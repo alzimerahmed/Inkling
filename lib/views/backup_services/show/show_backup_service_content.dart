@@ -1,0 +1,339 @@
+part of 'show_backup_service_view.dart';
+
+class _ShowBackupServiceContent extends StatelessWidget {
+  final ShowBackupServiceViewModel viewModel;
+
+  const _ShowBackupServiceContent(this.viewModel);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        title: Text.rich(
+          TextSpan(
+            style: TextTheme.of(context).titleLarge,
+            children: [
+              TextSpan(text: "${viewModel.serviceType.displayName} "),
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Icon(viewModel.serviceType.icon, size: 20),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          if (viewModel.params.service.currentUser != null)
+            SpPopupMenuButton(
+              items: (context) {
+                // iCloud has no in-app sign-out — Apple exposes no API to
+                // disable an app's iCloud Drive access, only the OS Settings
+                // toggle can. This opens that instead of clearing local
+                // state, which wouldn't actually stick (see
+                // ShowBackupServiceViewModel.disableICloud).
+                if (viewModel.serviceType == BackupServiceType.icloud) {
+                  return [
+                    SpPopMenuItem(
+                      titleStyle: TextStyle(color: ColorScheme.of(context).error),
+                      leadingIconData: SpIcons.setting,
+                      title: tr('button.disable'),
+                      onPressed: () => viewModel.disableICloud(context),
+                    ),
+                  ];
+                }
+
+                return [
+                  SpPopMenuItem(
+                    titleStyle: TextStyle(color: ColorScheme.of(context).error),
+                    leadingIconData: Icons.logout,
+                    title: tr('button.sign_out'),
+                    onPressed: () => viewModel.signOut(context),
+                  ),
+                ];
+              },
+              builder: (callback) {
+                return IconButton(
+                  tooltip: tr('button.more_options'),
+                  onPressed: callback,
+                  icon: const Icon(SpIcons.moreVert),
+                );
+              },
+            ),
+          // IconButton(
+          //   icon: const Icon(SpIcons.moreVert),
+          //   onPressed: () => viewModel.signOut(context),
+          //   tooltip: tr('button.sign_out'),
+          // ),
+        ],
+      ),
+      body: RefreshIndicator.adaptive(
+        onRefresh: () => viewModel.load(),
+        child: buildBody(context),
+      ),
+    );
+  }
+
+  Widget buildBody(BuildContext context) {
+    String? lastSyncAt = viewModel.getLastSyncAt(context);
+
+    if (viewModel.yearlyBackups == null) {
+      return const Center(
+        child: CircularProgressIndicator.adaptive(),
+      );
+    }
+
+    return ListView(
+      children: [
+        buildProfileTile(lastSyncAt),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: _SyncButton(viewModel: viewModel),
+        ),
+        if (viewModel.serviceType.googleDrive) ...[
+          const SizedBox(height: 4.0),
+          buildGoogleDriveStorageInfo(context),
+        ],
+        if (viewModel.params.service.currentUser != null)
+          SwitchListTile.adaptive(
+            value: viewModel.params.service.autoBackupEnabled,
+            title: Text(tr('list_tile.auto_backups.title')),
+            onChanged: (value) {
+              viewModel.setAutoBackupEnabled(context, value);
+            },
+          ),
+        const SizedBox(height: 4),
+        if ((viewModel.params.service.currentUser?.configuration ?? const []).isNotEmpty) ...[
+          const Divider(height: 1),
+          ..._buildConfigurationSection(context),
+        ],
+        const Divider(height: 1),
+        const SizedBox(height: 12),
+        if (viewModel.error != null) ..._buildErrorSection(context),
+        if (viewModel.error == null && viewModel.yearlyBackups!.isEmpty)
+          Padding(
+            padding: EdgeInsets.only(
+              left: MediaQuery.paddingOf(context).left,
+              right: MediaQuery.paddingOf(context).left,
+            ),
+            child: Text(
+              tr('general.no_backup_found'),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        if (viewModel.yearlyBackups!.isNotEmpty) SpSectionTitle(title: tr('list_tile.backup.title')),
+        for (MapEntry<int, CloudFileObject> entry in viewModel.getSortedYearlyBackups())
+          SpPopupMenuButton(
+            items: (context) {
+              return [
+                SpPopMenuItem(
+                  title: tr("button.view"),
+                  leadingIconData: SpIcons.info,
+                  onPressed: () => viewModel.openCloudFile(context, entry.value),
+                ),
+                SpPopMenuItem(
+                  title: tr("button.delete"),
+                  leadingIconData: SpIcons.delete,
+                  titleStyle: TextStyle(color: ColorScheme.of(context).error),
+                  onPressed: () async {
+                    OkCancelResult userResponse = await showOkCancelAlertDialog(
+                      context: context,
+                      title: tr("dialog.are_you_sure_to_delete_this_backup.title"),
+                      message: tr("dialog.are_you_sure.you_cant_undo_message"),
+                      isDestructiveAction: true,
+                      okLabel: tr("button.delete"),
+                    );
+
+                    if (userResponse == OkCancelResult.ok && context.mounted) {
+                      await viewModel.deleteCloudFile(context, entry.value);
+                    }
+                  },
+                ),
+              ];
+            },
+            builder: (callback) {
+              return ListTile(
+                leading: const Icon(SpIcons.folderOpen),
+                title: Text(
+                  entry.key == BackupFileObject.kGlobalBackupYear
+                      ? tr("list_tile.backup.global_bucket_title")
+                      : entry.key.toString(),
+                ),
+
+                trailing: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      entry.value.getFileInfo()?.device.model ??
+                          entry.value.getFileInfo()?.device.id ??
+                          tr("general.unknown"),
+                    ),
+                    Text(
+                      DateFormatHelper.yMEd_jmNullable(entry.value.getFileInfo()?.createdAt, context.locale) ??
+                          tr("general.na"),
+                    ),
+                  ],
+                ),
+                onTap: callback,
+              );
+            },
+          ),
+
+        // We want to display actual filerrs in store in each service instead,
+        // but because limitation with API, we will show all backups for now.
+        // const ListTile(
+        //   leading: Icon(SpIcons.folderOpen),
+        //   title: Text("appDataFolder/backups"),
+        //   trailing: Text("100kb"),
+        // ),
+        // const ListTile(
+        //   leading: Icon(SpIcons.folderOpen),
+        //   title: Text("appDataFolder/images"),
+        //   trailing: Text("100mb"),
+        // ),
+        // const ListTile(
+        //   leading: Icon(SpIcons.folderOpen),
+        //   title: Text("appDataFolder/audio"),
+        //   trailing: Text("50mb"),
+        // ),
+      ],
+    );
+  }
+
+  Widget buildGoogleDriveStorageInfo(BuildContext context) {
+    Color outline = ColorScheme.of(context).outline;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(SpIcons.info, size: 14, color: outline),
+          const SizedBox(width: 6),
+          Expanded(
+            child: SpMarkdownBody(
+              style: TextTheme.of(context).bodySmall?.copyWith(color: outline),
+              body: tr(
+                'page.show_backup_service.google_drive_storage_info',
+                namedArgs: {
+                  'SP_LEARN_MORE_LINK':
+                      '[${tr("button.learn_more")}](https://developers.google.com/workspace/drive/api/guides/appdata)',
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  ListTile buildProfileTile(String? lastSyncAt) {
+    return ListTile(
+      leading: viewModel.params.service.currentUser?.photoUrl != null
+          ? CircleAvatar(
+              backgroundImage: CachedNetworkImageProvider(
+                viewModel.params.service.currentUser!.photoUrl!,
+              ),
+              onBackgroundImageError: (_, _) {},
+            )
+          : const Icon(SpIcons.profile),
+      title: Text(
+        viewModel.params.service.currentUser?.identifier ?? tr('list_tile.backup.unsignin_subtitle'),
+      ),
+      subtitle: lastSyncAt != null ? Text(lastSyncAt) : null,
+    );
+  }
+
+  List<Widget> _buildConfigurationSection(BuildContext context) {
+    final configuration = viewModel.params.service.currentUser?.configuration ?? const [];
+
+    return [
+      for (final entry in configuration)
+        ListTile(
+          leading: const Icon(SpIcons.info),
+          title: Text(entry.label),
+          subtitle: Text(entry.value),
+        ),
+    ];
+  }
+
+  List<Widget> _buildErrorSection(BuildContext context) {
+    final error = viewModel.error!;
+
+    return [
+      const SizedBox(height: 16),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          children: [
+            Icon(
+              SpIcons.warning,
+              size: 48,
+              color: ColorScheme.of(context).error,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              error.userFriendlyMessage,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: ColorScheme.of(context).error),
+            ),
+            const SizedBox(height: 24),
+            if (error is AuthException && error.requiresReauth)
+              FilledButton.icon(
+                onPressed: () => viewModel.reauthenticate(context),
+                icon: const Icon(SpIcons.refresh),
+                label: Text(tr('button.retry')),
+              )
+            else if (error is AuthException && error.requiresReconnect)
+              FilledButton.icon(
+                onPressed: () => viewModel.reconnect(context),
+                icon: const Icon(SpIcons.refresh),
+                label: Text(tr('button.reconnect')),
+              )
+            else if (error.isRetryable)
+              FilledButton.icon(
+                onPressed: () => viewModel.retry(context),
+                icon: const Icon(SpIcons.refresh),
+                label: Text(tr('button.retry')),
+              ),
+          ],
+        ),
+      ),
+      const SizedBox(height: 16),
+    ];
+  }
+}
+
+class _SyncButton extends StatefulWidget {
+  const _SyncButton({
+    required this.viewModel,
+  });
+
+  final ShowBackupServiceViewModel viewModel;
+
+  @override
+  State<_SyncButton> createState() => _SyncButtonState();
+}
+
+class _SyncButtonState extends State<_SyncButton> {
+  bool syncing = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return FilledButton.icon(
+      label: Text(tr('button.sync')),
+      icon: syncing
+          ? const SizedBox.square(dimension: 16, child: CircularProgressIndicator.adaptive())
+          : const Icon(SpIcons.refresh),
+      onPressed: syncing
+          ? null
+          : () async {
+              syncing = true;
+              setState(() {});
+              await widget.viewModel.sync(context);
+              syncing = false;
+              if (mounted) setState(() {});
+            },
+    );
+  }
+}

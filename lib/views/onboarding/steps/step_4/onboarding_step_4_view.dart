@@ -1,0 +1,37 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:storypad/core/constants/app_constants.dart' show kIsCupertino;
+import 'package:storypad/views/onboarding/local_widgets/onboarding_template.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:storypad/widgets/base_view/base_route.dart';
+
+import 'onboarding_step_4_view_model.dart';
+
+part 'onboarding_step_4_content.dart';
+
+class OnboardingStep4Route extends BaseRoute {
+  OnboardingStep4Route();
+
+  @override
+  Widget buildPage(BuildContext context) => OnboardingStep4View(params: this);
+}
+
+class OnboardingStep4View extends StatelessWidget {
+  const OnboardingStep4View({
+    super.key,
+    required this.params,
+  });
+
+  final OnboardingStep4Route params;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<OnboardingStep4ViewModel>(
+      create: (context) => OnboardingStep4ViewModel(params: params),
+      builder: (context, child) {
+        return _OnboardingStep4Content(Provider.of(context));
+      },
+    );
+  }
+}

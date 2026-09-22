@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# Make sure python > 3.8 is install.
+# 
+# pip3 install codemagic-cli-tools
+# pip3 show codemagic-cli-tools
+# asdf reshim python
+# which xcode-project
+# 
+# reference:
+# https://docs.codemagic.io/knowledge-codemagic/codemagic-cli-tools/
+
+# Usage:
+#   bin/build_release_ios --storypad
+#   bin/build_release_ios --community
+
+source "$(dirname "$0")/helpers"
+sync_private_keys
+
+function build_ipa() {
+  FLAVOR=$1
+  PROVISIONING_EXPORT_PATH=$(get_provision_export_path $FLAVOR "ios")
+
+  run_command "rm -rf build/ios/ipa" # clean previous builds
+  run_command "rm -rf ios/Flutter/Generated.xcconfig" # remove existing generated xcconfig
+  run_command "rm -rf ios/Flutter/GeneratedDartDefines.xcconfig" # remove existing generated dart-defines
+  run_command "flutter pub get" # pod install required pub get first.
+
+  # no actual build, it only generates Generated.xcconfig, Flutter/flutter_export_environment.sh etc.
+  run_command "flutter build ios --release
+    --config-only
+    --flavor=$FLAVOR
+    --dart-define=CUPERTINO=yes
+    --dart-define-from-file=bin/.tmp/private_keys/dart_defines/$FLAVOR.json"
+
+  # generates GeneratedDartDefines.xcconfig
+  run_command "(cd ios && source Flutter/flutter_export_environment.sh && ./scripts/extract_dart_defines.sh)"
+
+  # builds ipa
+  run_command "flutter build ipa --release
+    --flavor=$FLAVOR
+    --target=lib/main_$FLAVOR.dart
+    --dart-define=CUPERTINO=yes
+    --dart-define-from-file=bin/.tmp/private_keys/dart_defines/$FLAVOR.json
+    --export-options-plist=$PROVISIONING_EXPORT_PATH"
+}
+
+# sync_private_keys mirrors AuthKey_<apikey>.p8 into ~/.appstoreconnect/private_keys/,
+# which is where the xcrun CLI actually looks for it.
+function upload_ipa_to_app_store() {
+  FLAVOR=$1
+
+  API_ISSUER_ID=$(get_env_key 'APPLE_CONNECT_API_KEY_ISSUER_ID')
+  API_KEY_ID=$(get_env_key 'APPLE_CONNECT_API_KEY_ID')
+  IPA_FILE=(build/ios/ipa/*.ipa)
+
+  echo "🔑 Issuer ID: $API_ISSUER_ID"
+  echo "🔑 API Key ID: $API_KEY_ID"
+  echo "🔑 IPA File: $IPA_FILE"
+  echo ""
+
+  run_command "xcrun altool --upload-app
+    --type ios
+    --file '$IPA_FILE'
+    --apiKey $API_KEY_ID
+    --apiIssuer $API_ISSUER_ID"
+}
+
+function main(){
+  FLAVOR=${1#--} # eg. --prod -> prod
+
+  echo "Building appbundle for $FLAVOR flavor..."
+  echo ""
+
+  setup_signing_certificates
+  copy_provisioning_profile_to_xcode_home $FLAVOR "ios"
+  install_provisioning_profile $FLAVOR "ios" "ios/Runner.xcodeproj"
+  build_ipa $FLAVOR
+  upload_ipa_to_app_store $FLAVOR
+}
+
+validate_flavor_inputs $@
+main $@

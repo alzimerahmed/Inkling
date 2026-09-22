@@ -1,0 +1,661 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:2962579780537594759",
+      "lastPropertyId": "40:5221629383960840754",
+      "name": "StoryObjectBox",
+      "properties": [
+        {
+          "id": "1:97606503289813034",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:6285480559740659261",
+          "name": "version",
+          "type": 6
+        },
+        {
+          "id": "3:1455186831852939171",
+          "name": "type",
+          "indexId": "6:786910284736652617",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "4:4895366266528452927",
+          "name": "year",
+          "indexId": "7:7680682158647514188",
+          "type": 6,
+          "flags": 8
+        },
+        {
+          "id": "5:3493347036869873160",
+          "name": "month",
+          "indexId": "8:5748551050959482493",
+          "type": 6,
+          "flags": 8
+        },
+        {
+          "id": "6:3490487563053838054",
+          "name": "day",
+          "indexId": "9:8404009621044148001",
+          "type": 6,
+          "flags": 8
+        },
+        {
+          "id": "7:6774169397346542505",
+          "name": "starred",
+          "indexId": "10:3298798639978026731",
+          "type": 1,
+          "flags": 8
+        },
+        {
+          "id": "8:7221060550241170408",
+          "name": "feeling",
+          "type": 9
+        },
+        {
+          "id": "9:4952094039664744075",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "10:4961981479060558999",
+          "name": "updatedAt",
+          "type": 10
+        },
+        {
+          "id": "11:9125848120865526787",
+          "name": "movedToBinAt",
+          "type": 10
+        },
+        {
+          "id": "12:5871534476772289101",
+          "name": "changes",
+          "type": 30
+        },
+        {
+          "id": "13:6005849190320169908",
+          "name": "tags",
+          "type": 30
+        },
+        {
+          "id": "18:1429297690659026930",
+          "name": "hour",
+          "type": 6
+        },
+        {
+          "id": "19:862060011000399226",
+          "name": "minute",
+          "type": 6
+        },
+        {
+          "id": "20:4113637293536721721",
+          "name": "second",
+          "type": 6
+        },
+        {
+          "id": "21:5147940647382545592",
+          "name": "permanentlyDeletedAt",
+          "type": 10
+        },
+        {
+          "id": "22:7678166380701811232",
+          "name": "lastSavedDeviceId",
+          "type": 9
+        },
+        {
+          "id": "24:7561688432028578210",
+          "name": "assets",
+          "type": 27
+        },
+        {
+          "id": "25:5807327571729293497",
+          "name": "preferences",
+          "type": 9
+        },
+        {
+          "id": "28:421098968365083050",
+          "name": "latestContent",
+          "type": 9
+        },
+        {
+          "id": "29:2326009534719657446",
+          "name": "draftContent",
+          "type": 9
+        },
+        {
+          "id": "30:5473653846024956989",
+          "name": "templateId",
+          "indexId": "12:3113154224104962350",
+          "type": 6,
+          "flags": 8
+        },
+        {
+          "id": "32:5877908410429539901",
+          "name": "galleryTemplateId",
+          "indexId": "13:7630204089175785169",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "33:6880637040027848499",
+          "name": "searchMetadata",
+          "type": 9
+        },
+        {
+          "id": "34:6588339555158711350",
+          "name": "pinned",
+          "indexId": "11:3999592741583348396",
+          "type": 1,
+          "flags": 8
+        },
+        {
+          "id": "35:84094890273270909",
+          "name": "wordCount",
+          "type": 6
+        },
+        {
+          "id": "36:3051838431030192697",
+          "name": "characterCount",
+          "type": 6
+        },
+        {
+          "id": "37:6787714761444359568",
+          "name": "latitude",
+          "type": 8
+        },
+        {
+          "id": "38:6206608334633774136",
+          "name": "longitude",
+          "type": 8
+        },
+        {
+          "id": "39:2142887574017047798",
+          "name": "place",
+          "type": 9
+        },
+        {
+          "id": "40:5221629383960840754",
+          "name": "placeName",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:5548558812249966101",
+      "lastPropertyId": "12:2093176491331659474",
+      "name": "TagObjectBox",
+      "properties": [
+        {
+          "id": "1:5046052891972916251",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:8744880092533568590",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "3:7863427692914238443",
+          "name": "version",
+          "type": 6
+        },
+        {
+          "id": "5:3138951263147849158",
+          "name": "emoji",
+          "type": 9
+        },
+        {
+          "id": "6:3746821438504660808",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "7:4116584270770327746",
+          "name": "updatedAt",
+          "type": 10
+        },
+        {
+          "id": "8:6011272584059291333",
+          "name": "index",
+          "type": 6
+        },
+        {
+          "id": "9:4397546260987904187",
+          "name": "permanentlyDeletedAt",
+          "type": 10
+        },
+        {
+          "id": "10:1120015455933452719",
+          "name": "lastSavedDeviceId",
+          "type": 9
+        },
+        {
+          "id": "12:2093176491331659474",
+          "name": "categoryId",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:8652388247732271380",
+      "lastPropertyId": "7:4080067487898077389",
+      "name": "PreferenceObjectBox",
+      "properties": [
+        {
+          "id": "1:5845189424486968777",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:7879389423381012812",
+          "name": "key",
+          "type": 9
+        },
+        {
+          "id": "3:6346675735678687120",
+          "name": "value",
+          "type": 9
+        },
+        {
+          "id": "4:5487565668895572636",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "5:6079525654333709276",
+          "name": "updatedAt",
+          "type": 10
+        },
+        {
+          "id": "6:7741946128893402175",
+          "name": "permanentlyDeletedAt",
+          "type": 10
+        },
+        {
+          "id": "7:4080067487898077389",
+          "name": "lastSavedDeviceId",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:4094713120589114734",
+      "lastPropertyId": "15:1493334910848739574",
+      "name": "AssetObjectBox",
+      "properties": [
+        {
+          "id": "1:5906669873848364603",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "3:9061464992410544713",
+          "name": "cloudDestinations",
+          "type": 9
+        },
+        {
+          "id": "4:7161480163824462596",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "5:4609595509255257773",
+          "name": "updatedAt",
+          "type": 10
+        },
+        {
+          "id": "6:7819533052746471106",
+          "name": "permanentlyDeletedAt",
+          "type": 10
+        },
+        {
+          "id": "7:5781354513111192719",
+          "name": "lastSavedDeviceId",
+          "type": 9
+        },
+        {
+          "id": "8:1856515659629711057",
+          "name": "originalSource",
+          "type": 9
+        },
+        {
+          "id": "10:3842512515517858228",
+          "name": "type",
+          "indexId": "2:5947623304772272976",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "11:3385039821200523280",
+          "name": "metadata",
+          "type": 9
+        },
+        {
+          "id": "12:7750389189867599724",
+          "name": "tags",
+          "type": 27
+        },
+        {
+          "id": "13:8859144998009161825",
+          "name": "version",
+          "indexId": "1:3213191916563326579",
+          "type": 6,
+          "flags": 8
+        },
+        {
+          "id": "14:2230481197199389868",
+          "name": "width",
+          "type": 8
+        },
+        {
+          "id": "15:1493334910848739574",
+          "name": "height",
+          "type": 8
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:4197752153260494722",
+      "lastPropertyId": "13:7711936533008164879",
+      "name": "TemplateObjectBox",
+      "properties": [
+        {
+          "id": "1:4888786211485405431",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:965504840504950186",
+          "name": "index",
+          "type": 6
+        },
+        {
+          "id": "3:8534163020409733992",
+          "name": "tags",
+          "type": 27
+        },
+        {
+          "id": "4:5109357445308744818",
+          "name": "content",
+          "type": 9
+        },
+        {
+          "id": "5:2667031694050257510",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "6:7266303846030833481",
+          "name": "updatedAt",
+          "type": 10
+        },
+        {
+          "id": "7:7271579894459585661",
+          "name": "permanentlyDeletedAt",
+          "type": 10
+        },
+        {
+          "id": "8:7677675212420904566",
+          "name": "lastSavedDeviceId",
+          "type": 9
+        },
+        {
+          "id": "9:7022531881534829655",
+          "name": "preferences",
+          "type": 9
+        },
+        {
+          "id": "10:3267732544409712890",
+          "name": "archivedAt",
+          "indexId": "17:8988225225053088376",
+          "type": 10,
+          "flags": 8
+        },
+        {
+          "id": "11:9213761210184601049",
+          "name": "note",
+          "type": 9
+        },
+        {
+          "id": "12:7449546806323438363",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "13:7711936533008164879",
+          "name": "galleryTemplateId",
+          "indexId": "16:6557880598724524162",
+          "type": 9,
+          "flags": 2048
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:7447837682900434922",
+      "lastPropertyId": "8:5312486173104212263",
+      "name": "RelaxSoundMixBox",
+      "properties": [
+        {
+          "id": "1:313537167867615676",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:4518666253956758444",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:8484003766353545544",
+          "name": "sounds",
+          "type": 9
+        },
+        {
+          "id": "4:713199041146636257",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "5:7838093783314215653",
+          "name": "updatedAt",
+          "type": 10
+        },
+        {
+          "id": "6:359413979246993001",
+          "name": "permanentlyDeletedAt",
+          "type": 10
+        },
+        {
+          "id": "7:764543406322651921",
+          "name": "lastSavedDeviceId",
+          "type": 9
+        },
+        {
+          "id": "8:5312486173104212263",
+          "name": "index",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "8:4141544638649465889",
+      "lastPropertyId": "9:7724360977652119040",
+      "name": "EventObjectBox",
+      "properties": [
+        {
+          "id": "1:7778167802137349235",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:8514330305809733913",
+          "name": "year",
+          "indexId": "3:7857486985597440145",
+          "type": 6,
+          "flags": 8
+        },
+        {
+          "id": "3:1817316657179753326",
+          "name": "month",
+          "indexId": "4:2697777245432978080",
+          "type": 6,
+          "flags": 8
+        },
+        {
+          "id": "4:5471026013882178136",
+          "name": "day",
+          "type": 6
+        },
+        {
+          "id": "5:7259485360492887599",
+          "name": "eventType",
+          "indexId": "5:3757697663970228685",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "6:4105040820472222305",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "7:6528294432714917018",
+          "name": "updatedAt",
+          "type": 10
+        },
+        {
+          "id": "8:6580784597345938449",
+          "name": "permanentlyDeletedAt",
+          "type": 10
+        },
+        {
+          "id": "9:7724360977652119040",
+          "name": "lastSavedDeviceId",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "10:6875722368332154421",
+      "lastPropertyId": "10:1586171392323133748",
+      "name": "TagCategoryObjectBox",
+      "properties": [
+        {
+          "id": "1:8447154602269222328",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:2122632392509580275",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "3:4800807500656422913",
+          "name": "multiSelect",
+          "type": 1
+        },
+        {
+          "id": "4:2424685804451881967",
+          "name": "system",
+          "type": 1
+        },
+        {
+          "id": "5:7305675005364225177",
+          "name": "index",
+          "type": 6
+        },
+        {
+          "id": "6:5615958948791855505",
+          "name": "version",
+          "type": 6
+        },
+        {
+          "id": "7:8290431425631655667",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "8:2832184903213716384",
+          "name": "updatedAt",
+          "type": 10
+        },
+        {
+          "id": "9:1747783703445985427",
+          "name": "permanentlyDeletedAt",
+          "type": 10
+        },
+        {
+          "id": "10:1586171392323133748",
+          "name": "lastSavedDeviceId",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "10:6875722368332154421",
+  "lastIndexId": "17:8988225225053088376",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [
+    114680069077451626,
+    419456903475856603
+  ],
+  "retiredIndexUids": [
+    4439843768253498140,
+    9104753461571652364
+  ],
+  "retiredPropertyUids": [
+    7351525936100002271,
+    3655265263412929559,
+    4968158570417504072,
+    957469211671557087,
+    8481003567609178682,
+    8289181544945165894,
+    7601477478707634423,
+    5301328484806180063,
+    8536407145733065373,
+    4928182202971877211,
+    8623820136669220816,
+    6622617203849334669,
+    4253592364122996012,
+    7934408466890046801,
+    7747415329836042242,
+    4458731407009078384,
+    6272534886584588071,
+    3294491619270889894,
+    5674426136259592087,
+    2218941453863587655,
+    2340920246315442710,
+    1623317357095888655,
+    6417690656797806340,
+    3376970649560229075
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}

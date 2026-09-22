@@ -1,0 +1,337 @@
+import 'dart:io';
+import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:storypad/core/constants/app_constants.dart';
+import 'package:storypad/core/helpers/path_helper.dart';
+import 'package:storypad/core/rich_text/rich_text.dart';
+import 'package:storypad/core/types/asset_type.dart';
+import 'package:storypad/core/databases/models/asset_db_model.dart';
+import 'package:storypad/core/services/duration_format_service.dart';
+import 'package:storypad/core/services/messenger_service.dart';
+import 'package:storypad/core/services/voice_recorder_service.dart';
+import 'package:storypad/widgets/bottom_sheets/base_bottom_sheet.dart';
+import 'package:storypad/widgets/sp_app_lock_wrapper.dart';
+import 'package:storypad/widgets/sp_voice_player.dart';
+import 'package:storypad/widgets/sp_icons.dart';
+
+/// Sheet for recording voice notes
+///
+/// Usage:
+/// ```dart
+/// final result = await SpVoiceRecordingSheet().show(context);
+///
+/// if (result != null) {
+///   // Use result.filePath and result.durationInMs
+/// }
+/// ```
+class SpVoiceRecordingSheet extends BaseBottomSheet {
+  const SpVoiceRecordingSheet();
+
+  @override
+  bool get fullScreen => false;
+
+  @override
+  bool get showMaterialDragHandle => false;
+
+  @override
+  bool get barrierDismissible => false;
+
+  @override
+  double get cupertinoPaddingTop => 0.0; // we have custom padding here instead.
+
+  static Future<void> showQuillRecorder({
+    required BuildContext context,
+    required RichTextController controller,
+  }) async {
+    final result = await const SpVoiceRecordingSheet().show(context: context);
+
+    if (result is VoiceRecordingResult && context.mounted) {
+      final asset = AssetDbModel.fromLocalPath(
+        id: DateTime.now().millisecondsSinceEpoch,
+        localPath: result.filePath,
+        type: AssetType.audio,
+        durationInMs: result.durationInMs,
+        createdAt: result.recordedAt,
+      );
+
+      // Copy file to app storage & clean up temp file
+      final storagePath = asset.type.getStoragePath(id: asset.id, extension: extension(result.filePath));
+      final newFile = File(storagePath)..createSync(recursive: true);
+      await newFile.writeAsBytes(File(result.filePath).readAsBytesSync());
+      if (File(result.filePath).existsSync()) File(result.filePath).deleteSync(recursive: true);
+
+      final savedAsset = await asset.save();
+
+      if (savedAsset != null && context.mounted) {
+        editorAdapter.insertAudio(
+          controller: controller,
+          audioPath: savedAsset.relativeLocalFilePath,
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, double bottomPadding) {
+    return _VoiceRecordingContent(bottomPadding: bottomPadding);
+  }
+}
+
+class _VoiceRecordingContent extends StatefulWidget {
+  const _VoiceRecordingContent({
+    required this.bottomPadding,
+  });
+
+  final double bottomPadding;
+
+  @override
+  State<_VoiceRecordingContent> createState() => _VoiceRecordingContentState();
+}
+
+class _VoiceRecordingContentState extends State<_VoiceRecordingContent> {
+  late VoiceRecorderService recorder;
+
+  bool recording = false;
+  int durationInMs = 0;
+  VoiceRecordingResult? recordingResult;
+
+  @override
+  void initState() {
+    super.initState();
+    recorder = VoiceRecorderService();
+    startRecording();
+  }
+
+  @override
+  void dispose() {
+    recorder.dispose();
+    super.dispose();
+  }
+
+  Future<void> startRecording() async {
+    try {
+      // `record`'s hasPermission() check can surface a native mic-permission prompt (or send
+      // the user to Settings if previously denied), which must not be mistaken for the app
+      // backgrounding and trigger the app-lock screen.
+      final success = await SpAppLockWrapper.disableAppLockIfHas(
+        context,
+        callback: () => recorder.startRecording(),
+      );
+
+      if (success && mounted) {
+        setState(() {
+          recording = true;
+          durationInMs = 0;
+        });
+
+        while (recording && mounted) {
+          await Future.delayed(const Duration(milliseconds: 100));
+          if (mounted) {
+            setState(() => durationInMs = recorder.currentDurationInMs ?? 0);
+          }
+        }
+      }
+    } catch (e) {
+      if (mounted) MessengerService.of(context).showSnackBar(e.toString(), success: false);
+    }
+  }
+
+  Future<void> stopRecording() async {
+    try {
+      final result = await recorder.stopRecording();
+
+      if (mounted) {
+        setState(() {
+          recording = false;
+          recordingResult = result;
+        });
+      }
+    } catch (e) {
+      if (mounted) MessengerService.of(context).showSnackBar(e.toString(), success: false);
+    }
+  }
+
+  Future<void> cancelRecordingAndPop() async {
+    if (recording) {
+      final result = await showOkCancelAlertDialog(
+        context: context,
+        isDestructiveAction: true,
+        title: tr('dialog.are_you_sure.title'),
+      );
+
+      if (result != OkCancelResult.ok) return;
+    }
+
+    await recorder.cancelRecording();
+    if (mounted) {
+      setState(() => recording = false);
+      Navigator.of(context).pop();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final hasRecording = recordingResult != null;
+
+    return Stack(
+      children: [
+        Container(
+          padding: EdgeInsets.only(
+            left: 16.0,
+            right: 16.0,
+            top: 36.0,
+            bottom: widget.bottomPadding + 16.0,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              hasRecording ? buildPlaybackUI(context) : buildRecordingUI(context),
+            ],
+          ),
+        ),
+        if (!hasRecording)
+          Positioned(
+            right: 8,
+            top: 8,
+            child: Builder(
+              builder: (context) {
+                if (kIsCupertino) {
+                  return CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: cancelRecordingAndPop,
+                    child: const Icon(SpIcons.clear),
+                  );
+                } else {
+                  return CloseButton(
+                    style: IconButton.styleFrom(shape: const CircleBorder()),
+                    onPressed: cancelRecordingAndPop,
+                  );
+                }
+              },
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget buildRecordingUI(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          DurationFormatService.formatMs(durationInMs),
+          style: Theme.of(context).textTheme.displaySmall?.copyWith(
+            color: Theme.of(context).colorScheme.primary,
+            fontFeatures: const [FontFeature.tabularFigures()],
+          ),
+        ),
+        const SizedBox(height: 12.0),
+        buildRecordingStatus(context),
+        const SizedBox(height: 24.0),
+        SizedBox(
+          width: double.infinity,
+          child: buildRecordingAction(context),
+        ),
+      ],
+    );
+  }
+
+  Widget buildPlaybackUI(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (recordingResult != null)
+          SpVoicePlayer.file(
+            filePath: recordingResult!.filePath,
+            initialDuration: Duration(seconds: durationInMs),
+          ),
+        const SizedBox(height: 32.0),
+        buildPlaybackActions(context),
+      ],
+    );
+  }
+
+  Widget buildPlaybackActions(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: Row(
+        children: [
+          Expanded(
+            child: kIsCupertino
+                ? CupertinoButton(
+                    child: Text(tr('button.delete')),
+                    onPressed: () {
+                      setState(() {
+                        recordingResult = null;
+                      });
+                    },
+                  )
+                : OutlinedButton.icon(
+                    icon: const Icon(SpIcons.delete),
+                    onPressed: () {
+                      setState(() {
+                        recordingResult = null;
+                      });
+                    },
+                    label: Text(tr('button.delete')),
+                  ),
+          ),
+          const SizedBox(width: 12.0),
+          Expanded(
+            child: kIsCupertino
+                ? CupertinoButton.filled(
+                    onPressed: recordingResult != null ? () => Navigator.of(context).pop(recordingResult) : null,
+                    child: Text(tr('button.done')),
+                  )
+                : FilledButton.icon(
+                    icon: const Icon(SpIcons.save),
+                    onPressed: recordingResult != null ? () => Navigator.of(context).pop(recordingResult) : null,
+                    label: Text(tr('button.done')),
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildRecordingStatus(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AnimatedContainer(
+          duration: Durations.medium1,
+          width: 6,
+          height: 6,
+          decoration: BoxDecoration(
+            color: !recording ? Colors.transparent : Theme.of(context).colorScheme.error,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const SizedBox(width: 8.0),
+        Text(
+          recording ? tr('general.recording') : '',
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: Theme.of(context).colorScheme.error,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildRecordingAction(BuildContext context) {
+    if (kIsCupertino) {
+      return CupertinoButton.filled(
+        onPressed: recording ? stopRecording : startRecording,
+        child: Text(recording ? tr('button.stop') : tr('button.record_voice')),
+      );
+    } else {
+      return FilledButton.icon(
+        onPressed: recording ? stopRecording : startRecording,
+        icon: recording ? null : const Icon(SpIcons.voice),
+        label: Text(recording ? tr('button.stop') : tr('button.record_voice')),
+      );
+    }
+  }
+}

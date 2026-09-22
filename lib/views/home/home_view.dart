@@ -1,0 +1,112 @@
+import 'dart:io';
+import 'dart:ui';
+import 'package:animations/animations.dart';
+import 'package:easy_localization/easy_localization.dart' show tr, BuildContextEasyLocalizationExtension;
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:storypad/app_theme.dart';
+import 'package:storypad/core/constants/app_constants.dart';
+import 'package:storypad/core/databases/models/story_db_model.dart';
+import 'package:storypad/core/extensions/color_scheme_extension.dart';
+import 'package:storypad/core/helpers/date_format_helper.dart';
+import 'package:storypad/core/services/color_from_day_service.dart';
+import 'package:storypad/core/services/welcome_message_service.dart';
+import 'package:storypad/core/services/windowed_detector_service.dart';
+import 'package:storypad/providers/backup_provider.dart';
+import 'package:storypad/providers/device_preferences_provider.dart';
+import 'package:storypad/providers/in_app_purchase_provider.dart';
+import 'package:storypad/providers/in_app_update_provider.dart';
+import 'package:storypad/providers/nickname_provider.dart';
+import 'package:storypad/providers/root_provider.dart';
+import 'package:storypad/views/home/local_widgets/end_drawer/home_end_drawer.dart';
+import 'package:storypad/views/root/root_view.dart';
+import 'package:storypad/views/settings/settings_view.dart';
+import 'package:storypad/widgets/base_view/base_route.dart';
+import 'package:storypad/widgets/sp_cross_fade.dart';
+import 'package:storypad/widgets/sp_fab_location.dart';
+import 'package:storypad/widgets/sp_fade_in.dart';
+import 'package:storypad/widgets/sp_icons.dart';
+import 'package:storypad/widgets/sp_loop_animation_builder.dart';
+import 'package:storypad/widgets/sp_measure_size.dart';
+import 'package:storypad/widgets/sp_multi_edit_bottom_nav_bar.dart';
+import 'package:storypad/widgets/sp_nested_navigation.dart';
+import 'package:storypad/widgets/sp_scroll_configuration.dart';
+import 'package:storypad/widgets/side_items/side_items.dart';
+import 'package:storypad/widgets/sp_tap_effect.dart';
+import 'package:storypad/widgets/sp_throwback_tile.dart';
+import 'package:storypad/widgets/story_list/local_widgets/story_month_header.dart';
+import 'package:storypad/widgets/story_list/local_widgets/story_month_recap_tile.dart';
+import 'package:storypad/widgets/story_list/sp_story_list_multi_edit_wrapper.dart';
+import 'package:storypad/widgets/story_list/sp_story_listener_builder.dart';
+import 'package:storypad/widgets/story_list/sp_story_tile.dart';
+
+import 'home_view_model.dart';
+
+part 'home_content.dart';
+part 'local_widgets/app_update_floating_button.dart';
+part 'local_widgets/home_app_bar.dart';
+part 'local_widgets/home_app_bar_message.dart';
+part 'local_widgets/home_app_bar_nickname.dart';
+part 'local_widgets/home_empty.dart';
+part 'local_widgets/home_flexible_space_bar.dart';
+part 'local_widgets/home_floating_buttons.dart';
+part 'local_widgets/home_scaffold.dart';
+part 'local_widgets/home_tab_bar.dart';
+part 'local_widgets/home_timeline_side_bar.dart';
+part 'local_widgets/rounded_indicator.dart';
+part 'local_widgets/pin_story_icon_button.dart';
+
+class HomeRoute extends BaseRoute {
+  @override
+  String get routeName => 'home';
+
+  const HomeRoute();
+
+  @override
+  Widget buildPage(BuildContext context) => const HomeView();
+}
+
+class HomeView extends StatelessWidget {
+  const HomeView({
+    super.key,
+  });
+
+  static BuildContext? _homeContext;
+  static BuildContext? get homeContext => _homeContext;
+
+  static Future<void> reload({
+    required String debugSource,
+  }) async {
+    return _homeContext?.read<HomeViewModel>().reload(debugSource: debugSource);
+  }
+
+  /// Applies a single story change locally, without a full DB refetch.
+  ///
+  /// Unlike the per-tile [SpStoryListenerBuilder] callbacks, this doesn't
+  /// require the story's tile to currently be mounted in Home — so it's
+  /// safe to call for stories acted on from another screen (e.g. bulk
+  /// archive/bin/put-back from Archives) that may not be built yet.
+  static void applyStoryReloaded(StoryDbModel story) {
+    _homeContext?.read<HomeViewModel>().onAStoryReloaded(story);
+  }
+
+  /// See [applyStoryReloaded]; for permanent deletions.
+  static void applyStoryDeleted(StoryDbModel story) {
+    _homeContext?.read<HomeViewModel>().onAStoryDeleted(story);
+  }
+
+  static void scrollToTop() {
+    _homeContext!.read<HomeViewModel>().scrollInfo.scrollToTop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<HomeViewModel>(
+      create: (context) => HomeViewModel(),
+      builder: (context, child) {
+        _homeContext = context;
+        return _HomeContent(Provider.of(context));
+      },
+    );
+  }
+}

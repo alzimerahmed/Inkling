@@ -1,0 +1,232 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'story_preferences_db_model.dart';
+
+// **************************************************************************
+// CopyWithGenerator
+// **************************************************************************
+
+abstract class _$StoryPreferencesDbModelCWProxy {
+  StoryPreferencesDbModel showDayCount(bool? showDayCount);
+
+  StoryPreferencesDbModel colorSeedValue(int? colorSeedValue);
+
+  StoryPreferencesDbModel colorTone(int? colorTone);
+
+  StoryPreferencesDbModel backgroundImagePath(String? backgroundImagePath);
+
+  StoryPreferencesDbModel fontFamily(String? fontFamily);
+
+  StoryPreferencesDbModel fontSize(FontSizeOption? fontSize);
+
+  StoryPreferencesDbModel fontWeightIndex(int? fontWeightIndex);
+
+  StoryPreferencesDbModel titleFontFamily(String? titleFontFamily);
+
+  StoryPreferencesDbModel titleFontWeightIndex(int? titleFontWeightIndex);
+
+  StoryPreferencesDbModel titleExpanded(bool? titleExpanded);
+
+  StoryPreferencesDbModel layoutType(PageLayoutType layoutType);
+
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `StoryPreferencesDbModel(...).copyWith.fieldName(value)`.
+  ///
+  /// Example:
+  /// ```dart
+  /// StoryPreferencesDbModel(...).copyWith(id: 12, name: "My name")
+  /// ```
+  StoryPreferencesDbModel call({
+    bool? showDayCount,
+    int? colorSeedValue,
+    int? colorTone,
+    String? backgroundImagePath,
+    String? fontFamily,
+    FontSizeOption? fontSize,
+    int? fontWeightIndex,
+    String? titleFontFamily,
+    int? titleFontWeightIndex,
+    bool? titleExpanded,
+    PageLayoutType layoutType,
+  });
+}
+
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfStoryPreferencesDbModel.copyWith(...)` or call `instanceOfStoryPreferencesDbModel.copyWith.fieldName(value)` for a single field.
+class _$StoryPreferencesDbModelCWProxyImpl
+    implements _$StoryPreferencesDbModelCWProxy {
+  const _$StoryPreferencesDbModelCWProxyImpl(this._value);
+
+  final StoryPreferencesDbModel _value;
+
+  @override
+  StoryPreferencesDbModel showDayCount(bool? showDayCount) =>
+      call(showDayCount: showDayCount);
+
+  @override
+  StoryPreferencesDbModel colorSeedValue(int? colorSeedValue) =>
+      call(colorSeedValue: colorSeedValue);
+
+  @override
+  StoryPreferencesDbModel colorTone(int? colorTone) =>
+      call(colorTone: colorTone);
+
+  @override
+  StoryPreferencesDbModel backgroundImagePath(String? backgroundImagePath) =>
+      call(backgroundImagePath: backgroundImagePath);
+
+  @override
+  StoryPreferencesDbModel fontFamily(String? fontFamily) =>
+      call(fontFamily: fontFamily);
+
+  @override
+  StoryPreferencesDbModel fontSize(FontSizeOption? fontSize) =>
+      call(fontSize: fontSize);
+
+  @override
+  StoryPreferencesDbModel fontWeightIndex(int? fontWeightIndex) =>
+      call(fontWeightIndex: fontWeightIndex);
+
+  @override
+  StoryPreferencesDbModel titleFontFamily(String? titleFontFamily) =>
+      call(titleFontFamily: titleFontFamily);
+
+  @override
+  StoryPreferencesDbModel titleFontWeightIndex(int? titleFontWeightIndex) =>
+      call(titleFontWeightIndex: titleFontWeightIndex);
+
+  @override
+  StoryPreferencesDbModel titleExpanded(bool? titleExpanded) =>
+      call(titleExpanded: titleExpanded);
+
+  @override
+  StoryPreferencesDbModel layoutType(PageLayoutType layoutType) =>
+      call(layoutType: layoutType);
+
+  @override
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `StoryPreferencesDbModel(...).copyWith.fieldName(value)`.
+  ///
+  /// Example:
+  /// ```dart
+  /// StoryPreferencesDbModel(...).copyWith(id: 12, name: "My name")
+  /// ```
+  StoryPreferencesDbModel call({
+    Object? showDayCount = const $CopyWithPlaceholder(),
+    Object? colorSeedValue = const $CopyWithPlaceholder(),
+    Object? colorTone = const $CopyWithPlaceholder(),
+    Object? backgroundImagePath = const $CopyWithPlaceholder(),
+    Object? fontFamily = const $CopyWithPlaceholder(),
+    Object? fontSize = const $CopyWithPlaceholder(),
+    Object? fontWeightIndex = const $CopyWithPlaceholder(),
+    Object? titleFontFamily = const $CopyWithPlaceholder(),
+    Object? titleFontWeightIndex = const $CopyWithPlaceholder(),
+    Object? titleExpanded = const $CopyWithPlaceholder(),
+    Object? layoutType = const $CopyWithPlaceholder(),
+  }) {
+    return StoryPreferencesDbModel(
+      showDayCount: showDayCount == const $CopyWithPlaceholder()
+          ? _value.showDayCount
+          // ignore: cast_nullable_to_non_nullable
+          : showDayCount as bool?,
+      colorSeedValue: colorSeedValue == const $CopyWithPlaceholder()
+          ? _value.colorSeedValue
+          // ignore: cast_nullable_to_non_nullable
+          : colorSeedValue as int?,
+      colorTone: colorTone == const $CopyWithPlaceholder()
+          ? _value.colorTone
+          // ignore: cast_nullable_to_non_nullable
+          : colorTone as int?,
+      backgroundImagePath: backgroundImagePath == const $CopyWithPlaceholder()
+          ? _value.backgroundImagePath
+          // ignore: cast_nullable_to_non_nullable
+          : backgroundImagePath as String?,
+      fontFamily: fontFamily == const $CopyWithPlaceholder()
+          ? _value.fontFamily
+          // ignore: cast_nullable_to_non_nullable
+          : fontFamily as String?,
+      fontSize: fontSize == const $CopyWithPlaceholder()
+          ? _value.fontSize
+          // ignore: cast_nullable_to_non_nullable
+          : fontSize as FontSizeOption?,
+      fontWeightIndex: fontWeightIndex == const $CopyWithPlaceholder()
+          ? _value.fontWeightIndex
+          // ignore: cast_nullable_to_non_nullable
+          : fontWeightIndex as int?,
+      titleFontFamily: titleFontFamily == const $CopyWithPlaceholder()
+          ? _value.titleFontFamily
+          // ignore: cast_nullable_to_non_nullable
+          : titleFontFamily as String?,
+      titleFontWeightIndex: titleFontWeightIndex == const $CopyWithPlaceholder()
+          ? _value.titleFontWeightIndex
+          // ignore: cast_nullable_to_non_nullable
+          : titleFontWeightIndex as int?,
+      titleExpanded: titleExpanded == const $CopyWithPlaceholder()
+          ? _value.titleExpanded
+          // ignore: cast_nullable_to_non_nullable
+          : titleExpanded as bool?,
+      layoutType:
+          layoutType == const $CopyWithPlaceholder() || layoutType == null
+          ? _value.layoutType
+          // ignore: cast_nullable_to_non_nullable
+          : layoutType as PageLayoutType,
+    );
+  }
+}
+
+extension $StoryPreferencesDbModelCopyWith on StoryPreferencesDbModel {
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfStoryPreferencesDbModel.copyWith(...)` or `instanceOfStoryPreferencesDbModel.copyWith.fieldName(...)`.
+  // ignore: library_private_types_in_public_api
+  _$StoryPreferencesDbModelCWProxy get copyWith =>
+      _$StoryPreferencesDbModelCWProxyImpl(this);
+}
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+StoryPreferencesDbModel _$StoryPreferencesDbModelFromJson(
+  Map<String, dynamic> json,
+) => StoryPreferencesDbModel(
+  showDayCount: json['show_day_count'] as bool?,
+  colorSeedValue: (json['color_seed_value'] as num?)?.toInt(),
+  colorTone: (json['color_tone'] as num?)?.toInt(),
+  backgroundImagePath: json['background_image_path'] as String?,
+  fontFamily: json['font_family'] as String?,
+  fontSize: $enumDecodeNullable(_$FontSizeOptionEnumMap, json['font_size']),
+  fontWeightIndex: (json['font_weight_index'] as num?)?.toInt(),
+  titleFontFamily: json['title_font_family'] as String?,
+  titleFontWeightIndex: (json['title_font_weight_index'] as num?)?.toInt(),
+  titleExpanded: json['title_expanded'] as bool?,
+  layoutType: _layoutTypeFromJson(json['layout_type']),
+);
+
+Map<String, dynamic> _$StoryPreferencesDbModelToJson(
+  StoryPreferencesDbModel instance,
+) => <String, dynamic>{
+  'show_day_count': instance.showDayCount,
+  'color_seed_value': instance.colorSeedValue,
+  'color_tone': instance.colorTone,
+  'background_image_path': instance.backgroundImagePath,
+  'font_family': instance.fontFamily,
+  'font_size': _$FontSizeOptionEnumMap[instance.fontSize],
+  'font_weight_index': instance.fontWeightIndex,
+  'title_font_family': instance.titleFontFamily,
+  'title_font_weight_index': instance.titleFontWeightIndex,
+  'title_expanded': instance.titleExpanded,
+  'layout_type': _$PageLayoutTypeEnumMap[instance.layoutType]!,
+};
+
+const _$FontSizeOptionEnumMap = {
+  FontSizeOption.small: 'small',
+  FontSizeOption.normal: 'normal',
+  FontSizeOption.large: 'large',
+  FontSizeOption.extraLarge: 'extraLarge',
+};
+
+const _$PageLayoutTypeEnumMap = {
+  PageLayoutType.list: 'list',
+  PageLayoutType.grid: 'grid',
+  PageLayoutType.pages: 'pages',
+};

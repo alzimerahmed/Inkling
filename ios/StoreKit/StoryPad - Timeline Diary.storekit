@@ -1,0 +1,186 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "17F9A15C",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : true,
+      "internalID" : "6757280549",
+      "localizations" : [
+        {
+          "description" : "Create the right atmosphere for your stories.",
+          "displayName" : "Backgrounds",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "backgrounds",
+      "referenceName" : "backgrounds",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : true,
+      "internalID" : "6756936811",
+      "localizations" : [
+        {
+          "description" : "Compatible with Obsidian, Notion, and markdown editors.",
+          "displayName" : "Markdown Export",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "markdown_export",
+      "referenceName" : "markdown_export",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : true,
+      "internalID" : "6754039959",
+      "localizations" : [
+        {
+          "description" : "Track your cycle and feelings",
+          "displayName" : "Period Calendar",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "period_calendar",
+      "referenceName" : "period_calendar",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : true,
+      "internalID" : "6748109452",
+      "localizations" : [
+        {
+          "description" : "Set the mood before you write or read.",
+          "displayName" : "Relaxing Sounds",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "relax_sounds",
+      "referenceName" : "relax_sounds",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "9.99",
+      "familyShareable" : true,
+      "internalID" : "6761650718",
+      "localizations" : [
+        {
+          "description" : "Unlock all features and benefits",
+          "displayName" : "StoryPad Pro",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "storypad_pro_lifetime",
+      "referenceName" : "storypad_pro_lifetime",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : true,
+      "internalID" : "6748109594",
+      "localizations" : [
+        {
+          "description" : "Create your own daily writing templates.",
+          "displayName" : "Templates",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "templates",
+      "referenceName" : "templates",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : true,
+      "internalID" : "6755052252",
+      "localizations" : [
+        {
+          "description" : "Record voice notes for your stories",
+          "displayName" : "Voice Journal",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "voice_journal",
+      "referenceName" : "voice_journal",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6744032172",
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_developerTeamID" : "XF9U464CCP",
+    "_disableDialogs" : false,
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 796994414.76246095,
+    "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ],
+    "_timeRate" : 0
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "subscriptionOffersKeyPair" : {
+    "id" : "DE92348D",
+    "privateKey" : "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQg9WJZ0ZzEn5H9FS4TcSoNo8SuJpWpR+dnfpnRHOjknQmgCgYIKoZIzj0DAQehRANCAAQeHVR0tPtnuILZiCI7T6wet0Q7mHzNED1/9osTiCMepFTT+NXv5RG8NXJnVErEK2Y5IyanR6sns5zVoWJQrBU1"
+  },
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

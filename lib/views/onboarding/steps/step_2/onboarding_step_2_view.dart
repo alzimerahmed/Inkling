@@ -1,0 +1,43 @@
+import 'dart:ui';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:storypad/core/constants/app_constants.dart' show kIsCupertino;
+import 'package:storypad/core/extensions/matrix_4_extension.dart';
+import 'package:storypad/gen/assets.gen.dart';
+import 'package:storypad/views/onboarding/local_widgets/fade_in_builder.dart';
+import 'package:storypad/views/onboarding/local_widgets/onboarding_template.dart';
+import 'package:storypad/views/onboarding/local_widgets/story_details_screenshot.dart';
+import 'package:storypad/views/onboarding/local_widgets/visible_when_notified.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:storypad/widgets/base_view/base_route.dart';
+
+import 'onboarding_step_2_view_model.dart';
+
+part 'onboarding_step_2_content.dart';
+
+class OnboardingStep2Route extends BaseRoute {
+  OnboardingStep2Route();
+
+  @override
+  Widget buildPage(BuildContext context) => OnboardingStep2View(params: this);
+}
+
+class OnboardingStep2View extends StatelessWidget {
+  const OnboardingStep2View({
+    super.key,
+    required this.params,
+  });
+
+  final OnboardingStep2Route params;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<OnboardingStep2ViewModel>(
+      create: (context) => OnboardingStep2ViewModel(params: params),
+      builder: (context, child) {
+        return _OnboardingStep2Content(Provider.of(context));
+      },
+    );
+  }
+}

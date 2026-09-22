@@ -1,0 +1,23 @@
+gradle-wrapper.jar
+/.gradle
+/captures/
+/gradlew
+/gradlew.bat
+/local.properties
+GeneratedPluginRegistrant.java
+.kotlin
+
+# Remember to never publicly share your keystore.
+# See https://flutter.dev/to/reference-keystore
+**/*_key.properties
+**/*.keystore
+**/*.jks
+
+# keytool -export -rfc -keystore storypad_keystore.jks -alias key -file storypad_certificate.pem
+**/*.pem
+
+!community_debug.keystore
+!keys/community/community_keystore.jks
+!keys/community/community_key.properties
+
+app/.cxx

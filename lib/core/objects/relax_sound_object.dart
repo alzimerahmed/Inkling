@@ -1,0 +1,343 @@
+import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:storypad/core/services/remote_config/remote_config_service.dart';
+import 'package:storypad/core/types/relax_sound_background.dart';
+
+part 'relax_sound_object.g.dart';
+
+@CopyWith()
+@JsonSerializable()
+class RelaxSoundObject {
+  final String translationKey;
+  final String artist;
+  final String svgIconUrlPath;
+  final RelaxSoundBackground background;
+
+  // mp3 or wave
+  final String soundUrlPath;
+
+  // Base on Cambodia tranditional color by weekday (1 to 7)
+  final int dayColor;
+
+  RelaxSoundObject({
+    required this.artist,
+    required this.translationKey,
+    required this.svgIconUrlPath,
+    required this.background,
+    required this.soundUrlPath,
+    this.dayColor = 3,
+  }) : assert(dayColor >= 1 && dayColor <= 7);
+
+  String get label => tr(translationKey);
+
+  /// Determines which sound group this sound belongs to based on its URL path
+  String _getSoundGroup() {
+    if (soundUrlPath.contains('/musics/')) return 'music';
+    if (soundUrlPath.contains('/rainy/')) return 'rainy';
+    if (soundUrlPath.contains('/water/')) return 'water';
+    if (soundUrlPath.contains('/animal/')) return 'animal';
+    if (soundUrlPath.contains('/melody/')) return 'melody';
+    if (soundUrlPath.contains('/fire/')) return 'fire';
+    if (soundUrlPath.contains('/body/')) return 'body';
+    if (soundUrlPath.contains('/activity/')) return 'activity';
+    return '';
+  }
+
+  /// Checks if this sound should be free based on the current variant
+  ///
+  /// **Variants:**
+  /// - variant_1: All sounds in Music, Rainy, Water groups are free
+  /// - variant_2: All sounds in Music, Rainy, Water + first 2 from Animal & Melody are free
+  /// - variant_3: Only first sound from each group is free
+  bool get free {
+    final group = _getSoundGroup();
+    final variant = RemoteConfigService.relaxSoundFreeSetVariant.get();
+
+    switch (variant) {
+      case 'variant_3':
+        // Full groups: Music, Rainy, Water
+        return ['music', 'rainy', 'water', 'body'].contains(group);
+      case 'variant_2':
+        // Hybrid: Full Music, Rainy, Water + 2 from Animal/Melody
+        if (['music', 'rainy', 'water', 'body'].contains(group)) return true;
+        // First 2 animal sounds: night_crickets, cicada
+        if (group == 'animal') return soundUrlPath.contains('night_crickets') || soundUrlPath.contains('cicada');
+        // First 2 melody sounds: wind_chime, bamboo_windchime
+        if (group == 'melody') return soundUrlPath.contains('wind_chime') || soundUrlPath.contains('bamboo_windchime');
+        return false;
+      case 'variant_1':
+      default:
+        // Minimal: 1 sound per group
+        if (group == 'music') return soundUrlPath.contains('acoustic_guitar_duet');
+        if (group == 'rainy') return soundUrlPath.contains('light_rain');
+        if (group == 'water') return soundUrlPath.contains('ocean_waves');
+        if (group == 'animal') return soundUrlPath.contains('night_crickets');
+        if (group == 'melody') return soundUrlPath.contains('wind_chime');
+        if (group == 'fire') return soundUrlPath.contains('campfire');
+        if (group == 'body') return soundUrlPath.contains('heartbeat');
+        if (group == 'activity') return soundUrlPath.contains('typing');
+        return false;
+    }
+  }
+
+  static Map<String, RelaxSoundObject>? _defaultSoundsList;
+  static Map<String, RelaxSoundObject> defaultSoundsList() {
+    if (_defaultSoundsList != null) return _defaultSoundsList!;
+
+    for (var sound in defaultSounds()) {
+      _defaultSoundsList ??= {};
+      _defaultSoundsList?[sound.soundUrlPath] = sound;
+    }
+
+    return _defaultSoundsList!;
+  }
+
+  static List<RelaxSoundObject> defaultSounds() {
+    return [
+      ...musicSounds(),
+      ...rainySounds(),
+      ...waterSounds(),
+      ...animalSounds(),
+      ...melodySounds(),
+      ...fireSounds(),
+      ...bodySounds(),
+      ...activitySounds(),
+    ];
+  }
+
+  static List<RelaxSoundObject> musicSounds() {
+    return [
+      RelaxSoundObject(
+        artist: '@graham_makes',
+        translationKey: 'sounds.acoustic_guitar_duet',
+        background: .music_notes_on_heart_shaped_paper,
+        svgIconUrlPath: '/relax_sounds/musics/acoustic_guitar_duet.svg',
+        soundUrlPath: '/relax_sounds/musics/acoustic_guitar_duet.mp3',
+        dayColor: 3,
+      ),
+      RelaxSoundObject(
+        artist: '@Matio888',
+        translationKey: 'sounds.serene_piano_reflections',
+        background: .two_cloudy_tags_on_color_background,
+        svgIconUrlPath: '/relax_sounds/musics/serene_piano_reflections.svg',
+        soundUrlPath: '/relax_sounds/musics/serene_piano_reflections.mp3',
+        dayColor: 2,
+      ),
+      RelaxSoundObject(
+        artist: '@Gustavo_Alivera',
+        translationKey: 'sounds.serene_moments',
+        background: .color_beautiful_sky_vintage_forest,
+        svgIconUrlPath: '/relax_sounds/musics/serene_moments.svg',
+        soundUrlPath: '/relax_sounds/musics/serene_moments.mp3',
+        dayColor: 1,
+      ),
+      RelaxSoundObject(
+        artist: '@voyouz',
+        translationKey: 'sounds.music_box',
+        background: .music_notes_on_heart_shaped_paper,
+        svgIconUrlPath: '/relax_sounds/musics/music_box.svg',
+        soundUrlPath: '/relax_sounds/musics/music_box.wav',
+        dayColor: 1,
+      ),
+    ];
+  }
+
+  static List<RelaxSoundObject> rainySounds() {
+    return [
+      RelaxSoundObject(
+        artist: '@jmbphilmes',
+        translationKey: 'sounds.light_rain',
+        background: .textured_green_and_black_liquefy_abstract_background,
+        svgIconUrlPath: '/relax_sounds/rainy/light_rain.svg',
+        soundUrlPath: '/relax_sounds/rainy/light_rain.wav',
+        dayColor: 3,
+      ),
+      RelaxSoundObject(
+        artist: '@InspectorJ',
+        translationKey: 'sounds.rain_on_window',
+        background: .textured_green_and_black_liquefy_abstract_background,
+        svgIconUrlPath: '/relax_sounds/rainy/rain_on_window.svg',
+        soundUrlPath: '/relax_sounds/rainy/rain_on_window.wav',
+        dayColor: 4,
+      ),
+      RelaxSoundObject(
+        artist: '@lebaston100',
+        translationKey: 'sounds.heavy_rain',
+        background: .textured_green_and_black_liquefy_abstract_background,
+        svgIconUrlPath: '/relax_sounds/rainy/heavy_rain.svg',
+        soundUrlPath: '/relax_sounds/rainy/heavy_rain.wav',
+        dayColor: 6,
+      ),
+      RelaxSoundObject(
+        artist: '@laribum',
+        translationKey: 'sounds.thunder',
+        background: .textured_green_and_black_liquefy_abstract_background,
+        svgIconUrlPath: '/relax_sounds/rainy/thunder.svg',
+        soundUrlPath: '/relax_sounds/rainy/thunder.wav',
+        dayColor: 6,
+      ),
+    ];
+  }
+
+  static List<RelaxSoundObject> waterSounds() {
+    return [
+      RelaxSoundObject(
+        artist: '@Profispiesser',
+        translationKey: 'sounds.ocean_waves',
+        background: .abstract_water_drops_on_turquoise_glass_background,
+        svgIconUrlPath: '/relax_sounds/water/ocean_waves.svg',
+        soundUrlPath: '/relax_sounds/water/ocean_waves.wav',
+        dayColor: 5,
+      ),
+      RelaxSoundObject(
+        artist: '@felix.blume',
+        translationKey: 'sounds.river_stream',
+        background: .abstract_water_drops_on_turquoise_glass_background,
+        svgIconUrlPath: '/relax_sounds/water/river_stream.svg',
+        soundUrlPath: '/relax_sounds/water/river_stream.wav',
+        dayColor: 5,
+      ),
+      RelaxSoundObject(
+        artist: '@Lydmakeren',
+        translationKey: 'sounds.droplets',
+        background: .abstract_water_drops_on_turquoise_glass_background,
+        svgIconUrlPath: '/relax_sounds/water/droplets.svg',
+        soundUrlPath: '/relax_sounds/water/droplets.wav',
+        dayColor: 5,
+      ),
+      RelaxSoundObject(
+        artist: '@brunoboselli',
+        translationKey: 'sounds.bubbles',
+        background: .abstract_water_drops_on_turquoise_glass_background,
+        svgIconUrlPath: '/relax_sounds/water/bubbles.svg',
+        soundUrlPath: '/relax_sounds/water/bubbles.wav',
+        dayColor: 5,
+      ),
+    ];
+  }
+
+  static List<RelaxSoundObject> animalSounds() {
+    return [
+      RelaxSoundObject(
+        artist: '@Virgile_Loiseau',
+        translationKey: 'sounds.night_crickets',
+        background: .forest_full_of_high_rise_trees,
+        svgIconUrlPath: '/relax_sounds/animal/night_crickets.svg',
+        soundUrlPath: '/relax_sounds/animal/night_crickets.wav',
+        dayColor: 2,
+      ),
+      RelaxSoundObject(
+        artist: '@sacred_steel',
+        translationKey: 'sounds.cicada',
+        background: .forest_full_of_high_rise_trees,
+        svgIconUrlPath: '/relax_sounds/animal/cicada.svg',
+        soundUrlPath: '/relax_sounds/animal/cicada.wav',
+        dayColor: 4,
+      ),
+      RelaxSoundObject(
+        artist: '@eyecandyuk',
+        translationKey: 'sounds.frogs',
+        background: .forest_full_of_high_rise_trees,
+        svgIconUrlPath: '/relax_sounds/animal/frogs.svg',
+        soundUrlPath: '/relax_sounds/animal/frogs.wav',
+        dayColor: 1,
+      ),
+      RelaxSoundObject(
+        artist: '@reinsamba',
+        translationKey: 'sounds.forest_birds',
+        background: .fall_leaves_hanging_on_blurry_surface,
+        svgIconUrlPath: '/relax_sounds/animal/forest_birds.svg',
+        soundUrlPath: '/relax_sounds/animal/forest_birds.wav',
+        dayColor: 3,
+      ),
+      RelaxSoundObject(
+        artist: '@interstellar_galleon',
+        translationKey: 'sounds.seagulls',
+        background: .fall_leaves_hanging_on_blurry_surface,
+        svgIconUrlPath: '/relax_sounds/animal/seagulls.svg',
+        soundUrlPath: '/relax_sounds/animal/seagulls.wav',
+        dayColor: 5,
+      ),
+    ];
+  }
+
+  static List<RelaxSoundObject> melodySounds() {
+    return [
+      RelaxSoundObject(
+        artist: '@AnoukJade',
+        translationKey: 'sounds.wind_chime',
+        background: .color_beautiful_sky_vintage_forest,
+        svgIconUrlPath: '/relax_sounds/melody/wind_chime.svg',
+        soundUrlPath: '/relax_sounds/melody/wind_chime.wav',
+        dayColor: 5,
+      ),
+      RelaxSoundObject(
+        artist: '@LoopUdu',
+        translationKey: 'sounds.bamboo_windchime',
+        background: .color_beautiful_sky_vintage_forest,
+        svgIconUrlPath: '/relax_sounds/melody/bamboo_windchime.svg',
+        soundUrlPath: '/relax_sounds/melody/bamboo_windchime.wav',
+        dayColor: 5,
+      ),
+      RelaxSoundObject(
+        artist: '@imagefilm.berlin',
+        translationKey: 'sounds.singing_bowl',
+        background: .color_beautiful_sky_vintage_forest,
+        svgIconUrlPath: '/relax_sounds/melody/singing_bowl.svg',
+        soundUrlPath: '/relax_sounds/melody/singing_bowl.wav',
+        dayColor: 1,
+      ),
+      RelaxSoundObject(
+        artist: 'mhuxley@marianst.com.au',
+        translationKey: 'sounds.ticking_clock',
+        background: .music_notes_on_heart_shaped_paper,
+        svgIconUrlPath: '/relax_sounds/melody/ticking_clock.svg',
+        soundUrlPath: '/relax_sounds/melody/ticking_clock.wav',
+        dayColor: 5,
+      ),
+    ];
+  }
+
+  static List<RelaxSoundObject> fireSounds() {
+    return [
+      RelaxSoundObject(
+        artist: '@StevenMyat_',
+        translationKey: 'sounds.campfire',
+        background: .cups_and_pot_near_fire,
+        svgIconUrlPath: '/relax_sounds/fire/campfire.svg',
+        soundUrlPath: '/relax_sounds/fire/campfire.wav',
+        dayColor: 1,
+      ),
+    ];
+  }
+
+  static List<RelaxSoundObject> bodySounds() {
+    return [
+      RelaxSoundObject(
+        artist: '@RICHERlandTV',
+        translationKey: 'sounds.heartbeat',
+        background: .two_cloudy_tags_on_color_background,
+        svgIconUrlPath: '/relax_sounds/body/heartbeat.svg',
+        soundUrlPath: '/relax_sounds/body/heartbeat.wav',
+        dayColor: 7,
+      ),
+    ];
+  }
+
+  static List<RelaxSoundObject> activitySounds() {
+    return [
+      RelaxSoundObject(
+        artist: '@forfii',
+        translationKey: 'sounds.typing',
+        background: .designer_at_work_in_office,
+        svgIconUrlPath: '/relax_sounds/activity/typing.svg',
+        soundUrlPath: '/relax_sounds/activity/typing.wav',
+        dayColor: 7,
+      ),
+    ];
+  }
+
+  Map<String, dynamic> toJson() => _$RelaxSoundObjectToJson(this);
+  factory RelaxSoundObject.fromJson(Map<String, dynamic> json) => _$RelaxSoundObjectFromJson(json);
+}

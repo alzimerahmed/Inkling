@@ -1,0 +1,98 @@
+import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:storypad/core/databases/adapters/objectbox/templates_box.dart';
+import 'package:storypad/core/databases/models/base_db_model.dart';
+import 'package:storypad/core/databases/models/story_content_db_model.dart';
+import 'package:storypad/core/databases/models/story_preferences_db_model.dart';
+
+part 'template_db_model.g.dart';
+
+@CopyWith()
+@JsonSerializable()
+class TemplateDbModel extends BaseDbModel {
+  static final TemplatesBox db = TemplatesBox();
+
+  @override
+  final int id;
+  final int index;
+  final List<int>? tags;
+
+  @JsonKey(name: 'preferences')
+  final StoryPreferencesDbModel? preferencesOrNull;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  StoryPreferencesDbModel get preferences => preferencesOrNull ?? StoryPreferencesDbModel.create();
+
+  final String? name;
+  final StoryContentDbModel? content;
+
+  // Keep original reference to gallery template when save gallery template to DB.
+  final String? galleryTemplateId;
+
+  final String? note;
+  final DateTime createdAt;
+
+  @override
+  final DateTime updatedAt;
+  final String? lastSavedDeviceId;
+
+  final DateTime? archivedAt;
+
+  @override
+  final DateTime? permanentlyDeletedAt;
+
+  int? storiesCount;
+
+  TemplateDbModel({
+    required this.id,
+    required this.tags,
+    required this.name,
+    required this.content,
+    required this.galleryTemplateId,
+    required this.note,
+    this.preferencesOrNull,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.archivedAt,
+    required this.lastSavedDeviceId,
+    required this.permanentlyDeletedAt,
+    int? index,
+  }) : index = index ?? 0;
+
+  bool get archived => archivedAt != null;
+
+  factory TemplateDbModel.newTemplate({
+    required DateTime createdAt,
+    StoryContentDbModel? content,
+    StoryPreferencesDbModel? preferences,
+    String? galleryTemplateId,
+    List<int>? tags,
+  }) {
+    return TemplateDbModel(
+      id: createdAt.millisecondsSinceEpoch,
+      tags: tags ?? [],
+      name: null,
+      content: content,
+      note: null,
+      preferencesOrNull: preferences,
+      galleryTemplateId: galleryTemplateId,
+      createdAt: createdAt,
+      updatedAt: createdAt,
+      archivedAt: null,
+      lastSavedDeviceId: null,
+      permanentlyDeletedAt: null,
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() => _$TemplateDbModelToJson(this);
+  factory TemplateDbModel.fromJson(Map<String, dynamic> json) => _$TemplateDbModelFromJson(json);
+
+  bool _cloudViewing = false;
+  bool get cloudViewing => _cloudViewing;
+
+  TemplateDbModel markAsCloudViewing() {
+    _cloudViewing = true;
+    return this;
+  }
+}

@@ -1,0 +1,52 @@
+import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:storypad/app_theme.dart';
+import 'package:storypad/core/constants/app_constants.dart';
+import 'package:storypad/core/extensions/matrix_4_extension.dart';
+import 'package:storypad/core/services/analytics/analytics_service.dart';
+import 'package:storypad/core/services/messenger_service.dart';
+import 'package:storypad/core/services/remote_config/remote_config_service.dart';
+import 'package:storypad/core/services/url_opener_service.dart';
+import 'package:storypad/views/developer_options/developer_options_view.dart';
+import 'package:storypad/views/home/home_view.dart';
+import 'package:storypad/views/support_us/support_us_view.dart';
+import 'package:storypad/widgets/sp_fade_in.dart';
+import 'package:storypad/widgets/sp_icons.dart';
+import 'package:storypad/widgets/sp_onboarding_wrapper.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:storypad/widgets/base_view/base_route.dart';
+
+import 'community_view_model.dart';
+
+part 'community_content.dart';
+part 'local_widgets/community_card.dart';
+
+class CommunityRoute extends BaseRoute {
+  CommunityRoute();
+
+  @override
+  String? get routeName => 'community';
+
+  @override
+  Widget buildPage(BuildContext context) => CommunityView(params: this);
+}
+
+class CommunityView extends StatelessWidget {
+  const CommunityView({
+    super.key,
+    required this.params,
+  });
+
+  final CommunityRoute params;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<CommunityViewModel>(
+      create: (context) => CommunityViewModel(params: params),
+      builder: (context, child) {
+        return _CommunityContent(Provider.of(context));
+      },
+    );
+  }
+}

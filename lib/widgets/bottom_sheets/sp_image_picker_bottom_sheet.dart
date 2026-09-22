@@ -1,0 +1,394 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:storypad/core/constants/app_constants.dart';
+import 'package:storypad/core/rich_text/rich_text.dart';
+import 'package:storypad/core/services/assets/app_file_picker_service.dart';
+import 'package:storypad/core/services/assets/retrieve_lost_photo_service.dart';
+import 'package:storypad/core/types/asset_type.dart';
+import 'package:storypad/core/databases/models/asset_db_model.dart';
+import 'package:storypad/core/services/analytics/analytics_service.dart';
+import 'package:storypad/core/services/assets/insert_file_to_db_service.dart';
+import 'package:storypad/providers/device_preferences_provider.dart';
+import 'package:storypad/widgets/bottom_sheets/base_bottom_sheet.dart';
+import 'package:storypad/widgets/sp_app_lock_wrapper.dart';
+import 'package:storypad/widgets/sp_fade_in.dart';
+import 'package:storypad/widgets/sp_icons.dart';
+import 'package:storypad/widgets/sp_media_tile.dart';
+
+class SpImagePickerBottomSheet extends BaseBottomSheet {
+  const SpImagePickerBottomSheet({
+    required this.assets,
+  });
+
+  @override
+  bool get fullScreen => true;
+
+  final List<AssetDbModel> assets;
+
+  static Future<void> showImagePicker({
+    required BuildContext context,
+    required RichTextController controller,
+    required ImageSource source,
+  }) async {
+    return SpAppLockWrapper.disableAppLockIfHas(
+      context,
+      callback: () async {
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final photo = await AppFilePickerService.pickImage(
+          source: source,
+          compression: compression,
+        );
+        if (photo == null) return;
+
+        AssetDbModel? tookAsset = await InsertFileToDbService.insertImage(photo.file, size: photo.size);
+        if (tookAsset == null) return;
+
+        editorAdapter.insertMedia(
+          controller: controller,
+          mediaPath: tookAsset.relativeLocalFilePath,
+        );
+
+        if (source == ImageSource.camera) {
+          AnalyticsService.instance.logTakePhoto();
+        } else {
+          AnalyticsService.instance.logInsertNewPhoto();
+        }
+      },
+    );
+  }
+
+  static Future<void> showVideoPicker({
+    required BuildContext context,
+    required RichTextController controller,
+    required ImageSource source,
+  }) async {
+    return SpAppLockWrapper.disableAppLockIfHas(
+      context,
+      callback: () async {
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final video = await AppFilePickerService.pickVideo(
+          context: context,
+          source: source,
+          compression: compression,
+        );
+        if (video == null) return;
+
+        AssetDbModel? tookAsset = await InsertFileToDbService.insertVideo(video.file, size: video.size);
+        if (tookAsset == null) return;
+
+        editorAdapter.insertMedia(
+          controller: controller,
+          mediaPath: tookAsset.relativeLocalFilePath,
+        );
+
+        if (source == ImageSource.camera) {
+          AnalyticsService.instance.logRecordVideo();
+        } else {
+          AnalyticsService.instance.logInsertNewVideo();
+        }
+      },
+    );
+  }
+
+  /// Opens the native OS media picker (mixed image+video multi-select) and
+  /// inserts everything picked as a single embed (an album if more than one).
+  static Future<void> showNativePicker({
+    required BuildContext context,
+    required RichTextController controller,
+  }) async {
+    return SpAppLockWrapper.disableAppLockIfHas(
+      context,
+      callback: () async {
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final files = await AppFilePickerService.pickMultipleMedia(context: context, compression: compression);
+        if (files.isEmpty) return;
+
+        final List<AssetDbModel> savedAssets = [];
+        for (final file in files) {
+          final savedAsset = await InsertFileToDbService.insertMedia(file);
+          if (savedAsset != null) savedAssets.add(savedAsset);
+        }
+        if (savedAssets.isEmpty) return;
+
+        final mediaPath = savedAssets.map((a) => a.relativeLocalFilePath).join('|');
+        editorAdapter.insertMedia(
+          controller: controller,
+          mediaPath: mediaPath,
+        );
+
+        _logInsertedMedia(savedAssets);
+      },
+    );
+  }
+
+  /// Opens the native OS media picker (mixed image+video multi-select) and
+  /// returns the saved assets directly, for callers that aren't inserting
+  /// into a rich text [controller] (e.g. [SpAlbumManagementSheet]).
+  static Future<List<AssetDbModel>> pickFromNativeLibrary({
+    required BuildContext context,
+  }) async {
+    return SpAppLockWrapper.disableAppLockIfHas(
+      context,
+      callback: () async {
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final files = await AppFilePickerService.pickMultipleMedia(context: context, compression: compression);
+        if (files.isEmpty) return <AssetDbModel>[];
+
+        final List<AssetDbModel> savedAssets = [];
+        for (final file in files) {
+          final savedAsset = await InsertFileToDbService.insertMedia(file);
+          if (savedAsset != null) savedAssets.add(savedAsset);
+        }
+
+        _logInsertedMedia(savedAssets);
+
+        return savedAssets;
+      },
+    );
+  }
+
+  static Future<void> showQuillPicker<T>({
+    required BuildContext context,
+    required RichTextController controller,
+  }) async {
+    await RetrieveLostPhotoService.call();
+
+    final assets = await AssetDbModel.db
+        .where(
+          filters: {
+            'types': [AssetType.image, AssetType.video],
+          },
+        )
+        .then((e) => e?.items ?? <AssetDbModel>[]);
+    if (!context.mounted) return;
+
+    final pickAssets = await SpImagePickerBottomSheet(
+      assets: assets,
+    ).show(context: context);
+
+    if (pickAssets is List<AssetDbModel> && pickAssets.isNotEmpty) {
+      // Media embed supports multiple items by joining paths with '|', and parsing them in the embed builder.
+      // See docs/features/album-embed.md for details.
+      final mediaPath = pickAssets.map((a) => a.relativeLocalFilePath).join('|');
+
+      editorAdapter.insertMedia(
+        controller: controller,
+        mediaPath: mediaPath,
+      );
+
+      _logInsertedMedia(pickAssets);
+    }
+  }
+
+  static Future<List<AssetDbModel>?> showAlbumPicker({
+    required BuildContext context,
+  }) async {
+    await RetrieveLostPhotoService.call();
+
+    final assets = await AssetDbModel.db
+        .where(
+          filters: {
+            'types': [AssetType.image, AssetType.video],
+          },
+        )
+        .then((e) => e?.items ?? <AssetDbModel>[]);
+    if (!context.mounted) return null;
+
+    final result = await SpImagePickerBottomSheet(
+      assets: assets,
+    ).show(context: context);
+
+    return result is List<AssetDbModel> ? result : null;
+  }
+
+  /// Logs one photo/video insert event per resulting [AssetType], for the
+  /// mixed-pick call sites (native OS picker, in-app album picker) that can
+  /// return either kind in a single batch -- a single `logInsertNewPhoto` call
+  /// would misreport a video-only or mixed pick as photos.
+  static void _logInsertedMedia(List<AssetDbModel> savedAssets) {
+    if (savedAssets.any((a) => a.type == AssetType.image)) {
+      AnalyticsService.instance.logInsertNewPhoto();
+    }
+    if (savedAssets.any((a) => a.type == AssetType.video)) {
+      AnalyticsService.instance.logInsertNewVideo();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, double bottomPadding) {
+    if (kIsCupertino) {
+      return _Content(params: this);
+    } else {
+      double maxChildSize = 1 - View.of(context).viewPadding.top / MediaQuery.of(context).size.height;
+      return DraggableScrollableSheet(
+        expand: false,
+        maxChildSize: maxChildSize,
+        builder: (context, controller) {
+          return PrimaryScrollController(
+            controller: controller,
+            child: _Content(params: this),
+          );
+        },
+      );
+    }
+  }
+}
+
+class _Content extends StatefulWidget {
+  const _Content({
+    required this.params,
+  });
+
+  final SpImagePickerBottomSheet params;
+
+  @override
+  State<_Content> createState() => _ContentState();
+}
+
+class _ContentState extends State<_Content> {
+  List<AssetDbModel> get assets => widget.params.assets;
+
+  Map<int, AssetDbModel> selectedAssets = {};
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(tr('page.library.title')),
+            automaticallyImplyLeading: !CupertinoSheetRoute.hasParentSheet(context),
+            actions: [
+              if (CupertinoSheetRoute.hasParentSheet(context))
+                CloseButton(onPressed: () => CupertinoSheetRoute.popSheet(context)),
+            ],
+          ),
+          body: buildBody(
+            context: context,
+            constraints: constraints,
+          ),
+          bottomNavigationBar: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                  left: 8.0,
+                  top: 8.0,
+                  bottom: MediaQuery.of(context).padding.bottom + 8.0,
+                  right: 16.0,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  spacing: 8.0,
+                  children: [
+                    FilledButton(
+                      onPressed: selectedAssets.isNotEmpty
+                          ? () => Navigator.maybePop(context, selectedAssets.values.toList())
+                          : null,
+                      child: Text(tr("button.done")),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget buildBody({
+    required BuildContext context,
+    required BoxConstraints constraints,
+  }) {
+    if (assets.isEmpty) {
+      return Center(
+        child: Text(
+          tr('page.image_picker.empty_message'),
+          textAlign: TextAlign.center,
+          style: TextTheme.of(context).bodyLarge,
+        ),
+      );
+    }
+
+    return Scrollbar(
+      thumbVisibility: true,
+      interactive: true,
+      controller: PrimaryScrollController.maybeOf(context),
+      child: MasonryGridView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
+        addAutomaticKeepAlives: false,
+        controller: PrimaryScrollController.maybeOf(context),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+        ).copyWith(top: 16.0, bottom: MediaQuery.of(context).padding.bottom + 16.0),
+        itemCount: assets.length,
+        mainAxisSpacing: 8.0,
+        crossAxisSpacing: 8.0,
+        gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: constraints.maxWidth ~/ 120),
+        itemBuilder: (BuildContext context, int index) {
+          final asset = assets[index];
+
+          return GestureDetector(
+            onTap: () {
+              if (selectedAssets.containsKey(asset.id)) {
+                selectedAssets.remove(asset.id);
+              } else {
+                selectedAssets[asset.id] = asset;
+              }
+              setState(() {});
+            },
+            child: Stack(
+              children: [
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Material(
+                      clipBehavior: Clip.hardEdge,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: BorderSide(color: Theme.of(context).dividerColor),
+                      ),
+                      child: SpMediaTile(
+                        link: asset.relativeLocalFilePath,
+                        width: constraints.maxWidth,
+                        height: 120,
+                      ),
+                    );
+                  },
+                ),
+                if (selectedAssets.containsKey(asset.id)) buildSelectedCheck(),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget buildSelectedCheck() {
+    final Color foregroundColor = Colors.white.withValues(alpha: 0.7);
+
+    return Positioned(
+      key: ValueKey('$foregroundColor'),
+      top: 8,
+      right: 8,
+      child: SpFadeIn.fromBottom(
+        child: Container(
+          padding: const EdgeInsets.all(2.0),
+          decoration: BoxDecoration(
+            color: Colors.black.withValues(alpha: 0.5),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            SpIcons.checkCircle,
+            color: foregroundColor,
+          ),
+        ),
+      ),
+    );
+  }
+}

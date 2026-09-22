@@ -1,0 +1,193 @@
+part of 'sp_story_list_multi_edit_wrapper.dart';
+
+class SpStoryListMultiEditWrapperState extends ChangeNotifier {
+  final bool disabled;
+
+  SpStoryListMultiEditWrapperState({
+    required this.disabled,
+  });
+
+  bool editing = false;
+  Set<int> selectedStories = {};
+  Set<int> stories = {};
+
+  void toggleSelection(StoryDbModel story) {
+    if (selectedStories.contains(story.id)) {
+      selectedStories.remove(story.id);
+    } else {
+      selectedStories.add(story.id);
+    }
+    notifyListeners();
+  }
+
+  void turnOnEditing({
+    int? initialId,
+  }) {
+    editing = true;
+    selectedStories.clear();
+    if (initialId != null) selectedStories.add(initialId);
+    notifyListeners();
+  }
+
+  void turnOffEditing({
+    int? initialId,
+  }) {
+    editing = false;
+    selectedStories.clear();
+    notifyListeners();
+  }
+
+  void toggleSelectAll(BuildContext context) {
+    if (selectedStories.length == stories.length) {
+      selectedStories.clear();
+    } else {
+      selectedStories.addAll(stories);
+    }
+    notifyListeners();
+  }
+
+  Future<bool> putBackAll(BuildContext context) async {
+    OkCancelResult result = await showOkCancelAlertDialog(
+      context: context,
+      title: tr("dialog.are_you_sure_to_put_back_these_stories.title"),
+      okLabel: tr("button.put_back"),
+    );
+
+    if (result == OkCancelResult.ok && context.mounted) {
+      await MessengerService.of(context).showLoading(
+        debugSource: '$runtimeType#putBackAll',
+        future: () async {
+          for (int i = 0; i < selectedStories.length; i++) {
+            int id = selectedStories.elementAt(i);
+            final record = await StoryDbModel.db.find(id);
+            final updatedStory = await record?.putBack();
+            if (updatedStory != null) HomeView.applyStoryReloaded(updatedStory);
+          }
+        },
+      );
+
+      await AnalyticsService.instance.logPutBackAllStories(count: selectedStories.length);
+      turnOffEditing();
+      return true;
+    }
+
+    return false;
+  }
+
+  Future<bool> moveToBinAll(BuildContext context) async {
+    OkCancelResult result = await showOkCancelAlertDialog(
+      context: context,
+      title: tr("dialog.are_you_sure_to_move_to_bin_these_stories.title"),
+      isDestructiveAction: true,
+      okLabel: tr("button.move_to_bin"),
+    );
+
+    if (result == OkCancelResult.ok && context.mounted) {
+      await MessengerService.of(context).showLoading(
+        debugSource: '$runtimeType#moveToBinAll',
+        future: () async {
+          for (int i = 0; i < selectedStories.length; i++) {
+            int id = selectedStories.elementAt(i);
+            final record = await StoryDbModel.db.find(id);
+            final updatedStory = await record?.moveToBin();
+            if (updatedStory != null) HomeView.applyStoryReloaded(updatedStory);
+          }
+        },
+      );
+
+      await AnalyticsService.instance.logMoveAllStoriesToBin(count: selectedStories.length);
+      turnOffEditing();
+      return true;
+    }
+
+    return false;
+  }
+
+  Future<bool> unpinAll(BuildContext context) async {
+    for (int i = 0; i < selectedStories.length; i++) {
+      int id = selectedStories.elementAt(i);
+      final record = await StoryDbModel.db.find(id);
+
+      // must run callbacks on each story since pinning changes
+      // depend on individual story tile. See home view.
+      await record?.setPinned(false);
+    }
+
+    await AnalyticsService.instance.logUnpinAllStories(count: selectedStories.length);
+    turnOffEditing();
+    return true;
+  }
+
+  Future<bool> pinAll(BuildContext context) async {
+    for (int i = 0; i < selectedStories.length; i++) {
+      int id = selectedStories.elementAt(i);
+      final record = await StoryDbModel.db.find(id);
+
+      // must run callbacks on each story since pinning changes
+      // depend on individual story tile. See home view.
+      await record?.setPinned(true);
+    }
+
+    await AnalyticsService.instance.logPinAllStories(count: selectedStories.length);
+    turnOffEditing();
+    return true;
+  }
+
+  Future<bool> archiveAll(BuildContext context) async {
+    OkCancelResult result = await showOkCancelAlertDialog(
+      context: context,
+      title: tr("dialog.are_you_sure_to_archive_these_stories.title"),
+      okLabel: tr("button.archive"),
+    );
+
+    if (result == OkCancelResult.ok && context.mounted) {
+      await MessengerService.of(context).showLoading(
+        debugSource: '$runtimeType#archiveAll',
+        future: () async {
+          for (int i = 0; i < selectedStories.length; i++) {
+            int id = selectedStories.elementAt(i);
+            final record = await StoryDbModel.db.find(id);
+            final updatedStory = await record?.archive();
+            if (updatedStory != null) HomeView.applyStoryReloaded(updatedStory);
+          }
+        },
+      );
+
+      await AnalyticsService.instance.logArchiveAllStories(count: selectedStories.length);
+      turnOffEditing();
+      return true;
+    }
+
+    return false;
+  }
+
+  Future<bool> permanantDeleteAll(BuildContext context) async {
+    OkCancelResult result = await showOkCancelAlertDialog(
+      context: context,
+      title: tr("dialog.are_you_sure_to_delete_these_stories.title"),
+      message: tr("dialog.are_you_sure.you_cant_undo_message"),
+      isDestructiveAction: true,
+      okLabel: tr("button.permanent_delete"),
+    );
+
+    if (result == OkCancelResult.ok && context.mounted) {
+      final state = SpStoryListMultiEditWrapper.of(context);
+
+      await MessengerService.of(context).showLoading(
+        debugSource: '$runtimeType#putBackAll',
+        future: () async {
+          for (int i = 0; i < state.selectedStories.length; i++) {
+            int id = state.selectedStories.elementAt(i);
+            await StoryDbModel.db.delete(id);
+          }
+        },
+      );
+
+      await AnalyticsService.instance.logPermanentDeleteAllStories(count: state.selectedStories.length);
+      turnOffEditing();
+      return true;
+    }
+
+    return false;
+  }
+}

@@ -1,0 +1,218 @@
+import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:storypad/app_theme.dart';
+import 'package:storypad/core/databases/models/story_content_db_model.dart';
+import 'package:storypad/core/databases/models/story_db_model.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:storypad/core/extensions/matrix_4_extension.dart';
+import 'package:storypad/core/extensions/string_extension.dart';
+import 'package:storypad/core/objects/story_tile_preferences_object.dart';
+import 'package:storypad/core/types/asset_type.dart';
+import 'package:storypad/core/services/color_from_day_service.dart';
+import 'package:storypad/core/services/stories/story_content_embed_extractor.dart';
+import 'package:storypad/core/helpers/date_format_helper.dart';
+import 'package:storypad/providers/device_preferences_provider.dart';
+import 'package:storypad/widgets/bottom_sheets/sp_story_info_sheet.dart';
+import 'package:storypad/widgets/sp_icons.dart';
+import 'package:storypad/widgets/sp_album_grid.dart';
+import 'package:storypad/widgets/sp_animated_icon.dart';
+import 'package:storypad/widgets/sp_markdown_body.dart';
+import 'package:storypad/widgets/sp_media_tile.dart';
+import 'package:storypad/widgets/media_viewer/sp_media_viewer.dart';
+import 'package:storypad/widgets/sp_pop_up_menu_button.dart';
+import 'package:storypad/widgets/sp_single_state_widget.dart';
+import 'package:storypad/widgets/sp_story_labels.dart';
+import 'package:storypad/widgets/sp_tap_effect.dart';
+import 'package:storypad/widgets/story_list/local_widgets/story_tile_actions.dart';
+import 'package:storypad/widgets/story_list/sp_story_list_multi_edit_wrapper.dart';
+
+part 'local_widgets/story_tile_assets.dart';
+part 'local_widgets/story_tile_monogram.dart';
+part 'local_widgets/story_tile_favorite_button.dart';
+part 'local_widgets/story_tile_contents.dart';
+part 'local_widgets/story_tile_starred_button.dart';
+
+class SpStoryTile extends StatelessWidget {
+  static const double monogramSize = 32;
+
+  const SpStoryTile({
+    super.key,
+    required this.story,
+    required this.preferences,
+    required this.showMonogram,
+    required this.onTap,
+    required this.listContext,
+    this.viewOnly = false,
+  });
+
+  final StoryDbModel story;
+  final StoryTilePreferencesObject preferences;
+  final bool showMonogram;
+  final bool viewOnly;
+  final void Function()? onTap;
+
+  /// In some case, StoryTile is removed from screen, which make its context unusable.
+  /// [listContext] is still mounted even after story is removed, allow us it to read HomeViewModel & do other thiings.
+  final BuildContext listContext;
+
+  List<SpPopMenuItem> buildPopUpMenus(BuildContext context) {
+    return [
+      if ((story.inArchives || story.inBins) && onTap != null)
+        SpPopMenuItem(
+          title: tr('button.open'),
+          leadingIconData: SpIcons.book,
+          onPressed: onTap,
+        ),
+      if (story.putBackAble)
+        SpPopMenuItem(
+          title: tr('button.put_back'),
+          leadingIconData: SpIcons.putBack,
+          onPressed: () => StoryTileActions(
+            story: story,
+            storyListReloaderContext: listContext,
+          ).putBack(context),
+        ),
+      if (story.archivable)
+        SpPopMenuItem(
+          title: tr('button.archive'),
+          leadingIconData: SpIcons.archive,
+          onPressed: () => StoryTileActions(
+            story: story,
+            storyListReloaderContext: listContext,
+          ).archive(context),
+        ),
+      if (story.canMoveToBin)
+        SpPopMenuItem(
+          title: tr('button.move_to_bin'),
+          leadingIconData: SpIcons.delete,
+          titleStyle: TextStyle(color: ColorScheme.of(context).error),
+          onPressed: () => StoryTileActions(
+            story: story,
+            storyListReloaderContext: listContext,
+          ).moveToBin(context),
+        ),
+      if (story.hardDeletable)
+        SpPopMenuItem(
+          title: tr('button.permanent_delete'),
+          leadingIconData: SpIcons.deleteForever,
+          titleStyle: TextStyle(color: ColorScheme.of(context).error),
+          onPressed: () => StoryTileActions(
+            story: story,
+            storyListReloaderContext: listContext,
+          ).hardDelete(context),
+        ),
+      if (story.cloudViewing)
+        SpPopMenuItem(
+          title: tr('button.import'),
+          leadingIconData: SpIcons.import,
+          titleStyle: TextStyle(color: ColorScheme.of(context).primary),
+          onPressed: () => StoryTileActions(
+            story: story,
+            storyListReloaderContext: listContext,
+          ).importIndividualStory(context),
+        ),
+      SpPopMenuItem(
+        title: tr('button.info'),
+        leadingIconData: SpIcons.info,
+        onPressed: () => SpStoryInfoSheet(story: story, persisted: true).show(context: context),
+      ),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SpStoryListMultiEditWrapper.tryListen(
+      context: context,
+      builder: (context, multiEditState) {
+        if (multiEditState == null) return buildStoryTile(context);
+        return buildStoryTile(context, multiEditState);
+      },
+    );
+  }
+
+  Widget buildStoryTile(
+    BuildContext context, [
+    SpStoryListMultiEditWrapperState? multiEditState,
+  ]) {
+    StoryContentDbModel? content = story.draftContent ?? story.latestContent;
+    String? displayShortBody = content?.displayShortBody(maxCharacterCount: preferences.displayCharacterCount);
+
+    bool hasTitle = content?.title?.trim().isNotEmpty == true;
+    bool hasBody = displayShortBody != null && displayShortBody.trim().isNotEmpty == true;
+    List<SpPopMenuItem> menus = buildPopUpMenus(context);
+
+    return SpPopupMenuButton(
+      smartDx: true,
+      dyGetter: (double dy) => dy + kToolbarHeight,
+      items: (BuildContext context) => menus,
+      builder: (openPopUpMenu) {
+        void Function()? onTap;
+        void Function()? onLongPress;
+
+        if (multiEditState != null) {
+          if (multiEditState.editing) {
+            onTap = () => multiEditState.toggleSelection(story);
+            onLongPress = null;
+          } else if (story.inArchives || story.inBins) {
+            onTap = () => openPopUpMenu.call();
+            onLongPress = () => multiEditState.turnOnEditing(initialId: story.id);
+          } else {
+            onTap = this.onTap;
+            onLongPress = () => multiEditState.turnOnEditing(initialId: story.id);
+          }
+        } else {
+          onTap = this.onTap;
+          onLongPress = () => openPopUpMenu.call();
+        }
+
+        return SpTapEffect(
+          effects: [SpTapEffectType.touchableOpacity],
+          onTap: onTap,
+          onLongPressed: onLongPress,
+          child: Container(
+            // color: story.day.isEven ? Colors.red : Colors.blue,
+            padding: const EdgeInsets.only(
+              left: 16.0,
+              right: 16.0,
+              top: 12.0,
+              bottom: 12.0,
+            ),
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 16.0,
+                  children: [
+                    _StoryTileMonogram(
+                      showMonogram: showMonogram,
+                      monogramSize: monogramSize,
+                      story: story,
+                    ),
+                    _StoryTileContents(
+                      story: story,
+                      viewOnly: viewOnly,
+                      listContext: listContext,
+                      hasTitle: hasTitle,
+                      content: content,
+                      hasBody: hasBody,
+                      displayShortBody: displayShortBody,
+                      preferences: preferences,
+                    ),
+                  ],
+                ),
+                _StoryTileStarredButton(
+                  story: story,
+                  viewOnly: viewOnly,
+                  listContext: listContext,
+                  multiEditState: multiEditState,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

@@ -1,0 +1,108 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:storypad/core/constants/app_constants.dart';
+import 'package:storypad/core/databases/models/story_db_model.dart';
+import 'package:storypad/widgets/sp_single_state_widget.dart';
+
+class StoryTimePickerService {
+  final BuildContext context;
+  final StoryDbModel story;
+
+  StoryTimePickerService({
+    required this.context,
+    required this.story,
+  });
+
+  Future<TimeOfDay?> showPicker() async {
+    TimeOfDay? newTime;
+
+    if (kIsCupertino) {
+      newTime = await _showCupertinoTimePicker(context);
+    } else {
+      newTime = await _showMaterialTimePicker(newTime);
+    }
+
+    return newTime;
+  }
+
+  TimeOfDay _durationToTimeOfDay(Duration duration) {
+    int hours = duration.inHours % 24;
+    int minutes = duration.inMinutes % 60;
+    return TimeOfDay(hour: hours, minute: minutes);
+  }
+
+  Future<TimeOfDay?> _showMaterialTimePicker(TimeOfDay? newTime) async {
+    return showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(story.displayPathDate),
+      builder: (context, child) {
+        return GestureDetector(
+          onTap: () => Navigator.maybePop(context),
+          child: Center(
+            child: SingleChildScrollView(
+              child: child!,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<TimeOfDay?> _showCupertinoTimePicker(BuildContext context) {
+    return showCupertinoModalPopup<TimeOfDay>(
+      context: context,
+      builder: (BuildContext context) {
+        return SpSingleStateWidget<TimeOfDay?>(
+          initialValue: TimeOfDay.fromDateTime(story.displayPathDate),
+          builder: (context, notifier) {
+            return Container(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom + 16.0,
+                left: MediaQuery.of(context).padding.left,
+                right: MediaQuery.of(context).padding.right,
+              ),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              color: CupertinoColors.systemBackground.resolveFrom(context),
+              child: MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                removeBottom: false,
+                child: Column(
+                  mainAxisSize: .min,
+                  children: [
+                    _buildCupertinoNavigator(context, notifier),
+                    CupertinoTimerPicker(
+                      initialTimerDuration: Duration(
+                        hours: story.displayPathDate.hour,
+                        minutes: story.displayPathDate.minute,
+                      ),
+                      mode: CupertinoTimerPickerMode.hm,
+                      onTimerDurationChanged: (duration) => notifier.value = _durationToTimeOfDay(duration),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildCupertinoNavigator(BuildContext context, CmValueNotifier<TimeOfDay?> notifier) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        CupertinoButton(
+          onPressed: () => Navigator.pop(context, null),
+          child: Text(tr("button.cancel")),
+        ),
+        CupertinoButton(
+          child: Text(tr("button.done")),
+          onPressed: () => Navigator.pop(context, notifier.value),
+        ),
+      ],
+    );
+  }
+}

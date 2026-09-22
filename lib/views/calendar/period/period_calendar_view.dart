@@ -1,0 +1,35 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:storypad/core/objects/reminder_object.dart';
+import 'package:storypad/core/types/reminder_type.dart';
+import 'package:storypad/providers/device_preferences_provider.dart';
+import 'package:storypad/widgets/bottom_sheets/sp_edit_reminder_sheet.dart';
+import 'package:storypad/widgets/calendar/sp_calendar.dart';
+import 'package:storypad/widgets/calendar/sp_calendar_period_date_cell.dart';
+import 'package:storypad/widgets/sp_fab_location.dart';
+import 'package:storypad/widgets/sp_fade_in.dart';
+import 'package:storypad/widgets/sp_icons.dart';
+import 'package:storypad/widgets/story_list/sp_story_list.dart';
+import 'period_calendar_view_model.dart';
+
+part 'period_calendar_content.dart';
+
+class PeriodCalendarView extends StatelessWidget {
+  const PeriodCalendarView({
+    super.key,
+    required this.monthYearNotifier,
+  });
+
+  final ValueNotifier<({int year, int month})> monthYearNotifier;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<PeriodCalendarViewModel>(
+      create: (context) => PeriodCalendarViewModel(params: this, context: context),
+      builder: (context, child) {
+        return _PeriodCalendarContent(Provider.of(context));
+      },
+    );
+  }
+}

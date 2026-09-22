@@ -1,0 +1,263 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:storypad/core/databases/models/story_content_db_model.dart';
+import 'package:storypad/core/databases/models/story_page_db_model.dart';
+import 'package:storypad/core/databases/models/story_preferences_db_model.dart';
+import 'package:storypad/core/databases/models/template_db_model.dart';
+import 'package:storypad/core/mixins/debounched_callback.dart';
+import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
+import 'package:storypad/core/mixins/list_reorderable.dart';
+import 'package:storypad/core/objects/story_page_objects_map.dart';
+import 'package:storypad/core/services/generate_body_plain_text_service.dart';
+import 'package:storypad/core/services/stories/story_has_data_written_service.dart';
+import 'package:storypad/core/types/editing_flow_type.dart';
+import 'package:storypad/views/stories/local_widgets/base_story_view_model.dart';
+
+import 'edit_template_view.dart';
+
+class EditTemplateViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
+  final EditTemplateRoute params;
+  final PageController pageController = PageController();
+
+  EditTemplateViewModel({
+    required this.params,
+  }) {
+    template = params.initialTemplate ?? TemplateDbModel.newTemplate(createdAt: openedOn);
+    latestContent = template.content ?? StoryContentDbModel.create(createdAt: openedOn);
+    draftContent = template.content ?? StoryContentDbModel.create(createdAt: openedOn);
+
+    bool alreadyHasPage = draftContent!.richPages?.isNotEmpty == true;
+    if (!alreadyHasPage) draftContent = draftContent!.addRichPage();
+
+    pagesManager = StoryPagesManagerInfo(
+      initialPageIndex: 0,
+      initialScrollOffset: 0.0,
+      draftContent: () => draftContent,
+      notifyListeners: notifyListeners,
+    );
+
+    load();
+  }
+
+  late TemplateDbModel template;
+  StoryContentDbModel? draftContent;
+  StoryContentDbModel? latestContent;
+
+  final ValueNotifier<DateTime?> lastSavedAtNotifier = ValueNotifier(null);
+  late final StoryPagesManagerInfo pagesManager;
+  final DateTime openedOn = DateTime.now();
+
+  EditingFlowType get flowType => params.flowType;
+
+  Future<void> load() async {
+    pagesManager.pagesMap = await StoryPageObjectsMap.fromContent(
+      content: draftContent!,
+      readOnly: false,
+      initialPagesMap: null,
+    );
+    notifyListeners();
+  }
+
+  void addNewPage() async {
+    HapticFeedback.selectionClick();
+
+    draftContent = draftContent!.addRichPage();
+    pagesManager.pagesMap.add(richPage: draftContent!.richPages!.last, readOnly: false);
+
+    if (hasDataWritten) {
+      template = template.copyWith(content: draftContent, updatedAt: DateTime.now());
+      lastSavedAtNotifier.value = DateTime.now();
+      TemplateDbModel.db.set(template);
+    }
+
+    notifyListeners();
+
+    if (pagesManager.pageScrollController.hasClients) {
+      pagesManager.scrollToPage(draftContent!.richPages!.last.id);
+    } else if (pagesManager.pageController.hasClients) {
+      pagesManager.pageController.animateToPage(
+        draftContent!.richPages!.length - 1,
+        duration: Durations.long4,
+        curve: Curves.fastLinearToSlowEaseIn,
+      );
+    }
+  }
+
+  Future<void> swapPages({
+    required int oldIndex,
+    required int newIndex,
+  }) async {
+    List<StoryPageDbModel> pages = [
+      ...draftContent?.richPages ?? <StoryPageDbModel>[],
+    ].swap(oldIndex: oldIndex, newIndex: newIndex);
+
+    final plainTextResult = GenerateBodyPlainTextService.call(pages);
+
+    draftContent = draftContent!.copyWith(
+      plainText: plainTextResult?.plainText,
+      richPages: plainTextResult?.richPagesWithCounts,
+    );
+
+    if (hasDataWritten) {
+      template = template.copyWith(content: draftContent, updatedAt: DateTime.now());
+      lastSavedAtNotifier.value = DateTime.now();
+      TemplateDbModel.db.set(template);
+    }
+
+    notifyListeners();
+
+    if (!pagesManager.managingPage) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (pagesManager.pageScrollController.hasClients) {
+          pagesManager.scrollToPage(pages[newIndex].id);
+        }
+      });
+    }
+  }
+
+  Future<void> deleteAPage(BuildContext context, StoryPageDbModel richPage) async {
+    if (!pagesManager.canDeletePage) return;
+
+    final result = await showOkCancelAlertDialog(
+      title: tr("dialog.are_you_sure_to_delete_this_page.title"),
+      context: context,
+      okLabel: tr("button.delete"),
+      isDestructiveAction: true,
+    );
+
+    if (result == OkCancelResult.ok) {
+      draftContent = draftContent!.removeRichPage(richPage.id);
+      pagesManager.pagesMap.remove(richPage.id);
+
+      if (hasDataWritten) {
+        template = template.copyWith(content: draftContent, updatedAt: DateTime.now());
+        lastSavedAtNotifier.value = DateTime.now();
+        TemplateDbModel.db.set(template);
+      }
+
+      notifyListeners();
+    }
+  }
+
+  Future<void> onNameChanged(String newTemplateName) async {
+    return debouncedCallback(() async {
+      template = template.copyWith(
+        name: newTemplateName.trim(),
+        updatedAt: DateTime.now(),
+      );
+      lastSavedAtNotifier.value = DateTime.now();
+      await TemplateDbModel.db.set(template);
+    });
+  }
+
+  Future<void> onPageChanged(StoryPageDbModel richPage) async {
+    draftContent = draftContent!.replacePage(richPage);
+    pagesManager.pagesMap[richPage.id]?.page = richPage;
+
+    return debouncedCallback(() async {
+      if (hasChange) {
+        template = template.copyWith(content: draftContent, updatedAt: DateTime.now());
+        lastSavedAtNotifier.value = DateTime.now();
+        await TemplateDbModel.db.set(template);
+      }
+    });
+  }
+
+  Future<bool> setTags(List<int> tags) async {
+    template = template.copyWith(tags: tags, updatedAt: DateTime.now());
+    notifyListeners();
+
+    if (hasDataWritten) {
+      lastSavedAtNotifier.value = DateTime.now();
+      TemplateDbModel.db.set(template);
+    }
+
+    return true;
+  }
+
+  Future<void> changePreferences(StoryPreferencesDbModel preferences) async {
+    if (preferences.layoutType != template.preferences.layoutType) {
+      pagesManager.currentPageIndexNotifier.value = null;
+
+      if (pagesManager.pageController.hasClients) pagesManager.pageController.jumpToPage(0);
+      if (pagesManager.pageScrollController.hasClients) pagesManager.pageScrollController.jumpTo(0);
+    }
+
+    template = template.copyWith(updatedAt: DateTime.now(), preferencesOrNull: preferences);
+    notifyListeners();
+
+    if (hasDataWritten) {
+      await TemplateDbModel.db.set(template);
+      lastSavedAtNotifier.value = DateTime.now();
+    }
+  }
+
+  Future<void> done(BuildContext context) async {
+    // Re-save without check to make sure draft content is removed. We will revert back if no change anyway.
+    await TemplateDbModel.db.set(template);
+    lastSavedAtNotifier.value = template.updatedAt;
+
+    // call pop instead of maybePop to skip pop scope
+    if (context.mounted) Navigator.pop(context, template);
+  }
+
+  bool get hasDataWritten =>
+      flowType == EditingFlowType.update || StoryHasDataWrittenService.callByContent(draftContent!);
+
+  bool get hasChange {
+    if (draftContent == null) return false;
+    if (latestContent == null) return false;
+
+    // when not ignore empty & no data written, consider not changed.
+    if (flowType == EditingFlowType.create && !StoryHasDataWrittenService.callByContent(draftContent!)) return false;
+    return draftContent!.hasChanges(latestContent!);
+  }
+
+  @override
+  void dispose() {
+    pagesManager.dispose();
+    pageController.dispose();
+    super.dispose();
+  }
+
+  Future<void> onPopInvokedWithResult(bool didPop, Object? _, BuildContext context) async {
+    if (pagesManager.managingPage) return pagesManager.toggleManagingPage();
+    if (didPop) return;
+
+    Future<OkCancelResult> showDiscardConfirmation(BuildContext context) async {
+      return showOkCancelAlertDialog(
+        context: context,
+        isDestructiveAction: true,
+        title: tr("dialog.are_you_sure_to_discard_these_changes.title"),
+        okLabel: tr("button.discard"),
+      );
+    }
+
+    if (flowType == EditingFlowType.create) {
+      if (lastSavedAtNotifier.value != null) {
+        OkCancelResult userAction = await showDiscardConfirmation(context);
+        if (userAction == OkCancelResult.ok) {
+          await TemplateDbModel.db.delete(template.id, softDelete: false);
+          if (context.mounted && ModalRoute.of(context)?.isCurrent == true) return Navigator.of(context).pop(null);
+        } else {
+          return;
+        }
+      } else {
+        if (context.mounted) Navigator.of(context).pop(null);
+      }
+    } else if (flowType == EditingFlowType.update) {
+      if (template.updatedAt != params.initialTemplate?.updatedAt) {
+        OkCancelResult userAction = await showDiscardConfirmation(context);
+        if (userAction == OkCancelResult.ok) {
+          await TemplateDbModel.db.set(params.initialTemplate!);
+          template = params.initialTemplate!;
+          if (context.mounted && ModalRoute.of(context)?.isCurrent == true) return Navigator.of(context).pop(null);
+        }
+      } else {
+        if (context.mounted) Navigator.of(context).pop(null);
+      }
+    }
+  }
+}

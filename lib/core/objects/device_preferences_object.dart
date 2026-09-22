@@ -1,0 +1,110 @@
+import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:storypad/core/constants/app_constants.dart';
+import 'package:storypad/core/objects/app_quick_action_object.dart';
+import 'package:storypad/core/objects/default_story_preferences_object.dart';
+import 'package:storypad/core/objects/reminder_object.dart';
+import 'package:storypad/core/objects/story_tile_preferences_object.dart';
+import 'package:storypad/core/types/asset_compression_option.dart';
+import 'package:storypad/core/types/first_day_of_week_option.dart';
+import 'package:storypad/core/types/font_size_option.dart';
+import 'package:storypad/core/types/media_sync_option.dart';
+import 'package:storypad/core/types/time_format_option.dart';
+import 'package:storypad/widgets/maps/map_types.dart';
+
+part 'device_preferences_object.g.dart';
+
+@CopyWith()
+@JsonSerializable()
+class DevicePreferencesObject {
+  final String fontFamily;
+  final FontSizeOption? fontSize;
+  final int? fontWeightIndex;
+
+  final ThemeMode themeMode;
+  final int? colorSeedValue;
+
+  /// User-customized color name per weekday (DateTime.monday..sunday).
+  /// `null` or a missing day key falls back to [kDefaultColorNamesByDay].
+  final Map<int, String>? colorByDay;
+  final double voicePlaybackSpeed;
+  final double videoPlaybackSpeed;
+  final bool videoMuted;
+  final TimeFormatOption? timeFormat;
+  final FirstDayOfWeekOption firstDayOfWeek;
+  final AssetCompressionOption assetCompression;
+  final MediaSyncOption mediaSync;
+  final SpMapStyle mapStyle;
+
+  /// Which map provider to render with. `null` means "never chosen", which
+  /// falls back to `SpMapRenderer.defaultRenderer` — that fallback has to stay
+  /// platform-aware, since Google Maps has no desktop support at all. Read it
+  /// through `DevicePreferencesProvider.mapRenderer`, never directly.
+  final SpMapRenderer? mapRenderer;
+
+  final StoryTilePreferencesObject storyTilePreferences;
+  final DefaultStoryPreferencesObject defaultStoryPreferences;
+  final List<AppQuickActionObject>? homeQuickActions;
+
+  /// Names of the stats sections the user has hidden on the stats screen.
+  /// `null` means "never customized" so the stats view falls back to its own
+  /// defaults. Owned by the stats view model, which reads this once on open.
+  final List<String>? hiddenStatsSections;
+
+  // Add ons
+  final bool? enableRelaxSounds;
+  final bool? enablePeriodCalendar;
+
+  /// Device-local reminder configurations. `null` means never configured.
+  /// Reminders are intentionally not synced across devices (OS notifications
+  /// are per-device).
+  final List<ReminderObject>? reminders;
+
+  Color? get colorSeed => colorSeedValue != null ? Color(colorSeedValue!) : null;
+  FontWeight get fontWeight => fontWeightIndex != null ? FontWeight.values[fontWeightIndex!] : kDefaultFontWeight;
+
+  bool get colorSeedCustomized => colorSeed != null;
+
+  DevicePreferencesObject({
+    String? fontFamily,
+    this.fontSize,
+    this.fontWeightIndex,
+    this.enableRelaxSounds,
+    this.enablePeriodCalendar,
+    this.reminders,
+    ThemeMode? themeMode,
+    this.timeFormat,
+    FirstDayOfWeekOption? firstDayOfWeek,
+    AssetCompressionOption? assetCompression,
+    MediaSyncOption? mediaSync,
+    this.colorSeedValue,
+    this.colorByDay,
+    double? voicePlaybackSpeed,
+    double? videoPlaybackSpeed,
+    bool? videoMuted,
+    StoryTilePreferencesObject? storyTilePreferences,
+    DefaultStoryPreferencesObject? defaultStoryPreferences,
+    this.homeQuickActions,
+    this.hiddenStatsSections,
+    this.mapRenderer,
+    SpMapStyle? mapStyle,
+  }) : fontFamily = fontFamily ?? kDefaultFontFamily,
+       themeMode = themeMode ?? ThemeMode.system,
+       firstDayOfWeek = firstDayOfWeek ?? FirstDayOfWeekOption.defaultValue,
+       assetCompression = assetCompression ?? AssetCompressionOption.defaultValue,
+       mediaSync = mediaSync ?? MediaSyncOption.defaultValue,
+       voicePlaybackSpeed = voicePlaybackSpeed ?? 1.0,
+       videoPlaybackSpeed = videoPlaybackSpeed ?? 1.0,
+       videoMuted = videoMuted ?? false,
+       storyTilePreferences = storyTilePreferences ?? StoryTilePreferencesObject(),
+       defaultStoryPreferences = defaultStoryPreferences ?? DefaultStoryPreferencesObject(),
+       mapStyle = mapStyle ?? SpMapStyle.streets;
+
+  factory DevicePreferencesObject.initial() {
+    return DevicePreferencesObject();
+  }
+
+  Map<String, dynamic> toJson() => _$DevicePreferencesObjectToJson(this);
+  factory DevicePreferencesObject.fromJson(Map<String, dynamic> json) => _$DevicePreferencesObjectFromJson(json);
+}

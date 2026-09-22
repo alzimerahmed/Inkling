@@ -1,0 +1,67 @@
+import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:storypad/core/constants/app_constants.dart';
+import 'package:storypad/core/extensions/font_weight_extension.dart';
+
+part 'theme_object.g.dart';
+
+@JsonSerializable()
+class ThemeObject {
+  @JsonKey(name: 'font_family')
+  final String? _fontFamily;
+  final int? fontWeightIndex;
+
+  @JsonKey(name: 'theme_mode')
+  final ThemeMode? _themeMode;
+  final int? colorSeedValue;
+
+  String get fontFamily => _fontFamily ?? kDefaultFontFamily;
+  ThemeMode get themeMode => _themeMode ?? ThemeMode.system;
+  Color? get colorSeed => colorSeedValue != null ? Color(colorSeedValue!) : null;
+  FontWeight get fontWeight => fontWeightIndex != null ? FontWeight.values[fontWeightIndex!] : kDefaultFontWeight;
+
+  bool get colorSeedCustomized => colorSeed != null;
+
+  ThemeObject({
+    String? fontFamily,
+    this.fontWeightIndex,
+    ThemeMode? themeMode,
+    this.colorSeedValue,
+  }) : _fontFamily = fontFamily,
+       _themeMode = themeMode;
+
+  factory ThemeObject.initial() {
+    return ThemeObject();
+  }
+
+  ThemeObject copyWith({
+    String? fontFamily,
+    FontWeight? fontWeight,
+    ThemeMode? themeMode,
+    Color? colorSeed,
+  }) {
+    return ThemeObject(
+      fontFamily: fontFamily ?? this.fontFamily,
+      fontWeightIndex: fontWeight?.weightIndex ?? fontWeightIndex,
+      themeMode: themeMode ?? this.themeMode,
+      colorSeedValue: colorSeed?.toARGB32() ?? colorSeedValue,
+    );
+  }
+
+  ThemeObject copyWithNewColor(
+    Color colorSeed, {
+    bool removeIfSame = true,
+  }) {
+    Color? newColorSeed = colorSeed;
+    if (removeIfSame) newColorSeed = colorSeed.toARGB32() != colorSeedValue ? colorSeed : null;
+    return ThemeObject(
+      fontFamily: fontFamily,
+      fontWeightIndex: fontWeight.weightIndex,
+      themeMode: themeMode,
+      colorSeedValue: newColorSeed?.toARGB32(),
+    );
+  }
+
+  Map<String, dynamic> toJson() => _$ThemeObjectToJson(this);
+  factory ThemeObject.fromJson(Map<String, dynamic> json) => _$ThemeObjectFromJson(json);
+}

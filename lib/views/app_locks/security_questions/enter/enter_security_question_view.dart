@@ -1,0 +1,48 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:provider/provider.dart';
+import 'package:storypad/core/types/app_lock_question.dart';
+import 'package:flutter/material.dart';
+import 'package:storypad/widgets/base_view/base_route.dart';
+
+import 'enter_security_question_view_model.dart';
+
+part 'enter_security_question_content.dart';
+
+class EnterSecurityQuestionRoute extends BaseRoute {
+  EnterSecurityQuestionRoute({
+    required this.question,
+    required this.answer,
+  });
+
+  final AppLockQuestion question;
+  final String? answer;
+
+  @override
+  Map<String, String?>? get analyticsParameters {
+    return {
+      'question': question.translatedQuestion,
+    };
+  }
+
+  @override
+  Widget buildPage(BuildContext context) => EnterSecurityQuestionView(params: this);
+}
+
+class EnterSecurityQuestionView extends StatelessWidget {
+  const EnterSecurityQuestionView({
+    super.key,
+    required this.params,
+  });
+
+  final EnterSecurityQuestionRoute params;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<EnterSecurityQuestionViewModel>(
+      create: (context) => EnterSecurityQuestionViewModel(params: params),
+      builder: (context, child) {
+        return _EnterSecurityQuestionContent(Provider.of(context));
+      },
+    );
+  }
+}

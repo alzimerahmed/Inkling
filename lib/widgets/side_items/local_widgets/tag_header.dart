@@ -1,0 +1,58 @@
+part of '../side_items.dart';
+
+class TagHeader extends StatelessWidget {
+  const TagHeader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => context.read<RootProvider>().navigate(TagsRoute()),
+      child: ValueListenableBuilder(
+        valueListenable: context.read<RootProvider>().selectedRootRouteNameNotifier,
+        child: Row(
+          mainAxisAlignment: .start,
+          crossAxisAlignment: .center,
+          children: [
+            Expanded(
+              child: Text(
+                tr('general.tags'),
+                style: TextTheme.of(context).titleMedium,
+              ),
+            ),
+            const SizedBox(width: 8),
+            const SizedBox.square(
+              dimension: 32,
+              child: Icon(
+                SpIcons.edit,
+                size: 20.0,
+              ),
+            ),
+          ],
+        ),
+        builder: (context, selectedRootRouteName, contents) {
+          bool selected = selectedRootRouteName == TagsRoute().routeName;
+
+          return Container(
+            padding: EdgeInsets.only(
+              left: _leadingPaddedSize + 4.0,
+              top: 4.0,
+              bottom: 4.0,
+              right: selected ? 4.0 : 8.0,
+            ),
+            decoration: BoxDecoration(
+              border: selected
+                  ? Border(
+                      right: BorderSide(
+                        color: ColorScheme.of(context).primary,
+                        width: 4.0,
+                      ),
+                    )
+                  : null,
+            ),
+            child: contents,
+          );
+        },
+      ),
+    );
+  }
+}

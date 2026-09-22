@@ -1,0 +1,270 @@
+import 'package:storypad/core/constants/app_constants.dart';
+import 'package:storypad/core/databases/adapters/base_db_adapter.dart';
+import 'package:storypad/core/databases/adapters/objectbox/entities.dart';
+import 'package:storypad/core/databases/models/base_db_model.dart';
+import 'package:storypad/core/databases/models/collection_db_model.dart';
+import 'package:storypad/core/objects/backup_file_object.dart';
+import 'package:storypad/core/services/logger/app_logger.dart';
+import 'package:storypad/core/types/support_directory_path.dart';
+import 'package:storypad/objectbox.g.dart';
+
+abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends BaseDbAdapter<T> {
+  @override
+  String get tableName;
+
+  static Store? _store;
+  Store get store => _store!;
+
+  Box<B>? _box;
+
+  Box<B> get box {
+    _box ??= store.box<B>();
+    return _box!;
+  }
+
+  QueryIntegerProperty<B> get idProperty;
+  QueryStringProperty<B> get lastSavedDeviceIdProperty;
+  QueryDateProperty<B> get permanentlyDeletedAtProperty;
+
+  Future<void> cleanupOldDeletedRecords() async {
+    DateTime sevenDaysAgo = DateTime.now().subtract(const Duration(days: 7));
+    Condition<B> conditions = permanentlyDeletedAtProperty.notNull().and(
+      permanentlyDeletedAtProperty.lessOrEqualDate(sevenDaysAgo),
+    );
+
+    await box.query(conditions).build().removeAsync();
+  }
+
+  @override
+  Future<Map<int, DateTime?>> getLastUpdatedAtByYear({bool? fromThisDeviceOnly}) async {
+    Condition<B>? conditions = idProperty.notNull();
+
+    if (fromThisDeviceOnly == true) {
+      conditions = conditions.and(lastSavedDeviceIdProperty.equals(kDeviceInfo.id));
+    }
+
+    // We don't need to filter out deleted records here because
+    // even deleted records can have updatedAt values. Usually for sync purposes.
+    // conditions = conditions.and(permanentlyDeletedAtProperty.isNull());
+
+    final objects = await box.query(conditions).build().findAsync();
+
+    if (!isYearPartitioned) {
+      DateTime? lastUpdated;
+      for (var obj in objects) {
+        if (lastUpdated == null || obj.updatedAt.isAfter(lastUpdated)) {
+          lastUpdated = obj.updatedAt;
+        }
+      }
+
+      return lastUpdated == null ? {} : {BackupFileObject.kGlobalBackupYear: lastUpdated};
+    }
+
+    Map<int, DateTime?> lastUpdatedByYear = {};
+    for (var obj in objects) {
+      int year = obj.createdAt.year;
+      if (lastUpdatedByYear[year] == null || obj.updatedAt.isAfter(lastUpdatedByYear[year]!)) {
+        lastUpdatedByYear[year] = obj.updatedAt;
+      }
+    }
+
+    return lastUpdatedByYear;
+  }
+
+  Future<B> modelToObject(T model, [Map<String, dynamic>? options]);
+  Future<List<B>> modelsToObjects(List<T> models, [Map<String, dynamic>? options]);
+
+  Future<T> objectToModel(B object, [Map<String, dynamic>? options]);
+  Future<List<T>> objectsToModels(
+    List<B> objects, [
+    Map<String, dynamic>? options,
+  ]);
+
+  Future<void> initilize() async {
+    await _initializeStore();
+    await cleanupOldDeletedRecords();
+  }
+
+  Future<void> _initializeStore() async {
+    if (_store != null) return;
+
+    await SupportDirectoryPath.objectbox.ensureDirectoryExists();
+    _store = await openStore(
+      directory: SupportDirectoryPath.objectbox.directoryPath,
+      macosApplicationGroup: '24KJ877SZ9',
+    );
+  }
+
+  bool exist(int id) {
+    return box.contains(id);
+  }
+
+  @override
+  Future<T?> find(
+    int id, {
+    bool returnDeleted = false,
+    String? debugSource,
+  }) async {
+    AppLogger.info("Triggering $tableName#find $id 🍎 from $debugSource");
+
+    B? object = box.get(id);
+    if (object?.permanentlyDeletedAt != null && !returnDeleted) return null;
+
+    if (object != null) {
+      return objectToModel(object);
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  bool hasDeleted(int id) {
+    return box.get(id)?.permanentlyDeletedAt != null;
+  }
+
+  QueryBuilder<B> buildQuery({
+    Map<String, dynamic>? filters,
+    required bool returnDeleted,
+  });
+
+  @override
+  Future<int> count({
+    Map<String, dynamic>? filters,
+    bool returnDeleted = false,
+    required String? debugSource,
+  }) async {
+    AppLogger.info("Triggering $tableName#count from $debugSource 🍎");
+    QueryBuilder<B>? queryBuilder = buildQuery(filters: filters, returnDeleted: returnDeleted);
+    Query<B>? query = queryBuilder.build();
+    return query.count();
+  }
+
+  @override
+  Future<CollectionDbModel<T>?> where({
+    Map<String, dynamic>? filters,
+    Map<String, dynamic>? options,
+    bool returnDeleted = false,
+  }) async {
+    AppLogger.info("Triggering $tableName#where 🍎");
+
+    List<B> objects;
+    QueryBuilder<B>? queryBuilder = buildQuery(filters: filters, returnDeleted: returnDeleted);
+
+    Query<B>? query = queryBuilder.build();
+
+    int? limit = filters != null && filters.containsKey('limit') ? filters['limit'] as int : null;
+    if (limit != null) query.limit = limit;
+
+    objects = await query.findAsync();
+    List<T> docs = await objectsToModels(objects, options);
+    return CollectionDbModel<T>(items: docs);
+  }
+
+  @override
+  Future<T?> touch(
+    T record, {
+    bool runCallbacks = true,
+  }) async {
+    AppLogger.info("Triggering $tableName#touch 🍎🍎");
+    B constructed = await modelToObject(record);
+
+    constructed.touch();
+    await box.putAsync(constructed, mode: PutMode.put);
+
+    if (runCallbacks) await afterCommit(record.id, record);
+    return record;
+  }
+
+  @override
+  Future<T?> set(
+    T record, {
+    bool runCallbacks = true,
+    String? debugSource,
+  }) async {
+    AppLogger.info("Triggering $tableName#set 🍎 from $debugSource");
+    B constructed = await modelToObject(record);
+
+    constructed.setDeviceId();
+    await box.putAsync(constructed, mode: PutMode.put);
+
+    if (runCallbacks) await afterCommit(record.id, record);
+    return record;
+  }
+
+  @override
+  Future<void> setAll(
+    List<T> records, {
+    bool runCallbacks = true,
+  }) async {
+    AppLogger.info("Triggering $tableName#setAll 🍎");
+    List<B> objects = await modelsToObjects(records.whereType<T>().toList());
+
+    for (B obj in objects) {
+      obj.setDeviceId();
+    }
+
+    if (runCallbacks) await afterCommit();
+    await box.putManyAsync(objects, mode: PutMode.put);
+  }
+
+  @override
+  Future<T?> update(
+    T record, {
+    bool runCallbacks = true,
+  }) async {
+    AppLogger.info("Triggering $tableName#update 🍎");
+    B constructed = await modelToObject(record);
+
+    constructed.setDeviceId();
+    await box.putAsync(constructed, mode: PutMode.update);
+
+    if (runCallbacks) await afterCommit(record.id, record);
+    return record;
+  }
+
+  @override
+  Future<T?> create(
+    T record, {
+    bool runCallbacks = true,
+  }) async {
+    AppLogger.info("Triggering $tableName#create 🍎");
+    B constructed = await modelToObject(record);
+
+    constructed.setDeviceId();
+    await box.putAsync(constructed, mode: PutMode.insert);
+
+    if (runCallbacks) await afterCommit(record.id, record);
+    return record;
+  }
+
+  @override
+  /// By default, records are soft-deleted. Soft-deleted records remain in the database
+  /// for up to 7 days and are later permanently removed by a cleanup job.
+  ///
+  /// Soft deletion helps synchronize deletions across devices (e.g., when data is restored
+  /// from a backup). However, if the data hasn’t been backed up yet, you can set
+  /// `softDelete = false` to delete it immediately.
+  Future<T?> delete(
+    int id, {
+    bool softDelete = true,
+    bool runCallbacks = true,
+    DateTime? deletedAt,
+  }) async {
+    AppLogger.info("Triggering $tableName#delete 🍎");
+    B? object = box.get(id);
+
+    if (softDelete) {
+      if (object != null) {
+        object.setDeviceId();
+        object.toPermanentlyDeleted(deletedAt: deletedAt);
+        await box.putAsync(object);
+      }
+
+      if (runCallbacks) await afterCommit(id, null);
+      return null;
+    } else {
+      await box.removeAsync(id);
+      return null;
+    }
+  }
+}

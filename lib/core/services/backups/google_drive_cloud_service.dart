@@ -1,0 +1,838 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io' as io;
+import 'package:google_sign_in/google_sign_in.dart' as gsi;
+import 'package:googleapis/drive/v3.dart' as drive;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
+import 'package:storypad/core/objects/cloud_file_object.dart';
+import 'package:storypad/core/objects/cloud_storage_quota_object.dart';
+import 'package:storypad/core/objects/google_user_object.dart';
+import 'package:storypad/core/services/backups/backup_cloud_service.dart';
+import 'package:storypad/core/services/backups/backup_service_type.dart';
+import 'package:storypad/core/services/logger/app_logger.dart';
+import 'package:storypad/core/storages/google_user_storage.dart';
+
+import 'package:http/http.dart' as http;
+
+class _GoogleAuthClient extends http.BaseClient {
+  final http.Client client = http.Client();
+  final Map<String, String> headers;
+
+  _GoogleAuthClient(this.headers);
+
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest request) {
+    return client.send(request..headers.addAll(headers));
+  }
+}
+
+// These class are responsible for calling google drive APIs.
+// Exception should not catch here. Let repository handle it.
+class GoogleDriveCloudService extends BackupCloudService {
+  @override
+  BackupServiceType get serviceType => BackupServiceType.google_drive;
+
+  GoogleUserObject? _currentUser;
+
+  @override
+  GoogleUserObject? get currentUser => _currentUser;
+
+  @override
+  bool get isSignedIn => _currentUser != null;
+
+  final Map<String, String> _folderDriveIdByFolderName = {};
+  final List<String> _requestedScopes = [drive.DriveApi.driveAppdataScope];
+
+  Future<drive.DriveApi?> get googleDriveClient async {
+    if (_currentUser == null || _currentUser?.accessToken == null) return null;
+    final _GoogleAuthClient client = _GoogleAuthClient(
+      _currentUser!.authHeaders,
+    );
+    return drive.DriveApi(client);
+  }
+
+  // load data locally
+  @override
+  Future<void> initialize() async {
+    _currentUser = await GoogleUserStorage().readObject();
+  }
+
+  Completer<gsi.GoogleSignIn>? googleServiceCompleter;
+  Future<gsi.GoogleSignIn> get googleServiceInstance async {
+    if (googleServiceCompleter != null) return googleServiceCompleter!.future;
+    googleServiceCompleter = Completer<gsi.GoogleSignIn>();
+
+    try {
+      await gsi.GoogleSignIn.instance.initialize();
+      googleServiceCompleter!.complete(gsi.GoogleSignIn.instance);
+    } catch (e) {
+      googleServiceCompleter!.completeError(e);
+      googleServiceCompleter = null;
+    }
+
+    return googleServiceCompleter!.future;
+  }
+
+  @override
+  void setAutoBackupEnabled(bool enabled) {
+    if (_currentUser == null) return;
+
+    _currentUser = _currentUser!.copyWith(autoBackupEnabled: enabled);
+    GoogleUserStorage().writeObject(_currentUser!);
+  }
+
+  @override
+  Future<bool> reauthenticateIfNeeded() async {
+    await googleServiceInstance; // ensure initialized
+
+    try {
+      if (currentUser == null) {
+        throw exp.AuthException(
+          'No stored user found',
+          exp.AuthExceptionType.signInRequired,
+          serviceType: serviceType,
+        );
+      }
+
+      final authHeaders = await (await googleServiceInstance).authorizationClient.authorizationHeaders(
+        _requestedScopes,
+        promptIfNecessary: true,
+      );
+
+      if (authHeaders != null) {
+        _currentUser = GoogleUserObject(
+          id: _currentUser!.id,
+          email: _currentUser!.email,
+          displayName: _currentUser!.displayName,
+          photoUrl: _currentUser!.photoUrl,
+          accessToken: authHeaders['Authorization']?.replaceFirst(
+            'Bearer ',
+            '',
+          ),
+          refreshedAt: DateTime.now(),
+          autoBackupEnabled: autoBackupEnabled,
+        );
+
+        await GoogleUserStorage().writeObject(_currentUser!);
+        return true;
+      }
+
+      throw exp.AuthException(
+        'Failed to get auth headers',
+        exp.AuthExceptionType.tokenExpired,
+        serviceType: serviceType,
+      );
+    } on exp.AuthException {
+      rethrow;
+    } catch (e) {
+      throw exp.AuthException(
+        'Reauthentication failed: $e',
+        exp.AuthExceptionType.signInFailed,
+        context: 'reauthenticateIfNeeded',
+        serviceType: serviceType,
+      );
+    }
+  }
+
+  @override
+  Future<bool> signIn() async {
+    try {
+      if (!(await googleServiceInstance).supportsAuthenticate()) {
+        throw exp.AuthException(
+          'Platform does not support authentication',
+          exp.AuthExceptionType.signInFailed,
+          serviceType: serviceType,
+        );
+      }
+
+      final account = await (await googleServiceInstance).authenticate(
+        scopeHint: _requestedScopes,
+      );
+      final authHeaders = await account.authorizationClient.authorizationHeaders(
+        _requestedScopes,
+        promptIfNecessary: true,
+      );
+
+      _currentUser = GoogleUserObject(
+        id: account.id,
+        email: account.email,
+        displayName: account.displayName,
+        photoUrl: account.photoUrl,
+        accessToken: authHeaders?['Authorization']?.replaceFirst('Bearer ', ''),
+        refreshedAt: DateTime.now(),
+        autoBackupEnabled: autoBackupEnabled,
+      );
+
+      await GoogleUserStorage().writeObject(_currentUser!);
+      return true;
+    } catch (e) {
+      if (e is exp.AuthException) rethrow;
+
+      if (e is gsi.GoogleSignInException) {
+        throw exp.AuthException(
+          e.description ?? e.toString(),
+          exp.AuthExceptionType.signInRequired,
+          context: 'signIn',
+          serviceType: serviceType,
+        );
+      }
+
+      throw exp.AuthException(
+        'Sign-in failed: $e',
+        exp.AuthExceptionType.signInFailed,
+        context: 'signIn',
+        serviceType: serviceType,
+      );
+    }
+  }
+
+  @override
+  Future<void> signOut() async {
+    await (await googleServiceInstance).signOut();
+    await GoogleUserStorage().remove();
+    _currentUser = null;
+  }
+
+  @override
+  Future<bool> canAccessRequestedScopes() async {
+    try {
+      if (_currentUser == null || _currentUser!.accessToken == null) {
+        throw exp.AuthException(
+          'No current user or missing access token',
+          exp.AuthExceptionType.signInRequired,
+          serviceType: serviceType,
+        );
+      }
+
+      // If we have a non-null access token and it was recently refreshed, we have the scopes
+      // Google's authenticate() method requests all necessary scopes upfront
+      return _currentUser!.isRefreshedRecently();
+    } on exp.AuthException {
+      rethrow;
+    } catch (e) {
+      throw exp.AuthException(
+        'Scope validation failed: $e',
+        exp.AuthExceptionType.signInFailed,
+        context: 'canAccessRequestedScopes',
+        serviceType: serviceType,
+      );
+    }
+  }
+
+  @override
+  Future<bool> requestScope() async {
+    if (!isSignedIn) return false;
+
+    try {
+      final account = await (await googleServiceInstance).authenticate(
+        scopeHint: _requestedScopes,
+      );
+      final authHeaders = await account.authorizationClient.authorizationHeaders(
+        _requestedScopes,
+        promptIfNecessary: true,
+      );
+
+      if (authHeaders == null) {
+        await (await googleServiceInstance).disconnect();
+        _currentUser = null;
+        await GoogleUserStorage().remove();
+        return false;
+      }
+
+      _currentUser = GoogleUserObject(
+        id: account.id,
+        email: account.email,
+        displayName: account.displayName,
+        photoUrl: account.photoUrl,
+        accessToken: authHeaders['Authorization']?.replaceFirst('Bearer ', ''),
+        refreshedAt: DateTime.now(),
+        autoBackupEnabled: autoBackupEnabled,
+      );
+
+      await GoogleUserStorage().writeObject(_currentUser!);
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  @override
+  Future<(String, int)?> getFileContent(CloudFileObject file) async {
+    drive.DriveApi? client = await googleDriveClient;
+    if (client == null) return null;
+
+    return _executeWithRetry(
+      methodName: 'getFileContent',
+      operation: () async {
+        CloudFileObject? fileInfo = await findFileById(file.id);
+        if (fileInfo == null) return null;
+
+        final bytes = await _fetchMediaBytes(client, fileInfo.id);
+        if (bytes == null) return null;
+
+        if (file.getFileInfo()?.hasCompression == true) {
+          final decodedBytes = io.gzip.decode(bytes);
+          return (utf8.decode(decodedBytes), bytes.length);
+        } else {
+          return (utf8.decode(bytes), bytes.length);
+        }
+      },
+    );
+  }
+
+  @override
+  Future<List<int>?> downloadFileBytes(String fileId) async {
+    drive.DriveApi? client = await googleDriveClient;
+    if (client == null) return null;
+
+    return _executeWithRetry(
+      methodName: 'downloadFileBytes',
+      operation: () => _fetchMediaBytes(client, fileId),
+    );
+  }
+
+  Future<List<int>?> _fetchMediaBytes(drive.DriveApi client, String fileId) async {
+    Object? media = await client.files.get(
+      fileId,
+      downloadOptions: drive.DownloadOptions.fullMedia,
+    );
+    if (media is! drive.Media) return null;
+
+    List<int> dataStore = [];
+    final completer = Completer<List<int>>();
+    media.stream.listen(
+      (data) => dataStore.insertAll(dataStore.length, data),
+      onDone: () => completer.complete(dataStore),
+      onError: (error) => completer.completeError(error),
+      cancelOnError: true,
+    );
+
+    return completer.future;
+  }
+
+  @override
+  Future<CloudFileObject?> findFileById(String fileId) async {
+    drive.DriveApi? client = await googleDriveClient;
+    if (client == null) return null;
+
+    return _executeWithRetry(
+      methodName: 'findFileById',
+      operation: () async {
+        Object file = await client.files.get(fileId);
+        if (file is drive.File) return CloudFileObject.fromGoogleDrive(file);
+        return null;
+      },
+    );
+  }
+
+  /// Fetch all yearly backups (v3) from the backups/ folder
+  /// Falls back to legacy backups (v2/v1) from root if no v3 backups exist
+  /// Returns a map of year -> CloudFileObject
+  @override
+  Future<Map<int, CloudFileObject>> fetchYearlyBackups() async {
+    return _executeWithRetry(
+      methodName: 'fetchYearlyBackups',
+      operation: () async {
+        drive.DriveApi client = await _getAuthenticatedClient();
+
+        // First, try to fetch v3 yearly backups from backups/ folder
+        final backupsFolderId = await loadFolder(client, 'backups');
+
+        if (backupsFolderId != null) {
+          drive.FileList fileList = await client.files.list(
+            spaces: "appDataFolder",
+            q: "(name contains 'Backup__3__' or name contains 'Backup::3::') and '$backupsFolderId' in parents",
+          );
+
+          if (fileList.files != null && fileList.files!.isNotEmpty) {
+            Map<int, CloudFileObject> yearlyBackups = {};
+            for (var file in fileList.files!) {
+              final cloudFile = CloudFileObject.fromGoogleDrive(file);
+              final year = cloudFile.year;
+              if (year != null) {
+                // When duplicates exist for the same year, keep the one with the newest
+                // filename timestamp. This prevents non-deterministic ordering from
+                // causing endless re-uploads when multiple files exist for a year.
+                final existing = yearlyBackups[year];
+                final existingTs = existing?.lastUpdatedAt;
+                final newTs = cloudFile.lastUpdatedAt;
+                final isNewer =
+                    existing == null || (newTs != null && (existingTs == null || newTs.isAfter(existingTs)));
+                if (isNewer) yearlyBackups[year] = cloudFile;
+              }
+            }
+            return yearlyBackups;
+          }
+        }
+
+        // Should be removed after all users have migrated to v3 backups.
+        // Only for backward compatibility.
+        return _fetchLegacyBackups(client);
+      },
+    );
+  }
+
+  // Fallback: Fetch legacy backups (v2/v1) from root folder
+  /// NOTE: Legacy backups are NOT yearly backups. They're stored with a sentinel year (-1)
+  /// to indicate they should be treated specially and not as part of normal yearly sync logic.
+  /// This prevents accidental misuse if code tries to interpret them as real yearly backups.
+  Future<Map<int, CloudFileObject>> _fetchLegacyBackups(drive.DriveApi client) async {
+    return _executeWithRetry(
+      methodName: 'fetchLegacyBackups',
+      operation: () async {
+        AppLogger.d('No v3 backups found, fetching legacy backups...');
+
+        drive.FileList legacyFileList = await client.files.list(
+          spaces: "appDataFolder",
+          q: "name contains '.json' or name contains '.zip'",
+          orderBy: "createdTime desc",
+          pageSize: 1, // Only fetch the most recent legacy backup
+        );
+
+        if (legacyFileList.files == null || legacyFileList.files!.isEmpty) {
+          return {};
+        }
+
+        // Legacy backups are monolithic (contain all years), so we use a sentinel year (-1)
+        // to indicate this is a legacy backup, not a yearly backup
+        final cloudFile = CloudFileObject.fromLegacyStoryPad(legacyFileList.files!.first);
+        return {-1: cloudFile};
+      },
+    );
+  }
+
+  /// Update an existing yearly backup file atomically using file ID
+  /// This prevents race conditions when multiple devices sync simultaneously
+  @override
+  Future<CloudFileObject?> updateFile({
+    required String fileId,
+    required String fileName,
+    required io.File file,
+  }) async {
+    AppLogger.d('GoogleDriveService#updateFile fileId=$fileId, fileName=$fileName');
+
+    return _executeWithRetry(
+      methodName: 'updateFile',
+      operation: () async {
+        if (!file.existsSync()) {
+          throw exp.FileOperationException(
+            'Local file does not exist: ${file.path}',
+            exp.FileOperationType.upload,
+            context: fileName,
+            serviceType: serviceType,
+          );
+        }
+
+        drive.DriveApi client = await _getAuthenticatedClient();
+
+        // Update both the file content AND the filename (to reflect new timestamp)
+        drive.File fileToUpdate = drive.File();
+        fileToUpdate.name = fileName;
+
+        AppLogger.d('GoogleDriveService#updateFile uploading...');
+        drive.File received = await client.files.update(
+          fileToUpdate,
+          fileId,
+          uploadMedia: drive.Media(
+            file.openRead(),
+            file.lengthSync(),
+          ),
+        );
+
+        if (received.id != null) {
+          AppLogger.d('GoogleDriveService#updateFile updated: ${received.id}');
+          return CloudFileObject.fromGoogleDrive(received);
+        }
+
+        throw exp.FileOperationException(
+          'Update succeeded but no file ID returned',
+          exp.FileOperationType.upload,
+          context: fileName,
+          serviceType: serviceType,
+        );
+      },
+    );
+  }
+
+  @override
+  Future<CloudStorageQuotaObject?> fetchStorageQuota() async {
+    final client = await googleDriveClient;
+    if (client == null) return null;
+
+    try {
+      // Get app-only usage: sum of all files in appDataFolder (all app-owned storage).
+      final appUsageBytes = await _calculateAppDataUsageBytes(client);
+
+      // Get account quota and total usage
+      final about = await client.about.get($fields: 'storageQuota');
+      final quota = about.storageQuota;
+      final accountUsageBytes = quota?.usage != null ? int.tryParse(quota!.usage!) : null;
+      final limitBytes = quota?.limit != null ? int.tryParse(quota!.limit!) : null;
+
+      return CloudStorageQuotaObject(
+        appUsageInBytes: appUsageBytes,
+        accountUsageInBytes: accountUsageBytes,
+        limitInBytes: limitBytes,
+      );
+    } catch (e, s) {
+      AppLogger.error('GoogleDriveService#fetchStorageQuota failed: $e', stackTrace: s);
+      return null;
+    }
+  }
+
+  @override
+  Future<List<CloudFileObject>> listFilesInFolder(String folderName) async {
+    final client = await googleDriveClient;
+    if (client == null) return [];
+
+    return _executeWithRetry(
+      methodName: 'listFilesInFolder',
+      operation: () async {
+        final folderId = await loadFolder(client, folderName);
+        if (folderId == null) return [];
+
+        final List<CloudFileObject> result = [];
+        String? nextPageToken;
+
+        do {
+          final fileList = await client.files.list(
+            spaces: 'appDataFolder',
+            q: "'$folderId' in parents and trashed=false",
+            $fields: 'nextPageToken,files(id,name,size,createdTime,modifiedTime,trashed)',
+            pageSize: 1000,
+            pageToken: nextPageToken,
+          );
+
+          if (fileList.files != null) {
+            for (final file in fileList.files!) {
+              if (file.id != null) result.add(CloudFileObject.fromGoogleDrive(file));
+            }
+          }
+
+          nextPageToken = fileList.nextPageToken;
+        } while (nextPageToken != null && nextPageToken.isNotEmpty);
+
+        return result;
+      },
+    );
+  }
+
+  Future<int> _calculateAppDataUsageBytes(drive.DriveApi client) async {
+    const folderMimeType = 'application/vnd.google-apps.folder';
+
+    int totalBytes = 0;
+    String? nextPageToken;
+
+    do {
+      final fileList = await client.files.list(
+        spaces: 'appDataFolder',
+        q: 'trashed=false',
+        $fields: 'nextPageToken, files(size,mimeType)',
+        pageToken: nextPageToken,
+        pageSize: 1000,
+      );
+
+      final files = fileList.files;
+      if (files != null) {
+        for (final file in files) {
+          if (file.mimeType == folderMimeType || file.size == null) continue;
+          totalBytes += int.tryParse(file.size.toString()) ?? 0;
+        }
+      }
+
+      nextPageToken = fileList.nextPageToken;
+    } while (nextPageToken != null && nextPageToken.isNotEmpty);
+
+    return totalBytes;
+  }
+
+  @override
+  Future<CloudFileObject?> uploadFile(
+    String fileName,
+    io.File file, {
+    String? folderName,
+  }) async {
+    AppLogger.d('GoogleDriveService#uploadFile $fileName');
+
+    return _executeWithRetry(
+      methodName: 'uploadFile',
+      operation: () async {
+        if (!file.existsSync()) {
+          throw exp.FileOperationException(
+            'Local file does not exist: ${file.path}',
+            exp.FileOperationType.upload,
+            context: fileName,
+            serviceType: serviceType,
+          );
+        }
+
+        drive.DriveApi client = await _getAuthenticatedClient();
+
+        drive.File fileToUpload = drive.File();
+        fileToUpload.name = fileName;
+        fileToUpload.parents = ["appDataFolder"];
+
+        if (folderName != null) {
+          String? folderId = await loadFolder(client, folderName);
+          if (folderId == null) {
+            throw exp.FileOperationException(
+              'Failed to create or find folder: $folderName',
+              exp.FileOperationType.upload,
+              context: fileName,
+              serviceType: serviceType,
+            );
+          }
+          fileToUpload.parents = [folderId];
+        }
+
+        // Request explicit fields to guarantee name is available for AssetDb cloud mapping.
+        AppLogger.d('GoogleDriveService#uploadFile uploading...');
+        drive.File received = await client.files.create(
+          fileToUpload,
+          uploadMedia: drive.Media(
+            file.openRead(),
+            file.lengthSync(),
+          ),
+          $fields: 'id,name',
+        );
+
+        if (received.id != null) {
+          AppLogger.d('GoogleDriveService#uploadFile uploaded: ${received.id}');
+          return CloudFileObject.fromGoogleDrive(received);
+        }
+
+        throw exp.FileOperationException(
+          'Upload succeeded but no file ID returned',
+          exp.FileOperationType.upload,
+          context: fileName,
+          serviceType: serviceType,
+        );
+      },
+    );
+  }
+
+  @override
+  Future<bool> deleteFile(String cloudFileId) async {
+    return _executeWithRetry(
+      methodName: 'deleteFile',
+      operation: () async {
+        drive.DriveApi client = await _getAuthenticatedClient();
+        await client.files.delete(cloudFileId);
+        return true;
+      },
+    );
+  }
+
+  @override
+  Future<bool> trashFile(String cloudFileId) async {
+    return _executeWithRetry(
+      methodName: 'trashFile',
+      operation: () async {
+        drive.DriveApi client = await _getAuthenticatedClient();
+        await client.files.update(
+          drive.File()..trashed = true,
+          cloudFileId,
+          $fields: 'id,trashed',
+        );
+        return true;
+      },
+    );
+  }
+
+  @override
+  Future<bool> restoreFileFromTrash(String cloudFileId) async {
+    return _executeWithRetry(
+      methodName: 'restoreFileFromTrash',
+      operation: () async {
+        drive.DriveApi client = await _getAuthenticatedClient();
+        await client.files.update(
+          drive.File()..trashed = false,
+          cloudFileId,
+          $fields: 'id,trashed',
+        );
+        return true;
+      },
+    );
+  }
+
+  @override
+  Future<CloudFileObject?> findFileByIdIncludingTrashed(String fileId) async {
+    drive.DriveApi? client = await googleDriveClient;
+    if (client == null) return null;
+
+    return _executeWithRetry(
+      methodName: 'findFileByIdIncludingTrashed',
+      operation: () async {
+        // files.get returns trashed files by ID without any extra query param
+        Object file = await client.files.get(
+          fileId,
+          $fields: 'id,name,size,trashed,createdTime,modifiedTime',
+        );
+        if (file is drive.File) return CloudFileObject.fromGoogleDrive(file);
+        return null;
+      },
+    );
+  }
+
+  Future<T> _executeWithRetry<T>({
+    required String methodName,
+    required Future<T> Function() operation,
+  }) async {
+    try {
+      return await operation();
+    } catch (e) {
+      final exception = _buildException(e, methodName);
+
+      if (exception is exp.AuthException && exception.requiresReauth) {
+        final reauthenticated = await reauthenticateIfNeeded();
+
+        if (reauthenticated) {
+          AppLogger.d('Reauthentication succeeded.');
+
+          try {
+            return await operation();
+          } catch (e) {
+            final exp.BackupException exception = _buildException(e, methodName);
+            throw exception;
+          }
+        } else {
+          AppLogger.d('Reauthentication failed.');
+        }
+      }
+
+      throw exception;
+    }
+  }
+
+  /// Get authenticated Drive API client or throw appropriate exception
+  Future<drive.DriveApi> _getAuthenticatedClient() async {
+    final client = await googleDriveClient;
+    if (client == null) {
+      throw exp.AuthException(
+        'Failed to get authenticated Google Drive client',
+        exp.AuthExceptionType.signInRequired,
+        serviceType: serviceType,
+      );
+    }
+    return client;
+  }
+
+  /// Handle and map API exceptions to appropriate BackupExceptions
+  exp.BackupException _buildException(dynamic error, String methodName, {String? context}) {
+    if (error is exp.BackupException) return error;
+
+    // Handle specific HTTP errors from Google APIs
+    if (error.toString().contains('401')) {
+      return exp.AuthException(
+        'Authentication failed during $methodName',
+        exp.AuthExceptionType.tokenExpired,
+        context: context,
+        serviceType: serviceType,
+      );
+    }
+
+    if (error.toString().contains('403')) {
+      if (error.toString().toLowerCase().contains('quota') || error.toString().toLowerCase().contains('limit')) {
+        return exp.QuotaException(
+          'Quota exceeded during $methodName',
+          exp.QuotaExceptionType.rateLimitExceeded,
+          context: context,
+          serviceType: serviceType,
+        );
+      }
+      return exp.AuthException(
+        'Access denied during $methodName',
+        exp.AuthExceptionType.tokenRevoked,
+        context: context,
+        serviceType: serviceType,
+      );
+    }
+
+    if (error.toString().contains('404') || (error is drive.DetailedApiRequestError && error.status == 404)) {
+      return exp.FileOperationException(
+        'File not found during $methodName',
+        _getFileOperationType(methodName),
+        context: context,
+        serviceType: serviceType,
+        statusCode: 404,
+      );
+    }
+
+    if (error.toString().contains('429')) {
+      return exp.QuotaException(
+        'Rate limit exceeded during $methodName',
+        exp.QuotaExceptionType.rateLimitExceeded,
+        context: context,
+        serviceType: serviceType,
+      );
+    }
+
+    // Handle network errors
+    if (error is io.SocketException || error is TimeoutException) {
+      return exp.NetworkException(
+        'Network error during $methodName: $error',
+        context: context,
+        serviceType: serviceType,
+      );
+    }
+
+    // Default to service exception for unknown errors
+    return exp.ServiceException(
+      'Unknown error during $methodName: $error',
+      exp.ServiceExceptionType.unexpectedError,
+      context: context,
+      serviceType: serviceType,
+    );
+  }
+
+  /// Map operation name to exp.FileOperationType
+  exp.FileOperationType _getFileOperationType(String methodName) {
+    switch (methodName) {
+      case 'uploadFile':
+      case 'upload':
+        return exp.FileOperationType.upload;
+      case 'deleteFile':
+      case 'delete':
+        return exp.FileOperationType.delete;
+      case 'downloadFile':
+      case 'download':
+        return exp.FileOperationType.download;
+      default:
+        return exp.FileOperationType.list;
+    }
+  }
+
+  Future<String?> loadFolder(drive.DriveApi client, String folderName) async {
+    if (_folderDriveIdByFolderName[folderName] != null) return _folderDriveIdByFolderName[folderName];
+
+    return _executeWithRetry(
+      methodName: 'loadFolder',
+      operation: () async {
+        drive.FileList response = await client.files.list(
+          spaces: "appDataFolder",
+          q: "name='$folderName' and mimeType='application/vnd.google-apps.folder'",
+        );
+
+        if (response.files?.firstOrNull?.id != null) {
+          AppLogger.d(
+            "Drive folder ${response.files!.first.name} founded: ${response.files!.first.id}",
+          );
+          return _folderDriveIdByFolderName[folderName] = response.files!.first.id!;
+        }
+
+        drive.File folderToCreate = drive.File();
+        folderToCreate.name = folderName;
+        folderToCreate.parents = ["appDataFolder"];
+        folderToCreate.mimeType = "application/vnd.google-apps.folder";
+
+        final createdFolder = await client.files.create(folderToCreate);
+        AppLogger.d(
+          "Drive folder ${createdFolder.name} created: ${createdFolder.id}",
+        );
+
+        return _folderDriveIdByFolderName[folderName] = createdFolder.id!;
+      },
+    );
+  }
+}

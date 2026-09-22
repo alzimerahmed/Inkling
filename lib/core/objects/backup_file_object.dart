@@ -1,0 +1,131 @@
+import 'package:flutter/foundation.dart';
+import 'package:storypad/core/objects/device_info_object.dart';
+
+class BackupFileObject {
+  static const String prefix = "Backup";
+  static const String splitBy = "__"; // Use __ for Windows compatibility (old :: still supported)
+
+  /// Sentinel `year` for the v3 file holding tables with no calendar semantics
+  /// (tags, tag categories, templates, preferences, relax sound mixes) — rides
+  /// the same year-file mechanism as real years (see [year]) so it needs no
+  /// filename-version bump and is discovered/merged by existing code paths
+  /// unchanged. Distinct from the `-1` sentinel used for legacy (pre-v3)
+  /// monolithic backups (see `GoogleDriveCloudService.fetchYearlyBackups`).
+  static const int kGlobalBackupYear = -2;
+
+  final DateTime createdAt;
+  final String version;
+  final DeviceInfoObject device;
+  final bool hasCompression;
+  final int? year; // For v3 yearly backups
+
+  bool sameDayAs(BackupFileObject fileInfo) {
+    return [createdAt.year, createdAt.month, createdAt.day].join("-") ==
+        [fileInfo.createdAt.year, fileInfo.createdAt.month, fileInfo.createdAt.day].join("-");
+  }
+
+  BackupFileObject({
+    required this.createdAt,
+    required this.device,
+    required this.hasCompression,
+    String? version,
+    this.year,
+  }) : version = version ?? (year != null ? '3' : '2');
+
+  // v3: Backup__3__2025__1734350000000__iPhone 15 Pro__iPhone123 (year-based, extension added separately)
+  // v2 (legacy): Backup::2::1731680400000::iPhone 15 Pro::ABC123 (extension added separately)
+  // v1 (legacy): Backup::1::2022-06-14T17:44:47.097469::Pixel 5 (extension added separately)
+  String get fileName {
+    if (version == '3') {
+      if (year == null) {
+        throw ArgumentError('Year is required for v3 backups');
+      }
+
+      return <String>[
+        prefix,
+        version,
+        year.toString(),
+        createdAt.millisecondsSinceEpoch.toString(),
+        device.model,
+        device.id,
+      ].join(splitBy);
+    }
+
+    // Legacy v1/v2 format
+    return <String>[
+      prefix,
+      version,
+      createdAt.millisecondsSinceEpoch.toString(),
+      device.model,
+      device.id,
+    ].join(splitBy);
+  }
+
+  String get fileNameWithExtention {
+    if (!hasCompression) {
+      return "$fileName.json";
+    } else {
+      return "$fileName.zip";
+    }
+  }
+
+  static BackupFileObject? fromFileName(String fileName) {
+    bool hasCompression = fileName.endsWith(".zip");
+
+    if (fileName.endsWith(".zip")) fileName = fileName.replaceAll(".zip", "");
+    if (fileName.endsWith(".json")) fileName = fileName.replaceAll(".json", "");
+
+    // Support both __ (new format) and :: (legacy format) for backward compatibility
+    String separator = fileName.contains('__') ? '__' : '::';
+    List<String> value = fileName.trim().split(separator);
+
+    if (value.isNotEmpty) {
+      String? version = value.length > 1 ? value[1] : null;
+
+      switch (version) {
+        case "3":
+          // v3: Backup__3__2025__1734350000000__iPhone 15 Pro__iPhone123 (or legacy Backup::3::...)
+          try {
+            int year = int.parse(value[2]);
+            int millisecondsEpoch = int.parse(value[3]);
+            DateTime createdAt = DateTime.fromMillisecondsSinceEpoch(millisecondsEpoch);
+            String deviceModel = value[4];
+            String deviceId = value[5];
+
+            return BackupFileObject(
+              createdAt: createdAt,
+              device: DeviceInfoObject(model: deviceModel, id: deviceId),
+              version: version!,
+              year: year,
+              hasCompression: hasCompression,
+            );
+          } catch (e) {
+            debugPrint("ERROR: fromFileName v3 parse error: $e");
+          }
+          break;
+        case "2":
+        case "1":
+          // v2: Backup__2__1731680400000__iPhone 15 Pro__ABC123 (or legacy Backup::2::...)
+          // v1: Backup__1__1731680400000__Pixel 5__ABC123 (or legacy Backup::1::...)
+          try {
+            int millisecondsEpoch = int.parse(value[2]);
+            DateTime createdAt = DateTime.fromMillisecondsSinceEpoch(millisecondsEpoch);
+            String deviceModel = value[3];
+            String deviceId = value[4];
+            return BackupFileObject(
+              createdAt: createdAt,
+              device: DeviceInfoObject(model: deviceModel, id: deviceId),
+              version: version!,
+              hasCompression: hasCompression,
+            );
+          } catch (e) {
+            debugPrint("ERROR: fromFileName $e");
+          }
+          break;
+        default:
+          return null;
+      }
+    }
+    return null;
+  }
+}

@@ -1,0 +1,463 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'device_preferences_object.dart';
+
+// **************************************************************************
+// CopyWithGenerator
+// **************************************************************************
+
+abstract class _$DevicePreferencesObjectCWProxy {
+  DevicePreferencesObject fontFamily(String? fontFamily);
+
+  DevicePreferencesObject fontSize(FontSizeOption? fontSize);
+
+  DevicePreferencesObject fontWeightIndex(int? fontWeightIndex);
+
+  DevicePreferencesObject enableRelaxSounds(bool? enableRelaxSounds);
+
+  DevicePreferencesObject enablePeriodCalendar(bool? enablePeriodCalendar);
+
+  DevicePreferencesObject reminders(List<ReminderObject>? reminders);
+
+  DevicePreferencesObject themeMode(ThemeMode? themeMode);
+
+  DevicePreferencesObject timeFormat(TimeFormatOption? timeFormat);
+
+  DevicePreferencesObject firstDayOfWeek(FirstDayOfWeekOption? firstDayOfWeek);
+
+  DevicePreferencesObject assetCompression(
+    AssetCompressionOption? assetCompression,
+  );
+
+  DevicePreferencesObject mediaSync(MediaSyncOption? mediaSync);
+
+  DevicePreferencesObject colorSeedValue(int? colorSeedValue);
+
+  DevicePreferencesObject colorByDay(Map<int, String>? colorByDay);
+
+  DevicePreferencesObject voicePlaybackSpeed(double? voicePlaybackSpeed);
+
+  DevicePreferencesObject videoPlaybackSpeed(double? videoPlaybackSpeed);
+
+  DevicePreferencesObject videoMuted(bool? videoMuted);
+
+  DevicePreferencesObject storyTilePreferences(
+    StoryTilePreferencesObject? storyTilePreferences,
+  );
+
+  DevicePreferencesObject defaultStoryPreferences(
+    DefaultStoryPreferencesObject? defaultStoryPreferences,
+  );
+
+  DevicePreferencesObject homeQuickActions(
+    List<AppQuickActionObject>? homeQuickActions,
+  );
+
+  DevicePreferencesObject hiddenStatsSections(
+    List<String>? hiddenStatsSections,
+  );
+
+  DevicePreferencesObject mapRenderer(SpMapRenderer? mapRenderer);
+
+  DevicePreferencesObject mapStyle(SpMapStyle? mapStyle);
+
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `DevicePreferencesObject(...).copyWith.fieldName(value)`.
+  ///
+  /// Example:
+  /// ```dart
+  /// DevicePreferencesObject(...).copyWith(id: 12, name: "My name")
+  /// ```
+  DevicePreferencesObject call({
+    String? fontFamily,
+    FontSizeOption? fontSize,
+    int? fontWeightIndex,
+    bool? enableRelaxSounds,
+    bool? enablePeriodCalendar,
+    List<ReminderObject>? reminders,
+    ThemeMode? themeMode,
+    TimeFormatOption? timeFormat,
+    FirstDayOfWeekOption? firstDayOfWeek,
+    AssetCompressionOption? assetCompression,
+    MediaSyncOption? mediaSync,
+    int? colorSeedValue,
+    Map<int, String>? colorByDay,
+    double? voicePlaybackSpeed,
+    double? videoPlaybackSpeed,
+    bool? videoMuted,
+    StoryTilePreferencesObject? storyTilePreferences,
+    DefaultStoryPreferencesObject? defaultStoryPreferences,
+    List<AppQuickActionObject>? homeQuickActions,
+    List<String>? hiddenStatsSections,
+    SpMapRenderer? mapRenderer,
+    SpMapStyle? mapStyle,
+  });
+}
+
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfDevicePreferencesObject.copyWith(...)` or call `instanceOfDevicePreferencesObject.copyWith.fieldName(value)` for a single field.
+class _$DevicePreferencesObjectCWProxyImpl
+    implements _$DevicePreferencesObjectCWProxy {
+  const _$DevicePreferencesObjectCWProxyImpl(this._value);
+
+  final DevicePreferencesObject _value;
+
+  @override
+  DevicePreferencesObject fontFamily(String? fontFamily) =>
+      call(fontFamily: fontFamily);
+
+  @override
+  DevicePreferencesObject fontSize(FontSizeOption? fontSize) =>
+      call(fontSize: fontSize);
+
+  @override
+  DevicePreferencesObject fontWeightIndex(int? fontWeightIndex) =>
+      call(fontWeightIndex: fontWeightIndex);
+
+  @override
+  DevicePreferencesObject enableRelaxSounds(bool? enableRelaxSounds) =>
+      call(enableRelaxSounds: enableRelaxSounds);
+
+  @override
+  DevicePreferencesObject enablePeriodCalendar(bool? enablePeriodCalendar) =>
+      call(enablePeriodCalendar: enablePeriodCalendar);
+
+  @override
+  DevicePreferencesObject reminders(List<ReminderObject>? reminders) =>
+      call(reminders: reminders);
+
+  @override
+  DevicePreferencesObject themeMode(ThemeMode? themeMode) =>
+      call(themeMode: themeMode);
+
+  @override
+  DevicePreferencesObject timeFormat(TimeFormatOption? timeFormat) =>
+      call(timeFormat: timeFormat);
+
+  @override
+  DevicePreferencesObject firstDayOfWeek(
+    FirstDayOfWeekOption? firstDayOfWeek,
+  ) => call(firstDayOfWeek: firstDayOfWeek);
+
+  @override
+  DevicePreferencesObject assetCompression(
+    AssetCompressionOption? assetCompression,
+  ) => call(assetCompression: assetCompression);
+
+  @override
+  DevicePreferencesObject mediaSync(MediaSyncOption? mediaSync) =>
+      call(mediaSync: mediaSync);
+
+  @override
+  DevicePreferencesObject colorSeedValue(int? colorSeedValue) =>
+      call(colorSeedValue: colorSeedValue);
+
+  @override
+  DevicePreferencesObject colorByDay(Map<int, String>? colorByDay) =>
+      call(colorByDay: colorByDay);
+
+  @override
+  DevicePreferencesObject voicePlaybackSpeed(double? voicePlaybackSpeed) =>
+      call(voicePlaybackSpeed: voicePlaybackSpeed);
+
+  @override
+  DevicePreferencesObject videoPlaybackSpeed(double? videoPlaybackSpeed) =>
+      call(videoPlaybackSpeed: videoPlaybackSpeed);
+
+  @override
+  DevicePreferencesObject videoMuted(bool? videoMuted) =>
+      call(videoMuted: videoMuted);
+
+  @override
+  DevicePreferencesObject storyTilePreferences(
+    StoryTilePreferencesObject? storyTilePreferences,
+  ) => call(storyTilePreferences: storyTilePreferences);
+
+  @override
+  DevicePreferencesObject defaultStoryPreferences(
+    DefaultStoryPreferencesObject? defaultStoryPreferences,
+  ) => call(defaultStoryPreferences: defaultStoryPreferences);
+
+  @override
+  DevicePreferencesObject homeQuickActions(
+    List<AppQuickActionObject>? homeQuickActions,
+  ) => call(homeQuickActions: homeQuickActions);
+
+  @override
+  DevicePreferencesObject hiddenStatsSections(
+    List<String>? hiddenStatsSections,
+  ) => call(hiddenStatsSections: hiddenStatsSections);
+
+  @override
+  DevicePreferencesObject mapRenderer(SpMapRenderer? mapRenderer) =>
+      call(mapRenderer: mapRenderer);
+
+  @override
+  DevicePreferencesObject mapStyle(SpMapStyle? mapStyle) =>
+      call(mapStyle: mapStyle);
+
+  @override
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `DevicePreferencesObject(...).copyWith.fieldName(value)`.
+  ///
+  /// Example:
+  /// ```dart
+  /// DevicePreferencesObject(...).copyWith(id: 12, name: "My name")
+  /// ```
+  DevicePreferencesObject call({
+    Object? fontFamily = const $CopyWithPlaceholder(),
+    Object? fontSize = const $CopyWithPlaceholder(),
+    Object? fontWeightIndex = const $CopyWithPlaceholder(),
+    Object? enableRelaxSounds = const $CopyWithPlaceholder(),
+    Object? enablePeriodCalendar = const $CopyWithPlaceholder(),
+    Object? reminders = const $CopyWithPlaceholder(),
+    Object? themeMode = const $CopyWithPlaceholder(),
+    Object? timeFormat = const $CopyWithPlaceholder(),
+    Object? firstDayOfWeek = const $CopyWithPlaceholder(),
+    Object? assetCompression = const $CopyWithPlaceholder(),
+    Object? mediaSync = const $CopyWithPlaceholder(),
+    Object? colorSeedValue = const $CopyWithPlaceholder(),
+    Object? colorByDay = const $CopyWithPlaceholder(),
+    Object? voicePlaybackSpeed = const $CopyWithPlaceholder(),
+    Object? videoPlaybackSpeed = const $CopyWithPlaceholder(),
+    Object? videoMuted = const $CopyWithPlaceholder(),
+    Object? storyTilePreferences = const $CopyWithPlaceholder(),
+    Object? defaultStoryPreferences = const $CopyWithPlaceholder(),
+    Object? homeQuickActions = const $CopyWithPlaceholder(),
+    Object? hiddenStatsSections = const $CopyWithPlaceholder(),
+    Object? mapRenderer = const $CopyWithPlaceholder(),
+    Object? mapStyle = const $CopyWithPlaceholder(),
+  }) {
+    return DevicePreferencesObject(
+      fontFamily: fontFamily == const $CopyWithPlaceholder()
+          ? _value.fontFamily
+          // ignore: cast_nullable_to_non_nullable
+          : fontFamily as String?,
+      fontSize: fontSize == const $CopyWithPlaceholder()
+          ? _value.fontSize
+          // ignore: cast_nullable_to_non_nullable
+          : fontSize as FontSizeOption?,
+      fontWeightIndex: fontWeightIndex == const $CopyWithPlaceholder()
+          ? _value.fontWeightIndex
+          // ignore: cast_nullable_to_non_nullable
+          : fontWeightIndex as int?,
+      enableRelaxSounds: enableRelaxSounds == const $CopyWithPlaceholder()
+          ? _value.enableRelaxSounds
+          // ignore: cast_nullable_to_non_nullable
+          : enableRelaxSounds as bool?,
+      enablePeriodCalendar: enablePeriodCalendar == const $CopyWithPlaceholder()
+          ? _value.enablePeriodCalendar
+          // ignore: cast_nullable_to_non_nullable
+          : enablePeriodCalendar as bool?,
+      reminders: reminders == const $CopyWithPlaceholder()
+          ? _value.reminders
+          // ignore: cast_nullable_to_non_nullable
+          : reminders as List<ReminderObject>?,
+      themeMode: themeMode == const $CopyWithPlaceholder()
+          ? _value.themeMode
+          // ignore: cast_nullable_to_non_nullable
+          : themeMode as ThemeMode?,
+      timeFormat: timeFormat == const $CopyWithPlaceholder()
+          ? _value.timeFormat
+          // ignore: cast_nullable_to_non_nullable
+          : timeFormat as TimeFormatOption?,
+      firstDayOfWeek: firstDayOfWeek == const $CopyWithPlaceholder()
+          ? _value.firstDayOfWeek
+          // ignore: cast_nullable_to_non_nullable
+          : firstDayOfWeek as FirstDayOfWeekOption?,
+      assetCompression: assetCompression == const $CopyWithPlaceholder()
+          ? _value.assetCompression
+          // ignore: cast_nullable_to_non_nullable
+          : assetCompression as AssetCompressionOption?,
+      mediaSync: mediaSync == const $CopyWithPlaceholder()
+          ? _value.mediaSync
+          // ignore: cast_nullable_to_non_nullable
+          : mediaSync as MediaSyncOption?,
+      colorSeedValue: colorSeedValue == const $CopyWithPlaceholder()
+          ? _value.colorSeedValue
+          // ignore: cast_nullable_to_non_nullable
+          : colorSeedValue as int?,
+      colorByDay: colorByDay == const $CopyWithPlaceholder()
+          ? _value.colorByDay
+          // ignore: cast_nullable_to_non_nullable
+          : colorByDay as Map<int, String>?,
+      voicePlaybackSpeed: voicePlaybackSpeed == const $CopyWithPlaceholder()
+          ? _value.voicePlaybackSpeed
+          // ignore: cast_nullable_to_non_nullable
+          : voicePlaybackSpeed as double?,
+      videoPlaybackSpeed: videoPlaybackSpeed == const $CopyWithPlaceholder()
+          ? _value.videoPlaybackSpeed
+          // ignore: cast_nullable_to_non_nullable
+          : videoPlaybackSpeed as double?,
+      videoMuted: videoMuted == const $CopyWithPlaceholder()
+          ? _value.videoMuted
+          // ignore: cast_nullable_to_non_nullable
+          : videoMuted as bool?,
+      storyTilePreferences: storyTilePreferences == const $CopyWithPlaceholder()
+          ? _value.storyTilePreferences
+          // ignore: cast_nullable_to_non_nullable
+          : storyTilePreferences as StoryTilePreferencesObject?,
+      defaultStoryPreferences:
+          defaultStoryPreferences == const $CopyWithPlaceholder()
+          ? _value.defaultStoryPreferences
+          // ignore: cast_nullable_to_non_nullable
+          : defaultStoryPreferences as DefaultStoryPreferencesObject?,
+      homeQuickActions: homeQuickActions == const $CopyWithPlaceholder()
+          ? _value.homeQuickActions
+          // ignore: cast_nullable_to_non_nullable
+          : homeQuickActions as List<AppQuickActionObject>?,
+      hiddenStatsSections: hiddenStatsSections == const $CopyWithPlaceholder()
+          ? _value.hiddenStatsSections
+          // ignore: cast_nullable_to_non_nullable
+          : hiddenStatsSections as List<String>?,
+      mapRenderer: mapRenderer == const $CopyWithPlaceholder()
+          ? _value.mapRenderer
+          // ignore: cast_nullable_to_non_nullable
+          : mapRenderer as SpMapRenderer?,
+      mapStyle: mapStyle == const $CopyWithPlaceholder()
+          ? _value.mapStyle
+          // ignore: cast_nullable_to_non_nullable
+          : mapStyle as SpMapStyle?,
+    );
+  }
+}
+
+extension $DevicePreferencesObjectCopyWith on DevicePreferencesObject {
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfDevicePreferencesObject.copyWith(...)` or `instanceOfDevicePreferencesObject.copyWith.fieldName(...)`.
+  // ignore: library_private_types_in_public_api
+  _$DevicePreferencesObjectCWProxy get copyWith =>
+      _$DevicePreferencesObjectCWProxyImpl(this);
+}
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+DevicePreferencesObject _$DevicePreferencesObjectFromJson(
+  Map<String, dynamic> json,
+) => DevicePreferencesObject(
+  fontFamily: json['font_family'] as String?,
+  fontSize: $enumDecodeNullable(_$FontSizeOptionEnumMap, json['font_size']),
+  fontWeightIndex: (json['font_weight_index'] as num?)?.toInt(),
+  enableRelaxSounds: json['enable_relax_sounds'] as bool?,
+  enablePeriodCalendar: json['enable_period_calendar'] as bool?,
+  reminders: (json['reminders'] as List<dynamic>?)
+      ?.map((e) => ReminderObject.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  themeMode: $enumDecodeNullable(_$ThemeModeEnumMap, json['theme_mode']),
+  timeFormat: $enumDecodeNullable(
+    _$TimeFormatOptionEnumMap,
+    json['time_format'],
+  ),
+  firstDayOfWeek: $enumDecodeNullable(
+    _$FirstDayOfWeekOptionEnumMap,
+    json['first_day_of_week'],
+  ),
+  assetCompression: $enumDecodeNullable(
+    _$AssetCompressionOptionEnumMap,
+    json['asset_compression'],
+  ),
+  mediaSync: $enumDecodeNullable(_$MediaSyncOptionEnumMap, json['media_sync']),
+  colorSeedValue: (json['color_seed_value'] as num?)?.toInt(),
+  colorByDay: (json['color_by_day'] as Map<String, dynamic>?)?.map(
+    (k, e) => MapEntry(int.parse(k), e as String),
+  ),
+  voicePlaybackSpeed: (json['voice_playback_speed'] as num?)?.toDouble(),
+  videoPlaybackSpeed: (json['video_playback_speed'] as num?)?.toDouble(),
+  videoMuted: json['video_muted'] as bool?,
+  storyTilePreferences: json['story_tile_preferences'] == null
+      ? null
+      : StoryTilePreferencesObject.fromJson(
+          json['story_tile_preferences'] as Map<String, dynamic>,
+        ),
+  defaultStoryPreferences: json['default_story_preferences'] == null
+      ? null
+      : DefaultStoryPreferencesObject.fromJson(
+          json['default_story_preferences'] as Map<String, dynamic>,
+        ),
+  homeQuickActions: (json['home_quick_actions'] as List<dynamic>?)
+      ?.map((e) => AppQuickActionObject.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  hiddenStatsSections: (json['hidden_stats_sections'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
+  mapRenderer: $enumDecodeNullable(
+    _$SpMapRendererEnumMap,
+    json['map_renderer'],
+  ),
+  mapStyle: $enumDecodeNullable(_$SpMapStyleEnumMap, json['map_style']),
+);
+
+Map<String, dynamic> _$DevicePreferencesObjectToJson(
+  DevicePreferencesObject instance,
+) => <String, dynamic>{
+  'font_family': instance.fontFamily,
+  'font_size': _$FontSizeOptionEnumMap[instance.fontSize],
+  'font_weight_index': instance.fontWeightIndex,
+  'theme_mode': _$ThemeModeEnumMap[instance.themeMode]!,
+  'color_seed_value': instance.colorSeedValue,
+  'color_by_day': instance.colorByDay?.map((k, e) => MapEntry(k.toString(), e)),
+  'voice_playback_speed': instance.voicePlaybackSpeed,
+  'video_playback_speed': instance.videoPlaybackSpeed,
+  'video_muted': instance.videoMuted,
+  'time_format': _$TimeFormatOptionEnumMap[instance.timeFormat],
+  'first_day_of_week': _$FirstDayOfWeekOptionEnumMap[instance.firstDayOfWeek]!,
+  'asset_compression':
+      _$AssetCompressionOptionEnumMap[instance.assetCompression]!,
+  'media_sync': _$MediaSyncOptionEnumMap[instance.mediaSync]!,
+  'map_style': _$SpMapStyleEnumMap[instance.mapStyle]!,
+  'map_renderer': _$SpMapRendererEnumMap[instance.mapRenderer],
+  'story_tile_preferences': instance.storyTilePreferences.toJson(),
+  'default_story_preferences': instance.defaultStoryPreferences.toJson(),
+  'home_quick_actions': instance.homeQuickActions
+      ?.map((e) => e.toJson())
+      .toList(),
+  'hidden_stats_sections': instance.hiddenStatsSections,
+  'enable_relax_sounds': instance.enableRelaxSounds,
+  'enable_period_calendar': instance.enablePeriodCalendar,
+  'reminders': instance.reminders?.map((e) => e.toJson()).toList(),
+};
+
+const _$FontSizeOptionEnumMap = {
+  FontSizeOption.small: 'small',
+  FontSizeOption.normal: 'normal',
+  FontSizeOption.large: 'large',
+  FontSizeOption.extraLarge: 'extraLarge',
+};
+
+const _$ThemeModeEnumMap = {
+  ThemeMode.system: 'system',
+  ThemeMode.light: 'light',
+  ThemeMode.dark: 'dark',
+};
+
+const _$TimeFormatOptionEnumMap = {
+  TimeFormatOption.h12: 'h12',
+  TimeFormatOption.h24: 'h24',
+};
+
+const _$FirstDayOfWeekOptionEnumMap = {
+  FirstDayOfWeekOption.monday: 'monday',
+  FirstDayOfWeekOption.sunday: 'sunday',
+};
+
+const _$AssetCompressionOptionEnumMap = {
+  AssetCompressionOption.standard: 'standard',
+  AssetCompressionOption.none: 'none',
+};
+
+const _$MediaSyncOptionEnumMap = {
+  MediaSyncOption.wifiAndCellular: 'wifiAndCellular',
+  MediaSyncOption.wifiOnly: 'wifiOnly',
+};
+
+const _$SpMapRendererEnumMap = {
+  SpMapRenderer.googleMap: 'googleMap',
+  SpMapRenderer.flutterMap: 'flutterMap',
+};
+
+const _$SpMapStyleEnumMap = {
+  SpMapStyle.streets: 'streets',
+  SpMapStyle.satellite: 'satellite',
+};

@@ -1,0 +1,262 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'search_filter_object.dart';
+
+// **************************************************************************
+// CopyWithGenerator
+// **************************************************************************
+
+abstract class _$SearchFilterObjectCWProxy {
+  SearchFilterObject years(Set<int> years);
+
+  SearchFilterObject types(Set<PathType> types);
+
+  SearchFilterObject assetId(int? assetId);
+
+  SearchFilterObject storyIds(Set<int>? storyIds);
+
+  SearchFilterObject tagIds(Set<int>? tagIds);
+
+  SearchFilterObject query(String? query);
+
+  SearchFilterObject galleryTemplateId(String? galleryTemplateId);
+
+  SearchFilterObject templateId(int? templateId);
+
+  SearchFilterObject excludeYears(Set<int>? excludeYears);
+
+  SearchFilterObject month(int? month);
+
+  SearchFilterObject day(int? day);
+
+  SearchFilterObject starred(bool? starred);
+
+  SearchFilterObject pinned(bool? pinned);
+
+  SearchFilterObject limit(int? limit);
+
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SearchFilterObject(...).copyWith.fieldName(value)`.
+  ///
+  /// Example:
+  /// ```dart
+  /// SearchFilterObject(...).copyWith(id: 12, name: "My name")
+  /// ```
+  SearchFilterObject call({
+    Set<int> years,
+    Set<PathType> types,
+    int? assetId,
+    Set<int>? storyIds,
+    Set<int>? tagIds,
+    String? query,
+    String? galleryTemplateId,
+    int? templateId,
+    Set<int>? excludeYears,
+    int? month,
+    int? day,
+    bool? starred,
+    bool? pinned,
+    int? limit,
+  });
+}
+
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfSearchFilterObject.copyWith(...)` or call `instanceOfSearchFilterObject.copyWith.fieldName(value)` for a single field.
+class _$SearchFilterObjectCWProxyImpl implements _$SearchFilterObjectCWProxy {
+  const _$SearchFilterObjectCWProxyImpl(this._value);
+
+  final SearchFilterObject _value;
+
+  @override
+  SearchFilterObject years(Set<int> years) => call(years: years);
+
+  @override
+  SearchFilterObject types(Set<PathType> types) => call(types: types);
+
+  @override
+  SearchFilterObject assetId(int? assetId) => call(assetId: assetId);
+
+  @override
+  SearchFilterObject storyIds(Set<int>? storyIds) => call(storyIds: storyIds);
+
+  @override
+  SearchFilterObject tagIds(Set<int>? tagIds) => call(tagIds: tagIds);
+
+  @override
+  SearchFilterObject query(String? query) => call(query: query);
+
+  @override
+  SearchFilterObject galleryTemplateId(String? galleryTemplateId) =>
+      call(galleryTemplateId: galleryTemplateId);
+
+  @override
+  SearchFilterObject templateId(int? templateId) =>
+      call(templateId: templateId);
+
+  @override
+  SearchFilterObject excludeYears(Set<int>? excludeYears) =>
+      call(excludeYears: excludeYears);
+
+  @override
+  SearchFilterObject month(int? month) => call(month: month);
+
+  @override
+  SearchFilterObject day(int? day) => call(day: day);
+
+  @override
+  SearchFilterObject starred(bool? starred) => call(starred: starred);
+
+  @override
+  SearchFilterObject pinned(bool? pinned) => call(pinned: pinned);
+
+  @override
+  SearchFilterObject limit(int? limit) => call(limit: limit);
+
+  @override
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SearchFilterObject(...).copyWith.fieldName(value)`.
+  ///
+  /// Example:
+  /// ```dart
+  /// SearchFilterObject(...).copyWith(id: 12, name: "My name")
+  /// ```
+  SearchFilterObject call({
+    Object? years = const $CopyWithPlaceholder(),
+    Object? types = const $CopyWithPlaceholder(),
+    Object? assetId = const $CopyWithPlaceholder(),
+    Object? storyIds = const $CopyWithPlaceholder(),
+    Object? tagIds = const $CopyWithPlaceholder(),
+    Object? query = const $CopyWithPlaceholder(),
+    Object? galleryTemplateId = const $CopyWithPlaceholder(),
+    Object? templateId = const $CopyWithPlaceholder(),
+    Object? excludeYears = const $CopyWithPlaceholder(),
+    Object? month = const $CopyWithPlaceholder(),
+    Object? day = const $CopyWithPlaceholder(),
+    Object? starred = const $CopyWithPlaceholder(),
+    Object? pinned = const $CopyWithPlaceholder(),
+    Object? limit = const $CopyWithPlaceholder(),
+  }) {
+    return SearchFilterObject(
+      years: years == const $CopyWithPlaceholder() || years == null
+          ? _value.years
+          // ignore: cast_nullable_to_non_nullable
+          : years as Set<int>,
+      types: types == const $CopyWithPlaceholder() || types == null
+          ? _value.types
+          // ignore: cast_nullable_to_non_nullable
+          : types as Set<PathType>,
+      assetId: assetId == const $CopyWithPlaceholder()
+          ? _value.assetId
+          // ignore: cast_nullable_to_non_nullable
+          : assetId as int?,
+      storyIds: storyIds == const $CopyWithPlaceholder()
+          ? _value.storyIds
+          // ignore: cast_nullable_to_non_nullable
+          : storyIds as Set<int>?,
+      tagIds: tagIds == const $CopyWithPlaceholder()
+          ? _value.tagIds
+          // ignore: cast_nullable_to_non_nullable
+          : tagIds as Set<int>?,
+      query: query == const $CopyWithPlaceholder()
+          ? _value.query
+          // ignore: cast_nullable_to_non_nullable
+          : query as String?,
+      galleryTemplateId: galleryTemplateId == const $CopyWithPlaceholder()
+          ? _value.galleryTemplateId
+          // ignore: cast_nullable_to_non_nullable
+          : galleryTemplateId as String?,
+      templateId: templateId == const $CopyWithPlaceholder()
+          ? _value.templateId
+          // ignore: cast_nullable_to_non_nullable
+          : templateId as int?,
+      excludeYears: excludeYears == const $CopyWithPlaceholder()
+          ? _value.excludeYears
+          // ignore: cast_nullable_to_non_nullable
+          : excludeYears as Set<int>?,
+      month: month == const $CopyWithPlaceholder()
+          ? _value.month
+          // ignore: cast_nullable_to_non_nullable
+          : month as int?,
+      day: day == const $CopyWithPlaceholder()
+          ? _value.day
+          // ignore: cast_nullable_to_non_nullable
+          : day as int?,
+      starred: starred == const $CopyWithPlaceholder()
+          ? _value.starred
+          // ignore: cast_nullable_to_non_nullable
+          : starred as bool?,
+      pinned: pinned == const $CopyWithPlaceholder()
+          ? _value.pinned
+          // ignore: cast_nullable_to_non_nullable
+          : pinned as bool?,
+      limit: limit == const $CopyWithPlaceholder()
+          ? _value.limit
+          // ignore: cast_nullable_to_non_nullable
+          : limit as int?,
+    );
+  }
+}
+
+extension $SearchFilterObjectCopyWith on SearchFilterObject {
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfSearchFilterObject.copyWith(...)` or `instanceOfSearchFilterObject.copyWith.fieldName(...)`.
+  // ignore: library_private_types_in_public_api
+  _$SearchFilterObjectCWProxy get copyWith =>
+      _$SearchFilterObjectCWProxyImpl(this);
+}
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+SearchFilterObject _$SearchFilterObjectFromJson(Map<String, dynamic> json) =>
+    SearchFilterObject(
+      years: (json['years'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toSet(),
+      types: (json['types'] as List<dynamic>)
+          .map((e) => $enumDecode(_$PathTypeEnumMap, e))
+          .toSet(),
+      assetId: (json['asset_id'] as num?)?.toInt(),
+      storyIds: (json['story_ids'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toSet(),
+      tagIds: (json['tag_ids'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toSet(),
+      query: json['query'] as String?,
+      galleryTemplateId: json['gallery_template_id'] as String?,
+      templateId: (json['template_id'] as num?)?.toInt(),
+      excludeYears: (json['exclude_years'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toSet(),
+      month: (json['month'] as num?)?.toInt(),
+      day: (json['day'] as num?)?.toInt(),
+      starred: json['starred'] as bool?,
+      pinned: json['pinned'] as bool?,
+      limit: (json['limit'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$SearchFilterObjectToJson(SearchFilterObject instance) =>
+    <String, dynamic>{
+      'years': instance.years.toList(),
+      'story_ids': instance.storyIds?.toList(),
+      'exclude_years': instance.excludeYears?.toList(),
+      'query': instance.query,
+      'month': instance.month,
+      'day': instance.day,
+      'types': instance.types.map((e) => _$PathTypeEnumMap[e]!).toList(),
+      'tag_ids': instance.tagIds.toList(),
+      'gallery_template_id': instance.galleryTemplateId,
+      'template_id': instance.templateId,
+      'asset_id': instance.assetId,
+      'starred': instance.starred,
+      'pinned': instance.pinned,
+      'limit': instance.limit,
+    };
+
+const _$PathTypeEnumMap = {
+  PathType.docs: 'docs',
+  PathType.bins: 'bins',
+  PathType.archives: 'archives',
+};

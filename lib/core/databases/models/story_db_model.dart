@@ -1,0 +1,370 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
+import 'package:dart_quill_delta/dart_quill_delta.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:storypad/core/databases/adapters/objectbox/stories_box.dart';
+import 'package:storypad/core/databases/models/base_db_model.dart';
+import 'package:storypad/core/databases/models/event_db_model.dart';
+import 'package:storypad/core/databases/models/story_content_db_model.dart';
+import 'package:storypad/core/databases/models/story_page_db_model.dart';
+import 'package:storypad/core/databases/models/place_db_model.dart';
+import 'package:storypad/core/databases/models/story_preferences_db_model.dart';
+import 'package:storypad/core/databases/models/template_db_model.dart';
+import 'package:storypad/core/objects/sp_latlng.dart';
+import 'package:storypad/core/objects/gallery_template_object.dart';
+import 'package:storypad/core/objects/default_story_preferences_object.dart';
+import 'package:storypad/core/types/path_type.dart';
+
+part 'story_db_model.g.dart';
+
+List<String>? tagsFromJson(dynamic tags) {
+  if (tags == null) return null;
+  if (tags is List) return tags.map((e) => e.toString()).toList();
+  return null;
+}
+
+@CopyWith()
+@JsonSerializable()
+class StoryDbModel extends BaseDbModel {
+  static final StoriesBox db = StoriesBox();
+
+  @override
+  final int id;
+
+  final int version;
+  final PathType type;
+
+  final int year;
+  final int month;
+  final int day;
+  final int? hour;
+  final int? minute;
+  final int? second;
+
+  final bool? starred;
+  final bool? pinned;
+
+  @Deprecated('We have moved to tags instead')
+  final String? feeling;
+
+  @JsonKey(fromJson: tagsFromJson)
+  final List<String>? tags;
+  final List<int>? assets;
+
+  final StoryContentDbModel? latestContent;
+  final StoryContentDbModel? draftContent;
+  final DateTime createdAt;
+
+  @override
+  final DateTime updatedAt;
+  final String? galleryTemplateId;
+  final int? templateId;
+
+  // We include this at DB level. Matched by the story's calendar date (period marker).
+  final EventDbModel? event;
+
+  final int? wordCount;
+  final int? characterCount;
+
+  final PlaceDbModel? place;
+
+  final DateTime? movedToBinAt;
+  final String? lastSavedDeviceId;
+
+  @JsonKey(name: 'preferences')
+  final StoryPreferencesDbModel? preferencesOrNull;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  StoryPreferencesDbModel get preferences => preferencesOrNull ?? StoryPreferencesDbModel.create();
+
+  @override
+  final DateTime? permanentlyDeletedAt;
+
+  DateTime get displayPathDate {
+    return DateTime(
+      year,
+      month,
+      day,
+      hour ?? createdAt.hour,
+      minute ?? createdAt.minute,
+    );
+  }
+
+  // tags are mistaken stores in DB in string.
+  // we use integer here, buts its actuals value is still in <string>.
+  List<int>? get validTags => tags?.map((e) => int.tryParse(e)).whereType<int>().toList();
+
+  StoryDbModel({
+    this.version = 3,
+    required this.type,
+    required this.id,
+    required this.starred,
+    required this.pinned,
+    required this.feeling,
+
+    required this.year,
+    required this.month,
+    required this.day,
+    required this.hour,
+    required this.minute,
+    required this.second,
+    required this.updatedAt,
+    required this.createdAt,
+    this.preferencesOrNull,
+    required this.tags,
+    required this.assets,
+    required this.movedToBinAt,
+    required this.latestContent,
+    required this.draftContent,
+    required this.galleryTemplateId,
+    required this.templateId,
+    this.event,
+    this.wordCount,
+    this.characterCount,
+    this.place,
+    required this.lastSavedDeviceId,
+    required this.permanentlyDeletedAt,
+  });
+
+  bool get draftStory => draftContent != null;
+
+  bool get hasLocation => place != null;
+  SpLatLng? get latLng => place != null ? SpLatLng(place!.latitude, place!.longitude) : null;
+
+  Duration get dateDifferentCount => DateTime.now().difference(displayPathDate);
+  bool get preferredShowDayCount => preferences.showDayCount ?? false;
+
+  String? get preferredFontFamily => preferences.fontFamily;
+  int? get preferredFontWeightIndex => preferences.fontWeightIndex;
+
+  bool get viewOnly => unarchivable || inBins;
+
+  bool get inBins => type == PathType.bins;
+  bool get inArchives => type == PathType.archives;
+  bool get permanentlyDeleted => permanentlyDeletedAt != null;
+
+  bool get editable => type == PathType.docs && !cloudViewing;
+  bool get putBackAble => (permanentlyDeleted || inBins || unarchivable) && !cloudViewing;
+
+  bool get archivable => type == PathType.docs && !cloudViewing;
+  bool get unarchivable => type == PathType.archives && !cloudViewing;
+  bool get canMoveToBin => !permanentlyDeleted && !inBins && !cloudViewing;
+  bool get hardDeletable => !permanentlyDeleted && !cloudViewing;
+
+  int? get willBeRemovedInDays {
+    if (movedToBinAt != null) {
+      DateTime willBeRemovedAt = movedToBinAt!.add(const Duration(days: 30));
+      return willBeRemovedAt.difference(DateTime.now()).inDays;
+    }
+    return null;
+  }
+
+  bool sameDayAs(StoryDbModel story) {
+    return [displayPathDate.year, displayPathDate.month, displayPathDate.day].join("-") ==
+        [story.displayPathDate.year, story.displayPathDate.month, story.displayPathDate.day].join("-");
+  }
+
+  StoryContentDbModel generateDraftContent() {
+    if (draftContent != null) {
+      return draftContent!;
+    } else if (latestContent != null) {
+      return StoryContentDbModel.dublicate(latestContent!);
+    } else {
+      return StoryContentDbModel.create(createdAt: DateTime.now());
+    }
+  }
+
+  Future<StoryDbModel?> putBack({
+    bool runCallbacks = true,
+  }) async {
+    if (!putBackAble) return null;
+
+    return db.set(
+      runCallbacks: runCallbacks,
+      copyWith(
+        type: PathType.docs,
+        updatedAt: DateTime.now(),
+        movedToBinAt: null,
+        permanentlyDeletedAt: null,
+      ),
+    );
+  }
+
+  Future<StoryDbModel?> moveToBin({
+    bool runCallbacks = true,
+  }) async {
+    if (!canMoveToBin) return null;
+
+    return db.set(
+      runCallbacks: runCallbacks,
+      copyWith(
+        type: PathType.bins,
+        updatedAt: DateTime.now(),
+        movedToBinAt: DateTime.now(),
+      ),
+    );
+  }
+
+  Future<StoryDbModel?> toggleStarred() async {
+    if (!editable) return null;
+
+    return db.set(
+      copyWith(
+        starred: !(starred == true),
+        updatedAt: DateTime.now(),
+      ),
+    );
+  }
+
+  Future<StoryDbModel?> setPinned(
+    bool pinned, {
+    bool runCallbacks = true,
+  }) async {
+    if (!editable) return null;
+
+    return db.set(
+      copyWith(pinned: pinned, updatedAt: DateTime.now()),
+      runCallbacks: runCallbacks,
+    );
+  }
+
+  Future<StoryDbModel?> updatePreferences({
+    required StoryPreferencesDbModel preferences,
+  }) async {
+    if (!editable) return null;
+
+    return db.set(
+      copyWith(
+        preferencesOrNull: preferences,
+        updatedAt: DateTime.now(),
+      ),
+    );
+  }
+
+  Future<StoryDbModel?> archive({
+    bool runCallbacks = true,
+  }) async {
+    if (!archivable) return null;
+
+    return db.set(
+      runCallbacks: runCallbacks,
+      copyWith(
+        type: PathType.archives,
+        updatedAt: DateTime.now(),
+      ),
+    );
+  }
+
+  Future<void> delete() async {
+    if (!hardDeletable) return;
+    await db.delete(id);
+  }
+
+  Future<StoryDbModel?> changePathDate(DateTime date) async {
+    if (!editable) return null;
+
+    return db.set(
+      copyWith(
+        year: date.year,
+        month: date.month,
+        day: date.day,
+        hour: displayPathDate.hour,
+        minute: displayPathDate.minute,
+      ),
+    );
+  }
+
+  factory StoryDbModel.fromNow() {
+    final now = DateTime.now();
+    return StoryDbModel.fromDate(now);
+  }
+
+  // use date for only path
+  factory StoryDbModel.fromDate(
+    DateTime date, {
+    int? initialYear,
+    int? initialMonth,
+    int? initialDay,
+    List<int>? initialTagIds,
+    GalleryTemplateObject? galleryTemplate,
+    TemplateDbModel? template,
+    DefaultStoryPreferencesObject? defaultStoryPreferences,
+  }) {
+    List<int> tags = initialTagIds ?? template?.tags ?? [];
+
+    // for gallery template, must load draft content beforehand.
+    final templateContent = galleryTemplate?.lazyDraftContent ?? template?.content;
+
+    StoryPreferencesDbModel preferences =
+        template?.preferences ?? defaultStoryPreferences?.toStoryPreference() ?? StoryPreferencesDbModel.create();
+    if (galleryTemplate != null) preferences = preferences.copyWith(layoutType: galleryTemplate.pageLayoutType);
+
+    final now = DateTime.now();
+    return StoryDbModel(
+      year: initialYear ?? date.year,
+      month: initialMonth ?? date.month,
+      day: initialDay ?? date.day,
+      hour: date.hour,
+      minute: date.minute,
+      second: date.second,
+      type: PathType.docs,
+      id: now.millisecondsSinceEpoch,
+      starred: false,
+      pinned: false,
+      feeling: null,
+      wordCount: null,
+      characterCount: null,
+      preferencesOrNull: preferences,
+      latestContent: templateContent ?? StoryContentDbModel.create(),
+      draftContent: templateContent,
+      updatedAt: now,
+      createdAt: now,
+      tags: tags.isNotEmpty == true ? tags.map((e) => e.toString()).toList() : null,
+      assets: [],
+      galleryTemplateId: galleryTemplate?.id,
+      templateId: template?.id,
+      movedToBinAt: null,
+      permanentlyDeletedAt: null,
+      lastSavedDeviceId: null,
+    );
+  }
+
+  factory StoryDbModel.startYearStory(int year) {
+    StoryDbModel initialStory = StoryDbModel.fromDate(DateTime(year, 1, 1));
+    String body =
+        "This is your personal space for $year. Add your stories, thoughts, dreams, or memories and make it uniquely yours.\n";
+    Delta delta = Delta()..insert(body);
+
+    initialStory = initialStory.copyWith(
+      latestContent: initialStory.latestContent!.copyWith(
+        title: "Let's Begin: $year ✨",
+        plainText: body,
+        richPages: [
+          StoryPageDbModel(
+            id: DateTime.now().millisecondsSinceEpoch,
+            title: "Let's Begin: $year ✨",
+            body: delta.toJson(),
+            characterCount: null,
+            wordCount: null,
+          ),
+        ],
+      ),
+    );
+
+    return initialStory;
+  }
+
+  factory StoryDbModel.fromJson(Map<String, dynamic> json) => _$StoryDbModelFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$StoryDbModelToJson(this);
+
+  bool _cloudViewing = false;
+  bool get cloudViewing => _cloudViewing;
+
+  StoryDbModel markAsCloudViewing() {
+    _cloudViewing = true;
+    return this;
+  }
+}

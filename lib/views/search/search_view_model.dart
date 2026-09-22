@@ -1,0 +1,198 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:storypad/core/databases/models/collection_db_model.dart';
+import 'package:storypad/core/databases/models/story_db_model.dart';
+import 'package:storypad/core/databases/models/tag_db_model.dart';
+import 'package:storypad/core/storages/search_filter_storage.dart';
+import 'package:storypad/core/types/path_type.dart';
+import 'package:storypad/providers/tags_provider.dart';
+import 'package:storypad/views/search/filter/search_filter_view.dart';
+import 'package:storypad/widgets/sp_scrollable_choice_chips.dart';
+import 'package:storypad/widgets/story_list/sp_story_list_multi_edit_wrapper.dart';
+import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
+import 'package:storypad/core/mixins/debounched_callback.dart';
+import 'package:storypad/core/objects/search_filter_object.dart';
+import 'package:storypad/core/services/analytics/analytics_service.dart';
+import 'search_view.dart';
+
+class SearchViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
+  final SearchRoute params;
+  final TextEditingController queryController = TextEditingController();
+  final tagsChipsKey = GlobalKey<SpScrollableChoiceChipsState<TagDbModel>>();
+  late final TagsProvider tagsProvider;
+
+  SearchViewModel({
+    required this.params,
+    required BuildContext context,
+  }) {
+    tagsProvider = context.read<TagsProvider>();
+    StoryDbModel.db.reindexSearchMetadata().then((_) {
+      load();
+    });
+  }
+
+  SearchFilterObject? searchFilter;
+  late final SearchFilterObject initialFilter =
+      params.initialFilter ??
+      SearchFilterObject(
+        years: {},
+        types: {PathType.docs},
+        assetId: null,
+        limit: 100,
+      );
+
+  List<TagDbModel>? _tags;
+  List<TagDbModel>? get tags => _tags;
+
+  CollectionDbModel<StoryDbModel>? _stories;
+  CollectionDbModel<StoryDbModel> get stories => _stories ?? CollectionDbModel(items: []);
+
+  bool get hasQuery => searchFilter?.query != null;
+
+  Future<void> load() async {
+    // StoryPad already persist the all search filters, but when reopening Search
+    // only restore the selected tag. Other fields (years, types, starred, etc.) are
+    // hidden in the UI and restoring them can be confusing.
+    // Tags are visibly selectable, so restoring just tagIds keeps the UX clear.
+    searchFilter = initialFilter.tagIds.isEmpty
+        ? await SearchFilterStorage().readObject().then((value) => initialFilter.copyWith(tagIds: value?.tagIds ?? {}))
+        : initialFilter;
+
+    _tags = [...tagsProvider.tags?.items ?? []];
+    if (_tags?.isNotEmpty == true) _tags?.insert(0, TagDbModel.fromIDTitle(0, tr('general.all')));
+
+    await _resetTagsCount();
+    notifyListeners();
+  }
+
+  void searchText(String query) {
+    if (searchFilter == null) return;
+
+    debouncedCallback(() async {
+      String? newQuery = query.trim().isNotEmpty ? query.trim() : null;
+      if (newQuery == searchFilter!.query) return;
+
+      searchFilter = searchFilter!.copyWith(
+        query: query.trim().isNotEmpty ? query.trim() : null,
+      );
+
+      await _resetTagsCount();
+      notifyListeners();
+
+      // query does not need to be remembered.
+      SearchFilterStorage().writeObject(searchFilter!.copyWith(query: null));
+      AnalyticsService.instance.logSearch(
+        searchTerm: query.trim(),
+      );
+    });
+  }
+
+  void clearQuery(BuildContext context) async {
+    if (searchFilter == null) return;
+
+    searchFilter = searchFilter!.copyWith(query: null);
+    queryController.clear();
+    await _resetTagsCount();
+    notifyListeners();
+
+    SearchFilterStorage().writeObject(searchFilter!);
+  }
+
+  // The quick-filter bar only ever represents a single active tag (tapping a chip
+  // replaces the selection), so once the filter page applies more than one tag — or a
+  // category tag (People, Feeling, Weather, Activity) that has no chip here at all — the
+  // bar can no longer represent the selection and is hidden; surface a badge instead of
+  // leaving the filter silently invisible.
+  bool get hasHiddenTagFilters {
+    if (searchFilter == null) return false;
+    if (searchFilter!.tagIds.length > 1) return true;
+
+    final visibleTagIds = tags?.map((tag) => tag.id).toSet() ?? {};
+    return searchFilter!.tagIds.any((id) => !visibleTagIds.contains(id));
+  }
+
+  // Bar shows a single selected chip at most; with 2+ tags applied (from the filter
+  // page) no single chip can represent the selection, so hide it instead of showing a
+  // misleading "no tag selected" bar.
+  bool get showTagFilterBar => (searchFilter?.tagIds.length ?? 0) <= 1;
+
+  bool tagSelected(TagDbModel tag) =>
+      searchFilter?.tagIds.contains(tag.id) == true || (tag.id == 0 && searchFilter?.tagIds.isEmpty == true);
+
+  void toggleTag(TagDbModel tag, BuildContext context) async {
+    if (searchFilter == null) return;
+
+    searchFilter = searchFilter!.copyWith(
+      tagIds: tag.id == 0 || searchFilter!.tagIds.contains(tag.id) ? {} : {tag.id},
+    );
+
+    notifyListeners();
+
+    SearchFilterStorage().writeObject(searchFilter!);
+
+    // Dismiss keyboard to improve UX when selecting tags.
+    if (FocusScope.of(context).hasFocus) FocusScope.of(context).unfocus();
+  }
+
+  Future<void> _resetTagsCount() async {
+    if (searchFilter == null) return;
+
+    Map<int, int> storiesCountByTagId = StoryDbModel.db.getStoryCountByTags(
+      query: searchFilter!.query,
+      tagIds: tags?.map((e) => e.id).toList() ?? [],
+      years: searchFilter!.years.toList(),
+      types: searchFilter!.types.isNotEmpty ? searchFilter!.types.map((e) => e.name).toList() : null,
+    );
+
+    for (TagDbModel tag in tags ?? []) {
+      tag.storiesCount = storiesCountByTagId[tag.id] ?? 0;
+    }
+  }
+
+  Future<void> goToFilterPage(BuildContext context) async {
+    if (searchFilter == null) return;
+
+    final result = await SearchFilterRoute(
+      initialTune: searchFilter!,
+      multiSelectYear: true,
+      filterTagModifiable: true,
+      resetTune: initialFilter,
+    ).push(context);
+
+    if (result is SearchFilterObject) {
+      searchFilter = result;
+      await _resetTagsCount();
+      notifyListeners();
+
+      Future.microtask(() {
+        tagsChipsKey.currentState?.scrollToFirstSelected();
+      });
+    }
+  }
+
+  Future<void> onPopInvokedWithResult(bool didPop, dynamic result, BuildContext context) async {
+    if (didPop) return;
+
+    bool shouldPop = true;
+
+    if (SpStoryListMultiEditWrapper.of(context).selectedStories.isNotEmpty) {
+      OkCancelResult result = await showOkCancelAlertDialog(
+        context: context,
+        title: tr("dialog.are_you_sure_to_discard_these_changes.title"),
+        isDestructiveAction: true,
+        okLabel: tr("button.discard"),
+      );
+      shouldPop = result == OkCancelResult.ok;
+    }
+
+    if (shouldPop && context.mounted && ModalRoute.of(context)?.isCurrent == true) Navigator.of(context).pop(result);
+  }
+
+  @override
+  void dispose() {
+    queryController.dispose();
+    super.dispose();
+  }
+}

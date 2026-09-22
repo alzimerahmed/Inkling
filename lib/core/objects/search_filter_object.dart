@@ -1,0 +1,74 @@
+import 'package:storypad/core/types/path_type.dart';
+import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'search_filter_object.g.dart';
+
+@CopyWith()
+@JsonSerializable()
+class SearchFilterObject {
+  final Set<int> years;
+  final Set<int>? storyIds;
+  final Set<int>? excludeYears;
+  final String? query;
+  final int? month;
+  final int? day;
+  final Set<PathType> types;
+  final Set<int> tagIds;
+  final String? galleryTemplateId;
+  final int? templateId;
+  final int? assetId;
+  final bool? starred;
+  final bool? pinned;
+  final int? limit;
+  final int? offset;
+
+  SearchFilterObject({
+    required this.years,
+    required this.types,
+    required this.assetId,
+    this.storyIds,
+    Set<int>? tagIds,
+    this.query,
+    this.galleryTemplateId,
+    this.templateId,
+    this.excludeYears,
+    this.month,
+    this.day,
+    this.starred,
+    this.pinned,
+    this.limit,
+    this.offset,
+  }) : tagIds = tagIds ?? {};
+
+  Map<String, dynamic>? toDatabaseFilter() {
+    Map<String, dynamic> filters = {};
+
+    if (query != null) filters['query'] = query;
+    if (storyIds?.isNotEmpty == true) filters['ids'] = storyIds?.toList();
+    if (years.isNotEmpty) filters['years'] = years.toList();
+    if (month != null) filters['month'] = month;
+    if (day != null) filters['day'] = day;
+    if (tagIds.isNotEmpty) filters['tags'] = tagIds.toList();
+    if (excludeYears != null) filters['exclude_years'] = excludeYears?.toList();
+    if (galleryTemplateId != null) filters['gallery_template_id'] = galleryTemplateId;
+    if (templateId != null) filters['template'] = templateId;
+    if (assetId != null) filters['asset'] = assetId;
+    if (starred != null) filters['starred'] = starred;
+    if (pinned != null) filters['pinned'] = pinned;
+    if (types.isNotEmpty) filters['types'] = types.map((e) => e.name).toList();
+    if (limit != null) filters['limit'] = limit;
+    if (offset != null) filters['offset'] = offset;
+
+    // Search whole database when has query.
+    if (query?.trim().isNotEmpty == true) {
+      filters['types'] = PathType.values.map((e) => e.name).toList();
+      filters.remove('years');
+    }
+
+    return filters;
+  }
+
+  Map<String, dynamic> toJson() => _$SearchFilterObjectToJson(this);
+  factory SearchFilterObject.fromJson(Map<String, dynamic> json) => _$SearchFilterObjectFromJson(json);
+}

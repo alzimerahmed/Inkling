@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "200040656841",
+    "project_id": "write-story-308919",
+    "storage_bucket": "write-story-308919.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200040656841:android:818105d452a7119c8e8218",
+        "android_client_info": {
+          "package_name": "com.tc.writestory.community"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDtdw-fHe9O21qZboGObwixGwVUaKtEuI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

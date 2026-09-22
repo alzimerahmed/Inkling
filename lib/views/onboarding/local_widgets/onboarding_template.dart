@@ -1,0 +1,168 @@
+import 'dart:math';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:storypad/core/services/remote_config/remote_config_service.dart';
+import 'package:storypad/core/services/url_opener_service.dart';
+import 'package:storypad/widgets/sp_fade_in.dart';
+import 'package:storypad/widgets/sp_tap_effect.dart';
+
+part 'privacy_policy_text.dart';
+
+class OnboardingTemplate extends StatelessWidget {
+  const OnboardingTemplate({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.actionButton,
+    required this.demo,
+    required this.currentStep,
+    required this.maxStep,
+    required this.onSkip,
+    this.fadeInContent = false,
+  });
+
+  final String title;
+  final String description;
+  final Widget? demo;
+  final Widget actionButton;
+  final int currentStep;
+  final int maxStep;
+  final bool fadeInContent;
+  final void Function()? onSkip;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return buildScaffold(context, constraints);
+      },
+    );
+  }
+
+  Widget buildScaffold(BuildContext context, BoxConstraints constraints) {
+    double staturBarHeight = MediaQuery.of(context).padding.top;
+    double bottomBarHeight = MediaQuery.of(context).padding.bottom + 24;
+
+    double dividerHeight = demo == null ? 0 : 1;
+    double spacingBetweenSection = 36;
+    double demoHeight = demo == null ? 240 : 360.0 + 48.0;
+
+    double pageHeight = MediaQuery.of(context).size.height;
+    double contentHeight =
+        pageHeight - (staturBarHeight + bottomBarHeight + dividerHeight + spacingBetweenSection + demoHeight);
+
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        forceMaterialTransparency: true,
+        automaticallyImplyLeading: false,
+        leading: ModalRoute.of(context)?.canPop == true
+            ? const Hero(tag: 'onboarding-back-button', child: BackButton())
+            : null,
+        actions: [
+          if (onSkip != null)
+            Hero(
+              tag: 'onboarding-skip-button',
+              child: TextButton(
+                onPressed: onSkip,
+                child: Text(tr("button.skip")),
+              ),
+            ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        reverse: true,
+        padding: EdgeInsets.only(
+          top: staturBarHeight,
+          bottom: bottomBarHeight,
+        ),
+        child: Column(
+          children: [
+            Container(
+              height: demoHeight,
+              alignment: Alignment.bottomCenter,
+              clipBehavior: Clip.hardEdge,
+              decoration: const BoxDecoration(),
+              child: GestureDetector(
+                onTap: () => HapticFeedback.selectionClick(),
+                child: demo,
+              ),
+            ),
+            if (demo != null)
+              Hero(
+                tag: "onboarding-divider",
+                child: Divider(height: dividerHeight),
+              ),
+            SizedBox(height: spacingBetweenSection),
+            Container(
+              width: double.infinity,
+              height: max(200, contentHeight),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildTextPresentation(context),
+                  buildFooter(context),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildTextPresentation(BuildContext context) {
+    Widget titleText = Text(
+      title,
+      style: TextTheme.of(context).titleLarge,
+      textAlign: TextAlign.center,
+    );
+
+    Widget descriptionText = Container(
+      constraints: const BoxConstraints(maxWidth: 250),
+      child: Text(
+        description,
+        style: TextTheme.of(context).bodyLarge,
+        textAlign: TextAlign.center,
+      ),
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children:
+          [
+            titleText,
+            const SizedBox(height: 8),
+            descriptionText,
+          ].asMap().entries.map((entry) {
+            return SpFadeIn.fromTop(
+              delay: Durations.medium4 + Durations.medium1 * entry.key,
+              duration: Durations.long3,
+              child: entry.value,
+            );
+          }).toList(),
+    );
+  }
+
+  Widget buildFooter(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (currentStep != maxStep) ...[
+          Text("$currentStep / $maxStep"),
+          const SizedBox(height: 24.0),
+        ],
+        if (currentStep == maxStep) ...[
+          _PrivacyPolicyText(context: context),
+          const SizedBox(height: 24.0),
+        ],
+        actionButton,
+      ],
+    );
+  }
+}
