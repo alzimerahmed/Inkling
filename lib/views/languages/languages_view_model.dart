@@ -7,7 +7,7 @@ import 'package:storypad/core/services/analytics/analytics_user_propery_service.
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl_standalone.dart';
 
-// ignore: implementation_imports, invalid_use_of_visible_for_testing_member
+// ignore_for_file: implementation_imports, invalid_use_of_visible_for_testing_member
 import 'package:easy_localization/src/easy_localization_controller.dart'
     show LocaleExtension;
 

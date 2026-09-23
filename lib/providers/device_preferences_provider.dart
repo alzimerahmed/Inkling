@@ -118,10 +118,9 @@ class DevicePreferencesProvider extends ChangeNotifier
 
   void setColorSeed(Color color) {
     _preferences = _preferences.copyWith(
-      // ignore: deprecated_member_use
-      colorSeedValue: _preferences.colorSeedValue == color.value
+      colorSeedValue: _preferences.colorSeedValue == color.toARGB32()
           ? null
-          : color.value,
+          : color.toARGB32(),
     );
 
     storage.writeObject(_preferences);
