@@ -29,7 +29,12 @@ class ShowTagViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   List<int>? years;
 
-  late final initialTune = SearchFilterObject(years: {}, types: {}, tagIds: {tag.id}, assetId: null);
+  late final initialTune = SearchFilterObject(
+    years: {},
+    types: {},
+    tagIds: {tag.id},
+    assetId: null,
+  );
 
   Future<void> load() async {
     years = await StoryDbModel.db
@@ -85,7 +90,11 @@ class ShowTagViewModel extends ChangeNotifier with DisposeAwareMixin {
     refreshList();
   }
 
-  Future<void> onPopInvokedWithResult(bool didPop, dynamic result, BuildContext context) async {
+  Future<void> onPopInvokedWithResult(
+    bool didPop,
+    dynamic result,
+    BuildContext context,
+  ) async {
     if (didPop) return;
 
     bool shouldPop = true;
@@ -100,6 +109,9 @@ class ShowTagViewModel extends ChangeNotifier with DisposeAwareMixin {
       shouldPop = result == OkCancelResult.ok;
     }
 
-    if (shouldPop && context.mounted && ModalRoute.of(context)?.isCurrent == true) Navigator.of(context).pop(result);
+    if (shouldPop &&
+        context.mounted &&
+        ModalRoute.of(context)?.isCurrent == true)
+      Navigator.of(context).pop(result);
   }
 }

@@ -7,10 +7,12 @@ import 'package:storypad/core/storages/storage_adapters/secure_storage_adaptor.d
 
 class AppLockStorage extends ObjectStorage<AppLockObject> {
   @override
-  Future<BaseStorageAdapter<String>> get adapter async => SecureStorageAdaptor();
+  Future<BaseStorageAdapter<String>> get adapter async =>
+      SecureStorageAdaptor();
 
   @override
-  AppLockObject decode(Map<String, dynamic> json) => AppLockObject.fromJson(json);
+  AppLockObject decode(Map<String, dynamic> json) =>
+      AppLockObject.fromJson(json);
 
   @override
   Map<String, dynamic> encode(AppLockObject object) => object.toJson();

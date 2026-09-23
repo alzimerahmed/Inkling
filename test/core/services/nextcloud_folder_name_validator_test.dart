@@ -21,7 +21,10 @@ void main() {
     });
 
     test('ignores blank/./.. segments rather than erroring on them', () {
-      expect(NextcloudFolderNameValidator.validate('Journals//MyDiary'), isNull);
+      expect(
+        NextcloudFolderNameValidator.validate('Journals//MyDiary'),
+        isNull,
+      );
       expect(NextcloudFolderNameValidator.validate('./myjournal'), isNull);
       expect(NextcloudFolderNameValidator.validate('../myjournal'), isNull);
     });

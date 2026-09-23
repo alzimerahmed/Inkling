@@ -23,7 +23,10 @@ void main() {
       expect(exception.message, equals('Test error'));
       expect(exception.context, equals('test_operation'));
       expect(exception.isRetryable, isTrue);
-      expect(exception.userFriendlyMessage, equals('Test error')); // Default implementation
+      expect(
+        exception.userFriendlyMessage,
+        equals('Test error'),
+      ); // Default implementation
     });
 
     test('creates with minimal properties', () {
@@ -40,7 +43,10 @@ void main() {
         'Test error',
         context: 'test_context',
       );
-      expect(exception.toString(), equals('BackupException: Test error (test_context)'));
+      expect(
+        exception.toString(),
+        equals('BackupException: Test error (test_context)'),
+      );
     });
 
     test('toString excludes context when not provided', () {

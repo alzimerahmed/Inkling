@@ -40,5 +40,6 @@ class RelaxSoundMixModel extends BaseDbModel {
 
   @override
   Map<String, dynamic> toJson() => _$RelaxSoundMixModelToJson(this);
-  factory RelaxSoundMixModel.fromJson(Map<String, dynamic> json) => _$RelaxSoundMixModelFromJson(json);
+  factory RelaxSoundMixModel.fromJson(Map<String, dynamic> json) =>
+      _$RelaxSoundMixModelFromJson(json);
 }

@@ -59,14 +59,17 @@ void main() {
       expect(messages.last.processing, isFalse);
     });
 
-    test('throws when the service is not signed in, regardless of the gate', () async {
-      final signedOut = _FakeCloudService(currentUser: null);
+    test(
+      'throws when the service is not signed in, regardless of the gate',
+      () async {
+        final signedOut = _FakeCloudService(currentUser: null);
 
-      expect(
-        () => service.start(signedOut, uploadAssets: false),
-        throwsA(anything),
-      );
-    });
+        expect(
+          () => service.start(signedOut, uploadAssets: false),
+          throwsA(anything),
+        );
+      },
+    );
   });
 
   group('BackupImagesUploaderService - pendingAssets', () {
@@ -82,7 +85,9 @@ void main() {
   // service" — pure over its inputs (no DB/network), so it's testable
   // directly without the DB-unavailable limitation above.
   group('BackupImagesUploaderService - findBackfillSource', () {
-    AssetDbModel buildAsset({required Map<String, Map<String, Map<String, String>>> cloudDestinations}) {
+    AssetDbModel buildAsset({
+      required Map<String, Map<String, Map<String, String>>> cloudDestinations,
+    }) {
       final now = DateTime(2026, 1, 1);
       return AssetDbModel(
         id: 1,
@@ -101,16 +106,25 @@ void main() {
       final asset = buildAsset(
         cloudDestinations: {
           BackupServiceType.nextcloud.id: {
-            'nextcloud-tester@example.com': {'file_id': 'abc', 'file_name': '1.jpg'},
+            'nextcloud-tester@example.com': {
+              'file_id': 'abc',
+              'file_name': '1.jpg',
+            },
           },
         },
       );
       final nextcloud = _FakeCloudService(
-        currentUser: _FakeUser(serviceType: BackupServiceType.nextcloud, identifier: 'nextcloud-tester@example.com'),
+        currentUser: _FakeUser(
+          serviceType: BackupServiceType.nextcloud,
+          identifier: 'nextcloud-tester@example.com',
+        ),
         serviceType: BackupServiceType.nextcloud,
       );
 
-      final source = service.findBackfillSource(asset, [cloudService, nextcloud], cloudService);
+      final source = service.findBackfillSource(asset, [
+        cloudService,
+        nextcloud,
+      ], cloudService);
 
       expect(source, same(nextcloud));
     });
@@ -118,36 +132,52 @@ void main() {
     test('returns null when no other connected service has the asset', () {
       final asset = buildAsset(cloudDestinations: {});
 
-      final source = service.findBackfillSource(asset, [cloudService], cloudService);
+      final source = service.findBackfillSource(asset, [
+        cloudService,
+      ], cloudService);
 
       expect(source, isNull);
     });
 
-    test('excludes the target service itself even if it has a matching entry', () {
-      final asset = buildAsset(
-        cloudDestinations: {
-          BackupServiceType.google_drive.id: {
-            'tester@example.com': {'file_id': 'abc', 'file_name': '1.jpg'},
+    test(
+      'excludes the target service itself even if it has a matching entry',
+      () {
+        final asset = buildAsset(
+          cloudDestinations: {
+            BackupServiceType.google_drive.id: {
+              'tester@example.com': {'file_id': 'abc', 'file_name': '1.jpg'},
+            },
           },
-        },
-      );
+        );
 
-      final source = service.findBackfillSource(asset, [cloudService], cloudService);
+        final source = service.findBackfillSource(asset, [
+          cloudService,
+        ], cloudService);
 
-      expect(source, isNull);
-    });
+        expect(source, isNull);
+      },
+    );
 
     test('skips a candidate service that is not signed in', () {
       final asset = buildAsset(
         cloudDestinations: {
           BackupServiceType.nextcloud.id: {
-            'nextcloud-tester@example.com': {'file_id': 'abc', 'file_name': '1.jpg'},
+            'nextcloud-tester@example.com': {
+              'file_id': 'abc',
+              'file_name': '1.jpg',
+            },
           },
         },
       );
-      final signedOutNextcloud = _FakeCloudService(currentUser: null, serviceType: BackupServiceType.nextcloud);
+      final signedOutNextcloud = _FakeCloudService(
+        currentUser: null,
+        serviceType: BackupServiceType.nextcloud,
+      );
 
-      final source = service.findBackfillSource(asset, [cloudService, signedOutNextcloud], cloudService);
+      final source = service.findBackfillSource(asset, [
+        cloudService,
+        signedOutNextcloud,
+      ], cloudService);
 
       expect(source, isNull);
     });
@@ -163,7 +193,10 @@ void main() {
         originalSource: 'images/42.jpg',
         cloudDestinations: {
           BackupServiceType.nextcloud.id: {
-            'nextcloud-tester@example.com': {'file_id': 'remote-id', 'file_name': '42.jpg'},
+            'nextcloud-tester@example.com': {
+              'file_id': 'remote-id',
+              'file_name': '42.jpg',
+            },
           },
         },
         createdAt: now,
@@ -178,7 +211,9 @@ void main() {
     // asset.localFilePath resolves under kSupportDirectory, which is normally
     // set during app init — point it at a scratch dir for this group only.
     setUpAll(() {
-      tempDir = io.Directory.systemTemp.createTempSync('backup_images_uploader_test_');
+      tempDir = io.Directory.systemTemp.createTempSync(
+        'backup_images_uploader_test_',
+      );
       kSupportDirectory = tempDir;
     });
 
@@ -198,47 +233,74 @@ void main() {
       }
     });
 
-    test('downloads bytes from the source service and writes them locally', () async {
-      final asset = buildBackfillableAsset();
-      final nextcloud = _FakeCloudService(
-        currentUser: _FakeUser(serviceType: BackupServiceType.nextcloud, identifier: 'nextcloud-tester@example.com'),
-        serviceType: BackupServiceType.nextcloud,
-        bytesToDownload: [1, 2, 3],
-      );
+    test(
+      'downloads bytes from the source service and writes them locally',
+      () async {
+        final asset = buildBackfillableAsset();
+        final nextcloud = _FakeCloudService(
+          currentUser: _FakeUser(
+            serviceType: BackupServiceType.nextcloud,
+            identifier: 'nextcloud-tester@example.com',
+          ),
+          serviceType: BackupServiceType.nextcloud,
+          bytesToDownload: [1, 2, 3],
+        );
 
-      final result = await service.backfillFromOtherService(asset, [cloudService, nextcloud], cloudService);
+        final result = await service.backfillFromOtherService(asset, [
+          cloudService,
+          nextcloud,
+        ], cloudService);
 
-      expect(result, BackfillOutcome.succeeded);
-      expect(io.File(asset.localFilePath).readAsBytesSync(), [1, 2, 3]);
-    });
+        expect(result, BackfillOutcome.succeeded);
+        expect(io.File(asset.localFilePath).readAsBytesSync(), [1, 2, 3]);
+      },
+    );
 
-    test('skips, writes nothing, when the download fails transiently', () async {
-      final asset = buildBackfillableAsset();
-      final nextcloud = _FakeCloudService(
-        currentUser: _FakeUser(serviceType: BackupServiceType.nextcloud, identifier: 'nextcloud-tester@example.com'),
-        serviceType: BackupServiceType.nextcloud,
-        downloadShouldThrow: true,
-      );
+    test(
+      'skips, writes nothing, when the download fails transiently',
+      () async {
+        final asset = buildBackfillableAsset();
+        final nextcloud = _FakeCloudService(
+          currentUser: _FakeUser(
+            serviceType: BackupServiceType.nextcloud,
+            identifier: 'nextcloud-tester@example.com',
+          ),
+          serviceType: BackupServiceType.nextcloud,
+          downloadShouldThrow: true,
+        );
 
-      final result = await service.backfillFromOtherService(asset, [cloudService, nextcloud], cloudService);
+        final result = await service.backfillFromOtherService(asset, [
+          cloudService,
+          nextcloud,
+        ], cloudService);
 
-      expect(result, BackfillOutcome.skipped);
-      expect(io.File(asset.localFilePath).existsSync(), isFalse);
-    });
+        expect(result, BackfillOutcome.skipped);
+        expect(io.File(asset.localFilePath).existsSync(), isFalse);
+      },
+    );
 
-    test('reports sourceMissing and clears the stale cloudDestinations entry on a 404', () async {
-      final asset = buildBackfillableAsset();
-      final nextcloud = _FakeCloudService(
-        currentUser: _FakeUser(serviceType: BackupServiceType.nextcloud, identifier: 'nextcloud-tester@example.com'),
-        serviceType: BackupServiceType.nextcloud,
-        downloadNotFound: true,
-      );
+    test(
+      'reports sourceMissing and clears the stale cloudDestinations entry on a 404',
+      () async {
+        final asset = buildBackfillableAsset();
+        final nextcloud = _FakeCloudService(
+          currentUser: _FakeUser(
+            serviceType: BackupServiceType.nextcloud,
+            identifier: 'nextcloud-tester@example.com',
+          ),
+          serviceType: BackupServiceType.nextcloud,
+          downloadNotFound: true,
+        );
 
-      final result = await service.backfillFromOtherService(asset, [cloudService, nextcloud], cloudService);
+        final result = await service.backfillFromOtherService(asset, [
+          cloudService,
+          nextcloud,
+        ], cloudService);
 
-      expect(result, BackfillOutcome.sourceMissing);
-      expect(io.File(asset.localFilePath).existsSync(), isFalse);
-    });
+        expect(result, BackfillOutcome.sourceMissing);
+        expect(io.File(asset.localFilePath).existsSync(), isFalse);
+      },
+    );
 
     // Deterministically forces the *write* (not the download) to fail: with
     // "images" already occupied by a plain file, creating the real target
@@ -246,21 +308,36 @@ void main() {
     // running out of disk space, which is exactly the code path being
     // exercised here (this code treats any write-time FileSystemException as
     // storage-full, rather than parsing OS-specific error codes).
-    test('throws a localStorageFull ServiceException when the write fails', () async {
-      io.File('${tempDir.path}/images').createSync(recursive: true);
+    test(
+      'throws a localStorageFull ServiceException when the write fails',
+      () async {
+        io.File('${tempDir.path}/images').createSync(recursive: true);
 
-      final asset = buildBackfillableAsset();
-      final nextcloud = _FakeCloudService(
-        currentUser: _FakeUser(serviceType: BackupServiceType.nextcloud, identifier: 'nextcloud-tester@example.com'),
-        serviceType: BackupServiceType.nextcloud,
-        bytesToDownload: [1, 2, 3],
-      );
+        final asset = buildBackfillableAsset();
+        final nextcloud = _FakeCloudService(
+          currentUser: _FakeUser(
+            serviceType: BackupServiceType.nextcloud,
+            identifier: 'nextcloud-tester@example.com',
+          ),
+          serviceType: BackupServiceType.nextcloud,
+          bytesToDownload: [1, 2, 3],
+        );
 
-      await expectLater(
-        service.backfillFromOtherService(asset, [cloudService, nextcloud], cloudService),
-        throwsA(isA<ServiceException>().having((e) => e.type, 'type', ServiceExceptionType.localStorageFull)),
-      );
-    });
+        await expectLater(
+          service.backfillFromOtherService(asset, [
+            cloudService,
+            nextcloud,
+          ], cloudService),
+          throwsA(
+            isA<ServiceException>().having(
+              (e) => e.type,
+              'type',
+              ServiceExceptionType.localStorageFull,
+            ),
+          ),
+        );
+      },
+    );
   });
 }
 
@@ -340,7 +417,11 @@ class _FakeCloudService implements BackupCloudService {
   bool get hasCompression => true;
 
   @override
-  Future<CloudFileObject?> uploadFile(String fileName, io.File file, {String? folderName}) async {
+  Future<CloudFileObject?> uploadFile(
+    String fileName,
+    io.File file, {
+    String? folderName,
+  }) async {
     uploadedFileNames.add(fileName);
     return null;
   }
@@ -349,7 +430,8 @@ class _FakeCloudService implements BackupCloudService {
   Future<CloudStorageQuotaObject?> fetchStorageQuota() async => null;
 
   @override
-  Future<List<CloudFileObject>> listFilesInFolder(String folderName) async => [];
+  Future<List<CloudFileObject>> listFilesInFolder(String folderName) async =>
+      [];
 
   @override
   Future<Map<int, CloudFileObject>> fetchYearlyBackups() async => {};

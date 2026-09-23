@@ -43,7 +43,9 @@ class SpLayoutTypeSection extends StatelessWidget {
                           color: ColorScheme.of(context).surface,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
-                            side: BorderSide(color: Theme.of(context).dividerColor),
+                            side: BorderSide(
+                              color: Theme.of(context).dividerColor,
+                            ),
                           ),
                           child: InkWell(
                             borderRadius: BorderRadius.circular(4.0),

@@ -26,7 +26,9 @@ class _HomeAppBar extends StatelessWidget {
 
   PreferredSize buildTabBar(BuildContext context) {
     return PreferredSize(
-      preferredSize: Size.fromHeight(viewModel.scrollInfo.appBar(context).getTabBarPreferredHeight()),
+      preferredSize: Size.fromHeight(
+        viewModel.scrollInfo.appBar(context).getTabBarPreferredHeight(),
+      ),
       child: _HomeTabBar(viewModel: viewModel),
     );
   }

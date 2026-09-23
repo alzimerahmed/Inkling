@@ -40,20 +40,29 @@ class SpCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 16.0,
+                ),
                 margin: EdgeInsets.only(right: logoSize + 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       title,
-                      style: TextTheme.of(
-                        context,
-                      ).titleMedium?.copyWith(color: ColorScheme.of(context).secondary, fontWeight: FontWeight.bold),
+                      style:
+                          TextTheme.of(
+                            context,
+                          ).titleMedium?.copyWith(
+                            color: ColorScheme.of(context).secondary,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     Text(
                       subtitle,
-                      style: TextTheme.of(context).bodyMedium?.copyWith(color: ColorScheme.of(context).secondary),
+                      style: TextTheme.of(context).bodyMedium?.copyWith(
+                        color: ColorScheme.of(context).secondary,
+                      ),
                     ),
                     const SizedBox(height: 12.0),
                   ],

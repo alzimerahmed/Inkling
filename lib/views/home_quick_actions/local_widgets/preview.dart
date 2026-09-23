@@ -8,7 +8,9 @@ class _Preview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = ColorScheme.of(context);
-    final menuColor = kIsCupertino ? colorScheme.surface.withValues(alpha: 0.92) : colorScheme.surface;
+    final menuColor = kIsCupertino
+        ? colorScheme.surface.withValues(alpha: 0.92)
+        : colorScheme.surface;
     const pointerHeight = 12.0;
     const pointerHalfWidth = 14.0;
     const pointerCornerRadius = 5.0;
@@ -53,8 +55,13 @@ class _Preview extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: pointerHeight),
                     child: viewModel.visibleEnabledActions.isEmpty
                         ? Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
-                            child: Text(tr('page.home_quick_actions.empty_message')),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 18,
+                            ),
+                            child: Text(
+                              tr('page.home_quick_actions.empty_message'),
+                            ),
                           )
                         : ReorderableListView(
                             shrinkWrap: true,
@@ -63,19 +70,37 @@ class _Preview extends StatelessWidget {
                             physics: const NeverScrollableScrollPhysics(),
                             onReorderItem: viewModel.reorderActions,
                             children: [
-                              for (int i = 0; i < viewModel.visibleEnabledActions.length; i++)
+                              for (
+                                int i = 0;
+                                i < viewModel.visibleEnabledActions.length;
+                                i++
+                              )
                                 ReorderableDelayedDragStartListener(
-                                  key: ValueKey(viewModel.visibleEnabledActions[i].key),
+                                  key: ValueKey(
+                                    viewModel.visibleEnabledActions[i].key,
+                                  ),
                                   index: i,
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       _PreviewRow(
-                                        action: viewModel.visibleEnabledActions[i],
-                                        activating: viewModel.isActivating(viewModel.visibleEnabledActions[i].key),
-                                        onRemove: () => viewModel.removeAction(viewModel.visibleEnabledActions[i]),
+                                        action:
+                                            viewModel.visibleEnabledActions[i],
+                                        activating: viewModel.isActivating(
+                                          viewModel
+                                              .visibleEnabledActions[i]
+                                              .key,
+                                        ),
+                                        onRemove: () => viewModel.removeAction(
+                                          viewModel.visibleEnabledActions[i],
+                                        ),
                                       ),
-                                      if (i < viewModel.visibleEnabledActions.length - 1) const Divider(height: 1),
+                                      if (i <
+                                          viewModel
+                                                  .visibleEnabledActions
+                                                  .length -
+                                              1)
+                                        const Divider(height: 1),
                                     ],
                                   ),
                                 ),
@@ -121,7 +146,9 @@ class _PreviewRow extends StatelessWidget {
     return AnimatedContainer(
       duration: Durations.medium2,
       curve: Curves.ease,
-      color: activating ? ColorScheme.of(context).primaryContainer.withValues(alpha: 0.35) : Colors.transparent,
+      color: activating
+          ? ColorScheme.of(context).primaryContainer.withValues(alpha: 0.35)
+          : Colors.transparent,
       child: ListTile(
         contentPadding: const EdgeInsets.only(left: 16.0, right: 8.0),
         leading: Icon(action.icon, size: 20),
@@ -147,10 +174,16 @@ class _PreviewRow extends StatelessWidget {
                 )
               : IconButton(
                   key: const ValueKey('remove'),
-                  tooltip: tr('button.remove_args', namedArgs: {'RM_LABEL': action.label}),
+                  tooltip: tr(
+                    'button.remove_args',
+                    namedArgs: {'RM_LABEL': action.label},
+                  ),
                   icon: const Icon(SpIcons.clear),
                   visualDensity: VisualDensity.compact,
-                  constraints: const BoxConstraints.tightFor(width: 36, height: 36),
+                  constraints: const BoxConstraints.tightFor(
+                    width: 36,
+                    height: 36,
+                  ),
                   onPressed: onRemove,
                 ),
         ),
@@ -262,7 +295,10 @@ Path _buildQuickActionsBubblePath(
     ..lineTo(width - radius, 0)
     ..arcToPoint(Offset(width, radius), radius: Radius.circular(radius))
     ..lineTo(width, rectBottom - radius)
-    ..arcToPoint(Offset(width - radius, rectBottom), radius: Radius.circular(radius))
+    ..arcToPoint(
+      Offset(width - radius, rectBottom),
+      radius: Radius.circular(radius),
+    )
     ..lineTo(rightPointer, rectBottom)
     ..quadraticBezierTo(
       centerX + pointerControl,
@@ -270,10 +306,23 @@ Path _buildQuickActionsBubblePath(
       centerX + pointerCornerRadius,
       rectBottom + pointerCornerRadius,
     )
-    ..quadraticBezierTo(centerX, size.height, centerX - pointerCornerRadius, rectBottom + pointerCornerRadius)
-    ..quadraticBezierTo(centerX - pointerControl, rectBottom, leftPointer, rectBottom)
+    ..quadraticBezierTo(
+      centerX,
+      size.height,
+      centerX - pointerCornerRadius,
+      rectBottom + pointerCornerRadius,
+    )
+    ..quadraticBezierTo(
+      centerX - pointerControl,
+      rectBottom,
+      leftPointer,
+      rectBottom,
+    )
     ..lineTo(radius, rectBottom)
-    ..arcToPoint(Offset(0, rectBottom - radius), radius: Radius.circular(radius))
+    ..arcToPoint(
+      Offset(0, rectBottom - radius),
+      radius: Radius.circular(radius),
+    )
     ..lineTo(0, radius)
     ..arcToPoint(Offset(radius, 0), radius: Radius.circular(radius))
     ..close();

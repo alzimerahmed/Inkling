@@ -50,7 +50,12 @@ class OnboardingTemplate extends StatelessWidget {
 
     double pageHeight = MediaQuery.of(context).size.height;
     double contentHeight =
-        pageHeight - (staturBarHeight + bottomBarHeight + dividerHeight + spacingBetweenSection + demoHeight);
+        pageHeight -
+        (staturBarHeight +
+            bottomBarHeight +
+            dividerHeight +
+            spacingBetweenSection +
+            demoHeight);
 
     return Scaffold(
       extendBodyBehindAppBar: true,

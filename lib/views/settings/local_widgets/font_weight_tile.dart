@@ -27,7 +27,8 @@ class FontWeightTile extends StatelessWidget {
         return FontWeightTile(
           weekday: weekday,
           currentFontWeight: provider.preferences.fontWeight,
-          onChanged: (FontWeight fontWeight) => provider.setFontWeight(fontWeight),
+          onChanged: (FontWeight fontWeight) =>
+              provider.setFontWeight(fontWeight),
           locked: !inAppPurchaseProvider.isProUser,
         );
       },
@@ -51,7 +52,10 @@ class FontWeightTile extends StatelessWidget {
     );
   }
 
-  static String getFontWeightTitle(FontWeight fontWeight, BuildContext context) {
+  static String getFontWeightTitle(
+    FontWeight fontWeight,
+    BuildContext context,
+  ) {
     final descriptions = {
       100: context.tr("general.font_weight.thin"),
       200: context.tr("general.font_weight.extra_light"),

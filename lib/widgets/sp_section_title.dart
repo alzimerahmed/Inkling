@@ -32,7 +32,9 @@ class SpSectionTitle extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: TextTheme.of(context).titleSmall?.copyWith(color: ColorScheme.of(context).primary),
+              style: TextTheme.of(
+                context,
+              ).titleSmall?.copyWith(color: ColorScheme.of(context).primary),
             ),
           ),
           if (trailing != null) ...[

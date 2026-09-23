@@ -28,7 +28,8 @@ class ShowStoryViewModel extends BaseStoryViewModel {
   }) async {
     story = initialStory ?? await StoryDbModel.db.find(params.id);
     story = await _migrateEmbedAssetsToRelativeFilePathIfExists(story);
-    if (story?.draftContent != null) lastSavedAtNotifier.value = story?.updatedAt;
+    if (story?.draftContent != null)
+      lastSavedAtNotifier.value = story?.updatedAt;
 
     StoryContentDbModel content = story!.generateDraftContent();
     bool alreadyHasPage = content.richPages?.isNotEmpty == true;
@@ -42,7 +43,9 @@ class ShowStoryViewModel extends BaseStoryViewModel {
     // Copy with richPages from pagesManager instead, since DB-loaded pages have null plainText.
     // plainText is needed when saving back to draft content for homepage display & search.
     draftContent = content.copyWith(
-      richPages: content.richPages?.map((e) => pagesManager.pagesMap[e.id]?.page ?? e).toList(),
+      richPages: content.richPages
+          ?.map((e) => pagesManager.pagesMap[e.id]?.page ?? e)
+          .toList(),
     );
 
     // Save if detect data is invalid mostly from previous version before 2.12.3 (plainText), 2.23.0 (count)
@@ -51,7 +54,10 @@ class ShowStoryViewModel extends BaseStoryViewModel {
         draftContent?.characterCount != content.characterCount ||
         draftContent?.wordCount != content.wordCount) {
       // Keep updatedAt same as before since this is just a silent fix. User didn't explicitly make change.
-      story = buildStory(draft: story?.draftStory == true, updatedAt: story?.updatedAt);
+      story = buildStory(
+        draft: story?.draftStory == true,
+        updatedAt: story?.updatedAt,
+      );
       StoryDbModel.db.set(story!, runCallbacks: false);
     }
 
@@ -67,9 +73,14 @@ class ShowStoryViewModel extends BaseStoryViewModel {
     switch (story?.preferences.layoutType) {
       case PageLayoutType.grid:
       case PageLayoutType.list:
-        if (pagesManager.canReadScrollOffset) initialPageScrollOffet = pagesManager.pageScrollController.offset;
+        if (pagesManager.canReadScrollOffset)
+          initialPageScrollOffet = pagesManager.pageScrollController.offset;
 
-        for (int index = 0; index < (draftContent?.richPages?.length ?? 0); index++) {
+        for (
+          int index = 0;
+          index < (draftContent?.richPages?.length ?? 0);
+          index++
+        ) {
           int pageId = draftContent!.richPages![index].id;
           if (pagesManager.pagesMap[pageId]?.titleVisibleFraction == 1) {
             nearestPageIndex = index;
@@ -116,7 +127,11 @@ class ShowStoryViewModel extends BaseStoryViewModel {
     notifyListeners();
   }
 
-  Future<void> onPopInvokedWithResult(bool didPop, Object? result, BuildContext context) async {
+  Future<void> onPopInvokedWithResult(
+    bool didPop,
+    Object? result,
+    BuildContext context,
+  ) async {
     if (pagesManager.managingPage) return pagesManager.toggleManagingPage();
   }
 
@@ -138,11 +153,16 @@ class ShowStoryViewModel extends BaseStoryViewModel {
   //
   // This function acts as a safety net to ensure those remaining stories
   // are migrated properly when they are accessed.
-  Future<StoryDbModel?> _migrateEmbedAssetsToRelativeFilePathIfExists(StoryDbModel? story) async {
+  Future<StoryDbModel?> _migrateEmbedAssetsToRelativeFilePathIfExists(
+    StoryDbModel? story,
+  ) async {
     if (story == null) return null;
 
-    List<String>? assetPaths = story.draftContent != null || story.latestContent != null
-        ? StoryContentEmbedExtractor.media(story.draftContent ?? story.latestContent)
+    List<String>? assetPaths =
+        story.draftContent != null || story.latestContent != null
+        ? StoryContentEmbedExtractor.media(
+            story.draftContent ?? story.latestContent,
+          )
         : null;
 
     const String legacyPrefix = 'storypad://assets/';
@@ -153,8 +173,12 @@ class ShowStoryViewModel extends BaseStoryViewModel {
         .toSet();
 
     if (needMigrationAssetIds != null && needMigrationAssetIds.isNotEmpty) {
-      await DatabaseInitializer.migrateEmbedAssetsToUseRelativeFilePaths(assetIds: needMigrationAssetIds.toList());
-      debugPrint('Migrated ${needMigrationAssetIds.length} to latest for story: ${story.id}');
+      await DatabaseInitializer.migrateEmbedAssetsToUseRelativeFilePaths(
+        assetIds: needMigrationAssetIds.toList(),
+      );
+      debugPrint(
+        'Migrated ${needMigrationAssetIds.length} to latest for story: ${story.id}',
+      );
       return StoryDbModel.db.find(params.id);
     }
 

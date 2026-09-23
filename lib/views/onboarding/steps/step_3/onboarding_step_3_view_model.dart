@@ -17,7 +17,9 @@ class OnboardingStep3ViewModel extends ChangeNotifier with DisposeAwareMixin {
   final clickDuration = const Duration(milliseconds: 500);
 
   final endDrawerOpenedNotifier = ValueNotifier(false);
-  final endDrawerStateNotifier = ValueNotifier(EndDrawerScreenshotState.noSignedIn);
+  final endDrawerStateNotifier = ValueNotifier(
+    EndDrawerScreenshotState.noSignedIn,
+  );
   final endDrawerScrollController = ScrollController();
 
   final showSignInClickedNotifier = ValueNotifier(false);
@@ -70,7 +72,11 @@ class OnboardingStep3ViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   Future<void> scrollToBackupSection() async {
     if (disposed) return;
-    await endDrawerScrollController.animateTo(100, duration: Durations.long4, curve: Curves.fastEaseInToSlowEaseOut);
+    await endDrawerScrollController.animateTo(
+      100,
+      duration: Durations.long4,
+      curve: Curves.fastEaseInToSlowEaseOut,
+    );
   }
 
   Future<void> showSignInClickAnimation() async {

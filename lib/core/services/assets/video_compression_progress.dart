@@ -38,7 +38,10 @@ class VideoCompressionProgress extends ChangeNotifier {
   /// a three-video pick doesn't restart the bar three times.
   double get overallFraction {
     if (total <= 0) return 0.0;
-    return (((_current - 1).clamp(0, total) + _fraction) / total).clamp(0.0, 1.0);
+    return (((_current - 1).clamp(0, total) + _fraction) / total).clamp(
+      0.0,
+      1.0,
+    );
   }
 
   bool _cancelled = false;

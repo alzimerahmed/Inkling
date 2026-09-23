@@ -13,7 +13,11 @@ void main() {
 
     test('returns null with only one cycle (no gap to average)', () {
       // A single 3-day cycle -> one start only.
-      final dates = [DateTime(2026, 1, 1), DateTime(2026, 1, 2), DateTime(2026, 1, 3)];
+      final dates = [
+        DateTime(2026, 1, 1),
+        DateTime(2026, 1, 2),
+        DateTime(2026, 1, 3),
+      ];
       expect(PeriodPredictionService.predictNextPeriodStart(dates), isNull);
     });
 
@@ -54,7 +58,11 @@ void main() {
       // average would be pulled well above 28.
       final dates = [
         DateTime(2025, 1, 1),
-        DateTime(2025, 3, 2), // 60-day gap, older than 6 months before the last start.
+        DateTime(
+          2025,
+          3,
+          2,
+        ), // 60-day gap, older than 6 months before the last start.
         DateTime(2026, 1, 1),
         DateTime(2026, 1, 29),
         DateTime(2026, 2, 26),
@@ -83,31 +91,37 @@ void main() {
       expect(next, equals(DateTime(2026, 2, 22)));
     });
 
-    test('returns null when the most recent start is older than the history window', () {
-      // Two real cycles, but the last one started 8 months before "now" —
-      // way outside maxHistoryMonths (6). Nothing recent to extrapolate from.
-      final dates = [
-        DateTime(2025, 1, 1),
-        DateTime(2025, 1, 29),
-      ];
-      final next = PeriodPredictionService.predictNextPeriodStart(
-        dates,
-        now: DateTime(2025, 9, 29),
-      );
-      expect(next, isNull);
-    });
+    test(
+      'returns null when the most recent start is older than the history window',
+      () {
+        // Two real cycles, but the last one started 8 months before "now" —
+        // way outside maxHistoryMonths (6). Nothing recent to extrapolate from.
+        final dates = [
+          DateTime(2025, 1, 1),
+          DateTime(2025, 1, 29),
+        ];
+        final next = PeriodPredictionService.predictNextPeriodStart(
+          dates,
+          now: DateTime(2025, 9, 29),
+        );
+        expect(next, isNull);
+      },
+    );
 
-    test('still predicts when the most recent start is just inside the history window', () {
-      final dates = [
-        DateTime(2025, 1, 1),
-        DateTime(2025, 1, 29),
-      ];
-      final next = PeriodPredictionService.predictNextPeriodStart(
-        dates,
-        now: DateTime(2025, 7, 20), // ~5.5 months after the last start.
-      );
-      expect(next, isNotNull);
-    });
+    test(
+      'still predicts when the most recent start is just inside the history window',
+      () {
+        final dates = [
+          DateTime(2025, 1, 1),
+          DateTime(2025, 1, 29),
+        ];
+        final next = PeriodPredictionService.predictNextPeriodStart(
+          dates,
+          now: DateTime(2025, 7, 20), // ~5.5 months after the last start.
+        );
+        expect(next, isNotNull);
+      },
+    );
 
     test('ignores duplicate day entries', () {
       final dates = [

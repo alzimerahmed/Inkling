@@ -38,7 +38,11 @@ class ArchivesViewModel extends ChangeNotifier with DisposeAwareMixin {
   /// tab's story list too — without remounting it (no loading-spinner flash).
   Future<void> refreshList() => load();
 
-  Future<void> onPopInvokedWithResult(bool didPop, dynamic result, BuildContext context) async {
+  Future<void> onPopInvokedWithResult(
+    bool didPop,
+    dynamic result,
+    BuildContext context,
+  ) async {
     if (didPop) return;
 
     bool shouldPop = true;
@@ -53,6 +57,9 @@ class ArchivesViewModel extends ChangeNotifier with DisposeAwareMixin {
       shouldPop = result == OkCancelResult.ok;
     }
 
-    if (shouldPop && context.mounted && ModalRoute.of(context)?.isCurrent == true) Navigator.of(context).pop(result);
+    if (shouldPop &&
+        context.mounted &&
+        ModalRoute.of(context)?.isCurrent == true)
+      Navigator.of(context).pop(result);
   }
 }

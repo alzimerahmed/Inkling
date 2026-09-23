@@ -12,7 +12,10 @@ class SpLatLng {
   String toString() => 'SpLatLng($latitude, $longitude)';
 
   @override
-  bool operator ==(Object other) => other is SpLatLng && other.latitude == latitude && other.longitude == longitude;
+  bool operator ==(Object other) =>
+      other is SpLatLng &&
+      other.latitude == latitude &&
+      other.longitude == longitude;
 
   @override
   int get hashCode => Object.hash(latitude, longitude);

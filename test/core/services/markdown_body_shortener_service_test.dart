@@ -47,21 +47,27 @@ void main() {
       });
     });
 
-    group('when markdown has less than 200 but has more than 10 line break', () {
-      String markdown = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n";
+    group(
+      'when markdown has less than 200 but has more than 10 line break',
+      () {
+        String markdown = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n";
 
-      test('return first 10 line with ...', () {
-        String result = MarkdownBodyShortenerService.call(markdown);
-        expect(result, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10...");
-      });
-    });
+        test('return first 10 line with ...', () {
+          String result = MarkdownBodyShortenerService.call(markdown);
+          expect(result, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10...");
+        });
+      },
+    );
 
     group('when markdown ends inside a link', () {
       test('complete plain link before adding ...', () {
         String markdown =
             "Read this link for more details https://storypad.app/releases/2026/05/01/link-preview-updates before continuing";
 
-        String result = MarkdownBodyShortenerService.call(markdown, maxCharacterCount: 60);
+        String result = MarkdownBodyShortenerService.call(
+          markdown,
+          maxCharacterCount: 60,
+        );
 
         expect(
           result,
@@ -73,7 +79,10 @@ void main() {
         String markdown =
             "Read this release note [StoryPad link preview updates](https://storypad.app/releases/2026/05/01/link-preview-updates) before continuing";
 
-        String result = MarkdownBodyShortenerService.call(markdown, maxCharacterCount: 80);
+        String result = MarkdownBodyShortenerService.call(
+          markdown,
+          maxCharacterCount: 80,
+        );
 
         expect(
           result,
@@ -102,7 +111,9 @@ void main() {
 
       test('trim only first 200 character with ...', () {
         markdownsToTest.forEach((key, markdown) {
-          final result = MarkdownBodyShortenerService.trimBody(markdown["input"]!);
+          final result = MarkdownBodyShortenerService.trimBody(
+            markdown["input"]!,
+          );
           expect(result, markdown["expectation"]);
         });
       });
@@ -130,7 +141,9 @@ void main() {
 
       test('trim only first 200 character with ...', () {
         markdownsToTest.forEach((key, markdown) {
-          final result = MarkdownBodyShortenerService.trimBody(markdown["input"]!);
+          final result = MarkdownBodyShortenerService.trimBody(
+            markdown["input"]!,
+          );
           expect(result, markdown["expectation"]);
         });
       });
@@ -150,7 +163,9 @@ void main() {
 
       test('trim only first 200 character with ...', () {
         markdownsToTest.forEach((key, markdown) {
-          final result = MarkdownBodyShortenerService.trimBody(markdown["input"]!);
+          final result = MarkdownBodyShortenerService.trimBody(
+            markdown["input"]!,
+          );
           expect(result, markdown["expectation"]);
         });
       });

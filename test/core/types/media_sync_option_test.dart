@@ -14,19 +14,30 @@ void main() {
     // has to be an explicit opt-in, never a silent behavior change.
     test('defaults to wifiAndCellular', () {
       expect(MediaSyncOption.defaultValue, MediaSyncOption.wifiAndCellular);
-      expect(DevicePreferencesObject.initial().mediaSync, MediaSyncOption.wifiAndCellular);
+      expect(
+        DevicePreferencesObject.initial().mediaSync,
+        MediaSyncOption.wifiAndCellular,
+      );
     });
 
     test('only the default option is labelled as default', () {
       expect(MediaSyncOption.wifiAndCellular.defaultOption, isTrue);
       expect(MediaSyncOption.wifiOnly.defaultOption, isFalse);
 
-      expect(MediaSyncOption.wifiAndCellular.labelWithDefault, contains('Default'));
-      expect(MediaSyncOption.wifiOnly.labelWithDefault, isNot(contains('Default')));
+      expect(
+        MediaSyncOption.wifiAndCellular.labelWithDefault,
+        contains('Default'),
+      );
+      expect(
+        MediaSyncOption.wifiOnly.labelWithDefault,
+        isNot(contains('Default')),
+      );
     });
 
     test('serializes through DevicePreferencesObject json round-trip', () {
-      final preferences = DevicePreferencesObject(mediaSync: MediaSyncOption.wifiOnly);
+      final preferences = DevicePreferencesObject(
+        mediaSync: MediaSyncOption.wifiOnly,
+      );
       final restored = DevicePreferencesObject.fromJson(preferences.toJson());
 
       expect(restored.mediaSync, MediaSyncOption.wifiOnly);
@@ -34,9 +45,13 @@ void main() {
 
     // Preferences written before this setting existed have no media_sync key.
     test('falls back to the default when absent from stored json', () {
-      final json = DevicePreferencesObject.initial().toJson()..remove('media_sync');
+      final json = DevicePreferencesObject.initial().toJson()
+        ..remove('media_sync');
 
-      expect(DevicePreferencesObject.fromJson(json).mediaSync, MediaSyncOption.wifiAndCellular);
+      expect(
+        DevicePreferencesObject.fromJson(json).mediaSync,
+        MediaSyncOption.wifiAndCellular,
+      );
     });
   });
 }

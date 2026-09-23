@@ -16,7 +16,9 @@ class _SoundsTab extends StatelessWidget {
     Iterable<String> musicSoundUrls = musicSounds.map((e) => e.soundUrlPath);
 
     Iterable<RelaxSoundObject> relaxSounds = provider.relaxSounds.values;
-    relaxSounds = relaxSounds.where((sound) => !musicSoundUrls.contains(sound.soundUrlPath));
+    relaxSounds = relaxSounds.where(
+      (sound) => !musicSoundUrls.contains(sound.soundUrlPath),
+    );
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -69,7 +71,11 @@ class _SoundsTab extends StatelessWidget {
             const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
             const SliverToBoxAdapter(child: Divider(height: 1)),
             const SliverToBoxAdapter(child: _LicenseText()),
-            SliverToBoxAdapter(child: SizedBox(height: MediaQuery.of(context).padding.bottom + 120.0)),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: MediaQuery.of(context).padding.bottom + 120.0,
+              ),
+            ),
           ],
         );
       },
@@ -89,7 +95,8 @@ class _SoundsTab extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         buildSoundCardContents(provider, relaxSound, selected, context),
-        if (selected && provider.getVolume(relaxSound) != null) _VolumeSlider(relaxSound: relaxSound),
+        if (selected && provider.getVolume(relaxSound) != null)
+          _VolumeSlider(relaxSound: relaxSound),
       ],
     );
   }

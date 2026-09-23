@@ -4,7 +4,11 @@ import 'package:storypad/core/services/error_reporting/adaptors/base_error_repor
 
 class FirebaseCrashlyticsAdaptor extends BaseErrorReportingAdaptor {
   @override
-  Future<void> recordError(Object error, StackTrace? stack, {bool fatal = false}) {
+  Future<void> recordError(
+    Object error,
+    StackTrace? stack, {
+    bool fatal = false,
+  }) {
     if (kIsWeb) return Future.value();
     return FirebaseCrashlytics.instance.recordError(error, stack, fatal: fatal);
   }

@@ -50,11 +50,17 @@ class _QuillMediaRenderer extends StatelessWidget {
   final bool readOnly;
   final List<String> Function() fetchAllMedia;
 
-  static List<String> _parsePaths(String value) => value.split('|').where((s) => s.isNotEmpty).toList();
+  static List<String> _parsePaths(String value) =>
+      value.split('|').where((s) => s.isNotEmpty).toList();
 
   void remove() {
     if (readOnly) return;
-    controller.replaceText(node.documentOffset, node.length, '', controller.selection);
+    controller.replaceText(
+      node.documentOffset,
+      node.length,
+      '',
+      controller.selection,
+    );
   }
 
   void _updatePaths(List<String> newPaths) {
@@ -65,13 +71,20 @@ class _QuillMediaRenderer extends StatelessWidget {
     }
 
     final op = node.toDelta().operations.first;
-    final attributes = op.attributes == null ? null : Map<String, dynamic>.from(op.attributes!);
+    final attributes = op.attributes == null
+        ? null
+        : Map<String, dynamic>.from(op.attributes!);
     final delta = QuillRichTextController._buildEmbedDelta(
       embedType: 'media',
       value: newPaths.join('|'),
       attributes: attributes,
     );
-    controller.replaceText(node.documentOffset, node.length, delta, controller.selection);
+    controller.replaceText(
+      node.documentOffset,
+      node.length,
+      delta,
+      controller.selection,
+    );
   }
 
   @override
@@ -93,11 +106,23 @@ class _QuillMediaRenderer extends StatelessWidget {
           height = null;
         } else {
           if (layoutType == PageLayoutType.grid) {
-            width = min(constraints.maxWidth, MediaQuery.textScalerOf(context).scale(88));
-            height = min(constraints.maxWidth, MediaQuery.textScalerOf(context).scale(88));
+            width = min(
+              constraints.maxWidth,
+              MediaQuery.textScalerOf(context).scale(88),
+            );
+            height = min(
+              constraints.maxWidth,
+              MediaQuery.textScalerOf(context).scale(88),
+            );
           } else {
-            width = min(constraints.maxWidth, MediaQuery.textScalerOf(context).scale(150));
-            height = min(constraints.maxWidth, MediaQuery.textScalerOf(context).scale(150));
+            width = min(
+              constraints.maxWidth,
+              MediaQuery.textScalerOf(context).scale(150),
+            );
+            height = min(
+              constraints.maxWidth,
+              MediaQuery.textScalerOf(context).scale(150),
+            );
           }
         }
 
@@ -105,7 +130,11 @@ class _QuillMediaRenderer extends StatelessWidget {
           width: double.infinity,
           alignment:
               _EmbedAlignmentAttribute.toAlignment(node) ??
-              AppTheme.getDirectionValue(context, Alignment.centerRight, Alignment.centerLeft),
+              AppTheme.getDirectionValue(
+                context,
+                Alignment.centerRight,
+                Alignment.centerLeft,
+              ),
           child: Stack(
             children: [
               GestureDetector(
@@ -113,7 +142,9 @@ class _QuillMediaRenderer extends StatelessWidget {
                 onLongPress: () async {
                   Feedback.forLongPress(context);
                   final relativePath = node.value.data;
-                  final asset = await AssetDbModel.findBy(relativePath: relativePath);
+                  final asset = await AssetDbModel.findBy(
+                    relativePath: relativePath,
+                  );
                   if (!context.mounted || asset == null) return;
                   SpAssetInfoSheet(
                     asset: asset,
@@ -163,14 +194,22 @@ class _QuillMediaRenderer extends StatelessWidget {
           width: double.infinity,
           alignment:
               _EmbedAlignmentAttribute.toAlignment(node) ??
-              AppTheme.getDirectionValue(context, Alignment.centerRight, Alignment.centerLeft),
+              AppTheme.getDirectionValue(
+                context,
+                Alignment.centerRight,
+                Alignment.centerLeft,
+              ),
           child: Stack(
             children: [
               ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
+                constraints: BoxConstraints(
+                  maxWidth: maxWidth ?? double.infinity,
+                ),
                 child: SpAlbumGrid(
                   paths: paths,
-                  onTap: readOnly ? (index) => _viewMediaAt(context, paths, index) : null,
+                  onTap: readOnly
+                      ? (index) => _viewMediaAt(context, paths, index)
+                      : null,
                 ),
               ),
               if (!readOnly)
@@ -213,14 +252,20 @@ class _QuillMediaRenderer extends StatelessWidget {
             : () => _EmbedAlignmentAttribute.right.toggle(controller, node),
       ),
       IconButton(
-        icon: Icon(_EmbedSizeAttribute.maxSize.hasApplied(node) ? SpIcons.zoomOut : SpIcons.zoomIn),
+        icon: Icon(
+          _EmbedSizeAttribute.maxSize.hasApplied(node)
+              ? SpIcons.zoomOut
+              : SpIcons.zoomIn,
+        ),
         onPressed: () => _EmbedSizeAttribute.toggle(controller, node),
       ),
 
       IconButton(
         icon: isAlbum ? const Icon(SpIcons.edit) : const Icon(SpIcons.addPhoto),
         onPressed: () async {
-          final result = await SpAlbumManagementSheet(paths: paths).show<List<String>?>(context: context);
+          final result = await SpAlbumManagementSheet(
+            paths: paths,
+          ).show<List<String>?>(context: context);
           if (!context.mounted) return;
           if (result is List<String>) _updatePaths(result);
         },
@@ -261,7 +306,8 @@ class _QuillMediaRenderer extends StatelessWidget {
             spacing: 0.0,
             runSpacing: 0.0,
             children: buttons.map((button) {
-              bool selected = button.onPressed != null && button.isSelected == true;
+              bool selected =
+                  button.onPressed != null && button.isSelected == true;
 
               return SizedBox(
                 width: itemSize,
@@ -272,7 +318,9 @@ class _QuillMediaRenderer extends StatelessWidget {
                     icon: button.icon,
                     color: button.color,
                     style: IconButton.styleFrom(
-                      side: selected ? BorderSide(color: Theme.of(context).dividerColor) : null,
+                      side: selected
+                          ? BorderSide(color: Theme.of(context).dividerColor)
+                          : null,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
@@ -319,7 +367,11 @@ class _QuillMediaRenderer extends StatelessWidget {
     }
   }
 
-  Future<void> _viewMediaAt(BuildContext context, List<String> paths, int index) async {
+  Future<void> _viewMediaAt(
+    BuildContext context,
+    List<String> paths,
+    int index,
+  ) async {
     Feedback.forTap(context);
 
     SpMediaViewer.fromString(

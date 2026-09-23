@@ -23,7 +23,8 @@ class AppLogger {
     final logTag = tag != null ? '[$tag]' : '';
     final errorStr = error != null ? ' | Error: $error' : '';
     final stackStr = stackTrace != null ? ' | StackTrace: $stackTrace' : '';
-    final formattedMessage = '$timestamp | $levelStr $logTag: $message$errorStr$stackStr';
+    final formattedMessage =
+        '$timestamp | $levelStr $logTag: $message$errorStr$stackStr';
 
     if (_logBuffer.length >= _maxLogs) _logBuffer.removeAt(0);
     _logBuffer.add(formattedMessage);
@@ -31,12 +32,36 @@ class AppLogger {
     if (kDebugMode) print(formattedMessage);
   }
 
-  static void d(String message, {String? tag}) => _instance.log(message, level: AppLogLevel.debug, tag: tag);
-  static void debug(String message, {String? tag}) => _instance.log(message, level: AppLogLevel.debug, tag: tag);
-  static void info(String message, {String? tag}) => _instance.log(message, level: AppLogLevel.info, tag: tag);
-  static void warning(String message, {String? tag}) => _instance.log(message, level: AppLogLevel.warning, tag: tag);
-  static void error(String message, {String? tag, dynamic error, StackTrace? stackTrace}) =>
-      _instance.log(message, level: AppLogLevel.error, tag: tag, error: error, stackTrace: stackTrace);
-  static void critical(String message, {String? tag, dynamic error, StackTrace? stackTrace}) =>
-      _instance.log(message, level: AppLogLevel.critical, tag: tag, error: error, stackTrace: stackTrace);
+  static void d(String message, {String? tag}) =>
+      _instance.log(message, level: AppLogLevel.debug, tag: tag);
+  static void debug(String message, {String? tag}) =>
+      _instance.log(message, level: AppLogLevel.debug, tag: tag);
+  static void info(String message, {String? tag}) =>
+      _instance.log(message, level: AppLogLevel.info, tag: tag);
+  static void warning(String message, {String? tag}) =>
+      _instance.log(message, level: AppLogLevel.warning, tag: tag);
+  static void error(
+    String message, {
+    String? tag,
+    dynamic error,
+    StackTrace? stackTrace,
+  }) => _instance.log(
+    message,
+    level: AppLogLevel.error,
+    tag: tag,
+    error: error,
+    stackTrace: stackTrace,
+  );
+  static void critical(
+    String message, {
+    String? tag,
+    dynamic error,
+    StackTrace? stackTrace,
+  }) => _instance.log(
+    message,
+    level: AppLogLevel.critical,
+    tag: tag,
+    error: error,
+    stackTrace: stackTrace,
+  );
 }

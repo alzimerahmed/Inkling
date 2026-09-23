@@ -33,7 +33,12 @@ class _ImagePageScaffoldState extends State<_ImagePageScaffold> {
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: _Chrome(
           visible: controlsVisible,
-          child: _buildAppBar(context, index: widget.index, total: widget.total, item: widget.item),
+          child: _buildAppBar(
+            context,
+            index: widget.index,
+            total: widget.total,
+            item: widget.item,
+          ),
         ),
       ),
       bottomNavigationBar: _Chrome(
@@ -150,7 +155,9 @@ class _AltText extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
           child: Text(
             alt ?? '',
-            style: TextTheme.of(context).bodyMedium?.copyWith(color: Colors.white),
+            style: TextTheme.of(
+              context,
+            ).bodyMedium?.copyWith(color: Colors.white),
           ),
         ),
       ],

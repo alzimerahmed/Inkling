@@ -12,7 +12,9 @@ class _EditPlaceContent extends StatelessWidget {
         title: Text(tr("page.map.edit_place.title")),
         actions: [
           FilledButton(
-            onPressed: viewModel.canApply ? () => viewModel.apply(context) : null,
+            onPressed: viewModel.canApply
+                ? () => viewModel.apply(context)
+                : null,
             child: Text(tr("button.apply")),
           ),
           const SizedBox(width: 12.0),

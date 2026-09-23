@@ -32,5 +32,6 @@ class StoryPageDbModel {
   });
 
   Map<String, dynamic> toJson() => _$StoryPageDbModelToJson(this);
-  factory StoryPageDbModel.fromJson(Map<String, dynamic> json) => _$StoryPageDbModelFromJson(json);
+  factory StoryPageDbModel.fromJson(Map<String, dynamic> json) =>
+      _$StoryPageDbModelFromJson(json);
 }

@@ -6,8 +6,11 @@ class _ShowStoryContent extends StatelessWidget {
   final ShowStoryViewModel viewModel;
 
   List<StoryPageObject> constructPages() {
-    if (viewModel.pagesManager.pagesMap.keys.isEmpty) return <StoryPageObject>[];
-    return List.generate(viewModel.draftContent?.richPages?.length ?? 0, (index) {
+    if (viewModel.pagesManager.pagesMap.keys.isEmpty)
+      return <StoryPageObject>[];
+    return List.generate(viewModel.draftContent?.richPages?.length ?? 0, (
+      index,
+    ) {
       final page = viewModel.draftContent!.richPages![index];
       return viewModel.pagesManager.pagesMap[page.id];
     }).toList().whereType<StoryPageObject>().toList();
@@ -45,14 +48,20 @@ class _ShowStoryContent extends StatelessWidget {
   Widget buildPageEditors(BuildContext context, List<StoryPageObject> pages) {
     return StoryPagesBuilder(
       viewInsets: MediaQuery.viewInsetsOf(context),
-      headerBuilder: (page) => StoryHeader.fromShowStory(page: page, viewModel: viewModel, context: context),
+      headerBuilder: (page) => StoryHeader.fromShowStory(
+        page: page,
+        viewModel: viewModel,
+        context: context,
+      ),
       pageScrollController: viewModel.pagesManager.pageScrollController,
       padding: MediaQuery.paddingOf(context).copyWith(top: 0.0),
       pages: pages,
       preferences: viewModel.story?.preferences,
       storyContent: viewModel.draftContent!,
-      onTitleVisibilityChanged: (pageIndex, page, info) =>
-          viewModel.pagesManager.pagesMap.setTitleVisibleFraction(page.id, info.visibleFraction),
+      onTitleVisibilityChanged: (pageIndex, page, info) => viewModel
+          .pagesManager
+          .pagesMap
+          .setTitleVisibleFraction(page.id, info.visibleFraction),
       pageController: viewModel.pagesManager.pageController,
       onPageChanged: (newRichPage) => viewModel.onPageChanged(newRichPage),
       onGoToEdit: () => viewModel.goToEditPage(context),
@@ -72,7 +81,8 @@ class _ShowStoryContent extends StatelessWidget {
           : PreferredSize(
               preferredSize: const Size.fromHeight(1),
               child: ValueListenableBuilder(
-                valueListenable: viewModel.pagesManager.pageScrollOffsetNotifier,
+                valueListenable:
+                    viewModel.pagesManager.pageScrollOffsetNotifier,
                 builder: (BuildContext context, double offset, Widget? child) {
                   return Opacity(
                     opacity: offset.clamp(0.0, 8.0) / 8.0,
@@ -83,7 +93,9 @@ class _ShowStoryContent extends StatelessWidget {
             ),
       leading: SpAnimatedIcons.fadeScale(
         showFirst: viewModel.pagesManager.managingPage,
-        firstChild: CloseButton(onPressed: () => viewModel.pagesManager.toggleManagingPage()),
+        firstChild: CloseButton(
+          onPressed: () => viewModel.pagesManager.toggleManagingPage(),
+        ),
         secondChild: Hero(
           tag: 'back-button',
           child: BackButton(

@@ -278,20 +278,29 @@ void main() {
 
   group('AssetType - Storage paths', () {
     test('getRelativeStoragePath returns relative path', () {
-      final path = AssetType.image.getRelativeStoragePath(id: 123, extension: '.jpg');
+      final path = AssetType.image.getRelativeStoragePath(
+        id: 123,
+        extension: '.jpg',
+      );
       // Should start with subDirectory, not an absolute path
       expect(path, equals('images/123.jpg'));
       expect(path, isNot(startsWith('/')));
     });
 
     test('getRelativeStoragePath works for audio', () {
-      final path = AssetType.audio.getRelativeStoragePath(id: 456, extension: '.m4a');
+      final path = AssetType.audio.getRelativeStoragePath(
+        id: 456,
+        extension: '.m4a',
+      );
       expect(path, equals('audio/456.m4a'));
       expect(path, isNot(startsWith('/')));
     });
 
     test('getRelativeStoragePath works for video', () {
-      final path = AssetType.video.getRelativeStoragePath(id: 789, extension: '.mp4');
+      final path = AssetType.video.getRelativeStoragePath(
+        id: 789,
+        extension: '.mp4',
+      );
       expect(path, equals('videos/789.mp4'));
       expect(path, isNot(startsWith('/')));
     });

@@ -57,32 +57,35 @@ void main() {
         expect(history[0], timestamp);
       });
 
-      test('returns multiple timestamps in reverse chronological order', () async {
-        final timestamps = [
-          DateTime(2024, 1, 15, 10, 30),
-          DateTime(2024, 1, 10, 8, 0),
-          DateTime(2024, 1, 5, 14, 45),
-        ];
+      test(
+        'returns multiple timestamps in reverse chronological order',
+        () async {
+          final timestamps = [
+            DateTime(2024, 1, 15, 10, 30),
+            DateTime(2024, 1, 10, 8, 0),
+            DateTime(2024, 1, 5, 14, 45),
+          ];
 
-        for (final ts in timestamps) {
-          await storage.markAsImported(
+          for (final ts in timestamps) {
+            await storage.markAsImported(
+              BackupServiceType.google_drive,
+              2024,
+              ts,
+            );
+          }
+
+          final history = await storage.getImportHistoryByYear(
             BackupServiceType.google_drive,
             2024,
-            ts,
           );
-        }
 
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
-
-        expect(history.length, 3);
-        // Should be in reverse chronological order (most recent first)
-        expect(history[0], timestamps[2]); // Last added
-        expect(history[1], timestamps[1]);
-        expect(history[2], timestamps[0]); // First added
-      });
+          expect(history.length, 3);
+          // Should be in reverse chronological order (most recent first)
+          expect(history[0], timestamps[2]); // Last added
+          expect(history[1], timestamps[1]);
+          expect(history[2], timestamps[0]); // First added
+        },
+      );
 
       test('preserves timezone information in timestamps', () async {
         final timestamp = DateTime(2024, 1, 15, 10, 30, 0, 123).toUtc();

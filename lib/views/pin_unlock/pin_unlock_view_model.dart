@@ -24,14 +24,20 @@ class PinUnlockViewModel extends ChangeNotifier with DisposeAwareMixin {
   void handleKeyEvent(KeyEvent event) {
     if (event is KeyDownEvent) {
       final character = event.character;
-      if (character != null && character.codeUnitAt(0) >= 48 && character.codeUnitAt(0) <= 57) {
+      if (character != null &&
+          character.codeUnitAt(0) >= 48 &&
+          character.codeUnitAt(0) <= 57) {
         // Number key 0-9
         final number = int.parse(character);
         addPin(context, number);
-      } else if (HardwareKeyboard.instance.isLogicalKeyPressed(LogicalKeyboardKey.backspace)) {
+      } else if (HardwareKeyboard.instance.isLogicalKeyPressed(
+        LogicalKeyboardKey.backspace,
+      )) {
         // Backspace - remove last digit (auto-repeats when held like keyboard)
         removeLastPin();
-      } else if (HardwareKeyboard.instance.isLogicalKeyPressed(LogicalKeyboardKey.enter)) {
+      } else if (HardwareKeyboard.instance.isLogicalKeyPressed(
+        LogicalKeyboardKey.enter,
+      )) {
         // Enter key - attempt to validate
         if (pin.isNotEmpty && pin.length >= 4) {
           if (params.validator(pin)) params.onValidated(context, pin);

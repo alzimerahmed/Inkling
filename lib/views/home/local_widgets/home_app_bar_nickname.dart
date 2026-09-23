@@ -16,7 +16,9 @@ class _HomeAppBarNickname extends StatelessWidget {
       ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: TextTheme.of(context).titleLarge?.copyWith(color: ColorScheme.of(context).primary),
+      style: TextTheme.of(
+        context,
+      ).titleLarge?.copyWith(color: ColorScheme.of(context).primary),
     );
   }
 }

@@ -8,7 +8,8 @@ class CdnCloudStorageAdaptor extends BaseCloudStorageAdaptor {
   final String baseUrl;
   final http.Client _httpClient;
 
-  CdnCloudStorageAdaptor({required this.baseUrl, http.Client? httpClient}) : _httpClient = httpClient ?? http.Client();
+  CdnCloudStorageAdaptor({required this.baseUrl, http.Client? httpClient})
+    : _httpClient = httpClient ?? http.Client();
 
   @override
   Future<Uint8List?> downloadBytes(String hashPath) async {
@@ -16,7 +17,9 @@ class CdnCloudStorageAdaptor extends BaseCloudStorageAdaptor {
       final response = await _httpClient.get(Uri.parse('$baseUrl$hashPath'));
       if (response.statusCode == 200) return response.bodyBytes;
       if (response.statusCode == 401 || response.statusCode == 403) {
-        throw CloudStorageUnauthorizedException('HTTP ${response.statusCode}: $hashPath');
+        throw CloudStorageUnauthorizedException(
+          'HTTP ${response.statusCode}: $hashPath',
+        );
       }
       return null;
     } on CloudStorageUnauthorizedException {

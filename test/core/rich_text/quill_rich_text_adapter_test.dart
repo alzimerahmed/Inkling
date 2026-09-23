@@ -449,7 +449,10 @@ void main() {
 
       test('provides all adapter methods', () {
         expect(editorAdapter.localizationsDelegates, isNotEmpty);
-        expect(() => editorAdapter.createEmptyController(readOnly: false), returnsNormally);
+        expect(
+          () => editorAdapter.createEmptyController(readOnly: false),
+          returnsNormally,
+        );
         expect(() => editorAdapter.createEmptyDocument(), returnsNormally);
       });
 

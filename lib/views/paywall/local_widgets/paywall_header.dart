@@ -26,7 +26,9 @@ class _PaywallHeader extends StatelessWidget {
                   return SizedBox(
                     width: 56,
                     height: 56,
-                    child: Center(child: failed ? const Icon(Icons.error) : null),
+                    child: Center(
+                      child: failed ? const Icon(Icons.error) : null,
+                    ),
                   );
                 }
                 return SizedBox(
@@ -34,7 +36,8 @@ class _PaywallHeader extends StatelessWidget {
                   height: 56,
                   child: Image.file(
                     file,
-                    cacheWidth: (56 * MediaQuery.of(context).devicePixelRatio).round(),
+                    cacheWidth: (56 * MediaQuery.of(context).devicePixelRatio)
+                        .round(),
                   ),
                 );
               },

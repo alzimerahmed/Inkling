@@ -41,10 +41,14 @@ class AppFilePickerService {
     required ImageSource source,
     required AssetCompressionOption compression,
   }) async {
-    final rootContext = context.read<RootProvider>().navigatorKey.currentContext;
+    final rootContext = context
+        .read<RootProvider>()
+        .navigatorKey
+        .currentContext;
     final video = await _imagePicker.pickVideo(source: source);
     if (video == null) return null;
-    if (rootContext == null || !rootContext.mounted) return _compressAndRead(video, compression);
+    if (rootContext == null || !rootContext.mounted)
+      return _compressAndRead(video, compression);
 
     final picked = await VideoCompressionRoute.run<PickedMediaObject>(
       rootContext,
@@ -63,7 +67,9 @@ class AppFilePickerService {
     // A cancel mid-batch keeps every remaining video at its original quality,
     // the same fallback every other compression failure takes.
     if (progress?.cancelled == true) return PickedMediaObject.read(video);
-    return PickedMediaObject.read(await VideoCompressionService.compress(video, compression) ?? video);
+    return PickedMediaObject.read(
+      await VideoCompressionService.compress(video, compression) ?? video,
+    );
   }
 
   /// Opens the native OS picker for a mixed image+video multi-select
@@ -73,13 +79,19 @@ class AppFilePickerService {
     required BuildContext context,
     required AssetCompressionOption compression,
   }) async {
-    final rootContext = context.read<RootProvider>().navigatorKey.currentContext;
-    final files = await _imagePicker.pickMultipleMedia(imageQuality: compression.imagePickerQuality);
+    final rootContext = context
+        .read<RootProvider>()
+        .navigatorKey
+        .currentContext;
+    final files = await _imagePicker.pickMultipleMedia(
+      imageQuality: compression.imagePickerQuality,
+    );
 
     // Skip the screen entirely for an all-images batch -- nothing to re-encode.
     final int videoCount = files.where(AssetFileTypeService.isVideo).length;
     if (videoCount == 0) return _readAll(files);
-    if (rootContext == null || !rootContext.mounted) return _compressVideosAndRead(files, compression);
+    if (rootContext == null || !rootContext.mounted)
+      return _compressVideosAndRead(files, compression);
 
     final picked = await VideoCompressionRoute.run<List<PickedMediaObject>>(
       rootContext,

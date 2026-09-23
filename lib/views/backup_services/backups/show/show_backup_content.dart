@@ -9,7 +9,10 @@ class _ShowBackupContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? backupAt = DateFormatHelper.yMEd_jmNullable(backup.fileInfo.createdAt, context.locale);
+    String? backupAt = DateFormatHelper.yMEd_jmNullable(
+      backup.fileInfo.createdAt,
+      context.locale,
+    );
 
     String? sizeInKB;
 

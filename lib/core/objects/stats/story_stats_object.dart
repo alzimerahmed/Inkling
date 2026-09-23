@@ -6,7 +6,11 @@ class EmojiStatItem {
   final int tagId;
   final String emoji;
   final int count;
-  const EmojiStatItem({required this.tagId, required this.emoji, required this.count});
+  const EmojiStatItem({
+    required this.tagId,
+    required this.emoji,
+    required this.count,
+  });
 }
 
 /// A named bucket (tag, person, place, country) and its story count. [tagId] is
@@ -18,7 +22,12 @@ class LabelStatItem {
   final int count;
   final int? tagId;
   final Set<int>? storyIds;
-  const LabelStatItem({required this.label, required this.count, this.tagId, this.storyIds});
+  const LabelStatItem({
+    required this.label,
+    required this.count,
+    this.tagId,
+    this.storyIds,
+  });
 }
 
 /// Fully-aggregated stats for one [StatsRange]. Pure data: holds raw counts and
@@ -34,6 +43,13 @@ class StoryStatsObject {
   /// Days the activity is scored against: full range length for a finished
   /// window, or days elapsed so far for the in-progress one.
   final int totalDays;
+
+  /// Consecutive active days ending today (or yesterday, if today has no entry
+  /// yet). Scored within the range's active days.
+  final int currentStreak;
+
+  /// Longest run of consecutive active days within the range.
+  final int longestStreak;
 
   /// Words written across all stories' latest content.
   final int wordCount;
@@ -74,10 +90,16 @@ class StoryStatsObject {
   /// entries-over-time trend.
   final Map<DateTime, int> dailyCounts;
 
+  /// Words written per day, keyed by a date-only [DateTime] (00:00). Drives
+  /// the daily writing-goal progress.
+  final Map<DateTime, int> dailyWordCounts;
+
   const StoryStatsObject({
     required this.entryCount,
     required this.activeDays,
     required this.totalDays,
+    required this.currentStreak,
+    required this.longestStreak,
     required this.wordCount,
     required this.photoCount,
     required this.videoCount,
@@ -94,6 +116,7 @@ class StoryStatsObject {
     required this.topPlaces,
     required this.topCountries,
     required this.dailyCounts,
+    required this.dailyWordCounts,
   });
 
   /// No stories at all in the range — the screen shows an empty state instead of

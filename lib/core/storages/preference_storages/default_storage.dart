@@ -4,5 +4,6 @@ import 'package:storypad/core/storages/storage_adapters/share_preferences_storag
 
 abstract class DefaultStorage<T> extends BaseStorage<T> {
   @override
-  Future<BaseStorageAdapter<T>> get adapter async => SharePreferencesStorageAdapter<T>();
+  Future<BaseStorageAdapter<T>> get adapter async =>
+      SharePreferencesStorageAdapter<T>();
 }

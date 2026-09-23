@@ -88,16 +88,21 @@ class AssetDbModel extends BaseDbModel {
     this.height,
   });
 
-  bool get needBackup => !originalSource.startsWith("http") && cloudDestinations.isEmpty;
+  bool get needBackup =>
+      !originalSource.startsWith("http") && cloudDestinations.isEmpty;
 
-  String? get cloudFileName => localFile != null ? "$id${extension(localFile!.path)}" : null;
+  String? get cloudFileName =>
+      localFile != null ? "$id${extension(localFile!.path)}" : null;
 
   bool get isAudio => type == AssetType.audio;
   bool get isImage => type == AssetType.image;
   bool get isVideo => type == AssetType.video;
-  int? get durationInMs => (metadata?[DURATION_KEY] is int) ? metadata![DURATION_KEY] as int : null;
+  int? get durationInMs =>
+      (metadata?[DURATION_KEY] is int) ? metadata![DURATION_KEY] as int : null;
 
-  double? get aspectRatio => (width != null && height != null && height! > 0) ? width! / height! : null;
+  double? get aspectRatio => (width != null && height != null && height! > 0)
+      ? width! / height!
+      : null;
 
   /// Format duration to readable string (MM:SS)
   String? get formattedDuration {
@@ -201,7 +206,9 @@ class AssetDbModel extends BaseDbModel {
   }
 
   String? getGoogleDriveIdForEmail(String email) {
-    return cloudDestinations[BackupServiceType.google_drive.id]?[email]?['file_id'];
+    return cloudDestinations[BackupServiceType
+        .google_drive
+        .id]?[email]?['file_id'];
   }
 
   /// Generic counterpart to [getGoogleDriveIdForEmail] — usable for any
@@ -220,8 +227,10 @@ class AssetDbModel extends BaseDbModel {
   /// needs to be fully cleaned up or fully described: deleting it must
   /// remove every remote copy, not just Drive's, and the asset info sheet
   /// should list every destination, not just Drive's.
-  List<({BackupServiceType serviceType, String identifier, String fileId})> get allCloudDestinations {
-    final destinations = <({BackupServiceType serviceType, String identifier, String fileId})>[];
+  List<({BackupServiceType serviceType, String identifier, String fileId})>
+  get allCloudDestinations {
+    final destinations =
+        <({BackupServiceType serviceType, String identifier, String fileId})>[];
 
     for (final serviceType in BackupServiceType.values) {
       final forService = cloudDestinations[serviceType.id];
@@ -230,7 +239,11 @@ class AssetDbModel extends BaseDbModel {
       for (final entry in forService.entries) {
         final fileId = entry.value['file_id'];
         if (fileId != null) {
-          destinations.add((serviceType: serviceType, identifier: entry.key, fileId: fileId));
+          destinations.add((
+            serviceType: serviceType,
+            identifier: entry.key,
+            fileId: fileId,
+          ));
         }
       }
     }
@@ -245,13 +258,16 @@ class AssetDbModel extends BaseDbModel {
   /// copies on more than one connected service; callers that can retry
   /// (e.g. [BackupAssetDownloaderService]) should try each rather than
   /// assuming the first is the only option.
-  List<({BackupServiceType serviceType, String identifier, String fileId})> matchingCloudDestinationsFor(
+  List<({BackupServiceType serviceType, String identifier, String fileId})>
+  matchingCloudDestinationsFor(
     List<BackupCloudService> signedInServices,
   ) {
     return allCloudDestinations
         .where(
           (d) => signedInServices.any(
-            (s) => s.serviceType == d.serviceType && s.currentUser?.destinationKey == d.identifier,
+            (s) =>
+                s.serviceType == d.serviceType &&
+                s.currentUser?.destinationKey == d.identifier,
           ),
         )
         .toList();
@@ -261,7 +277,8 @@ class AssetDbModel extends BaseDbModel {
   /// only need to know whether *some* destination is reachable (e.g. the
   /// Library status badges, the export view model's downloadable check),
   /// not which ones or in what order.
-  ({BackupServiceType serviceType, String identifier, String fileId})? matchingCloudDestinationFor(
+  ({BackupServiceType serviceType, String identifier, String fileId})?
+  matchingCloudDestinationFor(
     List<BackupCloudService> signedInServices,
   ) {
     return matchingCloudDestinationsFor(signedInServices).firstOrNull;
@@ -295,7 +312,9 @@ class AssetDbModel extends BaseDbModel {
     required CloudFileObject cloudFile,
     required String email,
   }) {
-    Map<String, Map<String, Map<String, String>>> newCloudDestinations = {...cloudDestinations};
+    Map<String, Map<String, Map<String, String>>> newCloudDestinations = {
+      ...cloudDestinations,
+    };
 
     newCloudDestinations[serviceType.id] ??= {};
     newCloudDestinations[serviceType.id]![email] = {
@@ -317,11 +336,14 @@ class AssetDbModel extends BaseDbModel {
     required BackupServiceType serviceType,
     required String identifier,
   }) {
-    Map<String, Map<String, Map<String, String>>> newCloudDestinations = {...cloudDestinations};
+    Map<String, Map<String, Map<String, String>>> newCloudDestinations = {
+      ...cloudDestinations,
+    };
 
     final forService = newCloudDestinations[serviceType.id];
     if (forService != null && forService.containsKey(identifier)) {
-      newCloudDestinations[serviceType.id] = {...forService}..remove(identifier);
+      newCloudDestinations[serviceType.id] = {...forService}
+        ..remove(identifier);
     }
 
     return copyWith(
@@ -330,7 +352,8 @@ class AssetDbModel extends BaseDbModel {
     );
   }
 
-  factory AssetDbModel.fromJson(Map<String, dynamic> json) => _$AssetDbModelFromJson(json);
+  factory AssetDbModel.fromJson(Map<String, dynamic> json) =>
+      _$AssetDbModelFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$AssetDbModelToJson(this);

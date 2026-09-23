@@ -14,7 +14,9 @@ class SpSplashScreenWrapper extends StatefulWidget {
   final Widget app;
 
   static void markAsLoaded(BuildContext context) {
-    context.findAncestorStateOfType<_SpSplashScreenWrapperState>()?.markAsLoaded();
+    context
+        .findAncestorStateOfType<_SpSplashScreenWrapperState>()
+        ?.markAsLoaded();
   }
 
   static Future<void> ensureInitialized() async {
@@ -25,7 +27,8 @@ class SpSplashScreenWrapper extends StatefulWidget {
   State<SpSplashScreenWrapper> createState() => _SpSplashScreenWrapperState();
 }
 
-class _SpSplashScreenWrapperState extends State<SpSplashScreenWrapper> with SingleTickerProviderStateMixin {
+class _SpSplashScreenWrapperState extends State<SpSplashScreenWrapper>
+    with SingleTickerProviderStateMixin {
   bool initialized = false;
   bool loaded = false;
 
@@ -34,7 +37,9 @@ class _SpSplashScreenWrapperState extends State<SpSplashScreenWrapper> with Sing
   // Ensure initialization is fully complete before mark as loaded and reverse splash and hide it.
   final Completer initializeCompleter = Completer();
 
-  bool get isDarkMode => WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
+  bool get isDarkMode =>
+      WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+      Brightness.dark;
 
   @override
   void initState() {

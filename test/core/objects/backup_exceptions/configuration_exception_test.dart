@@ -12,7 +12,12 @@ void main() {
       expect(exception.message, equals('Config error'));
       expect(exception.context, equals('app_setup'));
       expect(exception.isRetryable, isFalse);
-      expect(exception.userFriendlyMessage, equals('Configuration error. Please restart the app or contact support.'));
+      expect(
+        exception.userFriendlyMessage,
+        equals(
+          'Configuration error. Please restart the app or contact support.',
+        ),
+      );
     });
 
     test('creates with minimal properties', () {
@@ -21,7 +26,12 @@ void main() {
       expect(exception.message, equals('Config error'));
       expect(exception.context, isNull);
       expect(exception.isRetryable, isFalse);
-      expect(exception.userFriendlyMessage, equals('Configuration error. Please restart the app or contact support.'));
+      expect(
+        exception.userFriendlyMessage,
+        equals(
+          'Configuration error. Please restart the app or contact support.',
+        ),
+      );
     });
 
     test('is not retryable by default', () {
@@ -42,7 +52,10 @@ void main() {
         'Config error',
         context: 'test_setup',
       );
-      expect(exception.toString(), equals('BackupException: Config error (test_setup)'));
+      expect(
+        exception.toString(),
+        equals('BackupException: Config error (test_setup)'),
+      );
     });
 
     test('toString works without context', () {

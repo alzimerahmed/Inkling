@@ -14,7 +14,10 @@ void main() {
       expect(exception.type, equals(AuthExceptionType.tokenExpired));
       expect(exception.context, equals('test_auth'));
       expect(exception.isRetryable, isFalse);
-      expect(exception.userFriendlyMessage, equals('Your session has expired. Please sign in again.'));
+      expect(
+        exception.userFriendlyMessage,
+        equals('Your session has expired. Please sign in again.'),
+      );
       expect(exception.requiresReauth, isTrue);
       expect(exception.requiresSignOut, isFalse);
       expect(exception.requiresScopeRequest, isFalse);
@@ -35,7 +38,9 @@ void main() {
       expect(exception.requiresScopeRequest, isFalse);
       expect(
         exception.userFriendlyMessage,
-        equals('Access has been revoked. Please sign in again to continue using backup.'),
+        equals(
+          'Access has been revoked. Please sign in again to continue using backup.',
+        ),
       );
     });
 
@@ -50,7 +55,10 @@ void main() {
       expect(exception.requiresScopeRequest, isTrue);
       expect(exception.requiresReauth, isFalse);
       expect(exception.requiresSignOut, isFalse);
-      expect(exception.userFriendlyMessage, equals('Additional permissions are required for backup functionality.'));
+      expect(
+        exception.userFriendlyMessage,
+        equals('Additional permissions are required for backup functionality.'),
+      );
     });
 
     test('creates with correct properties for sign in required', () {
@@ -64,7 +72,10 @@ void main() {
       expect(exception.requiresReauth, isTrue);
       expect(exception.requiresSignOut, isFalse);
       expect(exception.requiresScopeRequest, isFalse);
-      expect(exception.userFriendlyMessage, equals('Please sign in to Google Drive to use backup features.'));
+      expect(
+        exception.userFriendlyMessage,
+        equals('Please sign in to Google Drive to use backup features.'),
+      );
     });
 
     test('creates with correct properties for sign in failed', () {
@@ -78,7 +89,10 @@ void main() {
       expect(exception.requiresReauth, isFalse);
       expect(exception.requiresSignOut, isFalse);
       expect(exception.requiresScopeRequest, isFalse);
-      expect(exception.userFriendlyMessage, equals('Failed to sign in to Google Drive. Please try again.'));
+      expect(
+        exception.userFriendlyMessage,
+        equals('Failed to sign in to Google Drive. Please try again.'),
+      );
     });
 
     test('is not retryable by default', () {
@@ -95,17 +109,35 @@ void main() {
         AuthExceptionType.tokenExpired,
         context: 'test_auth',
       );
-      expect(exception.toString(), equals('BackupException: Token expired (test_auth)'));
+      expect(
+        exception.toString(),
+        equals('BackupException: Token expired (test_auth)'),
+      );
     });
 
     group('AuthExceptionType enum', () {
       test('has all expected values', () {
         expect(AuthExceptionType.values, hasLength(5));
-        expect(AuthExceptionType.values, contains(AuthExceptionType.tokenExpired));
-        expect(AuthExceptionType.values, contains(AuthExceptionType.tokenRevoked));
-        expect(AuthExceptionType.values, contains(AuthExceptionType.insufficientScopes));
-        expect(AuthExceptionType.values, contains(AuthExceptionType.signInRequired));
-        expect(AuthExceptionType.values, contains(AuthExceptionType.signInFailed));
+        expect(
+          AuthExceptionType.values,
+          contains(AuthExceptionType.tokenExpired),
+        );
+        expect(
+          AuthExceptionType.values,
+          contains(AuthExceptionType.tokenRevoked),
+        );
+        expect(
+          AuthExceptionType.values,
+          contains(AuthExceptionType.insufficientScopes),
+        );
+        expect(
+          AuthExceptionType.values,
+          contains(AuthExceptionType.signInRequired),
+        );
+        expect(
+          AuthExceptionType.values,
+          contains(AuthExceptionType.signInFailed),
+        );
       });
     });
   });

@@ -62,14 +62,19 @@ class RelaxSoundObject {
         // Hybrid: Full Music, Rainy, Water + 2 from Animal/Melody
         if (['music', 'rainy', 'water', 'body'].contains(group)) return true;
         // First 2 animal sounds: night_crickets, cicada
-        if (group == 'animal') return soundUrlPath.contains('night_crickets') || soundUrlPath.contains('cicada');
+        if (group == 'animal')
+          return soundUrlPath.contains('night_crickets') ||
+              soundUrlPath.contains('cicada');
         // First 2 melody sounds: wind_chime, bamboo_windchime
-        if (group == 'melody') return soundUrlPath.contains('wind_chime') || soundUrlPath.contains('bamboo_windchime');
+        if (group == 'melody')
+          return soundUrlPath.contains('wind_chime') ||
+              soundUrlPath.contains('bamboo_windchime');
         return false;
       case 'variant_1':
       default:
         // Minimal: 1 sound per group
-        if (group == 'music') return soundUrlPath.contains('acoustic_guitar_duet');
+        if (group == 'music')
+          return soundUrlPath.contains('acoustic_guitar_duet');
         if (group == 'rainy') return soundUrlPath.contains('light_rain');
         if (group == 'water') return soundUrlPath.contains('ocean_waves');
         if (group == 'animal') return soundUrlPath.contains('night_crickets');
@@ -339,5 +344,6 @@ class RelaxSoundObject {
   }
 
   Map<String, dynamic> toJson() => _$RelaxSoundObjectToJson(this);
-  factory RelaxSoundObject.fromJson(Map<String, dynamic> json) => _$RelaxSoundObjectFromJson(json);
+  factory RelaxSoundObject.fromJson(Map<String, dynamic> json) =>
+      _$RelaxSoundObjectFromJson(json);
 }

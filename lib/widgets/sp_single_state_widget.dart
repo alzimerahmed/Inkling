@@ -9,7 +9,12 @@ class SpSingleStateWidget<T> extends StatefulWidget {
 
   factory SpSingleStateWidget.listen({
     required T initialValue,
-    required Widget Function(BuildContext context, T value, CmValueNotifier<T> notifier) builder,
+    required Widget Function(
+      BuildContext context,
+      T value,
+      CmValueNotifier<T> notifier,
+    )
+    builder,
   }) {
     return SpSingleStateWidget(
       initialValue: initialValue,
@@ -25,7 +30,8 @@ class SpSingleStateWidget<T> extends StatefulWidget {
   }
 
   final T initialValue;
-  final Widget Function(BuildContext context, CmValueNotifier<T> notifier) builder;
+  final Widget Function(BuildContext context, CmValueNotifier<T> notifier)
+  builder;
 
   @override
   State<SpSingleStateWidget<T>> createState() => _SpSingleStateWidgetState<T>();

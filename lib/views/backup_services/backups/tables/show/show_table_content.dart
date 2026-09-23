@@ -47,7 +47,9 @@ class _ShowTableContent extends StatelessWidget {
         viewer = BackupEventsTableViewer(events: models);
         break;
       default:
-        viewer = BackupDefaultTableViewer(tableContents: viewModel.params.tableContents);
+        viewer = BackupDefaultTableViewer(
+          tableContents: viewModel.params.tableContents,
+        );
         break;
     }
 

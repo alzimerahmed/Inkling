@@ -15,10 +15,14 @@ class _RelaxSoundsContent extends StatelessWidget {
             extendBody: true,
             appBar: AppBar(
               title: Text(tr('paywall_features.relax_sounds.title')),
-              automaticallyImplyLeading: !CupertinoSheetRoute.hasParentSheet(context),
+              automaticallyImplyLeading: !CupertinoSheetRoute.hasParentSheet(
+                context,
+              ),
               actions: [
                 if (CupertinoSheetRoute.hasParentSheet(context))
-                  CloseButton(onPressed: () => CupertinoSheetRoute.popSheet(context)),
+                  CloseButton(
+                    onPressed: () => CupertinoSheetRoute.popSheet(context),
+                  ),
               ],
               bottom: TabBar(
                 tabs: [

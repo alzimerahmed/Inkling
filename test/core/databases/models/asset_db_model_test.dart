@@ -10,7 +10,9 @@ import 'package:storypad/core/services/backups/backup_service_type.dart';
 import 'package:storypad/core/types/asset_type.dart';
 
 void main() {
-  AssetDbModel buildAsset({required Map<String, Map<String, Map<String, String>>> cloudDestinations}) {
+  AssetDbModel buildAsset({
+    required Map<String, Map<String, Map<String, String>>> cloudDestinations,
+  }) {
     final now = DateTime(2026, 1, 1);
     return AssetDbModel(
       id: 1,
@@ -38,7 +40,10 @@ void main() {
             'tester@example.com': {'file_id': 'abc', 'file_name': '1.jpg'},
           },
           BackupServiceType.nextcloud.id: {
-            'admin@example.com/StoryPad': {'file_id': '/StoryPad/images/1.jpg', 'file_name': '1.jpg'},
+            'admin@example.com/StoryPad': {
+              'file_id': '/StoryPad/images/1.jpg',
+              'file_name': '1.jpg',
+            },
           },
         },
       );
@@ -47,7 +52,11 @@ void main() {
       expect(
         asset.allCloudDestinations,
         containsAll([
-          (serviceType: BackupServiceType.google_drive, identifier: 'tester@example.com', fileId: 'abc'),
+          (
+            serviceType: BackupServiceType.google_drive,
+            identifier: 'tester@example.com',
+            fileId: 'abc',
+          ),
           (
             serviceType: BackupServiceType.nextcloud,
             identifier: 'admin@example.com/StoryPad',
@@ -61,8 +70,14 @@ void main() {
       final asset = buildAsset(
         cloudDestinations: {
           BackupServiceType.nextcloud.id: {
-            'admin@example.com/StoryPad': {'file_id': '/StoryPad/images/1.jpg', 'file_name': '1.jpg'},
-            'admin@example.com/OldFolder': {'file_id': '/OldFolder/images/1.jpg', 'file_name': '1.jpg'},
+            'admin@example.com/StoryPad': {
+              'file_id': '/StoryPad/images/1.jpg',
+              'file_name': '1.jpg',
+            },
+            'admin@example.com/OldFolder': {
+              'file_id': '/OldFolder/images/1.jpg',
+              'file_name': '1.jpg',
+            },
           },
         },
       );
@@ -91,41 +106,63 @@ void main() {
       expect(asset.matchingCloudDestinationFor([nextcloud]), isNull);
     });
 
-    test('is null when no signed-in service matches the destination\'s serviceType', () {
-      final asset = buildAsset(
-        cloudDestinations: {
-          BackupServiceType.nextcloud.id: {
-            'admin@example.com/StoryPad': {'file_id': '/StoryPad/images/1.jpg', 'file_name': '1.jpg'},
+    test(
+      'is null when no signed-in service matches the destination\'s serviceType',
+      () {
+        final asset = buildAsset(
+          cloudDestinations: {
+            BackupServiceType.nextcloud.id: {
+              'admin@example.com/StoryPad': {
+                'file_id': '/StoryPad/images/1.jpg',
+                'file_name': '1.jpg',
+              },
+            },
           },
-        },
-      );
-      final drive = _FakeCloudService(currentUser: _FakeUser(), serviceType: BackupServiceType.google_drive);
+        );
+        final drive = _FakeCloudService(
+          currentUser: _FakeUser(),
+          serviceType: BackupServiceType.google_drive,
+        );
 
-      expect(asset.matchingCloudDestinationFor([drive]), isNull);
-    });
+        expect(asset.matchingCloudDestinationFor([drive]), isNull);
+      },
+    );
 
-    test('is null when the destination belongs to a different (switched) account on the same service', () {
-      final asset = buildAsset(
-        cloudDestinations: {
-          BackupServiceType.nextcloud.id: {
-            'old-admin@example.com/StoryPad': {'file_id': '/StoryPad/images/1.jpg', 'file_name': '1.jpg'},
+    test(
+      'is null when the destination belongs to a different (switched) account on the same service',
+      () {
+        final asset = buildAsset(
+          cloudDestinations: {
+            BackupServiceType.nextcloud.id: {
+              'old-admin@example.com/StoryPad': {
+                'file_id': '/StoryPad/images/1.jpg',
+                'file_name': '1.jpg',
+              },
+            },
           },
-        },
-      );
-      final nextcloud = _FakeCloudService(currentUser: _FakeUser(identifier: 'new-admin@example.com/StoryPad'));
+        );
+        final nextcloud = _FakeCloudService(
+          currentUser: _FakeUser(identifier: 'new-admin@example.com/StoryPad'),
+        );
 
-      expect(asset.matchingCloudDestinationFor([nextcloud]), isNull);
-    });
+        expect(asset.matchingCloudDestinationFor([nextcloud]), isNull);
+      },
+    );
 
     test('finds the destination matching the currently signed-in account', () {
       final asset = buildAsset(
         cloudDestinations: {
           BackupServiceType.nextcloud.id: {
-            'admin@example.com/StoryPad': {'file_id': '/StoryPad/images/1.jpg', 'file_name': '1.jpg'},
+            'admin@example.com/StoryPad': {
+              'file_id': '/StoryPad/images/1.jpg',
+              'file_name': '1.jpg',
+            },
           },
         },
       );
-      final nextcloud = _FakeCloudService(currentUser: _FakeUser(identifier: 'admin@example.com/StoryPad'));
+      final nextcloud = _FakeCloudService(
+        currentUser: _FakeUser(identifier: 'admin@example.com/StoryPad'),
+      );
 
       final destination = asset.matchingCloudDestinationFor([nextcloud]);
 
@@ -143,34 +180,52 @@ void main() {
       expect(asset.matchingCloudDestinationsFor([nextcloud]), isEmpty);
     });
 
-    test('returns every matching destination, not just the first, when both Drive and Nextcloud have it', () {
-      final asset = buildAsset(
-        cloudDestinations: {
-          BackupServiceType.google_drive.id: {
-            'tester@example.com': {'file_id': 'drive-id', 'file_name': '1.jpg'},
+    test(
+      'returns every matching destination, not just the first, when both Drive and Nextcloud have it',
+      () {
+        final asset = buildAsset(
+          cloudDestinations: {
+            BackupServiceType.google_drive.id: {
+              'tester@example.com': {
+                'file_id': 'drive-id',
+                'file_name': '1.jpg',
+              },
+            },
+            BackupServiceType.nextcloud.id: {
+              'admin@example.com/StoryPad': {
+                'file_id': '/StoryPad/images/1.jpg',
+                'file_name': '1.jpg',
+              },
+            },
           },
-          BackupServiceType.nextcloud.id: {
-            'admin@example.com/StoryPad': {'file_id': '/StoryPad/images/1.jpg', 'file_name': '1.jpg'},
-          },
-        },
-      );
-      final drive = _FakeCloudService(
-        currentUser: _FakeUser(identifier: 'tester@example.com', serviceType: BackupServiceType.google_drive),
-        serviceType: BackupServiceType.google_drive,
-      );
-      final nextcloud = _FakeCloudService(
-        currentUser: _FakeUser(identifier: 'admin@example.com/StoryPad'),
-        serviceType: BackupServiceType.nextcloud,
-      );
+        );
+        final drive = _FakeCloudService(
+          currentUser: _FakeUser(
+            identifier: 'tester@example.com',
+            serviceType: BackupServiceType.google_drive,
+          ),
+          serviceType: BackupServiceType.google_drive,
+        );
+        final nextcloud = _FakeCloudService(
+          currentUser: _FakeUser(identifier: 'admin@example.com/StoryPad'),
+          serviceType: BackupServiceType.nextcloud,
+        );
 
-      final destinations = asset.matchingCloudDestinationsFor([drive, nextcloud]);
+        final destinations = asset.matchingCloudDestinationsFor([
+          drive,
+          nextcloud,
+        ]);
 
-      expect(destinations, hasLength(2));
-      expect(
-        destinations.map((d) => d.serviceType),
-        containsAll([BackupServiceType.google_drive, BackupServiceType.nextcloud]),
-      );
-    });
+        expect(destinations, hasLength(2));
+        expect(
+          destinations.map((d) => d.serviceType),
+          containsAll([
+            BackupServiceType.google_drive,
+            BackupServiceType.nextcloud,
+          ]),
+        );
+      },
+    );
   });
 }
 
@@ -230,13 +285,18 @@ class _FakeCloudService implements BackupCloudService {
   Future<List<int>?> downloadFileBytes(String fileId) async => null;
 
   @override
-  Future<CloudFileObject?> uploadFile(String fileName, io.File file, {String? folderName}) async => null;
+  Future<CloudFileObject?> uploadFile(
+    String fileName,
+    io.File file, {
+    String? folderName,
+  }) async => null;
 
   @override
   Future<CloudStorageQuotaObject?> fetchStorageQuota() async => null;
 
   @override
-  Future<List<CloudFileObject>> listFilesInFolder(String folderName) async => [];
+  Future<List<CloudFileObject>> listFilesInFolder(String folderName) async =>
+      [];
 
   @override
   Future<Map<int, CloudFileObject>> fetchYearlyBackups() async => {};

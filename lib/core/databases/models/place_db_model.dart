@@ -55,7 +55,8 @@ class PlaceDbModel extends BaseDbModel {
   @override
   DateTime? get permanentlyDeletedAt => null;
 
-  factory PlaceDbModel.fromJson(Map<String, dynamic> json) => _$PlaceDbModelFromJson(json);
+  factory PlaceDbModel.fromJson(Map<String, dynamic> json) =>
+      _$PlaceDbModelFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$PlaceDbModelToJson(this);

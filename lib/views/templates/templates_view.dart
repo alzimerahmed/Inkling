@@ -17,9 +17,13 @@ part 'templates_content.dart';
 enum TemplatePickResultType { custom, gallery }
 
 class TemplatePickResult {
-  const TemplatePickResult.custom(this.customTemplate) : galleryTemplate = null, type = TemplatePickResultType.custom;
+  const TemplatePickResult.custom(this.customTemplate)
+    : galleryTemplate = null,
+      type = TemplatePickResultType.custom;
 
-  const TemplatePickResult.gallery(this.galleryTemplate) : customTemplate = null, type = TemplatePickResultType.gallery;
+  const TemplatePickResult.gallery(this.galleryTemplate)
+    : customTemplate = null,
+      type = TemplatePickResultType.gallery;
 
   final TemplatePickResultType type;
   final TemplateDbModel? customTemplate;
@@ -58,7 +62,10 @@ class TemplatesRoute extends BaseRoute {
   final bool onlyMyTemplates;
 
   @override
-  Future<T?> push<T extends Object?>(BuildContext context, {bool rootNavigator = false}) {
+  Future<T?> push<T extends Object?>(
+    BuildContext context, {
+    bool rootNavigator = false,
+  }) {
     PreviouslyVisitedTemplateTabIndexStorage.appInstance.ensureInitialized();
     return super.push(context, rootNavigator: rootNavigator);
   }

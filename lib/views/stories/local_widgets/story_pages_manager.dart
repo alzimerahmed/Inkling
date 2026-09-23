@@ -55,9 +55,12 @@ class StoryPagesManager extends StatelessWidget {
             Widget child = buildPage(context, page, index);
             return SpReorderableItem(
               index: index,
-              onAccepted: (int oldIndex) => viewModel.reorderPages(oldIndex: oldIndex, newIndex: index),
-              onDragStarted: () => viewModel.pagesManager.draggingNotifier.value = true,
-              onDragCompleted: () => viewModel.pagesManager.draggingNotifier.value = false,
+              onAccepted: (int oldIndex) =>
+                  viewModel.reorderPages(oldIndex: oldIndex, newIndex: index),
+              onDragStarted: () =>
+                  viewModel.pagesManager.draggingNotifier.value = true,
+              onDragCompleted: () =>
+                  viewModel.pagesManager.draggingNotifier.value = false,
               child: child,
             );
           },
@@ -69,7 +72,8 @@ class StoryPagesManager extends StatelessWidget {
           child: _StoryPagesBinTarget(
             mediaQueryPadding: mediaQueryPadding,
             pagesManager: viewModel.pagesManager,
-            onDeletePage: (pageIndex) => viewModel.deleteAPage(context, richPages[pageIndex]),
+            onDeletePage: (pageIndex) =>
+                viewModel.deleteAPage(context, richPages[pageIndex]),
           ),
         ),
       ],
@@ -126,7 +130,10 @@ class StoryPagesManager extends StatelessWidget {
                   onSwap: actions!.onSwapPages,
                   onDelete: () => actions?.onDelete(page),
                   canMoveUp: actions!.canMoveUp(pageIndex),
-                  canMoveDown: actions!.canMoveDown(pageIndex, viewModel.pagesManager.pagesCount),
+                  canMoveDown: actions!.canMoveDown(
+                    pageIndex,
+                    viewModel.pagesManager.pagesCount,
+                  ),
                   canDeletePage: actions?.canDeletePage == true,
                   backgroundColor: Colors.transparent,
                   foregroundColor: Theme.of(context).colorScheme.onSurface,
@@ -175,10 +182,15 @@ class StoryPagesManager extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(
-            vertical: 12.0,
-            horizontal: 8.0,
-          ).add(actions != null ? const EdgeInsetsGeometry.only(right: 8.0) : EdgeInsetsGeometry.zero),
+          padding:
+              const EdgeInsets.symmetric(
+                vertical: 12.0,
+                horizontal: 8.0,
+              ).add(
+                actions != null
+                    ? const EdgeInsetsGeometry.only(right: 8.0)
+                    : EdgeInsetsGeometry.zero,
+              ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4.0),
             color: ColorScheme.of(context).surface,

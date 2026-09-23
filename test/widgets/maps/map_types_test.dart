@@ -13,7 +13,11 @@ void main() {
         'Asia/Kashgar',
         'PRC',
       ]) {
-        expect(SpMapRenderer.googleMapsUnavailableIn(timezone), isTrue, reason: timezone);
+        expect(
+          SpMapRenderer.googleMapsUnavailableIn(timezone),
+          isTrue,
+          reason: timezone,
+        );
       }
     });
 
@@ -21,13 +25,26 @@ void main() {
     // are the mistake most likely to be made when editing the timezone list.
     test('does not match Hong Kong, Macau or Taipei', () {
       for (final timezone in ['Asia/Hong_Kong', 'Asia/Macau', 'Asia/Taipei']) {
-        expect(SpMapRenderer.googleMapsUnavailableIn(timezone), isFalse, reason: timezone);
+        expect(
+          SpMapRenderer.googleMapsUnavailableIn(timezone),
+          isFalse,
+          reason: timezone,
+        );
       }
     });
 
     test('does not match unrelated timezones', () {
-      for (final timezone in ['Asia/Phnom_Penh', 'Europe/Berlin', 'America/New_York', 'UTC']) {
-        expect(SpMapRenderer.googleMapsUnavailableIn(timezone), isFalse, reason: timezone);
+      for (final timezone in [
+        'Asia/Phnom_Penh',
+        'Europe/Berlin',
+        'America/New_York',
+        'UTC',
+      ]) {
+        expect(
+          SpMapRenderer.googleMapsUnavailableIn(timezone),
+          isFalse,
+          reason: timezone,
+        );
       }
     });
 

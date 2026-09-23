@@ -14,7 +14,8 @@ import 'package:storypad/views/home/home_view.dart';
 import 'package:storypad/views/stories/edit/edit_story_view.dart';
 import 'package:storypad/widgets/calendar/sp_calendar.dart';
 
-class PeriodCalendarViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
+class PeriodCalendarViewModel extends ChangeNotifier
+    with DisposeAwareMixin, DebounchedCallback {
   final PeriodCalendarView params;
   final DevicePreferencesProvider _devicePreferencesProvider;
 
@@ -40,18 +41,22 @@ class PeriodCalendarViewModel extends ChangeNotifier with DisposeAwareMixin, Deb
   List<EventDbModel> get lastMonthPeriodEvents => _lastMonthPeriodEvents;
 
   List<EventDbModel> _periodEvents = [];
-  Set<DateTime> get periodDates => _periodEvents.map((e) => DateTime(e.year, e.month, e.day)).toSet();
+  Set<DateTime> get periodDates =>
+      _periodEvents.map((e) => DateTime(e.year, e.month, e.day)).toSet();
 
   EventDbModel? _selectedEvent;
   EventDbModel? get selectedEvent => _selectedEvent;
 
   CollectionDbModel<StoryDbModel>? _selectedEventStories;
-  CollectionDbModel<StoryDbModel>? get selectedEventStories => _selectedEventStories;
+  CollectionDbModel<StoryDbModel>? get selectedEventStories =>
+      _selectedEventStories;
 
   DateTime? get selectedEventDate => _selectedEvent?.date;
 
   bool isPeriodDate(DateTime date) {
-    return _periodEvents.any((d) => d.year == date.year && d.month == date.month && d.day == date.day);
+    return _periodEvents.any(
+      (d) => d.year == date.year && d.month == date.month && d.day == date.day,
+    );
   }
 
   bool isLastMonthPeriodDate(DateTime date) {
@@ -62,7 +67,10 @@ class PeriodCalendarViewModel extends ChangeNotifier with DisposeAwareMixin, Deb
     );
 
     return _lastMonthPeriodEvents.any(
-      (d) => d.year == thisDateLastMonth.year && d.month == thisDateLastMonth.month && d.day == thisDateLastMonth.day,
+      (d) =>
+          d.year == thisDateLastMonth.year &&
+          d.month == thisDateLastMonth.month &&
+          d.day == thisDateLastMonth.day,
     );
   }
 
@@ -153,7 +161,8 @@ class PeriodCalendarViewModel extends ChangeNotifier with DisposeAwareMixin, Deb
 
     await load();
 
-    if (params.monthYearNotifier.value.month != month || params.monthYearNotifier.value.year != year) {
+    if (params.monthYearNotifier.value.month != month ||
+        params.monthYearNotifier.value.year != year) {
       params.monthYearNotifier.value = (year: year, month: month);
     }
   }
@@ -161,7 +170,11 @@ class PeriodCalendarViewModel extends ChangeNotifier with DisposeAwareMixin, Deb
   void goToNewPage(BuildContext context) async {
     if (selectedEvent == null) return;
 
-    DateTime date = DateTime(selectedEvent!.year, selectedEvent!.month, selectedEvent!.day);
+    DateTime date = DateTime(
+      selectedEvent!.year,
+      selectedEvent!.month,
+      selectedEvent!.day,
+    );
     final addedStory = await EditStoryRoute(
       id: null,
       initialYear: year,
@@ -185,7 +198,9 @@ class PeriodCalendarViewModel extends ChangeNotifier with DisposeAwareMixin, Deb
   @override
   void dispose() {
     params.monthYearNotifier.removeListener(_onParentMonthYearChanged);
-    _devicePreferencesProvider.removeListenerForReminderChanges(notifyListeners);
+    _devicePreferencesProvider.removeListenerForReminderChanges(
+      notifyListeners,
+    );
     super.dispose();
   }
 }

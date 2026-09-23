@@ -24,7 +24,9 @@ class StoryStatsService {
     DateTime? now,
   }) {
     final DateTime today = now ?? DateTime.now();
-    final Map<int, TagDbModel> tagById = {for (final tag in allTags) tag.id: tag};
+    final Map<int, TagDbModel> tagById = {
+      for (final tag in allTags) tag.id: tag,
+    };
 
     final int feelingCategoryId = TagCategoryDbModel.feeling().id;
     final int activityCategoryId = TagCategoryDbModel.activity().id;
@@ -43,6 +45,7 @@ class StoryStatsService {
 
     final Set<DateTime> activeDaySet = {};
     final Map<DateTime, int> dailyCounts = {};
+    final Map<DateTime, int> dailyWordCounts = {};
 
     final Map<int, int> feelingCounts = {};
     final Map<int, int> activityCounts = {};
@@ -63,10 +66,18 @@ class StoryStatsService {
 
       final content = story.latestContent ?? story.draftContent;
       wordCount += content?.wordCount ?? 0;
+      dailyWordCounts[day] =
+          (dailyWordCounts[day] ?? 0) + (content?.wordCount ?? 0);
 
-      final int storyPhotoCount = StoryContentEmbedExtractor.photos(content).length;
-      final int storyVideoCount = StoryContentEmbedExtractor.videos(content).length;
-      final int storyVoiceCount = StoryContentEmbedExtractor.audio(content).length;
+      final int storyPhotoCount = StoryContentEmbedExtractor.photos(
+        content,
+      ).length;
+      final int storyVideoCount = StoryContentEmbedExtractor.videos(
+        content,
+      ).length;
+      final int storyVoiceCount = StoryContentEmbedExtractor.audio(
+        content,
+      ).length;
       photoCount += storyPhotoCount;
       videoCount += storyVideoCount;
       voiceCount += storyVoiceCount;
@@ -107,6 +118,8 @@ class StoryStatsService {
       entryCount: entryCount,
       activeDays: activeDaySet.length,
       totalDays: _elapsedDays(range, today),
+      currentStreak: _currentStreak(activeDaySet, today),
+      longestStreak: _longestStreak(activeDaySet),
       wordCount: wordCount,
       photoCount: photoCount,
       videoCount: videoCount,
@@ -123,6 +136,7 @@ class StoryStatsService {
       topPlaces: _topPlaceLabels(placeStoryIds),
       topCountries: _topCountryLabels(countryCounts),
       dailyCounts: dailyCounts,
+      dailyWordCounts: dailyWordCounts,
     );
   }
 
@@ -134,29 +148,92 @@ class StoryStatsService {
     return today.difference(range.start).inDays + 1;
   }
 
-  static List<EmojiStatItem> _topEmojis(Map<int, int> counts, Map<int, TagDbModel> tagById) {
-    final entries = counts.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+  /// Consecutive active days ending at [now] (or yesterday, when today has no
+  /// entry yet — a not-yet-written today must not break an ongoing streak).
+  static int _currentStreak(Set<DateTime> activeDays, DateTime now) {
+    DateTime day = DateTime(now.year, now.month, now.day);
+    if (!activeDays.contains(day)) day = day.subtract(const Duration(days: 1));
+
+    int streak = 0;
+    while (activeDays.contains(day)) {
+      streak++;
+      day = day.subtract(const Duration(days: 1));
+    }
+    return streak;
+  }
+
+  /// Longest run of consecutive active days in the range.
+  static int _longestStreak(Set<DateTime> activeDays) {
+    if (activeDays.isEmpty) return 0;
+
+    final List<DateTime> sorted = activeDays.toList()..sort();
+
+    int longest = 1;
+    int run = 1;
+    for (int i = 1; i < sorted.length; i++) {
+      run = sorted[i].difference(sorted[i - 1]).inDays == 1 ? run + 1 : 1;
+      if (run > longest) longest = run;
+    }
+    return longest;
+  }
+
+  static List<EmojiStatItem> _topEmojis(
+    Map<int, int> counts,
+    Map<int, TagDbModel> tagById,
+  ) {
+    final entries = counts.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
     return entries
-        .map((e) => EmojiStatItem(tagId: e.key, emoji: tagById[e.key]?.emoji ?? '', count: e.value))
+        .map(
+          (e) => EmojiStatItem(
+            tagId: e.key,
+            emoji: tagById[e.key]?.emoji ?? '',
+            count: e.value,
+          ),
+        )
         .where((item) => item.emoji.isNotEmpty)
         .toList();
   }
 
-  static List<LabelStatItem> _topTagLabels(Map<int, int> counts, Map<int, TagDbModel> tagById) {
-    final entries = counts.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+  static List<LabelStatItem> _topTagLabels(
+    Map<int, int> counts,
+    Map<int, TagDbModel> tagById,
+  ) {
+    final entries = counts.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
     return entries
-        .map((e) => LabelStatItem(label: tagById[e.key]?.title ?? '', count: e.value, tagId: e.key))
+        .map(
+          (e) => LabelStatItem(
+            label: tagById[e.key]?.title ?? '',
+            count: e.value,
+            tagId: e.key,
+          ),
+        )
         .where((item) => item.label.isNotEmpty)
         .toList();
   }
 
-  static List<LabelStatItem> _topPlaceLabels(Map<String, Set<int>> placeStoryIds) {
-    final entries = placeStoryIds.entries.toList()..sort((a, b) => b.value.length.compareTo(a.value.length));
-    return entries.map((e) => LabelStatItem(label: e.key, count: e.value.length, storyIds: e.value)).toList();
+  static List<LabelStatItem> _topPlaceLabels(
+    Map<String, Set<int>> placeStoryIds,
+  ) {
+    final entries = placeStoryIds.entries.toList()
+      ..sort((a, b) => b.value.length.compareTo(a.value.length));
+    return entries
+        .map(
+          (e) => LabelStatItem(
+            label: e.key,
+            count: e.value.length,
+            storyIds: e.value,
+          ),
+        )
+        .toList();
   }
 
   static List<LabelStatItem> _topCountryLabels(Map<String, int> counts) {
-    final entries = counts.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
-    return entries.map((e) => LabelStatItem(label: e.key, count: e.value)).toList();
+    final entries = counts.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    return entries
+        .map((e) => LabelStatItem(label: e.key, count: e.value))
+        .toList();
   }
 }

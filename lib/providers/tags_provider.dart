@@ -1,16 +1,22 @@
 import 'dart:async';
 
-import 'package:adaptive_dialog/adaptive_dialog.dart' show OkCancelResult, showOkCancelAlertDialog;
+import 'package:adaptive_dialog/adaptive_dialog.dart'
+    show OkCancelResult, showOkCancelAlertDialog;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' show BuildContext, ChangeNotifier;
-import 'package:storypad/core/databases/models/collection_db_model.dart' show CollectionDbModel;
+import 'package:storypad/core/databases/models/collection_db_model.dart'
+    show CollectionDbModel;
 import 'package:storypad/core/databases/models/story_db_model.dart';
-import 'package:storypad/core/databases/models/tag_category_db_model.dart' show TagCategoryDbModel;
-import 'package:storypad/core/databases/models/tag_db_model.dart' show $TagDbModelCopyWith, TagDbModel;
+import 'package:storypad/core/databases/models/tag_category_db_model.dart'
+    show TagCategoryDbModel;
+import 'package:storypad/core/databases/models/tag_db_model.dart'
+    show $TagDbModelCopyWith, TagDbModel;
 import 'package:storypad/core/mixins/debounched_callback.dart';
-import 'package:storypad/core/services/analytics/analytics_service.dart' show AnalyticsService;
+import 'package:storypad/core/services/analytics/analytics_service.dart'
+    show AnalyticsService;
 import 'package:storypad/providers/backup_provider.dart';
-import 'package:storypad/views/tags/edit/edit_tag_view.dart' show EditTagResult, EditTagRoute;
+import 'package:storypad/views/tags/edit/edit_tag_view.dart'
+    show EditTagResult, EditTagRoute;
 import 'package:storypad/views/tags/show/show_tag_view.dart' show ShowTagRoute;
 
 class TagsProvider extends ChangeNotifier with DebounchedCallback {
@@ -28,8 +34,9 @@ class TagsProvider extends ChangeNotifier with DebounchedCallback {
   CollectionDbModel<TagDbModel>? get tags => _tags;
   CollectionDbModel<TagDbModel>? get peopleTags => _peopleTags;
   CollectionDbModel<TagDbModel>? get emojiTags => _emojiTags;
-  CollectionDbModel<TagDbModel>? get allTags =>
-      CollectionDbModel(items: [...?tags?.items, ...?peopleTags?.items, ...?emojiTags?.items]);
+  CollectionDbModel<TagDbModel>? get allTags => CollectionDbModel(
+    items: [...?tags?.items, ...?peopleTags?.items, ...?emojiTags?.items],
+  );
 
   // Returns the editable (non-emoji) collection for the given category: topics when
   // [categoryId] is null, people when it is [TagCategoryDbModel.peopleId].
@@ -51,15 +58,29 @@ class TagsProvider extends ChangeNotifier with DebounchedCallback {
 
     // Emoji tags are identified by emoji presence so that text-based categories (People)
     // are not swept into the emoji bucket.
-    _emojiTags = CollectionDbModel(items: items.where((tag) => tag.emoji != null).toList());
-    _peopleTags = CollectionDbModel(items: items.where((tag) => tag.emoji == null && tag.isPerson).toList());
-    _tags = CollectionDbModel(items: items.where((tag) => tag.emoji == null && tag.categoryId == null).toList());
+    _emojiTags = CollectionDbModel(
+      items: items.where((tag) => tag.emoji != null).toList(),
+    );
+    _peopleTags = CollectionDbModel(
+      items: items.where((tag) => tag.emoji == null && tag.isPerson).toList(),
+    );
+    _tags = CollectionDbModel(
+      items: items
+          .where((tag) => tag.emoji == null && tag.categoryId == null)
+          .toList(),
+    );
 
-    _emojiById = {for (var tag in _emojiTags?.items ?? <TagDbModel>[]) tag.id: ?tag.emoji};
-    _feelingEmojiById = {
-      for (var tag in _emojiTags?.items.where((tag) => tag.feeling) ?? <TagDbModel>[]) tag.id: ?tag.emoji,
+    _emojiById = {
+      for (var tag in _emojiTags?.items ?? <TagDbModel>[]) tag.id: ?tag.emoji,
     };
-    _peopleById = {for (var tag in _peopleTags?.items ?? <TagDbModel>[]) tag.id: tag};
+    _feelingEmojiById = {
+      for (var tag
+          in _emojiTags?.items.where((tag) => tag.feeling) ?? <TagDbModel>[])
+        tag.id: ?tag.emoji,
+    };
+    _peopleById = {
+      for (var tag in _peopleTags?.items ?? <TagDbModel>[]) tag.id: tag,
+    };
   }
 
   // A bucket only needs repairing when its indexes no longer describe an unambiguous
@@ -114,8 +135,14 @@ class TagsProvider extends ChangeNotifier with DebounchedCallback {
       }
     }
 
-    await reindexBucket(_tags, (updated) => _tags = _tags!.replaceElement(updated));
-    await reindexBucket(_peopleTags, (updated) => _peopleTags = _peopleTags!.replaceElement(updated));
+    await reindexBucket(
+      _tags,
+      (updated) => _tags = _tags!.replaceElement(updated),
+    );
+    await reindexBucket(
+      _peopleTags,
+      (updated) => _peopleTags = _peopleTags!.replaceElement(updated),
+    );
 
     if (shouldNotify == true) notifyListeners();
   }
@@ -178,10 +205,13 @@ class TagsProvider extends ChangeNotifier with DebounchedCallback {
     }
   }
 
-  List<String> tagTitles({int? categoryId}) => tagsOf(categoryId)?.items.map((e) => e.title).toList() ?? [];
+  List<String> tagTitles({int? categoryId}) =>
+      tagsOf(categoryId)?.items.map((e) => e.title).toList() ?? [];
 
   bool isTagExist(String title, {int? categoryId}) {
-    return tagTitles(categoryId: categoryId).map((e) => e.toLowerCase()).contains(title.trim().toLowerCase());
+    return tagTitles(
+      categoryId: categoryId,
+    ).map((e) => e.toLowerCase()).contains(title.trim().toLowerCase());
   }
 
   Future<void> addTag(BuildContext context, {int? categoryId}) async {
@@ -192,7 +222,9 @@ class TagsProvider extends ChangeNotifier with DebounchedCallback {
     ).push(context);
 
     if (result is EditTagResult) {
-      TagDbModel newTag = TagDbModel.fromNow(categoryId: result.categoryId).copyWith(title: result.title);
+      TagDbModel newTag = TagDbModel.fromNow(
+        categoryId: result.categoryId,
+      ).copyWith(title: result.title);
       TagDbModel? tag = await TagDbModel.db.set(newTag);
       await reload();
 
@@ -255,16 +287,30 @@ class TagsProvider extends ChangeNotifier with DebounchedCallback {
   Future<TagDbModel?> createTag(String title, {int? categoryId}) async {
     final trimmed = title.trim();
     if (trimmed.isEmpty) return null;
-    if (tagsOf(categoryId)?.items.any((tag) => tag.title.toLowerCase() == trimmed.toLowerCase()) == true) {
+    if (tagsOf(categoryId)?.items.any(
+          (tag) => tag.title.toLowerCase() == trimmed.toLowerCase(),
+        ) ==
+        true) {
       return null;
     }
 
-    final newTag = TagDbModel.fromNow(categoryId: categoryId).copyWith(title: trimmed, index: -1);
+    final newTag = TagDbModel.fromNow(
+      categoryId: categoryId,
+    ).copyWith(title: trimmed, index: -1);
 
-    _setBucket(categoryId, (tagsOf(categoryId) ?? CollectionDbModel(items: [])).addElement(newTag, 0));
+    _setBucket(
+      categoryId,
+      (tagsOf(categoryId) ?? CollectionDbModel(items: [])).addElement(
+        newTag,
+        0,
+      ),
+    );
     notifyListeners();
 
-    final tag = await TagDbModel.db.set(newTag, debugSource: '$runtimeType#createTag');
+    final tag = await TagDbModel.db.set(
+      newTag,
+      debugSource: '$runtimeType#createTag',
+    );
 
     if (tag != null) {
       AnalyticsService.instance.logAddTag(tag: tag);

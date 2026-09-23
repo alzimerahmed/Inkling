@@ -21,7 +21,9 @@ class _TitleField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double? fontSize = preferences?.titleFontSize ?? Theme.of(context).textTheme.titleMedium?.fontSize;
+    double? fontSize =
+        preferences?.titleFontSize ??
+        Theme.of(context).textTheme.titleMedium?.fontSize;
     if (fontSize != null && largerTitle) fontSize += 2;
 
     TextStyle baseStyle = GoogleFonts.getFont(
@@ -30,7 +32,10 @@ class _TitleField extends StatelessWidget {
           context.read<DevicePreferencesProvider>().preferences.fontFamily,
       color: Theme.of(context).textTheme.titleMedium?.color,
       fontSize: fontSize,
-      fontWeight: AppTheme.getThemeFontWeight(context, preferences?.titleFontWeight ?? kTitleDefaultFontWeight),
+      fontWeight: AppTheme.getThemeFontWeight(
+        context,
+        preferences?.titleFontWeight ?? kTitleDefaultFontWeight,
+      ),
     );
 
     return TextFormField(
@@ -48,7 +53,12 @@ class _TitleField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: tr('input.title.hint'),
         isCollapsed: true,
-        contentPadding: const EdgeInsets.only(top: 12, left: 12.0, bottom: 4, right: 12.0),
+        contentPadding: const EdgeInsets.only(
+          top: 12,
+          left: 12.0,
+          bottom: 4,
+          right: 12.0,
+        ),
         border: InputBorder.none,
       ),
     );

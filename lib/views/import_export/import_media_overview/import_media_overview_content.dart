@@ -12,8 +12,12 @@ class _ImportMediaOverviewContent extends StatelessWidget {
     // Photos and videos share one tab, same as everywhere else media is
     // browsed (Library, the image picker's "types" filter) — see
     // docs/app/features/media.md ("Video is merged into the images tab").
-    final imageEntries = entries?.where((e) => e.scanEntry.type != AssetType.audio).toList() ?? const [];
-    final audioEntries = entries?.where((e) => e.scanEntry.type == AssetType.audio).toList() ?? const [];
+    final imageEntries =
+        entries?.where((e) => e.scanEntry.type != AssetType.audio).toList() ??
+        const [];
+    final audioEntries =
+        entries?.where((e) => e.scanEntry.type == AssetType.audio).toList() ??
+        const [];
     final hasImages = imageEntries.isNotEmpty;
     final hasAudio = audioEntries.isNotEmpty;
 
@@ -21,12 +25,22 @@ class _ImportMediaOverviewContent extends StatelessWidget {
     final tabViews = <Widget>[];
 
     if (hasImages) {
-      tabs.add(Tab(icon: const Icon(SpIcons.photo), text: plural('plural.row', imageEntries.length)));
+      tabs.add(
+        Tab(
+          icon: const Icon(SpIcons.photo),
+          text: plural('plural.row', imageEntries.length),
+        ),
+      );
       tabViews.add(_ImagesImportTab(entries: imageEntries));
     }
 
     if (hasAudio) {
-      tabs.add(Tab(icon: const Icon(SpIcons.voice), text: plural('plural.row', audioEntries.length)));
+      tabs.add(
+        Tab(
+          icon: const Icon(SpIcons.voice),
+          text: plural('plural.row', audioEntries.length),
+        ),
+      );
       tabViews.add(_AudioImportTab(entries: audioEntries));
     }
 
@@ -42,12 +56,18 @@ class _ImportMediaOverviewContent extends StatelessWidget {
               : null,
         ),
         body: buildBody(entries, tabs, tabViews),
-        bottomNavigationBar: entries == null ? null : buildBottomBar(context, entries),
+        bottomNavigationBar: entries == null
+            ? null
+            : buildBottomBar(context, entries),
       ),
     );
   }
 
-  Widget buildBody(List<ImportMediaEntry>? entries, List<Tab> tabs, List<Widget> tabViews) {
+  Widget buildBody(
+    List<ImportMediaEntry>? entries,
+    List<Tab> tabs,
+    List<Widget> tabViews,
+  ) {
     if (entries == null) {
       return const Center(child: CircularProgressIndicator.adaptive());
     }
@@ -84,7 +104,9 @@ class _ImportMediaOverviewContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             FilledButton(
-              onPressed: toImport == 0 ? null : () => viewModel.performImport(context),
+              onPressed: toImport == 0
+                  ? null
+                  : () => viewModel.performImport(context),
               child: Text(
                 "${tr('button.import')} (${plural('plural.row', toImport)})",
               ),
@@ -142,9 +164,10 @@ class _ImagesImportTab extends StatelessWidget {
                     mainAxisSpacing: 8.0,
                     crossAxisSpacing: 8.0,
                     padding: EdgeInsets.zero,
-                    gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: max(1, constraints.maxWidth ~/ 120),
-                    ),
+                    gridDelegate:
+                        SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: max(1, constraints.maxWidth ~/ 120),
+                        ),
                     itemBuilder: (context, index) {
                       return _ImageImportTile(entry: dayAssets[index]);
                     },
@@ -199,11 +222,15 @@ class _ImageImportTile extends StatelessWidget {
                               return Container(
                                 width: constraints.maxWidth,
                                 height: 120,
-                                color: ColorScheme.of(context).surfaceContainerHighest,
+                                color: ColorScheme.of(
+                                  context,
+                                ).surfaceContainerHighest,
                                 child: Center(
                                   child: Icon(
                                     SpIcons.photo,
-                                    color: ColorScheme.of(context).onSurfaceVariant,
+                                    color: ColorScheme.of(
+                                      context,
+                                    ).onSurfaceVariant,
                                   ),
                                 ),
                               );
@@ -406,7 +433,9 @@ class _AudioImportTile extends StatelessWidget {
       subtitle: Text.rich(
         TextSpan(
           children: [
-            TextSpan(text: entry.scanEntry.ext.replaceFirst('.', '').toUpperCase()),
+            TextSpan(
+              text: entry.scanEntry.ext.replaceFirst('.', '').toUpperCase(),
+            ),
             const TextSpan(text: ' • '),
             TextSpan(text: plural('plural.entry', entry.storyCount)),
             if (entry.storyCount == 0) ...[
@@ -429,7 +458,8 @@ class _AudioImportTile extends StatelessWidget {
 }
 
 List<Map<String, dynamic>> _groupEntriesByDay(List<ImportMediaEntry> source) {
-  final sorted = [...source]..sort((a, b) => _entryDate(b).compareTo(_entryDate(a)));
+  final sorted = [...source]
+    ..sort((a, b) => _entryDate(b).compareTo(_entryDate(a)));
   final groupedMap = <String, List<ImportMediaEntry>>{};
 
   for (final entry in sorted) {
@@ -444,11 +474,14 @@ List<Map<String, dynamic>> _groupEntriesByDay(List<ImportMediaEntry> source) {
       return dateB.compareTo(dateA);
     });
 
-  return sortedKeys.map((key) => {'label': key, 'entries': groupedMap[key]!}).toList();
+  return sortedKeys
+      .map((key) => {'label': key, 'entries': groupedMap[key]!})
+      .toList();
 }
 
 DateTime _entryDate(ImportMediaEntry entry) {
-  return entry.existingAsset?.createdAt ?? DateTime.fromMillisecondsSinceEpoch(entry.scanEntry.id);
+  return entry.existingAsset?.createdAt ??
+      DateTime.fromMillisecondsSinceEpoch(entry.scanEntry.id);
 }
 
 String _dayKey(DateTime dateTime) {

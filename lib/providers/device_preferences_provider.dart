@@ -25,8 +25,10 @@ import 'package:storypad/core/types/time_format_option.dart';
 import 'package:storypad/providers/in_app_purchase_provider.dart';
 import 'package:storypad/widgets/maps/map_types.dart';
 
-class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserver {
-  static DevicePreferencesStorage get storage => DevicePreferencesStorage.appInstance;
+class DevicePreferencesProvider extends ChangeNotifier
+    with WidgetsBindingObserver {
+  static DevicePreferencesStorage get storage =>
+      DevicePreferencesStorage.appInstance;
 
   DevicePreferencesObject _preferences = storage.preferences;
   DevicePreferencesObject get preferences => _preferences;
@@ -34,11 +36,13 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
 
   bool get enableRelaxSounds => preferences.enableRelaxSounds ?? false;
   bool enablePeriodCalendar(BuildContext context) =>
-      preferences.enablePeriodCalendar ?? context.read<InAppPurchaseProvider>().periodCalendar;
+      preferences.enablePeriodCalendar ??
+      context.read<InAppPurchaseProvider>().periodCalendar;
 
   /// Effective time format — falls back to the device's 24-hour setting when
   /// the user hasn't customized [DevicePreferencesObject.timeFormat].
-  TimeFormatOption timeFormatOf(BuildContext context) => TimeFormatOption.resolve(context, preferences.timeFormat);
+  TimeFormatOption timeFormatOf(BuildContext context) =>
+      TimeFormatOption.resolve(context, preferences.timeFormat);
 
   final Map<String, List<void Function()>> _listeners = {};
 
@@ -47,7 +51,8 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
   // In such cases, we determine dark mode based directly on ThemeMode and platform brightness.
   bool isDarkModeBaseOnThemeMode(BuildContext context) {
     if (themeMode == ThemeMode.system) {
-      return View.maybeOf(context)?.platformDispatcher.platformBrightness == Brightness.dark;
+      return View.maybeOf(context)?.platformDispatcher.platformBrightness ==
+          Brightness.dark;
     } else {
       return themeMode == ThemeMode.dark;
     }
@@ -74,9 +79,13 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
         .colorSeed => updated.copyWith(colorSeedValue: defaults.colorSeedValue),
         .fontSize => updated.copyWith(fontSize: defaults.fontSize),
         .fontFamily => updated.copyWith(fontFamily: defaults.fontFamily),
-        .fontWeight => updated.copyWith(fontWeightIndex: defaults.fontWeightIndex),
+        .fontWeight => updated.copyWith(
+          fontWeightIndex: defaults.fontWeightIndex,
+        ),
         .dayColors => updated.copyWith(colorByDay: defaults.colorByDay),
-        .storyTilePreferences => updated.copyWith(storyTilePreferences: defaults.storyTilePreferences),
+        .storyTilePreferences => updated.copyWith(
+          storyTilePreferences: defaults.storyTilePreferences,
+        ),
       };
     }
 
@@ -85,7 +94,9 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
     notifyListeners();
 
     if (keys.contains(AppearancePreferenceKey.fontFamily)) {
-      AnalyticsUserProperyService.instance.logSetFontFamily(newFontFamily: _preferences.fontFamily);
+      AnalyticsUserProperyService.instance.logSetFontFamily(
+        newFontFamily: _preferences.fontFamily,
+      );
     }
 
     if (keys.contains(AppearancePreferenceKey.colorSeed)) {
@@ -93,18 +104,24 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
     }
 
     if (keys.contains(AppearancePreferenceKey.themeMode)) {
-      AnalyticsUserProperyService.instance.logSetThemeMode(newThemeMode: ThemeMode.system);
+      AnalyticsUserProperyService.instance.logSetThemeMode(
+        newThemeMode: ThemeMode.system,
+      );
     }
 
     if (keys.contains(AppearancePreferenceKey.fontWeight)) {
-      AnalyticsUserProperyService.instance.logSetFontWeight(newFontWeight: kDefaultFontWeight);
+      AnalyticsUserProperyService.instance.logSetFontWeight(
+        newFontWeight: kDefaultFontWeight,
+      );
     }
   }
 
   void setColorSeed(Color color) {
     _preferences = _preferences.copyWith(
       // ignore: deprecated_member_use
-      colorSeedValue: _preferences.colorSeedValue == color.value ? null : color.value,
+      colorSeedValue: _preferences.colorSeedValue == color.value
+          ? null
+          : color.value,
     );
 
     storage.writeObject(_preferences);
@@ -129,7 +146,9 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
     updated.remove(weekday);
 
     // Reset to null once there are no customizations left, so stored preferences stay clean.
-    _preferences = _preferences.copyWith(colorByDay: updated.isEmpty ? null : updated);
+    _preferences = _preferences.copyWith(
+      colorByDay: updated.isEmpty ? null : updated,
+    );
     storage.writeObject(_preferences);
     notifyListeners();
   }
@@ -153,7 +172,9 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
   }
 
   void setFontWeight(FontWeight fontWeight) {
-    _preferences = _preferences.copyWith(fontWeightIndex: fontWeight.weightIndex);
+    _preferences = _preferences.copyWith(
+      fontWeightIndex: fontWeight.weightIndex,
+    );
     storage.writeObject(_preferences);
     notifyListeners();
 
@@ -260,7 +281,10 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
     }
 
     storage.writeObject(_preferences);
-    AnalyticsUserProperyService.instance.logToggleAddOn(addOn: addOn, enabled: enabled);
+    AnalyticsUserProperyService.instance.logToggleAddOn(
+      addOn: addOn,
+      enabled: enabled,
+    );
     _listeners['add_on']?.forEach((listener) => listener());
   }
 
@@ -360,13 +384,16 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
   }
 
   List<ReminderObject> get reminders => preferences.reminders ?? const [];
-  ReminderObject? reminderOfType(ReminderType type) => reminders.where((r) => r.type == type).firstOrNull;
+  ReminderObject? reminderOfType(ReminderType type) =>
+      reminders.where((r) => r.type == type).firstOrNull;
 
   ReminderObject? get dailyReminder => reminderOfType(ReminderType.daily);
-  ReminderObject? get onThisDayReminder => reminderOfType(ReminderType.onThisDay);
+  ReminderObject? get onThisDayReminder =>
+      reminderOfType(ReminderType.onThisDay);
   ReminderObject? get periodReminder => reminderOfType(ReminderType.period);
 
-  List<ReminderObject> get customReminders => reminders.where((r) => r.type == ReminderType.custom).toList();
+  List<ReminderObject> get customReminders =>
+      reminders.where((r) => r.type == ReminderType.custom).toList();
 
   /// Small, monotonically increasing id for a new custom reminder. Ids are kept
   /// small because Android notification ids are 32-bit and we derive them as
@@ -419,7 +446,9 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
   }
 
   Future<void> toggleReminder(int id, bool enabled) async {
-    final updated = reminders.map((r) => r.id == id ? r.copyWith(enabled: enabled) : r).toList();
+    final updated = reminders
+        .map((r) => r.id == id ? r.copyWith(enabled: enabled) : r)
+        .toList();
     await _writeReminders(updated);
   }
 
@@ -433,7 +462,8 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
 
   bool get isDarkMode {
     if (themeMode == ThemeMode.system) {
-      Brightness? brightness = WidgetsBinding.instance.platformDispatcher.platformBrightness;
+      Brightness? brightness =
+          WidgetsBinding.instance.platformDispatcher.platformBrightness;
       return brightness == Brightness.dark;
     } else {
       return themeMode == ThemeMode.dark;

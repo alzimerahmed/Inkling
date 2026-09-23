@@ -25,7 +25,9 @@ enum NextcloudFolderNameValidationError {
 class NextcloudFolderNameValidator {
   NextcloudFolderNameValidator._();
 
-  static final RegExp _forbiddenCharacterPattern = RegExp(r'[\\<>:"|?*\x00-\x1F]');
+  static final RegExp _forbiddenCharacterPattern = RegExp(
+    r'[\\<>:"|?*\x00-\x1F]',
+  );
 
   /// Most filesystems (ext4, NTFS, APFS) cap a single path component at 255
   /// *bytes* — checked against the UTF-8 encoding, not [String.length]

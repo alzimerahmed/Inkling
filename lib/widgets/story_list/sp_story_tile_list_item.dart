@@ -37,10 +37,15 @@ class SpStoryTileListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StoryDbModel? previousStory = index - 1 >= 0 ? stories.items[index - 1] : null;
+    StoryDbModel? previousStory = index - 1 >= 0
+        ? stories.items[index - 1]
+        : null;
     StoryDbModel story = stories.items[index];
-    StoryDbModel? nextStory = index + 1 < stories.items.length ? stories.items[index + 1] : null;
-    bool showMonogram = previousStory == null || !previousStory.sameDayAs(story);
+    StoryDbModel? nextStory = index + 1 < stories.items.length
+        ? stories.items[index + 1]
+        : null;
+    bool showMonogram =
+        previousStory == null || !previousStory.sameDayAs(story);
 
     Widget timelineDivider;
 
@@ -61,7 +66,8 @@ class SpStoryTileListItem extends StatelessWidget {
       );
     }
 
-    if (previousStory?.month != story.month || previousStory?.year != story.year) {
+    if (previousStory?.month != story.month ||
+        previousStory?.year != story.year) {
       final MonthRecapStatsObject? monthStats = monthlyStats?[story.month];
 
       return Column(
@@ -83,7 +89,11 @@ class SpStoryTileListItem extends StatelessWidget {
                   bottom: 0,
                   child: VerticalDivider(width: 1),
                 ),
-              StoryMonthHeader(isFirstOfRun: index == 0, story: story, showYear: showYear),
+              StoryMonthHeader(
+                isFirstOfRun: index == 0,
+                story: story,
+                showYear: showYear,
+              ),
             ],
           ),
 

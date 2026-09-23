@@ -11,5 +11,6 @@ enum AppLegacyProduct {
   markdown_export;
 
   String get productIdentifier => name;
-  static List<String> get productIdentifiers => values.map((e) => e.name).toList();
+  static List<String> get productIdentifiers =>
+      values.map((e) => e.name).toList();
 }

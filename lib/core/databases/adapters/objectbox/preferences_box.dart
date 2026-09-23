@@ -9,21 +9,36 @@ import 'package:storypad/objectbox.g.dart';
 part './helpers/defined_preference.dart';
 
 class PreferencesBox extends BaseBox<PreferenceObjectBox, PreferenceDbModel> {
-  _DefinedPreference get nickname => _DefinedPreference<String>(id: 2, key: 'nickname');
+  _DefinedPreference get nickname =>
+      _DefinedPreference<String>(id: 2, key: 'nickname');
 
   _DefinedPreference<String> storageQuotaFor(BackupServiceType serviceType) {
     return switch (serviceType) {
-      BackupServiceType.google_drive => _DefinedPreference<String>(id: 3, key: 'storage_quota_google_drive'),
+      BackupServiceType.google_drive => _DefinedPreference<String>(
+        id: 3,
+        key: 'storage_quota_google_drive',
+      ),
       // iCloud has no per-app storage quota API (ICloudCloudService.fetchStorageQuota
       // always returns null), but a defined preference is still needed so this
       // switch stays exhaustive.
-      BackupServiceType.icloud => _DefinedPreference<String>(id: 7, key: 'storage_quota_icloud'),
-      BackupServiceType.dropbox => _DefinedPreference<String>(id: 9, key: 'storage_quota_dropbox'),
-      BackupServiceType.nextcloud => _DefinedPreference<String>(id: 5, key: 'storage_quota_nextcloud'),
+      BackupServiceType.icloud => _DefinedPreference<String>(
+        id: 7,
+        key: 'storage_quota_icloud',
+      ),
+      BackupServiceType.dropbox => _DefinedPreference<String>(
+        id: 9,
+        key: 'storage_quota_dropbox',
+      ),
+      BackupServiceType.nextcloud => _DefinedPreference<String>(
+        id: 5,
+        key: 'storage_quota_nextcloud',
+      ),
     };
   }
 
-  _DefinedPreference<DateTime> storageQuotaFetchedAtFor(BackupServiceType serviceType) {
+  _DefinedPreference<DateTime> storageQuotaFetchedAtFor(
+    BackupServiceType serviceType,
+  ) {
     return switch (serviceType) {
       BackupServiceType.google_drive => _DefinedPreference<DateTime>(
         id: 4,
@@ -57,30 +72,41 @@ class PreferencesBox extends BaseBox<PreferenceObjectBox, PreferenceDbModel> {
   bool get isYearPartitioned => false;
 
   @override
-  QueryIntegerProperty<PreferenceObjectBox> get idProperty => PreferenceObjectBox_.id;
+  QueryIntegerProperty<PreferenceObjectBox> get idProperty =>
+      PreferenceObjectBox_.id;
 
   @override
-  QueryStringProperty<PreferenceObjectBox> get lastSavedDeviceIdProperty => PreferenceObjectBox_.lastSavedDeviceId;
+  QueryStringProperty<PreferenceObjectBox> get lastSavedDeviceIdProperty =>
+      PreferenceObjectBox_.lastSavedDeviceId;
 
   @override
-  QueryDateProperty<PreferenceObjectBox> get permanentlyDeletedAtProperty => PreferenceObjectBox_.permanentlyDeletedAt;
+  QueryDateProperty<PreferenceObjectBox> get permanentlyDeletedAtProperty =>
+      PreferenceObjectBox_.permanentlyDeletedAt;
 
   @override
   QueryBuilder<PreferenceObjectBox> buildQuery({
     Map<String, dynamic>? filters,
     bool returnDeleted = false,
   }) {
-    Condition<PreferenceObjectBox> conditions = PreferenceObjectBox_.id.notNull();
-    if (!returnDeleted) conditions = conditions.and(PreferenceObjectBox_.permanentlyDeletedAt.isNull());
+    Condition<PreferenceObjectBox> conditions = PreferenceObjectBox_.id
+        .notNull();
+    if (!returnDeleted)
+      conditions = conditions.and(
+        PreferenceObjectBox_.permanentlyDeletedAt.isNull(),
+      );
 
     return box.query(conditions);
   }
 
   @override
-  PreferenceDbModel modelFromJson(Map<String, dynamic> json) => PreferenceDbModel.fromJson(json);
+  PreferenceDbModel modelFromJson(Map<String, dynamic> json) =>
+      PreferenceDbModel.fromJson(json);
 
   @override
-  Future<PreferenceObjectBox> modelToObject(PreferenceDbModel model, [Map<String, dynamic>? options]) async {
+  Future<PreferenceObjectBox> modelToObject(
+    PreferenceDbModel model, [
+    Map<String, dynamic>? options,
+  ]) async {
     return PreferenceObjectBox(
       id: model.id,
       key: model.key,
@@ -107,7 +133,10 @@ class PreferencesBox extends BaseBox<PreferenceObjectBox, PreferenceDbModel> {
   }
 
   @override
-  Future<PreferenceDbModel> objectToModel(PreferenceObjectBox object, [Map<String, dynamic>? options]) async {
+  Future<PreferenceDbModel> objectToModel(
+    PreferenceObjectBox object, [
+    Map<String, dynamic>? options,
+  ]) async {
     return PreferenceDbModel(
       id: object.id,
       key: object.key,

@@ -19,7 +19,13 @@ class BackupTemplatesTableViewer extends StatelessWidget {
         final template = templates[index];
         return ListTile(
           title: Text(template.content?.title ?? tr('general.na')),
-          subtitle: Text(DateFormatHelper.yMEd_jmNullable(template.updatedAt, context.locale) ?? tr("general.na")),
+          subtitle: Text(
+            DateFormatHelper.yMEd_jmNullable(
+                  template.updatedAt,
+                  context.locale,
+                ) ??
+                tr("general.na"),
+          ),
         );
       },
     );

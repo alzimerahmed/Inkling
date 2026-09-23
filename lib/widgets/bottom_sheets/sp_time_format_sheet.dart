@@ -31,7 +31,9 @@ class SpTimeFormatSheet extends BaseBottomSheet {
             mainAxisSize: MainAxisSize.min,
             children: [
               ...[null, ...TimeFormatOption.values].map((timeFormat) {
-                final label = timeFormat?.label ?? "${context.tr('general.system')} (${context.tr('general.default')})";
+                final label =
+                    timeFormat?.label ??
+                    "${context.tr('general.system')} (${context.tr('general.default')})";
 
                 return ListTile(
                   title: Text(label),

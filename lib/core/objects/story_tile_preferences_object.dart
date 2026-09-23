@@ -45,5 +45,6 @@ class StoryTilePreferencesObject {
   }
 
   Map<String, dynamic> toJson() => _$StoryTilePreferencesObjectToJson(this);
-  factory StoryTilePreferencesObject.fromJson(Map<String, dynamic> json) => _$StoryTilePreferencesObjectFromJson(json);
+  factory StoryTilePreferencesObject.fromJson(Map<String, dynamic> json) =>
+      _$StoryTilePreferencesObjectFromJson(json);
 }

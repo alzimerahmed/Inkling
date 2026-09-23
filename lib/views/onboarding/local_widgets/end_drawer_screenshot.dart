@@ -44,6 +44,10 @@ class EndDrawerScreenshot extends StatelessWidget {
         break;
     }
 
-    return imageGen.image(width: 221, height: 510, alignment: Alignment.topCenter);
+    return imageGen.image(
+      width: 221,
+      height: 510,
+      alignment: Alignment.topCenter,
+    );
   }
 }

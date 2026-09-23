@@ -17,7 +17,8 @@ class _HomeTimelineSideBar extends StatefulWidget {
 
 class _HomeTimelineSideBarState extends State<_HomeTimelineSideBar> {
   ValueNotifier<bool> showProBadgeNotifier = ValueNotifier<bool>(true);
-  late final DevicePreferencesProvider devicePreferencesProvider = context.read<DevicePreferencesProvider>();
+  late final DevicePreferencesProvider devicePreferencesProvider = context
+      .read<DevicePreferencesProvider>();
 
   @override
   void initState() {
@@ -57,20 +58,32 @@ class _HomeTimelineSideBarState extends State<_HomeTimelineSideBar> {
           homeViewModel: widget.viewModel,
           iapProvider: provider,
           showBadgeNotifer: showProBadgeNotifier,
-          enableRelaxSounds: context.read<DevicePreferencesProvider>().enableRelaxSounds,
+          enableRelaxSounds: context
+              .read<DevicePreferencesProvider>()
+              .enableRelaxSounds,
         );
 
         return Container(
           margin: EdgeInsets.only(
             top: 8.0,
-            left: AppTheme.getDirectionValue(context, 0.0, widget.screenPadding.left + baseSideMargin)!,
-            right: AppTheme.getDirectionValue(context, widget.screenPadding.right + baseSideMargin, 0.0)!,
+            left: AppTheme.getDirectionValue(
+              context,
+              0.0,
+              widget.screenPadding.left + baseSideMargin,
+            )!,
+            right: AppTheme.getDirectionValue(
+              context,
+              widget.screenPadding.right + baseSideMargin,
+              0.0,
+            )!,
             bottom: widget.screenPadding.bottom + 16.0,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             spacing: Platform.isMacOS ? 8.0 : 0.0,
-            children: items.map((item) => _buildTimelineButton(context, item)).toList(),
+            children: items
+                .map((item) => _buildTimelineButton(context, item))
+                .toList(),
           ),
         );
       },
@@ -123,8 +136,16 @@ class _HomeTimelineSideBarState extends State<_HomeTimelineSideBar> {
 
   Widget buildBackgrounds(BuildContext context) {
     return Positioned(
-      left: AppTheme.getDirectionValue(context, 4.0, widget.screenPadding.left + 12.0)!,
-      right: AppTheme.getDirectionValue(context, widget.screenPadding.right + 12.0, 4.0)!,
+      left: AppTheme.getDirectionValue(
+        context,
+        4.0,
+        widget.screenPadding.left + 12.0,
+      )!,
+      right: AppTheme.getDirectionValue(
+        context,
+        widget.screenPadding.right + 12.0,
+        4.0,
+      )!,
       bottom: 0,
       top: 0,
       child: Stack(

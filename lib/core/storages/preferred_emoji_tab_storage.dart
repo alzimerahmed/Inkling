@@ -6,7 +6,9 @@ class PreferredEmojiTabStorage extends MapStorage {
     return readMap().then((map) {
       var result = map ?? {};
       if (result.containsKey(categoryId.toString())) {
-        return Category.values.firstWhere((c) => c.name == result[categoryId.toString()]);
+        return Category.values.firstWhere(
+          (c) => c.name == result[categoryId.toString()],
+        );
       } else {
         return null;
       }

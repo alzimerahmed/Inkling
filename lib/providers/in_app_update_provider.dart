@@ -1,10 +1,18 @@
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show ChangeNotifier, debugPrint;
 import 'package:in_app_update/in_app_update.dart'
-    show AppUpdateInfo, AppUpdateResult, InAppUpdate, InstallStatus, UpdateAvailability;
-import 'package:storypad/core/services/app_store_opener_service.dart' show AppStoreOpenerService;
-import 'package:storypad/core/types/in_app_update_status.dart' show InAppUpdateStatus;
-import 'package:storypad/widgets/packages/new_version_plus.dart' show NewVersionPlus, VersionStatus;
+    show
+        AppUpdateInfo,
+        AppUpdateResult,
+        InAppUpdate,
+        InstallStatus,
+        UpdateAvailability;
+import 'package:storypad/core/services/app_store_opener_service.dart'
+    show AppStoreOpenerService;
+import 'package:storypad/core/types/in_app_update_status.dart'
+    show InAppUpdateStatus;
+import 'package:storypad/widgets/packages/new_version_plus.dart'
+    show NewVersionPlus, VersionStatus;
 
 class InAppUpdateProvider extends ChangeNotifier {
   InAppUpdateProvider() {
@@ -30,11 +38,15 @@ class InAppUpdateProvider extends ChangeNotifier {
     }
 
     _androidInAppUpdateInfo = await _getAndroidInAppUpdateInfo();
-    debugPrint("💫 App Update Status: ${_versionStatus?.canUpdate} ${_versionStatus?.originalStoreVersion}");
+    debugPrint(
+      "💫 App Update Status: ${_versionStatus?.canUpdate} ${_versionStatus?.originalStoreVersion}",
+    );
 
-    if (_versionStatus?.canUpdate == true || _androidInAppUpdateInfo?.canUpdate == true) {
+    if (_versionStatus?.canUpdate == true ||
+        _androidInAppUpdateInfo?.canUpdate == true) {
       setDisplayStatus(InAppUpdateStatus.updateAvailable);
-      if (Platform.isAndroid && _androidInAppUpdateInfo != null) _listenToInAppUpdateStatus();
+      if (Platform.isAndroid && _androidInAppUpdateInfo != null)
+        _listenToInAppUpdateStatus();
     }
   }
 
@@ -64,9 +76,13 @@ class InAppUpdateProvider extends ChangeNotifier {
       case InstallStatus.failed:
       case InstallStatus.canceled:
         if (_androidInAppUpdateInfo!.flexibleUpdateAllowed) {
-          InAppUpdate.startFlexibleUpdate().catchError((e) => AppUpdateResult.inAppUpdateFailed);
+          InAppUpdate.startFlexibleUpdate().catchError(
+            (e) => AppUpdateResult.inAppUpdateFailed,
+          );
         } else if (_androidInAppUpdateInfo!.immediateUpdateAllowed) {
-          InAppUpdate.performImmediateUpdate().catchError((e) => AppUpdateResult.inAppUpdateFailed);
+          InAppUpdate.performImmediateUpdate().catchError(
+            (e) => AppUpdateResult.inAppUpdateFailed,
+          );
         }
         break;
       case InstallStatus.downloaded:
@@ -112,5 +128,6 @@ class InAppUpdateProvider extends ChangeNotifier {
 }
 
 extension on AppUpdateInfo {
-  bool get canUpdate => updateAvailability == UpdateAvailability.updateAvailable;
+  bool get canUpdate =>
+      updateAvailability == UpdateAvailability.updateAvailable;
 }

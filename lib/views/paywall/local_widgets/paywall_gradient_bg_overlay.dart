@@ -18,7 +18,9 @@ class _PaywallGradientBgOverlay extends StatelessWidget {
               begin: .topCenter,
               end: .bottomCenter,
               colors: [
-                Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.0),
+                Theme.of(
+                  context,
+                ).scaffoldBackgroundColor.withValues(alpha: 0.0),
                 Theme.of(context).scaffoldBackgroundColor,
               ],
             ),

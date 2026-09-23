@@ -17,8 +17,11 @@ class ThemeObject {
 
   String get fontFamily => _fontFamily ?? kDefaultFontFamily;
   ThemeMode get themeMode => _themeMode ?? ThemeMode.system;
-  Color? get colorSeed => colorSeedValue != null ? Color(colorSeedValue!) : null;
-  FontWeight get fontWeight => fontWeightIndex != null ? FontWeight.values[fontWeightIndex!] : kDefaultFontWeight;
+  Color? get colorSeed =>
+      colorSeedValue != null ? Color(colorSeedValue!) : null;
+  FontWeight get fontWeight => fontWeightIndex != null
+      ? FontWeight.values[fontWeightIndex!]
+      : kDefaultFontWeight;
 
   bool get colorSeedCustomized => colorSeed != null;
 
@@ -53,7 +56,8 @@ class ThemeObject {
     bool removeIfSame = true,
   }) {
     Color? newColorSeed = colorSeed;
-    if (removeIfSame) newColorSeed = colorSeed.toARGB32() != colorSeedValue ? colorSeed : null;
+    if (removeIfSame)
+      newColorSeed = colorSeed.toARGB32() != colorSeedValue ? colorSeed : null;
     return ThemeObject(
       fontFamily: fontFamily,
       fontWeightIndex: fontWeight.weightIndex,
@@ -63,5 +67,6 @@ class ThemeObject {
   }
 
   Map<String, dynamic> toJson() => _$ThemeObjectToJson(this);
-  factory ThemeObject.fromJson(Map<String, dynamic> json) => _$ThemeObjectFromJson(json);
+  factory ThemeObject.fromJson(Map<String, dynamic> json) =>
+      _$ThemeObjectFromJson(json);
 }

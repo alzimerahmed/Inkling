@@ -18,7 +18,9 @@ class _QuillDateBlockEmbed extends quill.EmbedBuilder {
           children: [
             Text(
               date.day.toString().padLeft(2, '0'),
-              style: TextTheme.of(context).headlineLarge?.copyWith(color: ColorScheme.of(context).primary),
+              style: TextTheme.of(
+                context,
+              ).headlineLarge?.copyWith(color: ColorScheme.of(context).primary),
             ),
             const SizedBox(height: 4.0),
             Column(

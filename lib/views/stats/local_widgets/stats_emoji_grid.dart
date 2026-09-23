@@ -22,14 +22,20 @@ class _StatsEmojiGrid extends StatelessWidget {
     return SpSingleStateWidget<bool>.listen(
       initialValue: false,
       builder: (context, expanded, notifier) {
-        final List<EmojiStatItem> visible = expanded || !canExpand ? items : items.take(_kStatsTopVisible).toList();
+        final List<EmojiStatItem> visible = expanded || !canExpand
+            ? items
+            : items.take(_kStatsTopVisible).toList();
 
         return LayoutBuilder(
           builder: (context, constraints) {
-            final int crossAxisCount = ((constraints.maxWidth + _spacing) / (_targetCellWidth + _spacing))
-                .floor()
-                .clamp(1, 99);
-            final double cellWidth = (constraints.maxWidth - _spacing * (crossAxisCount - 1)) / crossAxisCount;
+            final int crossAxisCount =
+                ((constraints.maxWidth + _spacing) /
+                        (_targetCellWidth + _spacing))
+                    .floor()
+                    .clamp(1, 99);
+            final double cellWidth =
+                (constraints.maxWidth - _spacing * (crossAxisCount - 1)) /
+                crossAxisCount;
 
             return Wrap(
               spacing: _spacing,

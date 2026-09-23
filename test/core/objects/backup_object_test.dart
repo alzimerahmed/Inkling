@@ -89,32 +89,39 @@ void main() {
       );
     });
 
-    test('fromContents() should use currentVersion if version is missing or invalid in map', () {
-      final contentMapWithNullVersion = {
-        'version': null,
-        'tables': testTables,
-        'meta_data': {
-          'device_model': 'Test Model',
-          'device_id': 'Test ID',
-          'created_at': testDateTime.toIso8601String(),
-        },
-      };
+    test(
+      'fromContents() should use currentVersion if version is missing or invalid in map',
+      () {
+        final contentMapWithNullVersion = {
+          'version': null,
+          'tables': testTables,
+          'meta_data': {
+            'device_model': 'Test Model',
+            'device_id': 'Test ID',
+            'created_at': testDateTime.toIso8601String(),
+          },
+        };
 
-      final contentMapWithInvalidVersion = {
-        'version': 'not-a-number',
-        'tables': testTables,
-        'meta_data': {
-          'device_model': 'Test Model',
-          'device_id': 'Test ID',
-          'created_at': testDateTime.toIso8601String(),
-        },
-      };
+        final contentMapWithInvalidVersion = {
+          'version': 'not-a-number',
+          'tables': testTables,
+          'meta_data': {
+            'device_model': 'Test Model',
+            'device_id': 'Test ID',
+            'created_at': testDateTime.toIso8601String(),
+          },
+        };
 
-      final backupObject1 = BackupObject.fromContents(contentMapWithNullVersion);
-      final backupObject2 = BackupObject.fromContents(contentMapWithInvalidVersion);
+        final backupObject1 = BackupObject.fromContents(
+          contentMapWithNullVersion,
+        );
+        final backupObject2 = BackupObject.fromContents(
+          contentMapWithInvalidVersion,
+        );
 
-      expect(backupObject1.version, BackupObject.currentVersion);
-      expect(backupObject2.version, BackupObject.currentVersion);
-    });
+        expect(backupObject1.version, BackupObject.currentVersion);
+        expect(backupObject2.version, BackupObject.currentVersion);
+      },
+    );
   });
 }

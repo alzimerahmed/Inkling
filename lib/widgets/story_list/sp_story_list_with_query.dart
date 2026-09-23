@@ -31,7 +31,8 @@ class SpStoryListWithQuery extends StatefulWidget {
   /// flash a `key` change would cause.
   final Listenable? watch;
 
-  String get uniqueness => jsonEncode(filter?.toDatabaseFilter()) + viewOnly.toString();
+  String get uniqueness =>
+      jsonEncode(filter?.toDatabaseFilter()) + viewOnly.toString();
 
   static SpStoryListWithQueryState? of(BuildContext context) {
     return context.findAncestorStateOfType<SpStoryListWithQueryState>();
@@ -57,7 +58,9 @@ class SpStoryListWithQueryState extends State<SpStoryListWithQuery> {
     );
     StoryContentEmbedExtractor.preloadAssetAspectRatios(stories?.items ?? []);
 
-    if (widget.filter?.years.length == 1 && widget.filter?.month != null && widget.filter?.day != null) {
+    if (widget.filter?.years.length == 1 &&
+        widget.filter?.month != null &&
+        widget.filter?.day != null) {
       _throwbackDates = await StoryDbModel.db
           .where(
             filters: SearchFilterObject(
@@ -78,7 +81,9 @@ class SpStoryListWithQueryState extends State<SpStoryListWithQuery> {
     if (!widget.disableMultiEdit && mounted) {
       try {
         SpStoryListMultiEditWrapper.of(context).stories.clear();
-        SpStoryListMultiEditWrapper.of(context).stories.addAll(stories?.items.map((e) => e.id) ?? {});
+        SpStoryListMultiEditWrapper.of(
+          context,
+        ).stories.addAll(stories?.items.map((e) => e.id) ?? {});
       } catch (e) {
         debugPrint(e.toString());
       }
@@ -103,14 +108,18 @@ class SpStoryListWithQueryState extends State<SpStoryListWithQuery> {
   @override
   void initState() {
     load(debugSource: '$runtimeType#initState');
-    BackupProvider.repoInstance.restoreService.addListener(_restoreServiceListener);
+    BackupProvider.repoInstance.restoreService.addListener(
+      _restoreServiceListener,
+    );
     widget.watch?.addListener(_watchListener);
     super.initState();
   }
 
   @override
   void dispose() {
-    BackupProvider.repoInstance.restoreService.removeListener(_restoreServiceListener);
+    BackupProvider.repoInstance.restoreService.removeListener(
+      _restoreServiceListener,
+    );
     widget.watch?.removeListener(_watchListener);
     super.dispose();
   }
@@ -138,7 +147,8 @@ class SpStoryListWithQueryState extends State<SpStoryListWithQuery> {
   }
 
   Widget buildFadeInList() {
-    if (stories?.items == null) return const Center(child: CircularProgressIndicator.adaptive());
+    if (stories?.items == null)
+      return const Center(child: CircularProgressIndicator.adaptive());
     if (stories!.items.isEmpty && !hasThrowback) {
       return Padding(
         padding: const EdgeInsets.all(16.0).add(
@@ -173,10 +183,15 @@ class SpStoryListWithQueryState extends State<SpStoryListWithQuery> {
       onDeleted: () => load(debugSource: '$runtimeType#onDeleted'),
       onChanged: (updatedStory) {
         final filter = widget.filter;
-        final dayMismatch = filter?.day != null && updatedStory.day != filter!.day;
-        final typeMismatch = filter?.types.isNotEmpty == true && !filter!.types.contains(updatedStory.type);
-        final starredMismatch = filter?.starred != null && updatedStory.starred != filter!.starred;
-        final pinnedMismatch = filter?.pinned != null && updatedStory.pinned != filter!.pinned;
+        final dayMismatch =
+            filter?.day != null && updatedStory.day != filter!.day;
+        final typeMismatch =
+            filter?.types.isNotEmpty == true &&
+            !filter!.types.contains(updatedStory.type);
+        final starredMismatch =
+            filter?.starred != null && updatedStory.starred != filter!.starred;
+        final pinnedMismatch =
+            filter?.pinned != null && updatedStory.pinned != filter!.pinned;
 
         if (dayMismatch || typeMismatch || starredMismatch || pinnedMismatch) {
           // The updated story no longer matches this list's filter (e.g. it

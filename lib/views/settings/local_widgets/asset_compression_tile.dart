@@ -21,7 +21,8 @@ class AssetCompressionTile extends StatelessWidget {
       builder: (context, provider, child) {
         return AssetCompressionTile(
           currentAssetCompression: provider.preferences.assetCompression,
-          onChanged: (assetCompression) => provider.setAssetCompression(assetCompression),
+          onChanged: (assetCompression) =>
+              provider.setAssetCompression(assetCompression),
         );
       },
     );

@@ -44,7 +44,10 @@ class _GalleryTabState extends State<GalleryTab> {
     setState(() {});
   }
 
-  Future<void> openTemplate(BuildContext context, GalleryTemplateObject template) async {
+  Future<void> openTemplate(
+    BuildContext context,
+    GalleryTemplateObject template,
+  ) async {
     if (widget.params.pickMode) {
       Navigator.maybePop(context, TemplatePickResult.gallery(template));
       return;
@@ -82,12 +85,19 @@ class _GalleryTabState extends State<GalleryTab> {
             return const _LicenseText();
           }
 
-          GalleryTemplateCategoryObject category = templates!.keys.elementAt(index);
-          List<GalleryTemplateObject> templatesInCategory = templates!.values.elementAt(index);
+          GalleryTemplateCategoryObject category = templates!.keys.elementAt(
+            index,
+          );
+          List<GalleryTemplateObject> templatesInCategory = templates!.values
+              .elementAt(index);
 
           return SpFadeInFadeOutGradient(
             color: Theme.of(context).scaffoldBackgroundColor,
-            child: buildTemplatesSection(category, context, templatesInCategory),
+            child: buildTemplatesSection(
+              category,
+              context,
+              templatesInCategory,
+            ),
           );
         },
       ),
@@ -114,7 +124,10 @@ class _GalleryTabState extends State<GalleryTab> {
                     alignment: PlaceholderAlignment.middle,
                     child: Container(
                       margin: const EdgeInsets.only(left: 6.0),
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 2.0,
+                      ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8.0),
                         color: ColorScheme.of(context).readOnly.surface2,
@@ -152,7 +165,8 @@ class _GalleryTabState extends State<GalleryTab> {
                     ),
                     child: _GalleryTemplateCard(
                       template: templatesInCategory[i],
-                      onTap: () => openTemplate(context, templatesInCategory[i]),
+                      onTap: () =>
+                          openTemplate(context, templatesInCategory[i]),
                     ),
                   ),
               ],

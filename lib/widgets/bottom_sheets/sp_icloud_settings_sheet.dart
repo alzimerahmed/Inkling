@@ -53,7 +53,10 @@ class _ICloudSettingsButton extends StatelessWidget {
           // primary visual guidance, so a new per-platform translation
           // wasn't worth it.
           Text(
-            tr('dialog.icloud_settings.navigation_steps', namedArgs: {'SP_APP_NAME': kAppName}),
+            tr(
+              'dialog.icloud_settings.navigation_steps',
+              namedArgs: {'SP_APP_NAME': kAppName},
+            ),
             textAlign: TextAlign.center,
             style: TextTheme.of(context).bodySmall,
           ),

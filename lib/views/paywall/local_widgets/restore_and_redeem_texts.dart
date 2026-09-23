@@ -20,21 +20,30 @@ class _RestoreAndRedeemTexts extends StatelessWidget {
             [
               (
                 tr('button.restore_purchase'),
-                () => context.read<InAppPurchaseProvider>().restorePurchase(context),
+                () => context.read<InAppPurchaseProvider>().restorePurchase(
+                  context,
+                ),
               ),
               ("•", null),
               (
                 tr('button.redeem_code'),
-                () => context.read<InAppPurchaseProvider>().presentCodeRedemptionSheet(context),
+                () => context
+                    .read<InAppPurchaseProvider>()
+                    .presentCodeRedemptionSheet(context),
               ),
             ].map((link) {
               return SpTapEffect(
                 onTap: link.$2,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6.0,
+                    vertical: 8,
+                  ),
                   child: Text(
                     link.$1,
-                    style: TextTheme.of(context).labelMedium?.copyWith(color: ColorScheme.of(context).primary),
+                    style: TextTheme.of(context).labelMedium?.copyWith(
+                      color: ColorScheme.of(context).primary,
+                    ),
                   ),
                 ),
               );

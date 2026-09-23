@@ -26,7 +26,9 @@ class RestoreBackupService {
     bool notifyCallbacks = true,
   }) async {
     Map<String, dynamic> tables = backup.tables;
-    Map<String, List<BaseDbModel>> datas = JsonTablesToModelService.decode(tables);
+    Map<String, List<BaseDbModel>> datas = JsonTablesToModelService.decode(
+      tables,
+    );
 
     int changesCount = 0;
 
@@ -35,11 +37,20 @@ class RestoreBackupService {
 
       if (items != null) {
         for (BaseDbModel newRecord in items) {
-          BaseDbModel? existingRecord = await db.find(newRecord.id, returnDeleted: true);
+          BaseDbModel? existingRecord = await db.find(
+            newRecord.id,
+            returnDeleted: true,
+          );
 
-          if (existingRecord != null && existingRecord.updatedAt != null && newRecord.updatedAt != null) {
-            bool backupHasNewerContent = existingRecord.updatedAt!.isBefore(newRecord.updatedAt!);
-            bool deviceHasNewerContent = existingRecord.updatedAt!.isAfter(newRecord.updatedAt!);
+          if (existingRecord != null &&
+              existingRecord.updatedAt != null &&
+              newRecord.updatedAt != null) {
+            bool backupHasNewerContent = existingRecord.updatedAt!.isBefore(
+              newRecord.updatedAt!,
+            );
+            bool deviceHasNewerContent = existingRecord.updatedAt!.isAfter(
+              newRecord.updatedAt!,
+            );
 
             if (backupHasNewerContent) {
               await db.set(newRecord, runCallbacks: false);
@@ -71,7 +82,9 @@ class RestoreBackupService {
     required BackupObject backup,
   }) async {
     Map<String, dynamic> tables = backup.tables;
-    Map<String, List<BaseDbModel>> datas = JsonTablesToModelService.decode(tables);
+    Map<String, List<BaseDbModel>> datas = JsonTablesToModelService.decode(
+      tables,
+    );
 
     for (BaseDbAdapter db in BackupRepository.databases) {
       List<BaseDbModel>? items = datas[db.tableName];

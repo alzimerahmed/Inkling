@@ -11,6 +11,7 @@ import 'package:storypad/views/settings/local_widgets/language_tile.dart';
 import 'package:storypad/views/settings/local_widgets/map_provider_tile.dart';
 import 'package:storypad/views/settings/local_widgets/my_templates_tile.dart';
 import 'package:storypad/views/settings/local_widgets/time_format_tile.dart';
+import 'package:storypad/views/settings/local_widgets/writing_goal_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:storypad/widgets/base_view/base_route.dart';
 import 'package:storypad/views/settings/local_widgets/default_story_preferences_tile.dart';

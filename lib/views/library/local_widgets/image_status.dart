@@ -13,7 +13,9 @@ class _ImageStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final destination = asset.matchingCloudDestinationFor(provider.signedInServices);
+    final destination = asset.matchingCloudDestinationFor(
+      provider.signedInServices,
+    );
 
     if (destination == null) {
       return SpAssetStatusBadge(
@@ -35,7 +37,8 @@ class _ImageStatus extends StatelessWidget {
       backgroundColor: ColorScheme.of(context).bootstrap.success.color,
       foregroundColor: ColorScheme.of(context).bootstrap.success.onColor,
       icon: SpIcons.cloudDone,
-      tooltipMessage: '${destination.serviceType.displayName}: ${destination.identifier}',
+      tooltipMessage:
+          '${destination.serviceType.displayName}: ${destination.identifier}',
     );
   }
 }

@@ -16,9 +16,13 @@ import 'paywall_view.dart';
 class PaywallViewModel extends ChangeNotifier with DisposeAwareMixin {
   final PaywallRoute params;
   final BuildContext context;
-  final List<GlobalKey> featureKeys = List.generate(PaywallFeature.values.length, (_) => GlobalKey());
+  final List<GlobalKey> featureKeys = List.generate(
+    PaywallFeature.values.length,
+    (_) => GlobalKey(),
+  );
 
-  late final ValueNotifier<PaywallFeature?> focusingFeatureNotifer = ValueNotifier(params.initialFocus);
+  late final ValueNotifier<PaywallFeature?> focusingFeatureNotifer =
+      ValueNotifier(params.initialFocus);
   List<PaywallFeatureObject>? features;
 
   PaywallViewModel({
@@ -35,7 +39,9 @@ class PaywallViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   Future<void> focusOn(PaywallFeature focusFeature) async {
-    int? index = features?.indexWhere((feature) => feature.type == focusFeature);
+    int? index = features?.indexWhere(
+      (feature) => feature.type == focusFeature,
+    );
     if (index != null && index > 4) {
       await Scrollable.ensureVisible(
         featureKeys[focusFeature.index].currentContext!,
@@ -51,7 +57,9 @@ class PaywallViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   Future<void> load(BuildContext context) async {
-    await context.read<InAppPurchaseProvider>().fetchAndCacheProducts(debugSource: '$runtimeType#load');
+    await context.read<InAppPurchaseProvider>().fetchAndCacheProducts(
+      debugSource: '$runtimeType#load',
+    );
 
     features = [
       PaywallFeatureObject(
@@ -106,7 +114,9 @@ class PaywallViewModel extends ChangeNotifier with DisposeAwareMixin {
           '/feature_demos/stats/stats_1__1080x2400.jpg',
           '/feature_demos/stats/stats_2__1080x2400.jpg',
         ],
-        onOpen: (BuildContext context) => StatsRoute(initialRange: StatsRange.year(DateTime.now())).push(context),
+        onOpen: (BuildContext context) => StatsRoute(
+          initialRange: StatsRange.year(DateTime.now()),
+        ).push(context),
       ),
       PaywallFeatureObject(
         type: PaywallFeature.multi_cloud_sync,
@@ -134,7 +144,9 @@ class PaywallViewModel extends ChangeNotifier with DisposeAwareMixin {
           '/feature_demos/markdown_export/markdown_export_4__3060x2400.jpg',
           '/feature_demos/markdown_export/markdown_export_5__2070x2400.jpg',
         ],
-        onOpen: (BuildContext context) => const ImportExportRoute(initialExportOption: .markdown).push(context),
+        onOpen: (BuildContext context) => const ImportExportRoute(
+          initialExportOption: .markdown,
+        ).push(context),
       ),
     ];
 

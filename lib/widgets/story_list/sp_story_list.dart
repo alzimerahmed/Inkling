@@ -55,7 +55,8 @@ class SpStoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (stories?.items == null) return const Center(child: CircularProgressIndicator.adaptive());
+    if (stories?.items == null)
+      return const Center(child: CircularProgressIndicator.adaptive());
 
     if (onRefresh != null) {
       return RefreshIndicator.adaptive(
@@ -109,7 +110,10 @@ class SpStoryList extends StatelessWidget {
               listHasThrowback: hasThrowback,
               onTap: () {
                 if (viewOnly) {
-                  ShowChangeRoute(content: story.latestContent!, preferences: story.preferences).push(context);
+                  ShowChangeRoute(
+                    content: story.latestContent!,
+                    preferences: story.preferences,
+                  ).push(context);
                 } else {
                   ShowStoryRoute(id: story.id, story: story).push(context);
                 }

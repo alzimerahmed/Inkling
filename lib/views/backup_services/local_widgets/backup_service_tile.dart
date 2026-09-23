@@ -29,13 +29,16 @@ class BackupServiceTile extends StatelessWidget {
     final status = provider.statusFor(service.serviceType);
     final metadata = service.serviceType;
 
-    final locked = metadata.isProOnly && !Provider.of<InAppPurchaseProvider>(context).isProUser;
+    final locked =
+        metadata.isProOnly &&
+        !Provider.of<InAppPurchaseProvider>(context).isProUser;
     if (locked) {
       return ListTile(
         leading: Icon(metadata.icon),
         title: Text(metadata.displayName),
         trailing: const Icon(SpIcons.lock),
-        onTap: () => const PaywallRoute(initialFocus: .multi_cloud_sync).push(context),
+        onTap: () =>
+            const PaywallRoute(initialFocus: .multi_cloud_sync).push(context),
       );
     }
 
@@ -106,7 +109,9 @@ class BackupServiceTile extends StatelessWidget {
           subtitle = Text(tr('list_tile.backup.no_permission_subtitle'));
           break;
         case BackupConnectionStatus.readyToSync:
-          subtitle = Text(tr('list_tile.backup.some_data_has_not_sync_subtitle'));
+          subtitle = Text(
+            tr('list_tile.backup.some_data_has_not_sync_subtitle'),
+          );
           break;
         case null:
           break;
@@ -119,7 +124,8 @@ class BackupServiceTile extends StatelessWidget {
       // service's own lastSyncedAt, not provider.lastSyncedAt (a global max
       // across every service) — otherwise a freshly-connected Nextcloud tile
       // could show Drive's timestamp despite never having synced itself.
-      if (status.connectionStatus == BackupConnectionStatus.readyToSync && status.lastSyncedAt != null) {
+      if (status.connectionStatus == BackupConnectionStatus.readyToSync &&
+          status.lastSyncedAt != null) {
         subtitle = Text(
           DateFormatHelper.yMEd_jmNullable(
                 status.lastSyncedAt,
@@ -139,7 +145,9 @@ class BackupServiceTile extends StatelessWidget {
       onPressed = () => ShowBackupServiceRoute(service: service).push(context);
 
       if (status.currentStep != null) {
-        subtitle = Text("${tr("general.syncing")} ${status.currentStep!.stepNumber}/4");
+        subtitle = Text(
+          "${tr("general.syncing")} ${status.currentStep!.stepNumber}/4",
+        );
       }
     } else if (service.isSignedIn && status.activity == SyncActivity.queued) {
       trailing = const SizedBox.square(

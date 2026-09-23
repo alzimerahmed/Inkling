@@ -39,7 +39,10 @@ class SpFontWeightSheet extends BaseBottomSheet {
             mainAxisSize: MainAxisSize.min,
             children: [
               ...FontWeight.values.map((fontWeight) {
-                String title = FontWeightTile.getFontWeightTitle(fontWeight, context);
+                String title = FontWeightTile.getFontWeightTitle(
+                  fontWeight,
+                  context,
+                );
                 bool isDefault = defaultFontWeight == fontWeight;
 
                 if (isDefault && showDefaultLabel) {
@@ -61,7 +64,9 @@ class SpFontWeightSheet extends BaseBottomSheet {
                         ),
                   onTap: () {
                     if (!isDefault && locked) {
-                      const PaywallRoute(initialFocus: .customizations).push(context);
+                      const PaywallRoute(
+                        initialFocus: .customizations,
+                      ).push(context);
                       return;
                     }
 

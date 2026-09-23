@@ -11,7 +11,16 @@ import 'package:storypad/core/types/asset_type.dart';
 
 import 'cloud_optimize_view.dart';
 
-enum OptimizeStep { idle, syncing, fetchingFiles, analyzing, awaitingConfirmation, cleaningUp, done, error }
+enum OptimizeStep {
+  idle,
+  syncing,
+  fetchingFiles,
+  analyzing,
+  awaitingConfirmation,
+  cleaningUp,
+  done,
+  error,
+}
 
 class DetachedFileResult {
   final CloudFileObject file;
@@ -65,9 +74,11 @@ class CloudOptimizeViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   BackupServiceType get serviceType => service.serviceType;
 
-  bool get hasFindings => detachedCandidates.isNotEmpty || staleDuplicates.isNotEmpty;
+  bool get hasFindings =>
+      detachedCandidates.isNotEmpty || staleDuplicates.isNotEmpty;
 
-  bool get hasFilesToClean => staleDuplicates.isNotEmpty || detachedCandidates.isNotEmpty;
+  bool get hasFilesToClean =>
+      staleDuplicates.isNotEmpty || detachedCandidates.isNotEmpty;
 
   int get totalToClean => staleDuplicates.length + detachedCandidates.length;
 
@@ -90,7 +101,9 @@ class CloudOptimizeViewModel extends ChangeNotifier with DisposeAwareMixin {
     // Step 1: sync preflight. Detached cleanup is disabled unless this succeeds.
     currentStep = OptimizeStep.syncing;
     notifyListeners();
-    kErrorReportingService.log('$runtimeType#startOptimize: syncing latest data');
+    kErrorReportingService.log(
+      '$runtimeType#startOptimize: syncing latest data',
+    );
 
     try {
       syncSucceeded = await syncCallback();
@@ -100,18 +113,24 @@ class CloudOptimizeViewModel extends ChangeNotifier with DisposeAwareMixin {
             : '$runtimeType#startOptimize: sync preflight did not complete; detached cleanup disabled',
       );
     } catch (e) {
-      kErrorReportingService.log('$runtimeType#startOptimize: sync preflight failed — $e');
+      kErrorReportingService.log(
+        '$runtimeType#startOptimize: sync preflight failed — $e',
+      );
       syncSucceeded = false;
     }
     notifyListeners();
 
     currentStep = OptimizeStep.fetchingFiles;
     notifyListeners();
-    kErrorReportingService.log('$runtimeType#startOptimize: fetching cloud files');
+    kErrorReportingService.log(
+      '$runtimeType#startOptimize: fetching cloud files',
+    );
 
     try {
       final allFiles = await _fetchFiles();
-      kErrorReportingService.log('$runtimeType#startOptimize: fetched ${allFiles.length} files');
+      kErrorReportingService.log(
+        '$runtimeType#startOptimize: fetched ${allFiles.length} files',
+      );
 
       currentStep = OptimizeStep.analyzing;
       notifyListeners();
@@ -126,7 +145,9 @@ class CloudOptimizeViewModel extends ChangeNotifier with DisposeAwareMixin {
       );
 
       if (!hasFindings) {
-        kErrorReportingService.log('$runtimeType#startOptimize: nothing to clean, done');
+        kErrorReportingService.log(
+          '$runtimeType#startOptimize: nothing to clean, done',
+        );
         currentStep = OptimizeStep.done;
         notifyListeners();
         return;
@@ -146,7 +167,9 @@ class CloudOptimizeViewModel extends ChangeNotifier with DisposeAwareMixin {
   Future<void> startCleanup() async {
     currentStep = OptimizeStep.cleaningUp;
     notifyListeners();
-    kErrorReportingService.log('$runtimeType#startCleanup: started — $totalToClean files to trash');
+    kErrorReportingService.log(
+      '$runtimeType#startCleanup: started — $totalToClean files to trash',
+    );
 
     try {
       await _cleanUpFiles();
@@ -181,7 +204,9 @@ class CloudOptimizeViewModel extends ChangeNotifier with DisposeAwareMixin {
     // `asset.type.subDirectory.relativePath`, so a new asset type must never be
     // able to hide its files from the optimizer.
     final results = await Future.wait(
-      AssetType.values.map((type) => service.listFilesInFolder(type.subDirectory.relativePath)),
+      AssetType.values.map(
+        (type) => service.listFilesInFolder(type.subDirectory.relativePath),
+      ),
     );
 
     final allFiles = results.expand((files) => files).toList();
@@ -204,7 +229,10 @@ class CloudOptimizeViewModel extends ChangeNotifier with DisposeAwareMixin {
     // Batch-fetch all matching DB records in a single query, including tombstones.
     final allIds = assetIds.toList();
     final collection = allIds.isNotEmpty
-        ? await AssetDbModel.db.where(filters: {'ids': allIds}, returnDeleted: true)
+        ? await AssetDbModel.db.where(
+            filters: {'ids': allIds},
+            returnDeleted: true,
+          )
         : null;
     final records = collection?.items ?? [];
     final Map<int, AssetDbModel> recordById = {
@@ -230,9 +258,14 @@ class CloudOptimizeViewModel extends ChangeNotifier with DisposeAwareMixin {
     // Detached cleanup is only safe after sync preflight has succeeded.
     detachedCandidates = syncSucceeded
         ? detachedFiles.where((r) {
-            final assetId = r.file.fileName != null ? int.tryParse(r.file.fileName!.split('.').first) : null;
+            final assetId = r.file.fileName != null
+                ? int.tryParse(r.file.fileName!.split('.').first)
+                : null;
             final tombstone = assetId != null ? tombstoneById[assetId] : null;
-            return CloudAssetAnalyzer.isDetachedEligibleForCleanup(r.file, tombstone: tombstone);
+            return CloudAssetAnalyzer.isDetachedEligibleForCleanup(
+              r.file,
+              tombstone: tombstone,
+            );
           }).toList()
         : [];
 
@@ -250,7 +283,10 @@ class CloudOptimizeViewModel extends ChangeNotifier with DisposeAwareMixin {
     ];
     final assetIds = _assetIdsFromFiles([...latestFiles, ...candidateFiles]);
     final collection = assetIds.isNotEmpty
-        ? await AssetDbModel.db.where(filters: {'ids': assetIds.toList()}, returnDeleted: true)
+        ? await AssetDbModel.db.where(
+            filters: {'ids': assetIds.toList()},
+            returnDeleted: true,
+          )
         : null;
     final records = collection?.items ?? [];
     final Map<int, AssetDbModel> freshRecords = {
@@ -286,7 +322,9 @@ class CloudOptimizeViewModel extends ChangeNotifier with DisposeAwareMixin {
 
     // Detached candidates: re-apply the sync and age gates with fresh records, then trash
     if (!syncSucceeded) {
-      kErrorReportingService.log('$runtimeType#_cleanUpFiles: detached cleanup skipped because sync failed');
+      kErrorReportingService.log(
+        '$runtimeType#_cleanUpFiles: detached cleanup skipped because sync failed',
+      );
       return;
     }
 
@@ -294,10 +332,15 @@ class CloudOptimizeViewModel extends ChangeNotifier with DisposeAwareMixin {
       if (disposed) break;
 
       final file = result.file;
-      final assetId = file.fileName != null ? int.tryParse(file.fileName!.split('.').first) : null;
+      final assetId = file.fileName != null
+          ? int.tryParse(file.fileName!.split('.').first)
+          : null;
       final tombstone = assetId != null ? freshTombstones[assetId] : null;
 
-      if (!CloudAssetAnalyzer.isDetachedEligibleForCleanup(file, tombstone: tombstone)) {
+      if (!CloudAssetAnalyzer.isDetachedEligibleForCleanup(
+        file,
+        tombstone: tombstone,
+      )) {
         kErrorReportingService.log(
           '$runtimeType#_cleanUpFiles: ${file.fileName} no longer eligible after re-check',
         );
@@ -320,14 +363,20 @@ class CloudOptimizeViewModel extends ChangeNotifier with DisposeAwareMixin {
       }
     } on BackupException catch (e) {
       if (e.toString().toLowerCase().contains('not found')) {
-        kErrorReportingService.log('$runtimeType#_trashOne: ${file.fileName} already gone, counting as trashed');
+        kErrorReportingService.log(
+          '$runtimeType#_trashOne: ${file.fileName} already gone, counting as trashed',
+        );
         deletedCount++;
       } else {
-        kErrorReportingService.log('$runtimeType#_trashOne: failed — ${file.fileName}: $e');
+        kErrorReportingService.log(
+          '$runtimeType#_trashOne: failed — ${file.fileName}: $e',
+        );
         failedCount++;
       }
     } catch (e) {
-      kErrorReportingService.log('$runtimeType#_trashOne: failed — ${file.fileName}: $e');
+      kErrorReportingService.log(
+        '$runtimeType#_trashOne: failed — ${file.fileName}: $e',
+      );
       failedCount++;
     }
     if (!disposed) notifyListeners();

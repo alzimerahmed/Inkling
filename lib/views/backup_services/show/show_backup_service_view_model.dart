@@ -46,7 +46,9 @@ class ShowBackupServiceViewModel extends ChangeNotifier with DisposeAwareMixin {
   List<MapEntry<int, CloudFileObject>> getSortedYearlyBackups() {
     if (yearlyBackups == null) return [];
     final entries = yearlyBackups!.entries.toList();
-    entries.sort((a, b) => b.key.compareTo(a.key)); // Descending order (newest first)
+    entries.sort(
+      (a, b) => b.key.compareTo(a.key),
+    ); // Descending order (newest first)
     return entries;
   }
 
@@ -55,8 +57,13 @@ class ShowBackupServiceViewModel extends ChangeNotifier with DisposeAwareMixin {
     final latest = yearlyBackups!.values
         .map((e) => e.lastUpdatedAt)
         .whereType<DateTime>()
-        .fold<DateTime?>(null, (prev, curr) => prev == null || curr.isAfter(prev) ? curr : prev);
-    return latest != null ? DateFormatHelper.yMEd_jmNullable(latest, context.locale) ?? '...' : null;
+        .fold<DateTime?>(
+          null,
+          (prev, curr) => prev == null || curr.isAfter(prev) ? curr : prev,
+        );
+    return latest != null
+        ? DateFormatHelper.yMEd_jmNullable(latest, context.locale) ?? '...'
+        : null;
   }
 
   Future<void> load() async {
@@ -106,13 +113,20 @@ class ShowBackupServiceViewModel extends ChangeNotifier with DisposeAwareMixin {
     }
   }
 
-  Future<void> deleteCloudFile(BuildContext context, CloudFileObject file) async {
+  Future<void> deleteCloudFile(
+    BuildContext context,
+    CloudFileObject file,
+  ) async {
     AnalyticsService.instance.logDeleteCloudBackup(file: file);
 
     await MessengerService.of(context).showLoading(
       debugSource: '$runtimeType#deleteCloudFile',
       future: () async {
-        bool? success = await context.read<BackupProvider>().repository.getService(serviceType).deleteFile(file.id);
+        bool? success = await context
+            .read<BackupProvider>()
+            .repository
+            .getService(serviceType)
+            .deleteFile(file.id);
         if (success == true) yearlyBackups?.remove(file.year);
         notifyListeners();
       },
@@ -199,7 +213,10 @@ class ShowBackupServiceViewModel extends ChangeNotifier with DisposeAwareMixin {
       // permission" until the next unrelated sync happens to run.
       await MessengerService.of(context).showLoading(
         debugSource: '$runtimeType#reconnect',
-        future: () => backupProvider.recheckAndSync(services: [service], context: context),
+        future: () => backupProvider.recheckAndSync(
+          services: [service],
+          context: context,
+        ),
       );
       await load();
     } else if (serviceType == BackupServiceType.dropbox) {

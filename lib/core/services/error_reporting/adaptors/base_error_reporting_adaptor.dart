@@ -5,10 +5,16 @@ import 'package:storypad/core/services/error_reporting/adaptors/none_error_repor
 
 abstract class BaseErrorReportingAdaptor {
   static BaseErrorReportingAdaptor create() {
-    return kFirebaseAvailable ? FirebaseCrashlyticsAdaptor() : NoneErrorReportingAdaptor();
+    return kFirebaseAvailable
+        ? FirebaseCrashlyticsAdaptor()
+        : NoneErrorReportingAdaptor();
   }
 
-  Future<void> recordError(Object error, StackTrace? stack, {bool fatal = false});
+  Future<void> recordError(
+    Object error,
+    StackTrace? stack, {
+    bool fatal = false,
+  });
   Future<void> recordFlutterFatalError(FlutterErrorDetails details);
 
   /// Breadcrumb log attached to the next crash/error report, not a report on

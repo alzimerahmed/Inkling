@@ -24,7 +24,9 @@ class SpFontsSheet extends BaseBottomSheet {
     if (kIsCupertino) {
       return buildView();
     } else {
-      double maxChildSize = 1 - View.of(context).viewPadding.top / MediaQuery.of(context).size.height;
+      double maxChildSize =
+          1 -
+          View.of(context).viewPadding.top / MediaQuery.of(context).size.height;
       return DraggableScrollableSheet(
         expand: false,
         maxChildSize: maxChildSize,

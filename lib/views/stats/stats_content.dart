@@ -32,7 +32,8 @@ class _StatsContent extends StatelessWidget {
             icon: const Icon(SpIcons.moreVert),
             onPressed: () => SpToggleListSheet<StatsSection>(
               items: [
-                for (final section in viewModel.sectionsForCurrentTab()) (value: section, label: section.label),
+                for (final section in viewModel.sectionsForCurrentTab())
+                  (value: section, label: section.label),
               ],
               isEnabled: viewModel.isSectionVisible,
               onToggle: viewModel.toggleSection,
@@ -151,7 +152,8 @@ class _StatsContent extends StatelessWidget {
     required StoryStatsObject stats,
     required int tabIndex,
   }) {
-    void openTag(int tagId) => viewModel.openStoriesForTag(context, tagId, tabIndex);
+    void openTag(int tagId) =>
+        viewModel.openStoriesForTag(context, tagId, tabIndex);
 
     return switch (section) {
       StatsSection.overview => _buildOverview(context, stats, tabIndex),
@@ -206,8 +208,15 @@ class _StatsContent extends StatelessWidget {
   /// open the filtered stories sheet on tap; metrics without a story list
   /// (active days, words) carry a null [onTap] and stay inert to avoid
   /// confusion.
-  Widget _buildOverview(BuildContext context, StoryStatsObject stats, int tabIndex) {
-    final List<({IconData icon, String value, String label, VoidCallback? onTap})> metrics = [
+  Widget _buildOverview(
+    BuildContext context,
+    StoryStatsObject stats,
+    int tabIndex,
+  ) {
+    final List<
+      ({IconData icon, String value, String label, VoidCallback? onTap})
+    >
+    metrics = [
       (
         icon: SpIcons.book,
         value: '${stats.entryCount}',
@@ -220,6 +229,22 @@ class _StatsContent extends StatelessWidget {
         label: tr('general.active_days'),
         onTap: null,
       ),
+      if (stats.currentStreak > 0)
+        (
+          icon: SpIcons.fire,
+          value: '${stats.currentStreak}',
+          label: tr('general.streak'),
+          onTap: null,
+        ),
+      if (viewModel.dailyGoal > 0 &&
+          viewModel.rangeForTab(tabIndex).contains(DateTime.now()))
+        (
+          icon: SpIcons.text,
+          value:
+              '${WritingGoalService.todayWords(stats.dailyWordCounts, DateTime.now())} / ${viewModel.dailyGoal}',
+          label: tr('general.words_today'),
+          onTap: null,
+        ),
       if (stats.wordCount > 0)
         (
           icon: SpIcons.text,
@@ -232,28 +257,44 @@ class _StatsContent extends StatelessWidget {
           icon: SpIcons.photo,
           value: '${stats.photoCount}',
           label: tr('general.photos'),
-          onTap: () => viewModel.openStoriesForIds(context, stats.photoStoryIds, tabIndex),
+          onTap: () => viewModel.openStoriesForIds(
+            context,
+            stats.photoStoryIds,
+            tabIndex,
+          ),
         ),
       if (stats.videoCount > 0)
         (
           icon: SpIcons.videoCamera,
           value: '${stats.videoCount}',
           label: tr('general.videos'),
-          onTap: () => viewModel.openStoriesForIds(context, stats.videoStoryIds, tabIndex),
+          onTap: () => viewModel.openStoriesForIds(
+            context,
+            stats.videoStoryIds,
+            tabIndex,
+          ),
         ),
       if (stats.voiceCount > 0)
         (
           icon: SpIcons.voice,
           value: '${stats.voiceCount}',
           label: tr('general.voices'),
-          onTap: () => viewModel.openStoriesForIds(context, stats.voiceStoryIds, tabIndex),
+          onTap: () => viewModel.openStoriesForIds(
+            context,
+            stats.voiceStoryIds,
+            tabIndex,
+          ),
         ),
       if (stats.locatedCount > 0)
         (
           icon: SpIcons.locationPin,
           value: '${stats.locatedCount}',
           label: tr('general.places'),
-          onTap: () => viewModel.openStoriesForIds(context, stats.locatedStoryIds, tabIndex),
+          onTap: () => viewModel.openStoriesForIds(
+            context,
+            stats.locatedStoryIds,
+            tabIndex,
+          ),
         ),
     ];
 

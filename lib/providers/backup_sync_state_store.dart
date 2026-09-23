@@ -39,7 +39,8 @@ class ServiceSyncStatus {
 class BackupSyncStateStore extends ChangeNotifier {
   final Map<BackupServiceType, ServiceSyncStatus> _statusByService = {};
 
-  ServiceSyncStatus statusFor(BackupServiceType type) => _statusByService[type] ?? ServiceSyncStatus.idle;
+  ServiceSyncStatus statusFor(BackupServiceType type) =>
+      _statusByService[type] ?? ServiceSyncStatus.idle;
 
   /// Clears everything known about a service — e.g. an explicit sign-out,
   /// where the account itself is gone, not just its sync progress.
@@ -61,10 +62,14 @@ class BackupSyncStateStore extends ChangeNotifier {
 
   /// Results of a connection check — one status per currently signed-in
   /// service, never just the first one that failed.
-  void onConnectionChecked(Map<BackupServiceType, BackupConnectionStatus> statusByService) {
+  void onConnectionChecked(
+    Map<BackupServiceType, BackupConnectionStatus> statusByService,
+  ) {
     for (final entry in statusByService.entries) {
       final current = statusFor(entry.key);
-      _statusByService[entry.key] = current.copyWith(connectionStatus: entry.value);
+      _statusByService[entry.key] = current.copyWith(
+        connectionStatus: entry.value,
+      );
     }
     notifyListeners();
   }

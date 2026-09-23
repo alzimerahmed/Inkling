@@ -50,7 +50,9 @@ class _StoryTileMonogram extends StatelessWidget {
           width: monogramSize,
           height: monogramSize,
           decoration: BoxDecoration(
-            color: ColorFromDayService(context: context).get(story.displayPathDate.weekday),
+            color: ColorFromDayService(
+              context: context,
+            ).get(story.displayPathDate.weekday),
             shape: BoxShape.circle,
           ),
           alignment: Alignment.center,
@@ -58,7 +60,9 @@ class _StoryTileMonogram extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               story.displayPathDate.day.toString(),
-              style: TextTheme.of(context).bodyMedium?.copyWith(color: ColorScheme.of(context).onPrimary),
+              style: TextTheme.of(
+                context,
+              ).bodyMedium?.copyWith(color: ColorScheme.of(context).onPrimary),
             ),
           ),
         ),

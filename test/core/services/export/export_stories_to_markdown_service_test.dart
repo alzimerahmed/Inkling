@@ -75,72 +75,102 @@ void main() {
       expect(year2025Files.length, 1);
     });
 
-    test('should have correct spacing between frontmatter and content', () async {
-      // Arrange
-      final story = _createStory(
-        id: 1,
-        year: 2025,
-        month: 1,
-        day: 1,
-        title: "Test Story",
-        content: "Test content",
-      );
+    test(
+      'should have correct spacing between frontmatter and content',
+      () async {
+        // Arrange
+        final story = _createStory(
+          id: 1,
+          year: 2025,
+          month: 1,
+          day: 1,
+          title: "Test Story",
+          content: "Test content",
+        );
 
-      // Act
-      await ExportStoriesToMarkdownService.call(
-        stories: [story],
-        outputDir: tempDir,
-      );
+        // Act
+        await ExportStoriesToMarkdownService.call(
+          stories: [story],
+          outputDir: tempDir,
+        );
 
-      // Assert
-      final files = Directory('${tempDir.path}/2025').listSync().whereType<File>().toList();
-      expect(files.length, 1);
+        // Assert
+        final files = Directory(
+          '${tempDir.path}/2025',
+        ).listSync().whereType<File>().toList();
+        expect(files.length, 1);
 
-      final content = await files.first.readAsString();
+        final content = await files.first.readAsString();
 
-      // Should have NO blank line between --- and content
-      expect(content.contains('---\n# Test Story\n'), true, reason: 'Should have no blank line after closing ---');
-      expect(content.contains('---\n\n# Test Story'), false, reason: 'Should NOT have blank line after closing ---');
+        // Should have NO blank line between --- and content
+        expect(
+          content.contains('---\n# Test Story\n'),
+          true,
+          reason: 'Should have no blank line after closing ---',
+        );
+        expect(
+          content.contains('---\n\n# Test Story'),
+          false,
+          reason: 'Should NOT have blank line after closing ---',
+        );
 
-      // Should not have multiple consecutive blank lines
-      expect(content.contains('\n\n\n'), false, reason: 'Should not have multiple consecutive blank lines');
+        // Should not have multiple consecutive blank lines
+        expect(
+          content.contains('\n\n\n'),
+          false,
+          reason: 'Should not have multiple consecutive blank lines',
+        );
 
-      // Frontmatter should not have trailing blank lines before ---
-      final lines = content.split('\n');
-      final closingDashIndex = lines.lastIndexOf('---');
-      expect(closingDashIndex > 0, true);
-      expect(lines[closingDashIndex - 1].trim().isNotEmpty, true, reason: 'No blank line before closing ---');
-    });
+        // Frontmatter should not have trailing blank lines before ---
+        final lines = content.split('\n');
+        final closingDashIndex = lines.lastIndexOf('---');
+        expect(closingDashIndex > 0, true);
+        expect(
+          lines[closingDashIndex - 1].trim().isNotEmpty,
+          true,
+          reason: 'No blank line before closing ---',
+        );
+      },
+    );
 
-    test('should have correct spacing between page title and content', () async {
-      // Arrange
-      final story = _createStory(
-        id: 1,
-        year: 2025,
-        month: 1,
-        day: 1,
-        title: "Test Story",
-        content: "First line of content",
-      );
+    test(
+      'should have correct spacing between page title and content',
+      () async {
+        // Arrange
+        final story = _createStory(
+          id: 1,
+          year: 2025,
+          month: 1,
+          day: 1,
+          title: "Test Story",
+          content: "First line of content",
+        );
 
-      // Act
-      await ExportStoriesToMarkdownService.call(
-        stories: [story],
-        outputDir: tempDir,
-      );
+        // Act
+        await ExportStoriesToMarkdownService.call(
+          stories: [story],
+          outputDir: tempDir,
+        );
 
-      // Assert
-      final files = Directory('${tempDir.path}/2025').listSync().whereType<File>().toList();
-      final content = await files.first.readAsString();
+        // Assert
+        final files = Directory(
+          '${tempDir.path}/2025',
+        ).listSync().whereType<File>().toList();
+        final content = await files.first.readAsString();
 
-      // Should have title followed by content without extra blank lines
-      expect(
-        content.contains('# Test Story\nFirst line'),
-        true,
-        reason: 'Title and content should be on consecutive lines',
-      );
-      expect(content.contains('# Test Story\n\nFirst line'), false, reason: 'Should not have blank line after title');
-    });
+        // Should have title followed by content without extra blank lines
+        expect(
+          content.contains('# Test Story\nFirst line'),
+          true,
+          reason: 'Title and content should be on consecutive lines',
+        );
+        expect(
+          content.contains('# Test Story\n\nFirst line'),
+          false,
+          reason: 'Should not have blank line after title',
+        );
+      },
+    );
 
     test('should generate correct filename format', () async {
       // Arrange
@@ -168,7 +198,10 @@ void main() {
       final files = year2025Dir.listSync().whereType<File>().toList();
 
       expect(files.length, 1);
-      expect(files.first.path, contains('2025.01.04 14.30.00 My Story Title.md'));
+      expect(
+        files.first.path,
+        contains('2025.01.04 14.30.00 My Story Title.md'),
+      );
     });
 
     test('should sanitize invalid characters in filename', () async {
@@ -193,10 +226,11 @@ void main() {
       final files = yearDir.listSync().whereType<File>().toList();
 
       expect(files.length, 1);
-      expect(files.first.path, contains('Invalid Title with Quotes and Slashes'));
-      expect(files.first.path, isNot(contains(':')));
-      expect(files.first.path, isNot(contains('<')));
-      expect(files.first.path, isNot(contains('"')));
+      final basename = files.first.uri.pathSegments.last;
+      expect(basename, contains('Invalid Title with Quotes and Slashes'));
+      expect(basename, isNot(contains(':')));
+      expect(basename, isNot(contains('<')));
+      expect(basename, isNot(contains('"')));
     });
 
     test('should use "Untitled" for stories without title', () async {
@@ -354,7 +388,8 @@ void main() {
 
       // Assert
       final yearDir = Directory('${tempDir.path}/2025');
-      final files = yearDir.listSync().whereType<File>().toList()..sort((a, b) => a.path.compareTo(b.path));
+      final files = yearDir.listSync().whereType<File>().toList()
+        ..sort((a, b) => a.path.compareTo(b.path));
 
       final content1 = await files[0].readAsString();
       final content2 = await files[1].readAsString();
@@ -554,7 +589,10 @@ void main() {
       final file = yearDir.listSync().whereType<File>().first;
       final content = await file.readAsString();
 
-      expect(content, contains('feeling: "Happy \\"Excited\\" Day\\nWith newlines"'));
+      expect(
+        content,
+        contains('feeling: "Happy \\"Excited\\" Day\\nWith newlines"'),
+      );
     });
 
     test('should handle empty story list', () async {

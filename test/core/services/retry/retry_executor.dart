@@ -39,7 +39,10 @@ void main() {
       expect(
         () async => await RetryExecutor.execute(() async {
           callCount++;
-          throw const AuthException('Auth error', AuthExceptionType.signInFailed);
+          throw const AuthException(
+            'Auth error',
+            AuthExceptionType.signInFailed,
+          );
         }),
         throwsA(isA<AuthException>()),
       );

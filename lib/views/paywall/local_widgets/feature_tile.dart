@@ -29,7 +29,10 @@ class _FeatureTile extends StatelessWidget {
           ),
         ),
         ListTile(
-          leading: SpSettingIconBadge(weekday: feature.weekdayColor, icon: feature.iconData),
+          leading: SpSettingIconBadge(
+            weekday: feature.weekdayColor,
+            icon: feature.iconData,
+          ),
           title: Text(feature.title),
           subtitle: Text(feature.subtitle),
           trailing: const Icon(SpIcons.keyboardRight),
@@ -43,7 +46,11 @@ class _FeatureTile extends StatelessWidget {
             final nextAction = await SpPaywallFeaturesSheet(
               params: PaywallFeaturesRoute(
                 features: viewModel.features ?? [],
-                initialPage: viewModel.features?.indexWhere((element) => element.type == feature.type) ?? 0,
+                initialPage:
+                    viewModel.features?.indexWhere(
+                      (element) => element.type == feature.type,
+                    ) ??
+                    0,
               ),
             ).show(context: context);
 

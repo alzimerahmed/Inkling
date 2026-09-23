@@ -20,7 +20,9 @@ class SpTemplateInfoSheet extends BaseBottomSheet {
 
   @override
   Widget build(BuildContext context, double bottomPadding) {
-    final timeFormat = context.read<DevicePreferencesProvider>().timeFormatOf(context);
+    final timeFormat = context.read<DevicePreferencesProvider>().timeFormatOf(
+      context,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

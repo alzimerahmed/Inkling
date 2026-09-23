@@ -68,12 +68,15 @@ class _StatsTrend extends StatelessWidget {
                       height: _barAreaHeight,
                       child: FractionallySizedBox(
                         alignment: Alignment.bottomCenter,
-                        heightFactor: maxCount == 0 ? 0.02 : (bar.count / maxCount).clamp(0.02, 1.0),
+                        heightFactor: maxCount == 0
+                            ? 0.02
+                            : (bar.count / maxCount).clamp(0.02, 1.0),
                         child: Container(
                           decoration: BoxDecoration(
                             color: bar.count > 0
                                 ? colorScheme.primary
-                                : colorScheme.surfaceContainerHighest.withValues(alpha: 0.6),
+                                : colorScheme.surfaceContainerHighest
+                                      .withValues(alpha: 0.6),
                             borderRadius: BorderRadius.circular(4.0),
                           ),
                         ),

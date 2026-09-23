@@ -86,11 +86,18 @@ class SpMediaViewer extends StatefulWidget {
     for (final path in images) {
       // Non-null only for relative asset paths (images/, audio/, videos/),
       // which are the ones backed by an AssetDbModel row.
-      final String? assetRelativePath = AssetType.getTypeFromLink(path) != null ? path : null;
+      final String? assetRelativePath = AssetType.getTypeFromLink(path) != null
+          ? path
+          : null;
 
       if (AssetType.getTypeFromLink(path) == AssetType.video) {
         items.add(
-          SpMediaViewerItem(type: AssetType.video, tag: path, alt: null, assetRelativePath: assetRelativePath),
+          SpMediaViewerItem(
+            type: AssetType.video,
+            tag: path,
+            alt: null,
+            assetRelativePath: assetRelativePath,
+          ),
         );
         continue;
       }
@@ -178,10 +185,19 @@ class _SpMediaViewerState extends State<SpMediaViewer> {
           final item = widget.items[index];
 
           if (item.isVideo) {
-            return _VideoPageScaffold(item: item, index: index, total: widget.items.length, controller: controller);
+            return _VideoPageScaffold(
+              item: item,
+              index: index,
+              total: widget.items.length,
+              controller: controller,
+            );
           }
 
-          return _ImagePageScaffold(item: item, index: index, total: widget.items.length);
+          return _ImagePageScaffold(
+            item: item,
+            index: index,
+            total: widget.items.length,
+          );
         },
       ),
     );
@@ -191,7 +207,12 @@ class _SpMediaViewerState extends State<SpMediaViewer> {
 /// Shared chrome (title, info, share, close) every page's app bar renders the
 /// same way -- kept as a plain function rather than a widget since it's
 /// stateless given (index, total, item).
-AppBar _buildAppBar(BuildContext context, {required int index, required int total, required SpMediaViewerItem item}) {
+AppBar _buildAppBar(
+  BuildContext context, {
+  required int index,
+  required int total,
+  required SpMediaViewerItem item,
+}) {
   return AppBar(
     backgroundColor: Colors.transparent,
     foregroundColor: _foregroundColor,
@@ -199,11 +220,14 @@ AppBar _buildAppBar(BuildContext context, {required int index, required int tota
     automaticallyImplyLeading: false,
     title: Text(
       '${index + 1}/$total',
-      style: TextTheme.of(context).titleMedium?.copyWith(color: _foregroundColor),
+      style: TextTheme.of(
+        context,
+      ).titleMedium?.copyWith(color: _foregroundColor),
     ),
     actions: [
       _ShareButton(tag: item.tag),
-      if (item.assetRelativePath != null) _InfoButton(assetRelativePath: item.assetRelativePath!),
+      if (item.assetRelativePath != null)
+        _InfoButton(assetRelativePath: item.assetRelativePath!),
       const CloseButton(color: _foregroundColor),
     ],
   );
@@ -246,7 +270,9 @@ class _InfoButton extends StatelessWidget {
       color: _foregroundColor,
       icon: const Icon(SpIcons.info),
       onPressed: () async {
-        final asset = await AssetDbModel.findBy(relativePath: assetRelativePath);
+        final asset = await AssetDbModel.findBy(
+          relativePath: assetRelativePath,
+        );
         if (!context.mounted || asset == null) return;
         SpAssetInfoSheet(asset: asset).show(context: context);
       },
@@ -285,7 +311,9 @@ class _ShareButton extends StatelessWidget {
               SharePlus.instance.share(
                 ShareParams(
                   files: [XFile(existFilePath)],
-                  sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+                  sharePositionOrigin: box != null
+                      ? box.localToGlobal(Offset.zero) & box.size
+                      : null,
                 ),
               );
             },

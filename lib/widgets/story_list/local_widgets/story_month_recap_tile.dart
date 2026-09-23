@@ -51,9 +51,16 @@ class StoryMonthRecapTile extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: colorScheme.surface,
-              border: Border.all(color: colorScheme.bootstrap.warning.color, width: 1.0),
+              border: Border.all(
+                color: colorScheme.bootstrap.warning.color,
+                width: 1.0,
+              ),
             ),
-            child: Icon(SpIcons.star, size: 20.0, color: colorScheme.bootstrap.warning.color),
+            child: Icon(
+              SpIcons.star,
+              size: 20.0,
+              color: colorScheme.bootstrap.warning.color,
+            ),
           ),
           title: Text(stats.titleLabel(context.locale)),
           subtitle: Text.rich(
@@ -62,7 +69,9 @@ class StoryMonthRecapTile extends StatelessWidget {
                 TextSpan(text: stats.activeDaysLabel),
                 TextSpan(
                   text: " · ${stats.labels.join(" · ")}",
-                  style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.6)),
+                  style: TextStyle(
+                    color: colorScheme.onSurface.withValues(alpha: 0.6),
+                  ),
                 ),
               ],
             ),

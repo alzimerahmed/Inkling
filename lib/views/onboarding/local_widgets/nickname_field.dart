@@ -26,7 +26,10 @@ class _NicknameField extends StatelessWidget {
     );
   }
 
-  TextFormField buildMaterialField(FormFieldState<String> state, BuildContext context) {
+  TextFormField buildMaterialField(
+    FormFieldState<String> state,
+    BuildContext context,
+  ) {
     InputBorder border = OutlineInputBorder(
       borderSide: state.hasError
           ? BorderSide(color: Theme.of(context).colorScheme.error, width: 2.0)
@@ -49,7 +52,10 @@ class _NicknameField extends StatelessWidget {
     );
   }
 
-  CupertinoTextField buildCupertinoField(FormFieldState<String> state, BuildContext context) {
+  CupertinoTextField buildCupertinoField(
+    FormFieldState<String> state,
+    BuildContext context,
+  ) {
     BoxDecoration decoration;
 
     if (state.hasError) {

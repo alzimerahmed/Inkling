@@ -22,7 +22,9 @@ class _OnboardingStep2Content extends StatelessWidget {
             notifier: viewModel.showStoryDetailsPageNotifier,
             child: FadeInBuilder(
               duration: viewModel.storyDetailsAnimationDuration,
-              transformBuilder: (a) => Matrix4.identity()..spTranslate(0.0, lerpDouble(64.0, 0.0, a.value)!),
+              transformBuilder: (a) =>
+                  Matrix4.identity()
+                    ..spTranslate(0.0, lerpDouble(64.0, 0.0, a.value)!),
               child: const StoryDetailsScreenshot(),
             ),
           ),
@@ -42,7 +44,9 @@ class _OnboardingStep2Content extends StatelessWidget {
         bottom: 0,
         child: FadeInBuilder(
           duration: viewModel.toolbarFadeInDuration,
-          transformBuilder: (a) => Matrix4.identity()..spTranslate(0.0, lerpDouble(64.0, 0.0, a.value)!),
+          transformBuilder: (a) =>
+              Matrix4.identity()
+                ..spTranslate(0.0, lerpDouble(64.0, 0.0, a.value)!),
           child: SizedBox(
             height: 42,
             child: SingleChildScrollView(

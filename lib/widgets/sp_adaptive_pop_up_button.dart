@@ -23,7 +23,8 @@ class SpAdaptivePopUpButton extends StatefulWidget {
 
   /// Builds the floating content. [openAbove] tells the content which way the
   /// pop-up is opening so it can flip its own internal alignment if needed.
-  final Widget Function(FutureOr<void> Function() close, bool openAbove) floatingBuilder;
+  final Widget Function(FutureOr<void> Function() close, bool openAbove)
+  floatingBuilder;
 
   /// Gap between the trigger and the floating content.
   final double gap;
@@ -34,7 +35,8 @@ class SpAdaptivePopUpButton extends StatefulWidget {
   State<SpAdaptivePopUpButton> createState() => _SpAdaptivePopUpButtonState();
 }
 
-class _SpAdaptivePopUpButtonState extends State<SpAdaptivePopUpButton> with SingleTickerProviderStateMixin {
+class _SpAdaptivePopUpButtonState extends State<SpAdaptivePopUpButton>
+    with SingleTickerProviderStateMixin {
   late final AnimationController animationController;
   final LayerLink layerLink = LayerLink();
   OverlayEntry? floating;
@@ -42,7 +44,10 @@ class _SpAdaptivePopUpButtonState extends State<SpAdaptivePopUpButton> with Sing
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(vsync: this, duration: Durations.medium1);
+    animationController = AnimationController(
+      vsync: this,
+      duration: Durations.medium1,
+    );
   }
 
   @override
@@ -78,7 +83,10 @@ class _SpAdaptivePopUpButtonState extends State<SpAdaptivePopUpButton> with Sing
     final Size triggerSize = renderBox.size;
 
     final media = MediaQuery.of(context);
-    final double spaceBelow = media.size.height - media.padding.bottom - (offset.dy + triggerSize.height);
+    final double spaceBelow =
+        media.size.height -
+        media.padding.bottom -
+        (offset.dy + triggerSize.height);
     final double spaceAbove = offset.dy - media.padding.top;
 
     // Open on whichever side has more room. Decided once at open time so the
@@ -97,14 +105,21 @@ class _SpAdaptivePopUpButtonState extends State<SpAdaptivePopUpButton> with Sing
                 showWhenUnlinked: false,
                 // Pin the follower's edge to the trigger's opposite edge and
                 // center horizontally; the follower sizes to the content.
-                targetAnchor: openAbove ? Alignment.topCenter : Alignment.bottomCenter,
-                followerAnchor: openAbove ? Alignment.bottomCenter : Alignment.topCenter,
+                targetAnchor: openAbove
+                    ? Alignment.topCenter
+                    : Alignment.bottomCenter,
+                followerAnchor: openAbove
+                    ? Alignment.bottomCenter
+                    : Alignment.topCenter,
                 offset: Offset(0.0, openAbove ? -widget.gap : widget.gap),
                 child: AnimatedBuilder(
                   animation: animationController,
                   builder: (context, child) {
                     return Transform.translate(
-                      offset: Offset(0.0, (1 - animationController.value) * (openAbove ? -8 : 8)),
+                      offset: Offset(
+                        0.0,
+                        (1 - animationController.value) * (openAbove ? -8 : 8),
+                      ),
                       child: Opacity(
                         opacity: animationController.value,
                         child: child,

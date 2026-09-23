@@ -55,7 +55,9 @@ class FontsView extends StatelessWidget {
                 fontWeight: viewModel.currentFontWeight,
               ).copyWith(
                 appBarTheme: AppBarTheme.of(context),
-                scaffoldBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                scaffoldBackgroundColor: Theme.of(
+                  context,
+                ).scaffoldBackgroundColor,
               ),
           child: _FontsContent(viewModel),
         );

@@ -15,7 +15,9 @@ class OnboardingStep1ViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   final Duration clickDuration = const Duration(milliseconds: 500);
-  final Duration storyDetailsAnimationDuration = const Duration(milliseconds: 1000);
+  final Duration storyDetailsAnimationDuration = const Duration(
+    milliseconds: 1000,
+  );
 
   final ValueNotifier<bool> showHomePageNotifier = ValueNotifier(true);
   final ValueNotifier<bool> showStoryClickedNotifier = ValueNotifier(false);

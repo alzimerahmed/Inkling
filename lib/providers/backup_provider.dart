@@ -50,7 +50,8 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
       // Only past the quick pre-check steps (upload assets/check latest) is a
       // sync "deep" enough to be worth surfacing in the home app bar — see
       // isSyncingDeepStep.
-      if (message.step == SyncStep.importChanges || message.step == SyncStep.uploadBackup) {
+      if (message.step == SyncStep.importChanges ||
+          message.step == SyncStep.uploadBackup) {
         _reachedDeepSyncStep = true;
       }
     });
@@ -88,7 +89,9 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
       restoreService: RestoreBackupService(),
       messenger: messenger,
       step1ImagesUploader: BackupImagesUploaderService(messenger: messenger),
-      step2LatestBackupChecker: BackupLatestCheckerService(messenger: messenger),
+      step2LatestBackupChecker: BackupLatestCheckerService(
+        messenger: messenger,
+      ),
       step3LatestBackupImporter: BackupImporterService(messenger: messenger),
       step4NewBackupUploader: BackupUploaderService(messenger: messenger),
       internetChecker: InternetCheckerService(),
@@ -113,7 +116,8 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
   /// everywhere regardless, since those read straight off the
   /// [BackupServiceType] enum rather than this registration.
   static BackupCloudService? _createICloudService() {
-    if (!kIsWeb && (Platform.isIOS || Platform.isMacOS)) return ICloudCloudService();
+    if (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
+      return ICloudCloudService();
     return null;
   }
 
@@ -122,7 +126,8 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
   BackupRepository get repository => repoInstance;
 
   final BackupSyncStateStore _syncState = BackupSyncStateStore();
-  ServiceSyncStatus statusFor(BackupServiceType type) => _syncState.statusFor(type);
+  ServiceSyncStatus statusFor(BackupServiceType type) =>
+      _syncState.statusFor(type);
 
   GoogleUserObject? get currentGoogleUser => repository.currentGoogleUser;
   bool get isSignedIn => repository.isSignedIn;
@@ -159,15 +164,19 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
   /// problems no longer block the whole batch; see [statusFor].
   bool _hasInternet = true;
 
-  DateTime? get lastSyncedAt => _lastSyncedAtByYear?.values.whereType<DateTime>().fold<DateTime?>(
-    null,
-    (latest, current) => latest == null || current.isAfter(latest) ? current : latest,
-  );
+  DateTime? get lastSyncedAt =>
+      _lastSyncedAtByYear?.values.whereType<DateTime>().fold<DateTime?>(
+        null,
+        (latest, current) =>
+            latest == null || current.isAfter(latest) ? current : latest,
+      );
 
-  DateTime? get lastDbUpdatedAt => _lastDbUpdatedAtByYear?.values.whereType<DateTime>().fold<DateTime?>(
-    null,
-    (latest, current) => latest == null || current.isAfter(latest) ? current : latest,
-  );
+  DateTime? get lastDbUpdatedAt =>
+      _lastDbUpdatedAtByYear?.values.whereType<DateTime>().fold<DateTime?>(
+        null,
+        (latest, current) =>
+            latest == null || current.isAfter(latest) ? current : latest,
+      );
 
   Map<int, DateTime?>? _lastSyncedAtByYear;
   Map<int, DateTime?>? get lastSyncedAtByYear => _lastSyncedAtByYear;
@@ -201,13 +210,15 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
   }
 
   List<BackupCloudService> get services => repository.services;
-  List<BackupCloudService> get autoBackupServices =>
-      repository.services.where((service) => service.autoBackupEnabled).toList();
+  List<BackupCloudService> get autoBackupServices => repository.services
+      .where((service) => service.autoBackupEnabled)
+      .toList();
 
   /// Every service with an active account — the set an asset could actually
   /// be downloaded from right now. Used by [BackupAssetDownloaderService]
   /// callers instead of assuming Drive is the only possible source.
-  List<BackupCloudService> get signedInServices => repository.services.where((service) => service.isSignedIn).toList();
+  List<BackupCloudService> get signedInServices =>
+      repository.services.where((service) => service.isSignedIn).toList();
 
   Future<void> _setupConnection() async {
     final connectionResult = await repository.checkConnection();
@@ -217,7 +228,9 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     }
 
     if (connectionResult.error != null) {
-      AppLogger.d('Connection check failed: ${connectionResult.error!.message}');
+      AppLogger.d(
+        'Connection check failed: ${connectionResult.error!.message}',
+      );
     }
   }
 
@@ -258,13 +271,19 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     // guaranteed retry once initialization finishes.
     await iapProvider.ensureInitialized();
     if (!iapProvider.isProUser) {
-      services = services.where((service) => service.serviceType == BackupServiceType.google_drive).toList();
+      services = services
+          .where(
+            (service) => service.serviceType == BackupServiceType.google_drive,
+          )
+          .toList();
       if (services.isEmpty) return false;
     }
 
     _syncing = true;
     _reachedDeepSyncStep = false;
-    _syncState.onSyncQueueStarted(services.map((service) => service.serviceType).toList());
+    _syncState.onSyncQueueStarted(
+      services.map((service) => service.serviceType).toList(),
+    );
     notifyListeners();
 
     try {
@@ -311,7 +330,9 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     // snackbar instead of the Settings sheet.
     if (serviceType == BackupServiceType.icloud) {
       if (result.data == true) {
-        _syncState.onConnectionChecked({serviceType: BackupConnectionStatus.readyToSync});
+        _syncState.onConnectionChecked({
+          serviceType: BackupConnectionStatus.readyToSync,
+        });
         _lastSyncedAtByYear = null;
         _lastDbUpdatedAtByYear = null;
       } else if (result.error?.type == BackupErrorType.network) {
@@ -337,7 +358,9 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     if (serviceType == BackupServiceType.dropbox) {
       if (result.isSuccess == true) {
         AnalyticsService.instance.logLogin(loginMethod: 'dropbox');
-        _syncState.onConnectionChecked({serviceType: BackupConnectionStatus.readyToSync});
+        _syncState.onConnectionChecked({
+          serviceType: BackupConnectionStatus.readyToSync,
+        });
         _lastSyncedAtByYear = null;
         _lastDbUpdatedAtByYear = null;
       } else if (result.error != null) {
@@ -355,7 +378,9 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     if (result.isSuccess == true) {
       AnalyticsService.instance.logSignInWithGoogle();
 
-      _syncState.onConnectionChecked({serviceType: BackupConnectionStatus.readyToSync});
+      _syncState.onConnectionChecked({
+        serviceType: BackupConnectionStatus.readyToSync,
+      });
       _lastSyncedAtByYear = null;
       _lastDbUpdatedAtByYear = null;
     } else if (result.error != null) {
@@ -386,7 +411,9 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     );
 
     if (result.isSuccess == true) {
-      _syncState.onConnectionChecked({BackupServiceType.nextcloud: BackupConnectionStatus.readyToSync});
+      _syncState.onConnectionChecked({
+        BackupServiceType.nextcloud: BackupConnectionStatus.readyToSync,
+      });
       _lastSyncedAtByYear = null;
       _lastDbUpdatedAtByYear = null;
     } else if (result.error != null) {
@@ -406,10 +433,11 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     BuildContext context,
     BackupServiceType serviceType,
   ) async {
-    final result = await MessengerService.of(context).showLoading<BackupResult<bool>>(
-      debugSource: '$runtimeType#requestScope',
-      future: () => repository.requestScope(),
-    );
+    final result = await MessengerService.of(context)
+        .showLoading<BackupResult<bool>>(
+          debugSource: '$runtimeType#requestScope',
+          future: () => repository.requestScope(),
+        );
 
     if (result?.isSuccess == true) {
       AnalyticsService.instance.logRequestGoogleDriveScope();
@@ -434,10 +462,11 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     BuildContext context,
     BackupServiceType serviceType,
   ) async {
-    final result = await MessengerService.of(context).showLoading<BackupResult<void>>(
-      debugSource: '$runtimeType#signOut',
-      future: () => repository.signOut(serviceType),
-    );
+    final result = await MessengerService.of(context)
+        .showLoading<BackupResult<void>>(
+          debugSource: '$runtimeType#signOut',
+          future: () => repository.signOut(serviceType),
+        );
 
     AnalyticsService.instance.logSignOut();
 
@@ -474,7 +503,8 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
   /// Resolved once per sync run and passed down as a plain bool, so no sync
   /// service has to reach for preferences or connectivity itself.
   Future<bool> _canUploadMedia() async {
-    final mediaSync = DevicePreferencesStorage.appInstance.preferences.mediaSync;
+    final mediaSync =
+        DevicePreferencesStorage.appInstance.preferences.mediaSync;
     if (mediaSync == .wifiAndCellular) return true;
 
     return _networkTypeService.isUnmetered();
@@ -501,7 +531,9 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     // Process each service individually
     for (final service in services) {
       if (!service.isSignedIn) {
-        AppLogger.d('Skipping service ${service.serviceType.displayName}: not signed in');
+        AppLogger.d(
+          'Skipping service ${service.serviceType.displayName}: not signed in',
+        );
         continue;
       }
 
@@ -510,9 +542,15 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
 
       _syncState.onServiceSyncStarted(service.serviceType);
 
-      kErrorReportingService.log('$runtimeType#_syncBackupAcrossDevices[$serviceId]: started');
+      kErrorReportingService.log(
+        '$runtimeType#_syncBackupAcrossDevices[$serviceId]: started',
+      );
 
-      final result = await repository.sync(service, uploadAssets: uploadAssets, notifyImportCallbacks: false);
+      final result = await repository.sync(
+        service,
+        uploadAssets: uploadAssets,
+        notifyImportCallbacks: false,
+      );
 
       if (!result.isSuccess) {
         allSyncsSucceeded = false;
@@ -523,7 +561,9 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
           final connectionResult = await repository.checkConnection();
           if (connectionResult.data != null) {
             _hasInternet = connectionResult.data!.hasInternet;
-            _syncState.onConnectionChecked(connectionResult.data!.statusByService);
+            _syncState.onConnectionChecked(
+              connectionResult.data!.statusByService,
+            );
           }
         } else {
           // onServiceSyncFinished alone leaves connectionStatus untouched —
@@ -542,7 +582,9 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
         continue;
       }
 
-      kErrorReportingService.log('$runtimeType#_syncBackupAcrossDevices[$serviceId]: succeeded');
+      kErrorReportingService.log(
+        '$runtimeType#_syncBackupAcrossDevices[$serviceId]: succeeded',
+      );
 
       if (result.data?.didImport == true) didImportAny = true;
 
@@ -553,7 +595,8 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
       // 1. Start with remote timestamps from Step 2 (always available)
       // 2. Override with uploaded file timestamps from Step 4 (fresher, reflects actual upload)
       final uploadedYearlyFilesPerService = result.data?.uploadedYearlyFiles;
-      final lastSyncedAtByYearPerService = result.data?.lastSyncedAtByYear ?? {};
+      final lastSyncedAtByYearPerService =
+          result.data?.lastSyncedAtByYear ?? {};
 
       // Merge uploaded files (Step 4) over remote timestamps (Step 2)
       // Uploaded timestamps are more accurate as they reflect the actual state after upload
@@ -564,11 +607,17 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
       }
 
       // This service's own latest synced-at, independent of the cross-service merge below.
-      final serviceLastSyncedAt = lastSyncedAtByYearPerService.values.whereType<DateTime>().fold<DateTime?>(
-        null,
-        (latest, current) => latest == null || current.isAfter(latest) ? current : latest,
+      final serviceLastSyncedAt = lastSyncedAtByYearPerService.values
+          .whereType<DateTime>()
+          .fold<DateTime?>(
+            null,
+            (latest, current) =>
+                latest == null || current.isAfter(latest) ? current : latest,
+          );
+      _syncState.onServiceSyncFinished(
+        service.serviceType,
+        lastSyncedAt: serviceLastSyncedAt,
       );
-      _syncState.onServiceSyncFinished(service.serviceType, lastSyncedAt: serviceLastSyncedAt);
 
       // Update global sync status using "Latest Wins" strategy:
       // - Compare timestamps across all services per year
@@ -579,7 +628,8 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
         final syncedAt = entry.value;
         final current = _lastSyncedAtByYear?[year];
 
-        if (syncedAt != null && (current == null || syncedAt.isAfter(current))) {
+        if (syncedAt != null &&
+            (current == null || syncedAt.isAfter(current))) {
           _lastSyncedAtByYear ??= {};
           _lastSyncedAtByYear?[year] = syncedAt;
         }

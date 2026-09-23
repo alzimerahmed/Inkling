@@ -39,3 +39,5 @@ analyzer:
     - ios/**
     - macos/**
     - linux/**
+    - web/**
+    - windows/**

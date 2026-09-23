@@ -54,7 +54,8 @@ class ShowStoryView extends StatelessWidget {
 
         return PopScope(
           canPop: !viewModel.pagesManager.managingPage,
-          onPopInvokedWithResult: (didPop, result) => viewModel.onPopInvokedWithResult(didPop, result, context),
+          onPopInvokedWithResult: (didPop, result) =>
+              viewModel.onPopInvokedWithResult(didPop, result, context),
           child: SpKeyboardListener(
             onKeyEvent: (event) => viewModel.handleKeyEvent(event, context),
             child: SpStoryPreferenceTheme(

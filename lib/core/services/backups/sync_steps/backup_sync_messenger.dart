@@ -10,7 +10,8 @@ import 'package:storypad/core/services/backups/sync_steps/sync_step.dart';
 /// (`BackupSyncStateStore`) can attribute updates directly instead of
 /// guessing from which controller emitted it.
 class BackupSyncMessenger {
-  final StreamController<BackupSyncMessage> _controller = StreamController<BackupSyncMessage>.broadcast();
+  final StreamController<BackupSyncMessage> _controller =
+      StreamController<BackupSyncMessage>.broadcast();
   Stream<BackupSyncMessage> get messages => _controller.stream;
 
   void report({

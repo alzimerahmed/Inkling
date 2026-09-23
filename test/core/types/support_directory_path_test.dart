@@ -26,7 +26,10 @@ void main() {
       });
 
       test('objectbox returns correct relative path', () {
-        expect(SupportDirectoryPath.objectbox.relativePath, equals('database/objectbox'));
+        expect(
+          SupportDirectoryPath.objectbox.relativePath,
+          equals('database/objectbox'),
+        );
       });
 
       test('images returns correct relative path', () {
@@ -42,7 +45,10 @@ void main() {
       });
 
       test('export_assets returns correct relative path', () {
-        expect(SupportDirectoryPath.export_assets.relativePath, equals('export_assets'));
+        expect(
+          SupportDirectoryPath.export_assets.relativePath,
+          equals('export_assets'),
+        );
       });
 
       test('downloaded_from_firestore returns correct relative path', () {
@@ -113,7 +119,9 @@ void main() {
 
     group('all enum cases', () {
       test('have unique relative paths', () {
-        final paths = SupportDirectoryPath.values.map((e) => e.relativePath).toList();
+        final paths = SupportDirectoryPath.values
+            .map((e) => e.relativePath)
+            .toList();
         expect(paths.length, equals(paths.toSet().length));
       });
 

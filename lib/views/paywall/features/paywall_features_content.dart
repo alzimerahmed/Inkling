@@ -15,7 +15,9 @@ class _PaywallFeaturesContent extends StatelessWidget {
           ? AppBar(
               automaticallyImplyLeading: false,
               actions: [
-                CloseButton(onPressed: () => CupertinoSheetRoute.popSheet(context)),
+                CloseButton(
+                  onPressed: () => CupertinoSheetRoute.popSheet(context),
+                ),
               ],
             )
           : null,
@@ -28,7 +30,8 @@ class _PaywallFeaturesContent extends StatelessWidget {
                 mainAxisSize: .min,
                 children: [
                   if (!iapProvider.isProUser &&
-                      (activeDeal.badgeLabel != null || activeDeal.displayComparePrice != null)) ...[
+                      (activeDeal.badgeLabel != null ||
+                          activeDeal.displayComparePrice != null)) ...[
                     if (activeDeal.badgeLabel != null) ...[
                       Text(
                         activeDeal.badgeLabel!,
@@ -73,7 +76,9 @@ class _PaywallFeaturesContent extends StatelessWidget {
                     pageCount: viewModel.params.features.length,
                     maxVisiblePages: 4,
                     activeColor: ColorScheme.of(context).primary,
-                    inactiveColor: ColorScheme.of(context).primary.withValues(alpha: 0.5),
+                    inactiveColor: ColorScheme.of(
+                      context,
+                    ).primary.withValues(alpha: 0.5),
                   ),
                   SizedBox(height: MediaQuery.paddingOf(context).bottom),
                 ],
@@ -90,7 +95,9 @@ class _PaywallFeaturesContent extends StatelessWidget {
             child: _Page(
               viewModel: viewModel,
               feature: feature,
-              topPadding: CupertinoSheetRoute.hasParentSheet(context) ? 0.0 : 8.0,
+              topPadding: CupertinoSheetRoute.hasParentSheet(context)
+                  ? 0.0
+                  : 8.0,
             ),
           );
         },
@@ -142,13 +149,18 @@ class _Page extends StatelessWidget {
     );
   }
 
-  Widget buildHeaderContents(BuildContext context, InAppPurchaseProvider iapProvider) {
+  Widget buildHeaderContents(
+    BuildContext context,
+    InAppPurchaseProvider iapProvider,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
       child: Column(
         children: [
           CircleAvatar(
-            backgroundColor: ColorFromDayService(context: context).get(feature.weekdayColor),
+            backgroundColor: ColorFromDayService(
+              context: context,
+            ).get(feature.weekdayColor),
             foregroundColor: ColorScheme.of(context).onPrimary,
             child: Icon(feature.iconData),
           ),
@@ -184,7 +196,8 @@ class _Page extends StatelessWidget {
                     context,
                     PaywallFeatureNextAction(
                       focusFeature: feature,
-                      action: (BuildContext context) => feature.onOpen!(context),
+                      action: (BuildContext context) =>
+                          feature.onOpen!(context),
                     ),
                   );
                 },

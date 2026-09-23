@@ -70,7 +70,9 @@ class CollectionDbModel<T extends BaseDbModel> {
     final seenIds = <int>{};
     final uniqueItems = items.where((item) {
       if (seenIds.contains(item.id)) {
-        AppLogger.debug('Deduplicate: Skipping duplicate ${item.runtimeType}:${item.id}');
+        AppLogger.debug(
+          'Deduplicate: Skipping duplicate ${item.runtimeType}:${item.id}',
+        );
         onDuplicateFound?.call(item.id);
         return false;
       }

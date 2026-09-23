@@ -11,8 +11,10 @@ class LegacyStoryPadInitializer {
     await _loadFromLegacyStorypadIfShould();
   }
 
-  static Future<_LegacyStorypadMigrationResponse> _loadFromLegacyStorypadIfShould() async {
-    (bool, String) result = await StorypadLegacyDatabase().transferToObjectBoxIfNotYet();
+  static Future<_LegacyStorypadMigrationResponse>
+  _loadFromLegacyStorypadIfShould() async {
+    (bool, String) result = await StorypadLegacyDatabase()
+        .transferToObjectBoxIfNotYet();
 
     bool success = result.$1;
     String message = result.$2;

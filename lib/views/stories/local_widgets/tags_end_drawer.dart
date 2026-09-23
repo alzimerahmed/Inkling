@@ -22,7 +22,9 @@ class TagsEndDrawer extends StatelessWidget {
       removeLeft: true,
       child: Drawer(
         child: Theme(
-          data: Theme.of(context).copyWith(scaffoldBackgroundColor: Theme.of(context).colorScheme.surface),
+          data: Theme.of(context).copyWith(
+            scaffoldBackgroundColor: Theme.of(context).colorScheme.surface,
+          ),
           child: SpNestedNavigation(
             initialScreen: TagsView(
               params: TagsRoute(

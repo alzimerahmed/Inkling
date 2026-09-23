@@ -2,7 +2,8 @@ import 'dart:io' as io;
 
 import 'package:storypad/core/databases/models/asset_db_model.dart';
 import 'package:storypad/core/databases/models/collection_db_model.dart';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
+    as exp;
 import 'package:storypad/core/services/backups/sync_steps/backup_sync_messenger.dart';
 import 'package:storypad/core/services/backups/sync_steps/sync_step.dart';
 import 'package:storypad/core/services/backups/backup_cloud_service.dart';
@@ -26,7 +27,8 @@ enum BackfillOutcome {
 }
 
 class BackupImagesUploaderService {
-  BackupImagesUploaderService({required BackupSyncMessenger messenger}) : _messenger = messenger;
+  BackupImagesUploaderService({required BackupSyncMessenger messenger})
+    : _messenger = messenger;
 
   final BackupSyncMessenger _messenger;
 
@@ -38,7 +40,11 @@ class BackupImagesUploaderService {
     AppLogger.d('🚧 $runtimeType#start ...');
 
     try {
-      return await _start(cloudService, uploadAssets: uploadAssets, allServices: allServices);
+      return await _start(
+        cloudService,
+        uploadAssets: uploadAssets,
+        allServices: allServices,
+      );
     } on exp.AuthException catch (e) {
       _messenger.report(
         serviceType: cloudService.serviceType,
@@ -102,12 +108,17 @@ class BackupImagesUploaderService {
       // a throw here would abort the entire backup over a status message.
       int? pendingCount;
       try {
-        pendingCount = (await pendingAssets(cloudService, allServices: allServices)).length;
+        pendingCount = (await pendingAssets(
+          cloudService,
+          allServices: allServices,
+        )).length;
       } catch (e) {
         AppLogger.d('$runtimeType: could not count pending assets: $e');
       }
 
-      AppLogger.d('$runtimeType: deferring ${pendingCount ?? 'unknown'} asset(s) — media sync is limited to Wi-Fi.');
+      AppLogger.d(
+        '$runtimeType: deferring ${pendingCount ?? 'unknown'} asset(s) — media sync is limited to Wi-Fi.',
+      );
 
       _messenger.report(
         serviceType: cloudService.serviceType,
@@ -181,11 +192,15 @@ class BackupImagesUploaderService {
   /// get less full between assets), so further backfill attempts stop —
   /// but assets that are already local need no new write, so they keep
   /// uploading normally regardless.
-  Future<({int uploadedCount, bool storageFull, int missingCount})> _uploadAssetsForService(
+  Future<({int uploadedCount, bool storageFull, int missingCount})>
+  _uploadAssetsForService(
     BackupCloudService cloudService,
     List<BackupCloudService> allServices,
   ) async {
-    final List<AssetDbModel>? localAssets = await _getLocalAsset(cloudService, allServices);
+    final List<AssetDbModel>? localAssets = await _getLocalAsset(
+      cloudService,
+      allServices,
+    );
 
     if (localAssets == null || localAssets.isEmpty) {
       return (uploadedCount: 0, storageFull: false, missingCount: 0);
@@ -216,7 +231,11 @@ class BackupImagesUploaderService {
       }
     }
 
-    return (uploadedCount: uploadedCount, storageFull: storageFull, missingCount: missingCount);
+    return (
+      uploadedCount: uploadedCount,
+      storageFull: storageFull,
+      missingCount: missingCount,
+    );
   }
 
   /// Upload a single asset to the specified service with retry logic.
@@ -229,9 +248,16 @@ class BackupImagesUploaderService {
     List<BackupCloudService> allServices,
   ) async {
     if (asset.localFile == null) {
-      final outcome = await backfillFromOtherService(asset, allServices, cloudService);
+      final outcome = await backfillFromOtherService(
+        asset,
+        allServices,
+        cloudService,
+      );
       if (outcome != BackfillOutcome.succeeded) {
-        return (uploaded: false, sourceMissing: outcome == BackfillOutcome.sourceMissing);
+        return (
+          uploaded: false,
+          sourceMissing: outcome == BackfillOutcome.sourceMissing,
+        );
       }
     }
 
@@ -265,7 +291,9 @@ class BackupImagesUploaderService {
           await AssetDbModel.db.set(updated);
         }
 
-        AppLogger.d('Uploaded asset to ${cloudService.serviceType.displayName}: $cloudFileName');
+        AppLogger.d(
+          'Uploaded asset to ${cloudService.serviceType.displayName}: $cloudFileName',
+        );
         return (uploaded: true, sourceMissing: false);
       }
 
@@ -298,7 +326,10 @@ class BackupImagesUploaderService {
       final destinationKey = service.currentUser?.destinationKey;
       if (destinationKey == null) continue;
 
-      final fileId = asset.cloudFileIdFor(serviceType: service.serviceType, identifier: destinationKey);
+      final fileId = asset.cloudFileIdFor(
+        serviceType: service.serviceType,
+        identifier: destinationKey,
+      );
       if (fileId != null) return service;
     }
 
@@ -331,7 +362,10 @@ class BackupImagesUploaderService {
 
     final destinationKey = source.currentUser?.destinationKey;
     final fileId = destinationKey != null
-        ? asset.cloudFileIdFor(serviceType: source.serviceType, identifier: destinationKey)
+        ? asset.cloudFileIdFor(
+            serviceType: source.serviceType,
+            identifier: destinationKey,
+          )
         : null;
     if (fileId == null) return BackfillOutcome.skipped;
 
@@ -340,11 +374,14 @@ class BackupImagesUploaderService {
       bytes = await RetryExecutor.execute(
         () => source.downloadFileBytes(fileId),
         policy: RetryPolicy.network,
-        operationName: 'backfill_asset_${asset.id}_from_${source.serviceType.id}',
+        operationName:
+            'backfill_asset_${asset.id}_from_${source.serviceType.id}',
       );
     } on exp.FileOperationException catch (e) {
       if (e.statusCode != 404) {
-        AppLogger.d('Failed to backfill asset ${asset.id} from ${source.serviceType.displayName}: $e');
+        AppLogger.d(
+          'Failed to backfill asset ${asset.id} from ${source.serviceType.displayName}: $e',
+        );
         return BackfillOutcome.skipped;
       }
 
@@ -353,18 +390,25 @@ class BackupImagesUploaderService {
         '— clearing the stale cloudDestinations entry.',
       );
       try {
-        final healed = asset.copyWithoutCloudFile(serviceType: source.serviceType, identifier: destinationKey!);
+        final healed = asset.copyWithoutCloudFile(
+          serviceType: source.serviceType,
+          identifier: destinationKey!,
+        );
         await AssetDbModel.db.set(healed);
       } catch (persistError) {
         // The 404 is real regardless of whether the cleanup itself could be
         // persisted — a DB hiccup here must not escalate into failing the
         // whole step (same "cosmetic must never fail this" contract as
         // pendingAssets' count above).
-        AppLogger.d('Failed to persist stale cloudDestinations cleanup for asset ${asset.id}: $persistError');
+        AppLogger.d(
+          'Failed to persist stale cloudDestinations cleanup for asset ${asset.id}: $persistError',
+        );
       }
       return BackfillOutcome.sourceMissing;
     } catch (e) {
-      AppLogger.d('Failed to backfill asset ${asset.id} from ${source.serviceType.displayName}: $e');
+      AppLogger.d(
+        'Failed to backfill asset ${asset.id} from ${source.serviceType.displayName}: $e',
+      );
       return BackfillOutcome.skipped;
     }
     if (bytes == null) return BackfillOutcome.skipped;
@@ -406,7 +450,9 @@ class BackupImagesUploaderService {
       );
     }
 
-    AppLogger.d('Backfilled asset ${asset.id} from ${source.serviceType.displayName}');
+    AppLogger.d(
+      'Backfilled asset ${asset.id} from ${source.serviceType.displayName}',
+    );
     return BackfillOutcome.succeeded;
   }
 
@@ -452,10 +498,15 @@ class BackupImagesUploaderService {
             .where(
               (e) =>
                   e.cloudDestinations[cloudService.serviceType.id] == null ||
-                  e.cloudDestinations[cloudService.serviceType.id]?[destinationKey] == null,
+                  e.cloudDestinations[cloudService
+                          .serviceType
+                          .id]?[destinationKey] ==
+                      null,
             )
             .where(
-              (e) => e.localFile?.existsSync() == true || findBackfillSource(e, allServices, cloudService) != null,
+              (e) =>
+                  e.localFile?.existsSync() == true ||
+                  findBackfillSource(e, allServices, cloudService) != null,
             )
             .toList() ??
         [];

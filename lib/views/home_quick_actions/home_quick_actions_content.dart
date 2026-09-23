@@ -14,7 +14,9 @@ class _HomeQuickActionsContent extends StatelessWidget {
         title: Text(tr('page.home_quick_actions.title')),
       ),
       body: ListView(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 120),
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).padding.bottom + 120,
+        ),
         children: [
           _Preview(viewModel: viewModel),
           const SizedBox(height: 16),
@@ -28,7 +30,10 @@ class _HomeQuickActionsContent extends StatelessWidget {
     );
   }
 
-  Future<void> _chooseTemplate(BuildContext context, InAppPurchaseProvider iapProvider) async {
+  Future<void> _chooseTemplate(
+    BuildContext context,
+    InAppPurchaseProvider iapProvider,
+  ) async {
     if (!iapProvider.isProUser) {
       const PaywallRoute(initialFocus: .customizations).push(context);
       return;
@@ -37,10 +42,14 @@ class _HomeQuickActionsContent extends StatelessWidget {
     if (viewModel.limitReached) return;
 
     final result = await const SpTemplatesPickerSheet().show(context: context);
-    if (result != null && result is TemplatePickResult) viewModel.addTemplate(result);
+    if (result != null && result is TemplatePickResult)
+      viewModel.addTemplate(result);
   }
 
-  Future<void> _chooseTag(BuildContext context, InAppPurchaseProvider iapProvider) async {
+  Future<void> _chooseTag(
+    BuildContext context,
+    InAppPurchaseProvider iapProvider,
+  ) async {
     if (!iapProvider.isProUser) {
       const PaywallRoute(initialFocus: .customizations).push(context);
       return;

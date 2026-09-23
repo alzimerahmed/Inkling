@@ -32,12 +32,18 @@ class SpEditReminderSheet extends BaseBottomSheet {
 
   @override
   Widget build(BuildContext context, double bottomPadding) {
-    return _SpEditReminderSheetBody(reminder: reminder, bottomPadding: bottomPadding);
+    return _SpEditReminderSheetBody(
+      reminder: reminder,
+      bottomPadding: bottomPadding,
+    );
   }
 }
 
 class _SpEditReminderSheetBody extends StatefulWidget {
-  const _SpEditReminderSheetBody({required this.reminder, required this.bottomPadding});
+  const _SpEditReminderSheetBody({
+    required this.reminder,
+    required this.bottomPadding,
+  });
 
   final ReminderObject reminder;
 
@@ -46,7 +52,8 @@ class _SpEditReminderSheetBody extends StatefulWidget {
   final double bottomPadding;
 
   @override
-  State<_SpEditReminderSheetBody> createState() => _SpEditReminderSheetBodyState();
+  State<_SpEditReminderSheetBody> createState() =>
+      _SpEditReminderSheetBodyState();
 }
 
 class _SpEditReminderSheetBodyState extends State<_SpEditReminderSheetBody> {
@@ -78,7 +85,9 @@ class _SpEditReminderSheetBodyState extends State<_SpEditReminderSheetBody> {
     _time = r.timeOfDay;
     // Every day is stored as an empty set — show it as all 7 chips checked
     // so the user can see the current schedule before pruning it down.
-    _weekdays = r.weekdays.isEmpty ? ReminderObject.allWeekdays.toSet() : r.weekdays.toSet();
+    _weekdays = r.weekdays.isEmpty
+        ? ReminderObject.allWeekdays.toSet()
+        : r.weekdays.toSet();
     _daysAhead = r.daysAhead ?? 2;
 
     if (_isOnThisDay) {
@@ -93,7 +102,9 @@ class _SpEditReminderSheetBodyState extends State<_SpEditReminderSheetBody> {
   // Same horizon as LocalNotificationService._scheduleOnThisDay, so this
   // preview matches what actually gets scheduled.
   Future<void> _loadOnThisDayPrediction() async {
-    final dates = await OnThisDayPredictionService.loadUpcomingMemoryDates(maxResults: 1);
+    final dates = await OnThisDayPredictionService.loadUpcomingMemoryDates(
+      maxResults: 1,
+    );
     if (!mounted) return;
     setState(() {
       _predictedOnThisDayDate = dates.firstOrNull;
@@ -102,7 +113,8 @@ class _SpEditReminderSheetBodyState extends State<_SpEditReminderSheetBody> {
   }
 
   Future<void> _loadPeriodPrediction() async {
-    final predicted = await PeriodPredictionService.loadPredictedNextPeriodStart();
+    final predicted =
+        await PeriodPredictionService.loadPredictedNextPeriodStart();
     if (!mounted) return;
     setState(() {
       _predictedPeriodStart = predicted;
@@ -119,13 +131,25 @@ class _SpEditReminderSheetBodyState extends State<_SpEditReminderSheetBody> {
       final start = _predictedPeriodStart;
       if (start == null) return null;
       final target = start.subtract(Duration(days: _daysAhead));
-      return DateTime(target.year, target.month, target.day, _time.hour, _time.minute);
+      return DateTime(
+        target.year,
+        target.month,
+        target.day,
+        _time.hour,
+        _time.minute,
+      );
     }
 
     if (_isOnThisDay) {
       final date = _predictedOnThisDayDate;
       if (date == null) return null;
-      return DateTime(date.year, date.month, date.day, _time.hour, _time.minute);
+      return DateTime(
+        date.year,
+        date.month,
+        date.day,
+        _time.hour,
+        _time.minute,
+      );
     }
 
     // Daily: mirrors LocalNotificationService._nextInstance, in local time.
@@ -134,7 +158,13 @@ class _SpEditReminderSheetBodyState extends State<_SpEditReminderSheetBody> {
     final slots = normalized.isEmpty ? const [0] : normalized;
 
     DateTime nextForSlot(int weekday) {
-      var candidate = DateTime(now.year, now.month, now.day, _time.hour, _time.minute);
+      var candidate = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        _time.hour,
+        _time.minute,
+      );
       if (weekday != 0) {
         while (candidate.weekday != weekday) {
           candidate = candidate.add(const Duration(days: 1));
@@ -211,11 +241,13 @@ class _SpEditReminderSheetBodyState extends State<_SpEditReminderSheetBody> {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: ReminderWeekdaysChips(
                         weekdays: _weekdays,
-                        onChanged: (updated) => setState(() => _weekdays = updated),
+                        onChanged: (updated) =>
+                            setState(() => _weekdays = updated),
                       ),
                     ),
                   if (_isPeriod) _buildDaysAheadTile(context),
-                  if (_enabled && _predictionLoaded) _buildScheduleHint(context),
+                  if (_enabled && _predictionLoaded)
+                    _buildScheduleHint(context),
                 ],
               ),
             ),
@@ -223,7 +255,10 @@ class _SpEditReminderSheetBodyState extends State<_SpEditReminderSheetBody> {
           const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: SizedBox(width: double.infinity, child: _buildSaveButton(context)),
+            child: SizedBox(
+              width: double.infinity,
+              child: _buildSaveButton(context),
+            ),
           ),
           SizedBox(height: widget.bottomPadding + 16),
         ],
@@ -262,12 +297,15 @@ class _SpEditReminderSheetBodyState extends State<_SpEditReminderSheetBody> {
     final nextOccurrence = _nextOccurrence;
     if (nextOccurrence != null &&
         nextOccurrence.isAfter(DateTime.now()) &&
-        nextOccurrence.difference(DateTime.now()).inDays <= _maxHintHorizonDays) {
+        nextOccurrence.difference(DateTime.now()).inDays <=
+            _maxHintHorizonDays) {
       return _buildHint(
         context,
         tr(
           'reminder.next_occurrence.at',
-          namedArgs: {'SP_DATE': DateFormatHelper.yMMMd(nextOccurrence, context.locale)},
+          namedArgs: {
+            'SP_DATE': DateFormatHelper.yMMMd(nextOccurrence, context.locale),
+          },
         ),
       );
     }
@@ -285,12 +323,18 @@ class _SpEditReminderSheetBodyState extends State<_SpEditReminderSheetBody> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(SpIcons.info, size: 16, color: ColorScheme.of(context).onSurfaceVariant),
+          Icon(
+            SpIcons.info,
+            size: 16,
+            color: ColorScheme.of(context).onSurfaceVariant,
+          ),
           const SizedBox(width: 6),
           Expanded(
             child: Text(
               message,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: ColorScheme.of(context).onSurfaceVariant),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: ColorScheme.of(context).onSurfaceVariant,
+              ),
             ),
           ),
         ],
@@ -308,12 +352,16 @@ class _SpEditReminderSheetBodyState extends State<_SpEditReminderSheetBody> {
         children: [
           IconButton(
             icon: const Icon(SpIcons.remove),
-            onPressed: _daysAhead > 0 ? () => setState(() => _daysAhead--) : null,
+            onPressed: _daysAhead > 0
+                ? () => setState(() => _daysAhead--)
+                : null,
           ),
           Text('$_daysAhead', style: Theme.of(context).textTheme.bodyMedium),
           IconButton(
             icon: const Icon(SpIcons.add),
-            onPressed: _daysAhead < 31 ? () => setState(() => _daysAhead++) : null,
+            onPressed: _daysAhead < 31
+                ? () => setState(() => _daysAhead++)
+                : null,
           ),
         ],
       ),

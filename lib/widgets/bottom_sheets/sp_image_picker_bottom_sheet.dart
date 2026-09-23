@@ -37,14 +37,20 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final compression = context
+            .read<DevicePreferencesProvider>()
+            .preferences
+            .assetCompression;
         final photo = await AppFilePickerService.pickImage(
           source: source,
           compression: compression,
         );
         if (photo == null) return;
 
-        AssetDbModel? tookAsset = await InsertFileToDbService.insertImage(photo.file, size: photo.size);
+        AssetDbModel? tookAsset = await InsertFileToDbService.insertImage(
+          photo.file,
+          size: photo.size,
+        );
         if (tookAsset == null) return;
 
         editorAdapter.insertMedia(
@@ -69,7 +75,10 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final compression = context
+            .read<DevicePreferencesProvider>()
+            .preferences
+            .assetCompression;
         final video = await AppFilePickerService.pickVideo(
           context: context,
           source: source,
@@ -77,7 +86,10 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
         );
         if (video == null) return;
 
-        AssetDbModel? tookAsset = await InsertFileToDbService.insertVideo(video.file, size: video.size);
+        AssetDbModel? tookAsset = await InsertFileToDbService.insertVideo(
+          video.file,
+          size: video.size,
+        );
         if (tookAsset == null) return;
 
         editorAdapter.insertMedia(
@@ -103,8 +115,14 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
-        final files = await AppFilePickerService.pickMultipleMedia(context: context, compression: compression);
+        final compression = context
+            .read<DevicePreferencesProvider>()
+            .preferences
+            .assetCompression;
+        final files = await AppFilePickerService.pickMultipleMedia(
+          context: context,
+          compression: compression,
+        );
         if (files.isEmpty) return;
 
         final List<AssetDbModel> savedAssets = [];
@@ -114,7 +132,9 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
         }
         if (savedAssets.isEmpty) return;
 
-        final mediaPath = savedAssets.map((a) => a.relativeLocalFilePath).join('|');
+        final mediaPath = savedAssets
+            .map((a) => a.relativeLocalFilePath)
+            .join('|');
         editorAdapter.insertMedia(
           controller: controller,
           mediaPath: mediaPath,
@@ -134,8 +154,14 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
-        final files = await AppFilePickerService.pickMultipleMedia(context: context, compression: compression);
+        final compression = context
+            .read<DevicePreferencesProvider>()
+            .preferences
+            .assetCompression;
+        final files = await AppFilePickerService.pickMultipleMedia(
+          context: context,
+          compression: compression,
+        );
         if (files.isEmpty) return <AssetDbModel>[];
 
         final List<AssetDbModel> savedAssets = [];
@@ -173,7 +199,9 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
     if (pickAssets is List<AssetDbModel> && pickAssets.isNotEmpty) {
       // Media embed supports multiple items by joining paths with '|', and parsing them in the embed builder.
       // See docs/features/album-embed.md for details.
-      final mediaPath = pickAssets.map((a) => a.relativeLocalFilePath).join('|');
+      final mediaPath = pickAssets
+          .map((a) => a.relativeLocalFilePath)
+          .join('|');
 
       editorAdapter.insertMedia(
         controller: controller,
@@ -223,7 +251,9 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
     if (kIsCupertino) {
       return _Content(params: this);
     } else {
-      double maxChildSize = 1 - View.of(context).viewPadding.top / MediaQuery.of(context).size.height;
+      double maxChildSize =
+          1 -
+          View.of(context).viewPadding.top / MediaQuery.of(context).size.height;
       return DraggableScrollableSheet(
         expand: false,
         maxChildSize: maxChildSize,
@@ -261,10 +291,14 @@ class _ContentState extends State<_Content> {
         return Scaffold(
           appBar: AppBar(
             title: Text(tr('page.library.title')),
-            automaticallyImplyLeading: !CupertinoSheetRoute.hasParentSheet(context),
+            automaticallyImplyLeading: !CupertinoSheetRoute.hasParentSheet(
+              context,
+            ),
             actions: [
               if (CupertinoSheetRoute.hasParentSheet(context))
-                CloseButton(onPressed: () => CupertinoSheetRoute.popSheet(context)),
+                CloseButton(
+                  onPressed: () => CupertinoSheetRoute.popSheet(context),
+                ),
             ],
           ),
           body: buildBody(
@@ -287,7 +321,10 @@ class _ContentState extends State<_Content> {
                   children: [
                     FilledButton(
                       onPressed: selectedAssets.isNotEmpty
-                          ? () => Navigator.maybePop(context, selectedAssets.values.toList())
+                          ? () => Navigator.maybePop(
+                              context,
+                              selectedAssets.values.toList(),
+                            )
                           : null,
                       child: Text(tr("button.done")),
                     ),
@@ -323,13 +360,19 @@ class _ContentState extends State<_Content> {
         physics: const AlwaysScrollableScrollPhysics(),
         addAutomaticKeepAlives: false,
         controller: PrimaryScrollController.maybeOf(context),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16.0,
-        ).copyWith(top: 16.0, bottom: MediaQuery.of(context).padding.bottom + 16.0),
+        padding:
+            const EdgeInsets.symmetric(
+              horizontal: 16.0,
+            ).copyWith(
+              top: 16.0,
+              bottom: MediaQuery.of(context).padding.bottom + 16.0,
+            ),
         itemCount: assets.length,
         mainAxisSpacing: 8.0,
         crossAxisSpacing: 8.0,
-        gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: constraints.maxWidth ~/ 120),
+        gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: constraints.maxWidth ~/ 120,
+        ),
         itemBuilder: (BuildContext context, int index) {
           final asset = assets[index];
 

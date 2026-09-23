@@ -28,28 +28,31 @@ void main() {
       );
     });
 
-    test('does not delay if callback is slower than minimum duration', () async {
-      const minDuration = Duration(milliseconds: 300);
+    test(
+      'does not delay if callback is slower than minimum duration',
+      () async {
+        const minDuration = Duration(milliseconds: 300);
 
-      final startedAt = DateTime.now();
+        final startedAt = DateTime.now();
 
-      final result = await MinimumExecutionTimeService.call(
-        duration: minDuration,
-        callback: () async {
-          await Future.delayed(const Duration(milliseconds: 500));
-          return 42;
-        },
-      );
+        final result = await MinimumExecutionTimeService.call(
+          duration: minDuration,
+          callback: () async {
+            await Future.delayed(const Duration(milliseconds: 500));
+            return 42;
+          },
+        );
 
-      final endedAt = DateTime.now();
-      final totalDuration = endedAt.difference(startedAt);
+        final endedAt = DateTime.now();
+        final totalDuration = endedAt.difference(startedAt);
 
-      expect(result, equals(42));
-      expect(
-        totalDuration >= const Duration(milliseconds: 500),
-        isTrue,
-        reason: 'Callback should not be delayed further',
-      );
-    });
+        expect(result, equals(42));
+        expect(
+          totalDuration >= const Duration(milliseconds: 500),
+          isTrue,
+          reason: 'Callback should not be delayed further',
+        );
+      },
+    );
   });
 }

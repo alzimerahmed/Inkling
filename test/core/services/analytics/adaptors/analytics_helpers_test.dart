@@ -15,20 +15,32 @@ void main() {
     });
 
     test('asserts fail for reserved firebase_ prefix', () {
-      expect(() => adaptor.sanitizeEventName('firebase_event'), throwsA(isA<AssertionError>()));
+      expect(
+        () => adaptor.sanitizeEventName('firebase_event'),
+        throwsA(isA<AssertionError>()),
+      );
     });
 
     test('asserts fail for reserved google_ prefix', () {
-      expect(() => adaptor.sanitizeEventName('google_event'), throwsA(isA<AssertionError>()));
+      expect(
+        () => adaptor.sanitizeEventName('google_event'),
+        throwsA(isA<AssertionError>()),
+      );
     });
 
     test('asserts fail for reserved ga_ prefix', () {
-      expect(() => adaptor.sanitizeEventName('ga_event'), throwsA(isA<AssertionError>()));
+      expect(
+        () => adaptor.sanitizeEventName('ga_event'),
+        throwsA(isA<AssertionError>()),
+      );
     });
 
     test('asserts fail for name longer than 40 characters', () {
       final longName = 'a' * 41;
-      expect(() => adaptor.sanitizeEventName(longName), throwsA(isA<AssertionError>()));
+      expect(
+        () => adaptor.sanitizeEventName(longName),
+        throwsA(isA<AssertionError>()),
+      );
     });
 
     test('accepts name of exactly 40 characters', () {
@@ -39,7 +51,10 @@ void main() {
 
   group('sanitizeParameters', () {
     test('filters out null values', () {
-      final result = adaptor.sanitizeParameters({'key': 'value', 'missing': null});
+      final result = adaptor.sanitizeParameters({
+        'key': 'value',
+        'missing': null,
+      });
       expect(result, equals({'key': 'value'}));
     });
 
@@ -54,7 +69,10 @@ void main() {
     });
 
     test('coerces numeric strings to num', () {
-      final result = adaptor.sanitizeParameters({'count': '42', 'ratio': '3.14'});
+      final result = adaptor.sanitizeParameters({
+        'count': '42',
+        'ratio': '3.14',
+      });
       expect(result?['count'], equals(42));
       expect(result?['ratio'], equals(3.14));
     });
@@ -65,7 +83,11 @@ void main() {
     });
 
     test('mixed numeric and string values', () {
-      final result = adaptor.sanitizeParameters({'count': '10', 'label': 'abc', 'skip': null});
+      final result = adaptor.sanitizeParameters({
+        'count': '10',
+        'label': 'abc',
+        'skip': null,
+      });
       expect(result, equals({'count': 10, 'label': 'abc'}));
     });
   });

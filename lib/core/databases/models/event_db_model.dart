@@ -73,7 +73,8 @@ class EventDbModel extends BaseDbModel {
     );
   }
 
-  factory EventDbModel.fromJson(Map<String, dynamic> json) => _$EventDbModelFromJson(json);
+  factory EventDbModel.fromJson(Map<String, dynamic> json) =>
+      _$EventDbModelFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$EventDbModelToJson(this);

@@ -27,7 +27,9 @@ class HomeYearSwitcherHeader extends StatelessWidget {
           children: [
             Text(
               homeViewModel.year.toString(),
-              style: TextTheme.of(context).displayMedium?.copyWith(color: ColorScheme.of(context).primary),
+              style: TextTheme.of(
+                context,
+              ).displayMedium?.copyWith(color: ColorScheme.of(context).primary),
             ),
             Text.rich(
               TextSpan(

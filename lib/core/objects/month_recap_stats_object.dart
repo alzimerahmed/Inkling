@@ -53,7 +53,9 @@ class MonthRecapStatsObject {
 
   String titleLabel(Locale locale) => tr(
     'page.home.story_recap.title',
-    namedArgs: {'SP_MONTH': DateFormatHelper.MMMM(DateTime(2000, month), locale)},
+    namedArgs: {
+      'SP_MONTH': DateFormatHelper.MMMM(DateTime(2000, month), locale),
+    },
   );
 
   /// Localized, pluralized stat strings to be joined by the UI (e.g. with " · ").

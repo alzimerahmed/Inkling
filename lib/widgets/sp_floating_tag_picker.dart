@@ -50,7 +50,8 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
   void _setPeopleMode(bool peopleMode) {
     if (_peopleMode == peopleMode) return;
     setState(() => _peopleMode = peopleMode);
-    if (peopleMode) AnalyticsService.instance.logTagPickerPeopleModeEntered(method: 'button');
+    if (peopleMode)
+      AnalyticsService.instance.logTagPickerPeopleModeEntered(method: 'button');
   }
 
   late final TagsProvider tagsProvider = context.read<TagsProvider>();
@@ -71,7 +72,9 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
 
   Future<void> _toggle(TagDbModel tag) async {
     final isSelected = selectedTags.contains(tag.id);
-    final newTags = isSelected ? ({...selectedTags}..remove(tag.id)).toList() : ({...selectedTags, tag.id}).toList();
+    final newTags = isSelected
+        ? ({...selectedTags}..remove(tag.id)).toList()
+        : ({...selectedTags, tag.id}).toList();
 
     setState(() => selectedTags = newTags.toSet());
     final success = await widget.onUpdated(newTags);
@@ -125,7 +128,9 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
 
   Widget buildPage({required BuildContext context}) {
     final provider = Provider.of<TagsProvider>(context);
-    final tags = (_peopleMode ? provider.peopleTags : provider.tags)?.items ?? <TagDbModel>[];
+    final tags =
+        (_peopleMode ? provider.peopleTags : provider.tags)?.items ??
+        <TagDbModel>[];
 
     final filtered = _query.isEmpty
         ? tags
@@ -134,7 +139,9 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
               tags,
               options: FuzzyOptions(
                 isCaseSensitive: false,
-                keys: [WeightedKey(name: 'title', getter: (t) => t.title, weight: 1)],
+                keys: [
+                  WeightedKey(name: 'title', getter: (t) => t.title, weight: 1),
+                ],
               ),
             );
 
@@ -144,7 +151,9 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
           }();
 
     final allowCreate =
-        _query.isNotEmpty && (tags.isEmpty || !tags.any((t) => t.title.toLowerCase() == _query.toLowerCase()));
+        _query.isNotEmpty &&
+        (tags.isEmpty ||
+            !tags.any((t) => t.title.toLowerCase() == _query.toLowerCase()));
 
     return Column(
       mainAxisSize: .min,
@@ -157,8 +166,12 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
             onChanged: (text) => setState(() => _query = text),
             decoration: InputDecoration(
               isDense: true,
-              hintText: _peopleMode ? tr('input.people.hint') : tr('input.tag.hint'),
-              hintStyle: TextStyle(color: ColorScheme.of(context).onSurface.withValues(alpha: 0.4)),
+              hintText: _peopleMode
+                  ? tr('input.people.hint')
+                  : tr('input.tag.hint'),
+              hintStyle: TextStyle(
+                color: ColorScheme.of(context).onSurface.withValues(alpha: 0.4),
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(color: ColorScheme.of(context).outline),
@@ -181,14 +194,19 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
         if (!allowCreate && tags.isEmpty) ...[
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 48.0, horizontal: 24.0),
+              padding: const EdgeInsets.symmetric(
+                vertical: 48.0,
+                horizontal: 24.0,
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 spacing: 12.0,
                 children: [
                   Icon(_peopleMode ? SpIcons.people : SpIcons.tag, size: 24.0),
                   Text(
-                    _peopleMode ? tr("page.tags.people_empty_message") : tr("page.tags.empty_message"),
+                    _peopleMode
+                        ? tr("page.tags.people_empty_message")
+                        : tr("page.tags.empty_message"),
                     textAlign: TextAlign.center,
                     style: TextTheme.of(context).bodyMedium,
                   ),
@@ -231,11 +249,15 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: '${_peopleMode ? tr("page.new_person.title") : tr("page.new_tag.title")}: ',
+                              text:
+                                  '${_peopleMode ? tr("page.new_person.title") : tr("page.new_tag.title")}: ',
                             ),
                             TextSpan(
                               text: _query,
-                              style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: .bold),
+                              style: const TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontWeight: .bold,
+                              ),
                             ),
                           ],
                         ),
@@ -249,7 +271,8 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
                         motion: const DrawerMotion(),
                         children: [
                           SlidableAction(
-                            onPressed: (context) => provider.deleteTag(context, tag),
+                            onPressed: (context) =>
+                                provider.deleteTag(context, tag),
                             backgroundColor: ColorScheme.of(context).error,
                             foregroundColor: ColorScheme.of(context).onError,
                             icon: SpIcons.delete,
@@ -258,21 +281,35 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
                           SlidableAction(
                             onPressed: (context) async {
                               final result = await Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => _EditTagView(tag: tag)),
+                                MaterialPageRoute(
+                                  builder: (context) => _EditTagView(tag: tag),
+                                ),
                               );
 
                               if (result is List<String> && result.isNotEmpty) {
-                                TagDbModel newTag = tag.copyWith(title: result.first, updatedAt: DateTime.now());
-                                await TagDbModel.db.set(newTag, debugSource: '$runtimeType#editTag');
+                                TagDbModel newTag = tag.copyWith(
+                                  title: result.first,
+                                  updatedAt: DateTime.now(),
+                                );
+                                await TagDbModel.db.set(
+                                  newTag,
+                                  debugSource: '$runtimeType#editTag',
+                                );
 
                                 // Clear search index for related stories so it get picked up to reindex when open search view.
-                                StoryDbModel.db.clearSearchIndex(filters: {"tag": tag.id});
+                                StoryDbModel.db.clearSearchIndex(
+                                  filters: {"tag": tag.id},
+                                );
 
-                                AnalyticsService.instance.logEditTag(tag: newTag);
+                                AnalyticsService.instance.logEditTag(
+                                  tag: newTag,
+                                );
                               }
                             },
                             backgroundColor: ColorScheme.of(context).secondary,
-                            foregroundColor: ColorScheme.of(context).onSecondary,
+                            foregroundColor: ColorScheme.of(
+                              context,
+                            ).onSecondary,
                             icon: SpIcons.edit,
                             label: tr("button.edit"),
                           ),
@@ -285,7 +322,10 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
                           onChanged: (_) => _toggle(tag),
                         ),
                         horizontalTitleGap: 12.0,
-                        contentPadding: const EdgeInsets.only(left: 4.0, right: 12.0),
+                        contentPadding: const EdgeInsets.only(
+                          left: 4.0,
+                          right: 12.0,
+                        ),
                         trailing:
                             [
                               TargetPlatform.linux,
@@ -295,7 +335,9 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
                             ? null
                             : const Icon(SpIcons.dragIndicator),
                         title: Text(tag.title),
-                        subtitle: Text(plural("plural.entry", getStoriesCount(tag))),
+                        subtitle: Text(
+                          plural("plural.entry", getStoriesCount(tag)),
+                        ),
                         onTap: () => _toggle(tag),
                       ),
                     ),
@@ -375,8 +417,12 @@ class _EditTagView extends StatelessWidget {
                     return tr("input.message.required");
                   }
 
-                  final exists = context.read<TagsProvider>().isTagExist(value, categoryId: tag.categoryId);
-                  final unchanged = tag.title.toLowerCase() == value.trim().toLowerCase();
+                  final exists = context.read<TagsProvider>().isTagExist(
+                    value,
+                    categoryId: tag.categoryId,
+                  );
+                  final unchanged =
+                      tag.title.toLowerCase() == value.trim().toLowerCase();
                   if (exists && !unchanged) {
                     return tr("input.message.already_exist");
                   }

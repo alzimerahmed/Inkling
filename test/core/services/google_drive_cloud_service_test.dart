@@ -16,7 +16,9 @@ void main() {
       expect(exception.isRetryable, isTrue);
       expect(
         exception.userFriendlyMessage,
-        equals('Network connection error. Please check your internet connection and try again.'),
+        equals(
+          'Network connection error. Please check your internet connection and try again.',
+        ),
       );
     });
 
@@ -55,7 +57,10 @@ void main() {
 
       expect(exception.type, equals(QuotaExceptionType.storageQuotaExceeded));
       expect(exception.isRetryable, isFalse);
-      expect(exception.userFriendlyMessage, contains('Google Drive storage is full'));
+      expect(
+        exception.userFriendlyMessage,
+        contains('Google Drive storage is full'),
+      );
     });
 
     test('creates FileOperationException for upload', () {
@@ -67,7 +72,10 @@ void main() {
 
       expect(exception.operation, equals(FileOperationType.upload));
       expect(exception.isRetryable, isTrue);
-      expect(exception.userFriendlyMessage, equals('Failed to upload backup. Please try again.'));
+      expect(
+        exception.userFriendlyMessage,
+        equals('Failed to upload backup. Please try again.'),
+      );
     });
 
     test('creates ServiceException for data corruption', () {
@@ -116,31 +124,73 @@ void main() {
       // Test network timeout
       expect(
         () => throw const NetworkException('Request timeout'),
-        throwsA(isA<NetworkException>().having((e) => e.isRetryable, 'isRetryable', isTrue)),
+        throwsA(
+          isA<NetworkException>().having(
+            (e) => e.isRetryable,
+            'isRetryable',
+            isTrue,
+          ),
+        ),
       );
 
       // Test token expiration during operation
       expect(
-        () => throw const AuthException('Token expired', AuthExceptionType.tokenExpired),
-        throwsA(isA<AuthException>().having((e) => e.requiresReauth, 'requiresReauth', isTrue)),
+        () => throw const AuthException(
+          'Token expired',
+          AuthExceptionType.tokenExpired,
+        ),
+        throwsA(
+          isA<AuthException>().having(
+            (e) => e.requiresReauth,
+            'requiresReauth',
+            isTrue,
+          ),
+        ),
       );
 
       // Test Google Drive storage full
       expect(
-        () => throw const QuotaException('Storage quota exceeded', QuotaExceptionType.storageQuotaExceeded),
-        throwsA(isA<QuotaException>().having((e) => e.userFriendlyMessage, 'message', contains('storage is full'))),
+        () => throw const QuotaException(
+          'Storage quota exceeded',
+          QuotaExceptionType.storageQuotaExceeded,
+        ),
+        throwsA(
+          isA<QuotaException>().having(
+            (e) => e.userFriendlyMessage,
+            'message',
+            contains('storage is full'),
+          ),
+        ),
       );
 
       // Test file upload failure
       expect(
-        () => throw const FileOperationException('Upload failed', FileOperationType.upload),
-        throwsA(isA<FileOperationException>().having((e) => e.isRetryable, 'isRetryable', isTrue)),
+        () => throw const FileOperationException(
+          'Upload failed',
+          FileOperationType.upload,
+        ),
+        throwsA(
+          isA<FileOperationException>().having(
+            (e) => e.isRetryable,
+            'isRetryable',
+            isTrue,
+          ),
+        ),
       );
 
       // Test backup data corruption
       expect(
-        () => throw const ServiceException('Data corrupted', ServiceExceptionType.dataCorrupted),
-        throwsA(isA<ServiceException>().having((e) => e.userFriendlyMessage, 'message', contains('corrupted'))),
+        () => throw const ServiceException(
+          'Data corrupted',
+          ServiceExceptionType.dataCorrupted,
+        ),
+        throwsA(
+          isA<ServiceException>().having(
+            (e) => e.userFriendlyMessage,
+            'message',
+            contains('corrupted'),
+          ),
+        ),
       );
     });
 
@@ -148,11 +198,19 @@ void main() {
       const networkException = NetworkException('Connection failed');
       expect(
         networkException.userFriendlyMessage,
-        equals('Network connection error. Please check your internet connection and try again.'),
+        equals(
+          'Network connection error. Please check your internet connection and try again.',
+        ),
       );
 
-      const authException = AuthException('Token expired', AuthExceptionType.tokenExpired);
-      expect(authException.userFriendlyMessage, equals('Your session has expired. Please sign in again.'));
+      const authException = AuthException(
+        'Token expired',
+        AuthExceptionType.tokenExpired,
+      );
+      expect(
+        authException.userFriendlyMessage,
+        equals('Your session has expired. Please sign in again.'),
+      );
 
       const quotaException = QuotaException(
         'Storage full',
@@ -161,14 +219,28 @@ void main() {
       );
       expect(
         quotaException.userFriendlyMessage,
-        equals('Google Drive storage is full. Please free up space or upgrade your storage plan.'),
+        equals(
+          'Google Drive storage is full. Please free up space or upgrade your storage plan.',
+        ),
       );
 
-      const fileException = FileOperationException('Upload failed', FileOperationType.upload);
-      expect(fileException.userFriendlyMessage, equals('Failed to upload backup. Please try again.'));
+      const fileException = FileOperationException(
+        'Upload failed',
+        FileOperationType.upload,
+      );
+      expect(
+        fileException.userFriendlyMessage,
+        equals('Failed to upload backup. Please try again.'),
+      );
 
-      const serviceException = ServiceException('Validation failed', ServiceExceptionType.validationFailed);
-      expect(serviceException.userFriendlyMessage, equals('Backup data validation failed. Please contact support.'));
+      const serviceException = ServiceException(
+        'Validation failed',
+        ServiceExceptionType.validationFailed,
+      );
+      expect(
+        serviceException.userFriendlyMessage,
+        equals('Backup data validation failed. Please contact support.'),
+      );
     });
   });
 }

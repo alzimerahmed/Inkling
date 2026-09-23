@@ -48,7 +48,8 @@ class SpDemoImages extends StatelessWidget {
     return widthOf(imageId);
   }
 
-  int get itemCount => demoImageUrls?.length ?? demoImageUrlPaths?.length ?? skeletonCount;
+  int get itemCount =>
+      demoImageUrls?.length ?? demoImageUrlPaths?.length ?? skeletonCount;
 
   @override
   Widget build(BuildContext context) {
@@ -122,14 +123,17 @@ class SpDemoImages extends StatelessWidget {
           child: Material(
             clipBehavior: Clip.hardEdge,
             elevation: 1,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(8.0)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadiusGeometry.circular(8.0),
+            ),
             child: CachedNetworkImage(
               imageUrl: imageUrl,
               filterQuality: FilterQuality.high,
               width: itemWidth,
               height: height,
               fit: BoxFit.cover,
-              progressIndicatorBuilder: (context, url, progress) => buildLoading(context, itemWidth),
+              progressIndicatorBuilder: (context, url, progress) =>
+                  buildLoading(context, itemWidth),
             ),
           ),
         ),
@@ -151,14 +155,17 @@ class SpDemoImages extends StatelessWidget {
           child: Material(
             clipBehavior: Clip.hardEdge,
             elevation: 1,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(8.0)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadiusGeometry.circular(8.0),
+            ),
             child: Image.file(
               File(filePath),
               filterQuality: FilterQuality.high,
               width: width,
               height: height,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => buildLoading(context, width),
+              errorBuilder: (context, error, stackTrace) =>
+                  buildLoading(context, width),
             ),
           ),
         ),
@@ -171,13 +178,19 @@ class SpDemoImages extends StatelessWidget {
     if (urlPaths == null || urlPaths.isEmpty) return;
 
     final localFilePaths = await Future.wait(
-      urlPaths.map((urlPath) => CloudStorageService.instance.downloadFile(urlPath).then((e) => e.file?.path)),
+      urlPaths.map(
+        (urlPath) => CloudStorageService.instance
+            .downloadFile(urlPath)
+            .then((e) => e.file?.path),
+      ),
     ).then((paths) => paths.whereType<String>().toList());
 
     if (localFilePaths.isEmpty || !context.mounted) return;
 
     await SpMediaViewer.fromString(
-      initialIndex: demoImageUrlPaths?.length == localFilePaths.length ? initialIndex : 0,
+      initialIndex: demoImageUrlPaths?.length == localFilePaths.length
+          ? initialIndex
+          : 0,
       images: localFilePaths,
       context: context,
     ).show(context);

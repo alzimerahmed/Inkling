@@ -59,11 +59,14 @@ class DropboxOAuthService {
   String get _callbackUrlScheme {
     if (kStoryPad) return 'storypad';
     if (kCommunity) return 'storypadcommunity';
-    throw StateError('Unknown flavor — no Dropbox OAuth callback scheme registered for this package');
+    throw StateError(
+      'Unknown flavor — no Dropbox OAuth callback scheme registered for this package',
+    );
   }
 
   String get _redirectUri {
-    if (!kIsWeb && io.Platform.isLinux) return 'http://localhost:$_linuxLoopbackPort/callback';
+    if (!kIsWeb && io.Platform.isLinux)
+      return 'http://localhost:$_linuxLoopbackPort/callback';
     return '$_callbackUrlScheme://oauth/dropbox';
   }
 
@@ -114,16 +117,24 @@ class DropboxOAuthService {
       // full URI and requires the complete `http://localhost:{port}` string
       // to bind the right port — passing just "http" throws before the
       // browser even opens. See flutter_web_auth_2's FlutterWebAuth2ServerPlugin.
-      callbackUrlScheme: useWebview ? Uri.parse(redirectUri).scheme : redirectUri,
+      callbackUrlScheme: useWebview
+          ? Uri.parse(redirectUri).scheme
+          : redirectUri,
       options: FlutterWebAuth2Options(useWebview: useWebview),
     );
 
     final code = Uri.parse(result).queryParameters['code'];
     if (code == null) {
-      throw const FormatException('Dropbox redirect did not include an authorization code');
+      throw const FormatException(
+        'Dropbox redirect did not include an authorization code',
+      );
     }
 
-    return _exchangeCodeForTokens(code: code, codeVerifier: codeVerifier, redirectUri: redirectUri);
+    return _exchangeCodeForTokens(
+      code: code,
+      codeVerifier: codeVerifier,
+      redirectUri: redirectUri,
+    );
   }
 
   Future<DropboxTokenResponse> _exchangeCodeForTokens({
@@ -167,9 +178,14 @@ class DropboxOAuthService {
     return _parseTokenResponse(response, fallbackRefreshToken: refreshToken);
   }
 
-  DropboxTokenResponse _parseTokenResponse(http.Response response, {String? fallbackRefreshToken}) {
+  DropboxTokenResponse _parseTokenResponse(
+    http.Response response, {
+    String? fallbackRefreshToken,
+  }) {
     if (response.statusCode != 200) {
-      throw http.ClientException('Dropbox token request failed (${response.statusCode}): ${response.body}');
+      throw http.ClientException(
+        'Dropbox token request failed (${response.statusCode}): ${response.body}',
+      );
     }
 
     final body = jsonDecode(response.body) as Map<String, dynamic>;

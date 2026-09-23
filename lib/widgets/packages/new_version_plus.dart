@@ -122,14 +122,17 @@ class NewVersionPlus {
     } else if (Platform.isAndroid) {
       return _getAndroidStoreVersion(kPackageInfo);
     } else {
-      debugPrint('The target platform "${Platform.operatingSystem}" is not yet supported by this package.');
+      debugPrint(
+        'The target platform "${Platform.operatingSystem}" is not yet supported by this package.',
+      );
       return null;
     }
   }
 
   /// This function attempts to clean local version strings so they match the MAJOR.MINOR.PATCH
   /// versioning pattern, so they can be properly compared with the store version.
-  String _getCleanVersion(String version) => RegExp(r'\d+\.\d+(\.\d+)?').stringMatch(version) ?? '0.0.0';
+  String _getCleanVersion(String version) =>
+      RegExp(r'\d+\.\d+(\.\d+)?').stringMatch(version) ?? '0.0.0';
   //RegExp(r'\d+\.\d+(\.[a-z]+)?(\.([^"]|\\")*)?').stringMatch(version) ?? '0.0.0';
 
   /// iOS info is fetched by using the iTunes lookup API, which returns a
@@ -158,7 +161,9 @@ class NewVersionPlus {
     }
     return VersionStatus._(
       localVersion: _getCleanVersion(packageInfo.version),
-      storeVersion: _getCleanVersion(forceAppVersion ?? jsonObj['results'][0]['version']),
+      storeVersion: _getCleanVersion(
+        forceAppVersion ?? jsonObj['results'][0]['version'],
+      ),
       originalStoreVersion: forceAppVersion ?? jsonObj['results'][0]['version'],
       appStoreLink: jsonObj['results'][0]['trackViewUrl'],
       releaseNotes: jsonObj['results'][0]['releaseNotes'],
@@ -166,7 +171,9 @@ class NewVersionPlus {
   }
 
   /// Android info is fetched by parsing the html of the app store page.
-  Future<VersionStatus?> _getAndroidStoreVersion(PackageInfo packageInfo) async {
+  Future<VersionStatus?> _getAndroidStoreVersion(
+    PackageInfo packageInfo,
+  ) async {
     final id = androidId ?? packageInfo.packageName;
     final uri = Uri.https('play.google.com', '/store/apps/details', {
       'id': id.toString(),
@@ -178,18 +185,30 @@ class NewVersionPlus {
     }
     // Supports 1.2.3 (most of the apps) and 1.2.prod.3 (e.g. Google Cloud)
     //final regexp = RegExp(r'\[\[\["(\d+\.\d+(\.[a-z]+)?\.\d+)"\]\]');
-    final regexp = RegExp(r'\[\[\[\"(\d+\.\d+(\.[a-z]+)?(\.([^"]|\\")*)?)\"\]\]');
+    final regexp = RegExp(
+      r'\[\[\[\"(\d+\.\d+(\.[a-z]+)?(\.([^"]|\\")*)?)\"\]\]',
+    );
     final storeVersion = regexp.firstMatch(response.body)?.group(1);
 
     //Description
     //final regexpDescription = RegExp(r'\[\[(null,)\"((\.[a-z]+)?(([^"]|\\")*)?)\"\]\]');
 
     //Release
-    final regexpRelease = RegExp(r'\[(null,)\[(null,)\"((\.[a-z]+)?(([^"]|\\")*)?)\"\]\]');
+    final regexpRelease = RegExp(
+      r'\[(null,)\[(null,)\"((\.[a-z]+)?(([^"]|\\")*)?)\"\]\]',
+    );
 
-    final expRemoveSc = RegExp(r'\\u003c[A-Za-z]{1,10}\\u003e', multiLine: true, caseSensitive: true);
+    final expRemoveSc = RegExp(
+      r'\\u003c[A-Za-z]{1,10}\\u003e',
+      multiLine: true,
+      caseSensitive: true,
+    );
 
-    final expRemoveQuote = RegExp(r'\\u0026quot;', multiLine: true, caseSensitive: true);
+    final expRemoveQuote = RegExp(
+      r'\\u0026quot;',
+      multiLine: true,
+      caseSensitive: true,
+    );
 
     final releaseNotes = regexpRelease.firstMatch(response.body)?.group(3);
     //final descriptionNotes = regexpDescription.firstMatch(response.body)?.group(2);
@@ -201,7 +220,9 @@ class NewVersionPlus {
       appStoreLink: uri.toString(),
       releaseNotes: androidHtmlReleaseNotes
           ? _parseUnicodeToString(releaseNotes)
-          : releaseNotes?.replaceAll(expRemoveSc, '').replaceAll(expRemoveQuote, '"'),
+          : releaseNotes
+                ?.replaceAll(expRemoveSc, '')
+                .replaceAll(expRemoveQuote, '"'),
     );
   }
 
@@ -220,7 +241,8 @@ class NewVersionPlus {
       var matches = re.allMatches(release);
       var codePoints = <int>[];
       for (var match in matches) {
-        var codePoint = match.namedGroup('asciiValue') ?? match.namedGroup('codePoint');
+        var codePoint =
+            match.namedGroup('asciiValue') ?? match.namedGroup('codePoint');
         if (codePoint != null) {
           codePoints.add(int.parse(codePoint, radix: 16));
         } else {

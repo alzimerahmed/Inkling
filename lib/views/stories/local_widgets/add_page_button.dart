@@ -14,7 +14,9 @@ class _AddPageButton extends StatelessWidget {
       alignment: Alignment.center,
       child: IconButton.outlined(
         onPressed: onAddPage,
-        style: IconButton.styleFrom(side: BorderSide(color: Theme.of(context).dividerColor)),
+        style: IconButton.styleFrom(
+          side: BorderSide(color: Theme.of(context).dividerColor),
+        ),
         iconSize: 20.0,
         icon: const Icon(SpIcons.add),
       ),

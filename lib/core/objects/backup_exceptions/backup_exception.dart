@@ -22,7 +22,8 @@ abstract class BackupException implements Exception {
   });
 
   @override
-  String toString() => 'BackupException: $message${context != null ? ' ($context)' : ''}';
+  String toString() =>
+      'BackupException: $message${context != null ? ' ($context)' : ''}';
 
   /// Creates user-friendly error message for UI display
   String get userFriendlyMessage => message;

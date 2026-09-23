@@ -45,15 +45,22 @@ class App extends StatelessWidget {
           // In big window mode, the sidebar is present, so top menu padding has minimal UI impact.
           // For big windows, apply only a smaller top padding.
           if (Platform.isIOS && WindowedDetectorService.isWindowed(context)) {
-            topMainMenuPadding = WindowedDetectorService.isBigWindow(context) ? 8 : 36;
+            topMainMenuPadding = WindowedDetectorService.isBigWindow(context)
+                ? 8
+                : 36;
           }
 
           return MediaQuery(
             data: mediaQuery.copyWith(
-              padding: mediaQuery.padding.copyWith(top: mediaQuery.padding.top + topMainMenuPadding),
+              padding: mediaQuery.padding.copyWith(
+                top: mediaQuery.padding.top + topMainMenuPadding,
+              ),
               textScaler: textScaler,
               alwaysUse24HourFormat:
-                  context.read<DevicePreferencesProvider>().timeFormatOf(context) == TimeFormatOption.h24,
+                  context.read<DevicePreferencesProvider>().timeFormatOf(
+                    context,
+                  ) ==
+                  TimeFormatOption.h24,
             ),
             child: MaterialApp(
               debugShowCheckedModeBanner: false,

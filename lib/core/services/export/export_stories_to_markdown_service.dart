@@ -74,7 +74,9 @@ class ExportStoriesToMarkdownService {
         '${date.minute.toString().padLeft(2, '0')}.'
         '${date.second.toString().padLeft(2, '0')}';
 
-    final title = content.title?.trim().isNotEmpty == true ? _sanitizeFilename(content.title!) : 'Untitled';
+    final title = content.title?.trim().isNotEmpty == true
+        ? _sanitizeFilename(content.title!)
+        : 'Untitled';
     final filename = '$dateStr $title.md';
 
     // Build YAML frontmatter
@@ -88,7 +90,8 @@ class ExportStoriesToMarkdownService {
 
     // Combine frontmatter + content
     // Format: ---\n[frontmatter]---\n[content] (no blank line after closing ---)
-    final fullContent = '---\n${frontmatter.trimRight()}\n---\n$markdownContent';
+    final fullContent =
+        '---\n${frontmatter.trimRight()}\n---\n$markdownContent';
 
     // Write file
     final file = File('${yearDir.path}/$filename');
@@ -212,9 +215,15 @@ class ExportStoriesToMarkdownService {
     return tag
         .toLowerCase() // Convert to lowercase for consistency
         .replaceAll(RegExp(r'\s+'), '_') // Replace spaces with underscores
-        .replaceAll(RegExp(r'[^a-z0-9_-]'), '') // Remove special chars (including emojis) except underscore and hyphen
+        .replaceAll(
+          RegExp(r'[^a-z0-9_-]'),
+          '',
+        ) // Remove special chars (including emojis) except underscore and hyphen
         .trim()
-        .replaceAll(RegExp(r'^_+|_+$'), ''); // Remove leading/trailing underscores
+        .replaceAll(
+          RegExp(r'^_+|_+$'),
+          '',
+        ); // Remove leading/trailing underscores
   }
 
   static String _escapeYaml(String value) {

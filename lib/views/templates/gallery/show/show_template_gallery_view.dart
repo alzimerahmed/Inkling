@@ -32,7 +32,8 @@ class ShowTemplateGalleryRoute extends BaseRoute {
   }
 
   @override
-  Widget buildPage(BuildContext context) => ShowTemplateGalleryView(params: this);
+  Widget buildPage(BuildContext context) =>
+      ShowTemplateGalleryView(params: this);
 }
 
 class ShowTemplateGalleryView extends StatelessWidget {

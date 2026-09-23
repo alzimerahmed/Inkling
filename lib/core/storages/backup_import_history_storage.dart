@@ -31,7 +31,11 @@ class BackupImportHistoryStorage extends MapStorage {
     final yearHistory = serviceData[year.toString()] as List<dynamic>?;
     if (yearHistory == null) return [];
 
-    return yearHistory.whereType<String>().map((ts) => DateTime.tryParse(ts)).whereType<DateTime>().toList();
+    return yearHistory
+        .whereType<String>()
+        .map((ts) => DateTime.tryParse(ts))
+        .whereType<DateTime>()
+        .toList();
   }
 
   Future<void> markAsImported(

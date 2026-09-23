@@ -22,8 +22,10 @@ class StatsRange {
 
   const StatsRange._(this.type, this.anchor);
 
-  factory StatsRange.month(DateTime anchor) => StatsRange._(StatsRangeType.month, _dateOnly(anchor));
-  factory StatsRange.year(DateTime anchor) => StatsRange._(StatsRangeType.year, _dateOnly(anchor));
+  factory StatsRange.month(DateTime anchor) =>
+      StatsRange._(StatsRangeType.month, _dateOnly(anchor));
+  factory StatsRange.year(DateTime anchor) =>
+      StatsRange._(StatsRangeType.year, _dateOnly(anchor));
 
   factory StatsRange.of(StatsRangeType type, DateTime anchor) {
     switch (type) {
@@ -98,5 +100,6 @@ class StatsRange {
     }
   }
 
-  static DateTime _dateOnly(DateTime date) => DateTime(date.year, date.month, date.day);
+  static DateTime _dateOnly(DateTime date) =>
+      DateTime(date.year, date.month, date.day);
 }

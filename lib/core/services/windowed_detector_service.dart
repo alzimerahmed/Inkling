@@ -16,7 +16,10 @@ class WindowedDetectorService {
     final mq = MediaQuery.of(context);
     return mq.orientation == Orientation.landscape
         ? Size(width > height ? width : height, width > height ? height : width)
-        : Size(width < height ? width : height, width < height ? height : width);
+        : Size(
+            width < height ? width : height,
+            width < height ? height : width,
+          );
   }
 
   /// Returns current app window size

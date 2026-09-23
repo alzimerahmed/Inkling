@@ -19,11 +19,15 @@ class SpLatLngBounds {
   );
 
   bool contains(SpLatLng point) {
-    return point.latitude >= south && point.latitude <= north && point.longitude >= west && point.longitude <= east;
+    return point.latitude >= south &&
+        point.latitude <= north &&
+        point.longitude >= west &&
+        point.longitude <= east;
   }
 
   bool containsBounds(SpLatLngBounds other) {
-    return contains(SpLatLng(other.south, other.west)) && contains(SpLatLng(other.north, other.east));
+    return contains(SpLatLng(other.south, other.west)) &&
+        contains(SpLatLng(other.north, other.east));
   }
 
   SpLatLngBounds expanded(double factor) {

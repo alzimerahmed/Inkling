@@ -54,7 +54,10 @@ class _SurveyBannerState extends State<SurveyBanner> {
   }
 
   Future<void> openSurvey() async {
-    await UrlOpenerService.openInCustomTab(context, RemoteConfigService.surveyUrl.get());
+    await UrlOpenerService.openInCustomTab(
+      context,
+      RemoteConfigService.surveyUrl.get(),
+    );
   }
 
   @override
@@ -65,16 +68,28 @@ class _SurveyBannerState extends State<SurveyBanner> {
       duration: Durations.long4,
       child: MaterialBanner(
         backgroundColor: Theme.of(context).colorScheme.readOnly.surface2,
-        contentTextStyle: Theme.of(
-          context,
-        ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
-        padding: const EdgeInsetsDirectional.only(start: 16.0, top: 24.0, end: 16.0, bottom: 4.0).add(
-          EdgeInsets.only(
-            left: MediaQuery.of(context).padding.left,
-            right: MediaQuery.of(context).padding.right,
-          ),
+        contentTextStyle:
+            Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary,
+            ),
+        padding:
+            const EdgeInsetsDirectional.only(
+              start: 16.0,
+              top: 24.0,
+              end: 16.0,
+              bottom: 4.0,
+            ).add(
+              EdgeInsets.only(
+                left: MediaQuery.of(context).padding.left,
+                right: MediaQuery.of(context).padding.right,
+              ),
+            ),
+        leading: Icon(
+          SpIcons.forum,
+          color: Theme.of(context).colorScheme.onSurface,
         ),
-        leading: Icon(SpIcons.forum, color: Theme.of(context).colorScheme.onSurface),
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -82,11 +97,15 @@ class _SurveyBannerState extends State<SurveyBanner> {
           children: [
             Text(
               tr("list_tile.survey.title"),
-              style: TextTheme.of(context).titleMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+              style: TextTheme.of(context).titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
             Text(
               tr("list_tile.survey.message"),
-              style: TextTheme.of(context).bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+              style: TextTheme.of(context).bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ],
         ),

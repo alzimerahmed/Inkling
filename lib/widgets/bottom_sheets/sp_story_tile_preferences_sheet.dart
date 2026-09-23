@@ -37,7 +37,10 @@ class SpStoryTilePreferencesSheet extends BaseBottomSheet {
   bool get fullScreen => true;
 
   @override
-  Future<T?> show<T>({required BuildContext context, bool useRootNavigator = false}) async {
+  Future<T?> show<T>({
+    required BuildContext context,
+    bool useRootNavigator = false,
+  }) async {
     await _StoryTilePreferencesSheetContentState._ensureDemoFeelingTag();
     if (!context.mounted) return null;
     return super.show(context: context, useRootNavigator: useRootNavigator);
@@ -80,24 +83,35 @@ class _StoryTilePreferencesSheetContent extends StatefulWidget {
   final void Function(StoryTilePreferencesObject? preferences)? onChanged;
 
   @override
-  State<_StoryTilePreferencesSheetContent> createState() => _StoryTilePreferencesSheetContentState();
+  State<_StoryTilePreferencesSheetContent> createState() =>
+      _StoryTilePreferencesSheetContentState();
 }
 
-class _StoryTilePreferencesSheetContentState extends State<_StoryTilePreferencesSheetContent> {
-  late var storyTilePreferences = context.read<DevicePreferencesProvider>().preferences.storyTilePreferences;
+class _StoryTilePreferencesSheetContentState
+    extends State<_StoryTilePreferencesSheetContent> {
+  late var storyTilePreferences = context
+      .read<DevicePreferencesProvider>()
+      .preferences
+      .storyTilePreferences;
   late var defaultStoryTilePreferences = StoryTilePreferencesObject();
   late var initialStoryTilePreferences = storyTilePreferences;
 
   // Ensure a demo feeling emoji tag exists. ID is deterministic so we can use it
   // immediately without waiting for the DB write.
-  static TagDbModel get _demoFeeling1Tag => TagCategoryDbModel.feeling().suggestTags()[8];
-  static TagDbModel get _demoFeeling2Tag => TagCategoryDbModel.feeling().suggestTags()[7];
-  static TagDbModel get _demoActivityTag => TagCategoryDbModel.activity().suggestTags()[1];
+  static TagDbModel get _demoFeeling1Tag =>
+      TagCategoryDbModel.feeling().suggestTags()[8];
+  static TagDbModel get _demoFeeling2Tag =>
+      TagCategoryDbModel.feeling().suggestTags()[7];
+  static TagDbModel get _demoActivityTag =>
+      TagCategoryDbModel.activity().suggestTags()[1];
 
   static Future<void> _ensureDemoFeelingTag() async {
-    if (!TagDbModel.db.exist(_demoFeeling1Tag.id)) await TagDbModel.db.set(_demoFeeling1Tag);
-    if (!TagDbModel.db.exist(_demoFeeling2Tag.id)) await TagDbModel.db.set(_demoFeeling2Tag);
-    if (!TagDbModel.db.exist(_demoActivityTag.id)) await TagDbModel.db.set(_demoActivityTag);
+    if (!TagDbModel.db.exist(_demoFeeling1Tag.id))
+      await TagDbModel.db.set(_demoFeeling1Tag);
+    if (!TagDbModel.db.exist(_demoFeeling2Tag.id))
+      await TagDbModel.db.set(_demoFeeling2Tag);
+    if (!TagDbModel.db.exist(_demoActivityTag.id))
+      await TagDbModel.db.set(_demoActivityTag);
   }
 
   late StoryDbModel story = _buildMockStory();
@@ -109,8 +123,12 @@ class _StoryTilePreferencesSheetContentState extends State<_StoryTilePreferences
   // photo collage. Empty when the user has no images yet.
   List<String> _previewImagePaths = [];
 
-  bool get changed => jsonEncode(storyTilePreferences.toJson()) != jsonEncode(initialStoryTilePreferences.toJson());
-  bool get resettable => jsonEncode(storyTilePreferences.toJson()) != jsonEncode(defaultStoryTilePreferences.toJson());
+  bool get changed =>
+      jsonEncode(storyTilePreferences.toJson()) !=
+      jsonEncode(initialStoryTilePreferences.toJson());
+  bool get resettable =>
+      jsonEncode(storyTilePreferences.toJson()) !=
+      jsonEncode(defaultStoryTilePreferences.toJson());
 
   void _apply(StoryTilePreferencesObject next) {
     setState(() => storyTilePreferences = next);
@@ -138,7 +156,9 @@ class _StoryTilePreferencesSheetContentState extends State<_StoryTilePreferences
       },
     );
 
-    final images = collection?.items.map((e) => e.relativeLocalFilePath).toList();
+    final images = collection?.items
+        .map((e) => e.relativeLocalFilePath)
+        .toList();
     if (images == null || images.isEmpty || !mounted) return;
 
     setState(() {
@@ -174,7 +194,13 @@ class _StoryTilePreferencesSheetContentState extends State<_StoryTilePreferences
     return story.copyWith(
       tags: [
         ?context.read<TagsProvider>().tags?.items.firstOrNull?.id.toString(),
-        ?context.read<TagsProvider>().peopleTags?.items.firstOrNull?.id.toString(),
+        ?context
+            .read<TagsProvider>()
+            .peopleTags
+            ?.items
+            .firstOrNull
+            ?.id
+            .toString(),
         _demoFeeling2Tag.id.toString(),
       ],
       feeling: null,
@@ -253,7 +279,10 @@ class _StoryTilePreferencesSheetContentState extends State<_StoryTilePreferences
               icon: Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  Icon(SpIcons.save, color: Theme.of(context).colorScheme.primary),
+                  Icon(
+                    SpIcons.save,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                   const Positioned(
                     top: -2,
                     right: -8,
@@ -261,11 +290,15 @@ class _StoryTilePreferencesSheetContentState extends State<_StoryTilePreferences
                   ),
                 ],
               ),
-              onPressed: () => const PaywallRoute(initialFocus: .customizations).push(context),
+              onPressed: () => const PaywallRoute(
+                initialFocus: .customizations,
+              ).push(context),
             ),
           IconButton(
             icon: const Icon(SpIcons.refresh),
-            onPressed: resettable ? () => _apply(defaultStoryTilePreferences) : null,
+            onPressed: resettable
+                ? () => _apply(defaultStoryTilePreferences)
+                : null,
           ),
           if (CupertinoSheetRoute.hasParentSheet(context))
             CloseButton(onPressed: () => CupertinoSheetRoute.popSheet(context)),
@@ -292,57 +325,117 @@ class _StoryTilePreferencesSheetContentState extends State<_StoryTilePreferences
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   children: [
                     SwitchListTile.adaptive(
-                      secondary: const SpSettingIconBadge(weekday: 7, icon: SpIcons.photo),
-                      contentPadding: const EdgeInsets.only(left: 16.0, right: 14.0),
+                      secondary: const SpSettingIconBadge(
+                        weekday: 7,
+                        icon: SpIcons.photo,
+                      ),
+                      contentPadding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 14.0,
+                      ),
                       title: Text(tr("list_tile.photo_collage.title")),
                       value: storyTilePreferences.photoCollage,
-                      onChanged: (value) => _apply(storyTilePreferences.copyWith(photoCollage: value)),
+                      onChanged: (value) => _apply(
+                        storyTilePreferences.copyWith(photoCollage: value),
+                      ),
                     ),
                     SwitchListTile.adaptive(
-                      secondary: const SpSettingIconBadge(weekday: 1, icon: SpIcons.timer),
-                      contentPadding: const EdgeInsets.only(left: 16.0, right: 14.0),
+                      secondary: const SpSettingIconBadge(
+                        weekday: 1,
+                        icon: SpIcons.timer,
+                      ),
+                      contentPadding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 14.0,
+                      ),
                       title: Text(tr("list_tile.show_time.title")),
                       value: storyTilePreferences.showTime,
-                      onChanged: (value) => _apply(storyTilePreferences.copyWith(showTime: value)),
+                      onChanged: (value) => _apply(
+                        storyTilePreferences.copyWith(showTime: value),
+                      ),
                     ),
                     SwitchListTile.adaptive(
-                      secondary: const SpSettingIconBadge(weekday: 2, icon: SpIcons.voice),
-                      contentPadding: const EdgeInsets.only(left: 16.0, right: 14.0),
+                      secondary: const SpSettingIconBadge(
+                        weekday: 2,
+                        icon: SpIcons.voice,
+                      ),
+                      contentPadding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 14.0,
+                      ),
                       title: Text(tr("list_tile.show_voice_count.title")),
                       value: storyTilePreferences.showVoiceCount,
-                      onChanged: (value) => _apply(storyTilePreferences.copyWith(showVoiceCount: value)),
+                      onChanged: (value) => _apply(
+                        storyTilePreferences.copyWith(showVoiceCount: value),
+                      ),
                     ),
                     SwitchListTile.adaptive(
-                      secondary: const SpSettingIconBadge(weekday: 3, icon: SpIcons.tag),
-                      contentPadding: const EdgeInsets.only(left: 16.0, right: 14.0),
+                      secondary: const SpSettingIconBadge(
+                        weekday: 3,
+                        icon: SpIcons.tag,
+                      ),
+                      contentPadding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 14.0,
+                      ),
                       title: Text(tr("list_tile.show_tag_labels.title")),
                       value: storyTilePreferences.showTagLabels,
-                      onChanged: (value) => _apply(storyTilePreferences.copyWith(showTagLabels: value)),
+                      onChanged: (value) => _apply(
+                        storyTilePreferences.copyWith(showTagLabels: value),
+                      ),
                     ),
                     SwitchListTile.adaptive(
-                      secondary: const SpSettingIconBadge(weekday: 4, icon: SpIcons.alternateEmail),
-                      contentPadding: const EdgeInsets.only(left: 16.0, right: 14.0),
+                      secondary: const SpSettingIconBadge(
+                        weekday: 4,
+                        icon: SpIcons.alternateEmail,
+                      ),
+                      contentPadding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 14.0,
+                      ),
                       title: Text(tr("list_tile.show_people_labels.title")),
                       value: storyTilePreferences.showPeopleLabels,
-                      onChanged: (value) => _apply(storyTilePreferences.copyWith(showPeopleLabels: value)),
+                      onChanged: (value) => _apply(
+                        storyTilePreferences.copyWith(showPeopleLabels: value),
+                      ),
                     ),
                     SwitchListTile.adaptive(
-                      secondary: const SpSettingIconBadge(weekday: 5, icon: SpIcons.managingPage),
-                      contentPadding: const EdgeInsets.only(left: 16.0, right: 14.0),
+                      secondary: const SpSettingIconBadge(
+                        weekday: 5,
+                        icon: SpIcons.managingPage,
+                      ),
+                      contentPadding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 14.0,
+                      ),
                       title: Text(tr("list_tile.show_page_count.title")),
                       value: storyTilePreferences.showPageCount,
-                      onChanged: (value) => _apply(storyTilePreferences.copyWith(showPageCount: value)),
+                      onChanged: (value) => _apply(
+                        storyTilePreferences.copyWith(showPageCount: value),
+                      ),
                     ),
                     SwitchListTile.adaptive(
-                      secondary: const SpSettingIconBadge(weekday: 6, icon: SpIcons.map),
-                      contentPadding: const EdgeInsets.only(left: 16.0, right: 14.0),
+                      secondary: const SpSettingIconBadge(
+                        weekday: 6,
+                        icon: SpIcons.map,
+                      ),
+                      contentPadding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 14.0,
+                      ),
                       title: Text(tr("list_tile.show_location.title")),
                       value: storyTilePreferences.showLocation,
-                      onChanged: (value) => _apply(storyTilePreferences.copyWith(showLocation: value)),
+                      onChanged: (value) => _apply(
+                        storyTilePreferences.copyWith(showLocation: value),
+                      ),
                     ),
                     _CharacterCountSlider(
                       preferences: storyTilePreferences,
-                      onChanged: (value) => _apply(storyTilePreferences.copyWith(displayCharacterCount: value)),
+                      onChanged: (value) => _apply(
+                        storyTilePreferences.copyWith(
+                          displayCharacterCount: value,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -419,7 +512,8 @@ class _CharacterCountSliderState extends State<_CharacterCountSlider> {
   @override
   void didUpdateWidget(_CharacterCountSlider oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.preferences.displayCharacterCount != widget.preferences.displayCharacterCount) {
+    if (oldWidget.preferences.displayCharacterCount !=
+        widget.preferences.displayCharacterCount) {
       _localValue = widget.preferences.displayCharacterCount;
     }
   }

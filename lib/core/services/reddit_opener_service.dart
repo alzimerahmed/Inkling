@@ -11,6 +11,9 @@ class RedditOpenerService {
   }) async {
     final encodedTitle = Uri.encodeComponent(title ?? '');
     final encodedBody = Uri.encodeComponent(body);
-    UrlOpenerService.openInCustomTab(context, 'https://www.reddit.com/submit?title=$encodedTitle&text=$encodedBody');
+    UrlOpenerService.openInCustomTab(
+      context,
+      'https://www.reddit.com/submit?title=$encodedTitle&text=$encodedBody',
+    );
   }
 }

@@ -40,7 +40,9 @@ enum ReminderType {
       case ReminderType.period:
         return tr('reminder.period.title');
       case ReminderType.custom:
-        throw UnsupportedError('ReminderType.custom has no generic title — use the reminder\'s own message.');
+        throw UnsupportedError(
+          'ReminderType.custom has no generic title — use the reminder\'s own message.',
+        );
     }
   }
 
@@ -55,7 +57,9 @@ enum ReminderType {
       case ReminderType.period:
         return tr('reminder.period.description');
       case ReminderType.custom:
-        throw UnsupportedError('ReminderType.custom has no generic description.');
+        throw UnsupportedError(
+          'ReminderType.custom has no generic description.',
+        );
     }
   }
 

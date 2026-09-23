@@ -14,7 +14,10 @@ void main() {
       expect(exception.type, equals(ServiceExceptionType.validationFailed));
       expect(exception.context, equals('backup_validation'));
       expect(exception.isRetryable, isFalse);
-      expect(exception.userFriendlyMessage, equals('Backup data validation failed. Please contact support.'));
+      expect(
+        exception.userFriendlyMessage,
+        equals('Backup data validation failed. Please contact support.'),
+      );
     });
 
     test('creates with correct properties for compression failed', () {
@@ -27,7 +30,10 @@ void main() {
       expect(exception.type, equals(ServiceExceptionType.compressionFailed));
       expect(exception.context, isNull);
       expect(exception.isRetryable, isFalse);
-      expect(exception.userFriendlyMessage, equals('Failed to compress backup data. Please try again.'));
+      expect(
+        exception.userFriendlyMessage,
+        equals('Failed to compress backup data. Please try again.'),
+      );
     });
 
     test('creates with correct properties for decompression failed', () {
@@ -43,7 +49,9 @@ void main() {
       expect(exception.isRetryable, isFalse);
       expect(
         exception.userFriendlyMessage,
-        equals('Failed to decompress backup data. The backup file may be corrupted.'),
+        equals(
+          'Failed to decompress backup data. The backup file may be corrupted.',
+        ),
       );
     });
 
@@ -58,7 +66,10 @@ void main() {
       expect(exception.type, equals(ServiceExceptionType.dataCorrupted));
       expect(exception.context, equals('backup_file'));
       expect(exception.isRetryable, isFalse);
-      expect(exception.userFriendlyMessage, equals('Backup data is corrupted and cannot be restored.'));
+      expect(
+        exception.userFriendlyMessage,
+        equals('Backup data is corrupted and cannot be restored.'),
+      );
     });
 
     test('creates with correct properties for unexpected error', () {
@@ -73,7 +84,9 @@ void main() {
       expect(exception.isRetryable, isFalse);
       expect(
         exception.userFriendlyMessage,
-        equals('An unexpected error occurred. Please try again or contact support.'),
+        equals(
+          'An unexpected error occurred. Please try again or contact support.',
+        ),
       );
     });
 
@@ -90,7 +103,9 @@ void main() {
       expect(exception.isRetryable, isFalse);
       expect(
         exception.userFriendlyMessage,
-        equals('Not enough storage space on this device. Free up space and try again.'),
+        equals(
+          'Not enough storage space on this device. Free up space and try again.',
+        ),
       );
     });
 
@@ -117,7 +132,10 @@ void main() {
         ServiceExceptionType.validationFailed,
         context: 'backup_service',
       );
-      expect(exception.toString(), equals('BackupException: Validation failed (backup_service)'));
+      expect(
+        exception.toString(),
+        equals('BackupException: Validation failed (backup_service)'),
+      );
     });
 
     test('toString works without context', () {
@@ -125,18 +143,39 @@ void main() {
         'Compression failed',
         ServiceExceptionType.compressionFailed,
       );
-      expect(exception.toString(), equals('BackupException: Compression failed'));
+      expect(
+        exception.toString(),
+        equals('BackupException: Compression failed'),
+      );
     });
 
     group('ServiceExceptionType enum', () {
       test('has all expected values', () {
         expect(ServiceExceptionType.values, hasLength(6));
-        expect(ServiceExceptionType.values, contains(ServiceExceptionType.validationFailed));
-        expect(ServiceExceptionType.values, contains(ServiceExceptionType.compressionFailed));
-        expect(ServiceExceptionType.values, contains(ServiceExceptionType.decompressionFailed));
-        expect(ServiceExceptionType.values, contains(ServiceExceptionType.dataCorrupted));
-        expect(ServiceExceptionType.values, contains(ServiceExceptionType.unexpectedError));
-        expect(ServiceExceptionType.values, contains(ServiceExceptionType.localStorageFull));
+        expect(
+          ServiceExceptionType.values,
+          contains(ServiceExceptionType.validationFailed),
+        );
+        expect(
+          ServiceExceptionType.values,
+          contains(ServiceExceptionType.compressionFailed),
+        );
+        expect(
+          ServiceExceptionType.values,
+          contains(ServiceExceptionType.decompressionFailed),
+        );
+        expect(
+          ServiceExceptionType.values,
+          contains(ServiceExceptionType.dataCorrupted),
+        );
+        expect(
+          ServiceExceptionType.values,
+          contains(ServiceExceptionType.unexpectedError),
+        );
+        expect(
+          ServiceExceptionType.values,
+          contains(ServiceExceptionType.localStorageFull),
+        );
       });
     });
   });

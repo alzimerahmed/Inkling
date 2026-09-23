@@ -34,7 +34,9 @@ class _QuillToolbarWidget extends StatelessWidget {
       data: Theme.of(context).copyWith(
         iconButtonTheme: IconButtonThemeData(
           style: ButtonStyle(
-            shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0))),
+            shape: WidgetStatePropertyAll(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+            ),
           ),
         ),
       ),
@@ -51,7 +53,8 @@ class _QuillToolbarWidget extends StatelessWidget {
 
   Widget _buildToolbar(BuildContext context) {
     // Access underlying QuillController for flutter_quill widgets that require it
-    final quillController = (controller as QuillRichTextController).quillController;
+    final quillController =
+        (controller as QuillRichTextController).quillController;
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -66,7 +69,8 @@ class _QuillToolbarWidget extends StatelessWidget {
           IconButton(
             tooltip: quill.FlutterQuillLocalizations.of(context)?.image,
             icon: const Icon(SpIcons.photo),
-            onPressed: () => _handleAddMedia(context: context, controller: controller),
+            onPressed: () =>
+                _handleAddMedia(context: context, controller: controller),
           ),
           Container(
             width: 1,
@@ -155,12 +159,16 @@ class _QuillToolbarWidget extends StatelessWidget {
                   IconButton(
                     tooltip: tr('button.cursor_left'),
                     icon: const Icon(SpIcons.keyboardLeft),
-                    onPressed: pos > 0 ? () => controller.moveCursorLeft() : null,
+                    onPressed: pos > 0
+                        ? () => controller.moveCursorLeft()
+                        : null,
                   ),
                   IconButton(
                     tooltip: tr('button.cursor_right'),
                     icon: const Icon(SpIcons.keyboardRight),
-                    onPressed: pos < docLength - 1 ? () => controller.moveCursorRight() : null,
+                    onPressed: pos < docLength - 1
+                        ? () => controller.moveCursorRight()
+                        : null,
                   ),
                 ],
               );
@@ -180,10 +188,16 @@ class _QuillToolbarWidget extends StatelessWidget {
 
     switch (action) {
       case SpAddMediaAction.selectFromLibrary:
-        await SpImagePickerBottomSheet.showQuillPicker(context: context, controller: controller);
+        await SpImagePickerBottomSheet.showQuillPicker(
+          context: context,
+          controller: controller,
+        );
         break;
       case SpAddMediaAction.selectFromPhotos:
-        await SpImagePickerBottomSheet.showNativePicker(context: context, controller: controller);
+        await SpImagePickerBottomSheet.showNativePicker(
+          context: context,
+          controller: controller,
+        );
         break;
       case SpAddMediaAction.takePhoto:
         await SpImagePickerBottomSheet.showImagePicker(
@@ -201,7 +215,10 @@ class _QuillToolbarWidget extends StatelessWidget {
         break;
       case SpAddMediaAction.recordVoiceNote:
         if (!context.mounted) return;
-        await SpVoiceRecordingSheet.showQuillRecorder(context: context, controller: controller);
+        await SpVoiceRecordingSheet.showQuillRecorder(
+          context: context,
+          controller: controller,
+        );
         break;
     }
   }

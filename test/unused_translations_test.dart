@@ -6,10 +6,13 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
-  test('translation keys are used, exist, and match across all locales', () async {
-    await _checkUnusedAndMissingKeys();
-    await _checkLocalesMatchEnKeys();
-  });
+  test(
+    'translation keys are used, exist, and match across all locales',
+    () async {
+      await _checkUnusedAndMissingKeys();
+      await _checkLocalesMatchEnKeys();
+    },
+  );
 }
 
 Future<void> _checkUnusedAndMissingKeys() async {
@@ -34,7 +37,8 @@ Future<void> _checkUnusedAndMissingKeys() async {
   final Map<String, dynamic> enJson = jsonDecode(enJsonContent);
 
   // Get all keys from en.json (excluding meta keys)
-  final List<String> allKeys = enJson.keys.where((key) => !key.startsWith('_meta.')).toList()..sort();
+  final List<String> allKeys =
+      enJson.keys.where((key) => !key.startsWith('_meta.')).toList()..sort();
 
   print('=== Total Translation Keys: ${allKeys.length} ===\n');
 
@@ -69,7 +73,8 @@ Future<void> _checkUnusedAndMissingKeys() async {
       }
     }
 
-    if (!dartContentStr.contains("'$keyToCheck'") && !dartContentStr.contains('"$keyToCheck"')) {
+    if (!dartContentStr.contains("'$keyToCheck'") &&
+        !dartContentStr.contains('"$keyToCheck"')) {
       unusedKeys.add(key);
     }
   }
@@ -102,7 +107,9 @@ Future<void> _checkUnusedAndMissingKeys() async {
   // Extract all translation keys used in code (tr('key') or plural('key'))
   final usedKeysInCode = _extractTranslationKeysFromCode(dartContentStr);
 
-  print('=== Found ${usedKeysInCode.length} translation keys used in code ===\n');
+  print(
+    '=== Found ${usedKeysInCode.length} translation keys used in code ===\n',
+  );
 
   // Find keys used in code but not in en.json
   final missingKeys = <String>[];
@@ -115,7 +122,10 @@ Future<void> _checkUnusedAndMissingKeys() async {
     } else {
       // For regular keys and plural base keys used with plural() function,
       // check if the key exists OR if plural variants exist (key.one, key.other)
-      keyExists = enJson.containsKey(key) || enJson.containsKey('$key.one') || enJson.containsKey('$key.other');
+      keyExists =
+          enJson.containsKey(key) ||
+          enJson.containsKey('$key.one') ||
+          enJson.containsKey('$key.other');
     }
 
     if (!keyExists) {
@@ -128,7 +138,9 @@ Future<void> _checkUnusedAndMissingKeys() async {
   if (missingKeys.isEmpty) {
     print('✅ All used keys exist in en.json!\n');
   } else {
-    print('❌ Found ${missingKeys.length} keys used in code but missing in en.json:\n');
+    print(
+      '❌ Found ${missingKeys.length} keys used in code but missing in en.json:\n',
+    );
     for (final key in missingKeys) {
       print('  • $key');
     }
@@ -149,21 +161,28 @@ Future<void> _checkLocalesMatchEnKeys() async {
 
   final translationsDir = Directory('translations');
   final enJsonFile = File('translations/en.json');
-  final Map<String, dynamic> enJson = jsonDecode(await enJsonFile.readAsString());
+  final Map<String, dynamic> enJson = jsonDecode(
+    await enJsonFile.readAsString(),
+  );
   final Set<String> enKeys = enJson.keys.toSet();
 
   final localeFiles =
       translationsDir
           .listSync()
           .whereType<File>()
-          .where((file) => file.path.endsWith('.json') && !file.path.endsWith('en.json'))
+          .where(
+            (file) =>
+                file.path.endsWith('.json') && !file.path.endsWith('en.json'),
+          )
           .toList()
         ..sort((a, b) => a.path.compareTo(b.path));
 
   final mismatches = <String>[];
 
   for (final file in localeFiles) {
-    final Map<String, dynamic> localeJson = jsonDecode(await file.readAsString());
+    final Map<String, dynamic> localeJson = jsonDecode(
+      await file.readAsString(),
+    );
     final Set<String> localeKeys = localeJson.keys.toSet();
 
     final missingInLocale = enKeys.difference(localeKeys);
@@ -185,7 +204,9 @@ Future<void> _checkLocalesMatchEnKeys() async {
   if (mismatches.isEmpty) {
     print('✅ All locale files match en.json keys!\n');
   } else {
-    print('❌ Found ${mismatches.length} locale file(s) with mismatched keys:\n');
+    print(
+      '❌ Found ${mismatches.length} locale file(s) with mismatched keys:\n',
+    );
     for (final mismatch in mismatches) {
       print('  • $mismatch');
     }
@@ -196,7 +217,8 @@ Future<void> _checkLocalesMatchEnKeys() async {
   expect(
     mismatches,
     isEmpty,
-    reason: 'Found locale files with keys that do not match en.json:\n${mismatches.join('\n')}',
+    reason:
+        'Found locale files with keys that do not match en.json:\n${mismatches.join('\n')}',
   );
 }
 

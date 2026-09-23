@@ -35,7 +35,9 @@ class ThemeModeTile extends StatelessWidget {
 
   bool isDarkMode(BuildContext context) {
     if (currentThemeMode == ThemeMode.system) {
-      Brightness? brightness = View.maybeOf(context)?.platformDispatcher.platformBrightness;
+      Brightness? brightness = View.maybeOf(
+        context,
+      )?.platformDispatcher.platformBrightness;
       return brightness == Brightness.dark;
     } else {
       return currentThemeMode == ThemeMode.dark;
@@ -49,8 +51,14 @@ class ThemeModeTile extends StatelessWidget {
         weekday: weekday,
         child: SpAnimatedIcons(
           duration: Durations.medium4,
-          firstChild: Icon(SpIcons.darkMode, color: ColorFromDayService(context: context).getForeground()),
-          secondChild: Icon(SpIcons.lightMode, color: ColorFromDayService(context: context).getForeground()),
+          firstChild: Icon(
+            SpIcons.darkMode,
+            color: ColorFromDayService(context: context).getForeground(),
+          ),
+          secondChild: Icon(
+            SpIcons.lightMode,
+            color: ColorFromDayService(context: context).getForeground(),
+          ),
           showFirst: isDarkMode(context),
         ),
       ),

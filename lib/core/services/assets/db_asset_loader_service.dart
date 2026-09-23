@@ -83,7 +83,10 @@ class DbAssetLoaderService {
       throw BackupAssetDownloadException('$relativePath is invalid.');
     }
 
-    String filePath = type.getStoragePath(id: id, extension: extension(relativePath));
+    String filePath = type.getStoragePath(
+      id: id,
+      extension: extension(relativePath),
+    );
     File file = File(filePath);
 
     if (file.existsSync()) return file;
@@ -102,7 +105,9 @@ class DbAssetLoaderService {
     }
 
     if (localFile != null) return localFile;
-    throw BackupAssetDownloadException('Asset file for $relativePath not found.');
+    throw BackupAssetDownloadException(
+      'Asset file for $relativePath not found.',
+    );
   }
 
   /// Remove oldest inserted cached entry if max capacity exceeded (FIFO eviction).

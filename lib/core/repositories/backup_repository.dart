@@ -8,7 +8,8 @@ import 'package:storypad/core/databases/models/story_db_model.dart';
 import 'package:storypad/core/databases/models/tag_category_db_model.dart';
 import 'package:storypad/core/databases/models/tag_db_model.dart';
 import 'package:storypad/core/databases/models/template_db_model.dart';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
+    as exp;
 import 'package:storypad/core/objects/backup_object.dart';
 import 'package:storypad/core/objects/cloud_file_object.dart';
 import 'package:storypad/core/objects/cloud_service_user.dart';
@@ -38,7 +39,10 @@ import 'package:storypad/core/types/backup_result.dart';
 /// [hasInternet] false makes [statusByService] moot — nothing can succeed
 /// offline, so every signed-in service is reported as [BackupConnectionStatus.noInternet]
 /// without attempting a per-service check.
-typedef ConnectionCheckResult = ({bool hasInternet, Map<BackupServiceType, BackupConnectionStatus> statusByService});
+typedef ConnectionCheckResult = ({
+  bool hasInternet,
+  Map<BackupServiceType, BackupConnectionStatus> statusByService,
+});
 
 class SyncResponse {
   final Map<int, CloudFileObject>? uploadedYearlyFiles;
@@ -66,7 +70,8 @@ enum UserChangeType {
 class BackupRepository {
   /// Broadcasts whenever a cloud service user signs in or out.
   /// Consumers can re-read [services] to get the latest authenticated users.
-  final StreamController<UserChangeType> _userChangesController = StreamController<UserChangeType>.broadcast();
+  final StreamController<UserChangeType> _userChangesController =
+      StreamController<UserChangeType>.broadcast();
   Stream<UserChangeType> get userChanges => _userChangesController.stream;
 
   static final List<BaseDbAdapter> databases = [
@@ -131,9 +136,11 @@ class BackupRepository {
   }
 
   // currentUser & isSignedIn are load in initializer - before rendering UI.
-  GoogleUserObject? get currentGoogleUser => googleDriveService.currentUser as GoogleUserObject?;
+  GoogleUserObject? get currentGoogleUser =>
+      googleDriveService.currentUser as GoogleUserObject?;
   NextcloudUserObject? get currentNextcloudUser => nextcloudService.currentUser;
-  ICloudUserObject? get currentICloudUser => icloudService?.currentUser as ICloudUserObject?;
+  ICloudUserObject? get currentICloudUser =>
+      icloudService?.currentUser as ICloudUserObject?;
   DropboxUserObject? get currentDropboxUser => dropboxService.currentUser;
   bool get isSignedIn => availableUsers.isNotEmpty;
 
@@ -188,7 +195,9 @@ class BackupRepository {
   ];
 
   BackupCloudService getService(BackupServiceType serviceType) {
-    return services.where((service) => service.serviceType == serviceType).first;
+    return services
+        .where((service) => service.serviceType == serviceType)
+        .first;
   }
 
   Future<BackupResult<bool>> requestScope() async {
@@ -263,7 +272,9 @@ class BackupRepository {
     // service.
     bool notifyImportCallbacks = true,
   }) async {
-    AppLogger.d('🔄 Starting sync for service: ${service.serviceType.displayName}');
+    AppLogger.d(
+      '🔄 Starting sync for service: ${service.serviceType.displayName}',
+    );
 
     // Step 1: Upload images for this service.
     // Runs before getLastDbUpdatedAtByYear() below on purpose: uploading bumps
@@ -271,7 +282,9 @@ class BackupRepository {
     // step 4 republishes them with the new cloud pointers.
     final step1Result = await startStep1(service, uploadAssets: uploadAssets);
     if (!step1Result.isSuccess) {
-      AppLogger.warning('Step 1 failed for ${service.serviceType.displayName}: ${step1Result.error!.message}');
+      AppLogger.warning(
+        'Step 1 failed for ${service.serviceType.displayName}: ${step1Result.error!.message}',
+      );
       return BackupResult.failure(step1Result.error!);
     }
 
@@ -282,7 +295,9 @@ class BackupRepository {
     final step2Result = await startStep2(service, lastDbUpdatedAtByYear);
 
     if (!step2Result.isSuccess) {
-      AppLogger.warning('Step 2 failed for ${service.serviceType.displayName}: ${step2Result.error!.message}');
+      AppLogger.warning(
+        'Step 2 failed for ${service.serviceType.displayName}: ${step2Result.error!.message}',
+      );
       return BackupResult.failure(step2Result.error!);
     }
 
@@ -302,7 +317,9 @@ class BackupRepository {
       );
 
       if (!step3Result.isSuccess) {
-        AppLogger.warning('Step 3 failed for ${service.serviceType.displayName}: ${step3Result.error!.message}');
+        AppLogger.warning(
+          'Step 3 failed for ${service.serviceType.displayName}: ${step3Result.error!.message}',
+        );
         return BackupResult.failure(step3Result.error!);
       }
 
@@ -311,7 +328,9 @@ class BackupRepository {
       // Re-fetch local timestamps after import (Step 3 may have updated DB with remote data)
       lastDbUpdatedAtByYear = await getLastDbUpdatedAtByYear();
     } else {
-      AppLogger.d('No backups to sync for ${service.serviceType.displayName} - already up to date');
+      AppLogger.d(
+        'No backups to sync for ${service.serviceType.displayName} - already up to date',
+      );
     }
 
     // Step 4: Upload new yearly backups to THIS service
@@ -324,9 +343,13 @@ class BackupRepository {
 
     if (!step4Result.isSuccess) {
       if (step4Result.error?.type == BackupErrorType.authentication) {
-        AppLogger.critical('Auth failure during Step 4 upload: ${step4Result.error!.message}');
+        AppLogger.critical(
+          'Auth failure during Step 4 upload: ${step4Result.error!.message}',
+        );
       } else {
-        AppLogger.error('Step 4 upload failed for ${service.serviceType.displayName}: ${step4Result.error!.message}');
+        AppLogger.error(
+          'Step 4 upload failed for ${service.serviceType.displayName}: ${step4Result.error!.message}',
+        );
       }
       return BackupResult.failure(step4Result.error!);
     }
@@ -345,7 +368,11 @@ class BackupRepository {
     required bool uploadAssets,
   }) async {
     try {
-      final result = await _step1ImagesUploader.start(service, uploadAssets: uploadAssets, allServices: services);
+      final result = await _step1ImagesUploader.start(
+        service,
+        uploadAssets: uploadAssets,
+        allServices: services,
+      );
       return BackupResult.success(result);
     } on exp.AuthException catch (e) {
       // Credentials are kept even on a revoked grant — only an explicit
@@ -500,7 +527,11 @@ class BackupRepository {
   /// stuck on "unavailable" until the user happened to tap it again.
   Future<BackupResult<ConnectionCheckResult>> checkConnection() async {
     final checkableServices = services
-        .where((service) => service.isSignedIn || service.serviceType == BackupServiceType.icloud)
+        .where(
+          (service) =>
+              service.isSignedIn ||
+              service.serviceType == BackupServiceType.icloud,
+        )
         .toList();
 
     if (checkableServices.isEmpty) {
@@ -523,7 +554,8 @@ class BackupRepository {
       return BackupResult.success((
         hasInternet: false,
         statusByService: {
-          for (final service in checkableServices) service.serviceType: BackupConnectionStatus.noInternet,
+          for (final service in checkableServices)
+            service.serviceType: BackupConnectionStatus.noInternet,
         },
       ));
     }
@@ -534,25 +566,35 @@ class BackupRepository {
       try {
         await service.reauthenticateIfNeeded();
         await service.canAccessRequestedScopes();
-        statusByService[service.serviceType] = BackupConnectionStatus.readyToSync;
+        statusByService[service.serviceType] =
+            BackupConnectionStatus.readyToSync;
       } on exp.AuthException catch (e) {
         statusByService[service.serviceType] = switch (e.type) {
-          exp.AuthExceptionType.tokenExpired => BackupConnectionStatus.needServicePermission,
-          exp.AuthExceptionType.tokenRevoked => BackupConnectionStatus.needServicePermission,
-          exp.AuthExceptionType.insufficientScopes => BackupConnectionStatus.needServicePermission,
+          exp.AuthExceptionType.tokenExpired =>
+            BackupConnectionStatus.needServicePermission,
+          exp.AuthExceptionType.tokenRevoked =>
+            BackupConnectionStatus.needServicePermission,
+          exp.AuthExceptionType.insufficientScopes =>
+            BackupConnectionStatus.needServicePermission,
           // Still off in Settings — an expected, recoverable state for
           // iCloud specifically, not an unknown/broken one.
-          exp.AuthExceptionType.signInRequired => BackupConnectionStatus.needServicePermission,
+          exp.AuthExceptionType.signInRequired =>
+            BackupConnectionStatus.needServicePermission,
           _ => BackupConnectionStatus.unknownError,
         };
       } on exp.NetworkException {
-        statusByService[service.serviceType] = BackupConnectionStatus.noInternet;
+        statusByService[service.serviceType] =
+            BackupConnectionStatus.noInternet;
       } catch (e) {
-        statusByService[service.serviceType] = BackupConnectionStatus.unknownError;
+        statusByService[service.serviceType] =
+            BackupConnectionStatus.unknownError;
       }
     }
 
-    return BackupResult.success((hasInternet: true, statusByService: statusByService));
+    return BackupResult.success((
+      hasInternet: true,
+      statusByService: statusByService,
+    ));
   }
 
   /// How many distinct local assets are still waiting to reach any signed-in
@@ -566,7 +608,10 @@ class BackupRepository {
     for (final service in services) {
       if (!service.isSignedIn) continue;
 
-      final pending = await _step1ImagesUploader.pendingAssets(service, allServices: services);
+      final pending = await _step1ImagesUploader.pendingAssets(
+        service,
+        allServices: services,
+      );
       assetIds.addAll(pending.map((asset) => asset.id));
     }
 

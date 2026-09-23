@@ -40,7 +40,9 @@ void main() {
       restoreService: RestoreBackupService(),
       messenger: messenger,
       step1ImagesUploader: BackupImagesUploaderService(messenger: messenger),
-      step2LatestBackupChecker: BackupLatestCheckerService(messenger: messenger),
+      step2LatestBackupChecker: BackupLatestCheckerService(
+        messenger: messenger,
+      ),
       step3LatestBackupImporter: BackupImporterService(messenger: messenger),
       step4NewBackupUploader: BackupUploaderService(messenger: messenger),
       internetChecker: _FakeInternetChecker(hasInternet),
@@ -56,7 +58,10 @@ void main() {
     // Google Drive's own status was never even checked.
     test('one service throwing does not prevent checking the other', () async {
       final repository = buildRepository(
-        googleDriveService: _FakeCloudService(serviceType: BackupServiceType.google_drive, shouldThrow: false),
+        googleDriveService: _FakeCloudService(
+          serviceType: BackupServiceType.google_drive,
+          shouldThrow: false,
+        ),
         nextcloudService: _FakeNextcloudService(shouldThrow: true),
       );
 
@@ -64,40 +69,73 @@ void main() {
 
       expect(result.isSuccess, isTrue);
       expect(result.data!.hasInternet, isTrue);
-      expect(result.data!.statusByService[BackupServiceType.google_drive], BackupConnectionStatus.readyToSync);
-      expect(result.data!.statusByService[BackupServiceType.nextcloud], BackupConnectionStatus.needServicePermission);
+      expect(
+        result.data!.statusByService[BackupServiceType.google_drive],
+        BackupConnectionStatus.readyToSync,
+      );
+      expect(
+        result.data!.statusByService[BackupServiceType.nextcloud],
+        BackupConnectionStatus.needServicePermission,
+      );
     });
 
     test('both services healthy report readyToSync for both', () async {
       final repository = buildRepository(
-        googleDriveService: _FakeCloudService(serviceType: BackupServiceType.google_drive, shouldThrow: false),
+        googleDriveService: _FakeCloudService(
+          serviceType: BackupServiceType.google_drive,
+          shouldThrow: false,
+        ),
         nextcloudService: _FakeNextcloudService(shouldThrow: false),
       );
 
       final result = await repository.checkConnection();
 
-      expect(result.data!.statusByService[BackupServiceType.google_drive], BackupConnectionStatus.readyToSync);
-      expect(result.data!.statusByService[BackupServiceType.nextcloud], BackupConnectionStatus.readyToSync);
-    });
-
-    test('no internet marks every signed-in service noInternet without checking them', () async {
-      final repository = buildRepository(
-        googleDriveService: _FakeCloudService(serviceType: BackupServiceType.google_drive, shouldThrow: false),
-        nextcloudService: _FakeNextcloudService(shouldThrow: false),
-        hasInternet: false,
+      expect(
+        result.data!.statusByService[BackupServiceType.google_drive],
+        BackupConnectionStatus.readyToSync,
       );
-
-      final result = await repository.checkConnection();
-
-      expect(result.data!.hasInternet, isFalse);
-      expect(result.data!.statusByService[BackupServiceType.google_drive], BackupConnectionStatus.noInternet);
-      expect(result.data!.statusByService[BackupServiceType.nextcloud], BackupConnectionStatus.noInternet);
+      expect(
+        result.data!.statusByService[BackupServiceType.nextcloud],
+        BackupConnectionStatus.readyToSync,
+      );
     });
+
+    test(
+      'no internet marks every signed-in service noInternet without checking them',
+      () async {
+        final repository = buildRepository(
+          googleDriveService: _FakeCloudService(
+            serviceType: BackupServiceType.google_drive,
+            shouldThrow: false,
+          ),
+          nextcloudService: _FakeNextcloudService(shouldThrow: false),
+          hasInternet: false,
+        );
+
+        final result = await repository.checkConnection();
+
+        expect(result.data!.hasInternet, isFalse);
+        expect(
+          result.data!.statusByService[BackupServiceType.google_drive],
+          BackupConnectionStatus.noInternet,
+        );
+        expect(
+          result.data!.statusByService[BackupServiceType.nextcloud],
+          BackupConnectionStatus.noInternet,
+        );
+      },
+    );
 
     test('nobody signed in at all fails fast', () async {
       final repository = buildRepository(
-        googleDriveService: _FakeCloudService(serviceType: BackupServiceType.google_drive, signedIn: false),
-        nextcloudService: _FakeNextcloudService(shouldThrow: false, signedIn: false),
+        googleDriveService: _FakeCloudService(
+          serviceType: BackupServiceType.google_drive,
+          signedIn: false,
+        ),
+        nextcloudService: _FakeNextcloudService(
+          shouldThrow: false,
+          signedIn: false,
+        ),
       );
 
       final result = await repository.checkConnection();
@@ -105,80 +143,136 @@ void main() {
       expect(result.isSuccess, isFalse);
     });
 
-    test('a service that is not signed in is excluded from the result, the other still checked', () async {
-      final repository = buildRepository(
-        googleDriveService: _FakeCloudService(serviceType: BackupServiceType.google_drive, signedIn: false),
-        nextcloudService: _FakeNextcloudService(shouldThrow: false),
-      );
+    test(
+      'a service that is not signed in is excluded from the result, the other still checked',
+      () async {
+        final repository = buildRepository(
+          googleDriveService: _FakeCloudService(
+            serviceType: BackupServiceType.google_drive,
+            signedIn: false,
+          ),
+          nextcloudService: _FakeNextcloudService(shouldThrow: false),
+        );
 
-      final result = await repository.checkConnection();
+        final result = await repository.checkConnection();
 
-      expect(result.isSuccess, isTrue);
-      expect(result.data!.statusByService.containsKey(BackupServiceType.google_drive), isFalse);
-      expect(result.data!.statusByService[BackupServiceType.nextcloud], BackupConnectionStatus.readyToSync);
-    });
+        expect(result.isSuccess, isTrue);
+        expect(
+          result.data!.statusByService.containsKey(
+            BackupServiceType.google_drive,
+          ),
+          isFalse,
+        );
+        expect(
+          result.data!.statusByService[BackupServiceType.nextcloud],
+          BackupConnectionStatus.readyToSync,
+        );
+      },
+    );
 
     // Unlike Drive/Nextcloud (excluded above when not signed in), iCloud is
     // always included even while unsigned-in — see checkConnection's own doc
     // comment: reauthenticateIfNeeded is how an iCloud tile recovers on its
     // own after the user enables iCloud Drive in Settings and returns to the
     // app, so it must be probed every time regardless of currentUser.
-    test('iCloud available reports readyToSync even though other services are unrelated', () async {
-      final repository = buildRepository(
-        googleDriveService: _FakeCloudService(serviceType: BackupServiceType.google_drive, signedIn: false),
-        nextcloudService: _FakeNextcloudService(shouldThrow: false, signedIn: false),
-        icloudService: _FakeCloudService(serviceType: BackupServiceType.icloud, signedIn: true),
-      );
-
-      final result = await repository.checkConnection();
-
-      expect(result.isSuccess, isTrue);
-      expect(result.data!.statusByService[BackupServiceType.icloud], BackupConnectionStatus.readyToSync);
-    });
-
-    test('iCloud still disabled in Settings reports needServicePermission, not unknownError', () async {
-      final repository = buildRepository(
-        googleDriveService: _FakeCloudService(serviceType: BackupServiceType.google_drive, signedIn: false),
-        nextcloudService: _FakeNextcloudService(shouldThrow: false, signedIn: false),
-        icloudService: _FakeCloudService(
-          serviceType: BackupServiceType.icloud,
-          signedIn: false,
-          reauthenticateError: const AuthException(
-            'iCloud is not available',
-            AuthExceptionType.signInRequired,
-            serviceType: BackupServiceType.icloud,
+    test(
+      'iCloud available reports readyToSync even though other services are unrelated',
+      () async {
+        final repository = buildRepository(
+          googleDriveService: _FakeCloudService(
+            serviceType: BackupServiceType.google_drive,
+            signedIn: false,
           ),
-        ),
-      );
-
-      final result = await repository.checkConnection();
-
-      expect(result.isSuccess, isTrue);
-      expect(result.data!.statusByService.containsKey(BackupServiceType.icloud), isTrue);
-      expect(result.data!.statusByService[BackupServiceType.icloud], BackupConnectionStatus.needServicePermission);
-    });
-
-    test('iCloud transient network failure reports noInternet for that service specifically', () async {
-      final repository = buildRepository(
-        googleDriveService: _FakeCloudService(serviceType: BackupServiceType.google_drive, shouldThrow: false),
-        nextcloudService: _FakeNextcloudService(shouldThrow: false),
-        icloudService: _FakeCloudService(
-          serviceType: BackupServiceType.icloud,
-          signedIn: false,
-          reauthenticateError: const NetworkException(
-            'Could not verify iCloud account',
-            serviceType: BackupServiceType.icloud,
+          nextcloudService: _FakeNextcloudService(
+            shouldThrow: false,
+            signedIn: false,
           ),
-        ),
-      );
+          icloudService: _FakeCloudService(
+            serviceType: BackupServiceType.icloud,
+            signedIn: true,
+          ),
+        );
 
-      final result = await repository.checkConnection();
+        final result = await repository.checkConnection();
 
-      expect(result.isSuccess, isTrue);
-      expect(result.data!.statusByService[BackupServiceType.icloud], BackupConnectionStatus.noInternet);
-      // The other services aren't affected by iCloud's own transient failure.
-      expect(result.data!.statusByService[BackupServiceType.google_drive], BackupConnectionStatus.readyToSync);
-    });
+        expect(result.isSuccess, isTrue);
+        expect(
+          result.data!.statusByService[BackupServiceType.icloud],
+          BackupConnectionStatus.readyToSync,
+        );
+      },
+    );
+
+    test(
+      'iCloud still disabled in Settings reports needServicePermission, not unknownError',
+      () async {
+        final repository = buildRepository(
+          googleDriveService: _FakeCloudService(
+            serviceType: BackupServiceType.google_drive,
+            signedIn: false,
+          ),
+          nextcloudService: _FakeNextcloudService(
+            shouldThrow: false,
+            signedIn: false,
+          ),
+          icloudService: _FakeCloudService(
+            serviceType: BackupServiceType.icloud,
+            signedIn: false,
+            reauthenticateError: const AuthException(
+              'iCloud is not available',
+              AuthExceptionType.signInRequired,
+              serviceType: BackupServiceType.icloud,
+            ),
+          ),
+        );
+
+        final result = await repository.checkConnection();
+
+        expect(result.isSuccess, isTrue);
+        expect(
+          result.data!.statusByService.containsKey(BackupServiceType.icloud),
+          isTrue,
+        );
+        expect(
+          result.data!.statusByService[BackupServiceType.icloud],
+          BackupConnectionStatus.needServicePermission,
+        );
+      },
+    );
+
+    test(
+      'iCloud transient network failure reports noInternet for that service specifically',
+      () async {
+        final repository = buildRepository(
+          googleDriveService: _FakeCloudService(
+            serviceType: BackupServiceType.google_drive,
+            shouldThrow: false,
+          ),
+          nextcloudService: _FakeNextcloudService(shouldThrow: false),
+          icloudService: _FakeCloudService(
+            serviceType: BackupServiceType.icloud,
+            signedIn: false,
+            reauthenticateError: const NetworkException(
+              'Could not verify iCloud account',
+              serviceType: BackupServiceType.icloud,
+            ),
+          ),
+        );
+
+        final result = await repository.checkConnection();
+
+        expect(result.isSuccess, isTrue);
+        expect(
+          result.data!.statusByService[BackupServiceType.icloud],
+          BackupConnectionStatus.noInternet,
+        );
+        // The other services aren't affected by iCloud's own transient failure.
+        expect(
+          result.data!.statusByService[BackupServiceType.google_drive],
+          BackupConnectionStatus.readyToSync,
+        );
+      },
+    );
   });
 }
 
@@ -208,7 +302,8 @@ class _FakeNextcloudService extends NextcloudCloudService {
   final bool signedIn;
 
   @override
-  NextcloudUserObject? get currentUser => signedIn ? _FakeNextcloudUser() : null;
+  NextcloudUserObject? get currentUser =>
+      signedIn ? _FakeNextcloudUser() : null;
 
   @override
   bool get isSignedIn => signedIn;
@@ -264,7 +359,11 @@ class _FakeCloudService implements BackupCloudService {
   Future<bool> reauthenticateIfNeeded() async {
     if (reauthenticateError != null) throw reauthenticateError!;
     if (shouldThrow) {
-      throw AuthException('Broken', AuthExceptionType.tokenRevoked, serviceType: serviceType);
+      throw AuthException(
+        'Broken',
+        AuthExceptionType.tokenRevoked,
+        serviceType: serviceType,
+      );
     }
     return true;
   }
@@ -273,13 +372,18 @@ class _FakeCloudService implements BackupCloudService {
   Future<bool> canAccessRequestedScopes() async => true;
 
   @override
-  Future<CloudFileObject?> uploadFile(String fileName, io.File file, {String? folderName}) async => null;
+  Future<CloudFileObject?> uploadFile(
+    String fileName,
+    io.File file, {
+    String? folderName,
+  }) async => null;
 
   @override
   Future<CloudStorageQuotaObject?> fetchStorageQuota() async => null;
 
   @override
-  Future<List<CloudFileObject>> listFilesInFolder(String folderName) async => [];
+  Future<List<CloudFileObject>> listFilesInFolder(String folderName) async =>
+      [];
 
   @override
   Future<Map<int, CloudFileObject>> fetchYearlyBackups() async => {};

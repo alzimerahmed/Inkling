@@ -8,6 +8,7 @@ import 'package:storypad/core/helpers/date_format_helper.dart';
 import 'package:storypad/core/objects/stats/stats_range.dart';
 import 'package:storypad/core/objects/stats/story_stats_object.dart';
 import 'package:storypad/core/services/remote_config/remote_config_service.dart';
+import 'package:storypad/core/services/stories/writing_goal_service.dart';
 import 'package:storypad/core/services/url_opener_service.dart';
 import 'package:storypad/core/types/app_logo.dart';
 import 'package:storypad/providers/device_preferences_provider.dart';
@@ -38,7 +39,8 @@ class StatsRoute extends BaseRoute {
   @override
   String get routeName => "stats";
 
-  factory StatsRoute.month(DateTime anchor) => StatsRoute(initialRange: StatsRange.month(anchor));
+  factory StatsRoute.month(DateTime anchor) =>
+      StatsRoute(initialRange: StatsRange.month(anchor));
 
   final StatsRange initialRange;
 
@@ -66,7 +68,8 @@ class StatsView extends StatelessWidget {
           create: (_) => StatsViewModel(
             initialRange: params.initialRange,
             tabController: DefaultTabController.of(context),
-            devicePreferencesProvider: context.read<DevicePreferencesProvider>(),
+            devicePreferencesProvider: context
+                .read<DevicePreferencesProvider>(),
           ),
           builder: (context, _) => _StatsContent(Provider.of(context)),
         ),

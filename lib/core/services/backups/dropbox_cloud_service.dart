@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:http/http.dart' as http;
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
+    as exp;
 import 'package:storypad/core/objects/cloud_file_object.dart';
 import 'package:storypad/core/objects/cloud_storage_quota_object.dart';
 import 'package:storypad/core/objects/dropbox_user_object.dart';
@@ -158,7 +159,8 @@ class DropboxCloudService extends BackupCloudService {
   @override
   Future<bool> requestScope() async => isSignedIn;
 
-  ({String id, String email, String? displayName, String? photoUrl}) _parseAccount(Map<String, dynamic> body) {
+  ({String id, String email, String? displayName, String? photoUrl})
+  _parseAccount(Map<String, dynamic> body) {
     final name = body['name'] as Map<String, dynamic>?;
     return (
       id: body['account_id'] as String,
@@ -168,7 +170,8 @@ class DropboxCloudService extends BackupCloudService {
     );
   }
 
-  Future<({String id, String email, String? displayName, String? photoUrl})> _fetchAccount({
+  Future<({String id, String email, String? displayName, String? photoUrl})>
+  _fetchAccount({
     required String accessToken,
   }) async {
     final response = await http.post(
@@ -188,8 +191,10 @@ class DropboxCloudService extends BackupCloudService {
     return _parseAccount(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
-  Uri _apiUri(String endpoint) => Uri.parse('https://api.dropboxapi.com/2/$endpoint');
-  Uri _contentUri(String endpoint) => Uri.parse('https://content.dropboxapi.com/2/$endpoint');
+  Uri _apiUri(String endpoint) =>
+      Uri.parse('https://api.dropboxapi.com/2/$endpoint');
+  Uri _contentUri(String endpoint) =>
+      Uri.parse('https://content.dropboxapi.com/2/$endpoint');
 
   Map<String, String> get _authHeader {
     final user = _currentUser;
@@ -230,7 +235,8 @@ class DropboxCloudService extends BackupCloudService {
 
   String? _errorSummary(String body) {
     try {
-      return (jsonDecode(body) as Map<String, dynamic>)['error_summary'] as String?;
+      return (jsonDecode(body) as Map<String, dynamic>)['error_summary']
+          as String?;
     } catch (_) {
       return null;
     }
@@ -260,7 +266,10 @@ class DropboxCloudService extends BackupCloudService {
           final existing = yearlyBackups[year];
           final existingTs = existing?.lastUpdatedAt;
           final newTs = cloudFile.lastUpdatedAt;
-          final isNewer = existing == null || (newTs != null && (existingTs == null || newTs.isAfter(existingTs)));
+          final isNewer =
+              existing == null ||
+              (newTs != null &&
+                  (existingTs == null || newTs.isAfter(existingTs)));
           if (isNewer) yearlyBackups[year] = cloudFile;
         }
 
@@ -298,7 +307,10 @@ class DropboxCloudService extends BackupCloudService {
     );
   }
 
-  Future<List<int>?> _downloadBytes(String fileIdOrPath, {required bool swallow404}) async {
+  Future<List<int>?> _downloadBytes(
+    String fileIdOrPath, {
+    required bool swallow404,
+  }) async {
     final response = await http.post(
       _contentUri('files/download'),
       headers: {
@@ -317,7 +329,9 @@ class DropboxCloudService extends BackupCloudService {
     return _executeWithRetry(
       methodName: 'findFileById',
       operation: () async {
-        final response = await _postJson(_apiUri('files/get_metadata'), {'path': fileId});
+        final response = await _postJson(_apiUri('files/get_metadata'), {
+          'path': fileId,
+        });
         if (_isPathNotFound(response)) return null;
         _throwIfError(response);
 
@@ -342,7 +356,11 @@ class DropboxCloudService extends BackupCloudService {
 
         final body = jsonDecode(response.body) as Map<String, dynamic>;
         final trashed = body['.tag'] == 'deleted';
-        return CloudFileObject.fromDropbox(body, trashed: trashed, idOverride: trashed ? fileId : null);
+        return CloudFileObject.fromDropbox(
+          body,
+          trashed: trashed,
+          idOverride: trashed ? fileId : null,
+        );
       },
     );
   }
@@ -352,7 +370,9 @@ class DropboxCloudService extends BackupCloudService {
     return _executeWithRetry(
       methodName: 'deleteFile',
       operation: () async {
-        final response = await _postJson(_apiUri('files/delete_v2'), {'path': cloudFileId});
+        final response = await _postJson(_apiUri('files/delete_v2'), {
+          'path': cloudFileId,
+        });
         _throwIfError(response);
         return true;
       },
@@ -369,26 +389,35 @@ class DropboxCloudService extends BackupCloudService {
     return _executeWithRetry(
       methodName: 'restoreFileFromTrash',
       operation: () async {
-        final metadataResponse = await _postJson(_apiUri('files/get_metadata'), {
-          'path': cloudFileId,
-          'include_deleted': true,
-        });
+        final metadataResponse = await _postJson(
+          _apiUri('files/get_metadata'),
+          {
+            'path': cloudFileId,
+            'include_deleted': true,
+          },
+        );
         _throwIfError(metadataResponse);
-        final metadata = jsonDecode(metadataResponse.body) as Map<String, dynamic>;
+        final metadata =
+            jsonDecode(metadataResponse.body) as Map<String, dynamic>;
         final path = metadata['path_lower'] as String;
 
         // Deleted-file metadata carries no `rev` (only live FileMetadata
         // does), so the path's most recent revision has to be looked up
         // first — restoring that revision's path is Dropbox's documented way
         // to undelete a file; there's no separate "undelete" endpoint.
-        final revisionsResponse = await _postJson(_apiUri('files/list_revisions'), {
-          'path': path,
-          'mode': 'path',
-          'limit': 1,
-        });
+        final revisionsResponse = await _postJson(
+          _apiUri('files/list_revisions'),
+          {
+            'path': path,
+            'mode': 'path',
+            'limit': 1,
+          },
+        );
         _throwIfError(revisionsResponse);
-        final revisions = jsonDecode(revisionsResponse.body) as Map<String, dynamic>;
-        final entries = (revisions['entries'] as List).cast<Map<String, dynamic>>();
+        final revisions =
+            jsonDecode(revisionsResponse.body) as Map<String, dynamic>;
+        final entries = (revisions['entries'] as List)
+            .cast<Map<String, dynamic>>();
         if (entries.isEmpty) {
           throw exp.FileOperationException(
             'No revisions found to restore',
@@ -399,7 +428,10 @@ class DropboxCloudService extends BackupCloudService {
         }
 
         final rev = entries.first['rev'] as String;
-        final restoreResponse = await _postJson(_apiUri('files/restore'), {'path': path, 'rev': rev});
+        final restoreResponse = await _postJson(_apiUri('files/restore'), {
+          'path': path,
+          'rev': rev,
+        });
         _throwIfError(restoreResponse);
         return true;
       },
@@ -431,14 +463,20 @@ class DropboxCloudService extends BackupCloudService {
           _contentUri('files/upload'),
           headers: {
             ..._authHeader,
-            'Dropbox-API-Arg': jsonEncode({'path': path, 'mode': 'overwrite', 'mute': true}),
+            'Dropbox-API-Arg': jsonEncode({
+              'path': path,
+              'mode': 'overwrite',
+              'mute': true,
+            }),
             'Content-Type': 'application/octet-stream',
           },
           body: bytes,
         );
         _throwIfError(response);
 
-        return CloudFileObject.fromDropbox(jsonDecode(response.body) as Map<String, dynamic>);
+        return CloudFileObject.fromDropbox(
+          jsonDecode(response.body) as Map<String, dynamic>,
+        );
       },
     );
   }
@@ -465,9 +503,15 @@ class DropboxCloudService extends BackupCloudService {
         // new path in the same folder — the old file's own path has to be
         // looked up from its ID first (Dropbox content endpoints take a
         // path, not a bare ID).
-        final oldMetadataResponse = await _postJson(_apiUri('files/get_metadata'), {'path': fileId});
+        final oldMetadataResponse = await _postJson(
+          _apiUri('files/get_metadata'),
+          {'path': fileId},
+        );
         _throwIfError(oldMetadataResponse);
-        final oldPath = (jsonDecode(oldMetadataResponse.body) as Map<String, dynamic>)['path_lower'] as String;
+        final oldPath =
+            (jsonDecode(oldMetadataResponse.body)
+                    as Map<String, dynamic>)['path_lower']
+                as String;
         final folder = _parentPath(oldPath);
         final newPath = folder.isEmpty ? '/$fileName' : '$folder/$fileName';
 
@@ -476,20 +520,29 @@ class DropboxCloudService extends BackupCloudService {
           _contentUri('files/upload'),
           headers: {
             ..._authHeader,
-            'Dropbox-API-Arg': jsonEncode({'path': newPath, 'mode': 'overwrite', 'mute': true}),
+            'Dropbox-API-Arg': jsonEncode({
+              'path': newPath,
+              'mode': 'overwrite',
+              'mute': true,
+            }),
             'Content-Type': 'application/octet-stream',
           },
           body: bytes,
         );
         _throwIfError(uploadResponse);
-        final uploaded = jsonDecode(uploadResponse.body) as Map<String, dynamic>;
+        final uploaded =
+            jsonDecode(uploadResponse.body) as Map<String, dynamic>;
 
         if (newPath.toLowerCase() != oldPath) {
           try {
-            final deleteResponse = await _postJson(_apiUri('files/delete_v2'), {'path': fileId});
+            final deleteResponse = await _postJson(_apiUri('files/delete_v2'), {
+              'path': fileId,
+            });
             _throwIfError(deleteResponse);
           } catch (e) {
-            AppLogger.d('DropboxCloudService#updateFile: failed to remove old file $fileId: $e');
+            AppLogger.d(
+              'DropboxCloudService#updateFile: failed to remove old file $fileId: $e',
+            );
           }
         }
 
@@ -517,7 +570,10 @@ class DropboxCloudService extends BackupCloudService {
     bool swallow404 = false,
     bool recursive = false,
   }) async {
-    var response = await _postJson(_apiUri('files/list_folder'), {'path': folderPath, 'recursive': recursive});
+    var response = await _postJson(_apiUri('files/list_folder'), {
+      'path': folderPath,
+      'recursive': recursive,
+    });
 
     if (swallow404 && _isPathNotFound(response)) return [];
     _throwIfError(response);
@@ -527,7 +583,9 @@ class DropboxCloudService extends BackupCloudService {
     entries.addAll((body['entries'] as List).cast<Map<String, dynamic>>());
 
     while (body['has_more'] == true) {
-      response = await _postJson(_apiUri('files/list_folder/continue'), {'cursor': body['cursor']});
+      response = await _postJson(_apiUri('files/list_folder/continue'), {
+        'cursor': body['cursor'],
+      });
       _throwIfError(response);
       body = jsonDecode(response.body) as Map<String, dynamic>;
       entries.addAll((body['entries'] as List).cast<Map<String, dynamic>>());
@@ -542,9 +600,15 @@ class DropboxCloudService extends BackupCloudService {
 
     try {
       final files = await _listFolder('', swallow404: true, recursive: true);
-      final appUsage = files.fold<int>(0, (total, file) => total + ((file['size'] as int?) ?? 0));
+      final appUsage = files.fold<int>(
+        0,
+        (total, file) => total + ((file['size'] as int?) ?? 0),
+      );
 
-      final spaceResponse = await _postJson(_apiUri('users/get_space_usage'), {});
+      final spaceResponse = await _postJson(
+        _apiUri('users/get_space_usage'),
+        {},
+      );
       _throwIfError(spaceResponse);
       final space = jsonDecode(spaceResponse.body) as Map<String, dynamic>;
       final allocation = space['allocation'] as Map<String, dynamic>?;
@@ -555,7 +619,10 @@ class DropboxCloudService extends BackupCloudService {
         limitInBytes: allocation?['allocated'] as int?,
       );
     } catch (e, s) {
-      AppLogger.error('DropboxCloudService#fetchStorageQuota failed: $e', stackTrace: s);
+      AppLogger.error(
+        'DropboxCloudService#fetchStorageQuota failed: $e',
+        stackTrace: s,
+      );
       return null;
     }
   }

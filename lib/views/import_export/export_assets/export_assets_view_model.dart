@@ -5,7 +5,8 @@ import 'package:share_plus/share_plus.dart';
 import 'package:storypad/core/constants/app_constants.dart';
 import 'package:storypad/core/databases/models/asset_db_model.dart';
 import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
+    as exp;
 import 'package:storypad/core/services/assets/backup_asset_downloader_service.dart';
 import 'package:storypad/core/services/backups/backup_cloud_service.dart';
 import 'package:storypad/core/services/messenger_service.dart';
@@ -103,12 +104,16 @@ class ExportAssetsViewModel extends ChangeNotifier with DisposeAwareMixin {
         }
 
         try {
-          await BackupAssetDownloaderService().downloadAsset(asset: asset, signedInServices: signedInServices);
+          await BackupAssetDownloaderService().downloadAsset(
+            asset: asset,
+            signedInServices: signedInServices,
+          );
         } catch (e) {
           // Auth errors affect every remaining download from that service —
           // surface and abort rather than skip-and-continue.
           if (e is exp.AuthException) {
-            if (context.mounted) MessengerService.of(context).showError(e.userFriendlyMessage);
+            if (context.mounted)
+              MessengerService.of(context).showError(e.userFriendlyMessage);
             return false;
           }
 
@@ -129,7 +134,10 @@ class ExportAssetsViewModel extends ChangeNotifier with DisposeAwareMixin {
     }
   }
 
-  bool _hasDownloadableDestination(AssetDbModel asset, List<BackupCloudService> signedInServices) {
+  bool _hasDownloadableDestination(
+    AssetDbModel asset,
+    List<BackupCloudService> signedInServices,
+  ) {
     return asset.matchingCloudDestinationFor(signedInServices) != null;
   }
 
@@ -154,7 +162,9 @@ class ExportAssetsViewModel extends ChangeNotifier with DisposeAwareMixin {
         final String exportFileName =
             "$kAppName-${kDeviceInfo.model}-assets-${DateTime.now().toIso8601String()}.tar.gz";
 
-        final tarFile = File("${SupportDirectoryPath.export_assets.directoryPath}/$exportFileName");
+        final tarFile = File(
+          "${SupportDirectoryPath.export_assets.directoryPath}/$exportFileName",
+        );
         await tarFile.create(recursive: true);
 
         Stream<TarEntry> buildEntries() async* {
@@ -174,7 +184,10 @@ class ExportAssetsViewModel extends ChangeNotifier with DisposeAwareMixin {
           }
         }
 
-        await buildEntries().transform(tarWriter).transform(gzip.encoder).pipe(tarFile.openWrite());
+        await buildEntries()
+            .transform(tarWriter)
+            .transform(gzip.encoder)
+            .pipe(tarFile.openWrite());
 
         return tarFile;
       },
@@ -190,7 +203,9 @@ class ExportAssetsViewModel extends ChangeNotifier with DisposeAwareMixin {
       await SharePlus.instance.share(
         ShareParams(
           title: basename(tarFile.path),
-          sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+          sharePositionOrigin: box != null
+              ? box.localToGlobal(Offset.zero) & box.size
+              : null,
           files: [XFile(tarFile.path)],
         ),
       );
@@ -203,7 +218,9 @@ class ExportAssetsViewModel extends ChangeNotifier with DisposeAwareMixin {
     if (context.mounted && _skippedAssets.isNotEmpty) {
       MessengerService.of(
         context,
-      ).showSnackBar('${_skippedAssets.length} asset(s) were unavailable and skipped from the export.');
+      ).showSnackBar(
+        '${_skippedAssets.length} asset(s) were unavailable and skipped from the export.',
+      );
     }
   }
 

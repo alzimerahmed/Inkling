@@ -30,7 +30,9 @@ void main() {
     });
 
     test('never contains base64 padding or non-URL-safe characters', () {
-      final challenge = DropboxOAuthService.codeChallengeFor('any-verifier-value');
+      final challenge = DropboxOAuthService.codeChallengeFor(
+        'any-verifier-value',
+      );
       expect(challenge, isNot(contains('=')));
       expect(challenge, isNot(contains('+')));
       expect(challenge, isNot(contains('/')));

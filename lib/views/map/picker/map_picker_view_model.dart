@@ -47,9 +47,13 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
   bool _showCurrentLocation = false;
   bool get showCurrentLocation => _showCurrentLocation;
 
-  SpMapRenderer get mapRenderer => viewContext.read<DevicePreferencesProvider>().mapRenderer;
+  SpMapRenderer get mapRenderer =>
+      viewContext.read<DevicePreferencesProvider>().mapRenderer;
 
-  late SpMapStyle _mapStyle = viewContext.read<DevicePreferencesProvider>().preferences.mapStyle;
+  late SpMapStyle _mapStyle = viewContext
+      .read<DevicePreferencesProvider>()
+      .preferences
+      .mapStyle;
   SpMapStyle get mapStyle => _mapStyle;
 
   PlaceDbModel? _selectedPlace;
@@ -71,7 +75,12 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
     final PlaceDbModel? initial = params.initialSelectedPlace;
     final PlaceDbModel? selected = _selectedPlace;
     if (initial == null || selected == null) return false;
-    return !_isSameLatLng(selected.latitude, selected.longitude, initial.latitude, initial.longitude);
+    return !_isSameLatLng(
+      selected.latitude,
+      selected.longitude,
+      initial.latitude,
+      initial.longitude,
+    );
   }
 
   SpMapCamera get initialSpMapCamera => _initialSpMapCamera;
@@ -87,17 +96,23 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
 
     return selectedPlace.latitude != initialPlace.latitude ||
         selectedPlace.longitude != initialPlace.longitude ||
-        _normalizeText(selectedPlace.placeName) != _normalizeText(initialPlace.placeName) ||
-        _normalizeText(selectedPlace.locality) != _normalizeText(initialPlace.locality) ||
-        _normalizeText(selectedPlace.country) != _normalizeText(initialPlace.country) ||
-        _normalizeText(selectedPlace.address) != _normalizeText(initialPlace.address);
+        _normalizeText(selectedPlace.placeName) !=
+            _normalizeText(initialPlace.placeName) ||
+        _normalizeText(selectedPlace.locality) !=
+            _normalizeText(initialPlace.locality) ||
+        _normalizeText(selectedPlace.country) !=
+            _normalizeText(initialPlace.country) ||
+        _normalizeText(selectedPlace.address) !=
+            _normalizeText(initialPlace.address);
   }
 
   Future<void> resolveInitialCamera() async {
     final resolver = InitialMapCameraResolver(
       fetchDeviceLocation: SpLocationService.fetchLastKnownLocation,
       fetchStoryLocations: () async {
-        final stories = await StoryDbModel.db.getRecentStoriesWithLocation(limit: 20);
+        final stories = await StoryDbModel.db.getRecentStoriesWithLocation(
+          limit: 20,
+        );
         return stories.map((story) => story.location).toList();
       },
       // The picker is about choosing one precise place, so start closer in
@@ -106,7 +121,9 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
       closeZoomBoost: 4.0,
     );
 
-    final result = await resolver.resolve(selectedPlace: params.initialSelectedPlace);
+    final result = await resolver.resolve(
+      selectedPlace: params.initialSelectedPlace,
+    );
     if (disposed) return;
     if (params.initialSelectedPlace == null && _selectedPlace != null) return;
 
@@ -141,7 +158,13 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
     _isDragging = false;
 
     final PlaceDbModel? current = _selectedPlace;
-    if (current != null && _isSameLatLng(center.latitude, center.longitude, current.latitude, current.longitude)) {
+    if (current != null &&
+        _isSameLatLng(
+          center.latitude,
+          center.longitude,
+          current.latitude,
+          current.longitude,
+        )) {
       notifyListeners();
       return;
     }
@@ -158,7 +181,13 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
       final SpLatLng center = viewport.center;
       final PlaceDbModel? current = _selectedPlace;
 
-      if (current != null && _isSameLatLng(center.latitude, center.longitude, current.latitude, current.longitude)) {
+      if (current != null &&
+          _isSameLatLng(
+            center.latitude,
+            center.longitude,
+            current.latitude,
+            current.longitude,
+          )) {
         return;
       }
 
@@ -198,7 +227,9 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   Future<void> goToCurrentLocation(BuildContext context) async {
-    final place = await SpAppLocationService.fetchCurrentPlaceWithRecovery(context);
+    final place = await SpAppLocationService.fetchCurrentPlaceWithRecovery(
+      context,
+    );
     if (!context.mounted || place == null) return;
 
     _showCurrentLocation = true;
@@ -225,7 +256,8 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
     final String trimmed = query.trim();
 
     if (trimmed.isEmpty) return Future.value(const <PlaceDbModel>[]);
-    if (params.initialSelectedPlace == null) return Future.value(const <PlaceDbModel>[]);
+    if (params.initialSelectedPlace == null)
+      return Future.value(const <PlaceDbModel>[]);
 
     return SpGeocodingService.onlineInstance.searchPlaces(
       trimmed,
@@ -303,7 +335,9 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
     notifyListeners();
 
     try {
-      final resolved = await SpGeocodingService.systemInstance.reverseGeocode(place.latLng);
+      final resolved = await SpGeocodingService.systemInstance.reverseGeocode(
+        place.latLng,
+      );
       if (selectedVersion != _selectedVersion) return;
 
       _selectedPlace = resolved ?? place;

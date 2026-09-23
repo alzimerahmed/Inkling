@@ -33,7 +33,9 @@ class MapProviderTile extends StatelessWidget {
         // already switched, wherever they are now. Hiding it the moment they
         // travel out of the region would be a one-way door.
         final bool visible =
-            SpMapRenderer.selectable(kLocalTimezone) || provider.preferences.mapRenderer != null || kDebugMode;
+            SpMapRenderer.selectable(kLocalTimezone) ||
+            provider.preferences.mapRenderer != null ||
+            kDebugMode;
         if (!visible) return const SizedBox.shrink();
 
         return MapProviderTile(

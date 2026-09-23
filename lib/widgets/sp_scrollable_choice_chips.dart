@@ -20,10 +20,12 @@ class SpScrollableChoiceChips<T> extends StatefulWidget {
   final double? wrapWidth;
 
   @override
-  State<SpScrollableChoiceChips<T>> createState() => SpScrollableChoiceChipsState<T>();
+  State<SpScrollableChoiceChips<T>> createState() =>
+      SpScrollableChoiceChipsState<T>();
 }
 
-class SpScrollableChoiceChipsState<T> extends State<SpScrollableChoiceChips<T>> {
+class SpScrollableChoiceChipsState<T>
+    extends State<SpScrollableChoiceChips<T>> {
   final Map<int, GlobalKey> _chipKeys = {};
 
   @override
@@ -86,7 +88,9 @@ class SpScrollableChoiceChipsState<T> extends State<SpScrollableChoiceChips<T>> 
               materialTapTargetSize: .shrinkWrap,
               showCheckmark: false,
               selected: widget.selected(choice),
-              onSelected: widget.onToggle != null ? (_) => widget.onToggle!(choice) : null,
+              onSelected: widget.onToggle != null
+                  ? (_) => widget.onToggle!(choice)
+                  : null,
               label: Row(
                 mainAxisAlignment: .center,
                 crossAxisAlignment: .center,
@@ -99,7 +103,10 @@ class SpScrollableChoiceChipsState<T> extends State<SpScrollableChoiceChips<T>> 
                   ),
                   if (storyCount != null)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6.0,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: ColorScheme.of(context).surface,
                         borderRadius: BorderRadius.circular(48.0),

@@ -8,7 +8,8 @@ import 'package:storypad/core/services/logger/app_logger.dart';
 import 'package:storypad/core/types/support_directory_path.dart';
 import 'package:storypad/objectbox.g.dart';
 
-abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends BaseDbAdapter<T> {
+abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel>
+    extends BaseDbAdapter<T> {
   @override
   String get tableName;
 
@@ -36,11 +37,15 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
   }
 
   @override
-  Future<Map<int, DateTime?>> getLastUpdatedAtByYear({bool? fromThisDeviceOnly}) async {
+  Future<Map<int, DateTime?>> getLastUpdatedAtByYear({
+    bool? fromThisDeviceOnly,
+  }) async {
     Condition<B>? conditions = idProperty.notNull();
 
     if (fromThisDeviceOnly == true) {
-      conditions = conditions.and(lastSavedDeviceIdProperty.equals(kDeviceInfo.id));
+      conditions = conditions.and(
+        lastSavedDeviceIdProperty.equals(kDeviceInfo.id),
+      );
     }
 
     // We don't need to filter out deleted records here because
@@ -57,13 +62,16 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
         }
       }
 
-      return lastUpdated == null ? {} : {BackupFileObject.kGlobalBackupYear: lastUpdated};
+      return lastUpdated == null
+          ? {}
+          : {BackupFileObject.kGlobalBackupYear: lastUpdated};
     }
 
     Map<int, DateTime?> lastUpdatedByYear = {};
     for (var obj in objects) {
       int year = obj.createdAt.year;
-      if (lastUpdatedByYear[year] == null || obj.updatedAt.isAfter(lastUpdatedByYear[year]!)) {
+      if (lastUpdatedByYear[year] == null ||
+          obj.updatedAt.isAfter(lastUpdatedByYear[year]!)) {
         lastUpdatedByYear[year] = obj.updatedAt;
       }
     }
@@ -72,7 +80,10 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
   }
 
   Future<B> modelToObject(T model, [Map<String, dynamic>? options]);
-  Future<List<B>> modelsToObjects(List<T> models, [Map<String, dynamic>? options]);
+  Future<List<B>> modelsToObjects(
+    List<T> models, [
+    Map<String, dynamic>? options,
+  ]);
 
   Future<T> objectToModel(B object, [Map<String, dynamic>? options]);
   Future<List<T>> objectsToModels(
@@ -134,7 +145,10 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
     required String? debugSource,
   }) async {
     AppLogger.info("Triggering $tableName#count from $debugSource 🍎");
-    QueryBuilder<B>? queryBuilder = buildQuery(filters: filters, returnDeleted: returnDeleted);
+    QueryBuilder<B>? queryBuilder = buildQuery(
+      filters: filters,
+      returnDeleted: returnDeleted,
+    );
     Query<B>? query = queryBuilder.build();
     return query.count();
   }
@@ -148,11 +162,16 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
     AppLogger.info("Triggering $tableName#where 🍎");
 
     List<B> objects;
-    QueryBuilder<B>? queryBuilder = buildQuery(filters: filters, returnDeleted: returnDeleted);
+    QueryBuilder<B>? queryBuilder = buildQuery(
+      filters: filters,
+      returnDeleted: returnDeleted,
+    );
 
     Query<B>? query = queryBuilder.build();
 
-    int? limit = filters != null && filters.containsKey('limit') ? filters['limit'] as int : null;
+    int? limit = filters != null && filters.containsKey('limit')
+        ? filters['limit'] as int
+        : null;
     if (limit != null) query.limit = limit;
 
     objects = await query.findAsync();

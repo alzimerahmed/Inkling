@@ -6,8 +6,11 @@ class _EditTemplateContent extends StatelessWidget {
   final EditTemplateViewModel viewModel;
 
   List<StoryPageObject> constructPages() {
-    if (viewModel.pagesManager.pagesMap.keys.isEmpty) return <StoryPageObject>[];
-    return List.generate(viewModel.draftContent?.richPages?.length ?? 0, (index) {
+    if (viewModel.pagesManager.pagesMap.keys.isEmpty)
+      return <StoryPageObject>[];
+    return List.generate(viewModel.draftContent?.richPages?.length ?? 0, (
+      index,
+    ) {
       final page = viewModel.draftContent!.richPages![index];
       return viewModel.pagesManager.pagesMap[page.id];
     }).toList().whereType<StoryPageObject>().toList();
@@ -43,7 +46,8 @@ class _EditTemplateContent extends StatelessWidget {
               SpStoryThemeBottomSheet(
                 preferences: viewModel.template.preferences,
                 storyViewModel: null,
-                onThemeChanged: (preferences) => viewModel.changePreferences(preferences),
+                onThemeChanged: (preferences) =>
+                    viewModel.changePreferences(preferences),
               ).show(context: context);
             },
           ),
@@ -58,7 +62,8 @@ class _EditTemplateContent extends StatelessWidget {
         pages: pages,
         backgroundColor: ColorScheme.of(context).readOnly.surface1,
         preferences: viewModel.template.preferences,
-        onThemeChanged: (preferences) => viewModel.changePreferences(preferences),
+        onThemeChanged: (preferences) =>
+            viewModel.changePreferences(preferences),
       ),
     );
   }
@@ -84,7 +89,8 @@ class _EditTemplateContent extends StatelessWidget {
       onPageChanged: (newRichPage) => viewModel.onPageChanged(newRichPage),
       actions: StoryPageBuilderAction(
         onAddPage: () => viewModel.addNewPage(),
-        onSwapPages: (oldIndex, newIndex) => viewModel.swapPages(oldIndex: oldIndex, newIndex: newIndex),
+        onSwapPages: (oldIndex, newIndex) =>
+            viewModel.swapPages(oldIndex: oldIndex, newIndex: newIndex),
         onDelete: (page) => viewModel.deleteAPage(context, page.page),
         onFocusChange: (pageIndex, page, titleFocused, bodyFocused) {},
         canDeletePage: viewModel.pagesManager.canDeletePage,
@@ -99,7 +105,9 @@ class _EditTemplateContent extends StatelessWidget {
       children: [
         TemplateTagLabels(
           template: viewModel.template,
-          margin: const EdgeInsets.symmetric(horizontal: 12.0).copyWith(top: 12.0),
+          margin: const EdgeInsets.symmetric(
+            horizontal: 12.0,
+          ).copyWith(top: 12.0),
         ),
       ],
     );

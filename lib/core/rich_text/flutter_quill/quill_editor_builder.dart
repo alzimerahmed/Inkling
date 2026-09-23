@@ -16,7 +16,8 @@ Widget buildQuillEditor({
   VoidCallback? onGoToEdit,
 }) {
   // Cast to QuillRichTextController to access underlying QuillController
-  final quillController = (controller as QuillRichTextController).quillController;
+  final quillController =
+      (controller as QuillRichTextController).quillController;
 
   return _QuillEditorWidget(
     bodyFocusNode: focusNode,
@@ -96,14 +97,18 @@ class _QuillEditorWidgetState extends State<_QuillEditorWidget> {
       config: quill.QuillEditorConfig(
         customStyles: quill.DefaultStyles(
           quote: quill.DefaultTextBlockStyle(
-            TextTheme.of(context).bodyLarge!.copyWith(color: ColorScheme.of(context).onSurface.withValues(alpha: 0.8)),
+            TextTheme.of(context).bodyLarge!.copyWith(
+              color: ColorScheme.of(context).onSurface.withValues(alpha: 0.8),
+            ),
             const quill.HorizontalSpacing(0.0, 0.0),
             const quill.VerticalSpacing(4.0, 4.0),
             const quill.VerticalSpacing(0.0, 0.0),
             BoxDecoration(
               border: Border(
                 left: BorderSide(
-                  color: ColorScheme.of(context).onSurface.withValues(alpha: 0.2),
+                  color: ColorScheme.of(
+                    context,
+                  ).onSurface.withValues(alpha: 0.2),
                   width: MediaQuery.textScalerOf(context).scale(3),
                 ),
               ),
@@ -111,34 +116,45 @@ class _QuillEditorWidgetState extends State<_QuillEditorWidget> {
           ),
         ),
         keyboardAppearance: Theme.of(context).brightness,
-        contextMenuBuilder: (context, rawEditorState) => _QuillContextMenuHelper.get(
-          rawEditorState,
-          editable: !widget.readOnly,
-          onEdit: widget.onGoToEdit,
-        ),
+        contextMenuBuilder: (context, rawEditorState) =>
+            _QuillContextMenuHelper.get(
+              rawEditorState,
+              editable: !widget.readOnly,
+              onEdit: widget.onGoToEdit,
+            ),
         scrollBottomInset: MediaQuery.of(context).viewPadding.bottom,
         scrollable: true,
         expands: false,
         quillMagnifierBuilder: null,
-        padding: const EdgeInsets.only(top: 4, left: 12.0, bottom: 20, right: 12.0),
+        padding: const EdgeInsets.only(
+          top: 4,
+          left: 12.0,
+          bottom: 20,
+          right: 12.0,
+        ),
         autoFocus: false,
-        checkBoxReadOnly: widget.onChanged == null ? true : (widget.readOnly ? false : null),
+        checkBoxReadOnly: widget.onChanged == null
+            ? true
+            : (widget.readOnly ? false : null),
         enableScribble: !widget.readOnly,
         showCursor: !widget.readOnly,
         paintCursorAboveText: !widget.readOnly,
         placeholder: "...",
-        onLaunchUrl: (value) => UrlOpenerService.openForRichContent(context: context, url: value),
+        onLaunchUrl: (value) =>
+            UrlOpenerService.openForRichContent(context: context, url: value),
         embedBuilders: [
           _QuillMediaBlockEmbed(
             layoutType: widget.layoutType,
-            fetchAllMedia: () => StoryContentEmbedExtractor.media(widget.storyContent),
+            fetchAllMedia: () =>
+                StoryContentEmbedExtractor.media(widget.storyContent),
           ),
           // Legacy key, kept for backward compatibility -- stories saved
           // before the image->media rename still use `image` and must keep
           // rendering exactly as before. See _QuillMediaBlockEmbed's doc.
           _QuillMediaBlockEmbed(
             layoutType: widget.layoutType,
-            fetchAllMedia: () => StoryContentEmbedExtractor.media(widget.storyContent),
+            fetchAllMedia: () =>
+                StoryContentEmbedExtractor.media(widget.storyContent),
             embedKey: 'image',
           ),
           _QuillAudioBlockEmbed(),
@@ -148,16 +164,26 @@ class _QuillEditorWidgetState extends State<_QuillEditorWidget> {
 
         // ignore: experimental_member_use
         customLeadingBlockBuilder: (node, config) {
-          final attribute = config.attrs[quill.Attribute.list.key] ?? config.attrs[quill.Attribute.codeBlock.key];
-          final isCheck = attribute == quill.Attribute.checked || attribute == quill.Attribute.unchecked;
+          final attribute =
+              config.attrs[quill.Attribute.list.key] ??
+              config.attrs[quill.Attribute.codeBlock.key];
+          final isCheck =
+              attribute == quill.Attribute.checked ||
+              attribute == quill.Attribute.unchecked;
 
           if (isCheck) {
             return Container(
-              alignment: AppTheme.getDirectionValue(context, Alignment.centerLeft, Alignment.centerRight),
+              alignment: AppTheme.getDirectionValue(
+                context,
+                Alignment.centerLeft,
+                Alignment.centerRight,
+              ),
               transform: Matrix4.translationValues(-6.0, 0.0, 0.0),
               child: Checkbox.adaptive(
                 value: config.value,
-                onChanged: config.enabled == true ? (value) => config.onCheckboxTap.call(value == true) : null,
+                onChanged: config.enabled == true
+                    ? (value) => config.onCheckboxTap.call(value == true)
+                    : null,
               ),
             );
           }

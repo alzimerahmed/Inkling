@@ -63,7 +63,10 @@ class SpToggleListSheet<T> extends BaseBottomSheet {
             ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: OutlinedButton(onPressed: onReset, child: Text(tr('button.reset'))),
+            child: OutlinedButton(
+              onPressed: onReset,
+              child: Text(tr('button.reset')),
+            ),
           ),
           SizedBox(height: bottomPadding),
         ],

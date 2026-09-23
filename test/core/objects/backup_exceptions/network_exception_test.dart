@@ -15,7 +15,9 @@ void main() {
       expect(exception.isRetryable, isTrue);
       expect(
         exception.userFriendlyMessage,
-        equals('Network connection error. Please check your internet connection and try again.'),
+        equals(
+          'Network connection error. Please check your internet connection and try again.',
+        ),
       );
     });
 
@@ -34,7 +36,10 @@ void main() {
         'Network error',
         context: 'test_context',
       );
-      expect(exception.toString(), equals('BackupException: Network error (test_context)'));
+      expect(
+        exception.toString(),
+        equals('BackupException: Network error (test_context)'),
+      );
     });
 
     test('toString excludes context when not provided', () {

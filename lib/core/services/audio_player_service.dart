@@ -19,7 +19,9 @@ class AudioPlayerService {
     _player.playerStateStream.listen((state) {
       if (_disposed) return;
 
-      debugPrint('🎻 AudioPlayerService#onStateChanged ${basename(urlPath)}: $state');
+      debugPrint(
+        '🎻 AudioPlayerService#onStateChanged ${basename(urlPath)}: $state',
+      );
       onStateChanged(state);
     });
   }
@@ -44,10 +46,14 @@ class AudioPlayerService {
       _setLoop ??= await _player.setLoopMode(LoopMode.one).then((e) => true);
 
       File? cachedFile = CloudStorageService.instance.getCachedFile(urlPath);
-      cachedFile ??= await CloudStorageService.instance.downloadFile(urlPath).then((e) => e.file);
+      cachedFile ??= await CloudStorageService.instance
+          .downloadFile(urlPath)
+          .then((e) => e.file);
 
       if (cachedFile != null && !_disposed) {
-        _setAudioSource ??= await _player.setFilePath(cachedFile.path).then((value) => true);
+        _setAudioSource ??= await _player
+            .setFilePath(cachedFile.path)
+            .then((value) => true);
         completer.complete(true);
         return true;
       } else {
@@ -55,7 +61,9 @@ class AudioPlayerService {
         return false;
       }
     } catch (error) {
-      debugPrint('🎻 AudioPlayerService#_setup ${basename(urlPath)} failed: $error');
+      debugPrint(
+        '🎻 AudioPlayerService#_setup ${basename(urlPath)} failed: $error',
+      );
       // Allow future retries instead of hanging every subsequent call on a broken setup.
       _setAudioSource = null;
       _setupCompleter = null;
@@ -70,7 +78,9 @@ class AudioPlayerService {
 
     // no need to wait for play.
     _player.play().catchError((error) {
-      debugPrint('🎻 AudioPlayerService#play ${basename(urlPath)} failed: $error');
+      debugPrint(
+        '🎻 AudioPlayerService#play ${basename(urlPath)} failed: $error',
+      );
     });
   }
 

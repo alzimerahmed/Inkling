@@ -6,7 +6,8 @@ class BackupObject {
   final BackupFileObject fileInfo;
 
   final int version;
-  final int? year; // For v3 yearly backups - indicates which year this backup contains
+  final int?
+  year; // For v3 yearly backups - indicates which year this backup contains
 
   int? originalFileSize;
 
@@ -25,14 +26,18 @@ class BackupObject {
     return BackupObject(
       version: int.tryParse(contents['version'].toString()) ?? currentVersion,
       tables: contents['tables'],
-      year: contents['year'] != null ? int.tryParse(contents['year'].toString()) : null,
+      year: contents['year'] != null
+          ? int.tryParse(contents['year'].toString())
+          : null,
       fileInfo: BackupFileObject(
         createdAt: DateTime.parse(contents['meta_data']['created_at']),
         device: DeviceInfoObject(
           model: contents['meta_data']['device_model'],
           id: contents['meta_data']['device_id'],
         ),
-        year: contents['year'] != null ? int.tryParse(contents['year'].toString()) : null,
+        year: contents['year'] != null
+            ? int.tryParse(contents['year'].toString())
+            : null,
         hasCompression: false,
       ),
     );

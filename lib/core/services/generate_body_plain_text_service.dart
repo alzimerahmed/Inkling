@@ -25,12 +25,18 @@ class GenerateBodyPlainTextService {
   /// - characterCount: Total character count across all pages
   ///
   /// Returns null if [newRichPages] is null or empty
-  static GenerateBodyPlainTextResult? call(List<StoryPageDbModel>? newRichPages) {
+  static GenerateBodyPlainTextResult? call(
+    List<StoryPageDbModel>? newRichPages,
+  ) {
     if (newRichPages == null || newRichPages.isEmpty) return null;
 
     // Compute text once per page and reuse results
     final pageTexts = newRichPages.map((page) {
-      return QuillDeltaToPlainTextService.call(page.body ?? [], markdown: true, includeMarkdownEmbeds: false);
+      return QuillDeltaToPlainTextService.call(
+        page.body ?? [],
+        markdown: true,
+        includeMarkdownEmbeds: false,
+      );
     }).toList();
 
     // Build plainText from computed texts
@@ -48,13 +54,18 @@ class GenerateBodyPlainTextService {
       for (int i = 0; i < newRichPages.length; i++)
         () {
           // Filter out markdown formatting to count only actual written content
-          final filteredTitle = MarkdownContentFilterService.call(newRichPages[i].title ?? '');
+          final filteredTitle = MarkdownContentFilterService.call(
+            newRichPages[i].title ?? '',
+          );
           final filteredBody = MarkdownContentFilterService.call(pageTexts[i]);
           final filteredCombined = '$filteredTitle $filteredBody';
 
           return newRichPages[i].copyWith(
             characterCount: filteredTitle.length + filteredBody.length,
-            wordCount: filteredCombined.split(RegExp(r'\s+')).where((element) => element.isNotEmpty).length,
+            wordCount: filteredCombined
+                .split(RegExp(r'\s+'))
+                .where((element) => element.isNotEmpty)
+                .length,
           );
         }(),
     ];

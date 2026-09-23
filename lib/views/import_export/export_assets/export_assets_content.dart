@@ -18,7 +18,10 @@ class _ExportAssetsContent extends StatelessWidget {
                   alignment: PlaceholderAlignment.middle,
                   child: Container(
                     margin: const EdgeInsets.only(left: 6.0),
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 2.0,
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.0),
                       color: ColorScheme.of(context).readOnly.surface2,
@@ -34,9 +37,12 @@ class _ExportAssetsContent extends StatelessWidget {
         ),
       ),
       body: ListView(
-        padding: MediaQuery.paddingOf(
-          context,
-        ).copyWith(top: 16.0, bottom: 16.0).add(const EdgeInsets.symmetric(horizontal: 16.0)),
+        padding:
+            MediaQuery.paddingOf(
+                  context,
+                )
+                .copyWith(top: 16.0, bottom: 16.0)
+                .add(const EdgeInsets.symmetric(horizontal: 16.0)),
         children: [
           buildStatistics(context),
           const SizedBox(height: 12.0),

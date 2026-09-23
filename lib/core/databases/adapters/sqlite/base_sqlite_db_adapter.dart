@@ -90,7 +90,9 @@ class BaseSqliteDbAdapter extends BaseDbAdapter {
   }
 
   @override
-  Future<Map<int, DateTime?>> getLastUpdatedAtByYear({bool? fromThisDeviceOnly}) {
+  Future<Map<int, DateTime?>> getLastUpdatedAtByYear({
+    bool? fromThisDeviceOnly,
+  }) {
     throw UnimplementedError();
   }
 }

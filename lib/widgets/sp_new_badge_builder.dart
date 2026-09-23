@@ -12,7 +12,12 @@ class SpNewBadgeBuilder extends StatefulWidget {
   });
 
   final String badgeKey;
-  final Widget Function(BuildContext context, Widget? newBadge, void Function() hideBadge) builder;
+  final Widget Function(
+    BuildContext context,
+    Widget? newBadge,
+    void Function() hideBadge,
+  )
+  builder;
 
   @override
   State<SpNewBadgeBuilder> createState() => _SpNewBadgeBuilderState();
@@ -60,7 +65,9 @@ class _SpNewBadgeBuilderState extends State<SpNewBadgeBuilder> {
         ),
         child: Text(
           tr('general.new'),
-          style: TextTheme.of(context).labelMedium?.copyWith(color: ColorScheme.of(context).onSurface),
+          style: TextTheme.of(
+            context,
+          ).labelMedium?.copyWith(color: ColorScheme.of(context).onSurface),
         ),
       ),
     );

@@ -21,7 +21,8 @@ import 'package:storypad/views/templates/stories/template_stories_view.dart';
 
 import 'show_template_gallery_view.dart';
 
-class ShowTemplateGalleryViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
+class ShowTemplateGalleryViewModel extends ChangeNotifier
+    with DisposeAwareMixin, DebounchedCallback {
   final ShowTemplateGalleryRoute params;
   final PageController pageController = PageController();
 
@@ -53,7 +54,9 @@ class ShowTemplateGalleryViewModel extends ChangeNotifier with DisposeAwareMixin
     );
 
     draftContent = content.copyWith(
-      richPages: content.richPages?.map((e) => pagesManager.pagesMap[e.id]?.page ?? e).toList(),
+      richPages: content.richPages
+          ?.map((e) => pagesManager.pagesMap[e.id]?.page ?? e)
+          .toList(),
     );
 
     galleryTemplate = galleryTemplate.copyWith(lazyDraftContent: draftContent);
@@ -121,8 +124,13 @@ class ShowTemplateGalleryViewModel extends ChangeNotifier with DisposeAwareMixin
   }
 
   void useTemplate(BuildContext context) async {
-    AnalyticsService.instance.logUseGalleryTemplate(templateId: galleryTemplate.id, source: 'gallery');
-    GalleryTemplateUsageService.instance.recordTemplateUsage(templateId: galleryTemplate.id);
+    AnalyticsService.instance.logUseGalleryTemplate(
+      templateId: galleryTemplate.id,
+      source: 'gallery',
+    );
+    GalleryTemplateUsageService.instance.recordTemplateUsage(
+      templateId: galleryTemplate.id,
+    );
 
     final result = await EditStoryRoute(
       galleryTemplate: galleryTemplate,

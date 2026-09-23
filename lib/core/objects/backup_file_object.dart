@@ -3,7 +3,8 @@ import 'package:storypad/core/objects/device_info_object.dart';
 
 class BackupFileObject {
   static const String prefix = "Backup";
-  static const String splitBy = "__"; // Use __ for Windows compatibility (old :: still supported)
+  static const String splitBy =
+      "__"; // Use __ for Windows compatibility (old :: still supported)
 
   /// Sentinel `year` for the v3 file holding tables with no calendar semantics
   /// (tags, tag categories, templates, preferences, relax sound mixes) — rides
@@ -21,7 +22,11 @@ class BackupFileObject {
 
   bool sameDayAs(BackupFileObject fileInfo) {
     return [createdAt.year, createdAt.month, createdAt.day].join("-") ==
-        [fileInfo.createdAt.year, fileInfo.createdAt.month, fileInfo.createdAt.day].join("-");
+        [
+          fileInfo.createdAt.year,
+          fileInfo.createdAt.month,
+          fileInfo.createdAt.day,
+        ].join("-");
   }
 
   BackupFileObject({
@@ -88,7 +93,9 @@ class BackupFileObject {
           try {
             int year = int.parse(value[2]);
             int millisecondsEpoch = int.parse(value[3]);
-            DateTime createdAt = DateTime.fromMillisecondsSinceEpoch(millisecondsEpoch);
+            DateTime createdAt = DateTime.fromMillisecondsSinceEpoch(
+              millisecondsEpoch,
+            );
             String deviceModel = value[4];
             String deviceId = value[5];
 
@@ -109,7 +116,9 @@ class BackupFileObject {
           // v1: Backup__1__1731680400000__Pixel 5__ABC123 (or legacy Backup::1::...)
           try {
             int millisecondsEpoch = int.parse(value[2]);
-            DateTime createdAt = DateTime.fromMillisecondsSinceEpoch(millisecondsEpoch);
+            DateTime createdAt = DateTime.fromMillisecondsSinceEpoch(
+              millisecondsEpoch,
+            );
             String deviceModel = value[3];
             String deviceId = value[4];
             return BackupFileObject(

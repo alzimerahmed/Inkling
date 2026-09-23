@@ -43,8 +43,11 @@ class StoryTileActions {
 
         /// In all case, delete button only show inside [SpStoryListWithQuery],
         /// So after undo, we should reload the list.
-        if (storyListReloaderContext != null && storyListReloaderContext!.mounted) {
-          SpStoryListWithQuery.of(storyListReloaderContext!)?.load(debugSource: '$runtimeType#undoHardDelete');
+        if (storyListReloaderContext != null &&
+            storyListReloaderContext!.mounted) {
+          SpStoryListWithQuery.of(
+            storyListReloaderContext!,
+          )?.load(debugSource: '$runtimeType#undoHardDelete');
         }
 
         AnalyticsService.instance.logUndoHardDeleteStory(
@@ -80,7 +83,9 @@ class StoryTileActions {
     );
 
     if (!context.mounted) return;
-    MessengerService.of(context).showSnackBar(tr("snack_bar.restore_individual_success"));
+    MessengerService.of(
+      context,
+    ).showSnackBar(tr("snack_bar.restore_individual_success"));
   }
 
   Future<bool> moveToBin(BuildContext context) async {
@@ -101,8 +106,11 @@ class StoryTileActions {
       );
 
       // sometime, it move to bin from archive page, so need to reload story list which in archives view as well.
-      if (storyListReloaderContext != null && storyListReloaderContext!.mounted) {
-        await SpStoryListWithQuery.of(storyListReloaderContext!)?.load(debugSource: '$runtimeType#undoMoveToBin');
+      if (storyListReloaderContext != null &&
+          storyListReloaderContext!.mounted) {
+        await SpStoryListWithQuery.of(
+          storyListReloaderContext!,
+        )?.load(debugSource: '$runtimeType#undoMoveToBin');
       }
 
       HomeView.applyStoryReloaded(updatedStory);
@@ -143,7 +151,9 @@ class StoryTileActions {
             label: tr("button.undo"),
             textColor: foreground,
             onPressed: () async {
-              StoryDbModel? updatedStory = await StoryDbModel.db.set(originalStory);
+              StoryDbModel? updatedStory = await StoryDbModel.db.set(
+                originalStory,
+              );
               if (updatedStory == null) return;
 
               AnalyticsService.instance.logUndoArchiveStory(
@@ -180,8 +190,11 @@ class StoryTileActions {
           story: updatedStory,
         );
 
-        if (storyListReloaderContext != null && storyListReloaderContext!.mounted) {
-          await SpStoryListWithQuery.of(storyListReloaderContext!)?.load(debugSource: '$runtimeType#undoPutBack');
+        if (storyListReloaderContext != null &&
+            storyListReloaderContext!.mounted) {
+          await SpStoryListWithQuery.of(
+            storyListReloaderContext!,
+          )?.load(debugSource: '$runtimeType#undoPutBack');
         }
 
         HomeView.applyStoryReloaded(updatedStory);
@@ -219,11 +232,15 @@ class StoryTileActions {
 
     AnalyticsService.instance.logDuplicateStory(story: story);
 
-    final addedStory = await EditStoryRoute(story: duplicatedStory).push(context);
+    final addedStory = await EditStoryRoute(
+      story: duplicatedStory,
+    ).push(context);
     if (addedStory is! StoryDbModel) return;
 
     if (storyListReloaderContext != null && storyListReloaderContext!.mounted) {
-      await SpStoryListWithQuery.of(storyListReloaderContext!)?.load(debugSource: '$runtimeType#duplicate');
+      await SpStoryListWithQuery.of(
+        storyListReloaderContext!,
+      )?.load(debugSource: '$runtimeType#duplicate');
     }
 
     await reloadHome('$runtimeType#duplicate');
@@ -240,7 +257,9 @@ class StoryTileActions {
 
   Future<void> toggleShowDayCount() async {
     StoryDbModel? updatedStory = await story.updatePreferences(
-      preferences: story.preferences.copyWith(showDayCount: !story.preferredShowDayCount),
+      preferences: story.preferences.copyWith(
+        showDayCount: !story.preferredShowDayCount,
+      ),
     );
 
     if (updatedStory == null) return;

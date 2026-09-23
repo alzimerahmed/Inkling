@@ -28,14 +28,18 @@ class DefaultStoryPreferencesTile extends StatelessWidget {
         // The sheet has no save button for pro users; it reports its live draft and
         // we commit it once here, after the sheet closes.
         DefaultStoryPreferencesObject? draft;
-        await SpDefaultStoryPreferencesSheet(onChanged: (result) => draft = result).show(context: context);
+        await SpDefaultStoryPreferencesSheet(
+          onChanged: (result) => draft = result,
+        ).show(context: context);
 
         if (!context.mounted || draft == null) return;
 
         // Non-pro users are gated by the locked save button inside the sheet (paywall),
         // so their draft is never persisted here.
         if (context.read<InAppPurchaseProvider>().isProUser) {
-          context.read<DevicePreferencesProvider>().setDefaultStoryPreferences(draft!);
+          context.read<DevicePreferencesProvider>().setDefaultStoryPreferences(
+            draft!,
+          );
         }
       },
     );

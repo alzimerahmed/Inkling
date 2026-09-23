@@ -24,9 +24,16 @@ class _StoryPagesBinTarget extends StatelessWidget {
                   ? ColorScheme.of(context).errorContainer
                   : ColorScheme.of(context).readOnly.surface3,
             ),
-            padding: EdgeInsets.only(top: 16.0, bottom: mediaQueryPadding.bottom + 16.0),
+            padding: EdgeInsets.only(
+              top: 16.0,
+              bottom: mediaQueryPadding.bottom + 16.0,
+            ),
             child: candidateItems.isNotEmpty
-                ? Icon(SpIcons.deleteEmpty, size: 32, color: ColorScheme.of(context).error)
+                ? Icon(
+                    SpIcons.deleteEmpty,
+                    size: 32,
+                    color: ColorScheme.of(context).error,
+                  )
                 : const Icon(SpIcons.deleteOutline, size: 32),
           );
         },

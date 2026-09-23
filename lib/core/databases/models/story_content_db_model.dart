@@ -19,7 +19,9 @@ List<StoryPageDbModel>? _richPagesFromJson(dynamic richPages) {
 
       // generate default ID for previous record if not exist.
       if (page['id'] == null) {
-        AppLogger.d('StoryContentDbModel._richPagesFromJson generating page ID 🚧🚧🚧🚧🚧');
+        AppLogger.d(
+          'StoryContentDbModel._richPagesFromJson generating page ID 🚧🚧🚧🚧🚧',
+        );
         page['id'] = now + index;
       }
 
@@ -63,10 +65,19 @@ class StoryContentDbModel extends BaseDbModel with Comparable {
   final List<StoryPageDbModel>? richPages;
 
   int get wordCount =>
-      richPages?.fold<int>(0, (previousValue, element) => previousValue + (element.wordCount ?? 0)) ?? 0;
+      richPages?.fold<int>(
+        0,
+        (previousValue, element) => previousValue + (element.wordCount ?? 0),
+      ) ??
+      0;
 
   int get characterCount =>
-      richPages?.fold<int>(0, (previousValue, element) => previousValue + (element.characterCount ?? 0)) ?? 0;
+      richPages?.fold<int>(
+        0,
+        (previousValue, element) =>
+            previousValue + (element.characterCount ?? 0),
+      ) ??
+      0;
 
   StoryContentDbModel({
     required this.id,
@@ -137,7 +148,10 @@ class StoryContentDbModel extends BaseDbModel with Comparable {
 
   String? displayShortBody({int maxCharacterCount = 200}) {
     return plainText != null
-        ? MarkdownBodyShortenerService.call(plainText!, maxCharacterCount: maxCharacterCount)
+        ? MarkdownBodyShortenerService.call(
+            plainText!,
+            maxCharacterCount: maxCharacterCount,
+          )
         : null;
   }
 
@@ -154,7 +168,9 @@ class StoryContentDbModel extends BaseDbModel with Comparable {
     DateTime? createdAt,
   }) {
     return StoryContentDbModel(
-      id: createdAt?.millisecondsSinceEpoch ?? DateTime.now().millisecondsSinceEpoch,
+      id:
+          createdAt?.millisecondsSinceEpoch ??
+          DateTime.now().millisecondsSinceEpoch,
       title: null,
       plainText: null,
       createdAt: createdAt ?? DateTime.now(),
@@ -165,5 +181,6 @@ class StoryContentDbModel extends BaseDbModel with Comparable {
 
   @override
   Map<String, dynamic> toJson() => _$StoryContentDbModelToJson(this);
-  factory StoryContentDbModel.fromJson(Map<String, dynamic> json) => _$StoryContentDbModelFromJson(json);
+  factory StoryContentDbModel.fromJson(Map<String, dynamic> json) =>
+      _$StoryContentDbModelFromJson(json);
 }

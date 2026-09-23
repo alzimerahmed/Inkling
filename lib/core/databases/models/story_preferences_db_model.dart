@@ -38,9 +38,13 @@ class StoryPreferencesDbModel extends BaseDbModel {
   @JsonKey(fromJson: _layoutTypeFromJson)
   final PageLayoutType layoutType;
 
-  Color? get colorSeed => colorSeedValue != null ? Color(colorSeedValue!) : null;
-  FontWeight? get fontWeight => fontWeightIndex != null ? FontWeight.values[fontWeightIndex!] : null;
-  FontWeight? get titleFontWeight => titleFontWeightIndex != null ? FontWeight.values[titleFontWeightIndex!] : null;
+  Color? get colorSeed =>
+      colorSeedValue != null ? Color(colorSeedValue!) : null;
+  FontWeight? get fontWeight =>
+      fontWeightIndex != null ? FontWeight.values[fontWeightIndex!] : null;
+  FontWeight? get titleFontWeight => titleFontWeightIndex != null
+      ? FontWeight.values[titleFontWeightIndex!]
+      : null;
 
   int get colorToneFallback => colorTone ?? 0;
   double get titleFontSize => titleExpandedFallback ? 18.0 : 16.0;
@@ -123,5 +127,6 @@ class StoryPreferencesDbModel extends BaseDbModel {
 
   @override
   Map<String, dynamic> toJson() => _$StoryPreferencesDbModelToJson(this);
-  factory StoryPreferencesDbModel.fromJson(Map<String, dynamic> json) => _$StoryPreferencesDbModelFromJson(json);
+  factory StoryPreferencesDbModel.fromJson(Map<String, dynamic> json) =>
+      _$StoryPreferencesDbModelFromJson(json);
 }

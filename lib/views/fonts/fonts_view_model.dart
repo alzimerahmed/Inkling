@@ -50,7 +50,9 @@ class FontsViewModel extends ChangeNotifier with DisposeAwareMixin {
 
     freeGlobalFonts = {kDefaultFontFamily};
     fontGroups?.forEach((group) {
-      freeGlobalFonts.addAll(group.fontFamilies.where((font) => fonts.contains(font)).take(5));
+      freeGlobalFonts.addAll(
+        group.fontFamilies.where((font) => fonts.contains(font)).take(5),
+      );
     });
 
     notifyListeners();
@@ -90,8 +92,15 @@ class FontsViewModel extends ChangeNotifier with DisposeAwareMixin {
     }).toList();
 
     return [
-      FontGroup(label: tr("general.defaults"), fontFamilies: [kDefaultFontFamily]),
-      if (recentlySelectedFonts != null) FontGroup(label: tr("general.recently"), fontFamilies: recentlySelectedFonts!),
+      FontGroup(
+        label: tr("general.defaults"),
+        fontFamilies: [kDefaultFontFamily],
+      ),
+      if (recentlySelectedFonts != null)
+        FontGroup(
+          label: tr("general.recently"),
+          fontFamilies: recentlySelectedFonts!,
+        ),
       ...alphabeticalGroups,
     ];
   }

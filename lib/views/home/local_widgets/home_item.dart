@@ -16,7 +16,8 @@ class _HomeValueKey extends GlobalKey {
   final Object value;
 
   @override
-  bool operator ==(Object other) => other is _HomeValueKey && other.value == value;
+  bool operator ==(Object other) =>
+      other is _HomeValueKey && other.value == value;
 
   @override
   int get hashCode => value.hashCode;
@@ -46,7 +47,10 @@ mixin HomeStoryFields {
 }
 
 final class HomeThrowbackItem extends HomeItem {
-  HomeThrowbackItem({required this.throwbackDates, required this.listHasStories});
+  HomeThrowbackItem({
+    required this.throwbackDates,
+    required this.listHasStories,
+  });
 
   // Only ever one throwback tile in the list at a time.
   @override
@@ -60,10 +64,15 @@ final class HomeThrowbackItem extends HomeItem {
 }
 
 final class HomeMonthHeaderItem extends HomeItem {
-  HomeMonthHeaderItem({required this.story, required this.isFirstOfRun, required this.pinned});
+  HomeMonthHeaderItem({
+    required this.story,
+    required this.isFirstOfRun,
+    required this.pinned,
+  });
 
   @override
-  GlobalKey get key => _HomeValueKey(('header', pinned, story.year, story.month));
+  GlobalKey get key =>
+      _HomeValueKey(('header', pinned, story.year, story.month));
 
   @override
   int? get storyId => null;
@@ -82,7 +91,11 @@ final class HomeMonthHeaderItem extends HomeItem {
 }
 
 final class HomeMonthRecapItem extends HomeItem {
-  HomeMonthRecapItem({required this.story, required this.stats, required this.showFullTimelineDivider});
+  HomeMonthRecapItem({
+    required this.story,
+    required this.stats,
+    required this.showFullTimelineDivider,
+  });
 
   // Recap tiles only ever appear in the unpinned run.
   @override
@@ -97,7 +110,11 @@ final class HomeMonthRecapItem extends HomeItem {
 }
 
 final class HomeStoryItem extends HomeItem with HomeStoryFields {
-  HomeStoryItem({required this.story, required this.showMonogram, required this.showFullTimelineDivider});
+  HomeStoryItem({
+    required this.story,
+    required this.showMonogram,
+    required this.showFullTimelineDivider,
+  });
 
   // A story id only ever appears in one of the pinned/unpinned runs at a
   // time, so no "pinned" tag is needed to keep this unique.
@@ -134,7 +151,11 @@ final class HomeLoadMoreItem extends HomeItem {
 }
 
 final class HomePinnedStoryItem extends HomeItem with HomeStoryFields {
-  HomePinnedStoryItem({required this.story, required this.showMonogram, required this.showFullTimelineDivider});
+  HomePinnedStoryItem({
+    required this.story,
+    required this.showMonogram,
+    required this.showFullTimelineDivider,
+  });
 
   @override
   GlobalKey get key => _HomeValueKey(('story', story.id));

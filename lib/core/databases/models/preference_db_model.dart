@@ -34,7 +34,8 @@ class PreferenceDbModel extends BaseDbModel {
     required this.permanentlyDeletedAt,
   });
 
-  factory PreferenceDbModel.fromJson(Map<String, dynamic> json) => _$PreferenceDbModelFromJson(json);
+  factory PreferenceDbModel.fromJson(Map<String, dynamic> json) =>
+      _$PreferenceDbModelFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$PreferenceDbModelToJson(this);

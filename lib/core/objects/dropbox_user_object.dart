@@ -44,15 +44,18 @@ class DropboxUserObject extends CloudServiceUser {
   String get identifier => email;
 
   @override
-  String? get globalId => serviceType.hasGlobalUserId ? "${serviceType.id}_$id" : null;
+  String? get globalId =>
+      serviceType.hasGlobalUserId ? "${serviceType.id}_$id" : null;
 
   /// A short buffer before the real expiry so a request never races a
   /// just-expired token — mirrors the intent of [GoogleUserObject]'s
   /// refreshed-recently check, but keyed off the token's own expiry instead
   /// of a fixed renewal window, since Dropbox tells us the exact lifetime.
-  bool get accessTokenExpiredOrExpiringSoon =>
-      DateTime.now().isAfter(accessTokenExpiresAt.subtract(const Duration(minutes: 2)));
+  bool get accessTokenExpiredOrExpiringSoon => DateTime.now().isAfter(
+    accessTokenExpiresAt.subtract(const Duration(minutes: 2)),
+  );
 
   Map<String, dynamic> toJson() => _$DropboxUserObjectToJson(this);
-  factory DropboxUserObject.fromJson(Map<String, dynamic> json) => _$DropboxUserObjectFromJson(json);
+  factory DropboxUserObject.fromJson(Map<String, dynamic> json) =>
+      _$DropboxUserObjectFromJson(json);
 }

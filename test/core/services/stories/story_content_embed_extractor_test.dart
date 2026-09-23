@@ -234,24 +234,27 @@ void main() {
         expect(result, isEmpty);
       });
 
-      test('handles multiple embed types in single insert (only extracts images)', () {
-        final content = _createContentWithPages([
-          _createPageWithBody([
-            {
-              'insert': {
-                'text': 'Some text',
-                'media': 'images/111.jpg',
-                'audio': 'audio/222.m4a',
-                'attributes': {'bold': true},
+      test(
+        'handles multiple embed types in single insert (only extracts images)',
+        () {
+          final content = _createContentWithPages([
+            _createPageWithBody([
+              {
+                'insert': {
+                  'text': 'Some text',
+                  'media': 'images/111.jpg',
+                  'audio': 'audio/222.m4a',
+                  'attributes': {'bold': true},
+                },
               },
-            },
-          ]),
-        ]);
+            ]),
+          ]);
 
-        final result = StoryContentEmbedExtractor.media(content);
+          final result = StoryContentEmbedExtractor.media(content);
 
-        expect(result, ['images/111.jpg']);
-      });
+          expect(result, ['images/111.jpg']);
+        },
+      );
 
       test('handles complex mixed content', () {
         final content = _createContentWithPages([
@@ -293,7 +296,12 @@ void main() {
 
         final result = StoryContentEmbedExtractor.media(content);
 
-        expect(result, ['images/100.jpg', 'images/300.jpg', 'https://external.com/img.png', 'images/400.jpg']);
+        expect(result, [
+          'images/100.jpg',
+          'images/300.jpg',
+          'https://external.com/img.png',
+          'images/400.jpg',
+        ]);
       });
 
       test('preserves order of extracted images', () {
@@ -319,7 +327,10 @@ void main() {
 
         final result = StoryContentEmbedExtractor.media(content);
 
-        expect(result, orderedEquals(['images/999.jpg', 'images/111.jpg', 'images/222.jpg']));
+        expect(
+          result,
+          orderedEquals(['images/999.jpg', 'images/111.jpg', 'images/222.jpg']),
+        );
       });
 
       test('filters out empty string embed values', () {
@@ -359,33 +370,39 @@ void main() {
         expect(result, ['images/legacy.jpg']);
       });
 
-      test('preserves order across mixed legacy `image` and current `media` embeds on one page', () {
-        // A page can genuinely mix both keys: an untouched legacy embed next
-        // to one that was edited (and so upgraded to `media`).
-        final content = _createContentWithPages([
-          _createPageWithBody([
-            {
-              'insert': {
-                'image': 'images/1.jpg',
+      test(
+        'preserves order across mixed legacy `image` and current `media` embeds on one page',
+        () {
+          // A page can genuinely mix both keys: an untouched legacy embed next
+          // to one that was edited (and so upgraded to `media`).
+          final content = _createContentWithPages([
+            _createPageWithBody([
+              {
+                'insert': {
+                  'image': 'images/1.jpg',
+                },
               },
-            },
-            {
-              'insert': {
-                'media': 'images/2.jpg',
+              {
+                'insert': {
+                  'media': 'images/2.jpg',
+                },
               },
-            },
-            {
-              'insert': {
-                'image': 'videos/3.mp4',
+              {
+                'insert': {
+                  'image': 'videos/3.mp4',
+                },
               },
-            },
-          ]),
-        ]);
+            ]),
+          ]);
 
-        final result = StoryContentEmbedExtractor.media(content);
+          final result = StoryContentEmbedExtractor.media(content);
 
-        expect(result, orderedEquals(['images/1.jpg', 'images/2.jpg', 'videos/3.mp4']));
-      });
+          expect(
+            result,
+            orderedEquals(['images/1.jpg', 'images/2.jpg', 'videos/3.mp4']),
+          );
+        },
+      );
     });
 
     group('audio()', () {
@@ -504,8 +521,14 @@ void main() {
           ]),
         ]);
 
-        expect(StoryContentEmbedExtractor.photos(content), ['images/100.jpg', 'images/300.jpg']);
-        expect(StoryContentEmbedExtractor.videos(content), ['videos/200.mp4', 'videos/400.mp4']);
+        expect(StoryContentEmbedExtractor.photos(content), [
+          'images/100.jpg',
+          'images/300.jpg',
+        ]);
+        expect(StoryContentEmbedExtractor.videos(content), [
+          'videos/200.mp4',
+          'videos/400.mp4',
+        ]);
       });
 
       test('media() still returns the union (photos and videos together)', () {
@@ -524,7 +547,10 @@ void main() {
           ]),
         ]);
 
-        expect(StoryContentEmbedExtractor.media(content), ['images/1.jpg', 'videos/2.mp4']);
+        expect(StoryContentEmbedExtractor.media(content), [
+          'images/1.jpg',
+          'videos/2.mp4',
+        ]);
       });
 
       test('external URLs are treated as photos, not videos', () {
@@ -538,7 +564,9 @@ void main() {
           ]),
         ]);
 
-        expect(StoryContentEmbedExtractor.photos(content), ['https://example.com/image.jpg']);
+        expect(StoryContentEmbedExtractor.photos(content), [
+          'https://example.com/image.jpg',
+        ]);
         expect(StoryContentEmbedExtractor.videos(content), isEmpty);
       });
     });

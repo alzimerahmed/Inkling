@@ -20,7 +20,9 @@ class _StatsLabelList extends StatelessWidget {
     return SpSingleStateWidget<bool>.listen(
       initialValue: false,
       builder: (context, expanded, notifier) {
-        final List<LabelStatItem> visible = expanded || !canExpand ? items : items.take(_kStatsTopVisible).toList();
+        final List<LabelStatItem> visible = expanded || !canExpand
+            ? items
+            : items.take(_kStatsTopVisible).toList();
 
         return Column(
           children: [
@@ -37,7 +39,9 @@ class _StatsLabelList extends StatelessWidget {
               _buildRowVisual(
                 context,
                 icon: expanded ? SpIcons.expandLess : SpIcons.expandMore,
-                label: expanded ? tr('button.show_less') : tr('button.show_more'),
+                label: expanded
+                    ? tr('button.show_less')
+                    : tr('button.show_more'),
                 trailing: '${items.length - _kStatsTopVisible}',
                 fraction: 0.0,
                 onTap: () => notifier.value = !expanded,

@@ -48,7 +48,10 @@ class SpAndroidRedemptionSheet extends BaseBottomSheet {
         title: 'Select "Redeem code" from payment methods',
         imagePath: '/android_redemption_flow/2_list_all_methods.png',
       ),
-      (title: 'Enter and apply the promo code', imagePath: '/android_redemption_flow/3_apply_promo.png'),
+      (
+        title: 'Enter and apply the promo code',
+        imagePath: '/android_redemption_flow/3_apply_promo.png',
+      ),
     ];
 
     // Calculate card height: title row (40) + spacing (12) + image height (360) + padding
@@ -87,7 +90,11 @@ class SpAndroidRedemptionSheet extends BaseBottomSheet {
     );
   }
 
-  Widget buildStepTitle(BuildContext context, int stepNumber, ({String imagePath, String title}) step) {
+  Widget buildStepTitle(
+    BuildContext context,
+    int stepNumber,
+    ({String imagePath, String title}) step,
+  ) {
     return SizedBox(
       height: 40.0,
       child: Row(
@@ -154,7 +161,8 @@ class SpAndroidRedemptionSheet extends BaseBottomSheet {
               height: imageHeight,
               fit: BoxFit.cover,
               cacheWidth: imageWidth != double.infinity
-                  ? (imageWidth * MediaQuery.of(context).devicePixelRatio).round()
+                  ? (imageWidth * MediaQuery.of(context).devicePixelRatio)
+                        .round()
                   : null,
             );
           },

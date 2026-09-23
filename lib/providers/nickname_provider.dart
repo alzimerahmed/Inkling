@@ -6,7 +6,9 @@ class NicknameProvider extends ChangeNotifier {
   String? nickname = PreferenceDbModel.db.nickname.get();
 
   void changeName(BuildContext context) async {
-    final result = await SpNicknameBottomSheet(nickname: nickname).show(context: context);
+    final result = await SpNicknameBottomSheet(
+      nickname: nickname,
+    ).show(context: context);
 
     if (result is String) {
       setNickname(result);

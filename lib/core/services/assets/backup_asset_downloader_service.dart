@@ -66,12 +66,15 @@ class BackupAssetDownloaderService {
     _downloadingByPath[localFilePath] = completer;
 
     _performDownload(
-      asset: asset,
-      signedInServices: signedInServices,
-      localFilePath: localFilePath,
-    ).then(completer.complete).catchError((Object e) => completer.completeError(e)).whenComplete(() {
-      _downloadingByPath.remove(localFilePath);
-    });
+          asset: asset,
+          signedInServices: signedInServices,
+          localFilePath: localFilePath,
+        )
+        .then(completer.complete)
+        .catchError((Object e) => completer.completeError(e))
+        .whenComplete(() {
+          _downloadingByPath.remove(localFilePath);
+        });
 
     return completer.future;
   }
@@ -101,7 +104,9 @@ class BackupAssetDownloaderService {
     Object? lastError;
 
     for (final destination in destinations) {
-      final service = signedInServices.firstWhere((s) => s.serviceType == destination.serviceType);
+      final service = signedInServices.firstWhere(
+        (s) => s.serviceType == destination.serviceType,
+      );
 
       try {
         final downloaded = await service.downloadFileBytes(destination.fileId);

@@ -10,15 +10,20 @@ class StoryPagesManagerInfo {
     required this.draftContent,
     required this.notifyListeners,
   }) {
-    pageScrollController = ScrollController(initialScrollOffset: initialScrollOffset);
+    pageScrollController = ScrollController(
+      initialScrollOffset: initialScrollOffset,
+    );
     pageController = PageController(initialPage: initialPageIndex ?? 0);
     pageScrollOffsetNotifier = ValueNotifier(initialScrollOffset);
     currentPageIndexNotifier = ValueNotifier(initialPageIndex);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      pageController.addListener(() => currentPageIndexNotifier.value = pageController.page?.toInt());
+      pageController.addListener(
+        () => currentPageIndexNotifier.value = pageController.page?.toInt(),
+      );
       pageScrollController.addListener(() {
-        if (canReadScrollOffset) pageScrollOffsetNotifier.value = pageScrollController.offset;
+        if (canReadScrollOffset)
+          pageScrollOffsetNotifier.value = pageScrollController.offset;
       });
     });
   }
@@ -60,8 +65,12 @@ class StoryPagesManagerInfo {
 
     if (itemPosition != null) {
       double destination = itemPosition - _headerHeight;
-      destination = max(0, min(destination, pageScrollController.position.maxScrollExtent));
-      int pageIndex = draftContent()?.richPages?.indexWhere((e) => e.id == pageId) ?? -1;
+      destination = max(
+        0,
+        min(destination, pageScrollController.position.maxScrollExtent),
+      );
+      int pageIndex =
+          draftContent()?.richPages?.indexWhere((e) => e.id == pageId) ?? -1;
 
       if (pageIndex == 0) {
         await pageScrollController.animateTo(
@@ -83,7 +92,8 @@ class StoryPagesManagerInfo {
     if (!canReadScrollOffset) return null;
 
     double scrollOffset = max(0.0, pageScrollController.offset);
-    final renderBox = pagesMap[pageId]?.key.currentContext?.findRenderObject() as RenderBox?;
+    final renderBox =
+        pagesMap[pageId]?.key.currentContext?.findRenderObject() as RenderBox?;
     return renderBox?.localToGlobal(Offset(0.0, scrollOffset)).dy;
   }
 

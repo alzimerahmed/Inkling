@@ -5,10 +5,12 @@ import 'package:storypad/core/storages/storage_adapters/secure_storage_adaptor.d
 
 class NextcloudUserStorage extends ObjectStorage<NextcloudUserObject> {
   @override
-  Future<BaseStorageAdapter<String>> get adapter async => SecureStorageAdaptor();
+  Future<BaseStorageAdapter<String>> get adapter async =>
+      SecureStorageAdaptor();
 
   @override
-  NextcloudUserObject decode(Map<String, dynamic> json) => NextcloudUserObject.fromJson(json);
+  NextcloudUserObject decode(Map<String, dynamic> json) =>
+      NextcloudUserObject.fromJson(json);
 
   @override
   Map<String, dynamic> encode(NextcloudUserObject object) => object.toJson();

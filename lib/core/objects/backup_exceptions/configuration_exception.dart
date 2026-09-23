@@ -10,5 +10,6 @@ class ConfigurationException extends BackupException {
   });
 
   @override
-  String get userFriendlyMessage => 'Configuration error. Please restart the app or contact support.';
+  String get userFriendlyMessage =>
+      'Configuration error. Please restart the app or contact support.';
 }

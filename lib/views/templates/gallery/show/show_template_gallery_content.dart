@@ -6,8 +6,11 @@ class _ShowTemplateGalleryContent extends StatelessWidget {
   final ShowTemplateGalleryViewModel viewModel;
 
   List<StoryPageObject> constructPages() {
-    if (viewModel.pagesManager.pagesMap.keys.isEmpty) return <StoryPageObject>[];
-    return List.generate(viewModel.draftContent?.richPages?.length ?? 0, (index) {
+    if (viewModel.pagesManager.pagesMap.keys.isEmpty)
+      return <StoryPageObject>[];
+    return List.generate(viewModel.draftContent?.richPages?.length ?? 0, (
+      index,
+    ) {
       final page = viewModel.draftContent!.richPages![index];
       return viewModel.pagesManager.pagesMap[page.id];
     }).toList().whereType<StoryPageObject>().toList();
@@ -33,7 +36,10 @@ class _ShowTemplateGalleryContent extends StatelessWidget {
                 ),
                 SpPopMenuItem(
                   leadingIconData: SpIcons.save,
-                  trailingIconData: !context.read<InAppPurchaseProvider>().isProUser ? SpIcons.lock : null,
+                  trailingIconData:
+                      !context.read<InAppPurchaseProvider>().isProUser
+                      ? SpIcons.lock
+                      : null,
                   title: tr('button.save_template'),
                   titleStyle: context.read<InAppPurchaseProvider>().isProUser
                       ? null
@@ -42,7 +48,9 @@ class _ShowTemplateGalleryContent extends StatelessWidget {
                     if (context.read<InAppPurchaseProvider>().isProUser) {
                       viewModel.saveTemplate(context);
                     } else {
-                      const PaywallRoute(initialFocus: .templates).push(context);
+                      const PaywallRoute(
+                        initialFocus: .templates,
+                      ).push(context);
                     }
                   },
                 ),
@@ -80,13 +88,17 @@ class _ShowTemplateGalleryContent extends StatelessWidget {
     final note = viewModel.galleryTemplate.note;
 
     return StoryPagesBuilder(
-      preferences: StoryPreferencesDbModel.create().copyWith(layoutType: viewModel.galleryTemplate.pageLayoutType),
+      preferences: StoryPreferencesDbModel.create().copyWith(
+        layoutType: viewModel.galleryTemplate.pageLayoutType,
+      ),
       pageController: viewModel.pageController,
       pages: pages,
       storyContent: viewModel.draftContent!,
       headerBuilder: note != null
           ? (_) => Padding(
-              padding: CupertinoSheetRoute.hasParentSheet(context) ? EdgeInsets.zero : const EdgeInsets.only(top: 12.0),
+              padding: CupertinoSheetRoute.hasParentSheet(context)
+                  ? EdgeInsets.zero
+                  : const EdgeInsets.only(top: 12.0),
               child: TemplateNote(note: note),
             )
           : null,

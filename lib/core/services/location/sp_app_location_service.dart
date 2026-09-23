@@ -20,7 +20,9 @@ class SpAppLocationService {
     bool skipReverseGeocoding = false,
   }) async {
     while (context.mounted) {
-      final result = await SpLocationService.fetchCurrentPlace(skipReverseGeocoding: skipReverseGeocoding);
+      final result = await SpLocationService.fetchCurrentPlace(
+        skipReverseGeocoding: skipReverseGeocoding,
+      );
       if (!context.mounted) return null;
 
       switch (result.status) {

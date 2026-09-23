@@ -17,7 +17,10 @@ class _StatsShareFooter extends StatelessWidget {
       children: [
         const SizedBox(height: 16.0),
         SpTapEffect(
-          onTap: () => UrlOpenerService.openInCustomTab(context, RemoteConfigService.websiteUrl.get()),
+          onTap: () => UrlOpenerService.openInCustomTab(
+            context,
+            RemoteConfigService.websiteUrl.get(),
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Row(
@@ -30,10 +33,17 @@ class _StatsShareFooter extends StatelessWidget {
                   clipBehavior: .hardEdge,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border: Border.all(color: Theme.of(context).dividerColor, width: 1.0),
+                    border: Border.all(
+                      color: Theme.of(context).dividerColor,
+                      width: 1.0,
+                    ),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: AppLogo.storypad_1_0.asset.image(width: 40, height: 40, fit: BoxFit.cover),
+                  child: AppLogo.storypad_1_0.asset.image(
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 const SizedBox(width: 12.0),
                 Column(

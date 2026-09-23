@@ -21,7 +21,10 @@ class BackupTagsTableViewer extends StatelessWidget {
         return ListTile(
           leading: const Icon(SpIcons.tag),
           title: Text(tag.title),
-          subtitle: Text(DateFormatHelper.yMEd_jmNullable(tag.updatedAt, context.locale) ?? tr("general.na")),
+          subtitle: Text(
+            DateFormatHelper.yMEd_jmNullable(tag.updatedAt, context.locale) ??
+                tr("general.na"),
+          ),
         );
       },
     );

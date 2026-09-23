@@ -42,7 +42,9 @@ class _StoryPage extends StatelessWidget {
 
   void onChange() {
     StoryPageDbModel richPage = page.page.copyWith(
-      title: page.titleController.text.trim().isNotEmpty == true ? page.titleController.text.trim() : null,
+      title: page.titleController.text.trim().isNotEmpty == true
+          ? page.titleController.text.trim()
+          : null,
       body: page.bodyController.serialize(),
     );
 
@@ -65,7 +67,8 @@ class _StoryPage extends StatelessWidget {
           buildEditor(context),
           if (canMoveUp || canMoveDown || canDeletePage) ...[
             if (!readOnly &&
-                (preferences?.layoutType == PageLayoutType.list || preferences?.layoutType == PageLayoutType.grid))
+                (preferences?.layoutType == PageLayoutType.list ||
+                    preferences?.layoutType == PageLayoutType.grid))
               buildMoreVertButton(context),
           ],
         ],
@@ -74,7 +77,8 @@ class _StoryPage extends StatelessWidget {
   }
 
   Widget buildEditor(BuildContext context) {
-    bool showHideTitle = readOnly && page.titleController.text.trim().isEmpty == true;
+    bool showHideTitle =
+        readOnly && page.titleController.text.trim().isEmpty == true;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +93,9 @@ class _StoryPage extends StatelessWidget {
             key: ValueKey('page-title-${page.id}'),
             onVisibilityChanged: onTitleVisibilityChanged,
             child: Padding(
-              padding: smallPage ? EdgeInsets.zero : const EdgeInsets.symmetric(horizontal: 4.0),
+              padding: smallPage
+                  ? EdgeInsets.zero
+                  : const EdgeInsets.symmetric(horizontal: 4.0),
               child: _TitleField(
                 titleFocusNode: page.titleFocusNode,
                 bodyFocusNode: page.bodyFocusNode,
@@ -103,7 +109,9 @@ class _StoryPage extends StatelessWidget {
           ),
         ],
         Padding(
-          padding: smallPage ? EdgeInsets.zero : const EdgeInsets.symmetric(horizontal: 4.0),
+          padding: smallPage
+              ? EdgeInsets.zero
+              : const EdgeInsets.symmetric(horizontal: 4.0),
           child: editorAdapter.buildEditor(
             context: context,
             controller: page.bodyController,

@@ -7,7 +7,8 @@ import 'package:storypad/core/services/logger/app_logger.dart';
 import 'package:storypad/core/storages/backup_import_history_storage.dart';
 
 class BackupImporterService {
-  BackupImporterService({required BackupSyncMessenger messenger}) : _messenger = messenger;
+  BackupImporterService({required BackupSyncMessenger messenger})
+    : _messenger = messenger;
 
   final BackupSyncMessenger _messenger;
 
@@ -28,7 +29,9 @@ class BackupImporterService {
     AppLogger.d('🚧 $runtimeType#start ...');
 
     if (backupContentsByYear == null || backupContentsByYear.isEmpty) {
-      AppLogger.d('$runtimeType#start completed: No backup contents to import.');
+      AppLogger.d(
+        '$runtimeType#start completed: No backup contents to import.',
+      );
       _messenger.report(
         serviceType: cloudService.serviceType,
         step: SyncStep.importChanges,
@@ -55,8 +58,15 @@ class BackupImporterService {
       AppLogger.d('BackupImporter: Importing year $year');
       // Hold listeners until every year is in. Ordering (e.g. tag index) spans years,
       // so rebuilding between files would expose a partially merged database.
-      final int changesCount = await restoreService.restoreOnlyNewData(backup: backup, notifyCallbacks: false);
-      await importHistoryStorage.markAsImported(cloudService.serviceType, year, backup.fileInfo.createdAt);
+      final int changesCount = await restoreService.restoreOnlyNewData(
+        backup: backup,
+        notifyCallbacks: false,
+      );
+      await importHistoryStorage.markAsImported(
+        cloudService.serviceType,
+        year,
+        backup.fileInfo.createdAt,
+      );
       totalChangesCount += changesCount;
     }
 

@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ develop ]
+    branches: [ main, develop ]
 
 jobs:
   test:
@@ -50,3 +50,56 @@ jobs:
       with:
         file: coverage/lcov.info
         fail_ci_if_error: false
+
+  build:
+    name: Build community APK
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Read Flutter version from .tool-versions
+      id: flutter-version
+      run: |
+        FLUTTER_VERSION=$(grep flutter .tool-versions | awk '{print $2}' | cut -d'-' -f1)
+        echo "version=$FLUTTER_VERSION" >> $GITHUB_OUTPUT
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: ${{ steps.flutter-version.outputs.version }}
+        cache: true
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: 21
+
+    - name: Get dependencies
+      run: flutter pub get
+
+    - name: Generate code
+      run: dart run build_runner build --delete-conflicting-outputs
+
+    # Community flavor is key-free: an empty dart-defines file is all it needs
+    # (same fallback bin/dev generates locally for external contributors).
+    - name: Create empty community dart-defines
+      run: |
+        mkdir -p bin/.tmp/dart_defines
+        echo '{}' > bin/.tmp/dart_defines/community.json
+
+    - name: Build community APK
+      run: >
+        flutter build apk --flavor community
+        --target lib/main_community.dart
+        --dart-define-from-file=bin/.tmp/dart_defines/community.json
+
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: inkling-community-apk
+        path: build/app/outputs/flutter-apk/*.apk
+        retention-days: 14

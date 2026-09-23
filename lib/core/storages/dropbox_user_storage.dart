@@ -5,10 +5,12 @@ import 'package:storypad/core/storages/storage_adapters/secure_storage_adaptor.d
 
 class DropboxUserStorage extends ObjectStorage<DropboxUserObject> {
   @override
-  Future<BaseStorageAdapter<String>> get adapter async => SecureStorageAdaptor();
+  Future<BaseStorageAdapter<String>> get adapter async =>
+      SecureStorageAdaptor();
 
   @override
-  DropboxUserObject decode(Map<String, dynamic> json) => DropboxUserObject.fromJson(json);
+  DropboxUserObject decode(Map<String, dynamic> json) =>
+      DropboxUserObject.fromJson(json);
 
   @override
   Map<String, dynamic> encode(DropboxUserObject object) => object.toJson();

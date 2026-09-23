@@ -27,14 +27,16 @@ class SpOnboardingWrapper extends StatefulWidget {
   State<SpOnboardingWrapper> createState() => _SpOnboardingWrapperState();
 }
 
-class _SpOnboardingWrapperState extends State<SpOnboardingWrapper> with TickerProviderStateMixin {
+class _SpOnboardingWrapperState extends State<SpOnboardingWrapper>
+    with TickerProviderStateMixin {
   AnimationController? onboardingAnimationController;
   AnimationController? homeAnimationController;
 
   final transitionDuration = const Duration(milliseconds: 750);
 
   bool onboarding = false;
-  bool onboarded = OnboardingInitializer.onboarded ?? !OnboardingInitializer.isNewUser;
+  bool onboarded =
+      OnboardingInitializer.onboarded ?? !OnboardingInitializer.isNewUser;
   GlobalKey<NavigatorState>? onboardingKey;
 
   @override
@@ -42,8 +44,16 @@ class _SpOnboardingWrapperState extends State<SpOnboardingWrapper> with TickerPr
     super.initState();
 
     if (!onboarded) {
-      onboardingAnimationController = AnimationController(vsync: this, duration: transitionDuration, value: 1.0);
-      homeAnimationController = AnimationController(vsync: this, duration: transitionDuration, value: 0.0);
+      onboardingAnimationController = AnimationController(
+        vsync: this,
+        duration: transitionDuration,
+        value: 1.0,
+      );
+      homeAnimationController = AnimationController(
+        vsync: this,
+        duration: transitionDuration,
+        value: 0.0,
+      );
       onboardingKey = GlobalKey();
     }
   }
@@ -52,8 +62,16 @@ class _SpOnboardingWrapperState extends State<SpOnboardingWrapper> with TickerPr
     onboarded = false;
     onboardingKey ??= GlobalKey();
 
-    onboardingAnimationController ??= AnimationController(vsync: this, duration: transitionDuration, value: 1.0);
-    homeAnimationController ??= AnimationController(vsync: this, duration: transitionDuration, value: 0.0);
+    onboardingAnimationController ??= AnimationController(
+      vsync: this,
+      duration: transitionDuration,
+      value: 1.0,
+    );
+    homeAnimationController ??= AnimationController(
+      vsync: this,
+      duration: transitionDuration,
+      value: 0.0,
+    );
 
     setState(() {});
   }
@@ -91,7 +109,9 @@ class _SpOnboardingWrapperState extends State<SpOnboardingWrapper> with TickerPr
 
   @override
   Widget build(BuildContext context) {
-    if (onboarded || onboardingAnimationController == null || homeAnimationController == null) {
+    if (onboarded ||
+        onboardingAnimationController == null ||
+        homeAnimationController == null) {
       return widget.child;
     }
 
@@ -114,7 +134,9 @@ class _SpOnboardingWrapperState extends State<SpOnboardingWrapper> with TickerPr
   Widget buildHomeAnimation({
     required Widget child,
   }) {
-    final homeAnimation = homeAnimationController!.drive(CurveTween(curve: Curves.fastEaseInToSlowEaseOut));
+    final homeAnimation = homeAnimationController!.drive(
+      CurveTween(curve: Curves.fastEaseInToSlowEaseOut),
+    );
     return Visibility(
       visible: onboarding,
       child: AnimatedBuilder(
@@ -125,7 +147,8 @@ class _SpOnboardingWrapperState extends State<SpOnboardingWrapper> with TickerPr
         ),
         builder: (context, child) {
           return Container(
-            transform: Matrix4.identity()..spTranslate(0.0, lerpDouble(56.0, 0.0, homeAnimation.value)!),
+            transform: Matrix4.identity()
+              ..spTranslate(0.0, lerpDouble(56.0, 0.0, homeAnimation.value)!),
             child: child,
           );
         },
@@ -136,7 +159,9 @@ class _SpOnboardingWrapperState extends State<SpOnboardingWrapper> with TickerPr
   Widget buildOnboardingAnimation({
     required Widget child,
   }) {
-    final animation = onboardingAnimationController!.drive(CurveTween(curve: Curves.fastEaseInToSlowEaseOut));
+    final animation = onboardingAnimationController!.drive(
+      CurveTween(curve: Curves.fastEaseInToSlowEaseOut),
+    );
     return Visibility(
       visible: !onboarded,
       child: AnimatedBuilder(
@@ -147,7 +172,8 @@ class _SpOnboardingWrapperState extends State<SpOnboardingWrapper> with TickerPr
         ),
         builder: (context, child) {
           return Container(
-            transform: Matrix4.identity()..spTranslate(0.0, lerpDouble(-56.0, 0.0, animation.value)!),
+            transform: Matrix4.identity()
+              ..spTranslate(0.0, lerpDouble(-56.0, 0.0, animation.value)!),
             child: child,
           );
         },

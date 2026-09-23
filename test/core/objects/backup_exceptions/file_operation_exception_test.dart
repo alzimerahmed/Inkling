@@ -14,7 +14,10 @@ void main() {
       expect(exception.operation, equals(FileOperationType.upload));
       expect(exception.context, equals('backup.json'));
       expect(exception.isRetryable, isTrue);
-      expect(exception.userFriendlyMessage, equals('Failed to upload backup. Please try again.'));
+      expect(
+        exception.userFriendlyMessage,
+        equals('Failed to upload backup. Please try again.'),
+      );
     });
 
     test('creates with correct properties for download operation', () {
@@ -29,7 +32,9 @@ void main() {
       expect(exception.isRetryable, isTrue);
       expect(
         exception.userFriendlyMessage,
-        equals('Failed to download backup. Please check your connection and try again.'),
+        equals(
+          'Failed to download backup. Please check your connection and try again.',
+        ),
       );
     });
 
@@ -44,7 +49,10 @@ void main() {
       expect(exception.operation, equals(FileOperationType.delete));
       expect(exception.context, equals('old_backup.json'));
       expect(exception.isRetryable, isTrue);
-      expect(exception.userFriendlyMessage, equals('Failed to delete backup file. Please try again.'));
+      expect(
+        exception.userFriendlyMessage,
+        equals('Failed to delete backup file. Please try again.'),
+      );
     });
 
     test('creates with correct properties for list operation', () {
@@ -60,7 +68,9 @@ void main() {
       expect(exception.isRetryable, isTrue);
       expect(
         exception.userFriendlyMessage,
-        equals('Failed to load backup files. Please check your connection and try again.'),
+        equals(
+          'Failed to load backup files. Please check your connection and try again.',
+        ),
       );
     });
 
@@ -87,7 +97,10 @@ void main() {
         FileOperationType.upload,
         context: 'test_file.json',
       );
-      expect(exception.toString(), equals('BackupException: Upload failed (test_file.json)'));
+      expect(
+        exception.toString(),
+        equals('BackupException: Upload failed (test_file.json)'),
+      );
     });
 
     group('FileOperationType enum', () {

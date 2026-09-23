@@ -23,7 +23,8 @@ class _HomeYearsContent extends StatelessWidget {
   }
 
   Widget buildBody() {
-    if (viewModel.years == null) return const Center(child: CircularProgressIndicator.adaptive());
+    if (viewModel.years == null)
+      return const Center(child: CircularProgressIndicator.adaptive());
 
     return ListView(
       children: buildYearsTiles(),
@@ -47,7 +48,10 @@ class _HomeYearsContent extends StatelessWidget {
                 selected: selected,
                 title: Text(entry.key.toString()),
                 subtitle: Text(plural("plural.entry", entry.value)),
-                trailing: Visibility(visible: selected, child: const Icon(SpIcons.check)),
+                trailing: Visibility(
+                  visible: selected,
+                  child: const Icon(SpIcons.check),
+                ),
               ),
               AnimatedContainer(
                 duration: Durations.long4,

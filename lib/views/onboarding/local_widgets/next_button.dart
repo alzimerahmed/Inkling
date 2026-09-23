@@ -24,7 +24,11 @@ class _NextButton extends StatelessWidget {
             return SizedBox(
               height: 48,
               child: FilledButton(
-                style: FilledButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0))),
+                style: FilledButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
                 child: Text(tr("button.next")),
                 onPressed: () => viewModel.next(context),
               ),

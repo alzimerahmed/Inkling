@@ -24,7 +24,9 @@ class _SpCountDownState extends State<SpCountDown> {
   @override
   void initState() {
     timer = Timer.periodic(const Duration(milliseconds: 500), (_) {
-      DateTime abitBeforeEndTime = widget.endTime.add(const Duration(milliseconds: 500));
+      DateTime abitBeforeEndTime = widget.endTime.add(
+        const Duration(milliseconds: 500),
+      );
       if (DateTime.now().isBefore(abitBeforeEndTime)) {
         setState(() {});
       }

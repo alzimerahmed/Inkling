@@ -21,7 +21,11 @@ class _StoryTileContents extends StatelessWidget {
   final String? displayShortBody;
   final StoryTilePreferencesObject preferences;
 
-  void _viewAssetImageAt(BuildContext context, List<String> assetPaths, int index) {
+  void _viewAssetImageAt(
+    BuildContext context,
+    List<String> assetPaths,
+    int index,
+  ) {
     SpMediaViewer.fromString(
       images: assetPaths,
       initialIndex: index,
@@ -33,10 +37,14 @@ class _StoryTileContents extends StatelessWidget {
   Widget build(BuildContext context) {
     // `media()` returns both photos and videos (they share one embed type by
     // design) -- rendering/tap-handling branches per path.
-    final assetPaths = content != null ? StoryContentEmbedExtractor.media(content) : null;
+    final assetPaths = content != null
+        ? StoryContentEmbedExtractor.media(content)
+        : null;
 
     final audioPaths = (story.draftContent ?? story.latestContent) != null
-        ? StoryContentEmbedExtractor.audio(story.draftContent ?? story.latestContent)
+        ? StoryContentEmbedExtractor.audio(
+            story.draftContent ?? story.latestContent,
+          )
         : null;
 
     return Expanded(
@@ -47,7 +55,9 @@ class _StoryTileContents extends StatelessWidget {
             Consumer<DevicePreferencesProvider>(
               builder: (context, provider, child) {
                 return Text(
-                  provider.timeFormatOf(context).formatTime(story.displayPathDate, context.locale),
+                  provider
+                      .timeFormatOf(context)
+                      .formatTime(story.displayPathDate, context.locale),
                   style: TextTheme.of(context).labelMedium,
                 );
               },
@@ -69,7 +79,9 @@ class _StoryTileContents extends StatelessWidget {
             Container(
               width: double.infinity,
               margin: hasTitle
-                  ? EdgeInsets.only(top: MediaQuery.textScalerOf(context).scale(6.0))
+                  ? EdgeInsets.only(
+                      top: MediaQuery.textScalerOf(context).scale(6.0),
+                    )
                   : AppTheme.getDirectionValue(
                       context,
                       const EdgeInsets.only(left: 24.0),
@@ -81,18 +93,26 @@ class _StoryTileContents extends StatelessWidget {
             story: story,
             fromStoryTile: true,
             voicesCount: audioPaths?.length,
-            margin: EdgeInsets.only(top: MediaQuery.textScalerOf(context).scale(8)),
+            margin: EdgeInsets.only(
+              top: MediaQuery.textScalerOf(context).scale(8),
+            ),
             preferences: preferences,
             onToggleShowDayCount: viewOnly
                 ? null
                 : () async {
-                    await StoryTileActions(story: story, storyListReloaderContext: listContext).toggleShowDayCount();
+                    await StoryTileActions(
+                      story: story,
+                      storyListReloaderContext: listContext,
+                    ).toggleShowDayCount();
                     if (context.mounted) Navigator.maybePop(context);
                   },
             onChangeDate: viewOnly
                 ? null
                 : (newDateTime) async {
-                    await StoryTileActions(story: story, storyListReloaderContext: listContext).changeDate(newDateTime);
+                    await StoryTileActions(
+                      story: story,
+                      storyListReloaderContext: listContext,
+                    ).changeDate(newDateTime);
                     if (context.mounted) Navigator.maybePop(context);
                   },
             onToggleManagingPage: null,
@@ -108,7 +128,10 @@ class _StoryTileContents extends StatelessWidget {
                   width: double.infinity,
                   child: SpAlbumGrid(
                     paths: assetPaths!,
-                    onTap: viewOnly ? null : (index) => _viewAssetImageAt(context, assetPaths, index),
+                    onTap: viewOnly
+                        ? null
+                        : (index) =>
+                              _viewAssetImageAt(context, assetPaths, index),
                   ),
                 ),
               )

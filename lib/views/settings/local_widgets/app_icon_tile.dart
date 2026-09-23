@@ -30,10 +30,17 @@ class AppIconTile extends StatelessWidget {
             clipBehavior: .hardEdge,
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border.all(color: Theme.of(context).dividerColor, width: 1.0),
+              border: Border.all(
+                color: Theme.of(context).dividerColor,
+                width: 1.0,
+              ),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: kAppLogo!.asset.image(width: 32, height: 32, fit: BoxFit.cover),
+            child: kAppLogo!.asset.image(
+              width: 32,
+              height: 32,
+              fit: BoxFit.cover,
+            ),
           ),
           onTap: () async {
             await SpNicknameBottomSheet(

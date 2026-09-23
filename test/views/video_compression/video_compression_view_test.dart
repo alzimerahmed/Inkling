@@ -11,7 +11,9 @@ void main() {
     // one route too many there empties the navigator and renders black -- which
     // is exactly what the shared loading dialog used to do, because it rebuilt
     // its pop callback on every rebuild of the dialog.
-    testWidgets('removes only its own route when the app rebuilds mid-task', (tester) async {
+    testWidgets('removes only its own route when the app rebuilds mid-task', (
+      tester,
+    ) async {
       final nestedNavigatorKey = GlobalKey<NavigatorState>();
       final task = Completer<String>();
 
@@ -21,7 +23,9 @@ void main() {
           home: Scaffold(
             body: Navigator(
               key: nestedNavigatorKey,
-              onGenerateRoute: (_) => MaterialPageRoute(builder: (_) => const Scaffold(body: Text('EDITOR'))),
+              onGenerateRoute: (_) => MaterialPageRoute(
+                builder: (_) => const Scaffold(body: Text('EDITOR')),
+              ),
             ),
           ),
         );
@@ -50,35 +54,44 @@ void main() {
 
       expect(await result, 'PICKED');
       expect(find.byType(VideoCompressionView), findsNothing);
-      expect(find.text('EDITOR'), findsOneWidget, reason: 'the route underneath must survive');
+      expect(
+        find.text('EDITOR'),
+        findsOneWidget,
+        reason: 'the route underneath must survive',
+      );
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('takes the screen down and falls back to null when the task throws', (tester) async {
-      final navigatorKey = GlobalKey<NavigatorState>();
+    testWidgets(
+      'takes the screen down and falls back to null when the task throws',
+      (tester) async {
+        final navigatorKey = GlobalKey<NavigatorState>();
 
-      await tester.pumpWidget(
-        MaterialApp(
-          navigatorKey: navigatorKey,
-          home: const Scaffold(body: Text('EDITOR')),
-        ),
-      );
+        await tester.pumpWidget(
+          MaterialApp(
+            navigatorKey: navigatorKey,
+            home: const Scaffold(body: Text('EDITOR')),
+          ),
+        );
 
-      final result = await VideoCompressionRoute.run<String>(
-        navigatorKey.currentContext!,
-        totalVideos: 1,
-        task: (_) async => throw StateError('encoder blew up'),
-      );
-      await tester.pumpAndSettle();
+        final result = await VideoCompressionRoute.run<String>(
+          navigatorKey.currentContext!,
+          totalVideos: 1,
+          task: (_) async => throw StateError('encoder blew up'),
+        );
+        await tester.pumpAndSettle();
 
-      expect(result, isNull);
-      expect(find.byType(VideoCompressionView), findsNothing);
-      expect(find.text('EDITOR'), findsOneWidget);
-    });
+        expect(result, isNull);
+        expect(find.byType(VideoCompressionView), findsNothing);
+        expect(find.text('EDITOR'), findsOneWidget);
+      },
+    );
 
     // Most picks are skipped by the within-target pre-check and return in
     // milliseconds; a full screen flashing up for those is worse than nothing.
-    testWidgets('never shows at all for a task that settles quickly', (tester) async {
+    testWidgets('never shows at all for a task that settles quickly', (
+      tester,
+    ) async {
       final navigatorKey = GlobalKey<NavigatorState>();
 
       await tester.pumpWidget(

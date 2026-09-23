@@ -61,7 +61,9 @@ class StoryPageObjectsMap {
     StoryPageObjectsMap? initialPagesMap,
   }) async {
     final result = await Isolate.run(() {
-      final plainTextResult = GenerateBodyPlainTextService.call(content.richPages);
+      final plainTextResult = GenerateBodyPlainTextService.call(
+        content.richPages,
+      );
       return plainTextResult?.richPagesWithCounts;
     });
 
@@ -72,7 +74,9 @@ class StoryPageObjectsMap {
 
       final richTextController = editorAdapter.createController(
         json: richPage.body ?? [],
-        selection: initialPagesMap?[richPage.id]?.bodyController.selection ?? const TextSelection.collapsed(offset: 0),
+        selection:
+            initialPagesMap?[richPage.id]?.bodyController.selection ??
+            const TextSelection.collapsed(offset: 0),
         readOnly: readOnly,
       );
 

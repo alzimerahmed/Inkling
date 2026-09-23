@@ -10,7 +10,10 @@ class _PrivacyPolicyText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SpTapEffect(
-      onTap: () => UrlOpenerService.openInCustomTab(context, RemoteConfigService.policyPrivacyUrl.get()),
+      onTap: () => UrlOpenerService.openInCustomTab(
+        context,
+        RemoteConfigService.policyPrivacyUrl.get(),
+      ),
       child: Text(
         tr("general.read_our_privacy_policy"),
         style: TextTheme.of(context).bodyMedium?.copyWith(

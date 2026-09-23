@@ -10,5 +10,6 @@ class NetworkException extends BackupException {
   });
 
   @override
-  String get userFriendlyMessage => 'Network connection error. Please check your internet connection and try again.';
+  String get userFriendlyMessage =>
+      'Network connection error. Please check your internet connection and try again.';
 }

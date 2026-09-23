@@ -89,7 +89,9 @@ class _HomeEmpty extends StatelessWidget {
             ),
             Container(
               constraints: const BoxConstraints(maxWidth: 200),
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + kToolbarHeight),
+              margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom + kToolbarHeight,
+              ),
               child: Text.rich(
                 textAlign: TextAlign.center,
                 textScaler: MediaQuery.textScalerOf(context),

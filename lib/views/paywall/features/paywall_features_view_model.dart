@@ -14,7 +14,9 @@ class PaywallFeaturesViewModel extends ChangeNotifier with DisposeAwareMixin {
     preloadFiles();
   }
 
-  late final PageController pageController = PageController(initialPage: params.initialPage);
+  late final PageController pageController = PageController(
+    initialPage: params.initialPage,
+  );
 
   void preloadFiles() {
     // downloadFile deduplicates requests using completers, so calling this

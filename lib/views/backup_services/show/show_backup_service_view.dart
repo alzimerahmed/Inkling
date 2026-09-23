@@ -41,7 +41,8 @@ class ShowBackupServiceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ShowBackupServiceViewModel>(
-      create: (context) => ShowBackupServiceViewModel(params: params, context: context),
+      create: (context) =>
+          ShowBackupServiceViewModel(params: params, context: context),
       builder: (context, child) {
         return _ShowBackupServiceContent(Provider.of(context));
       },

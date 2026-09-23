@@ -31,11 +31,18 @@ abstract class BaseBottomSheet {
     required BuildContext context,
     bool useRootNavigator = false,
   }) async {
-    if (kIsCupertino) throw UnimplementedError('Replacement bottom sheet is not implemented for Cupertino.');
+    if (kIsCupertino)
+      throw UnimplementedError(
+        'Replacement bottom sheet is not implemented for Cupertino.',
+      );
 
     AnalyticsService.instance.logViewSheet(bottomSheet: this);
 
-    bool previousTemporaryHidden = context.read<RootProvider>().sideBarInfoNotifier.value.temporaryHidden;
+    bool previousTemporaryHidden = context
+        .read<RootProvider>()
+        .sideBarInfoNotifier
+        .value
+        .temporaryHidden;
     context.read<RootProvider>().setTemporaryHidden(true);
 
     T? result = await replaceModalBottomSheet<T>(
@@ -52,7 +59,10 @@ abstract class BaseBottomSheet {
         return Theme(
           data: Theme.of(context).copyWith(
             scaffoldBackgroundColor: Colors.transparent,
-            appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent, surfaceTintColor: Colors.transparent),
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
+            ),
           ),
           // No need left or right default padding for sheet.
           child: MediaQuery.removePadding(
@@ -62,14 +72,17 @@ abstract class BaseBottomSheet {
             child: build(
               context,
               MediaQuery.of(context).padding.bottom +
-                  (includeKeyboardPadding ? MediaQuery.of(context).viewInsets.bottom : 0),
+                  (includeKeyboardPadding
+                      ? MediaQuery.of(context).viewInsets.bottom
+                      : 0),
             ),
           ),
         );
       },
     );
 
-    if (context.mounted) context.read<RootProvider>().setTemporaryHidden(previousTemporaryHidden);
+    if (context.mounted)
+      context.read<RootProvider>().setTemporaryHidden(previousTemporaryHidden);
     return result;
   }
 
@@ -86,7 +99,11 @@ abstract class BaseBottomSheet {
 
     AnalyticsService.instance.logViewSheet(bottomSheet: this);
 
-    bool previousTemporaryHidden = context.read<RootProvider>().sideBarInfoNotifier.value.temporaryHidden;
+    bool previousTemporaryHidden = context
+        .read<RootProvider>()
+        .sideBarInfoNotifier
+        .value
+        .temporaryHidden;
     context.read<RootProvider>().setTemporaryHidden(true);
 
     T? result;
@@ -114,13 +131,15 @@ abstract class BaseBottomSheet {
       );
     }
 
-    if (context.mounted) context.read<RootProvider>().setTemporaryHidden(previousTemporaryHidden);
+    if (context.mounted)
+      context.read<RootProvider>().setTemporaryHidden(previousTemporaryHidden);
     return result;
   }
 
   static Future<T?> openMaterial<T>({
     required BuildContext context,
-    required Widget Function(BuildContext context, double bottomPadding) builder,
+    required Widget Function(BuildContext context, double bottomPadding)
+    builder,
     bool? showDragHandle,
     Color? barrierColor,
     Color? backgroundColor,
@@ -141,7 +160,10 @@ abstract class BaseBottomSheet {
         return Theme(
           data: Theme.of(context).copyWith(
             scaffoldBackgroundColor: Colors.transparent,
-            appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent, surfaceTintColor: Colors.transparent),
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
+            ),
           ),
           // No need left or right default padding for sheet.
           child: MediaQuery.removePadding(
@@ -151,7 +173,9 @@ abstract class BaseBottomSheet {
             child: builder(
               context,
               MediaQuery.of(context).padding.bottom +
-                  (includeKeyboardPadding ? MediaQuery.of(context).viewInsets.bottom : 0),
+                  (includeKeyboardPadding
+                      ? MediaQuery.of(context).viewInsets.bottom
+                      : 0),
             ),
           ),
         );
@@ -179,7 +203,8 @@ abstract class BaseBottomSheet {
     required BuildContext context,
     required bool fullScreen,
     required double paddingTop,
-    required Widget Function(BuildContext context, double bottomPadding) builder,
+    required Widget Function(BuildContext context, double bottomPadding)
+    builder,
     Color? backgroundColor,
     bool useRootNavigator = false,
     bool barrierDismissible = true,
@@ -196,7 +221,9 @@ abstract class BaseBottomSheet {
                 return builder(
                   context,
                   MediaQuery.of(context).padding.bottom +
-                      (includeKeyboardPadding ? MediaQuery.of(context).viewInsets.bottom : 0),
+                      (includeKeyboardPadding
+                          ? MediaQuery.of(context).viewInsets.bottom
+                          : 0),
                 );
               },
             ),
@@ -226,7 +253,9 @@ abstract class BaseBottomSheet {
               child: builder(
                 context,
                 MediaQuery.of(context).padding.bottom +
-                    (includeKeyboardPadding ? MediaQuery.of(context).viewInsets.bottom : 0),
+                    (includeKeyboardPadding
+                        ? MediaQuery.of(context).viewInsets.bottom
+                        : 0),
               ),
             ),
           ),
@@ -279,23 +308,32 @@ Future<T?> replaceModalBottomSheet<T>({
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
 
-  final NavigatorState navigator = Navigator.of(context, rootNavigator: useRootNavigator);
+  final NavigatorState navigator = Navigator.of(
+    context,
+    rootNavigator: useRootNavigator,
+  );
   final MaterialLocalizations localizations = MaterialLocalizations.of(context);
   return navigator.pushReplacement(
     ModalBottomSheetRoute<T>(
       builder: builder,
-      capturedThemes: InheritedTheme.capture(from: context, to: navigator.context),
+      capturedThemes: InheritedTheme.capture(
+        from: context,
+        to: navigator.context,
+      ),
       isScrollControlled: isScrollControlled,
       scrollControlDisabledMaxHeightRatio: scrollControlDisabledMaxHeightRatio,
       barrierLabel: barrierLabel ?? localizations.scrimLabel,
-      barrierOnTapHint: localizations.scrimOnTapHint(localizations.bottomSheetLabel),
+      barrierOnTapHint: localizations.scrimOnTapHint(
+        localizations.bottomSheetLabel,
+      ),
       backgroundColor: backgroundColor,
       elevation: elevation,
       shape: shape,
       clipBehavior: clipBehavior,
       constraints: constraints,
       isDismissible: isDismissible,
-      modalBarrierColor: barrierColor ?? Theme.of(context).bottomSheetTheme.modalBarrierColor,
+      modalBarrierColor:
+          barrierColor ?? Theme.of(context).bottomSheetTheme.modalBarrierColor,
       enableDrag: enableDrag,
       showDragHandle: showDragHandle,
       settings: routeSettings,

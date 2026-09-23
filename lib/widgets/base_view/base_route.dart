@@ -47,9 +47,15 @@ abstract class BaseRoute {
     final nestedNavigator = SpNestedNavigation.maybeOf(context);
 
     if (nestedNavigator != null || routeName == null) {
-      return Navigator.of(context, rootNavigator: rootNavigator).push(buildRoute<T>(context));
+      return Navigator.of(
+        context,
+        rootNavigator: rootNavigator,
+      ).push(buildRoute<T>(context));
     } else {
-      return Navigator.of(context, rootNavigator: rootNavigator).pushNamed(routeName!, arguments: this);
+      return Navigator.of(
+        context,
+        rootNavigator: rootNavigator,
+      ).pushNamed(routeName!, arguments: this);
     }
   }
 
@@ -68,9 +74,15 @@ abstract class BaseRoute {
     final nestedNavigator = SpNestedNavigation.maybeOf(context);
 
     if (nestedNavigator != null || routeName == null) {
-      return Navigator.of(context, rootNavigator: rootNavigator).pushReplacement(buildRoute<T>(context));
+      return Navigator.of(
+        context,
+        rootNavigator: rootNavigator,
+      ).pushReplacement(buildRoute<T>(context));
     } else {
-      return Navigator.of(context, rootNavigator: rootNavigator).pushReplacementNamed(routeName!, arguments: this);
+      return Navigator.of(
+        context,
+        rootNavigator: rootNavigator,
+      ).pushReplacementNamed(routeName!, arguments: this);
     }
   }
 
@@ -86,7 +98,10 @@ abstract class BaseRoute {
   }) {
     return CupertinoSheetRoute<T>(
       scrollableBuilder: (context, controller) =>
-          SpCupertinoFullPageSheetConfigurations(context: context, child: buildPage(context)),
+          SpCupertinoFullPageSheetConfigurations(
+            context: context,
+            child: buildPage(context),
+          ),
     );
   }
 
@@ -97,7 +112,8 @@ abstract class BaseRoute {
     if (fullscreenDialog) {
       return PageRouteBuilder(
         fullscreenDialog: fullscreenDialog,
-        pageBuilder: (context, animation, secondaryAnimation) => buildPage(context),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            buildPage(context),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SharedAxisTransition(
             animation: animation,

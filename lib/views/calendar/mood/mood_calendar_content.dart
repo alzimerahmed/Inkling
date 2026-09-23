@@ -24,9 +24,12 @@ class _CalendarStoriesContent extends StatelessWidget {
                       child: SpScrollableChoiceChips<TagDbModel>(
                         choices: viewModel.tags ?? [],
                         storiesCount: (TagDbModel tag) =>
-                            viewModel.tagSelected(tag) ? viewModel.currentFilterStoriesCount : null,
+                            viewModel.tagSelected(tag)
+                            ? viewModel.currentFilterStoriesCount
+                            : null,
                         toLabel: (TagDbModel tag) => tag.title,
-                        selected: (TagDbModel tag) => viewModel.tagSelected(tag),
+                        selected: (TagDbModel tag) =>
+                            viewModel.tagSelected(tag),
                         onToggle: (TagDbModel tag) => viewModel.selectTag(tag),
                       ),
                     ),
@@ -65,7 +68,9 @@ class _CalendarStoriesContent extends StatelessWidget {
         right: MediaQuery.paddingOf(context).right,
       ),
       child: MediaQuery(
-        data: MediaQuery.of(context).copyWith(padding: MediaQuery.paddingOf(context).copyWith(left: 0, right: 0)),
+        data: MediaQuery.of(context).copyWith(
+          padding: MediaQuery.paddingOf(context).copyWith(left: 0, right: 0),
+        ),
         child: Row(
           crossAxisAlignment: .start,
           spacing: 0,
@@ -79,7 +84,11 @@ class _CalendarStoriesContent extends StatelessWidget {
                     color: Theme.of(context).dividerColor,
                   ),
                 ),
-                child: buildCalendar(context, showBottomBorder: false, scrollable: true),
+                child: buildCalendar(
+                  context,
+                  showBottomBorder: false,
+                  scrollable: true,
+                ),
               ),
             ),
             Flexible(child: buildStoryList()),
@@ -129,7 +138,9 @@ class _CalendarStoriesContent extends StatelessWidget {
         // Index 0 shows all stories for the month
         if (index == 0) {
           return SpStoryList.withQuery(
-            key: ValueKey(jsonEncode(viewModel.searchFilter.toDatabaseFilter())),
+            key: ValueKey(
+              jsonEncode(viewModel.searchFilter.toDatabaseFilter()),
+            ),
             disableMultiEdit: true,
             watch: viewModel,
             filter: viewModel.searchFilter,
@@ -143,7 +154,9 @@ class _CalendarStoriesContent extends StatelessWidget {
           month: viewModel.month,
           day: day,
           types: {PathType.docs},
-          tagIds: viewModel.selectedTagId != null ? {viewModel.selectedTagId!} : {},
+          tagIds: viewModel.selectedTagId != null
+              ? {viewModel.selectedTagId!}
+              : {},
           assetId: null,
         );
 
@@ -156,7 +169,9 @@ class _CalendarStoriesContent extends StatelessWidget {
             month: viewModel.month,
             day: day,
             types: {PathType.docs},
-            tagIds: viewModel.selectedTagId != null ? {viewModel.selectedTagId!} : {},
+            tagIds: viewModel.selectedTagId != null
+                ? {viewModel.selectedTagId!}
+                : {},
             assetId: null,
           ),
         );
@@ -170,7 +185,8 @@ class _CalendarStoriesContent extends StatelessWidget {
     bool scrollable = false,
   }) {
     final firstDayOfWeek = context.select(
-      (DevicePreferencesProvider provider) => provider.preferences.firstDayOfWeek,
+      (DevicePreferencesProvider provider) =>
+          provider.preferences.firstDayOfWeek,
     );
 
     Widget child = SpCalendar(
@@ -181,7 +197,9 @@ class _CalendarStoriesContent extends StatelessWidget {
       onMonthChanged: viewModel.onMonthChanged,
       controller: viewModel.calendarController,
       cellBuilder: (context, date, isDisplayMonth) {
-        List<String>? feelings = isDisplayMonth ? viewModel.feelingsMapByDay[date.day] : null;
+        List<String>? feelings = isDisplayMonth
+            ? viewModel.feelingsMapByDay[date.day]
+            : null;
 
         return SpCalendarDateCell(
           feelingVisibleIndexNotifier: date.day.isEven

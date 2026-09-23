@@ -80,7 +80,8 @@ class _StoryThemeSheet extends StatefulWidget {
   State<_StoryThemeSheet> createState() => _StoryThemeSheetState();
 }
 
-class _StoryThemeSheetState extends State<_StoryThemeSheet> with DebounchedCallback {
+class _StoryThemeSheetState extends State<_StoryThemeSheet>
+    with DebounchedCallback {
   late StoryPreferencesDbModel preferences = widget.preferences;
 
   DefaultStoryPreferencesObject get _currentThemeAsDefaultStoryPreferences {
@@ -93,13 +94,20 @@ class _StoryThemeSheetState extends State<_StoryThemeSheet> with DebounchedCallb
   }
 
   bool get _currentThemeAlreadySavedAsDefault {
-    final currentDefaults = context.read<DevicePreferencesProvider>().preferences.defaultStoryPreferences;
+    final currentDefaults = context
+        .read<DevicePreferencesProvider>()
+        .preferences
+        .defaultStoryPreferences;
     final currentThemeAsDefault = _currentThemeAsDefaultStoryPreferences;
 
-    return currentDefaults.defaultColorSeedValue == currentThemeAsDefault.defaultColorSeedValue &&
-        currentDefaults.defaultColorTone == currentThemeAsDefault.defaultColorTone &&
-        currentDefaults.defaultBackgroundImagePath == currentThemeAsDefault.defaultBackgroundImagePath &&
-        currentDefaults.defaultLayoutType == currentThemeAsDefault.defaultLayoutType;
+    return currentDefaults.defaultColorSeedValue ==
+            currentThemeAsDefault.defaultColorSeedValue &&
+        currentDefaults.defaultColorTone ==
+            currentThemeAsDefault.defaultColorTone &&
+        currentDefaults.defaultBackgroundImagePath ==
+            currentThemeAsDefault.defaultBackgroundImagePath &&
+        currentDefaults.defaultLayoutType ==
+            currentThemeAsDefault.defaultLayoutType;
   }
 
   @override
@@ -114,9 +122,17 @@ class _StoryThemeSheetState extends State<_StoryThemeSheet> with DebounchedCallb
           const SizedBox(height: 8.0),
           FontFamilyTile(
             currentFontWeight:
-                preferences.fontWeight ?? context.read<DevicePreferencesProvider>().preferences.fontWeight,
+                preferences.fontWeight ??
+                context
+                    .read<DevicePreferencesProvider>()
+                    .preferences
+                    .fontWeight,
             currentFontFamily:
-                preferences.fontFamily ?? context.read<DevicePreferencesProvider>().preferences.fontFamily,
+                preferences.fontFamily ??
+                context
+                    .read<DevicePreferencesProvider>()
+                    .preferences
+                    .fontFamily,
             onChanged: (fontFamily) {
               preferences = preferences.copyWith(fontFamily: fontFamily);
               setState(() {});
@@ -137,9 +153,15 @@ class _StoryThemeSheetState extends State<_StoryThemeSheet> with DebounchedCallb
           ),
           FontWeightTile(
             currentFontWeight:
-                preferences.fontWeight ?? context.read<DevicePreferencesProvider>().preferences.fontWeight,
+                preferences.fontWeight ??
+                context
+                    .read<DevicePreferencesProvider>()
+                    .preferences
+                    .fontWeight,
             onChanged: (value) {
-              preferences = preferences.copyWith(fontWeightIndex: value.weightIndex);
+              preferences = preferences.copyWith(
+                fontWeightIndex: value.weightIndex,
+              );
               setState(() {});
 
               widget.onThemeChanged(preferences);
@@ -152,19 +174,24 @@ class _StoryThemeSheetState extends State<_StoryThemeSheet> with DebounchedCallb
             colorSeedValue: preferences.colorSeedValue,
             colorTone: preferences.colorTone,
             backgroundImagePath: preferences.backgroundImagePath,
-            onThemeChanged: ({int? colorSeedValue, int? colorTone, String? backgroundImagePath}) async {
-              setState(() {
-                preferences = preferences.copyWith(
-                  colorSeedValue: colorSeedValue,
-                  colorTone: colorTone,
-                  backgroundImagePath: backgroundImagePath,
-                );
-              });
+            onThemeChanged:
+                ({
+                  int? colorSeedValue,
+                  int? colorTone,
+                  String? backgroundImagePath,
+                }) async {
+                  setState(() {
+                    preferences = preferences.copyWith(
+                      colorSeedValue: colorSeedValue,
+                      colorTone: colorTone,
+                      backgroundImagePath: backgroundImagePath,
+                    );
+                  });
 
-              debouncedCallback(() {
-                widget.onThemeChanged(preferences);
-              }, duration: Durations.medium1);
-            },
+                  debouncedCallback(() {
+                    widget.onThemeChanged(preferences);
+                  }, duration: Durations.medium1);
+                },
           ),
           const SizedBox(height: 12.0),
           SpLayoutTypeSection(
@@ -200,7 +227,11 @@ class _StoryThemeSheetState extends State<_StoryThemeSheet> with DebounchedCallb
           SpPopMenuItem(
             leadingIconData: SpIcons.refresh,
             title: tr("button.reset_theme"),
-            titleStyle: TextStyle(color: preferences.allReseted ? Theme.of(context).disabledColor : null),
+            titleStyle: TextStyle(
+              color: preferences.allReseted
+                  ? Theme.of(context).disabledColor
+                  : null,
+            ),
             onPressed: preferences.allReseted
                 ? null
                 : () {
@@ -214,20 +245,28 @@ class _StoryThemeSheetState extends State<_StoryThemeSheet> with DebounchedCallb
             title: tr('button.save_as_default'),
             leadingIconData: SpIcons.theme,
             titleStyle: TextStyle(
-              color: alreadySavedAsDefault ? Theme.of(context).disabledColor : null,
+              color: alreadySavedAsDefault
+                  ? Theme.of(context).disabledColor
+                  : null,
             ),
             trailingIconData: !context.read<InAppPurchaseProvider>().isProUser
                 ? SpIcons.lock
                 : (alreadySavedAsDefault ? SpIcons.check : null),
             onPressed: !context.read<InAppPurchaseProvider>().isProUser
-                ? () => const PaywallRoute(initialFocus: .customizations).push(context)
+                ? () => const PaywallRoute(
+                    initialFocus: .customizations,
+                  ).push(context)
                 : alreadySavedAsDefault
                 ? null
                 : () {
-                    context.read<DevicePreferencesProvider>().setDefaultStoryPreferences(
-                      _currentThemeAsDefaultStoryPreferences,
+                    context
+                        .read<DevicePreferencesProvider>()
+                        .setDefaultStoryPreferences(
+                          _currentThemeAsDefaultStoryPreferences,
+                        );
+                    MessengerService.of(context).showSnackBar(
+                      tr("snack_bar.save_theme_as_default_success"),
                     );
-                    MessengerService.of(context).showSnackBar(tr("snack_bar.save_theme_as_default_success"));
                     setState(() {});
                   },
           ),
@@ -244,13 +283,19 @@ class _StoryThemeSheetState extends State<_StoryThemeSheet> with DebounchedCallb
             SpPopMenuItem(
               title: tr('button.save_as_template'),
               leadingIconData: SpIcons.lightBulb,
-              trailingIconData: !context.read<InAppPurchaseProvider>().isProUser ? SpIcons.lock : null,
+              trailingIconData: !context.read<InAppPurchaseProvider>().isProUser
+                  ? SpIcons.lock
+                  : null,
               onPressed: () => storyViewModel.saveAsTemplate(context),
             ),
             if (story.editable)
               SpPopMenuItem(
-                title: story.pinned == true ? tr('button.unpin_story') : tr('button.pin_story'),
-                leadingIconData: story.pinned == true ? SpIcons.pinSlash : SpIcons.pin,
+                title: story.pinned == true
+                    ? tr('button.unpin_story')
+                    : tr('button.pin_story'),
+                leadingIconData: story.pinned == true
+                    ? SpIcons.pinSlash
+                    : SpIcons.pin,
                 onPressed: () => storyViewModel.togglePinned(),
               ),
             if (storyViewModel.readOnly && story.putBackAble)
@@ -268,7 +313,10 @@ class _StoryThemeSheetState extends State<_StoryThemeSheet> with DebounchedCallb
                         ).putBack(context);
 
                         if (putBack && context.mounted) {
-                          Navigator.pop(context, SpStoryThemeBottomSheetPopAction.backToStoryList);
+                          Navigator.pop(
+                            context,
+                            SpStoryThemeBottomSheetPopAction.backToStoryList,
+                          );
                         }
                       }
                     : null,
@@ -288,7 +336,10 @@ class _StoryThemeSheetState extends State<_StoryThemeSheet> with DebounchedCallb
                         ).archive(context);
 
                         if (archived && context.mounted) {
-                          Navigator.pop(context, SpStoryThemeBottomSheetPopAction.backToStoryList);
+                          Navigator.pop(
+                            context,
+                            SpStoryThemeBottomSheetPopAction.backToStoryList,
+                          );
                         }
                       }
                     : null,
@@ -309,7 +360,10 @@ class _StoryThemeSheetState extends State<_StoryThemeSheet> with DebounchedCallb
                         ).moveToBin(context);
 
                         if (moved && context.mounted) {
-                          Navigator.pop(context, SpStoryThemeBottomSheetPopAction.backToStoryList);
+                          Navigator.pop(
+                            context,
+                            SpStoryThemeBottomSheetPopAction.backToStoryList,
+                          );
                         }
                       }
                     : null,
@@ -330,7 +384,10 @@ class _StoryThemeSheetState extends State<_StoryThemeSheet> with DebounchedCallb
                         ).hardDelete(context);
 
                         if (deleted && context.mounted) {
-                          Navigator.pop(context, SpStoryThemeBottomSheetPopAction.backToStoryList);
+                          Navigator.pop(
+                            context,
+                            SpStoryThemeBottomSheetPopAction.backToStoryList,
+                          );
                         }
                       }
                     : null,
@@ -363,7 +420,9 @@ class _StoryThemeSheetState extends State<_StoryThemeSheet> with DebounchedCallb
       SpFadeIn.bound(
         child: IconButton(
           onPressed: () async {
-            await context.read<DevicePreferencesProvider>().toggleThemeMode(context);
+            await context.read<DevicePreferencesProvider>().toggleThemeMode(
+              context,
+            );
             if (!context.mounted) return;
 
             // for android, sheet replacement to apply theme mode immediately.
@@ -403,7 +462,9 @@ class _StoryThemeSheetState extends State<_StoryThemeSheet> with DebounchedCallb
       );
     } else {
       return Row(
-        mainAxisAlignment: showWordCount ? MainAxisAlignment.spaceBetween : MainAxisAlignment.end,
+        mainAxisAlignment: showWordCount
+            ? MainAxisAlignment.spaceBetween
+            : MainAxisAlignment.end,
         children: [
           if (showWordCount)
             Expanded(
@@ -437,7 +498,9 @@ class _WordCharCountButtonState extends State<_WordCharCountButton> {
   @override
   Widget build(BuildContext context) {
     return TextButton.icon(
-      style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.onSurface),
+      style: TextButton.styleFrom(
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
+      ),
       icon: const Icon(SpIcons.text),
       label: SpCrossFade(
         showFirst: showingWords,
@@ -445,7 +508,9 @@ class _WordCharCountButtonState extends State<_WordCharCountButton> {
           tr(
             'general.word_count_args',
             namedArgs: {
-              'WORDS_COUNT': (widget.storyViewModel?.draftContent?.wordCount ?? 0).toString(),
+              'WORDS_COUNT':
+                  (widget.storyViewModel?.draftContent?.wordCount ?? 0)
+                      .toString(),
             },
           ),
         ),
@@ -453,7 +518,9 @@ class _WordCharCountButtonState extends State<_WordCharCountButton> {
           tr(
             'general.character_count_args',
             namedArgs: {
-              'CHAR_COUNT': (widget.storyViewModel?.draftContent?.characterCount ?? 0).toString(),
+              'CHAR_COUNT':
+                  (widget.storyViewModel?.draftContent?.characterCount ?? 0)
+                      .toString(),
             },
           ),
         ),

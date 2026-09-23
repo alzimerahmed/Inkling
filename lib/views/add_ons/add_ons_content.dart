@@ -49,7 +49,8 @@ class _AddOnTile extends StatelessWidget {
 
     bool enabled =
         (provider.enableRelaxSounds && addOn == AddOnType.relax_sounds) ||
-        (provider.enablePeriodCalendar(context) && addOn == AddOnType.period_calendar);
+        (provider.enablePeriodCalendar(context) &&
+            addOn == AddOnType.period_calendar);
 
     // The switch reflects the true enabled state but doesn't toggle directly —
     // tapping it (like tapping the tile) opens the sheet, where the real
@@ -98,8 +99,10 @@ class _AddOnSwitchTileState extends State<_AddOnSwitchTile> {
     super.initState();
     final provider = context.read<DevicePreferencesProvider>();
     _enabled =
-        (provider.enableRelaxSounds && widget.addOn == AddOnType.relax_sounds) ||
-        (provider.enablePeriodCalendar(context) && widget.addOn == AddOnType.period_calendar);
+        (provider.enableRelaxSounds &&
+            widget.addOn == AddOnType.relax_sounds) ||
+        (provider.enablePeriodCalendar(context) &&
+            widget.addOn == AddOnType.period_calendar);
   }
 
   void _setEnabled(bool value) {
@@ -112,7 +115,10 @@ class _AddOnSwitchTileState extends State<_AddOnSwitchTile> {
     return SwitchListTile.adaptive(
       contentPadding: const EdgeInsets.only(left: 16.0, right: 12.0),
       value: _enabled,
-      secondary: SpSettingIconBadge(weekday: widget.addOn.weekdayColor, icon: widget.addOn.icon),
+      secondary: SpSettingIconBadge(
+        weekday: widget.addOn.weekdayColor,
+        icon: widget.addOn.icon,
+      ),
       title: _AddOnTitle(addOn: widget.addOn),
       subtitle: Text(widget.addOn.description),
       onChanged: _setEnabled,

@@ -48,12 +48,15 @@ class TagCategoryDbModel extends BaseDbModel {
   }) : _title = title,
        index = index ?? 0;
 
-  static List<String> suggestFeelings = "😄 🥳 🥰 😂 😈 😌 😊 😐 🤔 🧐 😶 😴 😔 😢 😭 😰 🤯 😤 😡 🤒 🥵 🥶 😋".split(
-    " ",
-  );
+  static List<String> suggestFeelings =
+      "😄 🥳 🥰 😂 😈 😌 😊 😐 🤔 🧐 😶 😴 😔 😢 😭 😰 🤯 😤 😡 🤒 🥵 🥶 😋"
+          .split(
+            " ",
+          );
 
   static List<String> suggestActivities =
-      "🏃 🚴 🚶 🏋️ 🏊 🧘 ⚽ 💻 📖 📝 🎓 🎨 💼 🍳 🧹 🛒 ☕ 🛌 🛁 🌱 🎮 📺 🎧 🍽️ 🎤 💃 📸 🚗 ✈️ 💇".split(" ");
+      "🏃 🚴 🚶 🏋️ 🏊 🧘 ⚽ 💻 📖 📝 🎓 🎨 💼 🍳 🧹 🛒 ☕ 🛌 🛁 🌱 🎮 📺 🎧 🍽️ 🎤 💃 📸 🚗 ✈️ 💇"
+          .split(" ");
 
   static List<String> suggestWeathers = "☀️ 🌤️ ☁️ 🌦️ 🌧️ ⛈️ 🌈 ❄️".split(" ");
 
@@ -61,15 +64,30 @@ class TagCategoryDbModel extends BaseDbModel {
     switch (id) {
       case 1:
         return suggestFeelings
-            .map((emoji) => TagDbModel.emoji(emoji, categoryId: TagCategoryDbModel.feeling().id))
+            .map(
+              (emoji) => TagDbModel.emoji(
+                emoji,
+                categoryId: TagCategoryDbModel.feeling().id,
+              ),
+            )
             .toList();
       case 2:
         return suggestActivities
-            .map((emoji) => TagDbModel.emoji(emoji, categoryId: TagCategoryDbModel.activity().id))
+            .map(
+              (emoji) => TagDbModel.emoji(
+                emoji,
+                categoryId: TagCategoryDbModel.activity().id,
+              ),
+            )
             .toList();
       case 3:
         return suggestWeathers
-            .map((emoji) => TagDbModel.emoji(emoji, categoryId: TagCategoryDbModel.weather().id))
+            .map(
+              (emoji) => TagDbModel.emoji(
+                emoji,
+                categoryId: TagCategoryDbModel.weather().id,
+              ),
+            )
             .toList();
       default:
         return [];
@@ -95,11 +113,19 @@ class TagCategoryDbModel extends BaseDbModel {
     TagCategoryDbModel.weather(),
   ];
 
-  factory TagCategoryDbModel.feeling() => TagCategoryDbModel.system(1, "Feeling", multiSelect: false);
-  factory TagCategoryDbModel.activity() => TagCategoryDbModel.system(2, "Activity", multiSelect: true);
-  factory TagCategoryDbModel.weather() => TagCategoryDbModel.system(3, "Weather", multiSelect: false);
-  factory TagCategoryDbModel.people() => TagCategoryDbModel.system(peopleId, "People", multiSelect: true);
-  factory TagCategoryDbModel.system(int id, String title, {bool multiSelect = false}) {
+  factory TagCategoryDbModel.feeling() =>
+      TagCategoryDbModel.system(1, "Feeling", multiSelect: false);
+  factory TagCategoryDbModel.activity() =>
+      TagCategoryDbModel.system(2, "Activity", multiSelect: true);
+  factory TagCategoryDbModel.weather() =>
+      TagCategoryDbModel.system(3, "Weather", multiSelect: false);
+  factory TagCategoryDbModel.people() =>
+      TagCategoryDbModel.system(peopleId, "People", multiSelect: true);
+  factory TagCategoryDbModel.system(
+    int id,
+    String title, {
+    bool multiSelect = false,
+  }) {
     return TagCategoryDbModel(
       id: id,
       version: 0,

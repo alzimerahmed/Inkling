@@ -25,7 +25,8 @@ class RemoteConfigService {
   RemoteConfigService._();
 
   final Map<Type, void Function()> _listeners = {};
-  void clearListeners(String key, void Function() callback) => _listeners.clear();
+  void clearListeners(String key, void Function() callback) =>
+      _listeners.clear();
   void notifyListeners() {
     for (var callback in _listeners.values) {
       callback.call();
@@ -117,7 +118,9 @@ class RemoteConfigService {
   Future<void> initialize() async {
     final defaults = {
       for (final element in _registeredKeys)
-        element.key: element.defaultValue is Map ? jsonEncode(element.defaultValue) : element.defaultValue,
+        element.key: element.defaultValue is Map
+            ? jsonEncode(element.defaultValue)
+            : element.defaultValue,
     };
 
     await kRemoteConfigAdaptor.initialize(defaults);

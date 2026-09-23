@@ -23,7 +23,9 @@ class SpAssetInfoSheet extends BaseBottomSheet {
   @override
   Widget build(BuildContext context, double bottomPadding) {
     final fileSize = _getFileSizeString();
-    final timeFormat = context.read<DevicePreferencesProvider>().timeFormatOf(context);
+    final timeFormat = context.read<DevicePreferencesProvider>().timeFormatOf(
+      context,
+    );
 
     return Stack(
       children: [

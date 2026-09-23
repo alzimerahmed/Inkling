@@ -32,6 +32,8 @@ class AssetFileTypeService {
   /// Whether [extension] (with or without a leading dot) names a video file.
   static bool isVideoExtension(String extension) {
     final normalized = extension.toLowerCase();
-    return _videoExtensions.contains(normalized.startsWith('.') ? normalized : '.$normalized');
+    return _videoExtensions.contains(
+      normalized.startsWith('.') ? normalized : '.$normalized',
+    );
   }
 }

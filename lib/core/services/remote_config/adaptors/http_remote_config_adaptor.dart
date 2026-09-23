@@ -40,7 +40,9 @@ class HttpRemoteConfigAdaptor extends BaseRemoteConfigAdaptor {
       final cached = await _cache.readMap();
       if (cached != null) _values = {..._values, ...cached};
     } catch (error) {
-      debugPrint('HttpRemoteConfigAdaptor#initialize cache read failed: $error');
+      debugPrint(
+        'HttpRemoteConfigAdaptor#initialize cache read failed: $error',
+      );
     }
 
     unawaited(_refetchAndApply());

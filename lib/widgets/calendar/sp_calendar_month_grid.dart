@@ -15,7 +15,12 @@ class _SpCalendarMonthGrid extends StatelessWidget {
   final int year;
   final int month;
   final FirstDayOfWeekOption firstDayOfWeek;
-  final Widget Function(BuildContext context, DateTime date, bool isCurrentMonth) cellBuilder;
+  final Widget Function(
+    BuildContext context,
+    DateTime date,
+    bool isCurrentMonth,
+  )
+  cellBuilder;
 
   @override
   Widget build(BuildContext context) {

@@ -14,10 +14,12 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
   QueryIntegerProperty<AssetObjectBox> get idProperty => AssetObjectBox_.id;
 
   @override
-  QueryStringProperty<AssetObjectBox> get lastSavedDeviceIdProperty => AssetObjectBox_.lastSavedDeviceId;
+  QueryStringProperty<AssetObjectBox> get lastSavedDeviceIdProperty =>
+      AssetObjectBox_.lastSavedDeviceId;
 
   @override
-  QueryDateProperty<AssetObjectBox> get permanentlyDeletedAtProperty => AssetObjectBox_.permanentlyDeletedAt;
+  QueryDateProperty<AssetObjectBox> get permanentlyDeletedAtProperty =>
+      AssetObjectBox_.permanentlyDeletedAt;
 
   @override
   QueryBuilder<AssetObjectBox> buildQuery({
@@ -33,24 +35,33 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
 
     Condition<AssetObjectBox> conditions = AssetObjectBox_.id.notNull();
 
-    if (!returnDeleted) conditions = conditions.and(AssetObjectBox_.permanentlyDeletedAt.isNull());
+    if (!returnDeleted)
+      conditions = conditions.and(
+        AssetObjectBox_.permanentlyDeletedAt.isNull(),
+      );
     if (types != null && types.isNotEmpty) {
       // Legacy rows saved before `type` existed have a null type and were always images.
-      Condition<AssetObjectBox> typeCondition = AssetObjectBox_.type.oneOf(types.map((t) => t.name).toList());
+      Condition<AssetObjectBox> typeCondition = AssetObjectBox_.type.oneOf(
+        types.map((t) => t.name).toList(),
+      );
       if (types.contains(AssetType.image)) {
         typeCondition = typeCondition.or(AssetObjectBox_.type.isNull());
       }
       conditions = conditions.and(typeCondition);
     } else if (type == AssetType.image) {
       conditions = conditions.and(
-        AssetObjectBox_.type.equals(AssetType.image.name).or(AssetObjectBox_.type.isNull()),
+        AssetObjectBox_.type
+            .equals(AssetType.image.name)
+            .or(AssetObjectBox_.type.isNull()),
       );
     } else if (type != null) {
       conditions = conditions.and(AssetObjectBox_.type.equals(type.name));
     }
 
     if (version == 1) {
-      conditions = conditions.and(AssetObjectBox_.version.equals(1).or(AssetObjectBox_.version.isNull()));
+      conditions = conditions.and(
+        AssetObjectBox_.version.equals(1).or(AssetObjectBox_.version.isNull()),
+      );
     }
 
     if (tag != null) {
@@ -71,16 +82,23 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
     }
 
     QueryBuilder<AssetObjectBox> queryBuilder = box.query(conditions);
-    queryBuilder = queryBuilder.order(AssetObjectBox_.id, flags: Order.descending);
+    queryBuilder = queryBuilder.order(
+      AssetObjectBox_.id,
+      flags: Order.descending,
+    );
 
     return queryBuilder;
   }
 
   @override
-  AssetDbModel modelFromJson(Map<String, dynamic> json) => AssetDbModel.fromJson(json);
+  AssetDbModel modelFromJson(Map<String, dynamic> json) =>
+      AssetDbModel.fromJson(json);
 
   @override
-  Future<AssetObjectBox> modelToObject(AssetDbModel model, [Map<String, dynamic>? options]) async {
+  Future<AssetObjectBox> modelToObject(
+    AssetDbModel model, [
+    Map<String, dynamic>? options,
+  ]) async {
     return AssetObjectBox(
       id: model.id,
       originalSource: model.originalSource,
@@ -121,14 +139,19 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
   }
 
   @override
-  Future<AssetDbModel> objectToModel(AssetObjectBox object, [Map<String, dynamic>? options]) async {
+  Future<AssetDbModel> objectToModel(
+    AssetObjectBox object, [
+    Map<String, dynamic>? options,
+  ]) async {
     return AssetDbModel(
       id: object.id,
       originalSource: object.originalSource,
       cloudDestinations: decodeCloudDestinations(object),
       type: AssetType.fromValue(object.type),
       tags: object.tags,
-      metadata: object.metadata != null ? jsonDecode(object.metadata!) as Map<String, dynamic> : null,
+      metadata: object.metadata != null
+          ? jsonDecode(object.metadata!) as Map<String, dynamic>
+          : null,
       width: object.width,
       height: object.height,
       createdAt: object.createdAt,
@@ -139,7 +162,9 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
     );
   }
 
-  Map<String, Map<String, Map<String, String>>> decodeCloudDestinations(AssetObjectBox object) {
+  Map<String, Map<String, Map<String, String>>> decodeCloudDestinations(
+    AssetObjectBox object,
+  ) {
     dynamic result = jsonDecode(object.cloudDestinations);
 
     Map<String, Map<String, Map<String, String>>> decodeData = {};
@@ -174,7 +199,9 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
         cloudDestinations: decodeCloudDestinations(object),
         type: AssetType.fromValue(object.type),
         tags: object.tags,
-        metadata: object.metadata != null ? jsonDecode(object.metadata!) as Map<String, dynamic> : null,
+        metadata: object.metadata != null
+            ? jsonDecode(object.metadata!) as Map<String, dynamic>
+            : null,
         width: object.width,
         height: object.height,
         createdAt: object.createdAt,
@@ -218,7 +245,10 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
   /// once after loading a batch of content that will render asset tiles (a
   /// story list, a library page, etc.), before those tiles build.
   void preloadAspectRatios(Iterable<int> ids) {
-    final idsToLoad = ids.where((id) => !_aspectRatioCache.containsKey(id)).toSet().toList();
+    final idsToLoad = ids
+        .where((id) => !_aspectRatioCache.containsKey(id))
+        .toSet()
+        .toList();
     if (idsToLoad.isEmpty) return;
 
     final objects = box.getMany(idsToLoad);

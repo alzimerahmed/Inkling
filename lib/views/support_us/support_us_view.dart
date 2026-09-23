@@ -47,7 +47,10 @@ class SupportUsView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: .start,
               children: [
-                Text(tr('page.support_us.title'), style: Theme.of(context).textTheme.headlineSmall),
+                Text(
+                  tr('page.support_us.title'),
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
                 Text(tr("page.support_us.message")),
               ],
             ),
@@ -58,7 +61,9 @@ class SupportUsView extends StatelessWidget {
             title: Text(
               tr(
                 'list_tile.rate_on_store.title',
-                namedArgs: {'ARG_NAME': Platform.isAndroid ? 'Play Store' : 'App Store'},
+                namedArgs: {
+                  'ARG_NAME': Platform.isAndroid ? 'Play Store' : 'App Store',
+                },
               ),
             ),
             trailing: const Icon(SpIcons.keyboardRight),
@@ -67,25 +72,43 @@ class SupportUsView extends StatelessWidget {
           if (productHuntUrl.trim().isNotEmpty) ...[
             ListTile(
               leading: const Icon(SpIcons.rocketLaunch),
-              title: Text(tr('list_tile.product_hunt.title', namedArgs: {'ARG_NAME': 'Product Hunt'})),
+              title: Text(
+                tr(
+                  'list_tile.product_hunt.title',
+                  namedArgs: {'ARG_NAME': 'Product Hunt'},
+                ),
+              ),
               trailing: const Icon(SpIcons.keyboardRight),
-              onTap: () => UrlOpenerService.openInCustomTab(context, productHuntUrl),
+              onTap: () =>
+                  UrlOpenerService.openInCustomTab(context, productHuntUrl),
             ),
           ],
           if (alternativeToUrl.trim().isNotEmpty) ...[
             ListTile(
               leading: const Icon(SpIcons.compare),
-              title: Text(tr('list_tile.alternative_to.title', namedArgs: {'ARG_NAME': 'AlternativeTo'})),
+              title: Text(
+                tr(
+                  'list_tile.alternative_to.title',
+                  namedArgs: {'ARG_NAME': 'AlternativeTo'},
+                ),
+              ),
               trailing: const Icon(SpIcons.keyboardRight),
-              onTap: () => UrlOpenerService.openInCustomTab(context, alternativeToUrl),
+              onTap: () =>
+                  UrlOpenerService.openInCustomTab(context, alternativeToUrl),
             ),
           ],
           if (sourceCodeUrl.trim().isNotEmpty) ...[
             ListTile(
               leading: const Icon(SpIcons.github),
-              title: Text(tr('list_tile.github_star.title', namedArgs: {'ARG_NAME': 'GitHub'})),
+              title: Text(
+                tr(
+                  'list_tile.github_star.title',
+                  namedArgs: {'ARG_NAME': 'GitHub'},
+                ),
+              ),
               trailing: const Icon(SpIcons.keyboardRight),
-              onTap: () => UrlOpenerService.openInCustomTab(context, sourceCodeUrl),
+              onTap: () =>
+                  UrlOpenerService.openInCustomTab(context, sourceCodeUrl),
             ),
           ],
         ],

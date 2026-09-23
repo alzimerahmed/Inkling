@@ -15,7 +15,9 @@ class _OnboardingStep3Content extends StatelessWidget {
       actionButton: buildActionButton(context),
       onSkip: () => viewModel.skip(context),
       demo: FadeInBuilder(
-        transformBuilder: (a) => Matrix4.identity()..spTranslate(0.0, lerpDouble(64.0, 0.0, a.value)!),
+        transformBuilder: (a) =>
+            Matrix4.identity()
+              ..spTranslate(0.0, lerpDouble(64.0, 0.0, a.value)!),
         duration: const Duration(milliseconds: 1000),
         child: HomeScreenshot(
           child: Stack(
@@ -55,11 +57,15 @@ class _OnboardingStep3Content extends StatelessWidget {
       child: VisibleWhenNotified(
         notifier: viewModel.endDrawerOpenedNotifier,
         child: ClipRRect(
-          borderRadius: const BorderRadius.only(topRight: Radius.circular(12.0)),
+          borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(12.0),
+          ),
           child: FadeInBuilder(
             curve: Curves.ease,
             duration: viewModel.endDrawerFadeInDuration,
-            transformBuilder: (a) => Matrix4.identity()..spTranslate(lerpDouble(221.0, 0.0, a.value)!, 0.0),
+            transformBuilder: (a) =>
+                Matrix4.identity()
+                  ..spTranslate(lerpDouble(221.0, 0.0, a.value)!, 0.0),
             child: SingleChildScrollView(
               physics: const NeverScrollableScrollPhysics(),
               controller: viewModel.endDrawerScrollController,

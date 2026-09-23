@@ -7,8 +7,12 @@ class _ImportExportContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final onlyExport = viewModel.params.showExport == true && viewModel.params.showImport != true;
-    final onlyImport = viewModel.params.showImport == true && viewModel.params.showExport != true;
+    final onlyExport =
+        viewModel.params.showExport == true &&
+        viewModel.params.showImport != true;
+    final onlyImport =
+        viewModel.params.showImport == true &&
+        viewModel.params.showExport != true;
 
     return Scaffold(
       appBar: AppBar(

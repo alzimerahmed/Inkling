@@ -84,7 +84,12 @@ void main() {
       final items = [
         _MockDbModel(id: 1, name: 'a', value: 10, date: DateTime(2024, 1)),
         _MockDbModel(id: 2, name: 'b', value: 20, date: DateTime(2024, 2)),
-        _MockDbModel(id: 1, name: 'a-duplicate', value: 15, date: DateTime(2024, 1)),
+        _MockDbModel(
+          id: 1,
+          name: 'a-duplicate',
+          value: 15,
+          date: DateTime(2024, 1),
+        ),
         _MockDbModel(id: 3, name: 'c', value: 30, date: DateTime(2024, 3)),
       ];
       final collection = CollectionDbModel<_MockDbModel>(items: items);
@@ -103,7 +108,12 @@ void main() {
       final items = [
         _MockDbModel(id: 1, name: 'first', value: 10, date: DateTime(2024, 1)),
         _MockDbModel(id: 2, name: 'b', value: 20, date: DateTime(2024, 2)),
-        _MockDbModel(id: 1, name: 'second', value: 100, date: DateTime(2024, 1)),
+        _MockDbModel(
+          id: 1,
+          name: 'second',
+          value: 100,
+          date: DateTime(2024, 1),
+        ),
       ];
       final collection = CollectionDbModel<_MockDbModel>(items: items);
 
@@ -211,45 +221,51 @@ void main() {
     });
   });
 
-  group('CollectionDbModel#deduplicateAndSort with StoryDbModel-like sorting', () {
-    test('sorts stories by displayPathDate descending (newest first)', () {
-      final items = [
-        _MockStory(id: 1, displayPathDate: DateTime(2024, 1, 15)),
-        _MockStory(id: 2, displayPathDate: DateTime(2024, 1, 25)),
-        _MockStory(id: 3, displayPathDate: DateTime(2024, 1, 5)),
-      ];
-      final collection = CollectionDbModel<_MockStory>(items: items);
+  group(
+    'CollectionDbModel#deduplicateAndSort with StoryDbModel-like sorting',
+    () {
+      test('sorts stories by displayPathDate descending (newest first)', () {
+        final items = [
+          _MockStory(id: 1, displayPathDate: DateTime(2024, 1, 15)),
+          _MockStory(id: 2, displayPathDate: DateTime(2024, 1, 25)),
+          _MockStory(id: 3, displayPathDate: DateTime(2024, 1, 5)),
+        ];
+        final collection = CollectionDbModel<_MockStory>(items: items);
 
-      final result = collection.deduplicateAndSort(
-        comparator: (a, b) => b.displayPathDate.compareTo(a.displayPathDate),
-      );
+        final result = collection.deduplicateAndSort(
+          comparator: (a, b) => b.displayPathDate.compareTo(a.displayPathDate),
+        );
 
-      expect(result!.items.length, 3);
-      expect(result.items[0].id, 2); // 2024-01-25
-      expect(result.items[1].id, 1); // 2024-01-15
-      expect(result.items[2].id, 3); // 2024-01-05
-    });
+        expect(result!.items.length, 3);
+        expect(result.items[0].id, 2); // 2024-01-25
+        expect(result.items[1].id, 1); // 2024-01-15
+        expect(result.items[2].id, 3); // 2024-01-05
+      });
 
-    test('removes duplicate stories while maintaining sort order', () {
-      final duplicateIds = <int>[];
-      final items = [
-        _MockStory(id: 1, displayPathDate: DateTime(2024, 1, 25)),
-        _MockStory(id: 2, displayPathDate: DateTime(2024, 1, 15)),
-        _MockStory(id: 1, displayPathDate: DateTime(2024, 1, 10)), // duplicate
-        _MockStory(id: 3, displayPathDate: DateTime(2024, 1, 20)),
-      ];
-      final collection = CollectionDbModel<_MockStory>(items: items);
+      test('removes duplicate stories while maintaining sort order', () {
+        final duplicateIds = <int>[];
+        final items = [
+          _MockStory(id: 1, displayPathDate: DateTime(2024, 1, 25)),
+          _MockStory(id: 2, displayPathDate: DateTime(2024, 1, 15)),
+          _MockStory(
+            id: 1,
+            displayPathDate: DateTime(2024, 1, 10),
+          ), // duplicate
+          _MockStory(id: 3, displayPathDate: DateTime(2024, 1, 20)),
+        ];
+        final collection = CollectionDbModel<_MockStory>(items: items);
 
-      final result = collection.deduplicateAndSort(
-        comparator: (a, b) => b.displayPathDate.compareTo(a.displayPathDate),
-        onDuplicateFound: (id) => duplicateIds.add(id),
-      );
+        final result = collection.deduplicateAndSort(
+          comparator: (a, b) => b.displayPathDate.compareTo(a.displayPathDate),
+          onDuplicateFound: (id) => duplicateIds.add(id),
+        );
 
-      expect(result!.items.length, 3);
-      expect(duplicateIds, [1]);
-      expect(result.items[0].id, 1); // 2024-01-25
-      expect(result.items[1].id, 3); // 2024-01-20
-      expect(result.items[2].id, 2); // 2024-01-15
-    });
-  });
+        expect(result!.items.length, 3);
+        expect(duplicateIds, [1]);
+        expect(result.items[0].id, 1); // 2024-01-25
+        expect(result.items[1].id, 3); // 2024-01-20
+        expect(result.items[2].id, 2); // 2024-01-15
+      });
+    },
+  );
 }

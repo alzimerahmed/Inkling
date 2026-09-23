@@ -7,7 +7,8 @@ import 'package:storypad/objectbox.g.dart';
 
 part './helpers/tag_categories_box_transformer.dart';
 
-class TagCategoriesBox extends BaseBox<TagCategoryObjectBox, TagCategoryDbModel> {
+class TagCategoriesBox
+    extends BaseBox<TagCategoryObjectBox, TagCategoryDbModel> {
   @override
   String get tableName => "tag_categories";
 
@@ -15,10 +16,12 @@ class TagCategoriesBox extends BaseBox<TagCategoryObjectBox, TagCategoryDbModel>
   bool get isYearPartitioned => false;
 
   @override
-  QueryIntegerProperty<TagCategoryObjectBox> get idProperty => TagCategoryObjectBox_.id;
+  QueryIntegerProperty<TagCategoryObjectBox> get idProperty =>
+      TagCategoryObjectBox_.id;
 
   @override
-  QueryStringProperty<TagCategoryObjectBox> get lastSavedDeviceIdProperty => TagCategoryObjectBox_.lastSavedDeviceId;
+  QueryStringProperty<TagCategoryObjectBox> get lastSavedDeviceIdProperty =>
+      TagCategoryObjectBox_.lastSavedDeviceId;
 
   @override
   QueryDateProperty<TagCategoryObjectBox> get permanentlyDeletedAtProperty =>
@@ -29,13 +32,18 @@ class TagCategoriesBox extends BaseBox<TagCategoryObjectBox, TagCategoryDbModel>
   }) async {
     List<TagCategoryDbModel> categories = TagCategoryDbModel.systemCategories;
 
-    Future<List<TagDbModel>> getTagsForCategory(TagCategoryDbModel category) async {
+    Future<List<TagDbModel>> getTagsForCategory(
+      TagCategoryDbModel category,
+    ) async {
       final existing = await TagDbModel.db
           .where(filters: {'category_id': category.id})
           .then((e) => e?.items ?? <TagDbModel>[]);
 
       final suggested = category.suggestTags();
-      final suggestedEmojiSet = suggested.map((tag) => tag.emoji).whereType<String>().toSet();
+      final suggestedEmojiSet = suggested
+          .map((tag) => tag.emoji)
+          .whereType<String>()
+          .toSet();
 
       final existingByEmoji = {
         for (final tag in existing)
@@ -73,7 +81,8 @@ class TagCategoriesBox extends BaseBox<TagCategoryObjectBox, TagCategoryDbModel>
     }
 
     return {
-      for (var category in categories) category: await getTagsForCategory(category),
+      for (var category in categories)
+        category: await getTagsForCategory(category),
     };
   }
 
@@ -84,8 +93,12 @@ class TagCategoriesBox extends BaseBox<TagCategoryObjectBox, TagCategoryDbModel>
   }) {
     int? order = filters?["order"];
 
-    Condition<TagCategoryObjectBox> conditions = TagCategoryObjectBox_.id.notNull();
-    if (!returnDeleted) conditions = conditions.and(TagCategoryObjectBox_.permanentlyDeletedAt.isNull());
+    Condition<TagCategoryObjectBox> conditions = TagCategoryObjectBox_.id
+        .notNull();
+    if (!returnDeleted)
+      conditions = conditions.and(
+        TagCategoryObjectBox_.permanentlyDeletedAt.isNull(),
+      );
 
     QueryBuilder<TagCategoryObjectBox> queryBuilder = box.query(conditions);
 
@@ -108,17 +121,26 @@ class TagCategoriesBox extends BaseBox<TagCategoryObjectBox, TagCategoryDbModel>
   }
 
   @override
-  Future<List<TagCategoryObjectBox>> modelsToObjects(List<TagCategoryDbModel> models, [Map<String, dynamic>? options]) {
+  Future<List<TagCategoryObjectBox>> modelsToObjects(
+    List<TagCategoryDbModel> models, [
+    Map<String, dynamic>? options,
+  ]) {
     return compute(_modelsToObjects, {'models': models, 'options': options});
   }
 
   @override
-  Future<TagCategoryObjectBox> modelToObject(TagCategoryDbModel model, [Map<String, dynamic>? options]) {
+  Future<TagCategoryObjectBox> modelToObject(
+    TagCategoryDbModel model, [
+    Map<String, dynamic>? options,
+  ]) {
     return compute(_modelToObject, {'model': model, 'options': options});
   }
 
   @override
-  Future<TagCategoryDbModel> objectToModel(TagCategoryObjectBox object, [Map<String, dynamic>? options]) {
+  Future<TagCategoryDbModel> objectToModel(
+    TagCategoryObjectBox object, [
+    Map<String, dynamic>? options,
+  ]) {
     return compute(_objectToModel, {'object': object, 'options': options});
   }
 }

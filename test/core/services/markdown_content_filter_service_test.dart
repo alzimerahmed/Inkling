@@ -59,8 +59,14 @@ void main() {
 
       test('counts only actual task text, not checkbox markers', () {
         const filtered = 'Task description';
-        expect(MarkdownContentFilterService.call('- [ ] Task description'), filtered);
-        expect(MarkdownContentFilterService.call('⏹️ Task description'), filtered);
+        expect(
+          MarkdownContentFilterService.call('- [ ] Task description'),
+          filtered,
+        );
+        expect(
+          MarkdownContentFilterService.call('⏹️ Task description'),
+          filtered,
+        );
         expect(filtered.length, 16); // Only counts actual content
       });
     });
@@ -112,7 +118,9 @@ void main() {
 
       test('removes roman numeral list markers', () {
         expect(
-          MarkdownContentFilterService.call('i. First\nii. Second\niii. Third\niv. Fourth'),
+          MarkdownContentFilterService.call(
+            'i. First\nii. Second\niii. Third\niv. Fourth',
+          ),
           'First\nSecond\nThird\nFourth',
         );
       });
@@ -193,7 +201,9 @@ void main() {
     group('Link and Image Filtering', () {
       test('extracts text from markdown links, removes URL', () {
         expect(
-          MarkdownContentFilterService.call('[Click here](https://example.com)'),
+          MarkdownContentFilterService.call(
+            '[Click here](https://example.com)',
+          ),
           'Click here',
         );
       });
@@ -332,7 +342,10 @@ void main() {
         final filtered = MarkdownContentFilterService.call(text);
         expect(filtered, 'First\nSecond');
         // 'First\nSecond' has 12 characters total
-        expect(filtered.replaceAll('\n', ' ').trim().length, 12); // "First Second" with space
+        expect(
+          filtered.replaceAll('\n', ' ').trim().length,
+          12,
+        ); // "First Second" with space
       });
     });
 
@@ -395,7 +408,8 @@ void main() {
 > Quote
 ---
 1. Item''';
-        const expected = 'Title\nTask 1\nTask 2\nBold and italic\nLink\nQuote\nItem';
+        const expected =
+            'Title\nTask 1\nTask 2\nBold and italic\nLink\nQuote\nItem';
         expect(MarkdownContentFilterService.call(markdown), expected);
       });
 
@@ -407,7 +421,8 @@ void main() {
       });
 
       test('preserves actual content in complex scenario', () {
-        const markdown = '## Story\n\n- [ ] Write **introduction**\n- Research [topic](url)\n\n> Get started!';
+        const markdown =
+            '## Story\n\n- [ ] Write **introduction**\n- Research [topic](url)\n\n> Get started!';
         final filtered = MarkdownContentFilterService.call(markdown);
         expect(filtered, contains('Story'));
         expect(filtered, contains('Write introduction'));
@@ -431,7 +446,10 @@ void main() {
         // User writes a list with 3 items
         const withMarkdown = '- Item one\n- Item two\n- Item three';
         final filtered = MarkdownContentFilterService.call(withMarkdown);
-        final words = filtered.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).length;
+        final words = filtered
+            .split(RegExp(r'\s+'))
+            .where((w) => w.isNotEmpty)
+            .length;
         expect(words, 6); // "Item one Item two Item three" = 6 words
       });
     });

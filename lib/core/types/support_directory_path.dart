@@ -39,7 +39,8 @@ enum SupportDirectoryPath {
   }
 
   String get directoryPath => directory.path;
-  Directory get directory => Directory('${kSupportDirectory.path}/$relativePath');
+  Directory get directory =>
+      Directory('${kSupportDirectory.path}/$relativePath');
 
   Future<void> ensureDirectoryExists() async {
     if (!await directory.exists()) {

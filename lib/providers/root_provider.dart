@@ -9,12 +9,16 @@ import 'package:storypad/core/services/app_quick_actions_service.dart';
 import 'package:storypad/core/services/notifications/local_notification_service.dart';
 import 'package:storypad/widgets/base_view/base_route.dart';
 
-class RootProvider extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
+class RootProvider extends ChangeNotifier
+    with DisposeAwareMixin, DebounchedCallback {
   final String initialRoute = const HomeRoute().routeName;
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  final ValueNotifier<String> selectedRootRouteNameNotifier = ValueNotifier('home');
-  final HeroController heroController = MaterialApp.createMaterialHeroController();
+  final ValueNotifier<String> selectedRootRouteNameNotifier = ValueNotifier(
+    'home',
+  );
+  final HeroController heroController =
+      MaterialApp.createMaterialHeroController();
 
   final ValueNotifier<RootViewSideBarInfo> sideBarInfoNotifier = ValueNotifier(
     RootViewSideBarInfo(
@@ -24,7 +28,8 @@ class RootProvider extends ChangeNotifier with DisposeAwareMixin, DebounchedCall
   );
 
   RootProvider() {
-    if (kSupportQuickActions) AppQuickActionsService.instance.initialize(navigatorKey: navigatorKey);
+    if (kSupportQuickActions)
+      AppQuickActionsService.instance.initialize(navigatorKey: navigatorKey);
 
     // Register the navigator key so reminder notification taps can navigate,
     // and (re)schedule reminders — see LocalNotificationService.init's doc
@@ -34,7 +39,8 @@ class RootProvider extends ChangeNotifier with DisposeAwareMixin, DebounchedCall
 
   /// For any navigation from sidebar, use this RootProvider#navigate instead of push directly.
   void navigate(BaseRoute route) {
-    bool alreadySelected = selectedRootRouteNameNotifier.value == route.routeName;
+    bool alreadySelected =
+        selectedRootRouteNameNotifier.value == route.routeName;
 
     AnalyticsService.instance.logViewRoute(
       routeObject: route,
@@ -48,7 +54,9 @@ class RootProvider extends ChangeNotifier with DisposeAwareMixin, DebounchedCall
         navigatorKey.currentState?.popUntil((r) => r.isFirst);
       }
     } else if (alreadySelected) {
-      navigatorKey.currentState?.popUntil((r) => r.settings.name == route.routeName);
+      navigatorKey.currentState?.popUntil(
+        (r) => r.settings.name == route.routeName,
+      );
     } else {
       navigatorKey.currentState?.pushNamedAndRemoveUntil(
         route.routeName!,
@@ -82,14 +90,18 @@ class RootProvider extends ChangeNotifier with DisposeAwareMixin, DebounchedCall
   // When a page closes, reset the foreground color to null to restore the default color based on the theme.
   void setSideBarColorScheme(ColorScheme? colorScheme) {
     if (colorScheme == sideBarInfoNotifier.value.colorScheme) return;
-    sideBarInfoNotifier.value = sideBarInfoNotifier.value.copyWithColorScheme(colorScheme);
+    sideBarInfoNotifier.value = sideBarInfoNotifier.value.copyWithColorScheme(
+      colorScheme,
+    );
   }
 
   // (optional) Used by temporary hidden sidebars to show/hide the sidebar.
   // When opening sheets or dialogs, we can optionally hide the sidebar temporarily for better focus.
   void setTemporaryHidden(bool temporaryHidden) {
     if (temporaryHidden == sideBarInfoNotifier.value.temporaryHidden) return;
-    sideBarInfoNotifier.value = sideBarInfoNotifier.value.copyWith(temporaryHidden: temporaryHidden);
+    sideBarInfoNotifier.value = sideBarInfoNotifier.value.copyWith(
+      temporaryHidden: temporaryHidden,
+    );
   }
 
   @override

@@ -40,7 +40,10 @@ class _SpStoryListenerBuilderState extends State<SpStoryListenerBuilder> {
 
   @override
   void dispose() {
-    StoryDbModel.db.removeListener(recordId: widget.story.id, callback: listener);
+    StoryDbModel.db.removeListener(
+      recordId: widget.story.id,
+      callback: listener,
+    );
     super.dispose();
   }
 

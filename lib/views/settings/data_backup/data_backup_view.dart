@@ -35,12 +35,14 @@ class DataBackupView extends StatelessWidget {
           ListTile(
             leading: const Icon(SpIcons.exportOffline),
             title: Text(tr('general.export')),
-            onTap: () => const ImportExportRoute(showExport: true).push(context),
+            onTap: () =>
+                const ImportExportRoute(showExport: true).push(context),
           ),
           ListTile(
             leading: const Icon(SpIcons.importOffline),
             title: Text(tr('general.import')),
-            onTap: () => const ImportExportRoute(showImport: true).push(context),
+            onTap: () =>
+                const ImportExportRoute(showImport: true).push(context),
           ),
           const Divider(),
           SpSectionTitle(title: tr('general.storage')),

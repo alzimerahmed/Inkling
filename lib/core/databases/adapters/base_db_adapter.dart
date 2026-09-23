@@ -31,7 +31,9 @@ abstract class BaseDbAdapter<T extends BaseDbModel> {
   /// For a table where [isYearPartitioned] is `false`, implementations return a
   /// single entry keyed by `BackupFileObject.kGlobalBackupYear` covering every
   /// row, regardless of that row's actual `createdAt`.
-  Future<Map<int, DateTime?>> getLastUpdatedAtByYear({bool? fromThisDeviceOnly});
+  Future<Map<int, DateTime?>> getLastUpdatedAtByYear({
+    bool? fromThisDeviceOnly,
+  });
   Future<T?> find(int id, {bool returnDeleted = false});
 
   Future<int> count({

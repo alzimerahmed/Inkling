@@ -115,7 +115,10 @@ class SpStoryTile extends StatelessWidget {
       SpPopMenuItem(
         title: tr('button.info'),
         leadingIconData: SpIcons.info,
-        onPressed: () => SpStoryInfoSheet(story: story, persisted: true).show(context: context),
+        onPressed: () => SpStoryInfoSheet(
+          story: story,
+          persisted: true,
+        ).show(context: context),
       ),
     ];
   }
@@ -136,10 +139,13 @@ class SpStoryTile extends StatelessWidget {
     SpStoryListMultiEditWrapperState? multiEditState,
   ]) {
     StoryContentDbModel? content = story.draftContent ?? story.latestContent;
-    String? displayShortBody = content?.displayShortBody(maxCharacterCount: preferences.displayCharacterCount);
+    String? displayShortBody = content?.displayShortBody(
+      maxCharacterCount: preferences.displayCharacterCount,
+    );
 
     bool hasTitle = content?.title?.trim().isNotEmpty == true;
-    bool hasBody = displayShortBody != null && displayShortBody.trim().isNotEmpty == true;
+    bool hasBody =
+        displayShortBody != null && displayShortBody.trim().isNotEmpty == true;
     List<SpPopMenuItem> menus = buildPopUpMenus(context);
 
     return SpPopupMenuButton(
@@ -156,10 +162,12 @@ class SpStoryTile extends StatelessWidget {
             onLongPress = null;
           } else if (story.inArchives || story.inBins) {
             onTap = () => openPopUpMenu.call();
-            onLongPress = () => multiEditState.turnOnEditing(initialId: story.id);
+            onLongPress = () =>
+                multiEditState.turnOnEditing(initialId: story.id);
           } else {
             onTap = this.onTap;
-            onLongPress = () => multiEditState.turnOnEditing(initialId: story.id);
+            onLongPress = () =>
+                multiEditState.turnOnEditing(initialId: story.id);
           }
         } else {
           onTap = this.onTap;

@@ -24,17 +24,20 @@ void main() {
       expect(file.trashed, isFalse);
     });
 
-    test('falls back to idOverride for deleted metadata, which carries no id field', () {
-      final file = CloudFileObject.fromDropbox(
-        {'.tag': 'deleted', 'name': 'old_backup.zip'},
-        trashed: true,
-        idOverride: 'id:the-original-query-key',
-      );
+    test(
+      'falls back to idOverride for deleted metadata, which carries no id field',
+      () {
+        final file = CloudFileObject.fromDropbox(
+          {'.tag': 'deleted', 'name': 'old_backup.zip'},
+          trashed: true,
+          idOverride: 'id:the-original-query-key',
+        );
 
-      expect(file.id, 'id:the-original-query-key');
-      expect(file.trashed, isTrue);
-      expect(file.sizeInBytes, isNull);
-    });
+        expect(file.id, 'id:the-original-query-key');
+        expect(file.trashed, isTrue);
+        expect(file.sizeInBytes, isNull);
+      },
+    );
 
     test('defaults trashed to false when not specified', () {
       final file = CloudFileObject.fromDropbox({'name': 'a.zip', 'id': 'id:1'});

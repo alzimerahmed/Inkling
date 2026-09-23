@@ -17,13 +17,19 @@ void main() {
 
     test('recordError with fatal: true completes without throwing', () async {
       await expectLater(
-        adaptor.recordError(Exception('fatal'), StackTrace.current, fatal: true),
+        adaptor.recordError(
+          Exception('fatal'),
+          StackTrace.current,
+          fatal: true,
+        ),
         completes,
       );
     });
 
     test('recordFlutterFatalError completes without throwing', () async {
-      final details = FlutterErrorDetails(exception: Exception('flutter error'));
+      final details = FlutterErrorDetails(
+        exception: Exception('flutter error'),
+      );
       await expectLater(adaptor.recordFlutterFatalError(details), completes);
     });
   });

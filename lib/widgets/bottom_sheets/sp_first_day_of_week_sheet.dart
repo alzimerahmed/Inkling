@@ -59,8 +59,12 @@ class SpFirstDayOfWeekSheet extends BaseBottomSheet {
   String _label(BuildContext context, FirstDayOfWeekOption value) {
     final localeName = context.locale.toLanguageTag();
     final baseLabel = switch (value) {
-      FirstDayOfWeekOption.monday => DateFormat.EEEE(localeName).format(DateTime(2024, 1, 1)),
-      FirstDayOfWeekOption.sunday => DateFormat.EEEE(localeName).format(DateTime(2024, 1, 7)),
+      FirstDayOfWeekOption.monday => DateFormat.EEEE(
+        localeName,
+      ).format(DateTime(2024, 1, 1)),
+      FirstDayOfWeekOption.sunday => DateFormat.EEEE(
+        localeName,
+      ).format(DateTime(2024, 1, 7)),
     };
 
     if (value == FirstDayOfWeekOption.defaultValue) {

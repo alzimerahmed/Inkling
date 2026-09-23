@@ -9,15 +9,19 @@ class SpDefaultTextController extends StatefulWidget {
   });
 
   final String? initialText;
-  final Widget Function(BuildContext context, TextEditingController controller) builder;
+  final Widget Function(BuildContext context, TextEditingController controller)
+  builder;
   final bool withForm;
 
   @override
-  State<SpDefaultTextController> createState() => _SpDefaultTextControllerState();
+  State<SpDefaultTextController> createState() =>
+      _SpDefaultTextControllerState();
 }
 
 class _SpDefaultTextControllerState extends State<SpDefaultTextController> {
-  late final TextEditingController controller = TextEditingController(text: widget.initialText);
+  late final TextEditingController controller = TextEditingController(
+    text: widget.initialText,
+  );
 
   @override
   void dispose() {

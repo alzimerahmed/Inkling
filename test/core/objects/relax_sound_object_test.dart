@@ -6,18 +6,31 @@ import 'package:storypad/gen/storage_hash_map.dart';
 
 void main() async {
   group("RelaxSoundObject.defaultSounds", () {
-    test('it make sure every translation, svg & music path was actually published', () async {
-      for (final sound in RelaxSoundObject.defaultSounds()) {
-        bool soundFileExist = kStorageHashMap.containsKey(sound.soundUrlPath);
-        bool iconFileExist = kStorageHashMap.containsKey(sound.svgIconUrlPath);
-        bool translationExist = trExists(sound.translationKey);
+    test(
+      'it make sure every translation, svg & music path was actually published',
+      () async {
+        for (final sound in RelaxSoundObject.defaultSounds()) {
+          bool soundFileExist = kStorageHashMap.containsKey(sound.soundUrlPath);
+          bool iconFileExist = kStorageHashMap.containsKey(
+            sound.svgIconUrlPath,
+          );
+          bool translationExist = trExists(sound.translationKey);
 
-        debugPrint('${sound.soundUrlPath} | ${sound.svgIconUrlPath}');
+          debugPrint('${sound.soundUrlPath} | ${sound.svgIconUrlPath}');
 
-        expect(soundFileExist, true, reason: '${sound.soundUrlPath} missing from kStorageHashMap');
-        expect(iconFileExist, true, reason: '${sound.svgIconUrlPath} missing from kStorageHashMap');
-        expect(translationExist, true);
-      }
-    });
+          expect(
+            soundFileExist,
+            true,
+            reason: '${sound.soundUrlPath} missing from kStorageHashMap',
+          );
+          expect(
+            iconFileExist,
+            true,
+            reason: '${sound.svgIconUrlPath} missing from kStorageHashMap',
+          );
+          expect(translationExist, true);
+        }
+      },
+    );
   });
 }

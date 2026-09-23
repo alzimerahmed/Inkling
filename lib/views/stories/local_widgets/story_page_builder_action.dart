@@ -5,7 +5,13 @@ class StoryPageBuilderAction {
   final void Function(int oldIndex, int newIndex) onSwapPages;
   final void Function(StoryPageObject page) onDelete;
 
-  final void Function(int pageIndex, StoryPageObject page, bool titleFocused, bool bodyFocused) onFocusChange;
+  final void Function(
+    int pageIndex,
+    StoryPageObject page,
+    bool titleFocused,
+    bool bodyFocused,
+  )
+  onFocusChange;
   final bool canDeletePage;
 
   StoryPageBuilderAction({
@@ -17,5 +23,6 @@ class StoryPageBuilderAction {
   });
 
   bool canMoveUp(int pageIndex) => pageIndex > 0;
-  bool canMoveDown(int pageIndex, int pagesLength) => pageIndex < pagesLength - 1;
+  bool canMoveDown(int pageIndex, int pagesLength) =>
+      pageIndex < pagesLength - 1;
 }

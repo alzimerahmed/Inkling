@@ -22,7 +22,11 @@ class SpMarkdownBody extends StatelessWidget {
     return MarkdownBody(
       data: body,
       onTapLink:
-          onTapLink ?? (text, href, title) => UrlOpenerService.openForRichContent(context: context, url: href ?? ''),
+          onTapLink ??
+          (text, href, title) => UrlOpenerService.openForRichContent(
+            context: context,
+            url: href ?? '',
+          ),
       styleSheet: MarkdownStyleSheet(
         p: style,
         textAlign: align,
@@ -32,8 +36,13 @@ class SpMarkdownBody extends StatelessWidget {
             left: BorderSide(color: Theme.of(context).dividerColor),
           ),
         ),
-        blockquotePadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8.0),
-        codeblockDecoration: BoxDecoration(border: Border.all(color: Theme.of(context).dividerColor)),
+        blockquotePadding: const EdgeInsets.symmetric(
+          vertical: 0,
+          horizontal: 8.0,
+        ),
+        codeblockDecoration: BoxDecoration(
+          border: Border.all(color: Theme.of(context).dividerColor),
+        ),
         listBulletPadding: const EdgeInsets.all(2),
         listIndent: 16,
         blockSpacing: 4.0,

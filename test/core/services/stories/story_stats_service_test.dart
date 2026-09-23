@@ -52,8 +52,24 @@ void main() {
     test('aggregates words, photos and voices from content', () {
       final stats = StoryStatsService.compute(
         stories: [
-          _story(id: 1, year: 2024, month: 6, day: 3, images: 2, audios: 1, words: 10),
-          _story(id: 2, year: 2024, month: 6, day: 4, images: 1, audios: 0, words: 5),
+          _story(
+            id: 1,
+            year: 2024,
+            month: 6,
+            day: 3,
+            images: 2,
+            audios: 1,
+            words: 10,
+          ),
+          _story(
+            id: 2,
+            year: 2024,
+            month: 6,
+            day: 4,
+            images: 1,
+            audios: 0,
+            words: 5,
+          ),
         ],
         allTags: tags,
         range: StatsRange.month(DateTime(2024, 6, 1)),
@@ -65,40 +81,65 @@ void main() {
       expect(stats.wordCount, 15);
     });
 
-    test('counts videos separately from photos, and excludes them from photoCount', () {
-      final stats = StoryStatsService.compute(
-        stories: [
-          _story(id: 1, year: 2024, month: 6, day: 3, images: 2, videos: 1),
-          // A video-only story -- must count toward videoCount, never photoCount.
-          _story(id: 2, year: 2024, month: 6, day: 4, videos: 2),
-        ],
-        allTags: tags,
-        range: StatsRange.month(DateTime(2024, 6, 1)),
-        now: DateTime(2024, 12, 31),
-      );
+    test(
+      'counts videos separately from photos, and excludes them from photoCount',
+      () {
+        final stats = StoryStatsService.compute(
+          stories: [
+            _story(id: 1, year: 2024, month: 6, day: 3, images: 2, videos: 1),
+            // A video-only story -- must count toward videoCount, never photoCount.
+            _story(id: 2, year: 2024, month: 6, day: 4, videos: 2),
+          ],
+          allTags: tags,
+          range: StatsRange.month(DateTime(2024, 6, 1)),
+          now: DateTime(2024, 12, 31),
+        );
 
-      expect(stats.photoCount, 2);
-      expect(stats.videoCount, 3);
-    });
+        expect(stats.photoCount, 2);
+        expect(stats.videoCount, 3);
+      },
+    );
 
-    test('videoStoryIds only contains stories with a video, never a photo-only story', () {
-      final stats = StoryStatsService.compute(
-        stories: [
-          _story(id: 1, year: 2024, month: 6, day: 1, images: 1), // photo only
-          _story(id: 2, year: 2024, month: 6, day: 2, videos: 1), // video only
-          _story(id: 3, year: 2024, month: 6, day: 3, images: 1, videos: 1), // both
-        ],
-        allTags: tags,
-        range: StatsRange.month(DateTime(2024, 6, 1)),
-        now: DateTime(2024, 12, 31),
-      );
+    test(
+      'videoStoryIds only contains stories with a video, never a photo-only story',
+      () {
+        final stats = StoryStatsService.compute(
+          stories: [
+            _story(
+              id: 1,
+              year: 2024,
+              month: 6,
+              day: 1,
+              images: 1,
+            ), // photo only
+            _story(
+              id: 2,
+              year: 2024,
+              month: 6,
+              day: 2,
+              videos: 1,
+            ), // video only
+            _story(
+              id: 3,
+              year: 2024,
+              month: 6,
+              day: 3,
+              images: 1,
+              videos: 1,
+            ), // both
+          ],
+          allTags: tags,
+          range: StatsRange.month(DateTime(2024, 6, 1)),
+          now: DateTime(2024, 12, 31),
+        );
 
-      // Regression guard: tapping the "Photos" chip must never open a story
-      // that has no photo in it (a video-only story previously leaked in via
-      // the shared `media()` extractor).
-      expect(stats.photoStoryIds, {1, 3});
-      expect(stats.videoStoryIds, {2, 3});
-    });
+        // Regression guard: tapping the "Photos" chip must never open a story
+        // that has no photo in it (a video-only story previously leaked in via
+        // the shared `media()` extractor).
+        expect(stats.photoStoryIds, {1, 3});
+        expect(stats.videoStoryIds, {2, 3});
+      },
+    );
 
     test('ranks top feelings, activities, people and tags', () {
       final stats = StoryStatsService.compute(
@@ -123,9 +164,27 @@ void main() {
     test('counts places and countries from located stories', () {
       final stats = StoryStatsService.compute(
         stories: [
-          _story(id: 1, year: 2024, month: 6, day: 1, place: _place('Cafe', 'Cambodia')),
-          _story(id: 2, year: 2024, month: 6, day: 2, place: _place('Cafe', 'Cambodia')),
-          _story(id: 3, year: 2024, month: 6, day: 3, place: _place('Park', 'Thailand')),
+          _story(
+            id: 1,
+            year: 2024,
+            month: 6,
+            day: 1,
+            place: _place('Cafe', 'Cambodia'),
+          ),
+          _story(
+            id: 2,
+            year: 2024,
+            month: 6,
+            day: 2,
+            place: _place('Cafe', 'Cambodia'),
+          ),
+          _story(
+            id: 3,
+            year: 2024,
+            month: 6,
+            day: 3,
+            place: _place('Park', 'Thailand'),
+          ),
           _story(id: 4, year: 2024, month: 6, day: 4),
         ],
         allTags: tags,
@@ -136,7 +195,10 @@ void main() {
       expect(stats.locatedCount, 3);
       expect(stats.topPlaces.first.label, 'Cafe');
       expect(stats.topPlaces.first.count, 2);
-      expect(stats.topCountries.map((e) => e.label).toSet(), {'Cambodia', 'Thailand'});
+      expect(stats.topCountries.map((e) => e.label).toSet(), {
+        'Cambodia',
+        'Thailand',
+      });
     });
 
     test('exposes the backing tag id on each ranked item for filtering', () {

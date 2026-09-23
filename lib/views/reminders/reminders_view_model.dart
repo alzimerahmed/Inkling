@@ -44,13 +44,19 @@ class RemindersViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   /// Built-in reminders (daily/on-this-day/period) edit via a compact sheet.
-  Future<void> openBuiltinEditor(BuildContext context, ReminderObject reminder) async {
+  Future<void> openBuiltinEditor(
+    BuildContext context,
+    ReminderObject reminder,
+  ) async {
     await SpEditReminderSheet(reminder: reminder).show(context: context);
   }
 
   /// Custom reminders have more fields (message, template, tags), so they get
   /// their own full page instead of the compact sheet.
-  Future<void> openCustomEditor(BuildContext context, ReminderObject reminder) async {
+  Future<void> openCustomEditor(
+    BuildContext context,
+    ReminderObject reminder,
+  ) async {
     await EditCustomReminderRoute(reminder: reminder).push(context);
   }
 
@@ -66,6 +72,9 @@ class RemindersViewModel extends ChangeNotifier with DisposeAwareMixin {
       enabled: true,
     );
 
-    await EditCustomReminderRoute(reminder: reminder, isNew: true).push(context);
+    await EditCustomReminderRoute(
+      reminder: reminder,
+      isNew: true,
+    ).push(context);
   }
 }

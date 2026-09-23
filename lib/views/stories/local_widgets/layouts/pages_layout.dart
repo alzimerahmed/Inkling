@@ -48,7 +48,10 @@ class _PagesLayoutState extends State<_PagesLayout> {
               children: [
                 SingleChildScrollView(
                   clipBehavior: Clip.none,
-                  padding: EdgeInsets.only(top: widget.builder.padding.top, bottom: widget.builder.padding.bottom),
+                  padding: EdgeInsets.only(
+                    top: widget.builder.padding.top,
+                    bottom: widget.builder.padding.bottom,
+                  ),
                   child: Column(
                     children: [
                       if (widget.builder.headerBuilder != null)
@@ -115,7 +118,8 @@ class _PagesLayoutState extends State<_PagesLayout> {
               ),
             ),
             Transform(
-              transform: Matrix4.identity()..spTranslate(offset - pageIndex * screenWidth),
+              transform: Matrix4.identity()
+                ..spTranslate(offset - pageIndex * screenWidth),
               child: Opacity(
                 opacity: datas.opacity,
                 child: const Padding(
@@ -141,9 +145,14 @@ class _PagesLayoutState extends State<_PagesLayout> {
           children: [
             TextSpan(
               text: " / ${widget.builder.storyContent.richPages?.length}",
-              style: TextTheme.of(
-                context,
-              ).bodySmall?.copyWith(color: ColorScheme.of(context).onSurface.withValues(alpha: 0.5)),
+              style:
+                  TextTheme.of(
+                    context,
+                  ).bodySmall?.copyWith(
+                    color: ColorScheme.of(
+                      context,
+                    ).onSurface.withValues(alpha: 0.5),
+                  ),
             ),
           ],
         ),

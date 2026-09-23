@@ -108,13 +108,17 @@ class NextcloudUserObject extends CloudServiceUser {
   /// `example.com/cloud-a` + folder `StoryPad` collide with `example.com` +
   /// folder `cloud-a/StoryPad`, both producing `example.com/cloud-a/StoryPad`.
   @override
-  String get destinationKey => '$identifier/${Uri.encodeComponent(folderName ?? defaultFolderName)}';
+  String get destinationKey =>
+      '$identifier/${Uri.encodeComponent(folderName ?? defaultFolderName)}';
 
   /// Deliberately excludes [appPassword] — this is rendered as plain text on
   /// the service's detail screen, never a place for secrets.
   @override
   List<({String label, String value})> get configuration => [
-    (label: tr("input.nextcloud_folder_name.hint"), value: "~/${folderName ?? defaultFolderName}"),
+    (
+      label: tr("input.nextcloud_folder_name.hint"),
+      value: "~/${folderName ?? defaultFolderName}",
+    ),
   ];
 
   Map<String, String> get authHeaders {
@@ -125,5 +129,6 @@ class NextcloudUserObject extends CloudServiceUser {
   }
 
   Map<String, dynamic> toJson() => _$NextcloudUserObjectToJson(this);
-  factory NextcloudUserObject.fromJson(Map<String, dynamic> json) => _$NextcloudUserObjectFromJson(json);
+  factory NextcloudUserObject.fromJson(Map<String, dynamic> json) =>
+      _$NextcloudUserObjectFromJson(json);
 }

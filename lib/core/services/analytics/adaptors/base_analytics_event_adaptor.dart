@@ -14,7 +14,9 @@ import 'package:storypad/widgets/bottom_sheets/base_bottom_sheet.dart';
 
 abstract class BaseAnalyticsEventAdaptor {
   static BaseAnalyticsEventAdaptor create() {
-    return kFirebaseAvailable ? FirebaseAnalyticsEventAdaptor() : NoneAnalyticsEventAdaptor();
+    return kFirebaseAvailable
+        ? FirebaseAnalyticsEventAdaptor()
+        : NoneAnalyticsEventAdaptor();
   }
 
   // ---------------------------------------------------------------------------
@@ -81,26 +83,38 @@ abstract class BaseAnalyticsEventAdaptor {
 
   Future<void> logSyncBackup() => logEvent(sanitizeEventName('sync_backup'));
 
-  Future<void> logImportOfflineBackup() => logEvent(sanitizeEventName('import_offline_backup'));
+  Future<void> logImportOfflineBackup() =>
+      logEvent(sanitizeEventName('import_offline_backup'));
 
-  Future<void> logExportOfflineBackup() => logEvent(sanitizeEventName('export_offline_backup'));
+  Future<void> logExportOfflineBackup() =>
+      logEvent(sanitizeEventName('export_offline_backup'));
 
-  Future<void> logRequestGoogleDriveScope() => logEvent(sanitizeEventName('request_google_drive_scope'));
+  Future<void> logRequestGoogleDriveScope() =>
+      logEvent(sanitizeEventName('request_google_drive_scope'));
 
   Future<void> logSignOut() => logEvent(sanitizeEventName('sign_out'));
 
   Future<void> logSignInWithGoogle() => logLogin(loginMethod: 'google');
 
   Future<void> logOpenLinkInCustomTab({required String url}) {
-    return logEvent(sanitizeEventName('open_custom_tab'), parameters: sanitizeParameters({'url': url}));
+    return logEvent(
+      sanitizeEventName('open_custom_tab'),
+      parameters: sanitizeParameters({'url': url}),
+    );
   }
 
   Future<void> logLaunchUrl({required String url}) {
-    return logEvent(sanitizeEventName('launch_url'), parameters: sanitizeParameters({'url': url}));
+    return logEvent(
+      sanitizeEventName('launch_url'),
+      parameters: sanitizeParameters({'url': url}),
+    );
   }
 
   Future<void> logSubmitRedditPost({required String target}) {
-    return logEvent(sanitizeEventName('submit_reddit_post'), parameters: sanitizeParameters({'target': target}));
+    return logEvent(
+      sanitizeEventName('submit_reddit_post'),
+      parameters: sanitizeParameters({'target': target}),
+    );
   }
 
   Future<void> logDeleteCloudBackup({required CloudFileObject file}) {
@@ -111,7 +125,9 @@ abstract class BaseAnalyticsEventAdaptor {
     return logEvent(sanitizeEventName('delete_asset'));
   }
 
-  Future<void> logForceRestoreBackup({required BackupFileObject backupFileInfo}) {
+  Future<void> logForceRestoreBackup({
+    required BackupFileObject backupFileInfo,
+  }) {
     return logEvent(
       sanitizeEventName('force_restore_backup'),
       parameters: sanitizeParameters({'version': backupFileInfo.version}),
@@ -119,82 +135,139 @@ abstract class BaseAnalyticsEventAdaptor {
   }
 
   Future<void> logHardDeleteStory({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('hard_delete_story'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('hard_delete_story'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logUndoHardDeleteStory({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('undo_hard_delete_story'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('undo_hard_delete_story'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logImportIndividualStory({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('import_story_individually'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('import_story_individually'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logDuplicateStory({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('duplicate_story'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('duplicate_story'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logMoveStoryToBin({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('move_story_to_bin'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('move_story_to_bin'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logUndoMoveStoryToBin({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('undo_move_story_to_bin'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('undo_move_story_to_bin'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logUndoPutBack({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('undo_put_back'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('undo_put_back'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logArchiveStory({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('archive_story'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('archive_story'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logUndoArchiveStory({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('undo_archive_story'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('undo_archive_story'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logChangeStoryDate({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('change_story_date'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('change_story_date'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logSaveStoryAsTemplate({
     required StoryDbModel story,
     required TemplateDbModel template,
   }) {
-    return logEvent(sanitizeEventName('save_story_as_template'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('save_story_as_template'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logToggleStoryStarred({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('toggle_story_starred'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('toggle_story_starred'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logToggleStoryPinned({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('toggle_story_pinned'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('toggle_story_pinned'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logReorderStoryPages({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('reorder_story_pages'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('reorder_story_pages'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logAddStoryPage({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('add_story_page'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('add_story_page'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logDeleteStoryPage({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('delete_story_page'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('delete_story_page'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logToggleShowDayCount({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('toggle_show_day_count'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('toggle_show_day_count'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logUpdateStoryPreferences({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('update_story_preferences'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('update_story_preferences'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logPutStoryBack({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('put_story_back'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('put_story_back'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logSetTagsToStory({
@@ -215,35 +288,59 @@ abstract class BaseAnalyticsEventAdaptor {
   }
 
   Future<void> logSetStoryFeeling({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('set_story_feeling'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('set_story_feeling'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logStorySaveDraft({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('story_save_draft'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('story_save_draft'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logStoryContinueEdit({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('story_continue_edit'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('story_continue_edit'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logStoryViewPrevious({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('story_view_previous'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('story_view_previous'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logStoryDiscardDraft({required StoryDbModel story}) {
-    return logEvent(sanitizeEventName('story_discard_draft'), parameters: storyAnalyticParameters(story));
+    return logEvent(
+      sanitizeEventName('story_discard_draft'),
+      parameters: storyAnalyticParameters(story),
+    );
   }
 
   Future<void> logDeleteTag({required TagDbModel tag}) {
-    return logEvent(sanitizeEventName('delete_tag'), parameters: tagAnalyticParameters(tag));
+    return logEvent(
+      sanitizeEventName('delete_tag'),
+      parameters: tagAnalyticParameters(tag),
+    );
   }
 
   Future<void> logEditTag({required TagDbModel tag}) {
-    return logEvent(sanitizeEventName('edit_tag'), parameters: tagAnalyticParameters(tag));
+    return logEvent(
+      sanitizeEventName('edit_tag'),
+      parameters: tagAnalyticParameters(tag),
+    );
   }
 
   Future<void> logAddTag({required TagDbModel tag}) {
-    return logEvent(sanitizeEventName('add_tag'), parameters: tagAnalyticParameters(tag));
+    return logEvent(
+      sanitizeEventName('add_tag'),
+      parameters: tagAnalyticParameters(tag),
+    );
   }
 
   // method: 'button' (tapped the Tags/People segment control).
@@ -260,14 +357,18 @@ abstract class BaseAnalyticsEventAdaptor {
       sanitizeEventName('reorder_tags'),
       parameters: sanitizeParameters({
         'count': tags.items.length.toString(),
-        'category': tags.items.isEmpty ? null : tagCategoryLabel(tags.items.first),
+        'category': tags.items.isEmpty
+            ? null
+            : tagCategoryLabel(tags.items.first),
       }),
     );
   }
 
-  Future<void> logInsertNewPhoto() => logEvent(sanitizeEventName('insert_new_photo'));
+  Future<void> logInsertNewPhoto() =>
+      logEvent(sanitizeEventName('insert_new_photo'));
 
-  Future<void> logInsertNewVideo() => logEvent(sanitizeEventName('insert_new_video'));
+  Future<void> logInsertNewVideo() =>
+      logEvent(sanitizeEventName('insert_new_video'));
 
   Future<void> logTakePhoto() => logEvent(sanitizeEventName('take_photo'));
 
@@ -289,7 +390,10 @@ abstract class BaseAnalyticsEventAdaptor {
   Future<void> logShareApp() => logEvent(sanitizeEventName('share_app'));
 
   Future<void> logShareStory({required String option}) {
-    return logEvent(sanitizeEventName('share_story'), parameters: sanitizeParameters({'option': option}));
+    return logEvent(
+      sanitizeEventName('share_story'),
+      parameters: sanitizeParameters({'option': option}),
+    );
   }
 
   Future<void> logClearPIN() => logEvent(sanitizeEventName('clear_pin'));
@@ -302,7 +406,10 @@ abstract class BaseAnalyticsEventAdaptor {
   }) {
     return logEvent(
       'use_gallery_template',
-      parameters: sanitizeParameters({'template_id': templateId, 'source': source}),
+      parameters: sanitizeParameters({
+        'template_id': templateId,
+        'source': source,
+      }),
     );
   }
 
@@ -328,7 +435,10 @@ abstract class BaseAnalyticsEventAdaptor {
   }
 
   Future<void> logPinAllStories({required int count}) {
-    return logEvent(sanitizeEventName('pin_all_stories'), parameters: sanitizeParameters({'count': count.toString()}));
+    return logEvent(
+      sanitizeEventName('pin_all_stories'),
+      parameters: sanitizeParameters({'count': count.toString()}),
+    );
   }
 
   Future<void> logArchiveAllStories({required int count}) {
@@ -353,7 +463,10 @@ abstract class BaseAnalyticsEventAdaptor {
   }
 
   Future<void> logQuickActionAdded({required String type}) {
-    return logEvent(sanitizeEventName('quick_action_added'), parameters: sanitizeParameters({'type': type}));
+    return logEvent(
+      sanitizeEventName('quick_action_added'),
+      parameters: sanitizeParameters({'type': type}),
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -375,8 +488,13 @@ abstract class BaseAnalyticsEventAdaptor {
       'day': story.day.toString(),
       'pinned': ?story.pinned?.toString(),
       'gallery_template_id': ?story.galleryTemplateId,
-      'pages_count': (story.draftContent?.id != null ? story.draftContent : story.latestContent)?.richPages?.length
-          .toString(),
+      'pages_count':
+          (story.draftContent?.id != null
+                  ? story.draftContent
+                  : story.latestContent)
+              ?.richPages
+              ?.length
+              .toString(),
       'draft_saved': story.draftContent?.id != null ? 'true' : 'false',
       'preferred_show_day_count': story.preferences.showDayCount?.toString(),
       'tags_count': ?story.tags?.length.toString(),
@@ -387,13 +505,15 @@ abstract class BaseAnalyticsEventAdaptor {
   }
 
   // Categorical/numeric only — never the tag title (tag and person names are user PII).
-  Map<String, Object>? tagAnalyticParameters(TagDbModel tag) => sanitizeParameters({
-    'category': tagCategoryLabel(tag),
-    'has_emoji': (tag.emoji != null).toString(),
-  });
+  Map<String, Object>? tagAnalyticParameters(TagDbModel tag) =>
+      sanitizeParameters({
+        'category': tagCategoryLabel(tag),
+        'has_emoji': (tag.emoji != null).toString(),
+      });
 
   // 'emoji' (Feeling/Activity/Weather), 'people', or 'topic' (regular tags).
-  String tagCategoryLabel(TagDbModel tag) => tag.emoji != null ? 'emoji' : (tag.isPerson ? 'people' : 'topic');
+  String tagCategoryLabel(TagDbModel tag) =>
+      tag.emoji != null ? 'emoji' : (tag.isPerson ? 'people' : 'topic');
 
   /// Validates and returns [name]. Firebase event names must be 1–40 alphanumeric/underscore
   /// characters, start with a letter, and not use reserved prefixes.

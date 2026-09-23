@@ -23,7 +23,9 @@ class _MapContent extends StatelessWidget {
               secondChild: const Icon(SpIcons.satellite),
               showFirst: viewModel.mapStyle == SpMapStyle.streets,
             ),
-            onPressed: () => viewModel.setMapStyle(viewModel.mapStyle == .streets ? .satellite : .streets),
+            onPressed: () => viewModel.setMapStyle(
+              viewModel.mapStyle == .streets ? .satellite : .streets,
+            ),
           ),
           SpSingleStateWidget.listen(
             initialValue: false,
@@ -64,7 +66,8 @@ class _MapContent extends StatelessWidget {
       );
     }
 
-    final double topPadding = MediaQuery.of(context).padding.top + kToolbarHeight + 16.0;
+    final double topPadding =
+        MediaQuery.of(context).padding.top + kToolbarHeight + 16.0;
 
     switch (viewModel.mapRenderer) {
       case SpMapRenderer.googleMap:
@@ -83,13 +86,14 @@ class _MapContent extends StatelessWidget {
           onViewportChanged: viewModel.handleViewportChanged,
           onMarkerTap: viewModel.onMarkerTap,
           onClusterTap: viewModel.onClusterTap,
-          markerIconBuilder: (context, marker, pixelRatio) => _MapStoryMarkerIconFactory.create(
-            context,
-            marker,
-            pixelRatio,
-            imageFile: viewModel.firstAssetFileForStory(marker.data),
-            color: viewModel.markerColorForStory(marker.data),
-          ),
+          markerIconBuilder: (context, marker, pixelRatio) =>
+              _MapStoryMarkerIconFactory.create(
+                context,
+                marker,
+                pixelRatio,
+                imageFile: viewModel.firstAssetFileForStory(marker.data),
+                color: viewModel.markerColorForStory(marker.data),
+              ),
         );
       case SpMapRenderer.flutterMap:
         return SpFlutterMap<MapStoryObject>(
@@ -149,7 +153,8 @@ class _FlutterMapStoryMarker extends StatelessWidget {
                         Image.file(
                           imageFile!,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => const _FlutterMapStoryIconPlaceholder(),
+                          errorBuilder: (context, error, stackTrace) =>
+                              const _FlutterMapStoryIconPlaceholder(),
                         ),
                         DecoratedBox(
                           decoration: BoxDecoration(
@@ -198,7 +203,9 @@ class _MapStoryMarkerIconFactory {
       cacheKey: marker.iconCacheKey ?? 'plc:${color.toARGB32()}',
       pixelRatio: pixelRatio,
       render: () async {
-        final ui.Image? image = imageFile == null ? null : await _loadImage(imageFile, pixelRatio);
+        final ui.Image? image = imageFile == null
+            ? null
+            : await _loadImage(imageFile, pixelRatio);
 
         try {
           final Uint8List rendered = await _drawMarker(
@@ -210,7 +217,10 @@ class _MapStoryMarkerIconFactory {
           // A photo that wouldn't decode has just been drawn as the plain
           // placeholder. Keeping that under the photo's key would make one
           // bad decode permanent, so leave it unsaved and retry next time.
-          return (bytes: rendered, cacheable: imageFile == null || image != null);
+          return (
+            bytes: rendered,
+            cacheable: imageFile == null || image != null,
+          );
         } finally {
           image?.dispose();
         }
@@ -231,7 +241,9 @@ class _MapStoryMarkerIconFactory {
   /// them then evict each other out of.
   static Future<ui.Image?> _loadImage(File imageFile, double pixelRatio) async {
     Future<ui.Image?> decode() async {
-      final ui.ImmutableBuffer buffer = await ui.ImmutableBuffer.fromUint8List(await imageFile.readAsBytes());
+      final ui.ImmutableBuffer buffer = await ui.ImmutableBuffer.fromUint8List(
+        await imageFile.readAsBytes(),
+      );
       final int target = (_logicalSize * pixelRatio).round();
 
       ui.ImageDescriptor? descriptor;
@@ -279,11 +291,21 @@ class _MapStoryMarkerIconFactory {
       const ui.Radius.circular(14.0),
     );
 
-    canvas.drawShadow(ui.Path()..addRRect(cardRRect), Colors.black.withValues(alpha: 0.24), 8.0, true);
+    canvas.drawShadow(
+      ui.Path()..addRRect(cardRRect),
+      Colors.black.withValues(alpha: 0.24),
+      8.0,
+      true,
+    );
     canvas.drawRRect(cardRRect, ui.Paint()..color = Colors.white);
 
     final ui.RRect contentRRect = ui.RRect.fromRectAndRadius(
-      const ui.Rect.fromLTWH(5.0, 5.0, _logicalSize - 10.0, _logicalSize - 10.0),
+      const ui.Rect.fromLTWH(
+        5.0,
+        5.0,
+        _logicalSize - 10.0,
+        _logicalSize - 10.0,
+      ),
       const ui.Radius.circular(10.0),
     );
 
@@ -329,7 +351,9 @@ class _MapStoryMarkerIconFactory {
       (_logicalSize * pixelRatio).round(),
       (_logicalSize * pixelRatio).round(),
     );
-    final ByteData? byteData = await markerImage.toByteData(format: ui.ImageByteFormat.png);
+    final ByteData? byteData = await markerImage.toByteData(
+      format: ui.ImageByteFormat.png,
+    );
     return byteData!.buffer.asUint8List();
   }
 

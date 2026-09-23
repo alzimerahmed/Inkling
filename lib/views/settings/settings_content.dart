@@ -16,20 +16,29 @@ class _SettingsContent extends StatelessWidget {
           ...[
             SpSectionTitle(title: context.tr("general.general")),
             ListTile(
-              leading: const SpSettingIconBadge(weekday: 1, icon: SpIcons.theme),
+              leading: const SpSettingIconBadge(
+                weekday: 1,
+                icon: SpIcons.theme,
+              ),
               title: Text(context.tr("general.customization")),
               onTap: () => const AppearanceRoute().push(context),
             ),
             buildAppLockTile(context, weekday: 2),
             if (LocalNotificationService.instance.supported) ...[
               ListTile(
-                leading: const SpSettingIconBadge(weekday: 3, icon: SpIcons.alarm),
+                leading: const SpSettingIconBadge(
+                  weekday: 3,
+                  icon: SpIcons.alarm,
+                ),
                 title: Text(context.tr('page.reminders.title')),
                 onTap: () => const RemindersRoute().push(context),
               ),
             ],
             ListTile(
-              leading: const SpSettingIconBadge(weekday: 4, icon: SpIcons.googleDrive),
+              leading: const SpSettingIconBadge(
+                weekday: 4,
+                icon: SpIcons.googleDrive,
+              ),
               title: Text(context.tr("general.data_backup")),
               onTap: () => const DataBackupRoute().push(context),
             ),
@@ -45,6 +54,7 @@ class _SettingsContent extends StatelessWidget {
           ...[
             const Divider(),
             SpSectionTitle(title: context.tr("general.stories")),
+            const WritingGoalTile(weekday: 4),
             const DefaultStoryPreferencesTile(weekday: 2),
             const MyTemplatesTile(weekday: 3),
           ],
@@ -60,7 +70,9 @@ class _SettingsContent extends StatelessWidget {
         return ListTile(
           leading: SpSettingIconBadge(weekday: weekday, icon: SpIcons.lock),
           title: Text(context.tr("page.app_lock.title")),
-          subtitle: appLockProvider.hasAppLock ? Text(context.tr("general.enabled")) : null,
+          subtitle: appLockProvider.hasAppLock
+              ? Text(context.tr("general.enabled"))
+              : null,
           onTap: () => AppLocksRoute().push(context),
         );
       },

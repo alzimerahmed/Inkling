@@ -28,7 +28,8 @@ class CloudStorageService {
 
   Map<String, String>? _downloadUrlsByUrlPath;
 
-  final Map<String, Completer<FirestoreStorageResponse>> _downloadingFileByUrlPath = {};
+  final Map<String, Completer<FirestoreStorageResponse>>
+  _downloadingFileByUrlPath = {};
 
   // input: /relax_sounds/animal/forest_birds.svg"
   // output: /relax_sounds/animal/forest_birds-8ce3ba7e37ca67690cc3c180abfdffc8.svg"
@@ -47,13 +48,18 @@ class CloudStorageService {
     _downloadUrlsByUrlPath ??= {};
 
     try {
-      if (_downloadUrlsByUrlPath?[urlPath] != null) return _downloadUrlsByUrlPath?[urlPath];
+      if (_downloadUrlsByUrlPath?[urlPath] != null)
+        return _downloadUrlsByUrlPath?[urlPath];
 
       final String hashPath = getHashPath(urlPath);
-      final String? downloadUrl = await kCloudStorageService.getDownloadUrl(hashPath);
+      final String? downloadUrl = await kCloudStorageService.getDownloadUrl(
+        hashPath,
+      );
 
       if (downloadUrl == null || downloadUrl.isEmpty) {
-        AppLogger.error('CloudStorageService#getDownloadURL failed to get URL for $urlPath (hashPath: $hashPath)');
+        AppLogger.error(
+          'CloudStorageService#getDownloadURL failed to get URL for $urlPath (hashPath: $hashPath)',
+        );
         return null;
       }
 
@@ -72,10 +78,13 @@ class CloudStorageService {
     final String hashPath = getHashPath(urlPath);
     final String downloadPath = constructDeviceDownloadPath(hashPath);
 
-    if (File(downloadPath).existsSync()) return FirestoreStorageResponse(file: File(downloadPath));
-    if (!File(downloadPath).parent.existsSync()) await File(downloadPath).parent.create(recursive: true);
+    if (File(downloadPath).existsSync())
+      return FirestoreStorageResponse(file: File(downloadPath));
+    if (!File(downloadPath).parent.existsSync())
+      await File(downloadPath).parent.create(recursive: true);
 
-    if (_downloadingFileByUrlPath[urlPath] != null && !_downloadingFileByUrlPath[urlPath]!.isCompleted) {
+    if (_downloadingFileByUrlPath[urlPath] != null &&
+        !_downloadingFileByUrlPath[urlPath]!.isCompleted) {
       return _downloadingFileByUrlPath[urlPath]!.future;
     }
 
@@ -90,7 +99,9 @@ class CloudStorageService {
         response = FirestoreStorageResponse(file: File(downloadPath));
       }
     } on CloudStorageUnauthorizedException catch (e) {
-      AppLogger.error('🔴 CloudStorageService#downloadFile unauthorized: ${e.message}');
+      AppLogger.error(
+        '🔴 CloudStorageService#downloadFile unauthorized: ${e.message}',
+      );
       response = FirestoreStorageResponse(
         file: null,
         state: FirestoreStorageState.unauthorized,
@@ -99,7 +110,10 @@ class CloudStorageService {
       AppLogger.error('🔴 CloudStorageService#downloadFile: $e', stackTrace: s);
     }
 
-    response ??= FirestoreStorageResponse(file: null, state: FirestoreStorageState.unknown);
+    response ??= FirestoreStorageResponse(
+      file: null,
+      state: FirestoreStorageState.unknown,
+    );
     _downloadingFileByUrlPath[urlPath]?.complete(response);
     return response;
   }
@@ -112,16 +126,22 @@ class CloudStorageService {
   /// Returns a list of paths that were deleted.
   Future<List<String>> cleanupUnusedFiles() async {
     try {
-      final downloadDir = SupportDirectoryPath.downloaded_from_firestore.directory;
+      final downloadDir =
+          SupportDirectoryPath.downloaded_from_firestore.directory;
       if (!await downloadDir.exists()) return [];
 
       // {
       //   "/relax_sounds/water/ocean_waves-130d1d326a06fe0f21d4650a4f7065b7.txt",
       //   "/relax_sounds/water/droplets-ec36e00209a8cece33eef6f5c3f80e61.txt",
       // };
-      final validBasenames = kStorageHashMap.values.map((e) => path.basename(e)).toSet();
+      final validBasenames = kStorageHashMap.values
+          .map((e) => path.basename(e))
+          .toSet();
 
-      final files = await downloadDir.list(recursive: true).where((entity) => entity is File).toList();
+      final files = await downloadDir
+          .list(recursive: true)
+          .where((entity) => entity is File)
+          .toList();
       final deletedFiles = <String>[];
 
       for (final fileEntity in files) {
@@ -140,10 +160,15 @@ class CloudStorageService {
         }
       }
 
-      AppLogger.info('$runtimeType#cleanupUnusedFiles ${deletedFiles.length} unused files removed');
+      AppLogger.info(
+        '$runtimeType#cleanupUnusedFiles ${deletedFiles.length} unused files removed',
+      );
       return deletedFiles;
     } catch (e, s) {
-      AppLogger.error('$runtimeType#cleanupUnusedFiles error: $e', stackTrace: s);
+      AppLogger.error(
+        '$runtimeType#cleanupUnusedFiles error: $e',
+        stackTrace: s,
+      );
       return [];
     }
   }

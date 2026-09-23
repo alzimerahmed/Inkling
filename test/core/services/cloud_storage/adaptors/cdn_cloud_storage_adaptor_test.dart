@@ -9,14 +9,19 @@ import 'package:storypad/core/services/cloud_storage/adaptors/base_cloud_storage
 import 'package:storypad/core/services/cloud_storage/adaptors/cdn_cloud_storage_adaptor.dart';
 
 CdnCloudStorageAdaptor _adapterWith(http.Client client) {
-  return CdnCloudStorageAdaptor(baseUrl: 'https://cdn.example.com', httpClient: client);
+  return CdnCloudStorageAdaptor(
+    baseUrl: 'https://cdn.example.com',
+    httpClient: client,
+  );
 }
 
 void main() {
   group('CdnCloudStorageAdaptor', () {
     group('getDownloadUrl', () {
       test('returns baseUrl + hashPath', () async {
-        final adaptor = CdnCloudStorageAdaptor(baseUrl: 'https://cdn.example.com');
+        final adaptor = CdnCloudStorageAdaptor(
+          baseUrl: 'https://cdn.example.com',
+        );
         final url = await adaptor.getDownloadUrl('/sounds/forest.mp3');
         expect(url, equals('https://cdn.example.com/sounds/forest.mp3'));
       });

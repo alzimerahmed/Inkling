@@ -4,11 +4,17 @@ import 'package:storypad/core/services/days_count_in_month_service.dart';
 void main() {
   group('DaysCountInMonthService.get', () {
     test('it returns correct day count for non-leap year February', () {
-      expect(DaysCountInMonthService.get(year: 2023, month: DateTime.february), 28);
+      expect(
+        DaysCountInMonthService.get(year: 2023, month: DateTime.february),
+        28,
+      );
     });
 
     test('it returns correct day count for leap year February', () {
-      expect(DaysCountInMonthService.get(year: 2024, month: DateTime.february), 29);
+      expect(
+        DaysCountInMonthService.get(year: 2024, month: DateTime.february),
+        29,
+      );
     });
 
     test('it returns correct day counts for all months in a common year', () {

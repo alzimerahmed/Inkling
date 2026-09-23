@@ -30,7 +30,9 @@ class PickedMediaObject {
   static Future<PickedMediaObject> read(XFile file) async {
     return PickedMediaObject(
       file: file,
-      size: AssetFileTypeService.isVideo(file) ? await _readVideoSize(file) : await _readImageSize(file),
+      size: AssetFileTypeService.isVideo(file)
+          ? await _readVideoSize(file)
+          : await _readImageSize(file),
     );
   }
 
@@ -39,7 +41,10 @@ class PickedMediaObject {
     try {
       codec = await ui.instantiateImageCodec(await file.readAsBytes());
       final frame = await codec.getNextFrame();
-      final size = ui.Size(frame.image.width.toDouble(), frame.image.height.toDouble());
+      final size = ui.Size(
+        frame.image.width.toDouble(),
+        frame.image.height.toDouble(),
+      );
       frame.image.dispose();
       return size;
     } catch (_) {

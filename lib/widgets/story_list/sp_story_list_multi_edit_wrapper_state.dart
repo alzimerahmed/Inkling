@@ -66,7 +66,9 @@ class SpStoryListMultiEditWrapperState extends ChangeNotifier {
         },
       );
 
-      await AnalyticsService.instance.logPutBackAllStories(count: selectedStories.length);
+      await AnalyticsService.instance.logPutBackAllStories(
+        count: selectedStories.length,
+      );
       turnOffEditing();
       return true;
     }
@@ -95,7 +97,9 @@ class SpStoryListMultiEditWrapperState extends ChangeNotifier {
         },
       );
 
-      await AnalyticsService.instance.logMoveAllStoriesToBin(count: selectedStories.length);
+      await AnalyticsService.instance.logMoveAllStoriesToBin(
+        count: selectedStories.length,
+      );
       turnOffEditing();
       return true;
     }
@@ -113,7 +117,9 @@ class SpStoryListMultiEditWrapperState extends ChangeNotifier {
       await record?.setPinned(false);
     }
 
-    await AnalyticsService.instance.logUnpinAllStories(count: selectedStories.length);
+    await AnalyticsService.instance.logUnpinAllStories(
+      count: selectedStories.length,
+    );
     turnOffEditing();
     return true;
   }
@@ -128,7 +134,9 @@ class SpStoryListMultiEditWrapperState extends ChangeNotifier {
       await record?.setPinned(true);
     }
 
-    await AnalyticsService.instance.logPinAllStories(count: selectedStories.length);
+    await AnalyticsService.instance.logPinAllStories(
+      count: selectedStories.length,
+    );
     turnOffEditing();
     return true;
   }
@@ -153,7 +161,9 @@ class SpStoryListMultiEditWrapperState extends ChangeNotifier {
         },
       );
 
-      await AnalyticsService.instance.logArchiveAllStories(count: selectedStories.length);
+      await AnalyticsService.instance.logArchiveAllStories(
+        count: selectedStories.length,
+      );
       turnOffEditing();
       return true;
     }
@@ -183,7 +193,9 @@ class SpStoryListMultiEditWrapperState extends ChangeNotifier {
         },
       );
 
-      await AnalyticsService.instance.logPermanentDeleteAllStories(count: state.selectedStories.length);
+      await AnalyticsService.instance.logPermanentDeleteAllStories(
+        count: state.selectedStories.length,
+      );
       turnOffEditing();
       return true;
     }

@@ -44,7 +44,9 @@ class SpMapSideButton extends StatelessWidget {
               dimension: size,
               child: Center(
                 child: IconTheme(
-                  data: IconThemeData(color: isDanger ? colorScheme.error : colorScheme.onSurface),
+                  data: IconThemeData(
+                    color: isDanger ? colorScheme.error : colorScheme.onSurface,
+                  ),
                   child: icon,
                 ),
               ),

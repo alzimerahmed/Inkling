@@ -49,10 +49,12 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
   QueryIntegerProperty<StoryObjectBox> get idProperty => StoryObjectBox_.id;
 
   @override
-  QueryStringProperty<StoryObjectBox> get lastSavedDeviceIdProperty => StoryObjectBox_.lastSavedDeviceId;
+  QueryStringProperty<StoryObjectBox> get lastSavedDeviceIdProperty =>
+      StoryObjectBox_.lastSavedDeviceId;
 
   @override
-  QueryDateProperty<StoryObjectBox> get permanentlyDeletedAtProperty => StoryObjectBox_.permanentlyDeletedAt;
+  QueryDateProperty<StoryObjectBox> get permanentlyDeletedAtProperty =>
+      StoryObjectBox_.permanentlyDeletedAt;
 
   Future<void> migrateDataToV2() async {
     final conditions = StoryObjectBox_.id
@@ -165,7 +167,10 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
       final emoji = legacyFeelingToEmojiMap[story.feeling];
 
       if (emoji != null) {
-        final tag = TagDbModel.emoji(emoji, categoryId: TagCategoryDbModel.feeling().id);
+        final tag = TagDbModel.emoji(
+          emoji,
+          categoryId: TagCategoryDbModel.feeling().id,
+        );
         story.tags = {...?story.tags, tag.id.toString()}.toList();
         tags[tag.id.toString()] = tag;
         migratedCount++;
@@ -184,7 +189,9 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
   /// Clear search index for related stories so it get picked up to reindex when open search view.
   Future<void> clearSearchIndex({required Map<String, int> filters}) async {
     return buildQuery(filters: filters).build().findAsync().then((boxes) async {
-      await box.putManyAsync(boxes.map((e) => e..searchMetadata = null).toList());
+      await box.putManyAsync(
+        boxes.map((e) => e..searchMetadata = null).toList(),
+      );
     });
   }
 
@@ -198,7 +205,11 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
   /// Call this only on the search view (lazy-load pattern) when needed to search text,
   Future<void> reindexSearchMetadata() async {
     final tagById = await TagsBox().box
-        .query(TagObjectBox_.id.notNull().and(TagObjectBox_.permanentlyDeletedAt.isNull()))
+        .query(
+          TagObjectBox_.id.notNull().and(
+            TagObjectBox_.permanentlyDeletedAt.isNull(),
+          ),
+        )
         .build()
         .findAsync()
         .then((e) => {for (var item in e) item.id: item.title});
@@ -230,13 +241,20 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
               storyBox.placeName,
               DateTime(storyBox.year, storyBox.month, storyBox.day),
               content,
-              storyBox.tags?.map((id) => tagById[int.tryParse(id) ?? -1]).whereType<String>().toList(),
+              storyBox.tags
+                  ?.map((id) => tagById[int.tryParse(id) ?? -1])
+                  .whereType<String>()
+                  .toList(),
             );
             storyBox.searchMetadata = updatedMetadata;
             toUpdate.add(storyBox);
             count++;
           } catch (e, stackTrace) {
-            AppLogger.error('Failed to reindex story ${storyBox.id}', error: e, stackTrace: stackTrace);
+            AppLogger.error(
+              'Failed to reindex story ${storyBox.id}',
+              error: e,
+              stackTrace: stackTrace,
+            );
             failed++;
           }
         }
@@ -293,7 +311,9 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
     return storiesWithLocation;
   }
 
-  Future<List<MapStoryObject>> getRecentStoriesWithLocation({int limit = 50}) async {
+  Future<List<MapStoryObject>> getRecentStoriesWithLocation({
+    int limit = 50,
+  }) async {
     final queryBuilder = box.query(_storiesWithLocationConditions())
       ..order(StoryObjectBox_.year, flags: Order.descending)
       ..order(StoryObjectBox_.month, flags: Order.descending)
@@ -357,7 +377,10 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
     }
 
     storyCountsByYear[DateTime.now().year] ??= 0;
-    return SplayTreeMap<int, int>.from(storyCountsByYear, (a, b) => b.compareTo(a));
+    return SplayTreeMap<int, int>.from(
+      storyCountsByYear,
+      (a, b) => b.compareTo(a),
+    );
   }
 
   /// Distinct months (1-12) that have at least one story matching [filters]
@@ -495,12 +518,18 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
     bool runCallbacks = true,
     String? debugSource,
   }) async {
-    StoryDbModel? saved = await super.set(record, runCallbacks: runCallbacks, debugSource: debugSource);
+    StoryDbModel? saved = await super.set(
+      record,
+      runCallbacks: runCallbacks,
+      debugSource: debugSource,
+    );
 
     // Only rebuild asset tags when story is published (not draft).
     // Draft stories auto-save frequently, so we skip this expensive operation.
     // Tag computation happens once when user click "Done".
-    if (saved != null && !saved.draftStory && saved.assets?.isNotEmpty == true) {
+    if (saved != null &&
+        !saved.draftStory &&
+        saved.assets?.isNotEmpty == true) {
       List<AssetDbModel> assets = await AssetDbModel.db
           .where(filters: {'ids': saved.assets})
           .then((e) => e?.items ?? []);
@@ -508,12 +537,16 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
       for (int i = 0; i < assets.length; i++) {
         Set<int> tags = await computeStoriesTagsForAsset(assets[i]);
         final isLastAsset = i == assets.length - 1;
-        await assets[i].copyWith(tags: tags.toList(), updatedAt: DateTime.now()).save(runCallbacks: isLastAsset);
+        await assets[i]
+            .copyWith(tags: tags.toList(), updatedAt: DateTime.now())
+            .save(runCallbacks: isLastAsset);
       }
       AppLogger.info("🏷️ $runtimeType#set: computing tags for asset");
     }
 
-    AppLogger.info("🚧 $runtimeType#set: latest ${saved?.latestContent?.id}, draft: ${saved?.draftContent?.id}");
+    AppLogger.info(
+      "🚧 $runtimeType#set: latest ${saved?.latestContent?.id}, draft: ${saved?.draftContent?.id}",
+    );
     return saved;
   }
 
@@ -523,7 +556,11 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
             .build()
             .findAsync()
             .then((e) => e.map((e) => e.tags))
-            .then((e) => e.expand((e) => e?.map((e) => int.tryParse(e) ?? 0) ?? <int>[]).toSet()) ??
+            .then(
+              (e) => e
+                  .expand((e) => e?.map((e) => int.tryParse(e) ?? 0) ?? <int>[])
+                  .toSet(),
+            ) ??
         {};
     return tags;
   }
@@ -537,14 +574,21 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
     AppLogger.info("Triggering $tableName#where 🍎");
 
     List<StoryObjectBox> objects;
-    QueryBuilder<StoryObjectBox>? queryBuilder = buildQuery(filters: filters, returnDeleted: returnDeleted);
+    QueryBuilder<StoryObjectBox>? queryBuilder = buildQuery(
+      filters: filters,
+      returnDeleted: returnDeleted,
+    );
 
     Query<StoryObjectBox>? query = queryBuilder.build();
 
-    int? limit = filters != null && filters.containsKey('limit') ? filters['limit'] as int : null;
+    int? limit = filters != null && filters.containsKey('limit')
+        ? filters['limit'] as int
+        : null;
     if (limit != null) query.limit = limit;
 
-    int? offset = filters != null && filters.containsKey('offset') ? filters['offset'] as int : null;
+    int? offset = filters != null && filters.containsKey('offset')
+        ? filters['offset'] as int
+        : null;
     if (offset != null) query.offset = offset;
 
     objects = await query.findAsync();
@@ -555,16 +599,22 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
     final eventFilters = <String, dynamic>{'event_type': 'period'};
     if (filters != null) {
       final List? years = filters['years'] as List?;
-      final int? year = (filters['year'] as int?) ?? (years != null && years.length == 1 ? years.first as int : null);
+      final int? year =
+          (filters['year'] as int?) ??
+          (years != null && years.length == 1 ? years.first as int : null);
       if (year != null) eventFilters['year'] = year;
       if (filters['month'] != null) eventFilters['month'] = filters['month'];
       if (filters['day'] != null) eventFilters['day'] = filters['day'];
     }
 
-    final periodEventObjects = await EventsBox().buildQuery(filters: eventFilters).build().findAsync();
+    final periodEventObjects = await EventsBox()
+        .buildQuery(filters: eventFilters)
+        .build()
+        .findAsync();
     final periodEvents = await EventsBox().objectsToModels(periodEventObjects);
     final Map<int, EventDbModel> eventsByDate = {
-      for (final event in periodEvents) periodDateKey(event.year, event.month, event.day): event,
+      for (final event in periodEvents)
+        periodDateKey(event.year, event.month, event.day): event,
     };
 
     options ??= {};
@@ -599,13 +649,17 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
           .build()
           .findAsync();
 
-      EventDbModel? event = periodObjects.isNotEmpty ? await EventsBox().objectToModel(periodObjects.first) : null;
+      EventDbModel? event = periodObjects.isNotEmpty
+          ? await EventsBox().objectToModel(periodObjects.first)
+          : null;
 
       return objectToModel(
         object,
         event != null
             ? {
-                'eventsByDate': {periodDateKey(object.year, object.month, object.day): event},
+                'eventsByDate': {
+                  periodDateKey(object.year, object.month, object.day): event,
+                },
               }
             : null,
       );
@@ -647,36 +701,62 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
       conditions = conditions.and(StoryObjectBox_.id.oneOf(ids));
     }
 
-    if (!returnDeleted) conditions = conditions.and(StoryObjectBox_.permanentlyDeletedAt.isNull());
-    if (tag != null) conditions = conditions.and(StoryObjectBox_.tags.containsElement(tag.toString()));
+    if (!returnDeleted)
+      conditions = conditions.and(
+        StoryObjectBox_.permanentlyDeletedAt.isNull(),
+      );
+    if (tag != null)
+      conditions = conditions.and(
+        StoryObjectBox_.tags.containsElement(tag.toString()),
+      );
 
     if (tags != null && tags.isNotEmpty) {
       // OR logic: story must have ANY of the specified tags (this group is then AND-ed
       // with the rest of the filters below).
-      Condition<StoryObjectBox> tagsCondition = StoryObjectBox_.tags.containsElement(tags.first.toString());
+      Condition<StoryObjectBox> tagsCondition = StoryObjectBox_.tags
+          .containsElement(tags.first.toString());
       for (final t in tags.skip(1)) {
-        tagsCondition = tagsCondition.or(StoryObjectBox_.tags.containsElement(t.toString()));
+        tagsCondition = tagsCondition.or(
+          StoryObjectBox_.tags.containsElement(t.toString()),
+        );
       }
       conditions = conditions.and(tagsCondition);
     }
 
     if (galleryTemplateId != null) {
-      conditions = conditions.and(StoryObjectBox_.galleryTemplateId.equals(galleryTemplateId));
+      conditions = conditions.and(
+        StoryObjectBox_.galleryTemplateId.equals(galleryTemplateId),
+      );
     }
-    if (template != null) conditions = conditions.and(StoryObjectBox_.templateId.equals(template));
-    if (asset != null) conditions = conditions.and(StoryObjectBox_.assets.equals(asset));
-    if (starred != null) conditions = conditions.and(StoryObjectBox_.starred.equals(starred));
-    if (pinned != null && pinned == true) conditions = conditions.and(StoryObjectBox_.pinned.equals(pinned));
+    if (template != null)
+      conditions = conditions.and(StoryObjectBox_.templateId.equals(template));
+    if (asset != null)
+      conditions = conditions.and(StoryObjectBox_.assets.equals(asset));
+    if (starred != null)
+      conditions = conditions.and(StoryObjectBox_.starred.equals(starred));
+    if (pinned != null && pinned == true)
+      conditions = conditions.and(StoryObjectBox_.pinned.equals(pinned));
     if (pinned != null && pinned == false) {
-      conditions = conditions.and(StoryObjectBox_.pinned.equals(pinned).or(StoryObjectBox_.pinned.isNull()));
+      conditions = conditions.and(
+        StoryObjectBox_.pinned
+            .equals(pinned)
+            .or(StoryObjectBox_.pinned.isNull()),
+      );
     }
-    if (type != null) conditions = conditions.and(StoryObjectBox_.type.equals(type));
-    if (types != null) conditions = conditions.and(StoryObjectBox_.type.oneOf(types));
-    if (year != null) conditions = conditions.and(StoryObjectBox_.year.equals(year));
-    if (years != null) conditions = conditions.and(StoryObjectBox_.year.oneOf(years));
-    if (excludeYears != null) conditions = conditions.and(StoryObjectBox_.year.notOneOf(excludeYears));
-    if (month != null) conditions = conditions.and(StoryObjectBox_.month.equals(month));
-    if (day != null) conditions = conditions.and(StoryObjectBox_.day.equals(day));
+    if (type != null)
+      conditions = conditions.and(StoryObjectBox_.type.equals(type));
+    if (types != null)
+      conditions = conditions.and(StoryObjectBox_.type.oneOf(types));
+    if (year != null)
+      conditions = conditions.and(StoryObjectBox_.year.equals(year));
+    if (years != null)
+      conditions = conditions.and(StoryObjectBox_.year.oneOf(years));
+    if (excludeYears != null)
+      conditions = conditions.and(StoryObjectBox_.year.notOneOf(excludeYears));
+    if (month != null)
+      conditions = conditions.and(StoryObjectBox_.month.equals(month));
+    if (day != null)
+      conditions = conditions.and(StoryObjectBox_.day.equals(day));
     if (createdYear != null) {
       conditions = conditions.and(
         StoryObjectBox_.createdAt.betweenDate(
@@ -688,7 +768,10 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
 
     if (query != null) {
       conditions = conditions.and(
-        StoryObjectBox_.searchMetadata.contains(query.toLowerCase(), caseSensitive: false),
+        StoryObjectBox_.searchMetadata.contains(
+          query.toLowerCase(),
+          caseSensitive: false,
+        ),
       );
     }
 
@@ -705,7 +788,8 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
     }
 
     QueryBuilder<StoryObjectBox> queryBuilder = box.query(conditions);
-    if (priority) queryBuilder.order(StoryObjectBox_.starred, flags: Order.descending);
+    if (priority)
+      queryBuilder.order(StoryObjectBox_.starred, flags: Order.descending);
 
     queryBuilder
       ..order(StoryObjectBox_.year, flags: order ?? Order.descending)
@@ -754,7 +838,10 @@ class StoriesBox extends BaseBox<StoryObjectBox, StoryDbModel> {
   }
 
   @override
-  Future<List<StoryObjectBox>> modelsToObjects(List<StoryDbModel> models, [Map<String, dynamic>? options]) {
+  Future<List<StoryObjectBox>> modelsToObjects(
+    List<StoryDbModel> models, [
+    Map<String, dynamic>? options,
+  ]) {
     return compute(_modelsToObjects, {
       'models': models,
       'options': options,

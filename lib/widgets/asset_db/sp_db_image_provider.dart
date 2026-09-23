@@ -23,7 +23,10 @@ class SpDbImageProvider extends ImageProvider<SpDbImageProvider> {
   }
 
   @override
-  ImageStreamCompleter loadImage(SpDbImageProvider key, ImageDecoderCallback decode) {
+  ImageStreamCompleter loadImage(
+    SpDbImageProvider key,
+    ImageDecoderCallback decode,
+  ) {
     return MultiFrameImageStreamCompleter(
       codec: _loadAsync(key, decode: decode),
       scale: key.scale,
@@ -46,7 +49,8 @@ class SpDbImageProvider extends ImageProvider<SpDbImageProvider> {
   /// token/refresh state, since resolving a destination via
   /// [BackupCloudService.downloadFileBytes] no longer depends on a
   /// caller-held token the way the old raw-HTTP Drive downloader did.
-  String get _accountsKey => signedInServices.map((s) => s.currentUser?.destinationKey).join(',');
+  String get _accountsKey =>
+      signedInServices.map((s) => s.currentUser?.destinationKey).join(',');
 
   @override
   bool operator ==(Object other) {

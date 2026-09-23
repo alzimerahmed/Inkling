@@ -38,7 +38,9 @@ class _TemplatesTabState extends State<TemplatesTab> {
   }
 
   Future<void> load() async {
-    templates = await TemplateDbModel.db.where(filters: {'archived': params.viewingArchives});
+    templates = await TemplateDbModel.db.where(
+      filters: {'archived': params.viewingArchives},
+    );
     setState(() {});
   }
 
@@ -89,7 +91,9 @@ class _TemplatesTabState extends State<TemplatesTab> {
     for (int i = 0; i < length; i++) {
       final item = templates!.items[i];
       if (item.index != i) {
-        await TemplateDbModel.db.set(item.copyWith(index: i, updatedAt: DateTime.now()));
+        await TemplateDbModel.db.set(
+          item.copyWith(index: i, updatedAt: DateTime.now()),
+        );
       }
     }
 
@@ -113,7 +117,9 @@ class _TemplatesTabState extends State<TemplatesTab> {
           : null,
       body: buildBody(context),
       floatingActionButtonLocation: SpFabLocation.endFloat(context),
-      floatingActionButton: params.viewingArchives || params.pickMode ? null : buildFAB(context),
+      floatingActionButton: params.viewingArchives || params.pickMode
+          ? null
+          : buildFAB(context),
     );
   }
 
@@ -144,7 +150,8 @@ class _TemplatesTabState extends State<TemplatesTab> {
   }
 
   Widget buildBody(BuildContext context) {
-    if (templates == null) return const Center(child: CircularProgressIndicator.adaptive());
+    if (templates == null)
+      return const Center(child: CircularProgressIndicator.adaptive());
     if (templates?.items.isEmpty == true) {
       return const _EmptyBody();
     }
@@ -170,7 +177,8 @@ class _TemplatesTabState extends State<TemplatesTab> {
         itemCount: templates!.items.length,
         padding: padding,
         buildDefaultDragHandles: true,
-        onReorderItem: (int oldIndex, int newIndex) => reorder(oldIndex, newIndex),
+        onReorderItem: (int oldIndex, int newIndex) =>
+            reorder(oldIndex, newIndex),
         proxyDecorator: (child, index, animation) {
           return Container(
             color: ColorScheme.of(context).readOnly.surface5,
@@ -184,7 +192,11 @@ class _TemplatesTabState extends State<TemplatesTab> {
     );
   }
 
-  Widget _buildTemplateTile(BuildContext context, TemplateDbModel template, int index) {
+  Widget _buildTemplateTile(
+    BuildContext context,
+    TemplateDbModel template,
+    int index,
+  ) {
     final isLast = index == templates!.items.length - 1;
 
     return Column(

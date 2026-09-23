@@ -33,13 +33,20 @@ class SpImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Check if this is a relative asset path (images/ or audio/)
-    if (AssetType.values.any((type) => link.startsWith("${type.subDirectory.relativePath}/"))) {
+    if (AssetType.values.any(
+      (type) => link.startsWith("${type.subDirectory.relativePath}/"),
+    )) {
       return SpDbAssetLoader.withUser(
         relativePath: link,
         builder: (context, file, error) {
           if (error != null) {
             return errorWidget?.call(context, link, error) ??
-                buildImageError(width ?? defaultSize, height ?? defaultSize, context, error);
+                buildImageError(
+                  width ?? defaultSize,
+                  height ?? defaultSize,
+                  context,
+                  error,
+                );
           }
 
           if (file == null) {
@@ -107,7 +114,12 @@ class SpImage extends StatelessWidget {
     }
   }
 
-  static Widget buildImageError(double width, double height, BuildContext context, Object? error) {
+  static Widget buildImageError(
+    double width,
+    double height,
+    BuildContext context,
+    Object? error,
+  ) {
     String? message = error is StateError ? error.message : error?.toString();
     return Material(
       color: ColorScheme.of(context).readOnly.surface3,

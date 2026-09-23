@@ -37,7 +37,9 @@ class AuthException extends BackupException {
   }
 
   bool get requiresSignOut => type == AuthExceptionType.tokenRevoked;
-  bool get requiresReauth => type == AuthExceptionType.tokenExpired || type == AuthExceptionType.signInRequired;
+  bool get requiresReauth =>
+      type == AuthExceptionType.tokenExpired ||
+      type == AuthExceptionType.signInRequired;
   bool get requiresScopeRequest => type == AuthExceptionType.insufficientScopes;
 
   /// A revoked grant needs the user to actively reconnect (fresh OAuth consent

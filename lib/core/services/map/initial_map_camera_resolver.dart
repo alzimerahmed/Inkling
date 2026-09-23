@@ -72,13 +72,17 @@ class InitialMapCameraResolver {
   Future<InitialMapCameraResult> resolve({PlaceDbModel? selectedPlace}) async {
     if (selectedPlace != null && _isValidPoint(selectedPlace.latLng)) {
       return InitialMapCameraResult(
-        camera: SpMapCamera(target: selectedPlace.latLng, zoom: 15.0 + closeZoomBoost),
+        camera: SpMapCamera(
+          target: selectedPlace.latLng,
+          zoom: 15.0 + closeZoomBoost,
+        ),
         source: InitialMapCameraSource.selectedPlace,
       );
     }
 
     final Future<InitialMapCameraResult?> deviceFuture = _resolveDevicePlace();
-    final Future<InitialMapCameraResult?> storyFuture = _resolveStoryLocations();
+    final Future<InitialMapCameraResult?> storyFuture =
+        _resolveStoryLocations();
 
     final InitialMapCameraResult? deviceResult = await deviceFuture;
     final InitialMapCameraResult? storyResult = await storyFuture;
@@ -108,7 +112,9 @@ class InitialMapCameraResolver {
   }
 
   Future<InitialMapCameraResult?> _resolveStoryLocations() async {
-    final List<SpLatLng> locations = (await fetchStoryLocations()).where(_isValidPoint).toList();
+    final List<SpLatLng> locations = (await fetchStoryLocations())
+        .where(_isValidPoint)
+        .toList();
     if (locations.isEmpty) return null;
 
     return InitialMapCameraResult(
@@ -130,7 +136,10 @@ class InitialMapCameraResolver {
     final SpLatLng anchor = locations.first;
     final List<SpLatLng> recentCluster = locations
         .take(20)
-        .where((location) => _isNear(location, anchor, latitudeSpan: 0.8, longitudeSpan: 0.8))
+        .where(
+          (location) =>
+              _isNear(location, anchor, latitudeSpan: 0.8, longitudeSpan: 0.8),
+        )
         .toList();
 
     if (recentCluster.length < 2) {
@@ -138,9 +147,15 @@ class InitialMapCameraResolver {
     }
 
     final SpLatLng center = _average(recentCluster);
-    final double latitudeSpan = _span(recentCluster.map((location) => location.latitude));
-    final double longitudeSpan = _span(recentCluster.map((location) => location.longitude));
-    final double maxSpan = latitudeSpan > longitudeSpan ? latitudeSpan : longitudeSpan;
+    final double latitudeSpan = _span(
+      recentCluster.map((location) => location.latitude),
+    );
+    final double longitudeSpan = _span(
+      recentCluster.map((location) => location.longitude),
+    );
+    final double maxSpan = latitudeSpan > longitudeSpan
+        ? latitudeSpan
+        : longitudeSpan;
 
     return SpMapCamera(
       target: center,

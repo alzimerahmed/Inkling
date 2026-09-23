@@ -17,11 +17,16 @@ class MultiAudioPlayersService {
 
   bool exist(String urlPath) => _players.keys.contains(urlPath);
   double? getVolume(String soundUrl) => _players[soundUrl]?.getVolume();
-  void setVolume(String soundUrl, double volume) => _players[soundUrl]?.setVolume(volume);
+  void setVolume(String soundUrl, double volume) =>
+      _players[soundUrl]?.setVolume(volume);
 
   void _notifyListeners(String debugSource) {
-    debugPrint('🎸 MultiAudioPlayersService#_notifyListeners $_playingStates from $debugSource');
-    bool? playing = playingStates.values.isEmpty ? null : playingStates.values.any((e) => e.playing);
+    debugPrint(
+      '🎸 MultiAudioPlayersService#_notifyListeners $_playingStates from $debugSource',
+    );
+    bool? playing = playingStates.values.isEmpty
+        ? null
+        : playingStates.values.any((e) => e.playing);
     onStateChanged(playing);
   }
 

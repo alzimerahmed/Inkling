@@ -50,7 +50,8 @@ class _MixesTab extends StatelessWidget {
         right: MediaQuery.of(context).padding.right + 10.0,
         bottom: MediaQuery.of(context).padding.bottom + 16.0,
       ),
-      onReorderItem: (int oldIndex, int newIndex) => viewModel.reorder(oldIndex, newIndex),
+      onReorderItem: (int oldIndex, int newIndex) =>
+          viewModel.reorder(oldIndex, newIndex),
       itemBuilder: (context, index) {
         final mix = viewModel.mixes![index];
         return buildMixTile(
@@ -71,7 +72,9 @@ class _MixesTab extends StatelessWidget {
       return provider.relaxSounds[e.soundUrlPath];
     }).whereType<RelaxSoundObject>();
 
-    Color backgroundColor = ColorFromDayService(context: context).get(sounds.lastOrNull?.dayColor ?? 1)!;
+    Color backgroundColor = ColorFromDayService(
+      context: context,
+    ).get(sounds.lastOrNull?.dayColor ?? 1)!;
 
     return Container(
       key: ValueKey(mix.id),
@@ -85,7 +88,12 @@ class _MixesTab extends StatelessWidget {
           tileColor: backgroundColor,
           textColor: Theme.of(context).colorScheme.onPrimary,
           title: Text(mix.name),
-          contentPadding: const EdgeInsets.only(left: 20.0, right: 0.0, top: 8.0, bottom: 8.0),
+          contentPadding: const EdgeInsets.only(
+            left: 20.0,
+            right: 0.0,
+            top: 8.0,
+            bottom: 8.0,
+          ),
           trailing: SpPopupMenuButton(
             dyGetter: (dy) => dy + 56,
             items: (context) {
@@ -148,7 +156,9 @@ class _MixesTab extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.surface,
                         borderRadius: BorderRadius.circular(8.0),
-                        border: Border.all(color: Theme.of(context).dividerColor),
+                        border: Border.all(
+                          color: Theme.of(context).dividerColor,
+                        ),
                       ),
                       child: child,
                     ),

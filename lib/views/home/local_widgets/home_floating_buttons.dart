@@ -11,9 +11,15 @@ class _HomeFloatingButtons extends StatefulWidget {
   State<_HomeFloatingButtons> createState() => _HomeFloatingButtonsState();
 }
 
-class _HomeFloatingButtonsState extends State<_HomeFloatingButtons> with SingleTickerProviderStateMixin {
-  late final AnimationController animationController = AnimationController(vsync: this, duration: Durations.medium2);
-  late Animation<double> animation = animationController.drive(CurveTween(curve: Curves.ease));
+class _HomeFloatingButtonsState extends State<_HomeFloatingButtons>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController animationController = AnimationController(
+    vsync: this,
+    duration: Durations.medium2,
+  );
+  late Animation<double> animation = animationController.drive(
+    CurveTween(curve: Curves.ease),
+  );
 
   OverlayEntry? floating;
 
@@ -120,6 +126,16 @@ class _HomeFloatingButtonsState extends State<_HomeFloatingButtons> with SingleT
         },
       ),
       IconButton.outlined(
+        tooltip: tr("button.daily_prompt"),
+        visualDensity: const VisualDensity(horizontal: 1.5, vertical: 1.5),
+        icon: const Icon(SpIcons.question),
+        color: Colors.white,
+        onPressed: () {
+          toggle(context);
+          widget.viewModel.goToDailyPromptPage(context);
+        },
+      ),
+      IconButton.outlined(
         tooltip: tr("paywall_features.templates.title"),
         visualDensity: const VisualDensity(horizontal: 1, vertical: 1),
         icon: const Icon(SpIcons.lightBulb, color: Colors.yellow),
@@ -141,7 +157,9 @@ class _HomeFloatingButtonsState extends State<_HomeFloatingButtons> with SingleT
             return Container(
               width: double.infinity,
               height: double.infinity,
-              color: Colors.black.withValues(alpha: lerpDouble(0.0, 0.75, animation.value)),
+              color: Colors.black.withValues(
+                alpha: lerpDouble(0.0, 0.75, animation.value),
+              ),
             );
           },
         ),
@@ -162,10 +180,17 @@ class _HomeFloatingButtonsState extends State<_HomeFloatingButtons> with SingleT
                   crossAxisAlignment: CrossAxisAlignment.center,
                   spacing: 8.0,
                   children: [
-                    Text(button.tooltip!, style: TextTheme.of(context).labelLarge?.copyWith(color: Colors.white)),
+                    Text(
+                      button.tooltip!,
+                      style: TextTheme.of(
+                        context,
+                      ).labelLarge?.copyWith(color: Colors.white),
+                    ),
                     Padding(
                       padding: button.visualDensity?.horizontal != null
-                          ? EdgeInsets.only(right: button.visualDensity!.horizontal)
+                          ? EdgeInsets.only(
+                              right: button.visualDensity!.horizontal,
+                            )
                           : EdgeInsets.zero,
                       child: button,
                     ),

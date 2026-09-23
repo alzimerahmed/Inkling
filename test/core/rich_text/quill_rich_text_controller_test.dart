@@ -24,7 +24,10 @@ void main() {
 
       expect(controller.getPlainText(), equals('Hello World\n'));
       expect(controller.readOnly, isFalse);
-      expect(controller.selection, equals(const TextSelection.collapsed(offset: 0)));
+      expect(
+        controller.selection,
+        equals(const TextSelection.collapsed(offset: 0)),
+      );
     });
 
     test('fromJson handles empty JSON through adapter', () {
@@ -208,7 +211,9 @@ void main() {
       );
 
       final serialized = controller.serialize();
-      final embedOp = serialized.firstWhere((op) => op['insert'] is Map && op['insert']['media'] != null);
+      final embedOp = serialized.firstWhere(
+        (op) => op['insert'] is Map && op['insert']['media'] != null,
+      );
       expect(embedOp['insert'], {'media': 'images/2.jpg|images/3.jpg'});
       expect(embedOp['attributes'], {
         'custom-embed-alignment': 'left',
@@ -273,7 +278,10 @@ void main() {
         readOnly: false,
       );
 
-      controller.selection = const TextSelection(baseOffset: 6, extentOffset: 11);
+      controller.selection = const TextSelection(
+        baseOffset: 6,
+        extentOffset: 11,
+      );
 
       expect(controller.selection.baseOffset, equals(6));
       expect(controller.selection.extentOffset, equals(11));

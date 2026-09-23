@@ -40,7 +40,9 @@ class SpMediaTile extends StatelessWidget {
     // time for both images and videos, so either kind of tile can size
     // correctly on its very first build, well before the file itself loads.
     final id = AssetType.parseAssetId(link);
-    final persistedAspectRatio = id != null ? AssetDbModel.db.findAspectRatioSync(id) : null;
+    final persistedAspectRatio = id != null
+        ? AssetDbModel.db.findAspectRatioSync(id)
+        : null;
 
     if (persistedAspectRatio == null) {
       // No persisted ratio (link isn't a DB-tracked asset, or predates this
@@ -53,8 +55,13 @@ class SpMediaTile extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final effectiveWidth = width != null && width!.isFinite ? width! : constraints.maxWidth;
-        return _buildChild(effectiveWidth, effectiveWidth / persistedAspectRatio);
+        final effectiveWidth = width != null && width!.isFinite
+            ? width!
+            : constraints.maxWidth;
+        return _buildChild(
+          effectiveWidth,
+          effectiveWidth / persistedAspectRatio,
+        );
       },
     );
   }
@@ -129,7 +136,11 @@ class _SpVideoPreviewTileState extends State<_SpVideoPreviewTile> {
     try {
       await newController.initialize();
     } catch (error, stackTrace) {
-      AppLogger.error('$runtimeType: failed to initialize video preview', error: error, stackTrace: stackTrace);
+      AppLogger.error(
+        '$runtimeType: failed to initialize video preview',
+        error: error,
+        stackTrace: stackTrace,
+      );
       await newController.dispose();
       failed = true;
       initializing = false;
@@ -172,7 +183,9 @@ class _SpVideoPreviewTileState extends State<_SpVideoPreviewTile> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = widget.width != null && widget.width!.isFinite ? widget.width! : constraints.maxWidth;
+        final width = widget.width != null && widget.width!.isFinite
+            ? widget.width!
+            : constraints.maxWidth;
         final aspectRatio = controller?.value.isInitialized == true
             ? controller!.value.aspectRatio
             : _fallbackAspectRatio;
@@ -201,7 +214,11 @@ class _SpVideoPreviewTileState extends State<_SpVideoPreviewTile> {
   Widget _buildPreview(BuildContext context) {
     final playerController = controller;
     if (playerController == null || !playerController.value.isInitialized) {
-      return ColoredBox(color: ColorScheme.of(context).readOnly.surface3 ?? ColorScheme.of(context).surface);
+      return ColoredBox(
+        color:
+            ColorScheme.of(context).readOnly.surface3 ??
+            ColorScheme.of(context).surface,
+      );
     }
 
     return FittedBox(

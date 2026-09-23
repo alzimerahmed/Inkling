@@ -11,7 +11,8 @@ sealed class BackupResult<T> {
   const factory BackupResult.failure(BackupError error) = BackupFailure<T>;
 
   /// Create a partial success result (some operations succeeded, some failed)
-  const factory BackupResult.partialSuccess(T data, List<BackupError> errors) = BackupPartialSuccess<T>;
+  const factory BackupResult.partialSuccess(T data, List<BackupError> errors) =
+      BackupPartialSuccess<T>;
 
   /// Returns true if the operation was completely successful
   bool get isSuccess => this is BackupSuccess<T>;
@@ -46,30 +47,37 @@ sealed class BackupResult<T> {
   /// Transform the success data using the provided function
   BackupResult<U> map<U>(U Function(T) transform) => switch (this) {
     BackupSuccess(data: final data) => BackupResult.success(transform(data)),
-    BackupPartialSuccess(data: final data, errors: final errors) => BackupResult.partialSuccess(
-      transform(data),
-      errors,
-    ),
+    BackupPartialSuccess(data: final data, errors: final errors) =>
+      BackupResult.partialSuccess(
+        transform(data),
+        errors,
+      ),
     BackupFailure(error: final error) => BackupResult.failure(error),
   };
 
   /// Chain another operation that returns a BackupResult
-  BackupResult<U> flatMap<U>(BackupResult<U> Function(T) transform) => switch (this) {
-    BackupSuccess(data: final data) => transform(data),
-    BackupPartialSuccess(data: final data, errors: final errors) => transform(data).addErrors(errors),
-    BackupFailure(error: final error) => BackupResult.failure(error),
-  };
+  BackupResult<U> flatMap<U>(BackupResult<U> Function(T) transform) =>
+      switch (this) {
+        BackupSuccess(data: final data) => transform(data),
+        BackupPartialSuccess(data: final data, errors: final errors) =>
+          transform(data).addErrors(errors),
+        BackupFailure(error: final error) => BackupResult.failure(error),
+      };
 
   /// Add additional errors to the result
-  BackupResult<T> addErrors(List<BackupError> additionalErrors) => switch (this) {
-    BackupSuccess(data: final data) =>
-      additionalErrors.isEmpty ? this : BackupResult.partialSuccess(data, additionalErrors),
-    BackupPartialSuccess(data: final data, errors: final errors) => BackupResult.partialSuccess(data, [
-      ...errors,
-      ...additionalErrors,
-    ]),
-    BackupFailure() => this,
-  };
+  BackupResult<T> addErrors(List<BackupError> additionalErrors) =>
+      switch (this) {
+        BackupSuccess(data: final data) =>
+          additionalErrors.isEmpty
+              ? this
+              : BackupResult.partialSuccess(data, additionalErrors),
+        BackupPartialSuccess(data: final data, errors: final errors) =>
+          BackupResult.partialSuccess(data, [
+            ...errors,
+            ...additionalErrors,
+          ]),
+        BackupFailure() => this,
+      };
 }
 
 /// Successful result
@@ -83,7 +91,10 @@ final class BackupSuccess<T> extends BackupResult<T> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is BackupSuccess<T> && runtimeType == other.runtimeType && data == other.data;
+      identical(this, other) ||
+      other is BackupSuccess<T> &&
+          runtimeType == other.runtimeType &&
+          data == other.data;
 
   @override
   int get hashCode => data.hashCode;
@@ -100,7 +111,10 @@ final class BackupFailure<T> extends BackupResult<T> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is BackupFailure<T> && runtimeType == other.runtimeType && error == other.error;
+      identical(this, other) ||
+      other is BackupFailure<T> &&
+          runtimeType == other.runtimeType &&
+          error == other.error;
 
   @override
   int get hashCode => error.hashCode;
@@ -180,19 +194,24 @@ class BackupError {
   }
 
   /// Create convenience constructors for common error types
-  factory BackupError.network(String message, {String? context, bool isRetryable = true}) => BackupError(
+  factory BackupError.network(
+    String message, {
+    String? context,
+    bool isRetryable = true,
+  }) => BackupError(
     type: BackupErrorType.network,
     message: message,
     context: context,
     isRetryable: isRetryable,
   );
 
-  factory BackupError.authentication(String message, {String? context}) => BackupError(
-    type: BackupErrorType.authentication,
-    message: message,
-    context: context,
-    isRetryable: false,
-  );
+  factory BackupError.authentication(String message, {String? context}) =>
+      BackupError(
+        type: BackupErrorType.authentication,
+        message: message,
+        context: context,
+        isRetryable: false,
+      );
 
   factory BackupError.quota(String message, {String? context}) => BackupError(
     type: BackupErrorType.quota,
@@ -201,7 +220,11 @@ class BackupError {
     isRetryable: false,
   );
 
-  factory BackupError.fileOperation(String message, {String? context, bool isRetryable = true}) => BackupError(
+  factory BackupError.fileOperation(
+    String message, {
+    String? context,
+    bool isRetryable = true,
+  }) => BackupError(
     type: BackupErrorType.fileOperation,
     message: message,
     context: context,
@@ -215,7 +238,11 @@ class BackupError {
     isRetryable: false,
   );
 
-  factory BackupError.unknown(String message, {String? context, bool isRetryable = true}) => BackupError(
+  factory BackupError.unknown(
+    String message, {
+    String? context,
+    bool isRetryable = true,
+  }) => BackupError(
     type: BackupErrorType.unknown,
     message: message,
     context: context,
@@ -223,7 +250,8 @@ class BackupError {
   );
 
   @override
-  String toString() => 'BackupError(${type.name}: $message${context != null ? ' ($context)' : ''})';
+  String toString() =>
+      'BackupError(${type.name}: $message${context != null ? ' ($context)' : ''})';
 
   @override
   bool operator ==(Object other) =>

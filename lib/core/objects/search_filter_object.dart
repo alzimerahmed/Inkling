@@ -51,7 +51,8 @@ class SearchFilterObject {
     if (day != null) filters['day'] = day;
     if (tagIds.isNotEmpty) filters['tags'] = tagIds.toList();
     if (excludeYears != null) filters['exclude_years'] = excludeYears?.toList();
-    if (galleryTemplateId != null) filters['gallery_template_id'] = galleryTemplateId;
+    if (galleryTemplateId != null)
+      filters['gallery_template_id'] = galleryTemplateId;
     if (templateId != null) filters['template'] = templateId;
     if (assetId != null) filters['asset'] = assetId;
     if (starred != null) filters['starred'] = starred;
@@ -70,5 +71,6 @@ class SearchFilterObject {
   }
 
   Map<String, dynamic> toJson() => _$SearchFilterObjectToJson(this);
-  factory SearchFilterObject.fromJson(Map<String, dynamic> json) => _$SearchFilterObjectFromJson(json);
+  factory SearchFilterObject.fromJson(Map<String, dynamic> json) =>
+      _$SearchFilterObjectFromJson(json);
 }

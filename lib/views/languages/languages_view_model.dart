@@ -8,7 +8,8 @@ import 'package:storypad/core/services/analytics/analytics_user_propery_service.
 import 'package:intl/intl_standalone.dart';
 
 // ignore: implementation_imports, invalid_use_of_visible_for_testing_member
-import 'package:easy_localization/src/easy_localization_controller.dart' show LocaleExtension;
+import 'package:easy_localization/src/easy_localization_controller.dart'
+    show LocaleExtension;
 
 import 'languages_view.dart';
 
@@ -23,14 +24,20 @@ class LanguagesViewModel extends ChangeNotifier with DisposeAwareMixin {
     required BuildContext context,
   }) {
     supportedLocales = _getSupportedLocales(context);
-    supportedLocaleKeys = List.generate(supportedLocales.length, (_) => GlobalKey());
+    supportedLocaleKeys = List.generate(
+      supportedLocales.length,
+      (_) => GlobalKey(),
+    );
 
     loadLocales();
   }
 
-  bool isSystemLocale(Locale locale) => _deviceLocale != null && locale.supports(_deviceLocale!);
+  bool isSystemLocale(Locale locale) =>
+      _deviceLocale != null && locale.supports(_deviceLocale!);
   bool get canSetToDeviceLocale =>
-      _savedLocale != null && _deviceLocale != null && !_savedLocale!.supports(_deviceLocale!);
+      _savedLocale != null &&
+      _deviceLocale != null &&
+      !_savedLocale!.supports(_deviceLocale!);
 
   Locale? _deviceLocale;
   Locale? _savedLocale;
@@ -44,7 +51,9 @@ class LanguagesViewModel extends ChangeNotifier with DisposeAwareMixin {
   Future<void> _loadDeviceLocale() async {
     final foundPlatformLocale = await findSystemLocale();
     Locale deviceLocale = foundPlatformLocale.toLocale();
-    _deviceLocale = supportedLocales.where((locale) => locale.supports(deviceLocale)).firstOrNull;
+    _deviceLocale = supportedLocales
+        .where((locale) => locale.supports(deviceLocale))
+        .firstOrNull;
   }
 
   Future<void> _loadSavedLocale() async {
@@ -86,7 +95,11 @@ class LanguagesViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   List<Locale> _getSupportedLocales(BuildContext context) {
     List<Locale> supportedLocales =
-        context.findAncestorWidgetOfExactType<MaterialApp>()?.supportedLocales.toList() ?? [];
+        context
+            .findAncestorWidgetOfExactType<MaterialApp>()
+            ?.supportedLocales
+            .toList() ??
+        [];
 
     // eg. en_US
     String? languageCode = Intl.systemLocale.split("_").firstOrNull;

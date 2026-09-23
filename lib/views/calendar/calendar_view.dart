@@ -49,7 +49,8 @@ class CalendarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<CalendarViewModel>(
-      create: (context) => CalendarViewModel(params: params, viewContext: context),
+      create: (context) =>
+          CalendarViewModel(params: params, viewContext: context),
       builder: (context, child) {
         return _CalendarContent(Provider.of(context));
       },

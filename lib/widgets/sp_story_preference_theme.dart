@@ -46,13 +46,18 @@ class _SpStoryPreferenceThemeState extends State<SpStoryPreferenceTheme> {
       FontSizeOption.extraLarge => const TextScaler.linear(1.3),
     };
 
-    SpStoryPreferenceThemeConstructor themeConstructor = SpStoryPreferenceThemeConstructor(
-      isDarkMode: Theme.of(context).brightness == Brightness.dark,
-      context: context,
-      fontFamily: widget.preferences?.fontFamily ?? themeProvider.preferences.fontFamily,
-      fontWeight: widget.preferences?.fontWeight ?? themeProvider.preferences.fontWeight,
-      preferences: widget.preferences,
-    );
+    SpStoryPreferenceThemeConstructor themeConstructor =
+        SpStoryPreferenceThemeConstructor(
+          isDarkMode: Theme.of(context).brightness == Brightness.dark,
+          context: context,
+          fontFamily:
+              widget.preferences?.fontFamily ??
+              themeProvider.preferences.fontFamily,
+          fontWeight:
+              widget.preferences?.fontWeight ??
+              themeProvider.preferences.fontWeight,
+          preferences: widget.preferences,
+        );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       rootProvider.setSideBarColorScheme(themeConstructor.colorScheme);
@@ -64,10 +69,16 @@ class _SpStoryPreferenceThemeState extends State<SpStoryPreferenceTheme> {
         data: themeConstructor.theme,
         child: Stack(
           children: [
-            Positioned.fill(child: Container(color: themeConstructor.scaffoldBackgroundColor)),
+            Positioned.fill(
+              child: Container(color: themeConstructor.scaffoldBackgroundColor),
+            ),
             buildImageBackground(themeConstructor),
             if (themeConstructor.overlayScaffoldBackgroundColor != null)
-              Positioned.fill(child: Container(color: themeConstructor.overlayScaffoldBackgroundColor)),
+              Positioned.fill(
+                child: Container(
+                  color: themeConstructor.overlayScaffoldBackgroundColor,
+                ),
+              ),
             widget.child,
           ],
         ),
@@ -75,7 +86,9 @@ class _SpStoryPreferenceThemeState extends State<SpStoryPreferenceTheme> {
     );
   }
 
-  Widget buildImageBackground(SpStoryPreferenceThemeConstructor themeConstructor) {
+  Widget buildImageBackground(
+    SpStoryPreferenceThemeConstructor themeConstructor,
+  ) {
     if (themeConstructor.selectedBackground != null) {
       return Positioned.fill(
         child: SpFirestoreStorageDownloaderBuilder(
@@ -89,11 +102,12 @@ class _SpStoryPreferenceThemeState extends State<SpStoryPreferenceTheme> {
                 return Image.file(
                   file,
                   fit: .cover,
-                  alignment: switch (themeConstructor.selectedBackground!.align) {
-                    .left => .centerLeft,
-                    .center => .center,
-                    .right => .centerRight,
-                  },
+                  alignment:
+                      switch (themeConstructor.selectedBackground!.align) {
+                        .left => .centerLeft,
+                        .center => .center,
+                        .right => .centerRight,
+                      },
                 );
               },
             );
@@ -108,7 +122,9 @@ class _SpStoryPreferenceThemeState extends State<SpStoryPreferenceTheme> {
 
 class SpStoryPreferenceThemeConstructor {
   StoryBackground? get selectedBackground =>
-      preferences?.backgroundImagePath != null ? StoryBackgrounds.byFilename[preferences!.backgroundImagePath!] : null;
+      preferences?.backgroundImagePath != null
+      ? StoryBackgrounds.byFilename[preferences!.backgroundImagePath!]
+      : null;
 
   final bool isDarkMode;
   final BuildContext context;
@@ -136,8 +152,10 @@ class SpStoryPreferenceThemeConstructor {
   static final Map<String, ColorScheme> _cacheDarkColorSchemes = {};
   static final Map<String, ColorScheme> _cacheLightColorSchemes = {};
 
-  bool get backgroundForLightMode => selectedBackground?.textColor == StoryBackgroundTextColor.black;
-  bool get backgroundForDarkMode => selectedBackground?.textColor == StoryBackgroundTextColor.white;
+  bool get backgroundForLightMode =>
+      selectedBackground?.textColor == StoryBackgroundTextColor.black;
+  bool get backgroundForDarkMode =>
+      selectedBackground?.textColor == StoryBackgroundTextColor.white;
 
   void _construct() {
     Color? seedColor = preferences?.colorSeed;
@@ -162,12 +180,16 @@ class SpStoryPreferenceThemeConstructor {
       if (overrideForegroundColor == Colors.white) {
         colorScheme = getDarkColorScheme(
           Colors.black,
-          isMonochrome(preferences?.colorSeed) ? DynamicSchemeVariant.monochrome : DynamicSchemeVariant.tonalSpot,
+          isMonochrome(preferences?.colorSeed)
+              ? DynamicSchemeVariant.monochrome
+              : DynamicSchemeVariant.tonalSpot,
         );
       } else {
         colorScheme = getLightColorScheme(
           Colors.white,
-          isMonochrome(preferences?.colorSeed) ? DynamicSchemeVariant.monochrome : DynamicSchemeVariant.tonalSpot,
+          isMonochrome(preferences?.colorSeed)
+              ? DynamicSchemeVariant.monochrome
+              : DynamicSchemeVariant.tonalSpot,
         );
       }
 
@@ -181,10 +203,14 @@ class SpStoryPreferenceThemeConstructor {
 
       theme = theme.copyWith(
         dividerColor: overrideForegroundColor!.withValues(alpha: 0.15),
-        dividerTheme: theme.dividerTheme.copyWith(color: overrideForegroundColor!.withValues(alpha: 0.15)),
+        dividerTheme: theme.dividerTheme.copyWith(
+          color: overrideForegroundColor!.withValues(alpha: 0.15),
+        ),
         iconTheme: theme.iconTheme.copyWith(color: overrideForegroundColor!),
         iconButtonTheme: IconButtonThemeData(
-          style: IconButton.styleFrom(foregroundColor: overrideForegroundColor!),
+          style: IconButton.styleFrom(
+            foregroundColor: overrideForegroundColor!,
+          ),
         ),
         textTheme: theme.textTheme.apply(bodyColor: overrideForegroundColor!),
         checkboxTheme: theme.checkboxTheme.copyWith(
@@ -198,15 +224,22 @@ class SpStoryPreferenceThemeConstructor {
       if (Theme.of(context).brightness == Brightness.dark) {
         colorScheme = getDarkColorScheme(
           seedColor,
-          isMonochrome(preferences?.colorSeed) ? DynamicSchemeVariant.monochrome : DynamicSchemeVariant.tonalSpot,
+          isMonochrome(preferences?.colorSeed)
+              ? DynamicSchemeVariant.monochrome
+              : DynamicSchemeVariant.tonalSpot,
         );
       } else {
         colorScheme = getLightColorScheme(
           seedColor,
-          isMonochrome(preferences?.colorSeed) ? DynamicSchemeVariant.monochrome : DynamicSchemeVariant.tonalSpot,
+          isMonochrome(preferences?.colorSeed)
+              ? DynamicSchemeVariant.monochrome
+              : DynamicSchemeVariant.tonalSpot,
         );
       }
-      scaffoldBackgroundColor = getScaffoldBackgroundColor(colorScheme: colorScheme, preferences: preferences);
+      scaffoldBackgroundColor = getScaffoldBackgroundColor(
+        colorScheme: colorScheme,
+        preferences: preferences,
+      );
       theme = AppTheme.getTheme(
         colorScheme: colorScheme,
         fontFamily: fontFamily,
@@ -229,23 +262,28 @@ class SpStoryPreferenceThemeConstructor {
     return colorSeed == Colors.black || colorSeed == Colors.white;
   }
 
-  static ColorScheme getLightColorScheme(Color seedColor, DynamicSchemeVariant dynamicSchemeVariant) {
-    return _cacheLightColorSchemes['${seedColor.toARGB32()}-${dynamicSchemeVariant.name}'] ??= ColorScheme.fromSeed(
-      seedColor: seedColor,
-      brightness: Brightness.light,
-      dynamicSchemeVariant: dynamicSchemeVariant,
-    );
+  static ColorScheme getLightColorScheme(
+    Color seedColor,
+    DynamicSchemeVariant dynamicSchemeVariant,
+  ) {
+    return _cacheLightColorSchemes['${seedColor.toARGB32()}-${dynamicSchemeVariant.name}'] ??=
+        ColorScheme.fromSeed(
+          seedColor: seedColor,
+          brightness: Brightness.light,
+          dynamicSchemeVariant: dynamicSchemeVariant,
+        );
   }
 
   static ColorScheme getDarkColorScheme(
     Color seedColor,
     DynamicSchemeVariant dynamicSchemeVariant,
   ) {
-    return _cacheDarkColorSchemes['${seedColor.toARGB32()}-${dynamicSchemeVariant.name}'] ??= ColorScheme.fromSeed(
-      seedColor: seedColor,
-      brightness: Brightness.dark,
-      dynamicSchemeVariant: dynamicSchemeVariant,
-    );
+    return _cacheDarkColorSchemes['${seedColor.toARGB32()}-${dynamicSchemeVariant.name}'] ??=
+        ColorScheme.fromSeed(
+          seedColor: seedColor,
+          brightness: Brightness.dark,
+          dynamicSchemeVariant: dynamicSchemeVariant,
+        );
   }
 
   static Color? getScaffoldBackgroundColor({
@@ -257,26 +295,56 @@ class SpStoryPreferenceThemeConstructor {
     if (isMonochrome(preferences?.colorSeed) == true) {
       Color baseColor = darkMode ? Colors.black : Colors.white;
       return switch (preferences?.colorToneFallback) {
-        0 => Color.alphaBlend(colorScheme.primary.withValues(alpha: 0.11), colorScheme.surface),
-        33 || null => Color.alphaBlend(colorScheme.primary.withValues(alpha: 0.06), colorScheme.surface),
-        66 => Color.alphaBlend(colorScheme.primary.withValues(alpha: 0.01), colorScheme.surface),
+        0 => Color.alphaBlend(
+          colorScheme.primary.withValues(alpha: 0.11),
+          colorScheme.surface,
+        ),
+        33 || null => Color.alphaBlend(
+          colorScheme.primary.withValues(alpha: 0.06),
+          colorScheme.surface,
+        ),
+        66 => Color.alphaBlend(
+          colorScheme.primary.withValues(alpha: 0.01),
+          colorScheme.surface,
+        ),
         99 => baseColor,
         _ => colorScheme.surface,
       };
     } else if (preferences?.colorSeed != null) {
       return switch (preferences?.colorToneFallback) {
-        0 => Color.alphaBlend(colorScheme.primary.withValues(alpha: 0.11), colorScheme.surface),
-        33 => Color.alphaBlend(colorScheme.primary.withValues(alpha: 0.11 + 0.05), colorScheme.surface),
-        66 => Color.alphaBlend(colorScheme.primary.withValues(alpha: 0.11 + 0.05 * 2), colorScheme.surface),
-        99 => Color.alphaBlend(colorScheme.primary.withValues(alpha: 0.11 + 0.05 * 3), colorScheme.surface),
+        0 => Color.alphaBlend(
+          colorScheme.primary.withValues(alpha: 0.11),
+          colorScheme.surface,
+        ),
+        33 => Color.alphaBlend(
+          colorScheme.primary.withValues(alpha: 0.11 + 0.05),
+          colorScheme.surface,
+        ),
+        66 => Color.alphaBlend(
+          colorScheme.primary.withValues(alpha: 0.11 + 0.05 * 2),
+          colorScheme.surface,
+        ),
+        99 => Color.alphaBlend(
+          colorScheme.primary.withValues(alpha: 0.11 + 0.05 * 3),
+          colorScheme.surface,
+        ),
         _ => colorScheme.readOnly.surface3,
       };
     } else {
       return switch (preferences?.colorToneFallback) {
         0 => colorScheme.surface,
-        33 => Color.alphaBlend(colorScheme.primary.withValues(alpha: 0.11), colorScheme.surface),
-        66 => Color.alphaBlend(colorScheme.primary.withValues(alpha: 0.11 + 0.05), colorScheme.surface),
-        99 => Color.alphaBlend(colorScheme.primary.withValues(alpha: 0.11 + 0.05 * 2), colorScheme.surface),
+        33 => Color.alphaBlend(
+          colorScheme.primary.withValues(alpha: 0.11),
+          colorScheme.surface,
+        ),
+        66 => Color.alphaBlend(
+          colorScheme.primary.withValues(alpha: 0.11 + 0.05),
+          colorScheme.surface,
+        ),
+        99 => Color.alphaBlend(
+          colorScheme.primary.withValues(alpha: 0.11 + 0.05 * 2),
+          colorScheme.surface,
+        ),
         _ => colorScheme.surface,
       };
     }

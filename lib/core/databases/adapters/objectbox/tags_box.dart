@@ -19,10 +19,12 @@ class TagsBox extends BaseBox<TagObjectBox, TagDbModel> {
   QueryIntegerProperty<TagObjectBox> get idProperty => TagObjectBox_.id;
 
   @override
-  QueryStringProperty<TagObjectBox> get lastSavedDeviceIdProperty => TagObjectBox_.lastSavedDeviceId;
+  QueryStringProperty<TagObjectBox> get lastSavedDeviceIdProperty =>
+      TagObjectBox_.lastSavedDeviceId;
 
   @override
-  QueryDateProperty<TagObjectBox> get permanentlyDeletedAtProperty => TagObjectBox_.permanentlyDeletedAt;
+  QueryDateProperty<TagObjectBox> get permanentlyDeletedAtProperty =>
+      TagObjectBox_.permanentlyDeletedAt;
 
   CollectionDbModel<TagDbModel>? _initialTags;
   CollectionDbModel<TagDbModel>? getInitialTagsAndClear() {
@@ -69,7 +71,8 @@ class TagsBox extends BaseBox<TagObjectBox, TagDbModel> {
     int? categoryId = filters?["category_id"];
 
     Condition<TagObjectBox> conditions = TagObjectBox_.id.notNull();
-    if (!returnDeleted) conditions = conditions.and(TagObjectBox_.permanentlyDeletedAt.isNull());
+    if (!returnDeleted)
+      conditions = conditions.and(TagObjectBox_.permanentlyDeletedAt.isNull());
 
     if (categoryId != null) {
       conditions = conditions.and(TagObjectBox_.categoryId.equals(categoryId));
@@ -99,22 +102,34 @@ class TagsBox extends BaseBox<TagObjectBox, TagDbModel> {
   }
 
   @override
-  Future<List<TagDbModel>> objectsToModels(List<TagObjectBox> objects, [Map<String, dynamic>? options]) {
+  Future<List<TagDbModel>> objectsToModels(
+    List<TagObjectBox> objects, [
+    Map<String, dynamic>? options,
+  ]) {
     return compute(_objectsToModels, {'objects': objects, 'options': options});
   }
 
   @override
-  Future<List<TagObjectBox>> modelsToObjects(List<TagDbModel> models, [Map<String, dynamic>? options]) {
+  Future<List<TagObjectBox>> modelsToObjects(
+    List<TagDbModel> models, [
+    Map<String, dynamic>? options,
+  ]) {
     return compute(_modelsToObjects, {'models': models, 'options': options});
   }
 
   @override
-  Future<TagObjectBox> modelToObject(TagDbModel model, [Map<String, dynamic>? options]) {
+  Future<TagObjectBox> modelToObject(
+    TagDbModel model, [
+    Map<String, dynamic>? options,
+  ]) {
     return compute(_modelToObject, {'model': model, 'options': options});
   }
 
   @override
-  Future<TagDbModel> objectToModel(TagObjectBox object, [Map<String, dynamic>? options]) {
+  Future<TagDbModel> objectToModel(
+    TagObjectBox object, [
+    Map<String, dynamic>? options,
+  ]) {
     return compute(_objectToModel, {'object': object, 'options': options});
   }
 }

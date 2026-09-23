@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'dart:io' as io;
 import 'package:google_sign_in/google_sign_in.dart' as gsi;
 import 'package:googleapis/drive/v3.dart' as drive;
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
+    as exp;
 import 'package:storypad/core/objects/cloud_file_object.dart';
 import 'package:storypad/core/objects/cloud_storage_quota_object.dart';
 import 'package:storypad/core/objects/google_user_object.dart';
@@ -94,10 +95,12 @@ class GoogleDriveCloudService extends BackupCloudService {
         );
       }
 
-      final authHeaders = await (await googleServiceInstance).authorizationClient.authorizationHeaders(
-        _requestedScopes,
-        promptIfNecessary: true,
-      );
+      final authHeaders = await (await googleServiceInstance)
+          .authorizationClient
+          .authorizationHeaders(
+            _requestedScopes,
+            promptIfNecessary: true,
+          );
 
       if (authHeaders != null) {
         _currentUser = GoogleUserObject(
@@ -148,10 +151,11 @@ class GoogleDriveCloudService extends BackupCloudService {
       final account = await (await googleServiceInstance).authenticate(
         scopeHint: _requestedScopes,
       );
-      final authHeaders = await account.authorizationClient.authorizationHeaders(
-        _requestedScopes,
-        promptIfNecessary: true,
-      );
+      final authHeaders = await account.authorizationClient
+          .authorizationHeaders(
+            _requestedScopes,
+            promptIfNecessary: true,
+          );
 
       _currentUser = GoogleUserObject(
         id: account.id,
@@ -227,10 +231,11 @@ class GoogleDriveCloudService extends BackupCloudService {
       final account = await (await googleServiceInstance).authenticate(
         scopeHint: _requestedScopes,
       );
-      final authHeaders = await account.authorizationClient.authorizationHeaders(
-        _requestedScopes,
-        promptIfNecessary: true,
-      );
+      final authHeaders = await account.authorizationClient
+          .authorizationHeaders(
+            _requestedScopes,
+            promptIfNecessary: true,
+          );
 
       if (authHeaders == null) {
         await (await googleServiceInstance).disconnect();
@@ -292,7 +297,10 @@ class GoogleDriveCloudService extends BackupCloudService {
     );
   }
 
-  Future<List<int>?> _fetchMediaBytes(drive.DriveApi client, String fileId) async {
+  Future<List<int>?> _fetchMediaBytes(
+    drive.DriveApi client,
+    String fileId,
+  ) async {
     Object? media = await client.files.get(
       fileId,
       downloadOptions: drive.DownloadOptions.fullMedia,
@@ -358,7 +366,9 @@ class GoogleDriveCloudService extends BackupCloudService {
                 final existingTs = existing?.lastUpdatedAt;
                 final newTs = cloudFile.lastUpdatedAt;
                 final isNewer =
-                    existing == null || (newTs != null && (existingTs == null || newTs.isAfter(existingTs)));
+                    existing == null ||
+                    (newTs != null &&
+                        (existingTs == null || newTs.isAfter(existingTs)));
                 if (isNewer) yearlyBackups[year] = cloudFile;
               }
             }
@@ -377,7 +387,9 @@ class GoogleDriveCloudService extends BackupCloudService {
   /// NOTE: Legacy backups are NOT yearly backups. They're stored with a sentinel year (-1)
   /// to indicate they should be treated specially and not as part of normal yearly sync logic.
   /// This prevents accidental misuse if code tries to interpret them as real yearly backups.
-  Future<Map<int, CloudFileObject>> _fetchLegacyBackups(drive.DriveApi client) async {
+  Future<Map<int, CloudFileObject>> _fetchLegacyBackups(
+    drive.DriveApi client,
+  ) async {
     return _executeWithRetry(
       methodName: 'fetchLegacyBackups',
       operation: () async {
@@ -396,7 +408,9 @@ class GoogleDriveCloudService extends BackupCloudService {
 
         // Legacy backups are monolithic (contain all years), so we use a sentinel year (-1)
         // to indicate this is a legacy backup, not a yearly backup
-        final cloudFile = CloudFileObject.fromLegacyStoryPad(legacyFileList.files!.first);
+        final cloudFile = CloudFileObject.fromLegacyStoryPad(
+          legacyFileList.files!.first,
+        );
         return {-1: cloudFile};
       },
     );
@@ -410,7 +424,9 @@ class GoogleDriveCloudService extends BackupCloudService {
     required String fileName,
     required io.File file,
   }) async {
-    AppLogger.d('GoogleDriveService#updateFile fileId=$fileId, fileName=$fileName');
+    AppLogger.d(
+      'GoogleDriveService#updateFile fileId=$fileId, fileName=$fileName',
+    );
 
     return _executeWithRetry(
       methodName: 'updateFile',
@@ -467,8 +483,12 @@ class GoogleDriveCloudService extends BackupCloudService {
       // Get account quota and total usage
       final about = await client.about.get($fields: 'storageQuota');
       final quota = about.storageQuota;
-      final accountUsageBytes = quota?.usage != null ? int.tryParse(quota!.usage!) : null;
-      final limitBytes = quota?.limit != null ? int.tryParse(quota!.limit!) : null;
+      final accountUsageBytes = quota?.usage != null
+          ? int.tryParse(quota!.usage!)
+          : null;
+      final limitBytes = quota?.limit != null
+          ? int.tryParse(quota!.limit!)
+          : null;
 
       return CloudStorageQuotaObject(
         appUsageInBytes: appUsageBytes,
@@ -476,7 +496,10 @@ class GoogleDriveCloudService extends BackupCloudService {
         limitInBytes: limitBytes,
       );
     } catch (e, s) {
-      AppLogger.error('GoogleDriveService#fetchStorageQuota failed: $e', stackTrace: s);
+      AppLogger.error(
+        'GoogleDriveService#fetchStorageQuota failed: $e',
+        stackTrace: s,
+      );
       return null;
     }
   }
@@ -499,14 +522,16 @@ class GoogleDriveCloudService extends BackupCloudService {
           final fileList = await client.files.list(
             spaces: 'appDataFolder',
             q: "'$folderId' in parents and trashed=false",
-            $fields: 'nextPageToken,files(id,name,size,createdTime,modifiedTime,trashed)',
+            $fields:
+                'nextPageToken,files(id,name,size,createdTime,modifiedTime,trashed)',
             pageSize: 1000,
             pageToken: nextPageToken,
           );
 
           if (fileList.files != null) {
             for (final file in fileList.files!) {
-              if (file.id != null) result.add(CloudFileObject.fromGoogleDrive(file));
+              if (file.id != null)
+                result.add(CloudFileObject.fromGoogleDrive(file));
             }
           }
 
@@ -693,7 +718,10 @@ class GoogleDriveCloudService extends BackupCloudService {
           try {
             return await operation();
           } catch (e) {
-            final exp.BackupException exception = _buildException(e, methodName);
+            final exp.BackupException exception = _buildException(
+              e,
+              methodName,
+            );
             throw exception;
           }
         } else {
@@ -719,7 +747,11 @@ class GoogleDriveCloudService extends BackupCloudService {
   }
 
   /// Handle and map API exceptions to appropriate BackupExceptions
-  exp.BackupException _buildException(dynamic error, String methodName, {String? context}) {
+  exp.BackupException _buildException(
+    dynamic error,
+    String methodName, {
+    String? context,
+  }) {
     if (error is exp.BackupException) return error;
 
     // Handle specific HTTP errors from Google APIs
@@ -733,7 +765,8 @@ class GoogleDriveCloudService extends BackupCloudService {
     }
 
     if (error.toString().contains('403')) {
-      if (error.toString().toLowerCase().contains('quota') || error.toString().toLowerCase().contains('limit')) {
+      if (error.toString().toLowerCase().contains('quota') ||
+          error.toString().toLowerCase().contains('limit')) {
         return exp.QuotaException(
           'Quota exceeded during $methodName',
           exp.QuotaExceptionType.rateLimitExceeded,
@@ -749,7 +782,8 @@ class GoogleDriveCloudService extends BackupCloudService {
       );
     }
 
-    if (error.toString().contains('404') || (error is drive.DetailedApiRequestError && error.status == 404)) {
+    if (error.toString().contains('404') ||
+        (error is drive.DetailedApiRequestError && error.status == 404)) {
       return exp.FileOperationException(
         'File not found during $methodName',
         _getFileOperationType(methodName),
@@ -804,7 +838,8 @@ class GoogleDriveCloudService extends BackupCloudService {
   }
 
   Future<String?> loadFolder(drive.DriveApi client, String folderName) async {
-    if (_folderDriveIdByFolderName[folderName] != null) return _folderDriveIdByFolderName[folderName];
+    if (_folderDriveIdByFolderName[folderName] != null)
+      return _folderDriveIdByFolderName[folderName];
 
     return _executeWithRetry(
       methodName: 'loadFolder',
@@ -818,7 +853,8 @@ class GoogleDriveCloudService extends BackupCloudService {
           AppLogger.d(
             "Drive folder ${response.files!.first.name} founded: ${response.files!.first.id}",
           );
-          return _folderDriveIdByFolderName[folderName] = response.files!.first.id!;
+          return _folderDriveIdByFolderName[folderName] =
+              response.files!.first.id!;
         }
 
         drive.File folderToCreate = drive.File();

@@ -36,7 +36,8 @@ class _SpPageViewState extends State<SpPageView> {
   }
 
   void _listener() {
-    if (widget.controller.hasClients) offsetNotifier.value = widget.controller.offset;
+    if (widget.controller.hasClients)
+      offsetNotifier.value = widget.controller.offset;
   }
 
   @override

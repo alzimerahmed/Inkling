@@ -20,21 +20,32 @@ class _TermPrivacyTexts extends StatelessWidget {
             [
               (
                 (tr('general.term_of_use')),
-                () => UrlOpenerService.openInCustomTab(context, 'https://storypad.me/term-of-use'),
+                () => UrlOpenerService.openInCustomTab(
+                  context,
+                  'https://storypad.me/term-of-use',
+                ),
               ),
               ("•", null),
               (
                 (tr('general.privacy_policy')),
-                () => UrlOpenerService.openInCustomTab(context, 'https://storypad.me/privacy-policy'),
+                () => UrlOpenerService.openInCustomTab(
+                  context,
+                  'https://storypad.me/privacy-policy',
+                ),
               ),
             ].map((link) {
               return SpTapEffect(
                 onTap: link.$2,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6.0,
+                    vertical: 8,
+                  ),
                   child: Text(
                     link.$1,
-                    style: TextTheme.of(context).labelMedium?.copyWith(color: ColorScheme.of(context).primary),
+                    style: TextTheme.of(context).labelMedium?.copyWith(
+                      color: ColorScheme.of(context).primary,
+                    ),
                   ),
                 ),
               );

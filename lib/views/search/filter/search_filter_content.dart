@@ -49,11 +49,15 @@ class _SearchFilterContent extends StatelessWidget {
       ),
     ];
 
-    if (children.isEmpty) return const Center(child: CircularProgressIndicator.adaptive());
+    if (children.isEmpty)
+      return const Center(child: CircularProgressIndicator.adaptive());
 
     return ListView(
       controller: PrimaryScrollController.maybeOf(context),
-      padding: EdgeInsets.only(top: 12.0, bottom: MediaQuery.of(context).padding.bottom),
+      padding: EdgeInsets.only(
+        top: 12.0,
+        bottom: MediaQuery.of(context).padding.bottom,
+      ),
       children: children,
     );
   }
@@ -69,7 +73,11 @@ class _SearchFilterContent extends StatelessWidget {
     );
   }
 
-  Widget buildTagChips(BuildContext context, TagCategoryDbModel? category, List<TagDbModel> tags) {
+  Widget buildTagChips(
+    BuildContext context,
+    TagCategoryDbModel? category,
+    List<TagDbModel> tags,
+  ) {
     final bool isPeople = category?.id == TagCategoryDbModel.peopleId;
     final bool isEmoji = category != null && !isPeople;
 
@@ -94,13 +102,21 @@ class _Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16.0,
-        vertical: 4.0,
-      ).add(EdgeInsets.only(left: MediaQuery.of(context).padding.left, right: MediaQuery.of(context).padding.right)),
+      padding:
+          const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 4.0,
+          ).add(
+            EdgeInsets.only(
+              left: MediaQuery.of(context).padding.left,
+              right: MediaQuery.of(context).padding.right,
+            ),
+          ),
       child: Text(
         title,
-        style: TextTheme.of(context).titleSmall?.copyWith(color: ColorScheme.of(context).primary),
+        style: TextTheme.of(
+          context,
+        ).titleSmall?.copyWith(color: ColorScheme.of(context).primary),
       ),
     );
   }

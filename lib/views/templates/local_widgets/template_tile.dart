@@ -12,7 +12,9 @@ class _TemplateTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? body = template.content?.richPages
-        ?.map((e) => e.title?.trim().isNotEmpty == true ? e.title!.trim() : null)
+        ?.map(
+          (e) => e.title?.trim().isNotEmpty == true ? e.title!.trim() : null,
+        )
         .whereType<String>()
         .join(" · ");
 
@@ -23,10 +25,15 @@ class _TemplateTile extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 6.0,
+        ),
         onTap: onTap,
         title: Text(
-          hasName ? template.name!.trim() : (hasBody ? body! : tr('general.na')),
+          hasName
+              ? template.name!.trim()
+              : (hasBody ? body! : tr('general.na')),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),

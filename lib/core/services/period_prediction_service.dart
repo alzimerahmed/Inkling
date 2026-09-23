@@ -21,8 +21,16 @@ class PeriodPredictionService {
   /// [minCycleStarts] distinct cycle starts, grouped from consecutive days),
   /// or when the most recent logged start is older than [maxHistoryMonths]
   /// relative to `now` (nothing recent enough to extrapolate from).
-  static DateTime? predictNextPeriodStart(List<DateTime> periodDates, {DateTime? now}) {
-    final days = periodDates.map((d) => DateTime(d.year, d.month, d.day)).toSet().toList()..sort();
+  static DateTime? predictNextPeriodStart(
+    List<DateTime> periodDates, {
+    DateTime? now,
+  }) {
+    final days =
+        periodDates
+            .map((d) => DateTime(d.year, d.month, d.day))
+            .toSet()
+            .toList()
+          ..sort();
 
     // A day is a cycle start when the previous calendar day isn't also a
     // period day — this groups consecutive logged days (a single period,
@@ -42,10 +50,18 @@ class PeriodPredictionService {
     // (relative to today, not to that start itself), the history is too
     // stale to extrapolate from — bail rather than roll a long-dead cycle
     // forward into a misleadingly confident future date.
-    final staleCutoff = DateTime(todayDay.year, todayDay.month - maxHistoryMonths, todayDay.day);
+    final staleCutoff = DateTime(
+      todayDay.year,
+      todayDay.month - maxHistoryMonths,
+      todayDay.day,
+    );
     if (allStarts.last.isBefore(staleCutoff)) return null;
 
-    final cutoff = DateTime(allStarts.last.year, allStarts.last.month - maxHistoryMonths, allStarts.last.day);
+    final cutoff = DateTime(
+      allStarts.last.year,
+      allStarts.last.month - maxHistoryMonths,
+      allStarts.last.day,
+    );
     var starts = allStarts.where((d) => !d.isBefore(cutoff)).toList();
     // The 6-month window can leave too few points (e.g. sparse logging) —
     // fall back to the most recent [minCycleStarts] starts so we still predict.
@@ -70,8 +86,12 @@ class PeriodPredictionService {
 
   /// Loads period history from the database and predicts the next start date.
   static Future<DateTime?> loadPredictedNextPeriodStart({DateTime? now}) async {
-    final collection = await EventDbModel.db.where(filters: {"event_type": "period"});
-    final dates = collection?.items.map((e) => e.date).whereType<DateTime>().toList() ?? [];
+    final collection = await EventDbModel.db.where(
+      filters: {"event_type": "period"},
+    );
+    final dates =
+        collection?.items.map((e) => e.date).whereType<DateTime>().toList() ??
+        [];
     return predictNextPeriodStart(dates, now: now);
   }
 }

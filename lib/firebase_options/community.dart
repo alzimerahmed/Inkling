@@ -75,5 +75,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'write-story-308919.firebasestorage.app',
     measurementId: 'G-PP2C5GYNGD',
   );
-
 }

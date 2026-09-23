@@ -17,7 +17,9 @@ class _HomeTabBar extends StatelessWidget {
               left: 14.0,
               right: 14.0,
               top: viewModel.scrollInfo.appBar(context).indicatorPaddingTop,
-              bottom: viewModel.scrollInfo.appBar(context).indicatorPaddingBottom,
+              bottom: viewModel.scrollInfo
+                  .appBar(context)
+                  .indicatorPaddingBottom,
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
@@ -31,7 +33,9 @@ class _HomeTabBar extends StatelessWidget {
                 unselectedLabelColor: Theme.of(context).colorScheme.primary,
                 padding: EdgeInsets.zero,
                 indicator: _RoundedIndicator.simple(
-                  height: viewModel.scrollInfo.appBar(context).indicatorHeight - 1.5,
+                  height:
+                      viewModel.scrollInfo.appBar(context).indicatorHeight -
+                      1.5,
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 onTap: (index) {
@@ -41,7 +45,9 @@ class _HomeTabBar extends StatelessWidget {
                   );
                 },
                 dividerHeight: 0.0,
-                splashBorderRadius: BorderRadius.circular(viewModel.scrollInfo.appBar(context).indicatorHeight / 2),
+                splashBorderRadius: BorderRadius.circular(
+                  viewModel.scrollInfo.appBar(context).indicatorHeight / 2,
+                ),
                 tabs: viewModel.months.map((month) {
                   return buildMonthTab(context, month);
                 }).toList(),
@@ -50,7 +56,9 @@ class _HomeTabBar extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: viewModel.scrollInfo.appBar(context).getTabBarPreferredHeight(),
+          height: viewModel.scrollInfo
+              .appBar(context)
+              .getTabBarPreferredHeight(),
           child: Center(child: buildOpenEndDrawerButton(context)),
         ),
       ],

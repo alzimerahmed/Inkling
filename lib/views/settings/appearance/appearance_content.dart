@@ -36,7 +36,8 @@ class _AppearanceContent extends StatelessWidget {
           for (int i = 0; i < viewModel.sections.length; i++) ...[
             if (i > 0) const Divider(),
             SpSectionTitle(title: viewModel.sections[i].title),
-            for (final item in viewModel.sections[i].items) item.builder(context),
+            for (final item in viewModel.sections[i].items)
+              item.builder(context),
           ],
         ],
       ),

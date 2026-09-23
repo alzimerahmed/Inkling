@@ -32,7 +32,8 @@ class MonthPickerService {
     this.maximumDate,
   });
 
-  MonthPickerResult get initialMonth => MonthPickerResult(month: month, year: year);
+  MonthPickerResult get initialMonth =>
+      MonthPickerResult(month: month, year: year);
 
   Future<MonthPickerResult?> showPicker() async {
     if (kIsCupertino) {
@@ -61,15 +62,26 @@ class MonthPickerService {
                     minimumDate: minimumDate,
                     maximumDate: maximumDate,
                     mode: CupertinoDatePickerMode.monthYear,
-                    selectionOverlayBuilder: (context, {required int columnCount, required int selectedIndex}) {
-                      return Container(
-                        margin: EdgeInsets.only(right: selectedIndex == columnCount - 1 ? 0.0 : 8.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Theme.of(context).dividerColor),
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                      );
-                    },
+                    selectionOverlayBuilder:
+                        (
+                          context, {
+                          required int columnCount,
+                          required int selectedIndex,
+                        }) {
+                          return Container(
+                            margin: EdgeInsets.only(
+                              right: selectedIndex == columnCount - 1
+                                  ? 0.0
+                                  : 8.0,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Theme.of(context).dividerColor,
+                              ),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                          );
+                        },
                     onDateTimeChanged: (DateTime value) {
                       notifier.value = MonthPickerResult(
                         month: value.month,
@@ -104,7 +116,9 @@ class MonthPickerService {
                 left: MediaQuery.of(context).padding.left,
                 right: MediaQuery.of(context).padding.right,
               ),
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
               color: CupertinoColors.systemBackground.resolveFrom(context),
               child: MediaQuery.removePadding(
                 context: context,
@@ -139,7 +153,10 @@ class MonthPickerService {
     );
   }
 
-  Widget _buildCupertinoNavigator(BuildContext context, CmValueNotifier<MonthPickerResult?> notifier) {
+  Widget _buildCupertinoNavigator(
+    BuildContext context,
+    CmValueNotifier<MonthPickerResult?> notifier,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

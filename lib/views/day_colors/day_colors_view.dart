@@ -41,14 +41,19 @@ class DayColorsView extends StatelessWidget {
           SpPopupMenuButton(
             fromAppBar: true,
             items: (context) {
-              final hasCustomizations = provider.preferences.colorByDay?.isNotEmpty ?? false;
+              final hasCustomizations =
+                  provider.preferences.colorByDay?.isNotEmpty ?? false;
               return [
                 SpPopMenuItem(
                   leadingIconData: SpIcons.refresh,
                   title: tr("button.reset"),
                   // Grey out and disable when there is nothing to reset.
-                  titleStyle: hasCustomizations ? null : TextStyle(color: Theme.of(context).disabledColor),
-                  onPressed: hasCustomizations ? () => provider.resetAllDayColors() : null,
+                  titleStyle: hasCustomizations
+                      ? null
+                      : TextStyle(color: Theme.of(context).disabledColor),
+                  onPressed: hasCustomizations
+                      ? () => provider.resetAllDayColors()
+                      : null,
                 ),
               ];
             },

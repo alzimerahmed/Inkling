@@ -22,30 +22,41 @@ class _CommunityContent extends StatelessWidget {
           ListTile(
             leading: Icon(
               SpIcons.favoriteFilled,
-              color: AppTheme.isDarkMode(context) ? Colors.red[300] : Colors.red[700],
+              color: AppTheme.isDarkMode(context)
+                  ? Colors.red[300]
+                  : Colors.red[700],
             ),
             title: Text(tr('page.support_us.title')),
             trailing: const Icon(SpIcons.keyboardRight),
             onTap: () async {
               await SupportUsRoute().push(context);
               if (context.mounted) {
-                MessengerService.of(context).showSnackBar(tr('page.support_us.thank_you_message'));
+                MessengerService.of(
+                  context,
+                ).showSnackBar(tr('page.support_us.thank_you_message'));
               }
             },
           ),
-          if (RemoteConfigService.policyPrivacyUrl.get().trim().isNotEmpty == true)
+          if (RemoteConfigService.policyPrivacyUrl.get().trim().isNotEmpty ==
+              true)
             ListTile(
               leading: const Icon(SpIcons.policy),
               title: Text(tr("general.privacy_policy")),
               trailing: const Icon(SpIcons.keyboardRight),
-              onTap: () => UrlOpenerService.openInCustomTab(context, RemoteConfigService.policyPrivacyUrl.get()),
+              onTap: () => UrlOpenerService.openInCustomTab(
+                context,
+                RemoteConfigService.policyPrivacyUrl.get(),
+              ),
             ),
           if (RemoteConfigService.sourceCodeUrl.get().trim().isNotEmpty == true)
             ListTile(
               leading: const Icon(SpIcons.code),
               title: Text(tr("list_tile.source_code.title")),
               subtitle: Text(tr("list_tile.source_code.subtitle")),
-              onTap: () => UrlOpenerService.openInCustomTab(context, RemoteConfigService.sourceCodeUrl.get()),
+              onTap: () => UrlOpenerService.openInCustomTab(
+                context,
+                RemoteConfigService.sourceCodeUrl.get(),
+              ),
             ),
           const Divider(),
           ListTile(
@@ -71,7 +82,8 @@ class _CommunityContent extends StatelessWidget {
                 context: context,
                 applicationName: kPackageInfo.appName,
                 applicationLegalese: '©${DateTime.now().year}',
-                applicationVersion: "${kPackageInfo.version}+${kPackageInfo.buildNumber}",
+                applicationVersion:
+                    "${kPackageInfo.version}+${kPackageInfo.buildNumber}",
               );
             },
           ),

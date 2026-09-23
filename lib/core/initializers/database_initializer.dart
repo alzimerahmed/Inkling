@@ -41,16 +41,23 @@ class DatabaseInitializer {
   // The 'tags' column was newly added to the asset table, so existing data may be missing tags.
   // This method runs exactly once to populate initial tag data for assets.
   static Future<void> computeStoryTagsForAsset() async {
-    bool initialComputed = await ComputedInitialTagsForAssetsStorage().read() ?? false;
+    bool initialComputed =
+        await ComputedInitialTagsForAssetsStorage().read() ?? false;
 
     if (initialComputed == false) {
-      AppLogger.d('$DatabaseInitializer.computeStoryTagsForAsset initialComputed: $initialComputed');
+      AppLogger.d(
+        '$DatabaseInitializer.computeStoryTagsForAsset initialComputed: $initialComputed',
+      );
 
-      var assets = await AssetDbModel.db.where().then((e) => e?.items ?? <AssetDbModel>[]);
+      var assets = await AssetDbModel.db.where().then(
+        (e) => e?.items ?? <AssetDbModel>[],
+      );
       for (int i = 0; i < assets.length; i++) {
         var tags = await StoryDbModel.db.computeStoriesTagsForAsset(assets[i]);
         final isLastAsset = i == assets.length - 1;
-        await assets[i].copyWith(tags: tags.toList(), updatedAt: DateTime.now()).save(runCallbacks: isLastAsset);
+        await assets[i]
+            .copyWith(tags: tags.toList(), updatedAt: DateTime.now())
+            .save(runCallbacks: isLastAsset);
       }
 
       await ComputedInitialTagsForAssetsStorage().write(true);
@@ -62,8 +69,12 @@ class DatabaseInitializer {
     List<int>? assetIds,
   }) async {
     var assets = assetIds != null
-        ? await AssetDbModel.db.where(filters: {'ids': assetIds}).then((e) => e?.items ?? <AssetDbModel>[])
-        : await AssetDbModel.db.where(filters: {'version': 1}).then((e) => e?.items ?? <AssetDbModel>[]);
+        ? await AssetDbModel.db
+              .where(filters: {'ids': assetIds})
+              .then((e) => e?.items ?? <AssetDbModel>[])
+        : await AssetDbModel.db
+              .where(filters: {'version': 1})
+              .then((e) => e?.items ?? <AssetDbModel>[]);
 
     for (int i = 0; i < assets.length; i++) {
       AssetDbModel asset = assets[i];
@@ -85,11 +96,20 @@ class DatabaseInitializer {
       };
 
       for (int j = 0; j < result.length; j++) {
-        result[j].draftContent = result[j].draftContent?.replaceAll(legacyEmbedLink, asset.relativeLocalFilePath);
-        result[j].latestContent = result[j].latestContent?.replaceAll(legacyEmbedLink, asset.relativeLocalFilePath);
+        result[j].draftContent = result[j].draftContent?.replaceAll(
+          legacyEmbedLink,
+          asset.relativeLocalFilePath,
+        );
+        result[j].latestContent = result[j].latestContent?.replaceAll(
+          legacyEmbedLink,
+          asset.relativeLocalFilePath,
+        );
       }
 
-      asset = asset.copyWith(version: 2, originalSource: asset.relativeLocalFilePath);
+      asset = asset.copyWith(
+        version: 2,
+        originalSource: asset.relativeLocalFilePath,
+      );
       await StoryDbModel.db.box.putManyAsync(result);
       await AssetDbModel.db.set(asset, runCallbacks: false);
     }
@@ -97,21 +117,38 @@ class DatabaseInitializer {
 
   static Future<void> moveExistingAssetToSupportDirectory() async {
     if (Directory("${kApplicationDirectory.path}/images").existsSync()) {
-      for (final image in Directory("${kApplicationDirectory.path}/images").listSync()) {
-        final destinationFile = File(image.path.replaceAll(kApplicationDirectory.path, kSupportDirectory.path));
-        if (!await destinationFile.parent.exists()) await destinationFile.create(recursive: true);
-        await destinationFile.writeAsBytes(await File(image.path).readAsBytes());
+      for (final image in Directory(
+        "${kApplicationDirectory.path}/images",
+      ).listSync()) {
+        final destinationFile = File(
+          image.path.replaceAll(
+            kApplicationDirectory.path,
+            kSupportDirectory.path,
+          ),
+        );
+        if (!await destinationFile.parent.exists())
+          await destinationFile.create(recursive: true);
+        await destinationFile.writeAsBytes(
+          await File(image.path).readAsBytes(),
+        );
         await image.delete(recursive: true);
       }
 
-      await Directory("${kApplicationDirectory.path}/images").delete(recursive: true);
-      final items = await AssetDbModel.db.where().then((e) => e?.items ?? <AssetDbModel>[]);
+      await Directory(
+        "${kApplicationDirectory.path}/images",
+      ).delete(recursive: true);
+      final items = await AssetDbModel.db.where().then(
+        (e) => e?.items ?? <AssetDbModel>[],
+      );
 
       for (final asset in items) {
         await AssetDbModel.db.set(
           runCallbacks: false,
           asset.copyWith(
-            originalSource: asset.originalSource.replaceAll(kApplicationDirectory.path, kSupportDirectory.path),
+            originalSource: asset.originalSource.replaceAll(
+              kApplicationDirectory.path,
+              kSupportDirectory.path,
+            ),
           ),
         );
       }

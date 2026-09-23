@@ -49,7 +49,14 @@ class _HomeAppBarMessage extends StatelessWidget {
         TextSpan(
           style: TextTheme.of(context).bodyLarge,
           text: title,
-          children: trailing == null ? null : [WidgetSpan(alignment: PlaceholderAlignment.middle, child: trailing)],
+          children: trailing == null
+              ? null
+              : [
+                  WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: trailing,
+                  ),
+                ],
         ),
       ),
     );
