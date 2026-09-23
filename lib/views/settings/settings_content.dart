@@ -42,6 +42,7 @@ class _SettingsContent extends StatelessWidget {
               title: Text(context.tr("general.data_backup")),
               onTap: () => const DataBackupRoute().push(context),
             ),
+            const AutoBackupTile(weekday: 5),
           ],
           ...[
             const Divider(),

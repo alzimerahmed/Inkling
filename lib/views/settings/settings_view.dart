@@ -6,6 +6,7 @@ import 'package:storypad/views/app_locks/app_locks_view.dart';
 import 'package:storypad/views/reminders/reminders_view.dart';
 import 'package:storypad/views/settings/appearance/appearance_view.dart';
 import 'package:storypad/views/settings/data_backup/data_backup_view.dart';
+import 'package:storypad/views/settings/local_widgets/auto_backup_tile.dart';
 import 'package:storypad/views/settings/local_widgets/first_day_of_week_tile.dart';
 import 'package:storypad/views/settings/local_widgets/language_tile.dart';
 import 'package:storypad/views/settings/local_widgets/map_provider_tile.dart';
