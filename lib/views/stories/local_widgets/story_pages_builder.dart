@@ -10,6 +10,7 @@ import 'package:storypad/core/databases/models/story_page_db_model.dart';
 import 'package:storypad/core/databases/models/story_preferences_db_model.dart';
 import 'package:storypad/core/extensions/matrix_4_extension.dart';
 import 'package:storypad/core/rich_text/rich_text.dart';
+import 'package:storypad/core/services/smart_title_suggestion_service.dart';
 import 'package:storypad/core/objects/story_page_object.dart';
 import 'package:storypad/core/types/page_layout_type.dart';
 import 'package:storypad/providers/device_preferences_provider.dart';
@@ -61,7 +62,8 @@ class StoryPagesBuilder extends StatelessWidget {
   final void Function(StoryPageDbModel newRichPage)? onPageChanged;
   final void Function()? onGoToEdit;
   final StoryPageBuilderAction? actions;
-  final void Function(int pageIndex, StoryPageObject page, VisibilityInfo info)? onTitleVisibilityChanged;
+  final void Function(int pageIndex, StoryPageObject page, VisibilityInfo info)?
+  onTitleVisibilityChanged;
 
   bool get readOnly => actions == null;
 
@@ -80,7 +82,11 @@ class StoryPagesBuilder extends StatelessWidget {
     }
   }
 
-  Widget buildPage(StoryPageObject page, BuildContext context, {bool smallPage = true}) {
+  Widget buildPage(
+    StoryPageObject page,
+    BuildContext context, {
+    bool smallPage = true,
+  }) {
     final pageIndex = pages.indexWhere((p) => page.id == p.id);
 
     return _StoryPage(
@@ -94,10 +100,14 @@ class StoryPagesBuilder extends StatelessWidget {
       onSwap: actions?.onSwapPages,
       onDelete: actions == null ? null : () => actions?.onDelete(page),
       canMoveUp: actions == null ? false : actions!.canMoveUp(pageIndex),
-      canMoveDown: actions == null ? false : actions!.canMoveDown(pageIndex, pages.length),
+      canMoveDown: actions == null
+          ? false
+          : actions!.canMoveDown(pageIndex, pages.length),
       canDeletePage: actions?.canDeletePage == true,
       onChanged: onPageChanged,
-      onFocusChange: actions?.onFocusChange != null ? (a, b) => actions!.onFocusChange(pageIndex, page, a, b) : null,
+      onFocusChange: actions?.onFocusChange != null
+          ? (a, b) => actions!.onFocusChange(pageIndex, page, a, b)
+          : null,
       onTitleVisibilityChanged: onTitleVisibilityChanged != null
           ? (info) => onTitleVisibilityChanged!(pageIndex, page, info)
           : null,
@@ -107,6 +117,8 @@ class StoryPagesBuilder extends StatelessWidget {
 
   // both should have same height, so switch between show / edit won't break scroll position.
   Widget _buildAddButton() {
-    return readOnly ? const SizedBox(height: 48) : _AddPageButton(onAddPage: () => actions!.onAddPage());
+    return readOnly
+        ? const SizedBox(height: 48)
+        : _AddPageButton(onAddPage: () => actions!.onAddPage());
   }
 }

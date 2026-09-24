@@ -17,6 +17,14 @@ abstract class _$DevicePreferencesObjectCWProxy {
 
   DevicePreferencesObject enablePeriodCalendar(bool? enablePeriodCalendar);
 
+  DevicePreferencesObject enableSmartTitleSuggestion(
+    bool? enableSmartTitleSuggestion,
+  );
+
+  DevicePreferencesObject enableWeatherAutoAttach(
+    bool? enableWeatherAutoAttach,
+  );
+
   DevicePreferencesObject reminders(List<ReminderObject>? reminders);
 
   DevicePreferencesObject themeMode(ThemeMode? themeMode);
@@ -74,6 +82,8 @@ abstract class _$DevicePreferencesObjectCWProxy {
     int? fontWeightIndex,
     bool? enableRelaxSounds,
     bool? enablePeriodCalendar,
+    bool? enableSmartTitleSuggestion,
+    bool? enableWeatherAutoAttach,
     List<ReminderObject>? reminders,
     ThemeMode? themeMode,
     TimeFormatOption? timeFormat,
@@ -121,6 +131,16 @@ class _$DevicePreferencesObjectCWProxyImpl
   @override
   DevicePreferencesObject enablePeriodCalendar(bool? enablePeriodCalendar) =>
       call(enablePeriodCalendar: enablePeriodCalendar);
+
+  @override
+  DevicePreferencesObject enableSmartTitleSuggestion(
+    bool? enableSmartTitleSuggestion,
+  ) => call(enableSmartTitleSuggestion: enableSmartTitleSuggestion);
+
+  @override
+  DevicePreferencesObject enableWeatherAutoAttach(
+    bool? enableWeatherAutoAttach,
+  ) => call(enableWeatherAutoAttach: enableWeatherAutoAttach);
 
   @override
   DevicePreferencesObject reminders(List<ReminderObject>? reminders) =>
@@ -210,6 +230,8 @@ class _$DevicePreferencesObjectCWProxyImpl
     Object? fontWeightIndex = const $CopyWithPlaceholder(),
     Object? enableRelaxSounds = const $CopyWithPlaceholder(),
     Object? enablePeriodCalendar = const $CopyWithPlaceholder(),
+    Object? enableSmartTitleSuggestion = const $CopyWithPlaceholder(),
+    Object? enableWeatherAutoAttach = const $CopyWithPlaceholder(),
     Object? reminders = const $CopyWithPlaceholder(),
     Object? themeMode = const $CopyWithPlaceholder(),
     Object? timeFormat = const $CopyWithPlaceholder(),
@@ -249,6 +271,16 @@ class _$DevicePreferencesObjectCWProxyImpl
           ? _value.enablePeriodCalendar
           // ignore: cast_nullable_to_non_nullable
           : enablePeriodCalendar as bool?,
+      enableSmartTitleSuggestion:
+          enableSmartTitleSuggestion == const $CopyWithPlaceholder()
+          ? _value.enableSmartTitleSuggestion
+          // ignore: cast_nullable_to_non_nullable
+          : enableSmartTitleSuggestion as bool?,
+      enableWeatherAutoAttach:
+          enableWeatherAutoAttach == const $CopyWithPlaceholder()
+          ? _value.enableWeatherAutoAttach
+          // ignore: cast_nullable_to_non_nullable
+          : enableWeatherAutoAttach as bool?,
       reminders: reminders == const $CopyWithPlaceholder()
           ? _value.reminders
           // ignore: cast_nullable_to_non_nullable
@@ -342,6 +374,8 @@ DevicePreferencesObject _$DevicePreferencesObjectFromJson(
   fontWeightIndex: (json['font_weight_index'] as num?)?.toInt(),
   enableRelaxSounds: json['enable_relax_sounds'] as bool?,
   enablePeriodCalendar: json['enable_period_calendar'] as bool?,
+  enableSmartTitleSuggestion: json['enable_smart_title_suggestion'] as bool?,
+  enableWeatherAutoAttach: json['enable_weather_auto_attach'] as bool?,
   reminders: (json['reminders'] as List<dynamic>?)
       ?.map((e) => ReminderObject.fromJson(e as Map<String, dynamic>))
       .toList(),
@@ -416,6 +450,8 @@ Map<String, dynamic> _$DevicePreferencesObjectToJson(
   'hidden_stats_sections': instance.hiddenStatsSections,
   'enable_relax_sounds': instance.enableRelaxSounds,
   'enable_period_calendar': instance.enablePeriodCalendar,
+  'enable_smart_title_suggestion': instance.enableSmartTitleSuggestion,
+  'enable_weather_auto_attach': instance.enableWeatherAutoAttach,
   'reminders': instance.reminders?.map((e) => e.toJson()).toList(),
 };
 

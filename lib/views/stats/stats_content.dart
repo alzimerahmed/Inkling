@@ -169,6 +169,13 @@ class _StatsContent extends StatelessWidget {
       (icon: SpIcons.calendar, value: '${stats.activeDays}', label: tr('general.active_days'), onTap: null),
       if (stats.currentStreak > 0)
         (icon: SpIcons.fire, value: '${stats.currentStreak}', label: tr('general.streak'), onTap: null),
+      if (stats.longestStreak > stats.currentStreak)
+        (
+          icon: SpIcons.fire,
+          value: '${stats.longestStreak}',
+          label: tr('general.longest_streak'),
+          onTap: null,
+        ),
       if (viewModel.dailyGoal > 0 && viewModel.rangeForTab(tabIndex).contains(DateTime.now()))
         (
           icon: SpIcons.text,
