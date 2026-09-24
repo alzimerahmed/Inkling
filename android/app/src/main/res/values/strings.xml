@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Home-screen widget (Phase 3) -->
+    <string name="widget_description">Quick capture and today\'s entry</string>
+    <string name="widget_quick_capture">＋ New entry</string>
+    <string name="widget_written_today">Written today</string>
+    <string name="widget_no_entry_today">Nothing written today</string>
+    <string name="widget_words_suffix">%1$d words</string>
+</resources>

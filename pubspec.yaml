@@ -92,6 +92,7 @@ dependencies:
   volume_controller: 3.7.0
   webdav_client: 1.2.2
   video_compressor_plus: 4.1.0
+  home_widget: ^0.10.0
 
 dev_dependencies:
   build_runner: 2.15.1
