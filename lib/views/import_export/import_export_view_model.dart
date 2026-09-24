@@ -43,7 +43,11 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   int? storyCount;
-  SearchFilterObject initialExportFilter = SearchFilterObject(years: {}, types: {}, assetId: null);
+  SearchFilterObject initialExportFilter = SearchFilterObject(
+    years: {},
+    types: {},
+    assetId: null,
+  );
 
   late SearchFilterObject exportFilter = initialExportFilter;
 
@@ -56,7 +60,9 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   Future<void> loadStoryCount({bool notifyUI = true}) async {
-    storyCount = StoryDbModel.db.getStoryCountBy(filters: exportFilter.toDatabaseFilter());
+    storyCount = StoryDbModel.db.getStoryCountBy(
+      filters: exportFilter.toDatabaseFilter(),
+    );
     if (notifyUI) notifyListeners();
   }
 
@@ -89,7 +95,9 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
 
     if (!context.mounted) return;
     if (backup == null) {
-      MessengerService.of(context).showSnackBar(tr("snack_bar.empty_or_invalid_file"), success: false);
+      MessengerService.of(
+        context,
+      ).showSnackBar(tr("snack_bar.empty_or_invalid_file"), success: false);
       return;
     }
 
@@ -109,7 +117,9 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
 
     final path = file.path;
     if (!path.endsWith('.tar.gz') && !path.endsWith('.gz')) {
-      MessengerService.of(context).showSnackBar(tr("snack_bar.empty_or_invalid_file"), success: false);
+      MessengerService.of(
+        context,
+      ).showSnackBar(tr("snack_bar.empty_or_invalid_file"), success: false);
       return;
     }
 
@@ -150,16 +160,32 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
         if (!context.mounted || stories == null || stories.isEmpty) return null;
 
         final String exportFileName = "$kAppName-${kDeviceInfo.model}-pdf-${DateTime.now().toIso8601String()}.pdf";
-        final pdfFile = File("${SupportDirectoryPath.backups.directoryPath}/$exportFileName");
+        final pdfFile = File(
+          "${SupportDirectoryPath.backups.directoryPath}/$exportFileName",
+        );
+
+        // Resolve tag names on the MAIN isolate: the ObjectBox store cannot be
+        // opened in `Isolate.run`, and the previous per-tag `TagDbModel.db.find`
+        // inside the isolate crashed PDF export for any story with tags.
+        final tagNames = <int, String>{};
+        final tagIds = stories.expand((s) => s.validTags ?? <int>[]).toSet();
+        for (final tagId in tagIds) {
+          final tag = await TagDbModel.db.find(tagId);
+          if (tag?.title != null && tag!.title.trim().isNotEmpty) tagNames[tagId] = tag.title;
+        }
+
+        // Fonts must be loaded from assets on the main isolate too — asset
+        // bundles are not available in a freshly spawned isolate.
+        final fontBytes = await ExportStoriesToPdfService.loadBundledFonts();
 
         // PDF generation is pure-Dart CPU work — run it off the main isolate.
-        final bytes = await Isolate.run(() async {
-          return await ExportStoriesToPdfService.call(
+        final bytes = await Isolate.run(() {
+          return ExportStoriesToPdfService.call(
             stories: stories,
-            tagNameGetter: (tagId) async {
-              final tag = await TagDbModel.db.find(tagId);
-              return tag?.title;
-            },
+            tagNames: tagNames,
+            fontBytes: fontBytes,
+            tagsLabel: tr('export.pdf_tags'),
+            photoPlaceholder: tr('export.pdf_photo_placeholder'),
           );
         });
 
@@ -231,7 +257,9 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
         );
 
         // Create tar.gz archive
-        final tarFile = File("${SupportDirectoryPath.backups.directoryPath}/$exportFileName");
+        final tarFile = File(
+          "${SupportDirectoryPath.backups.directoryPath}/$exportFileName",
+        );
         await tarFile.create(recursive: true);
 
         // Stream each file from the temp directory into the archive (one file
@@ -240,7 +268,9 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
         Stream<TarEntry> buildEntries() async* {
           for (final entity in tempDir.listSync(recursive: true)) {
             if (entity is File) {
-              final relativePath = entity.path.substring(tempDir.path.length + 1);
+              final relativePath = entity.path.substring(
+                tempDir.path.length + 1,
+              );
               yield TarEntry(
                 TarHeader(
                   name: relativePath,
@@ -296,7 +326,9 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
         if (!context.mounted || stories == null || stories.isEmpty) return null;
 
         final String exportFileName = "$kAppName-${kDeviceInfo.model}-text-${DateTime.now().toIso8601String()}.txt";
-        final textFile = File("${SupportDirectoryPath.backups.directoryPath}/$exportFileName");
+        final textFile = File(
+          "${SupportDirectoryPath.backups.directoryPath}/$exportFileName",
+        );
 
         // Export stories to text
         Map<int, TagDbModel?> tags = {};
@@ -354,7 +386,9 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
         if (!context.mounted || stories == null || stories.isEmpty) return null;
 
         final String exportFileName = "$kAppName-${kDeviceInfo.model}-csv-${DateTime.now().toIso8601String()}.csv";
-        final csvFile = File("${SupportDirectoryPath.backups.directoryPath}/$exportFileName");
+        final csvFile = File(
+          "${SupportDirectoryPath.backups.directoryPath}/$exportFileName",
+        );
 
         // Export stories to csv
         Map<int, TagDbModel?> tags = {};
@@ -420,7 +454,9 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
 
     if (backup == null || !context.mounted) return;
     if (Platform.isIOS || Platform.isMacOS) {
-      final file = File("${SupportDirectoryPath.backups.directoryPath}/$exportFileName");
+      final file = File(
+        "${SupportDirectoryPath.backups.directoryPath}/$exportFileName",
+      );
 
       await file.create(recursive: true);
       await file.writeAsString(jsonEncode(backup.toContents()));

@@ -588,6 +588,10 @@
   "button.select_file": "Select File",
   "button.export_pdf": "Export PDF",
   "snack_bar.import_external_done": "Imported {} entries ({} photos imported, {} photos skipped).",
+  "import_external.warning_attachments_skipped": "已跳过附件",
+  "snack_bar.import_parse_failed": "无法读取该文件。它是有效的导出文件吗？",
+  "export.pdf_tags": "标签：",
+  "export.pdf_photo_placeholder": "[照片]",
   "search.preset.starred": "Starred",
   "search.preset.pinned": "Pinned",
   "search.preset.this_year": "This year"

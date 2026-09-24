@@ -27,7 +27,9 @@ class EvernoteEnexImportParser {
     final drafts = <ImportedStoryDraft>[];
     int skipped = 0;
 
-    final noteMatches = RegExp(r'<note>([\s\S]*?)</note>').allMatches(content).toList();
+    final noteMatches = RegExp(
+      r'<note>([\s\S]*?)</note>',
+    ).allMatches(content).toList();
     if (noteMatches.isEmpty) return const ImportedParseResult(drafts: [], skippedCount: 1);
 
     for (final noteMatch in noteMatches) {
@@ -40,8 +42,11 @@ class EvernoteEnexImportParser {
       }
 
       final title = _element(note, 'title')?.trim();
-      final enml = _element(note, 'content') ?? '';
-      final body = _enmlToPlainText(enml);
+      // Content is CDATA — entity decoding happens once in _enmlToPlainText.
+      final enml = _element(note, 'content', decodeEntities: false) ?? '';
+      final bodyText = _enmlToPlainText(enml);
+      // Title-only notes still carry content — keep them instead of dropping.
+      final body = bodyText.trim().isNotEmpty ? bodyText : (title ?? '');
       if (body.trim().isEmpty) {
         skipped++;
         continue;
@@ -71,17 +76,24 @@ class EvernoteEnexImportParser {
   }
 
   /// Inner text of the first `<name>…</name>` element (no nesting in ENEX).
-  static String? _element(String xml, String name) {
+  static String? _element(
+    String xml,
+    String name, {
+    bool decodeEntities = true,
+  }) {
     final match = RegExp('<$name>([\\s\\S]*?)</$name>').firstMatch(xml);
     if (match == null) return null;
     // CDATA close marker survives tag-stripping — drop it here.
-    return HtmlCharacterEntities.decode(match.group(1)!).replaceAll(']]>', '');
+    final raw = match.group(1)!.replaceAll(']]>', '');
+    return decodeEntities ? HtmlCharacterEntities.decode(raw) : raw;
   }
 
   /// Evernote date format: `20230102T103000Z`.
   static DateTime? _parseEnDate(String? value) {
     if (value == null) return null;
-    final match = RegExp(r'^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$').firstMatch(value.trim());
+    final match = RegExp(
+      r'^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$',
+    ).firstMatch(value.trim());
     if (match == null) return null;
     return DateTime.utc(
       int.parse(match.group(1)!),

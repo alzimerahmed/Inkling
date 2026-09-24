@@ -1,57 +1,87 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storypad/core/objects/imported_story_draft.dart';
 import 'package:storypad/core/services/import/import_story_mapper.dart';
-import 'package:storypad/core/types/path_type.dart';
 
 void main() {
-  group('ImportStoryMapper.toStory', () {
-    test('maps date fields, tags, feeling and delta body', () {
-      final story = ImportStoryMapper.toStory(
-        draft: ImportedStoryDraft(
-          date: DateTime(2023, 1, 2, 10, 30, 5),
-          title: 'Title',
-          body: 'Body text',
-          tags: ['1', '2'],
-          feeling: 'Happy',
-        ),
-        id: 123,
-        tagIds: ['1', '2'],
-      );
+  test('embeds photos as structured Quill media ops, not markdown text', () {
+    final draft = ImportedStoryDraft(
+      date: DateTime(2024, 3, 1, 10, 0),
+      body: 'A quiet morning walk.',
+    );
 
-      expect(story.id, 123);
-      expect(story.type, PathType.docs);
-      expect(story.year, 2023);
-      expect(story.month, 1);
-      expect(story.day, 2);
-      expect(story.hour, 10);
-      expect(story.minute, 30);
-      expect(story.feeling, 'Happy');
-      expect(story.tags, ['1', '2']);
-      expect(story.latestContent?.title, 'Title');
-      expect(story.latestContent?.richPages?.first.body, [
-        {'insert': 'Body text\n'},
-      ]);
-    });
+    final story = ImportStoryMapper.toStory(
+      draft: draft,
+      id: 123,
+      tagIds: ['1'],
+      mediaPaths: ['images/111.jpg', 'images/222.png'],
+      assetIds: [111, 222],
+    );
 
-    test('promotes a short first line to title for body-only drafts', () {
-      final story = ImportStoryMapper.toStory(
-        draft: ImportedStoryDraft(date: DateTime(2023, 1, 2), body: 'Short title\nLonger body follows here'),
-        id: 456,
-        tagIds: [],
-      );
+    final body = story.latestContent!.richPages!.single.body!;
 
-      expect(story.latestContent?.title, 'Short title');
-    });
+    // Body text insert first.
+    expect(body.first['insert'], 'A quiet morning walk.\n');
 
-    test('does not promote a long single-line body to title', () {
-      final longLine = 'a' * 100;
-      final story = ImportStoryMapper.toStory(
-        draft: ImportedStoryDraft(date: DateTime(2023, 1, 2), body: longLine),
-        id: 789,
-        tagIds: [],
-      );
+    // Each photo becomes a structured media embed op + newline — NOT literal
+    // markdown like "![](images/111.jpg)" inside a text insert.
+    final embedOps = body.where((op) => op['insert'] is Map).toList();
+    expect(embedOps, hasLength(2));
+    expect(embedOps[0]['insert'], {'media': 'images/111.jpg'});
+    expect(embedOps[1]['insert'], {'media': 'images/222.png'});
 
-      expect(story.latestContent?.title, isNull);
-    });
+    final bodyText = body.map((op) => op['insert']).whereType<String>().join();
+    expect(bodyText, isNot(contains('![](')));
+  });
+
+  test('links created asset ids onto story.assets', () {
+    final draft = ImportedStoryDraft(date: DateTime(2024, 3, 1), body: 'note');
+
+    final story = ImportStoryMapper.toStory(
+      draft: draft,
+      id: 42,
+      tagIds: [],
+      mediaPaths: ['images/111.jpg'],
+      assetIds: [111],
+    );
+
+    expect(story.assets, [111]);
+  });
+
+  test('media-only entries (no body) still produce a valid delta', () {
+    final draft = ImportedStoryDraft(date: DateTime(2024, 3, 1));
+
+    final story = ImportStoryMapper.toStory(
+      draft: draft,
+      id: 42,
+      tagIds: [],
+      mediaPaths: ['images/111.jpg'],
+      assetIds: [111],
+    );
+
+    final body = story.latestContent!.richPages!.single.body!;
+    expect(body, hasLength(2));
+    expect(body[0]['insert'], {'media': 'images/111.jpg'});
+    expect(body[1]['insert'], '\n');
+  });
+
+  test('no photos → plain text delta, empty assets', () {
+    final draft = ImportedStoryDraft(date: DateTime(2024, 3, 1), body: 'hello');
+
+    final story = ImportStoryMapper.toStory(draft: draft, id: 42, tagIds: []);
+
+    final body = story.latestContent!.richPages!.single.body!;
+    expect(body, hasLength(1));
+    expect(body.single['insert'], 'hello\n');
+    expect(story.assets, isEmpty);
+  });
+
+  test('StoryContentDbModel.create round-trips title', () {
+    final draft = ImportedStoryDraft(
+      date: DateTime(2024, 3, 1),
+      title: 'Trip',
+      body: 'line1\nline2',
+    );
+    final story = ImportStoryMapper.toStory(draft: draft, id: 1, tagIds: []);
+    expect(story.latestContent!.title, 'Trip');
   });
 }

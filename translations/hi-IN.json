@@ -588,6 +588,10 @@
   "button.select_file": "Select File",
   "button.export_pdf": "Export PDF",
   "snack_bar.import_external_done": "Imported {} entries ({} photos imported, {} photos skipped).",
+  "import_external.warning_attachments_skipped": "अनुलग्नक छोड़ दिए गए",
+  "snack_bar.import_parse_failed": "फ़ाइल नहीं पढ़ी जा सकी। क्या यह मान्य निर्यात फ़ाइल है?",
+  "export.pdf_tags": "टैग: ",
+  "export.pdf_photo_placeholder": "[फ़ोटो]",
   "search.preset.starred": "Starred",
   "search.preset.pinned": "Pinned",
   "search.preset.this_year": "This year"

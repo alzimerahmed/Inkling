@@ -588,6 +588,10 @@
   "button.select_file": "Select File",
   "button.export_pdf": "Export PDF",
   "snack_bar.import_external_done": "Imported {} entries ({} photos imported, {} photos skipped).",
+  "import_external.warning_attachments_skipped": "ekler atlandı",
+  "snack_bar.import_parse_failed": "Dosya okunamadı. Geçerli bir dışa aktarma dosyası mı?",
+  "export.pdf_tags": "Etiketler: ",
+  "export.pdf_photo_placeholder": "[fotoğraf]",
   "search.preset.starred": "Starred",
   "search.preset.pinned": "Pinned",
   "search.preset.this_year": "This year"

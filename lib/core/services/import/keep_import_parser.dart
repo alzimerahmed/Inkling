@@ -23,9 +23,18 @@ class KeepImportParser {
   }
 
   static ImportedStoryDraft? parseNote(Map<dynamic, dynamic> note) {
-    final createdMs = int.tryParse(note['createdTimestampUtc']?.toString() ?? '');
-    final editedMs = int.tryParse(note['userEditedTimestampUtc']?.toString() ?? '');
-    final date = _fromMillis(createdMs) ?? _fromMillis(editedMs);
+    final createdMs = int.tryParse(
+      note['createdTimestampUtc']?.toString() ?? '',
+    );
+    final editedMs = int.tryParse(
+      note['userEditedTimestampUtc']?.toString() ?? '',
+    );
+    // Some Keep exports carry microsecond timestamps instead.
+    final createdUs = int.tryParse(
+      note['createdTimestampUsec']?.toString() ?? '',
+    );
+    final date =
+        _fromMillis(createdMs) ?? _fromMillis(createdUs == null ? null : createdUs ~/ 1000) ?? _fromMillis(editedMs);
     if (date == null) return null;
 
     // Prefer plain text; fall back to a rough HTML strip of textContentHtml.
@@ -37,7 +46,9 @@ class KeepImportParser {
     if (body == null && listContent is List) {
       body = listContent
           .whereType<Map>()
-          .map((item) => '${item['isChecked'] == true ? '[x] ' : '[ ] '}${item['text']?.toString() ?? ''}')
+          .map(
+            (item) => '${item['isChecked'] == true ? '[x] ' : '[ ] '}${item['text']?.toString() ?? ''}',
+          )
           .join('\n');
     }
 
@@ -53,7 +64,12 @@ class KeepImportParser {
       }
     }
 
-    return ImportedStoryDraft(date: date, title: _nonEmpty(note['title']?.toString()), body: body.trim(), tags: labels);
+    return ImportedStoryDraft(
+      date: date,
+      title: _nonEmpty(note['title']?.toString()),
+      body: body.trim(),
+      tags: labels,
+    );
   }
 
   static DateTime? _fromMillis(int? ms) {

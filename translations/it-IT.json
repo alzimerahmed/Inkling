@@ -588,6 +588,10 @@
   "button.select_file": "Select File",
   "button.export_pdf": "Export PDF",
   "snack_bar.import_external_done": "Imported {} entries ({} photos imported, {} photos skipped).",
+  "import_external.warning_attachments_skipped": "allegati ignorati",
+  "snack_bar.import_parse_failed": "Impossibile leggere il file. È un file di esportazione valido?",
+  "export.pdf_tags": "Tag: ",
+  "export.pdf_photo_placeholder": "[foto]",
   "search.preset.starred": "Starred",
   "search.preset.pinned": "Pinned",
   "search.preset.this_year": "This year"

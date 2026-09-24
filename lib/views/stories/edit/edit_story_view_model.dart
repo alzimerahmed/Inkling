@@ -8,7 +8,9 @@ import 'package:storypad/core/databases/models/story_db_model.dart';
 import 'package:storypad/core/databases/models/story_page_db_model.dart';
 import 'package:storypad/core/objects/default_story_preferences_object.dart';
 import 'package:storypad/core/objects/story_page_objects_map.dart';
+import 'package:storypad/core/services/location/sp_location_service.dart';
 import 'package:storypad/core/services/stories/story_should_revert_change_service.dart';
+import 'package:storypad/core/services/weather/open_meteo_weather_service.dart';
 import 'package:storypad/core/types/asset_type.dart';
 import 'package:storypad/core/types/editing_flow_type.dart';
 import 'package:storypad/providers/device_preferences_provider.dart';
@@ -19,11 +21,17 @@ import 'edit_story_view.dart';
 class EditStoryViewModel extends BaseStoryViewModel {
   final EditStoryRoute params;
 
+  /// Captured at construction for the fire-and-forget weather attach, which
+  /// runs after `init` completes and needs a mounted context to read
+  /// [DevicePreferencesProvider].
+  final BuildContext creationContext;
+
   @override
   bool get readOnly => false;
 
   EditStoryViewModel({required this.params, required BuildContext context})
-    : super(initialPageScrollOffet: params.initialPageScrollOffet, initialPageIndex: params.initialPageIndex) {
+    : creationContext = context,
+      super(initialPageScrollOffet: params.initialPageScrollOffet, initialPageIndex: params.initialPageIndex) {
     init(
       initialStory: params.story,
       initialPagesMap: params.pagesMap,
@@ -91,6 +99,42 @@ class EditStoryViewModel extends BaseStoryViewModel {
     if (params.autoRequestLocation) {
       await addCurrentLocation();
     }
+
+    if (flowType == EditingFlowType.create) {
+      // Fire-and-forget: weather must never delay the editor becoming
+      // interactive, and failure (offline, no permission) is silently ignored.
+      autoAttachWeatherIfEnabled();
+    }
+  }
+
+  /// Prepends the current weather as a text line (Day One-style) when the
+  /// user opted in. Uses only the *last known* location — never prompts for
+  /// permission — and is skipped entirely when offline or location is
+  /// unavailable.
+  Future<void> autoAttachWeatherIfEnabled() async {
+    final context = creationContext;
+    if (!context.mounted) return;
+
+    final enabled = context.read<DevicePreferencesProvider>().enableWeatherAutoAttach;
+    if (!enabled) return;
+
+    final latLng = await SpLocationService.fetchLastKnownLocation();
+    if (latLng == null) return;
+
+    final weather = await OpenMeteoWeatherService.fetchCurrentWeather(latLng);
+    if (weather == null) return;
+
+    final conditionKey = weather.conditionKeyOrNull;
+    final line = weather.displayLine(
+      localizedCondition: conditionKey == null ? '' : tr('weather.condition.$conditionKey'),
+    );
+
+    final richPages = draftContent?.richPages;
+    final page = (richPages == null || richPages.isEmpty) ? null : pagesManager.pagesMap[richPages.first.id];
+    if (page == null || page.bodyController.document.length > 1) return;
+
+    page.bodyController.replaceText(0, 0, '$line\n\n', null);
+    page.bodyController.moveCursorRight();
   }
 
   Future<void> done(BuildContext context) async {

@@ -588,6 +588,10 @@
   "button.select_file": "Select File",
   "button.export_pdf": "Export PDF",
   "snack_bar.import_external_done": "Imported {} entries ({} photos imported, {} photos skipped).",
+  "import_external.warning_attachments_skipped": "添付ファイルをスキップしました",
+  "snack_bar.import_parse_failed": "ファイルを読み込めませんでした。有効なエクスポートファイルですか？",
+  "export.pdf_tags": "タグ: ",
+  "export.pdf_photo_placeholder": "[写真]",
   "search.preset.starred": "Starred",
   "search.preset.pinned": "Pinned",
   "search.preset.this_year": "This year"

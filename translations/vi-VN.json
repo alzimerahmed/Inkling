@@ -588,6 +588,10 @@
   "button.select_file": "Select File",
   "button.export_pdf": "Export PDF",
   "snack_bar.import_external_done": "Imported {} entries ({} photos imported, {} photos skipped).",
+  "import_external.warning_attachments_skipped": "đã bỏ qua tệp đính kèm",
+  "snack_bar.import_parse_failed": "Không thể đọc tệp. Đây có phải là tệp xuất hợp lệ không?",
+  "export.pdf_tags": "Thẻ: ",
+  "export.pdf_photo_placeholder": "[ảnh]",
   "search.preset.starred": "Starred",
   "search.preset.pinned": "Pinned",
   "search.preset.this_year": "This year"

@@ -10,7 +10,7 @@ import 'package:storypad/core/types/path_type.dart';
 /// - date → year/month/day/hour/minute/second (+ createdAt/updatedAt)
 /// - title → content title (Day One/Daylio: first line promoted when it is
 ///   short and the body has more lines)
-/// - body → single Quill delta page (plain text insert)
+/// - body → single Quill delta page (plain text + media embeds)
 /// - tags → resolved by the importer (TagDbModel ids as strings)
 /// - feeling → legacy `feeling` field
 class ImportStoryMapper {
@@ -18,18 +18,36 @@ class ImportStoryMapper {
     required ImportedStoryDraft draft,
     required int id,
     required List<String> tagIds,
-    List<String> bodyLines = const [],
+    List<String> mediaPaths = const [],
+    List<int> assetIds = const [],
   }) {
-    final bodyText = [if (draft.hasBody) draft.body!.trim(), ...bodyLines].join('\n\n');
+    final bodyText = draft.hasBody ? draft.body!.trim() : '';
 
     final title = _resolveTitle(draft);
-    final deltaBody = [
-      {'insert': '$bodyText\n'},
+
+    // Embedded photos are structured Quill media embeds — the same ops the
+    // editor produces (`{"insert": {"media": "images/<id>.jpg"}}`), NOT
+    // markdown text. Markdown image syntax inside a text insert is rendered
+    // as literal text by flutter_quill and never links to the AssetDbModel.
+    final deltaBody = <Map<String, dynamic>>[
+      if (bodyText.isNotEmpty) {'insert': '$bodyText\n'},
+      for (final path in mediaPaths) ...[
+        {
+          'insert': {'media': path},
+        },
+        {'insert': '\n'},
+      ],
     ];
 
     final content = StoryContentDbModel.create(createdAt: draft.date).copyWith(
       title: title,
-      richPages: [StoryPageDbModel(id: draft.date.millisecondsSinceEpoch, title: title, body: deltaBody)],
+      richPages: [
+        StoryPageDbModel(
+          id: draft.date.millisecondsSinceEpoch,
+          title: title,
+          body: deltaBody,
+        ),
+      ],
     );
 
     return StoryDbModel(
@@ -51,7 +69,7 @@ class ImportStoryMapper {
       galleryTemplateId: null,
       templateId: null,
       tags: tagIds,
-      assets: [],
+      assets: assetIds,
       movedToBinAt: null,
       latestContent: content,
       draftContent: null,
