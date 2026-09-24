@@ -99,7 +99,11 @@ class MessengerService {
                   radius: 48,
                   backgroundColor: ColorScheme.of(context).readOnly.surface3,
                   child: SpFadeIn.bound(
-                    child: Icon(SpIcons.errorCircle, size: 56, color: ColorScheme.of(context).bootstrap.danger.color),
+                    child: Icon(
+                      SpIcons.errorCircle,
+                      size: 56,
+                      color: ColorScheme.of(context).bootstrap.danger.color,
+                    ),
                   ),
                 ),
               ),
@@ -110,7 +114,9 @@ class MessengerService {
                   child: Text(
                     errorMessage,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -137,7 +143,11 @@ class MessengerService {
               backgroundColor: ColorScheme.of(context).readOnly.surface3,
               child: SpFadeIn.bound(
                 duration: Durations.long1,
-                child: Icon(SpIcons.checkCircle, size: 56, color: ColorScheme.of(context).bootstrap.success.color),
+                child: Icon(
+                  SpIcons.checkCircle,
+                  size: 56,
+                  color: ColorScheme.of(context).bootstrap.success.color,
+                ),
               ),
             ),
           ),
@@ -146,31 +156,65 @@ class MessengerService {
     );
   }
 
-  Future<T?> showLoading<T>({required Future<T?> Function() future, required String? debugSource}) async {
+  Future<T?> showLoading<T>({
+    required Future<T?> Function() future,
+    required String? debugSource,
+  }) async {
     if (debugSource != null) AppLogger.info("LOADING... $debugSource");
 
     Completer<T?> completer = Completer();
-    future().then((value) => completer.complete(value));
+    Object? error;
+    StackTrace? stackTrace;
 
+    // If the future throws (malformed import file, decode error, …) we must
+    // still complete the completer — otherwise the loading dialog stays open
+    // forever. The error is captured (not completed into the completer, which
+    // would be unhandled before the FutureBuilder subscribes) and rethrown
+    // below once the dialog is closed, so callers keep their try/catch flow.
+    unawaited(
+      future().then(
+        (value) {
+          if (!completer.isCompleted) completer.complete(value);
+        },
+        onError: (Object e, StackTrace st) {
+          error = e;
+          stackTrace = st;
+          if (!completer.isCompleted) completer.complete(null);
+        },
+      ),
+    );
+
+    final T? result;
     if (!kIsWeb && Platform.isIOS) {
-      return showCupertinoDialog<T>(
+      result = await showCupertinoDialog<T>(
         context: context,
         builder: (context) => _loadingBuilder<T>(context, completer, debugSource),
         barrierDismissible: false,
       );
     } else {
-      return showDialog<T>(
+      result = await showDialog<T>(
         context: context,
         builder: (context) => _loadingBuilder<T>(context, completer, debugSource),
         barrierDismissible: false,
       );
     }
+
+    if (error != null) {
+      Error.throwWithStackTrace(error!, stackTrace!);
+    }
+    return result;
   }
 
-  Widget _loadingBuilder<T>(BuildContext context, Completer<T?> future, String? debugSource) {
+  Widget _loadingBuilder<T>(
+    BuildContext context,
+    Completer<T?> future,
+    String? debugSource,
+  ) {
     return FutureBuilder<T?>(
       future: future.future.then((value) {
-        if (debugSource != null) AppLogger.info("LOADED $debugSource with $value");
+        if (debugSource != null) {
+          AppLogger.info(value == null ? "LOADING FAILED $debugSource" : "LOADED $debugSource with $value");
+        }
         if (context.mounted) {
           Navigator.of(context).pop(value);
         }
