@@ -26,8 +26,8 @@ void main() {
     test('parses title, date, tags and ENML body', () {
       final result = EvernoteEnexImportParser.parse(_enex);
 
-      expect(result.drafts.length, 1);
-      expect(result.skippedCount, 1); // empty note
+      expect(result.drafts.length, 2);
+      expect(result.skippedCount, 0); // title-only note is kept, not dropped
 
       final draft = result.drafts.first;
       expect(draft.title, 'Meeting notes');
@@ -37,6 +37,11 @@ void main() {
       expect(draft.tags, ['work', 'meeting']);
       expect(draft.body, contains('Discussed & agreed'));
       expect(draft.warnings, contains('attachments_skipped'));
+
+      // Title-only note: body falls back to the title instead of being skipped.
+      final titleOnly = result.drafts.last;
+      expect(titleOnly.title, 'Empty');
+      expect(draft.body, isNotEmpty);
     });
 
     test('rejects non-ENEX content', () {

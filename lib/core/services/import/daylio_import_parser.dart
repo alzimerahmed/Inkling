@@ -52,13 +52,14 @@ class DaylioImportParser {
         continue;
       }
 
-      final activities = cell(activitiesIdx)
-          .split(RegExp(r'[,;|]'))
-          .map((e) => e.trim())
-          .where((e) => e.isNotEmpty)
-          .toList();
+      final activities = cell(
+        activitiesIdx,
+      ).split(RegExp(r'[,;|]')).map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
 
-      final body = [if (noteTitle.isNotEmpty) noteTitle, if (note.isNotEmpty) note].join('\n\n');
+      final body = [
+        if (noteTitle.isNotEmpty) noteTitle,
+        if (note.isNotEmpty) note,
+      ].join('\n\n');
 
       drafts.add(
         ImportedStoryDraft(
@@ -78,7 +79,9 @@ class DaylioImportParser {
   static DateTime? _parseDate(String value) {
     if (value.isEmpty) return null;
 
-    final match = RegExp(r'^(\d{1,4})[/\-.](\d{1,2})[/\-.](\d{1,4})(?:\s+(\d{1,2}):(\d{2}))?$').firstMatch(value);
+    final match = RegExp(
+      r'^(\d{1,4})[/\-.](\d{1,2})[/\-.](\d{1,4})(?:\s+(\d{1,2}):(\d{2}))?$',
+    ).firstMatch(value);
     if (match == null) return DateTime.tryParse(value);
 
     final a = int.parse(match.group(1)!);
@@ -87,10 +90,20 @@ class DaylioImportParser {
     final hour = match.group(4) != null ? int.parse(match.group(4)!) : 0;
     final minute = match.group(5) != null ? int.parse(match.group(5)!) : 0;
 
+    // Reject out-of-range values instead of letting DateTime silently roll
+    // them over (e.g. 31/02/2024 → 02/03/2024) — a rolled date is a corrupted
+    // entry, not a real one.
+    if (b < 1 || b > 12) return null;
+
     // Daylio is day-first (dd/mm/yyyy). A 4-digit first group means yyyy/mm/dd.
-    if (a > 31) return DateTime(a, b, c, hour, minute);
-    if (c > 31) return DateTime(c, b, a, hour, minute);
-    // Ambiguous two-digit year — assume day-first with a 2000s year.
-    return DateTime(2000 + (c < 100 ? c : 0), b, a, hour, minute);
+    final (year, month, day) = switch ((a > 31, c > 31)) {
+      (true, _) => (a, b, c),
+      (_, true) => (c, b, a),
+      _ => (2000 + (c < 100 ? c : 0), b, a),
+    };
+    if (day < 1 || day > DateTime(year, month + 1, 0).day) return null;
+    if (hour > 23 || minute > 59) return null;
+
+    return DateTime(year, month, day, hour, minute);
   }
 }
