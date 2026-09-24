@@ -9,8 +9,9 @@ class _FeedbackBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialBanner(
       backgroundColor: Theme.of(context).colorScheme.readOnly.surface2,
-      contentTextStyle: Theme.of(context).textTheme.bodyMedium
-          ?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
+      contentTextStyle: Theme.of(
+        context,
+      ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
       padding: const EdgeInsetsDirectional.only(
         start: 16.0,
         top: 24.0,

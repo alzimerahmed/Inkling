@@ -96,35 +96,43 @@ abstract class _$DevicePreferencesObjectCWProxy {
 
 /// Callable proxy for `copyWith` functionality.
 /// Use as `instanceOfDevicePreferencesObject.copyWith(...)` or call `instanceOfDevicePreferencesObject.copyWith.fieldName(value)` for a single field.
-class _$DevicePreferencesObjectCWProxyImpl implements _$DevicePreferencesObjectCWProxy {
+class _$DevicePreferencesObjectCWProxyImpl
+    implements _$DevicePreferencesObjectCWProxy {
   const _$DevicePreferencesObjectCWProxyImpl(this._value);
 
   final DevicePreferencesObject _value;
 
   @override
-  DevicePreferencesObject fontFamily(String? fontFamily) => call(fontFamily: fontFamily);
+  DevicePreferencesObject fontFamily(String? fontFamily) =>
+      call(fontFamily: fontFamily);
 
   @override
-  DevicePreferencesObject fontSize(FontSizeOption? fontSize) => call(fontSize: fontSize);
+  DevicePreferencesObject fontSize(FontSizeOption? fontSize) =>
+      call(fontSize: fontSize);
 
   @override
-  DevicePreferencesObject fontWeightIndex(int? fontWeightIndex) => call(fontWeightIndex: fontWeightIndex);
+  DevicePreferencesObject fontWeightIndex(int? fontWeightIndex) =>
+      call(fontWeightIndex: fontWeightIndex);
 
   @override
-  DevicePreferencesObject enableRelaxSounds(bool? enableRelaxSounds) => call(enableRelaxSounds: enableRelaxSounds);
+  DevicePreferencesObject enableRelaxSounds(bool? enableRelaxSounds) =>
+      call(enableRelaxSounds: enableRelaxSounds);
 
   @override
   DevicePreferencesObject enablePeriodCalendar(bool? enablePeriodCalendar) =>
       call(enablePeriodCalendar: enablePeriodCalendar);
 
   @override
-  DevicePreferencesObject reminders(List<ReminderObject>? reminders) => call(reminders: reminders);
+  DevicePreferencesObject reminders(List<ReminderObject>? reminders) =>
+      call(reminders: reminders);
 
   @override
-  DevicePreferencesObject themeMode(ThemeMode? themeMode) => call(themeMode: themeMode);
+  DevicePreferencesObject themeMode(ThemeMode? themeMode) =>
+      call(themeMode: themeMode);
 
   @override
-  DevicePreferencesObject timeFormat(TimeFormatOption? timeFormat) => call(timeFormat: timeFormat);
+  DevicePreferencesObject timeFormat(TimeFormatOption? timeFormat) =>
+      call(timeFormat: timeFormat);
 
   @override
   DevicePreferencesObject firstDayOfWeek(
@@ -137,13 +145,16 @@ class _$DevicePreferencesObjectCWProxyImpl implements _$DevicePreferencesObjectC
   ) => call(assetCompression: assetCompression);
 
   @override
-  DevicePreferencesObject mediaSync(MediaSyncOption? mediaSync) => call(mediaSync: mediaSync);
+  DevicePreferencesObject mediaSync(MediaSyncOption? mediaSync) =>
+      call(mediaSync: mediaSync);
 
   @override
-  DevicePreferencesObject colorSeedValue(int? colorSeedValue) => call(colorSeedValue: colorSeedValue);
+  DevicePreferencesObject colorSeedValue(int? colorSeedValue) =>
+      call(colorSeedValue: colorSeedValue);
 
   @override
-  DevicePreferencesObject colorByDay(Map<int, String>? colorByDay) => call(colorByDay: colorByDay);
+  DevicePreferencesObject colorByDay(Map<int, String>? colorByDay) =>
+      call(colorByDay: colorByDay);
 
   @override
   DevicePreferencesObject voicePlaybackSpeed(double? voicePlaybackSpeed) =>
@@ -154,7 +165,8 @@ class _$DevicePreferencesObjectCWProxyImpl implements _$DevicePreferencesObjectC
       call(videoPlaybackSpeed: videoPlaybackSpeed);
 
   @override
-  DevicePreferencesObject videoMuted(bool? videoMuted) => call(videoMuted: videoMuted);
+  DevicePreferencesObject videoMuted(bool? videoMuted) =>
+      call(videoMuted: videoMuted);
 
   @override
   DevicePreferencesObject storyTilePreferences(
@@ -177,12 +189,13 @@ class _$DevicePreferencesObjectCWProxyImpl implements _$DevicePreferencesObjectC
   ) => call(hiddenStatsSections: hiddenStatsSections);
 
   @override
-  DevicePreferencesObject mapRenderer(SpMapRenderer? mapRenderer) => call(mapRenderer: mapRenderer);
+  DevicePreferencesObject mapRenderer(SpMapRenderer? mapRenderer) =>
+      call(mapRenderer: mapRenderer);
 
   @override
-  DevicePreferencesObject mapStyle(SpMapStyle? mapStyle) => call(mapStyle: mapStyle);
+  DevicePreferencesObject mapStyle(SpMapStyle? mapStyle) =>
+      call(mapStyle: mapStyle);
 
-  @override
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `DevicePreferencesObject(...).copyWith.fieldName(value)`.
   ///
@@ -190,6 +203,7 @@ class _$DevicePreferencesObjectCWProxyImpl implements _$DevicePreferencesObjectC
   /// ```dart
   /// DevicePreferencesObject(...).copyWith(id: 12, name: "My name")
   /// ```
+  @override
   DevicePreferencesObject call({
     Object? fontFamily = const $CopyWithPlaceholder(),
     Object? fontSize = const $CopyWithPlaceholder(),
@@ -283,7 +297,8 @@ class _$DevicePreferencesObjectCWProxyImpl implements _$DevicePreferencesObjectC
           ? _value.storyTilePreferences
           // ignore: cast_nullable_to_non_nullable
           : storyTilePreferences as StoryTilePreferencesObject?,
-      defaultStoryPreferences: defaultStoryPreferences == const $CopyWithPlaceholder()
+      defaultStoryPreferences:
+          defaultStoryPreferences == const $CopyWithPlaceholder()
           ? _value.defaultStoryPreferences
           // ignore: cast_nullable_to_non_nullable
           : defaultStoryPreferences as DefaultStoryPreferencesObject?,
@@ -311,7 +326,8 @@ extension $DevicePreferencesObjectCopyWith on DevicePreferencesObject {
   /// Returns a callable class used to build a new instance with modified fields.
   /// Example: `instanceOfDevicePreferencesObject.copyWith(...)` or `instanceOfDevicePreferencesObject.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$DevicePreferencesObjectCWProxy get copyWith => _$DevicePreferencesObjectCWProxyImpl(this);
+  _$DevicePreferencesObjectCWProxy get copyWith =>
+      _$DevicePreferencesObjectCWProxyImpl(this);
 }
 
 // **************************************************************************
@@ -363,7 +379,9 @@ DevicePreferencesObject _$DevicePreferencesObjectFromJson(
   homeQuickActions: (json['home_quick_actions'] as List<dynamic>?)
       ?.map((e) => AppQuickActionObject.fromJson(e as Map<String, dynamic>))
       .toList(),
-  hiddenStatsSections: (json['hidden_stats_sections'] as List<dynamic>?)?.map((e) => e as String).toList(),
+  hiddenStatsSections: (json['hidden_stats_sections'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
   mapRenderer: $enumDecodeNullable(
     _$SpMapRendererEnumMap,
     json['map_renderer'],
@@ -385,13 +403,16 @@ Map<String, dynamic> _$DevicePreferencesObjectToJson(
   'video_muted': instance.videoMuted,
   'time_format': _$TimeFormatOptionEnumMap[instance.timeFormat],
   'first_day_of_week': _$FirstDayOfWeekOptionEnumMap[instance.firstDayOfWeek]!,
-  'asset_compression': _$AssetCompressionOptionEnumMap[instance.assetCompression]!,
+  'asset_compression':
+      _$AssetCompressionOptionEnumMap[instance.assetCompression]!,
   'media_sync': _$MediaSyncOptionEnumMap[instance.mediaSync]!,
   'map_style': _$SpMapStyleEnumMap[instance.mapStyle]!,
   'map_renderer': _$SpMapRendererEnumMap[instance.mapRenderer],
   'story_tile_preferences': instance.storyTilePreferences.toJson(),
   'default_story_preferences': instance.defaultStoryPreferences.toJson(),
-  'home_quick_actions': instance.homeQuickActions?.map((e) => e.toJson()).toList(),
+  'home_quick_actions': instance.homeQuickActions
+      ?.map((e) => e.toJson())
+      .toList(),
   'hidden_stats_sections': instance.hiddenStatsSections,
   'enable_relax_sounds': instance.enableRelaxSounds,
   'enable_period_calendar': instance.enablePeriodCalendar,

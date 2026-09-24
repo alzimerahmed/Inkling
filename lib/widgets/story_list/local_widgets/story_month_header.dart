@@ -34,8 +34,9 @@ class StoryMonthHeader extends StatelessWidget {
             const SizedBox(width: 7.0),
             Text(
               story.year.toString(),
-              style: TextTheme.of(context).labelSmall
-                  ?.copyWith(color: ColorScheme.of(context).onSurface.withValues(alpha: 0.5)),
+              style: TextTheme.of(
+                context,
+              ).labelSmall?.copyWith(color: ColorScheme.of(context).onSurface.withValues(alpha: 0.5)),
             ),
           ],
         ],

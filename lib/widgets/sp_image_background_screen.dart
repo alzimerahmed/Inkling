@@ -116,8 +116,9 @@ class SpImageBackgroundSplashScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style:
                             titleStyle ??
-                            Theme.of(context).textTheme.displayMedium
-                                ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                            Theme.of(
+                              context,
+                            ).textTheme.displayMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                       if (subtitle != null) ...[
                         const SizedBox(height: 12),

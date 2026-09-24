@@ -8,11 +8,12 @@ import 'package:storypad/core/objects/sp_latlng_bounds.dart';
 import 'package:storypad/widgets/maps/map_types.dart';
 import 'package:storypad/widgets/maps/sp_map_controller.dart';
 
-typedef SpGoogleMapMarkerIconBuilder<T> = Future<BitmapDescriptor> Function(
-  BuildContext context,
-  SpMapMarker<T> marker,
-  double pixelRatio,
-);
+typedef SpGoogleMapMarkerIconBuilder<T> =
+    Future<BitmapDescriptor> Function(
+      BuildContext context,
+      SpMapMarker<T> marker,
+      double pixelRatio,
+    );
 
 class SpGoogleMap<T> extends StatefulWidget {
   const SpGoogleMap({

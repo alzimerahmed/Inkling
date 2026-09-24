@@ -283,8 +283,9 @@ class _ContentState extends State<_Content> {
         physics: const AlwaysScrollableScrollPhysics(),
         addAutomaticKeepAlives: false,
         controller: PrimaryScrollController.maybeOf(context),
-        padding: const EdgeInsets.symmetric(horizontal: 16.0)
-            .copyWith(top: 16.0, bottom: MediaQuery.of(context).padding.bottom + 16.0),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+        ).copyWith(top: 16.0, bottom: MediaQuery.of(context).padding.bottom + 16.0),
         itemCount: assets.length,
         mainAxisSpacing: 8.0,
         crossAxisSpacing: 8.0,

@@ -44,7 +44,8 @@ abstract class _$GalleryTemplateObjectCWProxy {
 
 /// Callable proxy for `copyWith` functionality.
 /// Use as `instanceOfGalleryTemplateObject.copyWith(...)` or call `instanceOfGalleryTemplateObject.copyWith.fieldName(value)` for a single field.
-class _$GalleryTemplateObjectCWProxyImpl implements _$GalleryTemplateObjectCWProxy {
+class _$GalleryTemplateObjectCWProxyImpl
+    implements _$GalleryTemplateObjectCWProxy {
   const _$GalleryTemplateObjectCWProxyImpl(this._value);
 
   final GalleryTemplateObject _value;
@@ -62,20 +63,22 @@ class _$GalleryTemplateObjectCWProxyImpl implements _$GalleryTemplateObjectCWPro
   GalleryTemplateObject note(String? note) => call(note: note);
 
   @override
-  GalleryTemplateObject pages(List<GalleryTemplatePageObject> pages) => call(pages: pages);
+  GalleryTemplateObject pages(List<GalleryTemplatePageObject> pages) =>
+      call(pages: pages);
 
   @override
-  GalleryTemplateObject iconUrlPath(String iconUrlPath) => call(iconUrlPath: iconUrlPath);
+  GalleryTemplateObject iconUrlPath(String iconUrlPath) =>
+      call(iconUrlPath: iconUrlPath);
 
   @override
-  GalleryTemplateObject pageLayoutType(PageLayoutType pageLayoutType) => call(pageLayoutType: pageLayoutType);
+  GalleryTemplateObject pageLayoutType(PageLayoutType pageLayoutType) =>
+      call(pageLayoutType: pageLayoutType);
 
   @override
   GalleryTemplateObject lazyDraftContent(
     StoryContentDbModel? lazyDraftContent,
   ) => call(lazyDraftContent: lazyDraftContent);
 
-  @override
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `GalleryTemplateObject(...).copyWith.fieldName(value)`.
   ///
@@ -83,6 +86,7 @@ class _$GalleryTemplateObjectCWProxyImpl implements _$GalleryTemplateObjectCWPro
   /// ```dart
   /// GalleryTemplateObject(...).copyWith(id: 12, name: "My name")
   /// ```
+  @override
   GalleryTemplateObject call({
     Object? id = const $CopyWithPlaceholder(),
     Object? name = const $CopyWithPlaceholder(),
@@ -114,11 +118,14 @@ class _$GalleryTemplateObjectCWProxyImpl implements _$GalleryTemplateObjectCWPro
           ? _value.pages
           // ignore: cast_nullable_to_non_nullable
           : pages as List<GalleryTemplatePageObject>,
-      iconUrlPath: iconUrlPath == const $CopyWithPlaceholder() || iconUrlPath == null
+      iconUrlPath:
+          iconUrlPath == const $CopyWithPlaceholder() || iconUrlPath == null
           ? _value.iconUrlPath
           // ignore: cast_nullable_to_non_nullable
           : iconUrlPath as String,
-      pageLayoutType: pageLayoutType == const $CopyWithPlaceholder() || pageLayoutType == null
+      pageLayoutType:
+          pageLayoutType == const $CopyWithPlaceholder() ||
+              pageLayoutType == null
           ? _value.pageLayoutType
           // ignore: cast_nullable_to_non_nullable
           : pageLayoutType as PageLayoutType,
@@ -134,7 +141,8 @@ extension $GalleryTemplateObjectCopyWith on GalleryTemplateObject {
   /// Returns a callable class used to build a new instance with modified fields.
   /// Example: `instanceOfGalleryTemplateObject.copyWith(...)` or `instanceOfGalleryTemplateObject.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$GalleryTemplateObjectCWProxy get copyWith => _$GalleryTemplateObjectCWProxyImpl(this);
+  _$GalleryTemplateObjectCWProxy get copyWith =>
+      _$GalleryTemplateObjectCWProxyImpl(this);
 }
 
 // **************************************************************************

@@ -83,7 +83,8 @@ class _$ReminderObjectCWProxyImpl implements _$ReminderObjectCWProxy {
   ReminderObject templateId(int? templateId) => call(templateId: templateId);
 
   @override
-  ReminderObject galleryTemplateId(String? galleryTemplateId) => call(galleryTemplateId: galleryTemplateId);
+  ReminderObject galleryTemplateId(String? galleryTemplateId) =>
+      call(galleryTemplateId: galleryTemplateId);
 
   @override
   ReminderObject tagIds(List<int>? tagIds) => call(tagIds: tagIds);
@@ -91,7 +92,6 @@ class _$ReminderObjectCWProxyImpl implements _$ReminderObjectCWProxy {
   @override
   ReminderObject daysAhead(int? daysAhead) => call(daysAhead: daysAhead);
 
-  @override
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ReminderObject(...).copyWith.fieldName(value)`.
   ///
@@ -99,6 +99,7 @@ class _$ReminderObjectCWProxyImpl implements _$ReminderObjectCWProxy {
   /// ```dart
   /// ReminderObject(...).copyWith(id: 12, name: "My name")
   /// ```
+  @override
   ReminderObject call({
     Object? id = const $CopyWithPlaceholder(),
     Object? type = const $CopyWithPlaceholder(),
@@ -172,37 +173,45 @@ extension $ReminderObjectCopyWith on ReminderObject {
 // JsonSerializableGenerator
 // **************************************************************************
 
-ReminderObject _$ReminderObjectFromJson(Map<String, dynamic> json) => ReminderObject(
-  id: (json['id'] as num).toInt(),
-  type: $enumDecode(
-    _$ReminderTypeEnumMap,
-    json['type'],
-    unknownValue: ReminderType.custom,
-  ),
-  enabled: json['enabled'] as bool? ?? true,
-  hour: (json['hour'] as num?)?.toInt() ?? 21,
-  minute: (json['minute'] as num?)?.toInt() ?? 0,
-  weekdays: (json['weekdays'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList() ?? const [],
-  message: json['message'] as String?,
-  templateId: (json['template_id'] as num?)?.toInt(),
-  galleryTemplateId: json['gallery_template_id'] as String?,
-  tagIds: (json['tag_ids'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList(),
-  daysAhead: (json['days_ahead'] as num?)?.toInt(),
-);
+ReminderObject _$ReminderObjectFromJson(Map<String, dynamic> json) =>
+    ReminderObject(
+      id: (json['id'] as num).toInt(),
+      type: $enumDecode(
+        _$ReminderTypeEnumMap,
+        json['type'],
+        unknownValue: ReminderType.custom,
+      ),
+      enabled: json['enabled'] as bool? ?? true,
+      hour: (json['hour'] as num?)?.toInt() ?? 21,
+      minute: (json['minute'] as num?)?.toInt() ?? 0,
+      weekdays:
+          (json['weekdays'] as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
+              .toList() ??
+          const [],
+      message: json['message'] as String?,
+      templateId: (json['template_id'] as num?)?.toInt(),
+      galleryTemplateId: json['gallery_template_id'] as String?,
+      tagIds: (json['tag_ids'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
+      daysAhead: (json['days_ahead'] as num?)?.toInt(),
+    );
 
-Map<String, dynamic> _$ReminderObjectToJson(ReminderObject instance) => <String, dynamic>{
-  'id': instance.id,
-  'type': _$ReminderTypeEnumMap[instance.type]!,
-  'enabled': instance.enabled,
-  'hour': instance.hour,
-  'minute': instance.minute,
-  'weekdays': instance.weekdays,
-  'message': instance.message,
-  'template_id': instance.templateId,
-  'gallery_template_id': instance.galleryTemplateId,
-  'tag_ids': instance.tagIds,
-  'days_ahead': instance.daysAhead,
-};
+Map<String, dynamic> _$ReminderObjectToJson(ReminderObject instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'type': _$ReminderTypeEnumMap[instance.type]!,
+      'enabled': instance.enabled,
+      'hour': instance.hour,
+      'minute': instance.minute,
+      'weekdays': instance.weekdays,
+      'message': instance.message,
+      'template_id': instance.templateId,
+      'gallery_template_id': instance.galleryTemplateId,
+      'tag_ids': instance.tagIds,
+      'days_ahead': instance.daysAhead,
+    };
 
 const _$ReminderTypeEnumMap = {
   ReminderType.daily: 'daily',

@@ -29,12 +29,12 @@ class _$RelaxSoundModelCWProxyImpl implements _$RelaxSoundModelCWProxy {
   final RelaxSoundModel _value;
 
   @override
-  RelaxSoundModel soundUrlPath(String soundUrlPath) => call(soundUrlPath: soundUrlPath);
+  RelaxSoundModel soundUrlPath(String soundUrlPath) =>
+      call(soundUrlPath: soundUrlPath);
 
   @override
   RelaxSoundModel volume(double volume) => call(volume: volume);
 
-  @override
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `RelaxSoundModel(...).copyWith.fieldName(value)`.
   ///
@@ -42,12 +42,14 @@ class _$RelaxSoundModelCWProxyImpl implements _$RelaxSoundModelCWProxy {
   /// ```dart
   /// RelaxSoundModel(...).copyWith(id: 12, name: "My name")
   /// ```
+  @override
   RelaxSoundModel call({
     Object? soundUrlPath = const $CopyWithPlaceholder(),
     Object? volume = const $CopyWithPlaceholder(),
   }) {
     return RelaxSoundModel(
-      soundUrlPath: soundUrlPath == const $CopyWithPlaceholder() || soundUrlPath == null
+      soundUrlPath:
+          soundUrlPath == const $CopyWithPlaceholder() || soundUrlPath == null
           ? _value.soundUrlPath
           // ignore: cast_nullable_to_non_nullable
           : soundUrlPath as String,
@@ -70,12 +72,14 @@ extension $RelaxSoundModelCopyWith on RelaxSoundModel {
 // JsonSerializableGenerator
 // **************************************************************************
 
-RelaxSoundModel _$RelaxSoundModelFromJson(Map<String, dynamic> json) => RelaxSoundModel(
-  soundUrlPath: json['sound_url_path'] as String,
-  volume: (json['volume'] as num).toDouble(),
-);
+RelaxSoundModel _$RelaxSoundModelFromJson(Map<String, dynamic> json) =>
+    RelaxSoundModel(
+      soundUrlPath: json['sound_url_path'] as String,
+      volume: (json['volume'] as num).toDouble(),
+    );
 
-Map<String, dynamic> _$RelaxSoundModelToJson(RelaxSoundModel instance) => <String, dynamic>{
-  'sound_url_path': instance.soundUrlPath,
-  'volume': instance.volume,
-};
+Map<String, dynamic> _$RelaxSoundModelToJson(RelaxSoundModel instance) =>
+    <String, dynamic>{
+      'sound_url_path': instance.soundUrlPath,
+      'volume': instance.volume,
+    };

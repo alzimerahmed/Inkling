@@ -245,8 +245,9 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
                           ),
                           SlidableAction(
                             onPressed: (context) async {
-                              final result = await Navigator.of(context)
-                                  .push(MaterialPageRoute(builder: (context) => _EditTagView(tag: tag)));
+                              final result = await Navigator.of(
+                                context,
+                              ).push(MaterialPageRoute(builder: (context) => _EditTagView(tag: tag)));
 
                               if (result is List<String> && result.isNotEmpty) {
                                 TagDbModel newTag = tag.copyWith(title: result.first, updatedAt: DateTime.now());

@@ -62,8 +62,9 @@ class _SurveyBannerState extends State<SurveyBanner> {
       duration: Durations.long4,
       child: MaterialBanner(
         backgroundColor: Theme.of(context).colorScheme.readOnly.surface2,
-        contentTextStyle: Theme.of(context).textTheme.bodyMedium
-            ?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
+        contentTextStyle: Theme.of(
+          context,
+        ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
         padding: const EdgeInsetsDirectional.only(
           start: 16.0,
           top: 24.0,

@@ -262,8 +262,9 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
       // geocoding already failed once, so this is a last-chance retry on a
       // known-bad connection. We bound it so a hung geocoder doesn't silently
       // block the confirm action — on timeout we just save coordinates.
-      await _resolveSelectedPlace(selectedVersion: _selectedVersion)
-          .timeout(SpLocationService.geocodeTimeout, onTimeout: () {});
+      await _resolveSelectedPlace(
+        selectedVersion: _selectedVersion,
+      ).timeout(SpLocationService.geocodeTimeout, onTimeout: () {});
     }
 
     if (_selectedPlace == null) return null;

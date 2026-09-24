@@ -38,7 +38,8 @@ abstract class _$DefaultStoryPreferencesObjectCWProxy {
 
 /// Callable proxy for `copyWith` functionality.
 /// Use as `instanceOfDefaultStoryPreferencesObject.copyWith(...)` or call `instanceOfDefaultStoryPreferencesObject.copyWith.fieldName(value)` for a single field.
-class _$DefaultStoryPreferencesObjectCWProxyImpl implements _$DefaultStoryPreferencesObjectCWProxy {
+class _$DefaultStoryPreferencesObjectCWProxyImpl
+    implements _$DefaultStoryPreferencesObjectCWProxy {
   const _$DefaultStoryPreferencesObjectCWProxyImpl(this._value);
 
   final DefaultStoryPreferencesObject _value;
@@ -49,7 +50,8 @@ class _$DefaultStoryPreferencesObjectCWProxyImpl implements _$DefaultStoryPrefer
   ) => call(defaultColorSeedValue: defaultColorSeedValue);
 
   @override
-  DefaultStoryPreferencesObject defaultColorTone(int? defaultColorTone) => call(defaultColorTone: defaultColorTone);
+  DefaultStoryPreferencesObject defaultColorTone(int? defaultColorTone) =>
+      call(defaultColorTone: defaultColorTone);
 
   @override
   DefaultStoryPreferencesObject defaultBackgroundImagePath(
@@ -61,7 +63,6 @@ class _$DefaultStoryPreferencesObjectCWProxyImpl implements _$DefaultStoryPrefer
     PageLayoutType? defaultLayoutType,
   ) => call(defaultLayoutType: defaultLayoutType);
 
-  @override
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `DefaultStoryPreferencesObject(...).copyWith.fieldName(value)`.
   ///
@@ -69,6 +70,7 @@ class _$DefaultStoryPreferencesObjectCWProxyImpl implements _$DefaultStoryPrefer
   /// ```dart
   /// DefaultStoryPreferencesObject(...).copyWith(id: 12, name: "My name")
   /// ```
+  @override
   DefaultStoryPreferencesObject call({
     Object? defaultColorSeedValue = const $CopyWithPlaceholder(),
     Object? defaultColorTone = const $CopyWithPlaceholder(),
@@ -76,7 +78,8 @@ class _$DefaultStoryPreferencesObjectCWProxyImpl implements _$DefaultStoryPrefer
     Object? defaultLayoutType = const $CopyWithPlaceholder(),
   }) {
     return DefaultStoryPreferencesObject(
-      defaultColorSeedValue: defaultColorSeedValue == const $CopyWithPlaceholder()
+      defaultColorSeedValue:
+          defaultColorSeedValue == const $CopyWithPlaceholder()
           ? _value.defaultColorSeedValue
           // ignore: cast_nullable_to_non_nullable
           : defaultColorSeedValue as int?,
@@ -84,7 +87,8 @@ class _$DefaultStoryPreferencesObjectCWProxyImpl implements _$DefaultStoryPrefer
           ? _value.defaultColorTone
           // ignore: cast_nullable_to_non_nullable
           : defaultColorTone as int?,
-      defaultBackgroundImagePath: defaultBackgroundImagePath == const $CopyWithPlaceholder()
+      defaultBackgroundImagePath:
+          defaultBackgroundImagePath == const $CopyWithPlaceholder()
           ? _value.defaultBackgroundImagePath
           // ignore: cast_nullable_to_non_nullable
           : defaultBackgroundImagePath as String?,
@@ -96,11 +100,13 @@ class _$DefaultStoryPreferencesObjectCWProxyImpl implements _$DefaultStoryPrefer
   }
 }
 
-extension $DefaultStoryPreferencesObjectCopyWith on DefaultStoryPreferencesObject {
+extension $DefaultStoryPreferencesObjectCopyWith
+    on DefaultStoryPreferencesObject {
   /// Returns a callable class used to build a new instance with modified fields.
   /// Example: `instanceOfDefaultStoryPreferencesObject.copyWith(...)` or `instanceOfDefaultStoryPreferencesObject.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$DefaultStoryPreferencesObjectCWProxy get copyWith => _$DefaultStoryPreferencesObjectCWProxyImpl(this);
+  _$DefaultStoryPreferencesObjectCWProxy get copyWith =>
+      _$DefaultStoryPreferencesObjectCWProxyImpl(this);
 }
 
 // **************************************************************************

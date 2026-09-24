@@ -200,8 +200,9 @@ class ExportAssetsViewModel extends ChangeNotifier with DisposeAwareMixin {
 
     // Let the user know some assets couldn't be included in the export.
     if (context.mounted && _skippedAssets.isNotEmpty) {
-      MessengerService.of(context)
-          .showSnackBar('${_skippedAssets.length} asset(s) were unavailable and skipped from the export.');
+      MessengerService.of(
+        context,
+      ).showSnackBar('${_skippedAssets.length} asset(s) were unavailable and skipped from the export.');
     }
   }
 

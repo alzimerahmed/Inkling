@@ -61,8 +61,9 @@ class SpScrollableChoiceChipsState<T> extends State<SpScrollableChoiceChips<T>> 
   Widget build(BuildContext context) {
     Widget child = SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 16.0)
-          .add(EdgeInsets.only(left: MediaQuery.of(context).padding.left, right: MediaQuery.of(context).padding.right)),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16.0,
+      ).add(EdgeInsets.only(left: MediaQuery.of(context).padding.left, right: MediaQuery.of(context).padding.right)),
       child: SizedBox(
         width: widget.wrapWidth,
         child: Wrap(

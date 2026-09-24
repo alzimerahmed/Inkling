@@ -44,38 +44,45 @@ abstract class _$StoryTilePreferencesObjectCWProxy {
 
 /// Callable proxy for `copyWith` functionality.
 /// Use as `instanceOfStoryTilePreferencesObject.copyWith(...)` or call `instanceOfStoryTilePreferencesObject.copyWith.fieldName(value)` for a single field.
-class _$StoryTilePreferencesObjectCWProxyImpl implements _$StoryTilePreferencesObjectCWProxy {
+class _$StoryTilePreferencesObjectCWProxyImpl
+    implements _$StoryTilePreferencesObjectCWProxy {
   const _$StoryTilePreferencesObjectCWProxyImpl(this._value);
 
   final StoryTilePreferencesObject _value;
 
   @override
-  StoryTilePreferencesObject showTime(bool? showTime) => call(showTime: showTime);
+  StoryTilePreferencesObject showTime(bool? showTime) =>
+      call(showTime: showTime);
 
   @override
-  StoryTilePreferencesObject showPageCount(bool? showPageCount) => call(showPageCount: showPageCount);
+  StoryTilePreferencesObject showPageCount(bool? showPageCount) =>
+      call(showPageCount: showPageCount);
 
   @override
-  StoryTilePreferencesObject showTagLabels(bool? showTagLabels) => call(showTagLabels: showTagLabels);
+  StoryTilePreferencesObject showTagLabels(bool? showTagLabels) =>
+      call(showTagLabels: showTagLabels);
 
   @override
-  StoryTilePreferencesObject showPeopleLabels(bool? showPeopleLabels) => call(showPeopleLabels: showPeopleLabels);
+  StoryTilePreferencesObject showPeopleLabels(bool? showPeopleLabels) =>
+      call(showPeopleLabels: showPeopleLabels);
 
   @override
-  StoryTilePreferencesObject showVoiceCount(bool? showVoiceCount) => call(showVoiceCount: showVoiceCount);
+  StoryTilePreferencesObject showVoiceCount(bool? showVoiceCount) =>
+      call(showVoiceCount: showVoiceCount);
 
   @override
-  StoryTilePreferencesObject showLocation(bool? showLocation) => call(showLocation: showLocation);
+  StoryTilePreferencesObject showLocation(bool? showLocation) =>
+      call(showLocation: showLocation);
 
   @override
-  StoryTilePreferencesObject photoCollage(bool? photoCollage) => call(photoCollage: photoCollage);
+  StoryTilePreferencesObject photoCollage(bool? photoCollage) =>
+      call(photoCollage: photoCollage);
 
   @override
   StoryTilePreferencesObject displayCharacterCount(
     int? displayCharacterCount,
   ) => call(displayCharacterCount: displayCharacterCount);
 
-  @override
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `StoryTilePreferencesObject(...).copyWith.fieldName(value)`.
   ///
@@ -83,6 +90,7 @@ class _$StoryTilePreferencesObjectCWProxyImpl implements _$StoryTilePreferencesO
   /// ```dart
   /// StoryTilePreferencesObject(...).copyWith(id: 12, name: "My name")
   /// ```
+  @override
   StoryTilePreferencesObject call({
     Object? showTime = const $CopyWithPlaceholder(),
     Object? showPageCount = const $CopyWithPlaceholder(),
@@ -122,7 +130,8 @@ class _$StoryTilePreferencesObjectCWProxyImpl implements _$StoryTilePreferencesO
           ? _value.photoCollage
           // ignore: cast_nullable_to_non_nullable
           : photoCollage as bool?,
-      displayCharacterCount: displayCharacterCount == const $CopyWithPlaceholder()
+      displayCharacterCount:
+          displayCharacterCount == const $CopyWithPlaceholder()
           ? _value.displayCharacterCount
           // ignore: cast_nullable_to_non_nullable
           : displayCharacterCount as int?,
@@ -134,7 +143,8 @@ extension $StoryTilePreferencesObjectCopyWith on StoryTilePreferencesObject {
   /// Returns a callable class used to build a new instance with modified fields.
   /// Example: `instanceOfStoryTilePreferencesObject.copyWith(...)` or `instanceOfStoryTilePreferencesObject.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$StoryTilePreferencesObjectCWProxy get copyWith => _$StoryTilePreferencesObjectCWProxyImpl(this);
+  _$StoryTilePreferencesObjectCWProxy get copyWith =>
+      _$StoryTilePreferencesObjectCWProxyImpl(this);
 }
 
 // **************************************************************************

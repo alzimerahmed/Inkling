@@ -166,16 +166,20 @@ class _$StoryDbModelCWProxyImpl implements _$StoryDbModelCWProxy {
   StoryDbModel assets(List<int>? assets) => call(assets: assets);
 
   @override
-  StoryDbModel movedToBinAt(DateTime? movedToBinAt) => call(movedToBinAt: movedToBinAt);
+  StoryDbModel movedToBinAt(DateTime? movedToBinAt) =>
+      call(movedToBinAt: movedToBinAt);
 
   @override
-  StoryDbModel latestContent(StoryContentDbModel? latestContent) => call(latestContent: latestContent);
+  StoryDbModel latestContent(StoryContentDbModel? latestContent) =>
+      call(latestContent: latestContent);
 
   @override
-  StoryDbModel draftContent(StoryContentDbModel? draftContent) => call(draftContent: draftContent);
+  StoryDbModel draftContent(StoryContentDbModel? draftContent) =>
+      call(draftContent: draftContent);
 
   @override
-  StoryDbModel galleryTemplateId(String? galleryTemplateId) => call(galleryTemplateId: galleryTemplateId);
+  StoryDbModel galleryTemplateId(String? galleryTemplateId) =>
+      call(galleryTemplateId: galleryTemplateId);
 
   @override
   StoryDbModel templateId(int? templateId) => call(templateId: templateId);
@@ -187,18 +191,20 @@ class _$StoryDbModelCWProxyImpl implements _$StoryDbModelCWProxy {
   StoryDbModel wordCount(int? wordCount) => call(wordCount: wordCount);
 
   @override
-  StoryDbModel characterCount(int? characterCount) => call(characterCount: characterCount);
+  StoryDbModel characterCount(int? characterCount) =>
+      call(characterCount: characterCount);
 
   @override
   StoryDbModel place(PlaceDbModel? place) => call(place: place);
 
   @override
-  StoryDbModel lastSavedDeviceId(String? lastSavedDeviceId) => call(lastSavedDeviceId: lastSavedDeviceId);
+  StoryDbModel lastSavedDeviceId(String? lastSavedDeviceId) =>
+      call(lastSavedDeviceId: lastSavedDeviceId);
 
   @override
-  StoryDbModel permanentlyDeletedAt(DateTime? permanentlyDeletedAt) => call(permanentlyDeletedAt: permanentlyDeletedAt);
+  StoryDbModel permanentlyDeletedAt(DateTime? permanentlyDeletedAt) =>
+      call(permanentlyDeletedAt: permanentlyDeletedAt);
 
-  @override
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `StoryDbModel(...).copyWith.fieldName(value)`.
   ///
@@ -206,13 +212,15 @@ class _$StoryDbModelCWProxyImpl implements _$StoryDbModelCWProxy {
   /// ```dart
   /// StoryDbModel(...).copyWith(id: 12, name: "My name")
   /// ```
+  @override
   StoryDbModel call({
     Object? version = const $CopyWithPlaceholder(),
     Object? type = const $CopyWithPlaceholder(),
     Object? id = const $CopyWithPlaceholder(),
     Object? starred = const $CopyWithPlaceholder(),
     Object? pinned = const $CopyWithPlaceholder(),
-    @Deprecated('We have moved to tags instead') Object? feeling = const $CopyWithPlaceholder(),
+    @Deprecated('We have moved to tags instead')
+    Object? feeling = const $CopyWithPlaceholder(),
     Object? year = const $CopyWithPlaceholder(),
     Object? month = const $CopyWithPlaceholder(),
     Object? day = const $CopyWithPlaceholder(),
@@ -385,8 +393,12 @@ StoryDbModel _$StoryDbModelFromJson(Map<String, dynamic> json) => StoryDbModel(
           json['preferences'] as Map<String, dynamic>,
         ),
   tags: tagsFromJson(json['tags']),
-  assets: (json['assets'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList(),
-  movedToBinAt: json['moved_to_bin_at'] == null ? null : DateTime.parse(json['moved_to_bin_at'] as String),
+  assets: (json['assets'] as List<dynamic>?)
+      ?.map((e) => (e as num).toInt())
+      .toList(),
+  movedToBinAt: json['moved_to_bin_at'] == null
+      ? null
+      : DateTime.parse(json['moved_to_bin_at'] as String),
   latestContent: json['latest_content'] == null
       ? null
       : StoryContentDbModel.fromJson(
@@ -399,10 +411,14 @@ StoryDbModel _$StoryDbModelFromJson(Map<String, dynamic> json) => StoryDbModel(
         ),
   galleryTemplateId: json['gallery_template_id'] as String?,
   templateId: (json['template_id'] as num?)?.toInt(),
-  event: json['event'] == null ? null : EventDbModel.fromJson(json['event'] as Map<String, dynamic>),
+  event: json['event'] == null
+      ? null
+      : EventDbModel.fromJson(json['event'] as Map<String, dynamic>),
   wordCount: (json['word_count'] as num?)?.toInt(),
   characterCount: (json['character_count'] as num?)?.toInt(),
-  place: json['place'] == null ? null : PlaceDbModel.fromJson(json['place'] as Map<String, dynamic>),
+  place: json['place'] == null
+      ? null
+      : PlaceDbModel.fromJson(json['place'] as Map<String, dynamic>),
   lastSavedDeviceId: json['last_saved_device_id'] as String?,
   permanentlyDeletedAt: json['permanently_deleted_at'] == null
       ? null

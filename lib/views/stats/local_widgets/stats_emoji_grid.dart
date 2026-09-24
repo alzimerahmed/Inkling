@@ -65,8 +65,9 @@ class _StatsEmojiGrid extends StatelessWidget {
             ? Icon(SpIcons.expandLess, color: colorScheme.onSurface.withValues(alpha: 0.6))
             : Text(
                 '+${items.length - _kStatsTopVisible}',
-                style: TextTheme.of(context).bodyLarge
-                    ?.copyWith(fontWeight: FontWeight.bold, color: colorScheme.onSurface.withValues(alpha: 0.6)),
+                style: TextTheme.of(
+                  context,
+                ).bodyLarge?.copyWith(fontWeight: FontWeight.bold, color: colorScheme.onSurface.withValues(alpha: 0.6)),
               ),
       ),
     );

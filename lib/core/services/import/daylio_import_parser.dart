@@ -52,11 +52,9 @@ class DaylioImportParser {
         continue;
       }
 
-      final activities = cell(activitiesIdx)
-          .split(RegExp(r'[,;|]'))
-          .map((e) => e.trim())
-          .where((e) => e.isNotEmpty)
-          .toList();
+      final activities = cell(
+        activitiesIdx,
+      ).split(RegExp(r'[,;|]')).map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
 
       final body = [if (noteTitle.isNotEmpty) noteTitle, if (note.isNotEmpty) note].join('\n\n');
 

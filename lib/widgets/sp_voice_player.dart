@@ -420,14 +420,16 @@ class _SpVoicePlayerState extends State<SpVoicePlayer> with WidgetsBindingObserv
                     buildPlayPauseButton(context),
                     Text(
                       DurationFormatService.formatDuration(_isDragging ? _draggedPosition : _position),
-                      style: Theme.of(context).textTheme.labelSmall
-                          ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.labelSmall?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     ),
                     Expanded(child: buildSpeedLabelButton(context)),
                     Text(
                       DurationFormatService.formatDuration(_duration),
-                      style: Theme.of(context).textTheme.labelSmall
-                          ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.labelSmall?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     ),
                     const SizedBox(width: 16.0),
                   ],
@@ -475,8 +477,10 @@ class _SpVoicePlayerState extends State<SpVoicePlayer> with WidgetsBindingObserv
                 padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                 child: Text(
                   '${speed}x',
-                  style: Theme.of(context).textTheme.labelSmall
-                      ?.copyWith(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w600),
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),

@@ -84,8 +84,9 @@ class EditTemplateViewModel extends ChangeNotifier with DisposeAwareMixin, Debou
   }
 
   Future<void> swapPages({required int oldIndex, required int newIndex}) async {
-    List<StoryPageDbModel> pages = [...draftContent?.richPages ?? <StoryPageDbModel>[]]
-        .swap(oldIndex: oldIndex, newIndex: newIndex);
+    List<StoryPageDbModel> pages = [
+      ...draftContent?.richPages ?? <StoryPageDbModel>[],
+    ].swap(oldIndex: oldIndex, newIndex: newIndex);
 
     final plainTextResult = GenerateBodyPlainTextService.call(pages);
 

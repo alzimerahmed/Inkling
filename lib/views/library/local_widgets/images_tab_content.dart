@@ -107,8 +107,9 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
                   padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
                   child: Text(
                     dayLabel,
-                    style: Theme.of(context).textTheme.titleSmall
-                        ?.copyWith(color: Theme.of(context).colorScheme.outline),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.outline),
                   ),
                 ),
                 MasonryGridView.builder(

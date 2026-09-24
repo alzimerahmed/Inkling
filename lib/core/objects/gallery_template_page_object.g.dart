@@ -23,7 +23,8 @@ abstract class _$GalleryTemplatePageObjectCWProxy {
 
 /// Callable proxy for `copyWith` functionality.
 /// Use as `instanceOfGalleryTemplatePageObject.copyWith(...)` or call `instanceOfGalleryTemplatePageObject.copyWith.fieldName(value)` for a single field.
-class _$GalleryTemplatePageObjectCWProxyImpl implements _$GalleryTemplatePageObjectCWProxy {
+class _$GalleryTemplatePageObjectCWProxyImpl
+    implements _$GalleryTemplatePageObjectCWProxy {
   const _$GalleryTemplatePageObjectCWProxyImpl(this._value);
 
   final GalleryTemplatePageObject _value;
@@ -34,7 +35,6 @@ class _$GalleryTemplatePageObjectCWProxyImpl implements _$GalleryTemplatePageObj
   @override
   GalleryTemplatePageObject content(String content) => call(content: content);
 
-  @override
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `GalleryTemplatePageObject(...).copyWith.fieldName(value)`.
   ///
@@ -42,6 +42,7 @@ class _$GalleryTemplatePageObjectCWProxyImpl implements _$GalleryTemplatePageObj
   /// ```dart
   /// GalleryTemplatePageObject(...).copyWith(id: 12, name: "My name")
   /// ```
+  @override
   GalleryTemplatePageObject call({
     Object? title = const $CopyWithPlaceholder(),
     Object? content = const $CopyWithPlaceholder(),
@@ -63,7 +64,8 @@ extension $GalleryTemplatePageObjectCopyWith on GalleryTemplatePageObject {
   /// Returns a callable class used to build a new instance with modified fields.
   /// Example: `instanceOfGalleryTemplatePageObject.copyWith(...)` or `instanceOfGalleryTemplatePageObject.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$GalleryTemplatePageObjectCWProxy get copyWith => _$GalleryTemplatePageObjectCWProxyImpl(this);
+  _$GalleryTemplatePageObjectCWProxy get copyWith =>
+      _$GalleryTemplatePageObjectCWProxyImpl(this);
 }
 
 // **************************************************************************

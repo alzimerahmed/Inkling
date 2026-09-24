@@ -36,8 +36,9 @@ class _LicenseText extends StatelessWidget {
             ),
             TextSpan(
               text: tr("list_tile.licenses.title"),
-              style: TextTheme.of(context).titleMedium
-                  ?.copyWith(color: foregroundColor, decorationColor: foregroundColor),
+              style: TextTheme.of(
+                context,
+              ).titleMedium?.copyWith(color: foregroundColor, decorationColor: foregroundColor),
             ),
           ],
         ),

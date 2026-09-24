@@ -16,8 +16,9 @@ class _Preview extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      margin: const EdgeInsets.symmetric(horizontal: 16)
-          .add(EdgeInsets.only(left: MediaQuery.paddingOf(context).left, right: MediaQuery.paddingOf(context).right)),
+      margin: const EdgeInsets.symmetric(
+        horizontal: 16,
+      ).add(EdgeInsets.only(left: MediaQuery.paddingOf(context).left, right: MediaQuery.paddingOf(context).right)),
       decoration: BoxDecoration(color: colorScheme.readOnly.surface1, borderRadius: BorderRadius.circular(16)),
       child: Column(
         children: [

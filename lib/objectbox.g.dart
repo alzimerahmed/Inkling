@@ -9,7 +9,8 @@
 import 'dart:typed_data';
 
 import 'package:flat_buffers/flat_buffers.dart' as fb;
-import 'package:objectbox/internal.dart' as obx_int; // generated code can access "internal" functionality
+import 'package:objectbox/internal.dart'
+    as obx_int; // generated code can access "internal" functionality
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
@@ -819,7 +820,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (StoryObjectBox object, fb.Builder fbb) {
         final typeOffset = fbb.writeString(object.type);
-        final feelingOffset = object.feeling == null ? null : fbb.writeString(object.feeling!);
+        final feelingOffset = object.feeling == null
+            ? null
+            : fbb.writeString(object.feeling!);
         final changesOffset = fbb.writeList(
           object.changes.map(fbb.writeString).toList(growable: false),
         );
@@ -831,16 +834,30 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final lastSavedDeviceIdOffset = object.lastSavedDeviceId == null
             ? null
             : fbb.writeString(object.lastSavedDeviceId!);
-        final assetsOffset = object.assets == null ? null : fbb.writeListInt64(object.assets!);
-        final preferencesOffset = object.preferences == null ? null : fbb.writeString(object.preferences!);
-        final latestContentOffset = object.latestContent == null ? null : fbb.writeString(object.latestContent!);
-        final draftContentOffset = object.draftContent == null ? null : fbb.writeString(object.draftContent!);
+        final assetsOffset = object.assets == null
+            ? null
+            : fbb.writeListInt64(object.assets!);
+        final preferencesOffset = object.preferences == null
+            ? null
+            : fbb.writeString(object.preferences!);
+        final latestContentOffset = object.latestContent == null
+            ? null
+            : fbb.writeString(object.latestContent!);
+        final draftContentOffset = object.draftContent == null
+            ? null
+            : fbb.writeString(object.draftContent!);
         final galleryTemplateIdOffset = object.galleryTemplateId == null
             ? null
             : fbb.writeString(object.galleryTemplateId!);
-        final searchMetadataOffset = object.searchMetadata == null ? null : fbb.writeString(object.searchMetadata!);
-        final placeOffset = object.place == null ? null : fbb.writeString(object.place!);
-        final placeNameOffset = object.placeName == null ? null : fbb.writeString(object.placeName!);
+        final searchMetadataOffset = object.searchMetadata == null
+            ? null
+            : fbb.writeString(object.searchMetadata!);
+        final placeOffset = object.place == null
+            ? null
+            : fbb.writeString(object.place!);
+        final placeNameOffset = object.placeName == null
+            ? null
+            : fbb.writeString(object.placeName!);
         fbb.startTable(41);
         fbb.addInt64(0, object.id);
         fbb.addInt64(1, object.version);
@@ -885,7 +902,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           rootOffset,
           24,
         );
-        final permanentlyDeletedAtValue = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 44);
+        final permanentlyDeletedAtValue = const fb.Int64Reader()
+            .vTableGetNullable(buffer, rootOffset, 44);
         final idParam = const fb.Int64Reader().vTableGet(
           buffer,
           rootOffset,
@@ -1068,7 +1086,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (TagObjectBox object, fb.Builder fbb) {
         final titleOffset = fbb.writeString(object.title);
-        final emojiOffset = object.emoji == null ? null : fbb.writeString(object.emoji!);
+        final emojiOffset = object.emoji == null
+            ? null
+            : fbb.writeString(object.emoji!);
         final lastSavedDeviceIdOffset = object.lastSavedDeviceId == null
             ? null
             : fbb.writeString(object.lastSavedDeviceId!);
@@ -1089,7 +1109,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
-        final permanentlyDeletedAtValue = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 20);
+        final permanentlyDeletedAtValue = const fb.Int64Reader()
+            .vTableGetNullable(buffer, rootOffset, 20);
         final idParam = const fb.Int64Reader().vTableGet(
           buffer,
           rootOffset,
@@ -1174,7 +1195,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
-        final permanentlyDeletedAtValue = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 14);
+        final permanentlyDeletedAtValue = const fb.Int64Reader()
+            .vTableGetNullable(buffer, rootOffset, 14);
         final idParam = const fb.Int64Reader().vTableGet(
           buffer,
           rootOffset,
@@ -1228,9 +1250,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ? null
             : fbb.writeString(object.lastSavedDeviceId!);
         final originalSourceOffset = fbb.writeString(object.originalSource);
-        final typeOffset = object.type == null ? null : fbb.writeString(object.type!);
-        final metadataOffset = object.metadata == null ? null : fbb.writeString(object.metadata!);
-        final tagsOffset = object.tags == null ? null : fbb.writeListInt64(object.tags!);
+        final typeOffset = object.type == null
+            ? null
+            : fbb.writeString(object.type!);
+        final metadataOffset = object.metadata == null
+            ? null
+            : fbb.writeString(object.metadata!);
+        final tagsOffset = object.tags == null
+            ? null
+            : fbb.writeListInt64(object.tags!);
         fbb.startTable(16);
         fbb.addInt64(0, object.id);
         fbb.addOffset(2, cloudDestinationsOffset);
@@ -1251,7 +1279,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
-        final permanentlyDeletedAtValue = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 14);
+        final permanentlyDeletedAtValue = const fb.Int64Reader()
+            .vTableGetNullable(buffer, rootOffset, 14);
         final idParam = const fb.Int64Reader().vTableGet(
           buffer,
           rootOffset,
@@ -1329,14 +1358,24 @@ obx_int.ModelDefinition getObjectBoxModel() {
         object.id = id;
       },
       objectToFB: (TemplateObjectBox object, fb.Builder fbb) {
-        final tagsOffset = object.tags == null ? null : fbb.writeListInt64(object.tags!);
-        final contentOffset = object.content == null ? null : fbb.writeString(object.content!);
+        final tagsOffset = object.tags == null
+            ? null
+            : fbb.writeListInt64(object.tags!);
+        final contentOffset = object.content == null
+            ? null
+            : fbb.writeString(object.content!);
         final lastSavedDeviceIdOffset = object.lastSavedDeviceId == null
             ? null
             : fbb.writeString(object.lastSavedDeviceId!);
-        final preferencesOffset = object.preferences == null ? null : fbb.writeString(object.preferences!);
-        final noteOffset = object.note == null ? null : fbb.writeString(object.note!);
-        final nameOffset = object.name == null ? null : fbb.writeString(object.name!);
+        final preferencesOffset = object.preferences == null
+            ? null
+            : fbb.writeString(object.preferences!);
+        final noteOffset = object.note == null
+            ? null
+            : fbb.writeString(object.note!);
+        final nameOffset = object.name == null
+            ? null
+            : fbb.writeString(object.name!);
         final galleryTemplateIdOffset = object.galleryTemplateId == null
             ? null
             : fbb.writeString(object.galleryTemplateId!);
@@ -1360,7 +1399,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
-        final permanentlyDeletedAtValue = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 16);
+        final permanentlyDeletedAtValue = const fb.Int64Reader()
+            .vTableGetNullable(buffer, rootOffset, 16);
         final archivedAtValue = const fb.Int64Reader().vTableGetNullable(
           buffer,
           rootOffset,
@@ -1403,7 +1443,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final updatedAtParam = DateTime.fromMillisecondsSinceEpoch(
           const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0),
         );
-        final archivedAtParam = archivedAtValue == null ? null : DateTime.fromMillisecondsSinceEpoch(archivedAtValue);
+        final archivedAtParam = archivedAtValue == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(archivedAtValue);
         final permanentlyDeletedAtParam = permanentlyDeletedAtValue == null
             ? null
             : DateTime.fromMillisecondsSinceEpoch(permanentlyDeletedAtValue);
@@ -1458,7 +1500,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
-        final permanentlyDeletedAtValue = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 14);
+        final permanentlyDeletedAtValue = const fb.Int64Reader()
+            .vTableGetNullable(buffer, rootOffset, 14);
         final idParam = const fb.Int64Reader().vTableGet(
           buffer,
           rootOffset,
@@ -1532,7 +1575,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
-        final permanentlyDeletedAtValue = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 18);
+        final permanentlyDeletedAtValue = const fb.Int64Reader()
+            .vTableGetNullable(buffer, rootOffset, 18);
         final idParam = const fb.Int64Reader().vTableGet(
           buffer,
           rootOffset,
@@ -1617,7 +1661,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
-        final permanentlyDeletedAtValue = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 20);
+        final permanentlyDeletedAtValue = const fb.Int64Reader()
+            .vTableGetNullable(buffer, rootOffset, 20);
         final idParam = const fb.Int64Reader().vTableGet(
           buffer,
           rootOffset,
@@ -1927,7 +1972,8 @@ class PreferenceObjectBox_ {
   );
 
   /// See [PreferenceObjectBox.permanentlyDeletedAt].
-  static final permanentlyDeletedAt = obx.QueryDateProperty<PreferenceObjectBox>(_entities[2].properties[5]);
+  static final permanentlyDeletedAt =
+      obx.QueryDateProperty<PreferenceObjectBox>(_entities[2].properties[5]);
 
   /// See [PreferenceObjectBox.lastSavedDeviceId].
   static final lastSavedDeviceId = obx.QueryStringProperty<PreferenceObjectBox>(
@@ -2205,8 +2251,10 @@ class TagCategoryObjectBox_ {
   );
 
   /// See [TagCategoryObjectBox.permanentlyDeletedAt].
-  static final permanentlyDeletedAt = obx.QueryDateProperty<TagCategoryObjectBox>(_entities[7].properties[8]);
+  static final permanentlyDeletedAt =
+      obx.QueryDateProperty<TagCategoryObjectBox>(_entities[7].properties[8]);
 
   /// See [TagCategoryObjectBox.lastSavedDeviceId].
-  static final lastSavedDeviceId = obx.QueryStringProperty<TagCategoryObjectBox>(_entities[7].properties[9]);
+  static final lastSavedDeviceId =
+      obx.QueryStringProperty<TagCategoryObjectBox>(_entities[7].properties[9]);
 }

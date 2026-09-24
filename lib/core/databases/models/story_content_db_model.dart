@@ -73,8 +73,9 @@ class StoryContentDbModel extends BaseDbModel with Comparable {
   });
 
   StoryContentDbModel reorder({required int oldIndex, required int newIndex}) {
-    List<StoryPageDbModel> newRichPages = [...richPages ?? <StoryPageDbModel>[]]
-        .reorder(oldIndex: oldIndex, newIndex: newIndex);
+    List<StoryPageDbModel> newRichPages = [
+      ...richPages ?? <StoryPageDbModel>[],
+    ].reorder(oldIndex: oldIndex, newIndex: newIndex);
 
     final plainTextResult = GenerateBodyPlainTextService.call(newRichPages);
 

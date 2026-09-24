@@ -107,9 +107,9 @@ class _ExportSectionState extends State<_ExportSection> {
           ),
           Container(
             width: double.infinity,
-            margin: MediaQuery.paddingOf(context)
-                .copyWith(top: 0.0, bottom: 0)
-                .add(const EdgeInsets.symmetric(horizontal: 16.0)),
+            margin: MediaQuery.paddingOf(
+              context,
+            ).copyWith(top: 0.0, bottom: 0).add(const EdgeInsets.symmetric(horizontal: 16.0)),
             child: Builder(
               builder: (context) {
                 return FilledButton(
@@ -126,9 +126,9 @@ class _ExportSectionState extends State<_ExportSection> {
           const Divider(height: 32.0),
           Container(
             width: double.infinity,
-            margin: MediaQuery.paddingOf(context)
-                .copyWith(top: 0.0, bottom: 0)
-                .add(const EdgeInsets.symmetric(horizontal: 16.0)),
+            margin: MediaQuery.paddingOf(
+              context,
+            ).copyWith(top: 0.0, bottom: 0).add(const EdgeInsets.symmetric(horizontal: 16.0)),
             child: TextButton.icon(
               icon: const Icon(SpIcons.photo),
               label: Text(tr('button.export_assets')),

@@ -87,8 +87,9 @@ class _VoicesTabContentState extends State<_VoicesTabContent> with AutomaticKeep
                   padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                   child: Text(
                     dayLabel,
-                    style: Theme.of(context).textTheme.titleSmall
-                        ?.copyWith(color: Theme.of(context).colorScheme.outline),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.outline),
                   ),
                 ),
                 ...dayAssets.map((asset) {

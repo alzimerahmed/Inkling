@@ -38,8 +38,9 @@ class SpCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: TextTheme.of(context).titleMedium
-                          ?.copyWith(color: ColorScheme.of(context).secondary, fontWeight: FontWeight.bold),
+                      style: TextTheme.of(
+                        context,
+                      ).titleMedium?.copyWith(color: ColorScheme.of(context).secondary, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       subtitle,
