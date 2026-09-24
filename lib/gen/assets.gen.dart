@@ -427,6 +427,30 @@ class $AssetsEmoji64Gen {
   ];
 }
 
+class $AssetsFontsGen {
+  const $AssetsFontsGen();
+
+  /// File path: assets/fonts/NotoSans-Regular.ttf
+  String get notoSansRegular => 'assets/fonts/NotoSans-Regular.ttf';
+
+  /// File path: assets/fonts/NotoSansArabic-Regular.ttf
+  String get notoSansArabicRegular => 'assets/fonts/NotoSansArabic-Regular.ttf';
+
+  /// File path: assets/fonts/OFL-NotoSans.txt
+  String get oFLNotoSans => 'assets/fonts/OFL-NotoSans.txt';
+
+  /// File path: assets/fonts/OFL-NotoSansArabic.txt
+  String get oFLNotoSansArabic => 'assets/fonts/OFL-NotoSansArabic.txt';
+
+  /// List of all assets
+  List<String> get values => [
+    notoSansRegular,
+    notoSansArabicRegular,
+    oFLNotoSans,
+    oFLNotoSansArabic,
+  ];
+}
+
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
@@ -697,6 +721,7 @@ class $AssetsLogosStorypadLogo61IconAssetsGen {
 
 abstract final class Assets {
   static const $AssetsEmoji64Gen emoji64 = $AssetsEmoji64Gen();
+  static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLogosGen logos = $AssetsLogosGen();
   static const $TemplatesGen templates = $TemplatesGen();
