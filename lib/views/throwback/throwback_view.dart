@@ -10,10 +10,7 @@ import 'throwback_view_model.dart';
 part 'throwback_content.dart';
 
 class ThrowbackRoute extends BaseRoute {
-  const ThrowbackRoute({
-    required this.day,
-    required this.month,
-  });
+  const ThrowbackRoute({required this.day, required this.month});
 
   final int day;
   final int month;
@@ -26,10 +23,7 @@ class ThrowbackRoute extends BaseRoute {
 }
 
 class ThrowbackView extends StatelessWidget {
-  const ThrowbackView({
-    super.key,
-    required this.params,
-  });
+  const ThrowbackView({super.key, required this.params});
 
   final ThrowbackRoute params;
 

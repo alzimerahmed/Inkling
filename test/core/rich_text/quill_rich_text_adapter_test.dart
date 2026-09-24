@@ -247,10 +247,7 @@ void main() {
           readOnly: false,
         );
 
-        adapter.insertMedia(
-          controller: controller,
-          mediaPath: 'images/test.jpg',
-        );
+        adapter.insertMedia(controller: controller, mediaPath: 'images/test.jpg');
 
         final serialized = controller.serialize();
         final hasImage = serialized.any((op) {
@@ -271,10 +268,7 @@ void main() {
           readOnly: false,
         );
 
-        adapter.insertMedia(
-          controller: controller,
-          mediaPath: 'images/replacement.jpg',
-        );
+        adapter.insertMedia(controller: controller, mediaPath: 'images/replacement.jpg');
 
         final plainText = controller.getPlainText();
         expect(plainText, contains('this text'));
@@ -291,10 +285,7 @@ void main() {
           readOnly: false,
         );
 
-        adapter.insertMedia(
-          controller: controller,
-          mediaPath: 'images/test.jpg',
-        );
+        adapter.insertMedia(controller: controller, mediaPath: 'images/test.jpg');
 
         // Cursor should be after the image (position 5: "Test" + image)
         expect(controller.selection.baseOffset, equals(5));
@@ -310,10 +301,7 @@ void main() {
           readOnly: false,
         );
 
-        adapter.insertMedia(
-          controller: controller,
-          mediaPath: 'images/test.jpg',
-        );
+        adapter.insertMedia(controller: controller, mediaPath: 'images/test.jpg');
 
         final serialized = controller.serialize();
         final imageOp = serialized.firstWhere((op) {
@@ -326,19 +314,12 @@ void main() {
       });
 
       test('handles various image paths correctly', () {
-        final testPaths = [
-          'images/photo.jpg',
-          'images/subfolder/image.png',
-          'assets/img/picture.gif',
-        ];
+        final testPaths = ['images/photo.jpg', 'images/subfolder/image.png', 'assets/img/picture.gif'];
 
         for (final path in testPaths) {
           final controller = adapter.createEmptyController(readOnly: false);
 
-          adapter.insertMedia(
-            controller: controller,
-            mediaPath: path,
-          );
+          adapter.insertMedia(controller: controller, mediaPath: path);
 
           final serialized = controller.serialize();
           final hasImage = serialized.any((op) {
@@ -362,10 +343,7 @@ void main() {
           readOnly: false,
         );
 
-        adapter.insertAudio(
-          controller: controller,
-          audioPath: 'audio/recording.m4a',
-        );
+        adapter.insertAudio(controller: controller, audioPath: 'audio/recording.m4a');
 
         final serialized = controller.serialize();
         final hasAudio = serialized.any((op) {
@@ -386,10 +364,7 @@ void main() {
           readOnly: false,
         );
 
-        adapter.insertAudio(
-          controller: controller,
-          audioPath: 'audio/voice.m4a',
-        );
+        adapter.insertAudio(controller: controller, audioPath: 'audio/voice.m4a');
 
         final plainText = controller.getPlainText();
         expect(plainText, contains('this'));
@@ -406,29 +381,19 @@ void main() {
           readOnly: false,
         );
 
-        adapter.insertAudio(
-          controller: controller,
-          audioPath: 'audio/test.m4a',
-        );
+        adapter.insertAudio(controller: controller, audioPath: 'audio/test.m4a');
 
         // Cursor should be after the audio (position 5: "Test" + audio)
         expect(controller.selection.baseOffset, equals(5));
       });
 
       test('handles various audio paths correctly', () {
-        final testPaths = [
-          'audio/recording.m4a',
-          'audio/subfolder/voice.wav',
-          'assets/sounds/music.mp3',
-        ];
+        final testPaths = ['audio/recording.m4a', 'audio/subfolder/voice.wav', 'assets/sounds/music.mp3'];
 
         for (final path in testPaths) {
           final controller = adapter.createEmptyController(readOnly: false);
 
-          adapter.insertAudio(
-            controller: controller,
-            audioPath: path,
-          );
+          adapter.insertAudio(controller: controller, audioPath: path);
 
           final serialized = controller.serialize();
           final hasAudio = serialized.any((op) {
@@ -449,10 +414,7 @@ void main() {
 
       test('provides all adapter methods', () {
         expect(editorAdapter.localizationsDelegates, isNotEmpty);
-        expect(
-          () => editorAdapter.createEmptyController(readOnly: false),
-          returnsNormally,
-        );
+        expect(() => editorAdapter.createEmptyController(readOnly: false), returnsNormally);
         expect(() => editorAdapter.createEmptyDocument(), returnsNormally);
       });
 
@@ -501,10 +463,7 @@ void main() {
       test('inserting image and then serializing maintains data', () {
         final controller = adapter.createEmptyController(readOnly: false);
 
-        adapter.insertMedia(
-          controller: controller,
-          mediaPath: 'images/test.jpg',
-        );
+        adapter.insertMedia(controller: controller, mediaPath: 'images/test.jpg');
 
         final json = controller.serialize();
         final newController = adapter.createController(
@@ -524,10 +483,7 @@ void main() {
       test('inserting audio and then serializing maintains data', () {
         final controller = adapter.createEmptyController(readOnly: false);
 
-        adapter.insertAudio(
-          controller: controller,
-          audioPath: 'audio/test.m4a',
-        );
+        adapter.insertAudio(controller: controller, audioPath: 'audio/test.m4a');
 
         final json = controller.serialize();
         final newController = adapter.createController(

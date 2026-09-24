@@ -18,11 +18,7 @@ class _TagsContent extends StatelessWidget {
             body: TabBarView(
               children: [
                 buildCategory(context, provider, categoryId: null),
-                buildCategory(
-                  context,
-                  provider,
-                  categoryId: TagCategoryDbModel.peopleId,
-                ),
+                buildCategory(context, provider, categoryId: TagCategoryDbModel.peopleId),
               ],
             ),
           );
@@ -43,18 +39,12 @@ class _TagsContent extends StatelessWidget {
       actions: [
         if (viewModel.params.pickMode) ...[
           if (viewModel.params.maxCount != null)
-            SpCapacityBadge(
-              current: viewModel.selectedTags.length,
-              max: viewModel.params.maxCount!,
-            ),
+            SpCapacityBadge(current: viewModel.selectedTags.length, max: viewModel.params.maxCount!),
           const SizedBox(width: 4),
           TextButton(
             onPressed: () {
               final selected =
-                  provider.allTags?.items
-                      .where((t) => viewModel.selectedTags.contains(t.id))
-                      .toList() ??
-                  [];
+                  provider.allTags?.items.where((t) => viewModel.selectedTags.contains(t.id)).toList() ?? [];
               Navigator.maybePop(context, selected);
             },
             child: Text(tr('button.done')),
@@ -64,9 +54,7 @@ class _TagsContent extends StatelessWidget {
             tooltip: tr("page.new_tag.title"),
             icon: const Icon(SpIcons.add),
             onPressed: () {
-              final categoryId = DefaultTabController.of(context).index == 1
-                  ? TagCategoryDbModel.peopleId
-                  : null;
+              final categoryId = DefaultTabController.of(context).index == 1 ? TagCategoryDbModel.peopleId : null;
               provider.addTag(context, categoryId: categoryId);
             },
           ),
@@ -74,25 +62,16 @@ class _TagsContent extends StatelessWidget {
     );
   }
 
-  Widget buildCategory(
-    BuildContext context,
-    TagsProvider provider, {
-    required int? categoryId,
-  }) {
+  Widget buildCategory(BuildContext context, TagsProvider provider, {required int? categoryId}) {
     return RefreshIndicator.adaptive(
       onRefresh: () => provider.reload(),
       child: buildBody(context, provider, categoryId: categoryId),
     );
   }
 
-  Widget buildBody(
-    BuildContext context,
-    TagsProvider provider, {
-    required int? categoryId,
-  }) {
+  Widget buildBody(BuildContext context, TagsProvider provider, {required int? categoryId}) {
     final collection = provider.tagsOf(categoryId);
-    if (collection?.items == null)
-      return const Center(child: CircularProgressIndicator.adaptive());
+    if (collection?.items == null) return const Center(child: CircularProgressIndicator.adaptive());
 
     if (collection?.items.isEmpty == true) {
       return buildEmptyBody(context, categoryId: categoryId);
@@ -103,13 +82,9 @@ class _TagsContent extends StatelessWidget {
         padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
         buildDefaultDragHandles: true,
         itemCount: collection?.items.length ?? 0,
-        onReorderItem: (int oldIndex, int newIndex) =>
-            provider.reorder(oldIndex, newIndex, categoryId: categoryId),
+        onReorderItem: (int oldIndex, int newIndex) => provider.reorder(oldIndex, newIndex, categoryId: categoryId),
         proxyDecorator: (child, index, animation) {
-          return Container(
-            color: Theme.of(context).colorScheme.readOnly.surface5,
-            child: child,
-          );
+          return Container(color: Theme.of(context).colorScheme.readOnly.surface5, child: child);
         },
         itemBuilder: (context, index) {
           final tag = collection!.items[index];
@@ -124,8 +99,7 @@ class _TagsContent extends StatelessWidget {
                     motion: const DrawerMotion(),
                     children: [
                       SlidableAction(
-                        onPressed: (context) =>
-                            provider.deleteTag(context, tag),
+                        onPressed: (context) => provider.deleteTag(context, tag),
                         backgroundColor: ColorScheme.of(context).error,
                         foregroundColor: ColorScheme.of(context).onError,
                         icon: SpIcons.delete,
@@ -140,22 +114,14 @@ class _TagsContent extends StatelessWidget {
                       ),
                     ],
                   ),
-            child: Material(
-              color: Colors.transparent,
-              child: buildTile(tag, storyCount, provider, context),
-            ),
+            child: Material(color: Colors.transparent, child: buildTile(tag, storyCount, provider, context)),
           );
         },
       ),
     );
   }
 
-  Widget buildTile(
-    TagDbModel tag,
-    int storyCount,
-    TagsProvider provider,
-    BuildContext context,
-  ) {
+  Widget buildTile(TagDbModel tag, int storyCount, TagsProvider provider, BuildContext context) {
     return ListTile(
       tileColor: Colors.transparent,
       contentPadding: !viewModel.checkable
@@ -164,28 +130,17 @@ class _TagsContent extends StatelessWidget {
       title: Text(tag.title),
       subtitle: Text(plural("plural.entry", storyCount)),
       trailing:
-          [
-            TargetPlatform.linux,
-            TargetPlatform.windows,
-            TargetPlatform.macOS,
-          ].contains(Theme.of(context).platform)
+          [TargetPlatform.linux, TargetPlatform.windows, TargetPlatform.macOS].contains(Theme.of(context).platform)
           ? null
           : const Icon(SpIcons.dragIndicator),
       onTap: viewModel.params.pickMode
           ? () async {
               final isSelected = viewModel.selectedTags.contains(tag.id);
               final maxCount = viewModel.params.maxCount;
-              if (!isSelected &&
-                  maxCount != null &&
-                  viewModel.selectedTags.length >= maxCount)
-                return;
+              if (!isSelected && maxCount != null && viewModel.selectedTags.length >= maxCount) return;
               await viewModel.onToggle(tag, !isSelected);
             }
-          : () => provider.viewTag(
-              context: context,
-              tag: tag,
-              storyViewOnly: viewModel.params.storyViewOnly,
-            ),
+          : () => provider.viewTag(context: context, tag: tag, storyViewOnly: viewModel.params.storyViewOnly),
       leading: !viewModel.checkable
           ? null
           : Checkbox.adaptive(
@@ -194,8 +149,7 @@ class _TagsContent extends StatelessWidget {
               onChanged:
                   viewModel.params.pickMode &&
                       viewModel.params.maxCount != null &&
-                      viewModel.selectedTags.length >=
-                          viewModel.params.maxCount! &&
+                      viewModel.selectedTags.length >= viewModel.params.maxCount! &&
                       !viewModel.selectedTags.contains(tag.id)
                   ? null
                   : (value) async {
@@ -227,9 +181,7 @@ class _TagsContent extends StatelessWidget {
                 children: [
                   Icon(isPeople ? SpIcons.people : SpIcons.tag, size: 32.0),
                   Text(
-                    isPeople
-                        ? tr("page.tags.people_empty_message")
-                        : tr("page.tags.empty_message"),
+                    isPeople ? tr("page.tags.people_empty_message") : tr("page.tags.empty_message"),
                     textAlign: TextAlign.center,
                     style: TextTheme.of(context).bodyLarge,
                   ),

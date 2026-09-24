@@ -12,11 +12,7 @@ import 'package:storypad/providers/device_preferences_provider.dart';
 /// down to just Monday) instead of every uncheck bouncing back to "all
 /// selected".
 class ReminderWeekdaysChips extends StatelessWidget {
-  const ReminderWeekdaysChips({
-    super.key,
-    required this.weekdays,
-    required this.onChanged,
-  });
+  const ReminderWeekdaysChips({super.key, required this.weekdays, required this.onChanged});
 
   /// 1=Mon..7=Sun. Empty = every day (once saved).
   final Set<int> weekdays;
@@ -51,17 +47,11 @@ class ReminderWeekdaysChips extends StatelessWidget {
 
   String _label(BuildContext context, int weekday) {
     // date with weekday == w for w in 1..7 (Jan 1 2024 is a Monday).
-    return DateFormat.E(
-      context.locale.toString(),
-    ).format(DateTime(2024, 1, weekday));
+    return DateFormat.E(context.locale.toString()).format(DateTime(2024, 1, weekday));
   }
 
   List<int> _orderedWeekdays(BuildContext context) {
-    final firstDay = context
-        .read<DevicePreferencesProvider>()
-        .preferences
-        .firstDayOfWeek
-        .value;
+    final firstDay = context.read<DevicePreferencesProvider>().preferences.firstDayOfWeek.value;
     return List.generate(7, (i) => ((firstDay - 1 + i) % 7) + 1);
   }
 }

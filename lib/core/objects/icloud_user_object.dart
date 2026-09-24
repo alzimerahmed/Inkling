@@ -39,11 +39,7 @@ class ICloudUserObject extends CloudServiceUser {
   @override
   BackupServiceType get serviceType => BackupServiceType.icloud;
 
-  ICloudUserObject({
-    required this.accountId,
-    required this.autoBackupEnabled,
-    this.identityTokenFingerprint,
-  });
+  ICloudUserObject({required this.accountId, required this.autoBackupEnabled, this.identityTokenFingerprint});
 
   /// CloudKit exposes no Apple ID/email for privacy reasons, so this is the
   /// raw [accountId] — deliberately not prefixed with anything like

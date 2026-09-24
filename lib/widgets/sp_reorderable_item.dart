@@ -41,19 +41,13 @@ class _SpReorderableItemState extends State<SpReorderableItem> {
             builder: (context, size, child) {
               return Material(
                 color: Colors.transparent,
-                child: SizedBox(
-                  width: size?.width,
-                  height: size?.height,
-                  child: child,
-                ),
+                child: SizedBox(width: size?.width, height: size?.height, child: child),
               );
             },
           ),
           child: SpMeasureSize(
             onChange: (size) => sizeNotifier.value = size,
-            child: candidateItems.isNotEmpty
-                ? Opacity(opacity: 0.5, child: widget.child)
-                : widget.child,
+            child: candidateItems.isNotEmpty ? Opacity(opacity: 0.5, child: widget.child) : widget.child,
           ),
         );
       },

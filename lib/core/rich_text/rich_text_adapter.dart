@@ -45,11 +45,7 @@ abstract class RichTextAdapter {
   });
 
   /// Builds the rich text toolbar widget.
-  Widget buildToolbar({
-    required BuildContext context,
-    required RichTextController controller,
-    Color? backgroundColor,
-  });
+  Widget buildToolbar({required BuildContext context, required RichTextController controller, Color? backgroundColor});
 
   // ========================================================================
   // Factory Methods
@@ -67,14 +63,10 @@ abstract class RichTextAdapter {
   });
 
   /// Creates a RichTextController with empty content.
-  RichTextController createEmptyController({
-    required bool readOnly,
-  });
+  RichTextController createEmptyController({required bool readOnly});
 
   /// Creates a RichTextDocument from JSON data.
-  RichTextDocument createDocument({
-    required List<dynamic> json,
-  });
+  RichTextDocument createDocument({required List<dynamic> json});
 
   /// Creates an empty RichTextDocument.
   RichTextDocument createEmptyDocument();
@@ -87,19 +79,13 @@ abstract class RichTextAdapter {
   ///
   /// [controller]: The rich text controller
   /// [mediaPath]: Relative path to the image or video file
-  void insertMedia({
-    required RichTextController controller,
-    required String mediaPath,
-  });
+  void insertMedia({required RichTextController controller, required String mediaPath});
 
   /// Inserts an audio embed at the current cursor position.
   ///
   /// [controller]: The rich text controller
   /// [audioPath]: Relative path to the audio file
-  void insertAudio({
-    required RichTextController controller,
-    required String audioPath,
-  });
+  void insertAudio({required RichTextController controller, required String audioPath});
 }
 
 /// Global singleton instance for rich text editor adapter.

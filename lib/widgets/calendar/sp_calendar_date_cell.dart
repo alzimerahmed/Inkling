@@ -31,14 +31,10 @@ class SpCalendarDateCell extends StatelessWidget {
   final VoidCallback? onTap;
 
   bool get hasFeelings =>
-      isDisplayMonth &&
-      feelings != null &&
-      feelings!.any((feeling) => feeling != 'exist_but_not_set');
+      isDisplayMonth && feelings != null && feelings!.any((feeling) => feeling != 'exist_but_not_set');
 
   bool get hasStoriesButNoFeelings =>
-      isDisplayMonth &&
-      feelings != null &&
-      feelings!.every((feeling) => feeling == 'exist_but_not_set');
+      isDisplayMonth && feelings != null && feelings!.every((feeling) => feeling == 'exist_but_not_set');
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +51,7 @@ class SpCalendarDateCell extends StatelessWidget {
                 margin: const EdgeInsets.all(6.0),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.primary,
-                    width: isSelected ? 2 : 1,
-                  ),
+                  border: Border.all(color: Theme.of(context).colorScheme.primary, width: isSelected ? 2 : 1),
                 ),
               ),
             ),
@@ -73,8 +66,7 @@ class SpCalendarDateCell extends StatelessWidget {
   }
 
   bool get isSelected {
-    return "${date.day}-${date.month}-${date.year}" ==
-        "$selectedDay-$selectedMonth-$selectedYear";
+    return "${date.day}-${date.month}-${date.year}" == "$selectedDay-$selectedMonth-$selectedYear";
   }
 
   bool get isToday {
@@ -83,9 +75,7 @@ class SpCalendarDateCell extends StatelessWidget {
   }
 
   Widget _buildDateContent(BuildContext context) {
-    Color? backgroundColor = isSelected
-        ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
-        : null;
+    Color? backgroundColor = isSelected ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1) : null;
     Color foregroundColor = isSelected
         ? Theme.of(context).colorScheme.primary
         : Theme.of(context).colorScheme.onSurface;
@@ -100,18 +90,11 @@ class SpCalendarDateCell extends StatelessWidget {
         duration: Durations.medium1,
         curve: Curves.ease,
         margin: const EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: backgroundColor,
-        ),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: backgroundColor),
         alignment: Alignment.center,
         padding: const EdgeInsets.all(4.0),
         child: FittedBox(
-          child: buildFeelings(
-            feelings: feelings!
-                .where((feeling) => feeling != 'exist_but_not_set')
-                .toList(),
-          ),
+          child: buildFeelings(feelings: feelings!.where((feeling) => feeling != 'exist_but_not_set').toList()),
         ),
       );
     } else if (hasStoriesButNoFeelings) {
@@ -120,10 +103,7 @@ class SpCalendarDateCell extends StatelessWidget {
         duration: Durations.medium1,
         curve: Curves.ease,
         margin: const EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: backgroundColor,
-        ),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: backgroundColor),
         alignment: Alignment.center,
         child: Icon(SpIcons.check, color: foregroundColor),
       );
@@ -133,39 +113,26 @@ class SpCalendarDateCell extends StatelessWidget {
         duration: Durations.medium1,
         curve: Curves.ease,
         margin: const EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: backgroundColor,
-        ),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: backgroundColor),
         alignment: Alignment.center,
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
             DateFormatHelper.d(date, context.locale),
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: foregroundColor,
-            ),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: foregroundColor),
           ),
         ),
       );
     }
   }
 
-  Widget buildFeelings({
-    required List<String> feelings,
-  }) {
+  Widget buildFeelings({required List<String> feelings}) {
     if (feelings.length == 1) {
       return Text(
         feelings.first,
-        strutStyle: const StrutStyle(
-          fontSize: 56,
-          height: 1.0,
-        ),
-        style: const TextStyle(
-          fontSize: 56,
-          height: 1.0,
-        ),
+        strutStyle: const StrutStyle(fontSize: 56, height: 1.0),
+        style: const TextStyle(fontSize: 56, height: 1.0),
       );
     }
 
@@ -181,14 +148,8 @@ class SpCalendarDateCell extends StatelessWidget {
             duration: const Duration(seconds: 1),
             child: Text(
               emoji,
-              strutStyle: const StrutStyle(
-                fontSize: 56,
-                height: 1.0,
-              ),
-              style: const TextStyle(
-                fontSize: 100,
-                height: 1.0,
-              ),
+              strutStyle: const StrutStyle(fontSize: 56, height: 1.0),
+              style: const TextStyle(fontSize: 100, height: 1.0),
             ),
           ),
         );

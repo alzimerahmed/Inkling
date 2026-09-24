@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:storypad/core/extensions/color_scheme_extension.dart';
 
 class SpCapacityBadge extends StatelessWidget {
-  const SpCapacityBadge({
-    super.key,
-    required this.current,
-    required this.max,
-  });
+  const SpCapacityBadge({super.key, required this.current, required this.max});
 
   final int current;
   final int max;
@@ -30,16 +26,10 @@ class SpCapacityBadge extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(999),
-      ),
+      decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(999)),
       child: Text(
         '$current/$max',
-        style: TextTheme.of(context).labelMedium?.copyWith(
-          color: foregroundColor,
-          fontWeight: FontWeight.w700,
-        ),
+        style: TextTheme.of(context).labelMedium?.copyWith(color: foregroundColor, fontWeight: FontWeight.w700),
       ),
     );
   }

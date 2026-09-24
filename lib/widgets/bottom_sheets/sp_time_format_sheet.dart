@@ -7,10 +7,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/sp_single_state_widget.dart';
 
 class SpTimeFormatSheet extends BaseBottomSheet {
-  const SpTimeFormatSheet({
-    required this.timeFormat,
-    required this.onChanged,
-  });
+  const SpTimeFormatSheet({required this.timeFormat, required this.onChanged});
 
   final TimeFormatOption? timeFormat;
   final void Function(TimeFormatOption? timeFormat) onChanged;
@@ -31,19 +28,14 @@ class SpTimeFormatSheet extends BaseBottomSheet {
             mainAxisSize: MainAxisSize.min,
             children: [
               ...[null, ...TimeFormatOption.values].map((timeFormat) {
-                final label =
-                    timeFormat?.label ??
-                    "${context.tr('general.system')} (${context.tr('general.default')})";
+                final label = timeFormat?.label ?? "${context.tr('general.system')} (${context.tr('general.default')})";
 
                 return ListTile(
                   title: Text(label),
                   trailing: Visibility(
                     visible: timeFormat == selectedTimeFormat,
                     child: SpFadeIn.fromBottom(
-                      child: Icon(
-                        SpIcons.checkCircle,
-                        color: ColorScheme.of(context).primary,
-                      ),
+                      child: Icon(SpIcons.checkCircle, color: ColorScheme.of(context).primary),
                     ),
                   ),
                   onTap: () {

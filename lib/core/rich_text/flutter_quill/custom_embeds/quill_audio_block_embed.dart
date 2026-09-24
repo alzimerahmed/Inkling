@@ -17,11 +17,7 @@ class _QuillAudioBlockEmbed extends quill.EmbedBuilder {
 }
 
 class _QuillAudioRenderer extends StatefulWidget {
-  const _QuillAudioRenderer({
-    required this.node,
-    required this.controller,
-    required this.readOnly,
-  });
+  const _QuillAudioRenderer({required this.node, required this.controller, required this.readOnly});
 
   final quill.Embed node;
   final quill.QuillController controller;
@@ -53,11 +49,7 @@ class _QuillAudioRendererState extends State<_QuillAudioRenderer> {
         });
       }
     } catch (e) {
-      AppLogger.error(
-        '$runtimeType#loadAssetMetadata error loading audio metadata',
-        tag: '$runtimeType',
-        error: e,
-      );
+      AppLogger.error('$runtimeType#loadAssetMetadata error loading audio metadata', tag: '$runtimeType', error: e);
     }
   }
 
@@ -69,21 +61,13 @@ class _QuillAudioRendererState extends State<_QuillAudioRenderer> {
     final signedInServices = context.read<BackupProvider>().signedInServices;
     final downloader = BackupAssetDownloaderService();
 
-    return downloader.downloadAsset(
-      asset: _asset!,
-      signedInServices: signedInServices,
-    );
+    return downloader.downloadAsset(asset: _asset!, signedInServices: signedInServices);
   }
 
   void remove() {
     if (widget.readOnly) return;
 
-    widget.controller.replaceText(
-      widget.node.documentOffset,
-      widget.node.length,
-      '',
-      widget.controller.selection,
-    );
+    widget.controller.replaceText(widget.node.documentOffset, widget.node.length, '', widget.controller.selection);
   }
 
   @override

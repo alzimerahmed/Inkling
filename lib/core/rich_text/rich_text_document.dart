@@ -12,16 +12,12 @@ abstract class RichTextDocument {
   ///
   /// JSON structure depends on implementation (e.g., Quill Delta operations)
   factory RichTextDocument.fromJson(List<dynamic> json) {
-    throw UnimplementedError(
-      'RichTextDocument.fromJson must be implemented by adapter',
-    );
+    throw UnimplementedError('RichTextDocument.fromJson must be implemented by adapter');
   }
 
   /// Creates an empty document
   factory RichTextDocument.empty() {
-    throw UnimplementedError(
-      'RichTextDocument.empty must be implemented by adapter',
-    );
+    throw UnimplementedError('RichTextDocument.empty must be implemented by adapter');
   }
 
   /// Returns the length of the document in characters

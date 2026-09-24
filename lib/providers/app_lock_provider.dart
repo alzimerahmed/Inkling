@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:easy_localization/easy_localization.dart' show tr;
 import 'package:flutter/material.dart';
@@ -46,10 +47,7 @@ class AppLockProvider extends ChangeNotifier {
   }
 
   final avoidDublciated = AvoidDublicatedCallService<bool>();
-  Future<bool> authenticateIfHas({
-    required BuildContext context,
-    required String debugSource,
-  }) async {
+  Future<bool> authenticateIfHas({required BuildContext context, required String debugSource}) async {
     return avoidDublciated.run(() async {
       if (!hasAppLock) return true;
       if (appLock.pin != null) {
@@ -59,15 +57,11 @@ class AppLockProvider extends ChangeNotifier {
           invalidPinTitle: PinUnlockTitle.incorrect_pin,
           correctPin: appLock.pin!,
           onConfirmWithBiometrics: appLock.enabledBiometric == true && localAuth.canCheckBiometrics == true
-              ? () => localAuth.authenticate(
-                  title: tr('dialog.unlock_to_open_the_app.title'),
-                )
+              ? () => localAuth.authenticate(title: tr('dialog.unlock_to_open_the_app.title'))
               : null,
         ).push(context, rootNavigator: true).then((confirmed) => confirmed == true);
       } else {
-        return localAuth.authenticate(
-          title: tr('dialog.unlock_to_open_the_app.title'),
-        );
+        return localAuth.authenticate(title: tr('dialog.unlock_to_open_the_app.title'));
       }
     });
   }
@@ -116,12 +110,8 @@ class AppLockProvider extends ChangeNotifier {
     ).push(context, rootNavigator: true);
   }
 
-  Future<void> setSecurityAnswer(
-    Map<AppLockQuestion, String> securityAnswers,
-  ) async {
-    await storage.writeObject(
-      appLock.copyWith(securityAnswers: securityAnswers),
-    );
+  Future<void> setSecurityAnswer(Map<AppLockQuestion, String> securityAnswers) async {
+    await storage.writeObject(appLock.copyWith(securityAnswers: securityAnswers));
     await reload();
   }
 
@@ -132,16 +122,10 @@ class AppLockProvider extends ChangeNotifier {
     await SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        bool authenticated = await localAuth.authenticate(
-          title: tr('dialog.unlock_to_continue.title'),
-        );
+        bool authenticated = await localAuth.authenticate(title: tr('dialog.unlock_to_continue.title'));
 
         if (authenticated) {
-          await storage.writeObject(
-            appLock.copyWith(
-              enabledBiometric: !(appLock.enabledBiometric == true),
-            ),
-          );
+          await storage.writeObject(appLock.copyWith(enabledBiometric: !(appLock.enabledBiometric == true)));
           await reload();
         }
       },
@@ -156,10 +140,7 @@ class AppLockProvider extends ChangeNotifier {
       title: tr("page.security_questions.title"),
       toggleable: false,
       actions: questions.map((question) {
-        return AlertDialogAction(
-          key: question,
-          label: question.translatedQuestion,
-        );
+        return AlertDialogAction(key: question, label: question.translatedQuestion);
       }).toList(),
     );
 

@@ -60,13 +60,11 @@ class StoryHeader extends StatelessWidget {
     required BuildContext context,
   }) {
     return StoryHeader(
-      currentPageIndexNotifier:
-          viewModel.story?.preferences.layoutType == PageLayoutType.pages
+      currentPageIndexNotifier: viewModel.story?.preferences.layoutType == PageLayoutType.pages
           ? viewModel.pagesManager.currentPageIndexNotifier
           : null,
-      onSizeChange: (size) => viewModel.pagesManager.setHeaderHeight(
-        size.height + MediaQuery.of(context).padding.top + kToolbarHeight,
-      ),
+      onSizeChange: (size) =>
+          viewModel.pagesManager.setHeaderHeight(size.height + MediaQuery.of(context).padding.top + kToolbarHeight),
       story: viewModel.story!,
       draftContent: viewModel.draftContent!,
       setFeeling: viewModel.setFeeling,
@@ -90,13 +88,11 @@ class StoryHeader extends StatelessWidget {
   }) {
     return StoryHeader(
       page: page,
-      currentPageIndexNotifier:
-          viewModel.story?.preferences.layoutType == PageLayoutType.pages
+      currentPageIndexNotifier: viewModel.story?.preferences.layoutType == PageLayoutType.pages
           ? viewModel.pagesManager.currentPageIndexNotifier
           : null,
-      onSizeChange: (size) => viewModel.pagesManager.setHeaderHeight(
-        size.height + MediaQuery.of(context).padding.top + kToolbarHeight,
-      ),
+      onSizeChange: (size) =>
+          viewModel.pagesManager.setHeaderHeight(size.height + MediaQuery.of(context).padding.top + kToolbarHeight),
       story: viewModel.story!,
       draftContent: viewModel.draftContent!,
       setFeeling: viewModel.setFeeling,
@@ -120,9 +116,7 @@ class StoryHeader extends StatelessWidget {
           );
 
           if (result == OkCancelResult.ok) {
-            await StoryDbModel.db.set(
-              viewModel.story!.copyWith(draftContent: null),
-            );
+            await StoryDbModel.db.set(viewModel.story!.copyWith(draftContent: null));
             await viewModel.load();
           }
         },
@@ -140,21 +134,14 @@ class StoryHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SpMeasureSize(
-      onChange: onSizeChange,
-      child: buildContent(),
-    );
+    return SpMeasureSize(onChange: onSizeChange, child: buildContent());
   }
 
   Widget buildContent() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _StoryHeaderDateSelector(
-          story: story,
-          dateReadOnly: dateReadOnly,
-          onChangeDate: onChangeDate,
-        ),
+        _StoryHeaderDateSelector(story: story, dateReadOnly: dateReadOnly, onChangeDate: onChangeDate),
         SpStoryLabels(
           story: story,
           currentPagesCount: draftContent.richPages?.length,
@@ -175,21 +162,14 @@ class StoryHeader extends StatelessWidget {
 }
 
 class _StoryHeaderDateSelector extends StatelessWidget {
-  const _StoryHeaderDateSelector({
-    required this.story,
-    required this.dateReadOnly,
-    required this.onChangeDate,
-  });
+  const _StoryHeaderDateSelector({required this.story, required this.dateReadOnly, required this.onChangeDate});
 
   final StoryDbModel story;
   final bool dateReadOnly;
   final Future<void> Function(DateTime)? onChangeDate;
 
   Future<void> changeDate(BuildContext context) async {
-    DateTime? date = await DatePickerService(
-      context: context,
-      currentDate: story.displayPathDate,
-    ).show();
+    DateTime? date = await DatePickerService(context: context, currentDate: story.displayPathDate).show();
     if (date != null) {
       onChangeDate?.call(date);
     }
@@ -206,32 +186,21 @@ class _StoryHeaderDateSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String? daySuffix = DateFormatHelper.getDaySuffix(
-      story.displayPathDate.day,
-      context.locale,
-    );
+    final String? daySuffix = DateFormatHelper.getDaySuffix(story.displayPathDate.day, context.locale);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       alignment: .centerLeft,
       child: InkWell(
-        onTap: dateReadOnly || onChangeDate == null
-            ? () => openCalendar(context)
-            : () => changeDate(context),
+        onTap: dateReadOnly || onChangeDate == null ? () => openCalendar(context) : () => changeDate(context),
         borderRadius: BorderRadius.circular(4.0),
         child: Wrap(
           crossAxisAlignment: .center,
           children: [
             buildDay(context),
             const SizedBox(width: 4.0),
-            if (daySuffix != null)
-              buildDaySuffixMonthYear(context, daySuffix)
-            else
-              buildMonthYear(context),
-            if (!dateReadOnly) ...[
-              const SizedBox(width: 4.0),
-              const Icon(SpIcons.dropDown),
-            ],
+            if (daySuffix != null) buildDaySuffixMonthYear(context, daySuffix) else buildMonthYear(context),
+            if (!dateReadOnly) ...[const SizedBox(width: 4.0), const Icon(SpIcons.dropDown)],
           ],
         ),
       ),
@@ -243,14 +212,8 @@ class _StoryHeaderDateSelector extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          daySuffix,
-          style: TextTheme.of(context).labelSmall,
-        ),
-        Text(
-          DateFormatHelper.yMMMM(story.displayPathDate, context.locale),
-          style: TextTheme.of(context).labelMedium,
-        ),
+        Text(daySuffix, style: TextTheme.of(context).labelSmall),
+        Text(DateFormatHelper.yMMMM(story.displayPathDate, context.locale), style: TextTheme.of(context).labelMedium),
       ],
     );
   }
@@ -260,14 +223,8 @@ class _StoryHeaderDateSelector extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          DateFormatHelper.MMM(story.displayPathDate, context.locale),
-          style: TextTheme.of(context).labelSmall,
-        ),
-        Text(
-          DateFormatHelper.y(story.displayPathDate, context.locale),
-          style: TextTheme.of(context).labelSmall,
-        ),
+        Text(DateFormatHelper.MMM(story.displayPathDate, context.locale), style: TextTheme.of(context).labelSmall),
+        Text(DateFormatHelper.y(story.displayPathDate, context.locale), style: TextTheme.of(context).labelSmall),
       ],
     );
   }
@@ -278,9 +235,7 @@ class _StoryHeaderDateSelector extends StatelessWidget {
     if (story.preferences.colorSeedValue != null) {
       color = ColorScheme.of(context).primary;
     } else {
-      color = ColorFromDayService(
-        context: context,
-      ).get(story.displayPathDate.weekday);
+      color = ColorFromDayService(context: context).get(story.displayPathDate.weekday);
     }
 
     return Text(

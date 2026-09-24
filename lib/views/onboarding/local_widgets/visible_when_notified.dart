@@ -24,10 +24,7 @@ class VisibleWhenNotified extends StatelessWidget {
       valueListenable: notifier,
       child: child,
       builder: (context, visible, child) {
-        return Visibility(
-          visible: visible,
-          child: child!,
-        );
+        return Visibility(visible: visible, child: child!);
       },
     );
   }

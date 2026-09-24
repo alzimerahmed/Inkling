@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:storypad/core/constants/app_constants.dart' show kIsCupertino;
@@ -24,10 +25,7 @@ class OnboardingStep2Route extends BaseRoute {
 }
 
 class OnboardingStep2View extends StatelessWidget {
-  const OnboardingStep2View({
-    super.key,
-    required this.params,
-  });
+  const OnboardingStep2View({super.key, required this.params});
 
   final OnboardingStep2Route params;
 

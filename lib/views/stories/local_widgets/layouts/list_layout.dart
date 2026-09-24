@@ -1,9 +1,7 @@
 part of '../story_pages_builder.dart';
 
 class _ListLayout extends StatelessWidget {
-  const _ListLayout({
-    required this.builder,
-  });
+  const _ListLayout({required this.builder});
 
   final StoryPagesBuilder builder;
 
@@ -29,10 +27,7 @@ class _ListLayout extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: builder.spacing),
               child: builder.buildPage(page, context, smallPage: true),
             ),
-            if (index == itemCount - 1) ...[
-              SizedBox(height: builder.spacing),
-              builder._buildAddButton(),
-            ],
+            if (index == itemCount - 1) ...[SizedBox(height: builder.spacing), builder._buildAddButton()],
           ],
         );
       },

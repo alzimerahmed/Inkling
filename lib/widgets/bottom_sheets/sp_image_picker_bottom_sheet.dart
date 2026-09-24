@@ -20,9 +20,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/sp_media_tile.dart';
 
 class SpImagePickerBottomSheet extends BaseBottomSheet {
-  const SpImagePickerBottomSheet({
-    required this.assets,
-  });
+  const SpImagePickerBottomSheet({required this.assets});
 
   @override
   bool get fullScreen => true;
@@ -37,26 +35,14 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context
-            .read<DevicePreferencesProvider>()
-            .preferences
-            .assetCompression;
-        final photo = await AppFilePickerService.pickImage(
-          source: source,
-          compression: compression,
-        );
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final photo = await AppFilePickerService.pickImage(source: source, compression: compression);
         if (photo == null) return;
 
-        AssetDbModel? tookAsset = await InsertFileToDbService.insertImage(
-          photo.file,
-          size: photo.size,
-        );
+        AssetDbModel? tookAsset = await InsertFileToDbService.insertImage(photo.file, size: photo.size);
         if (tookAsset == null) return;
 
-        editorAdapter.insertMedia(
-          controller: controller,
-          mediaPath: tookAsset.relativeLocalFilePath,
-        );
+        editorAdapter.insertMedia(controller: controller, mediaPath: tookAsset.relativeLocalFilePath);
 
         if (source == ImageSource.camera) {
           AnalyticsService.instance.logTakePhoto();
@@ -75,27 +61,14 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context
-            .read<DevicePreferencesProvider>()
-            .preferences
-            .assetCompression;
-        final video = await AppFilePickerService.pickVideo(
-          context: context,
-          source: source,
-          compression: compression,
-        );
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final video = await AppFilePickerService.pickVideo(context: context, source: source, compression: compression);
         if (video == null) return;
 
-        AssetDbModel? tookAsset = await InsertFileToDbService.insertVideo(
-          video.file,
-          size: video.size,
-        );
+        AssetDbModel? tookAsset = await InsertFileToDbService.insertVideo(video.file, size: video.size);
         if (tookAsset == null) return;
 
-        editorAdapter.insertMedia(
-          controller: controller,
-          mediaPath: tookAsset.relativeLocalFilePath,
-        );
+        editorAdapter.insertMedia(controller: controller, mediaPath: tookAsset.relativeLocalFilePath);
 
         if (source == ImageSource.camera) {
           AnalyticsService.instance.logRecordVideo();
@@ -108,21 +81,12 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
 
   /// Opens the native OS media picker (mixed image+video multi-select) and
   /// inserts everything picked as a single embed (an album if more than one).
-  static Future<void> showNativePicker({
-    required BuildContext context,
-    required RichTextController controller,
-  }) async {
+  static Future<void> showNativePicker({required BuildContext context, required RichTextController controller}) async {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context
-            .read<DevicePreferencesProvider>()
-            .preferences
-            .assetCompression;
-        final files = await AppFilePickerService.pickMultipleMedia(
-          context: context,
-          compression: compression,
-        );
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final files = await AppFilePickerService.pickMultipleMedia(context: context, compression: compression);
         if (files.isEmpty) return;
 
         final List<AssetDbModel> savedAssets = [];
@@ -132,13 +96,8 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
         }
         if (savedAssets.isEmpty) return;
 
-        final mediaPath = savedAssets
-            .map((a) => a.relativeLocalFilePath)
-            .join('|');
-        editorAdapter.insertMedia(
-          controller: controller,
-          mediaPath: mediaPath,
-        );
+        final mediaPath = savedAssets.map((a) => a.relativeLocalFilePath).join('|');
+        editorAdapter.insertMedia(controller: controller, mediaPath: mediaPath);
 
         _logInsertedMedia(savedAssets);
       },
@@ -148,20 +107,12 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
   /// Opens the native OS media picker (mixed image+video multi-select) and
   /// returns the saved assets directly, for callers that aren't inserting
   /// into a rich text [controller] (e.g. [SpAlbumManagementSheet]).
-  static Future<List<AssetDbModel>> pickFromNativeLibrary({
-    required BuildContext context,
-  }) async {
+  static Future<List<AssetDbModel>> pickFromNativeLibrary({required BuildContext context}) async {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context
-            .read<DevicePreferencesProvider>()
-            .preferences
-            .assetCompression;
-        final files = await AppFilePickerService.pickMultipleMedia(
-          context: context,
-          compression: compression,
-        );
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final files = await AppFilePickerService.pickMultipleMedia(context: context, compression: compression);
         if (files.isEmpty) return <AssetDbModel>[];
 
         final List<AssetDbModel> savedAssets = [];
@@ -192,29 +143,20 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
         .then((e) => e?.items ?? <AssetDbModel>[]);
     if (!context.mounted) return;
 
-    final pickAssets = await SpImagePickerBottomSheet(
-      assets: assets,
-    ).show(context: context);
+    final pickAssets = await SpImagePickerBottomSheet(assets: assets).show(context: context);
 
     if (pickAssets is List<AssetDbModel> && pickAssets.isNotEmpty) {
       // Media embed supports multiple items by joining paths with '|', and parsing them in the embed builder.
       // See docs/features/album-embed.md for details.
-      final mediaPath = pickAssets
-          .map((a) => a.relativeLocalFilePath)
-          .join('|');
+      final mediaPath = pickAssets.map((a) => a.relativeLocalFilePath).join('|');
 
-      editorAdapter.insertMedia(
-        controller: controller,
-        mediaPath: mediaPath,
-      );
+      editorAdapter.insertMedia(controller: controller, mediaPath: mediaPath);
 
       _logInsertedMedia(pickAssets);
     }
   }
 
-  static Future<List<AssetDbModel>?> showAlbumPicker({
-    required BuildContext context,
-  }) async {
+  static Future<List<AssetDbModel>?> showAlbumPicker({required BuildContext context}) async {
     await RetrieveLostPhotoService.call();
 
     final assets = await AssetDbModel.db
@@ -226,9 +168,7 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
         .then((e) => e?.items ?? <AssetDbModel>[]);
     if (!context.mounted) return null;
 
-    final result = await SpImagePickerBottomSheet(
-      assets: assets,
-    ).show(context: context);
+    final result = await SpImagePickerBottomSheet(assets: assets).show(context: context);
 
     return result is List<AssetDbModel> ? result : null;
   }
@@ -251,9 +191,7 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
     if (kIsCupertino) {
       return _Content(params: this);
     } else {
-      double maxChildSize =
-          1 -
-          View.of(context).viewPadding.top / MediaQuery.of(context).size.height;
+      double maxChildSize = 1 - View.of(context).viewPadding.top / MediaQuery.of(context).size.height;
       return DraggableScrollableSheet(
         expand: false,
         maxChildSize: maxChildSize,
@@ -269,9 +207,7 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
 }
 
 class _Content extends StatefulWidget {
-  const _Content({
-    required this.params,
-  });
+  const _Content({required this.params});
 
   final SpImagePickerBottomSheet params;
 
@@ -291,20 +227,13 @@ class _ContentState extends State<_Content> {
         return Scaffold(
           appBar: AppBar(
             title: Text(tr('page.library.title')),
-            automaticallyImplyLeading: !CupertinoSheetRoute.hasParentSheet(
-              context,
-            ),
+            automaticallyImplyLeading: !CupertinoSheetRoute.hasParentSheet(context),
             actions: [
               if (CupertinoSheetRoute.hasParentSheet(context))
-                CloseButton(
-                  onPressed: () => CupertinoSheetRoute.popSheet(context),
-                ),
+                CloseButton(onPressed: () => CupertinoSheetRoute.popSheet(context)),
             ],
           ),
-          body: buildBody(
-            context: context,
-            constraints: constraints,
-          ),
+          body: buildBody(context: context, constraints: constraints),
           bottomNavigationBar: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -321,10 +250,7 @@ class _ContentState extends State<_Content> {
                   children: [
                     FilledButton(
                       onPressed: selectedAssets.isNotEmpty
-                          ? () => Navigator.maybePop(
-                              context,
-                              selectedAssets.values.toList(),
-                            )
+                          ? () => Navigator.maybePop(context, selectedAssets.values.toList())
                           : null,
                       child: Text(tr("button.done")),
                     ),
@@ -338,10 +264,7 @@ class _ContentState extends State<_Content> {
     );
   }
 
-  Widget buildBody({
-    required BuildContext context,
-    required BoxConstraints constraints,
-  }) {
+  Widget buildBody({required BuildContext context, required BoxConstraints constraints}) {
     if (assets.isEmpty) {
       return Center(
         child: Text(
@@ -360,19 +283,12 @@ class _ContentState extends State<_Content> {
         physics: const AlwaysScrollableScrollPhysics(),
         addAutomaticKeepAlives: false,
         controller: PrimaryScrollController.maybeOf(context),
-        padding:
-            const EdgeInsets.symmetric(
-              horizontal: 16.0,
-            ).copyWith(
-              top: 16.0,
-              bottom: MediaQuery.of(context).padding.bottom + 16.0,
-            ),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0)
+            .copyWith(top: 16.0, bottom: MediaQuery.of(context).padding.bottom + 16.0),
         itemCount: assets.length,
         mainAxisSpacing: 8.0,
         crossAxisSpacing: 8.0,
-        gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: constraints.maxWidth ~/ 120,
-        ),
+        gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: constraints.maxWidth ~/ 120),
         itemBuilder: (BuildContext context, int index) {
           final asset = assets[index];
 
@@ -395,11 +311,7 @@ class _ContentState extends State<_Content> {
                         borderRadius: BorderRadius.circular(8.0),
                         side: BorderSide(color: Theme.of(context).dividerColor),
                       ),
-                      child: SpMediaTile(
-                        link: asset.relativeLocalFilePath,
-                        width: constraints.maxWidth,
-                        height: 120,
-                      ),
+                      child: SpMediaTile(link: asset.relativeLocalFilePath, width: constraints.maxWidth, height: 120),
                     );
                   },
                 ),
@@ -422,14 +334,8 @@ class _ContentState extends State<_Content> {
       child: SpFadeIn.fromBottom(
         child: Container(
           padding: const EdgeInsets.all(2.0),
-          decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.5),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(
-            SpIcons.checkCircle,
-            color: foregroundColor,
-          ),
+          decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.5), shape: BoxShape.circle),
+          child: Icon(SpIcons.checkCircle, color: foregroundColor),
         ),
       ),
     );

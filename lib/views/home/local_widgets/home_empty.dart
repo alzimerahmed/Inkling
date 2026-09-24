@@ -1,20 +1,13 @@
 part of '../home_view.dart';
 
 class _HomeEmpty extends StatelessWidget {
-  const _HomeEmpty({
-    required this.viewModel,
-  });
+  const _HomeEmpty({required this.viewModel});
 
   final HomeViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
-    String message = tr(
-      'page.home.empty_message',
-      namedArgs: {
-        "YEAR": viewModel.year.toString(),
-      },
-    );
+    String message = tr('page.home.empty_message', namedArgs: {"YEAR": viewModel.year.toString()});
 
     return SingleChildScrollView(
       child: SizedBox(
@@ -28,10 +21,7 @@ class _HomeEmpty extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SpTapEffect(
-              effects: [
-                SpTapEffectType.touchableOpacity,
-                SpTapEffectType.scaleDown,
-              ],
+              effects: [SpTapEffectType.touchableOpacity, SpTapEffectType.scaleDown],
               onTap: () => SettingsRoute().push(context),
               child: Container(
                 padding: const EdgeInsets.all(16.0),
@@ -60,10 +50,7 @@ class _HomeEmpty extends StatelessWidget {
                       transitionBuilder: (child, animation) {
                         return FadeTransition(
                           opacity: animation,
-                          child: ScaleTransition(
-                            scale: animation,
-                            child: child,
-                          ),
+                          child: ScaleTransition(scale: animation, child: child),
                         );
                       },
                       child: SpLoopAnimationBuilder(
@@ -89,9 +76,7 @@ class _HomeEmpty extends StatelessWidget {
             ),
             Container(
               constraints: const BoxConstraints(maxWidth: 200),
-              margin: EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom + kToolbarHeight,
-              ),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + kToolbarHeight),
               child: Text.rich(
                 textAlign: TextAlign.center,
                 textScaler: MediaQuery.textScalerOf(context),
@@ -99,10 +84,7 @@ class _HomeEmpty extends StatelessWidget {
                   style: TextTheme.of(context).bodyLarge,
                   children: [
                     TextSpan(text: message.split("{EDIT_BUTTON}").first),
-                    const WidgetSpan(
-                      child: Icon(SpIcons.newStory, size: 16.0),
-                      alignment: PlaceholderAlignment.middle,
-                    ),
+                    const WidgetSpan(child: Icon(SpIcons.newStory, size: 16.0), alignment: PlaceholderAlignment.middle),
                     TextSpan(text: message.split("{EDIT_BUTTON}").last),
                   ],
                 ),

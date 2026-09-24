@@ -8,10 +8,7 @@ class TimePickerService {
   final BuildContext context;
   final Duration initialTimer;
 
-  TimePickerService({
-    required this.context,
-    required this.initialTimer,
-  });
+  TimePickerService({required this.context, required this.initialTimer});
 
   Future<Duration?> showPicker() async {
     Duration? newTimer;
@@ -40,36 +37,21 @@ class TimePickerService {
                 SizedBox(
                   height: 216,
                   child: CupertinoTimerPicker(
-                    selectionOverlayBuilder:
-                        (
-                          context, {
-                          required int columnCount,
-                          required int selectedIndex,
-                        }) {
-                          return Container(
-                            margin: EdgeInsets.only(
-                              right: selectedIndex == columnCount - 1
-                                  ? 0.0
-                                  : 8.0,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Theme.of(context).dividerColor,
-                              ),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                          );
-                        },
+                    selectionOverlayBuilder: (context, {required int columnCount, required int selectedIndex}) {
+                      return Container(
+                        margin: EdgeInsets.only(right: selectedIndex == columnCount - 1 ? 0.0 : 8.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Theme.of(context).dividerColor),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                      );
+                    },
                     initialTimerDuration: initialTimer,
                     mode: CupertinoTimerPickerMode.hm,
-                    onTimerDurationChanged: (duration) =>
-                        notifier.value = duration,
+                    onTimerDurationChanged: (duration) => notifier.value = duration,
                   ),
                 ),
-                FilledButton(
-                  child: Text(tr("button.done")),
-                  onPressed: () => Navigator.pop(context, notifier.value),
-                ),
+                FilledButton(child: Text(tr("button.done")), onPressed: () => Navigator.pop(context, notifier.value)),
                 SizedBox(height: MediaQuery.of(context).padding.bottom),
               ],
             );
@@ -92,9 +74,7 @@ class TimePickerService {
                 left: MediaQuery.of(context).padding.left,
                 right: MediaQuery.of(context).padding.right,
               ),
-              margin: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
               color: CupertinoColors.systemBackground.resolveFrom(context),
               child: MediaQuery.removePadding(
                 context: context,
@@ -107,8 +87,7 @@ class TimePickerService {
                     CupertinoTimerPicker(
                       initialTimerDuration: initialTimer,
                       mode: CupertinoTimerPickerMode.hm,
-                      onTimerDurationChanged: (duration) =>
-                          notifier.value = duration,
+                      onTimerDurationChanged: (duration) => notifier.value = duration,
                     ),
                   ],
                 ),
@@ -120,21 +99,12 @@ class TimePickerService {
     );
   }
 
-  Widget _buildCupertinoNavigator(
-    BuildContext context,
-    CmValueNotifier<Duration?> notifier,
-  ) {
+  Widget _buildCupertinoNavigator(BuildContext context, CmValueNotifier<Duration?> notifier) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CupertinoButton(
-          onPressed: () => Navigator.pop(context, null),
-          child: Text(tr("button.cancel")),
-        ),
-        CupertinoButton(
-          child: Text(tr("button.done")),
-          onPressed: () => Navigator.pop(context, notifier.value),
-        ),
+        CupertinoButton(onPressed: () => Navigator.pop(context, null), child: Text(tr("button.cancel"))),
+        CupertinoButton(child: Text(tr("button.done")), onPressed: () => Navigator.pop(context, notifier.value)),
       ],
     );
   }

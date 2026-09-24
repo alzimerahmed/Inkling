@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 
 abstract class BaseStorageAdapter<T> {
@@ -31,10 +32,7 @@ abstract class BaseStorageAdapter<T> {
     }
   }
 
-  Future<void> write({
-    required String key,
-    required T value,
-  }) {
+  Future<void> write({required String key, required T value}) {
     String encoded = jsonEncode({"data": value});
     return writeStr(key: key, value: encoded);
   }

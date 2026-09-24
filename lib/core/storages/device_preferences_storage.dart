@@ -28,9 +28,7 @@ class DevicePreferencesStorage extends ObjectStorage<DevicePreferencesObject> {
 
     _preferences = await readObject();
     if (_preferences == null) {
-      _preferences = DevicePreferencesObject(
-        colorSeedValue: kDefaultColorSeed.toARGB32(),
-      );
+      _preferences = DevicePreferencesObject(colorSeedValue: kDefaultColorSeed.toARGB32());
       await writeObject(_preferences!);
     }
   }

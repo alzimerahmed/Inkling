@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:storypad/app_theme.dart';
 import 'package:storypad/core/constants/app_constants.dart';
@@ -33,10 +34,7 @@ class CommunityRoute extends BaseRoute {
 }
 
 class CommunityView extends StatelessWidget {
-  const CommunityView({
-    super.key,
-    required this.params,
-  });
+  const CommunityView({super.key, required this.params});
 
   final CommunityRoute params;
 

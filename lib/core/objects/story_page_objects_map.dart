@@ -36,10 +36,7 @@ class StoryPageObjectsMap {
     _map[key]?.titleVisibleFraction = visibleFraction;
   }
 
-  void add({
-    required StoryPageDbModel richPage,
-    required bool readOnly,
-  }) async {
+  void add({required StoryPageDbModel richPage, required bool readOnly}) async {
     _map[richPage.id] = StoryPageObject(
       key: GlobalKey(),
       page: richPage,
@@ -61,9 +58,7 @@ class StoryPageObjectsMap {
     StoryPageObjectsMap? initialPagesMap,
   }) async {
     final result = await Isolate.run(() {
-      final plainTextResult = GenerateBodyPlainTextService.call(
-        content.richPages,
-      );
+      final plainTextResult = GenerateBodyPlainTextService.call(content.richPages);
       return plainTextResult?.richPagesWithCounts;
     });
 

@@ -24,14 +24,11 @@ import 'package:storypad/views/throwback/throwback_view.dart';
 /// custom reminders).
 class ReminderNavigationService {
   ReminderNavigationService._();
-  static final ReminderNavigationService instance =
-      ReminderNavigationService._();
+  static final ReminderNavigationService instance = ReminderNavigationService._();
 
   /// Returns the notification title+body together — always as one pair, so a
   /// randomly-picked title never ends up mismatched with an unrelated body.
-  static Future<(String title, String body)> copyFor(
-    ReminderObject reminder,
-  ) async {
+  static Future<(String title, String body)> copyFor(ReminderObject reminder) async {
     switch (reminder.type) {
       case ReminderType.daily:
         return ReminderNotificationCopyService.dailyCopy();
@@ -43,19 +40,13 @@ class ReminderNavigationService {
         // The message *is* the title (matches how it's shown in the reminders
         // list) — EditCustomReminderViewModel requires a non-empty message
         // before a custom reminder can be saved at all.
-        return (
-          reminder.message!.trim(),
-          tr('reminder.custom.notification_body'),
-        );
+        return (reminder.message!.trim(), tr('reminder.custom.notification_body'));
     }
   }
 
   bool _isHandling = false;
 
-  Future<void> handleTap(
-    ReminderObject reminder,
-    GlobalKey<NavigatorState>? navigatorKey,
-  ) async {
+  Future<void> handleTap(ReminderObject reminder, GlobalKey<NavigatorState>? navigatorKey) async {
     if (_isHandling) return;
     _isHandling = true;
 
@@ -92,21 +83,13 @@ class ReminderNavigationService {
 
   Future<void> _openNewStory(BuildContext context) async {
     context.read<RootProvider>().navigate(const HomeRoute());
-    await EditStoryRoute(
-      id: null,
-      initialYear: DateTime.now().year,
-    ).push(context);
+    await EditStoryRoute(id: null, initialYear: DateTime.now().year).push(context);
     await HomeView.reload(debugSource: '$runtimeType#_openNewStory');
   }
 
-  Future<void> _openCustom(
-    ReminderObject reminder,
-    BuildContext context,
-  ) async {
+  Future<void> _openCustom(ReminderObject reminder, BuildContext context) async {
     final hasPrefill =
-        reminder.templateId != null ||
-        reminder.galleryTemplateId != null ||
-        (reminder.tagIds?.isNotEmpty ?? false);
+        reminder.templateId != null || reminder.galleryTemplateId != null || (reminder.tagIds?.isNotEmpty ?? false);
 
     // No prefill configured -> just bring the app to the foreground on Home.
     if (!hasPrefill) {
@@ -151,18 +134,14 @@ class ReminderNavigationService {
               body: MarkdownToQuillDeltaService.call(template.pages[i].content),
             ),
         ];
-        final draftContent = StoryContentDbModel.create().copyWith(
-          richPages: richPages,
-        );
+        final draftContent = StoryContentDbModel.create().copyWith(richPages: richPages);
         return template.copyWith(lazyDraftContent: draftContent);
       }
     }
     return null;
   }
 
-  Future<BuildContext?> _waitForNavigatorContext(
-    GlobalKey<NavigatorState>? navigatorKey,
-  ) async {
+  Future<BuildContext?> _waitForNavigatorContext(GlobalKey<NavigatorState>? navigatorKey) async {
     // Longer window than quick actions: a notification can cold-start the app, so
     // we may need to wait for RootProvider to build and register the navigator key.
     for (int attempt = 0; attempt < 60; attempt++) {

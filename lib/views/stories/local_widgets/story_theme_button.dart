@@ -5,10 +5,7 @@ import 'package:storypad/widgets/bottom_sheets/sp_story_theme_bottom_sheet.dart'
 import 'package:storypad/widgets/sp_icons.dart';
 
 class StoryThemeButton extends StatelessWidget {
-  const StoryThemeButton({
-    super.key,
-    required this.viewModel,
-  });
+  const StoryThemeButton({super.key, required this.viewModel});
 
   final BaseStoryViewModel viewModel;
 
@@ -23,8 +20,7 @@ class StoryThemeButton extends StatelessWidget {
         onPressed: () async {
           var nextAction = await SpStoryThemeBottomSheet(
             preferences: viewModel.story!.preferences,
-            onThemeChanged: (preferences) =>
-                viewModel.changePreferences(preferences),
+            onThemeChanged: (preferences) => viewModel.changePreferences(preferences),
             storyViewModel: viewModel,
           ).show(context: context);
 

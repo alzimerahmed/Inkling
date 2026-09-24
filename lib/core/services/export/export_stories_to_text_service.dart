@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:storypad/core/databases/models/story_content_db_model.dart';
 import 'package:storypad/core/databases/models/story_db_model.dart';
 import 'package:storypad/core/services/quill/quill_delta_to_plain_text_service.dart';
@@ -48,12 +49,7 @@ class ExportStoriesToTextService {
       if (content == null) continue;
 
       // Add story metadata and content
-      await _writeStory(
-        buffer,
-        story,
-        content,
-        tagNameGetter: tagNameGetter,
-      );
+      await _writeStory(buffer, story, content, tagNameGetter: tagNameGetter);
 
       // Add separator between stories (except for last story)
       if (i < validStories.length - 1) {
@@ -97,14 +93,9 @@ class ExportStoriesToTextService {
 
     // Tags
     if (story.validTags?.isNotEmpty == true && tagNameGetter != null) {
-      final tagNames = await Future.wait(
-        story.validTags!.map((tagId) => tagNameGetter(tagId)),
-      );
+      final tagNames = await Future.wait(story.validTags!.map((tagId) => tagNameGetter(tagId)));
 
-      final validTagNames = tagNames
-          .whereType<String>()
-          .where((name) => name.isNotEmpty)
-          .toList();
+      final validTagNames = tagNames.whereType<String>().where((name) => name.isNotEmpty).toList();
 
       if (validTagNames.isNotEmpty) {
         buffer.writeln('Tags: ${validTagNames.join(', ')}');

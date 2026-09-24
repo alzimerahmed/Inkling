@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storypad/core/databases/models/event_db_model.dart';
 import 'package:storypad/core/databases/models/story_content_db_model.dart';
@@ -47,10 +48,7 @@ void main() {
       final outputFile = File('${tempDir.path}/export.txt');
 
       // Act
-      final result = await ExportStoriesToTextService.call(
-        stories: stories,
-        outputFile: outputFile,
-      );
+      final result = await ExportStoriesToTextService.call(stories: stories, outputFile: outputFile);
 
       // Assert
       expect(await result.exists(), true);
@@ -84,20 +82,13 @@ void main() {
 
       // Mock tag getter
       Future<String?> tagNameGetter(int tagId) async {
-        return {
-          20: 'Personal',
-          21: 'Workout 🏋️',
-        }[tagId];
+        return {20: 'Personal', 21: 'Workout 🏋️'}[tagId];
       }
 
       final outputFile = File('${tempDir.path}/export.txt');
 
       // Act
-      await ExportStoriesToTextService.call(
-        stories: [story],
-        outputFile: outputFile,
-        tagNameGetter: tagNameGetter,
-      );
+      await ExportStoriesToTextService.call(stories: [story], outputFile: outputFile, tagNameGetter: tagNameGetter);
 
       // Assert
       final content = await outputFile.readAsString();
@@ -123,10 +114,7 @@ void main() {
       final outputFile = File('${tempDir.path}/export.txt');
 
       // Act
-      await ExportStoriesToTextService.call(
-        stories: [story],
-        outputFile: outputFile,
-      );
+      await ExportStoriesToTextService.call(stories: [story], outputFile: outputFile);
 
       // Assert
       final content = await outputFile.readAsString();
@@ -141,22 +129,12 @@ void main() {
 
     test('should skip title when title is null or empty', () async {
       // Arrange
-      final story = _createStory(
-        id: 1,
-        year: 2025,
-        month: 1,
-        day: 1,
-        title: null,
-        content: "Content without title",
-      );
+      final story = _createStory(id: 1, year: 2025, month: 1, day: 1, title: null, content: "Content without title");
 
       final outputFile = File('${tempDir.path}/export.txt');
 
       // Act
-      await ExportStoriesToTextService.call(
-        stories: [story],
-        outputFile: outputFile,
-      );
+      await ExportStoriesToTextService.call(stories: [story], outputFile: outputFile);
 
       // Assert
       final content = await outputFile.readAsString();
@@ -198,10 +176,7 @@ void main() {
       final outputFile = File('${tempDir.path}/export.txt');
 
       // Act
-      await ExportStoriesToTextService.call(
-        stories: [story],
-        outputFile: outputFile,
-      );
+      await ExportStoriesToTextService.call(stories: [story], outputFile: outputFile);
 
       // Assert: Formatting should be stripped
       final content = await outputFile.readAsString();
@@ -245,10 +220,7 @@ void main() {
       final outputFile = File('${tempDir.path}/export.txt');
 
       // Act
-      await ExportStoriesToTextService.call(
-        stories: [story],
-        outputFile: outputFile,
-      );
+      await ExportStoriesToTextService.call(stories: [story], outputFile: outputFile);
 
       // Assert
       final content = await outputFile.readAsString();
@@ -267,31 +239,14 @@ void main() {
     test('should not include separators for last story', () async {
       // Arrange
       final stories = [
-        _createStory(
-          id: 1,
-          year: 2025,
-          month: 1,
-          day: 1,
-          title: "Story 1",
-          content: "First story",
-        ),
-        _createStory(
-          id: 2,
-          year: 2025,
-          month: 1,
-          day: 2,
-          title: "Story 2",
-          content: "Last story",
-        ),
+        _createStory(id: 1, year: 2025, month: 1, day: 1, title: "Story 1", content: "First story"),
+        _createStory(id: 2, year: 2025, month: 1, day: 2, title: "Story 2", content: "Last story"),
       ];
 
       final outputFile = File('${tempDir.path}/export.txt');
 
       // Act
-      await ExportStoriesToTextService.call(
-        stories: stories,
-        outputFile: outputFile,
-      );
+      await ExportStoriesToTextService.call(stories: stories, outputFile: outputFile);
 
       // Assert
       final content = await outputFile.readAsString();
@@ -308,10 +263,7 @@ void main() {
       final outputFile = File('${tempDir.path}/export.txt');
 
       // Act
-      await ExportStoriesToTextService.call(
-        stories: [],
-        outputFile: outputFile,
-      );
+      await ExportStoriesToTextService.call(stories: [], outputFile: outputFile);
 
       // Assert: File should be created but empty
       expect(await outputFile.exists(), true);
@@ -358,10 +310,7 @@ void main() {
       final outputFile = File('${tempDir.path}/export.txt');
 
       // Act
-      await ExportStoriesToTextService.call(
-        stories: [validStory, invalidStory],
-        outputFile: outputFile,
-      );
+      await ExportStoriesToTextService.call(stories: [validStory, invalidStory], outputFile: outputFile);
 
       // Assert: Only valid story should be in output
       final content = await outputFile.readAsString();
@@ -390,10 +339,7 @@ void main() {
       final outputFile = File('${tempDir.path}/export.txt');
 
       // Act
-      await ExportStoriesToTextService.call(
-        stories: [story],
-        outputFile: outputFile,
-      );
+      await ExportStoriesToTextService.call(stories: [story], outputFile: outputFile);
 
       // Assert: Date should be padded
       final content = await outputFile.readAsString();
@@ -426,10 +372,7 @@ void main() {
       final outputFile = File('${tempDir.path}/export.txt');
 
       // Act
-      await ExportStoriesToTextService.call(
-        stories: [story],
-        outputFile: outputFile,
-      );
+      await ExportStoriesToTextService.call(stories: [story], outputFile: outputFile);
 
       // Assert: Images should appear as markdown embeds
       final content = await outputFile.readAsString();
@@ -463,10 +406,7 @@ void main() {
 
       final outputFile = File('${tempDir.path}/export_video.txt');
 
-      await ExportStoriesToTextService.call(
-        stories: [story],
-        outputFile: outputFile,
-      );
+      await ExportStoriesToTextService.call(stories: [story], outputFile: outputFile);
 
       final content = await outputFile.readAsString();
       expect(content, contains('Check out this video:'));
@@ -476,22 +416,12 @@ void main() {
 
     test('should handle single page story without page title', () async {
       // Arrange: Single page story
-      final story = _createStory(
-        id: 1,
-        year: 2025,
-        month: 1,
-        day: 1,
-        title: "Single Page",
-        content: "Simple content",
-      );
+      final story = _createStory(id: 1, year: 2025, month: 1, day: 1, title: "Single Page", content: "Simple content");
 
       final outputFile = File('${tempDir.path}/export.txt');
 
       // Act
-      await ExportStoriesToTextService.call(
-        stories: [story],
-        outputFile: outputFile,
-      );
+      await ExportStoriesToTextService.call(stories: [story], outputFile: outputFile);
 
       // Assert: Should not add "Page 1" title for single-page stories
       final content = await outputFile.readAsString();

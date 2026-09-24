@@ -12,10 +12,7 @@ import 'storage_management_view.dart';
 class StorageManagementViewModel extends ChangeNotifier {
   final StorageManagementRoute params;
 
-  StorageManagementViewModel({
-    required this.params,
-    required BuildContext context,
-  }) {
+  StorageManagementViewModel({required this.params, required BuildContext context}) {
     load(context);
   }
 
@@ -41,10 +38,7 @@ class StorageManagementViewModel extends ChangeNotifier {
     loading = true;
     notifyListeners();
 
-    await Future.wait([
-      _loadLocalSizes(),
-      _loadCloudQuotas(context),
-    ]);
+    await Future.wait([_loadLocalSizes(), _loadCloudQuotas(context)]);
 
     if (!context.mounted) return;
     loading = false;
@@ -81,17 +75,13 @@ class StorageManagementViewModel extends ChangeNotifier {
 
       if (quota != null) {
         PreferencesBox().storageQuotaFor(serviceType).set(quota.toJsonString());
-        PreferencesBox()
-            .storageQuotaFetchedAtFor(serviceType)
-            .set(DateTime.now());
+        PreferencesBox().storageQuotaFetchedAtFor(serviceType).set(DateTime.now());
       }
     }
   }
 
   CloudStorageQuotaObject? _readCachedQuota(BackupServiceType serviceType) {
-    final fetchedAt = PreferencesBox()
-        .storageQuotaFetchedAtFor(serviceType)
-        .get();
+    final fetchedAt = PreferencesBox().storageQuotaFetchedAtFor(serviceType).get();
     if (fetchedAt == null) return null;
     if (DateTime.now().difference(fetchedAt) > _cacheTtl) return null;
 
@@ -122,8 +112,7 @@ class StorageManagementViewModel extends ChangeNotifier {
 
   Duration? get reloadCooldownRemaining {
     if (_lastReloadAt == null) return null;
-    final remaining =
-        _reloadCooldown - DateTime.now().difference(_lastReloadAt!);
+    final remaining = _reloadCooldown - DateTime.now().difference(_lastReloadAt!);
     return remaining.isNegative ? null : remaining;
   }
 
@@ -140,20 +129,14 @@ class StorageManagementViewModel extends ChangeNotifier {
     }
 
     try {
-      await Future.wait([
-        _loadLocalSizes(),
-        _loadCloudQuotas(context),
-      ]);
+      await Future.wait([_loadLocalSizes(), _loadCloudQuotas(context)]);
     } finally {
       reloading = false;
       notifyListeners();
     }
   }
 
-  int get cacheFilesBytes =>
-      cacheDirectories.fold(0, (a, p) => a + (localSizes[p] ?? 0)) +
-      cachedNetworkImageBytes;
+  int get cacheFilesBytes => cacheDirectories.fold(0, (a, p) => a + (localSizes[p] ?? 0)) + cachedNetworkImageBytes;
 
-  int get totalLocalBytes =>
-      localSizes.values.fold(0, (a, b) => a + b) + cachedNetworkImageBytes;
+  int get totalLocalBytes => localSizes.values.fold(0, (a, b) => a + b) + cachedNetworkImageBytes;
 }

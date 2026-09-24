@@ -25,31 +25,21 @@ class ReminderNotificationCopyService {
 
   /// One title+body pair, kept together so tone always matches — never
   /// mix-and-match a random title with an unrelated random body.
-  static Future<(String title, String body)> dailyCopy() => _pick(
-    _daily,
-    'reminder.daily.notification_title',
-    'reminder.daily.notification_body',
-  );
+  static Future<(String title, String body)> dailyCopy() =>
+      _pick(_daily, 'reminder.daily.notification_title', 'reminder.daily.notification_body');
 
-  static Future<(String title, String body)> onThisDayCopy() => _pick(
-    _onThisDay,
-    'reminder.on_this_day.notification_title',
-    'reminder.on_this_day.notification_body',
-  );
+  static Future<(String title, String body)> onThisDayCopy() =>
+      _pick(_onThisDay, 'reminder.on_this_day.notification_title', 'reminder.on_this_day.notification_body');
 
-  static Future<(String title, String body)> periodCopy() => _pick(
-    _period,
-    'reminder.period.notification_title',
-    'reminder.period.notification_body',
-  );
+  static Future<(String title, String body)> periodCopy() =>
+      _pick(_period, 'reminder.period.notification_title', 'reminder.period.notification_body');
 
   static Future<(String, String)> _pick(
     List<(String, String)> variants,
     String fallbackTitleKey,
     String fallbackBodyKey,
   ) async {
-    if (!await _useEnglishVariants())
-      return (tr(fallbackTitleKey), tr(fallbackBodyKey));
+    if (!await _useEnglishVariants()) return (tr(fallbackTitleKey), tr(fallbackBodyKey));
     return variants[Random().nextInt(variants.length)];
   }
 
@@ -110,10 +100,7 @@ class ReminderNotificationCopyService {
     ("Stay ahead", "It might be time to get ready for your period."),
     ("Coming soon", "Your period is predicted to start in a few days."),
     ("Just a heads-up", "Time to stock up — your period may be near."),
-    (
-      "Your body's calendar",
-      "Your next period could be just around the corner.",
-    ),
+    ("Your body's calendar", "Your next period could be just around the corner."),
     ("Plan ahead", "Your predicted cycle suggests your period is close."),
     ("Prediction alert", "Your period may begin in the coming days."),
     ("Cycle reminder", "Based on past cycles, your period could start soon."),

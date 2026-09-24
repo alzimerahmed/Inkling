@@ -36,12 +36,7 @@ class StoryTilePreferencesObject {
   // During user editing, we can show all content without limit.
   // displayCharacterCount is ignored.
   static StoryTilePreferencesObject editing() {
-    return StoryTilePreferencesObject(
-      showPageCount: true,
-      showTagLabels: true,
-      showPeopleLabels: true,
-      showTime: true,
-    );
+    return StoryTilePreferencesObject(showPageCount: true, showTagLabels: true, showPeopleLabels: true, showTime: true);
   }
 
   Map<String, dynamic> toJson() => _$StoryTilePreferencesObjectToJson(this);

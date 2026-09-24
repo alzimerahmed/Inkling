@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -35,15 +36,11 @@ class SpFloatingRelaxSoundsTile extends StatelessWidget {
     bool notPlaying =
         provider.audioPlayersService.playingStates.keys.isEmpty ||
         provider.audioPlayersService.playingStates.values.every(
-          (p) =>
-              p.processingState == ProcessingState.idle ||
-              p.processingState == ProcessingState.loading,
+          (p) => p.processingState == ProcessingState.idle || p.processingState == ProcessingState.loading,
         );
 
     if (notPlaying) return const SizedBox.shrink();
-    Color backgroundColor = ColorFromDayService(
-      context: context,
-    ).get(provider.selectedRelaxSounds.last.dayColor)!;
+    Color backgroundColor = ColorFromDayService(context: context).get(provider.selectedRelaxSounds.last.dayColor)!;
 
     return SpFadeIn.fromBottom(
       child: buildCardWithBackgrounds(
@@ -51,9 +48,7 @@ class SpFloatingRelaxSoundsTile extends StatelessWidget {
         backgroundColor: backgroundColor,
         provider: provider,
         child: buildContents(context, backgroundColor, provider),
-        onTap: fromHome
-            ? () => const RelaxSoundsRoute().push(context)
-            : () => showTimerPicker(provider, context),
+        onTap: fromHome ? () => const RelaxSoundsRoute().push(context) : () => showTimerPicker(provider, context),
       ),
     );
   }
@@ -82,15 +77,10 @@ class SpFloatingRelaxSoundsTile extends StatelessWidget {
           switchOutCurve: Curves.easeInOutQuad,
           duration: Durations.long1,
           transitionBuilder: (child, animation) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
+            return FadeTransition(opacity: animation, child: child);
           },
           child: Material(
-            key: ValueKey(
-              provider.selectedRelaxSounds.lastOrNull?.translationKey,
-            ),
+            key: ValueKey(provider.selectedRelaxSounds.lastOrNull?.translationKey),
             elevation: 8.0,
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(radius),
@@ -104,26 +94,15 @@ class SpFloatingRelaxSoundsTile extends StatelessWidget {
                 child: child,
                 builder: (context, value, child) {
                   return Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 12.0,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(radius),
                       gradient: LinearGradient(
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                         colors: [
-                          Color.lerp(
-                            backgroundColor,
-                            backgroundColor.darken(0.2),
-                            value,
-                          )!,
-                          Color.lerp(
-                            backgroundColor.darken(0.2),
-                            backgroundColor,
-                            value,
-                          )!,
+                          Color.lerp(backgroundColor, backgroundColor.darken(0.2), value)!,
+                          Color.lerp(backgroundColor.darken(0.2), backgroundColor, value)!,
                         ],
                       ),
                     ),
@@ -138,14 +117,8 @@ class SpFloatingRelaxSoundsTile extends StatelessWidget {
     );
   }
 
-  Widget buildContents(
-    BuildContext context,
-    Color backgroundColor,
-    RelaxSoundsProvider provider,
-  ) {
-    Color foregroundColor = AppTheme.isDarkMode(context)
-        ? backgroundColor.darken(0.5)
-        : backgroundColor.lighten(0.8);
+  Widget buildContents(BuildContext context, Color backgroundColor, RelaxSoundsProvider provider) {
+    Color foregroundColor = AppTheme.isDarkMode(context) ? backgroundColor.darken(0.5) : backgroundColor.lighten(0.8);
 
     return Row(
       spacing: 4.0,
@@ -171,9 +144,7 @@ class SpFloatingRelaxSoundsTile extends StatelessWidget {
               children: [
                 Text(
                   provider.selectedSoundsLabel,
-                  style: TextTheme.of(
-                    context,
-                  ).titleMedium?.copyWith(color: foregroundColor),
+                  style: TextTheme.of(context).titleMedium?.copyWith(color: foregroundColor),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -191,15 +162,8 @@ class SpFloatingRelaxSoundsTile extends StatelessWidget {
                       );
 
                       return Text(
-                        tr(
-                          'general.stop_in_args',
-                          namedArgs: {
-                            'TIMER': DateFormatHelper.Hms(date, context.locale),
-                          },
-                        ),
-                        style: TextTheme.of(
-                          context,
-                        ).bodyMedium?.copyWith(color: foregroundColor),
+                        tr('general.stop_in_args', namedArgs: {'TIMER': DateFormatHelper.Hms(date, context.locale)}),
+                        style: TextTheme.of(context).bodyMedium?.copyWith(color: foregroundColor),
                       );
                     },
                   ),
@@ -210,10 +174,7 @@ class SpFloatingRelaxSoundsTile extends StatelessWidget {
         if (fromHome)
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              SpIcons.keyboardRight,
-              color: foregroundColor,
-            ),
+            child: Icon(SpIcons.keyboardRight, color: foregroundColor),
           ),
         if (!fromHome)
           Row(
@@ -237,20 +198,13 @@ class SpFloatingRelaxSoundsTile extends StatelessWidget {
     );
   }
 
-  Future<void> showTimerPicker(
-    RelaxSoundsProvider provider,
-    BuildContext context,
-  ) async {
+  Future<void> showTimerPicker(RelaxSoundsProvider provider, BuildContext context) async {
     Duration initialStopTimer() {
-      if (provider.timerService.stopIn == null || provider.timerService.ended)
-        return const Duration(minutes: 30);
+      if (provider.timerService.stopIn == null || provider.timerService.ended) return const Duration(minutes: 30);
       return provider.timerService.stopIn!;
     }
 
-    final duration = await TimePickerService(
-      context: context,
-      initialTimer: initialStopTimer(),
-    ).showPicker();
+    final duration = await TimePickerService(context: context, initialTimer: initialStopTimer()).showPicker();
 
     if (duration != null) {
       provider.setStopIn(duration);

@@ -11,13 +11,7 @@ void main() {
       expect(policy.initialDelay, equals(const Duration(seconds: 1)));
       expect(policy.maxDelay, equals(const Duration(seconds: 30)));
       expect(policy.backoffMultiplier, equals(2.0));
-      expect(
-        policy.retryableExceptions,
-        equals({
-          NetworkException,
-          FileOperationException,
-        }),
-      );
+      expect(policy.retryableExceptions, equals({NetworkException, FileOperationException}));
     });
 
     test('has predefined network policy', () {
@@ -51,10 +45,7 @@ void main() {
     });
 
     test('calculates exponential backoff', () {
-      const policy = RetryPolicy(
-        initialDelay: Duration(seconds: 1),
-        backoffMultiplier: 2.0,
-      );
+      const policy = RetryPolicy(initialDelay: Duration(seconds: 1), backoffMultiplier: 2.0);
 
       expect(policy.calculateDelay(1), equals(const Duration(seconds: 1)));
       expect(policy.calculateDelay(2), equals(const Duration(seconds: 2)));
@@ -69,14 +60,8 @@ void main() {
       );
 
       expect(policy.calculateDelay(1), equals(const Duration(seconds: 10)));
-      expect(
-        policy.calculateDelay(2),
-        equals(const Duration(seconds: 15)),
-      ); // Clamped
-      expect(
-        policy.calculateDelay(3),
-        equals(const Duration(seconds: 15)),
-      ); // Clamped
+      expect(policy.calculateDelay(2), equals(const Duration(seconds: 15))); // Clamped
+      expect(policy.calculateDelay(3), equals(const Duration(seconds: 15))); // Clamped
     });
 
     test('does not retry if max attempts reached', () {
@@ -88,16 +73,10 @@ void main() {
     });
 
     test('retries retryable exceptions only', () {
-      const policy = RetryPolicy(
-        maxAttempts: 3,
-        retryableExceptions: {NetworkException},
-      );
+      const policy = RetryPolicy(maxAttempts: 3, retryableExceptions: {NetworkException});
 
       const networkException = NetworkException('Network error');
-      const authException = AuthException(
-        'Auth error',
-        AuthExceptionType.signInFailed,
-      );
+      const authException = AuthException('Auth error', AuthExceptionType.signInFailed);
 
       expect(policy.shouldRetry(networkException, 1), isTrue);
       expect(policy.shouldRetry(authException, 1), isFalse);
@@ -135,16 +114,10 @@ void main() {
       );
 
       // Without retry-after header, use normal backoff
-      expect(
-        policy.calculateDelayWithRateLimit(1, null),
-        equals(const Duration(seconds: 1)),
-      );
+      expect(policy.calculateDelayWithRateLimit(1, null), equals(const Duration(seconds: 1)));
 
       // With retry-after header, use that value
-      expect(
-        policy.calculateDelayWithRateLimit(1, '30'),
-        equals(const Duration(seconds: 30)),
-      );
+      expect(policy.calculateDelayWithRateLimit(1, '30'), equals(const Duration(seconds: 30)));
     });
 
     test('respects max delay for rate limiting', () {
@@ -154,10 +127,7 @@ void main() {
       );
 
       // Retry-after header is larger than max delay
-      expect(
-        policy.calculateDelayWithRateLimit(1, '60'),
-        equals(const Duration(seconds: 10)),
-      );
+      expect(policy.calculateDelayWithRateLimit(1, '60'), equals(const Duration(seconds: 10)));
     });
   });
 }

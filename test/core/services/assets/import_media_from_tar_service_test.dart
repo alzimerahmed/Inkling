@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storypad/core/constants/app_constants.dart';
 import 'package:storypad/core/databases/models/asset_db_model.dart';
@@ -28,12 +29,7 @@ Stream<List<int>> _buildTarGz(List<(String, List<int>)> entries) {
 
   Future(() async {
     for (final (path, bytes) in entries) {
-      controller.add(
-        TarEntry.data(
-          TarHeader(name: path, mode: 420, size: bytes.length),
-          bytes,
-        ),
-      );
+      controller.add(TarEntry.data(TarHeader(name: path, mode: 420, size: bytes.length), bytes));
     }
     await controller.close();
   });
@@ -42,17 +38,13 @@ Stream<List<int>> _buildTarGz(List<(String, List<int>)> entries) {
 }
 
 /// Returns a [_FakeDb] and a set of [_CallLog] helpers for injection.
-_Fakes _fakes({
-  List<AssetDbModel> existing = const [],
-  Set<String> existingFiles = const {},
-}) => _Fakes(existing: existing, existingFiles: existingFiles);
+_Fakes _fakes({List<AssetDbModel> existing = const [], Set<String> existingFiles = const {}}) =>
+    _Fakes(existing: existing, existingFiles: existingFiles);
 
 class _Fakes {
-  _Fakes({
-    List<AssetDbModel> existing = const [],
-    Set<String> existingFiles = const {},
-  }) : _existingById = {for (final a in existing) a.id: a},
-       _existingFiles = {...existingFiles};
+  _Fakes({List<AssetDbModel> existing = const [], Set<String> existingFiles = const {}})
+    : _existingById = {for (final a in existing) a.id: a},
+      _existingFiles = {...existingFiles};
 
   final Map<int, AssetDbModel> _existingById;
   final Set<String> _existingFiles;
@@ -62,10 +54,7 @@ class _Fakes {
   Future<AssetDbModel?> findAsset(int id) async => _existingById[id];
   bool fileExists(String path) => _existingFiles.contains(path);
   Future<void> writeFile(String path, Stream<List<int>> bytesStream) async {
-    writtenFiles[path] = await bytesStream.fold<List<int>>(
-      [],
-      (buf, chunk) => buf..addAll(chunk),
-    );
+    writtenFiles[path] = await bytesStream.fold<List<int>>([], (buf, chunk) => buf..addAll(chunk));
   }
 
   Future<void> saveAsset(AssetDbModel asset) async => savedAssets.add(asset);
@@ -74,10 +63,7 @@ class _Fakes {
   String relativePathFor(AssetType type, int id, String ext) => type.getRelativeStoragePath(id: id, extension: ext);
 }
 
-Future<ImportMediaResult> _run(
-  _Fakes fakes,
-  Stream<List<int>> tarGzStream,
-) => ImportMediaFromTarService.call(
+Future<ImportMediaResult> _run(_Fakes fakes, Stream<List<int>> tarGzStream) => ImportMediaFromTarService.call(
   tarGzStream: tarGzStream,
   findAsset: fakes.findAsset,
   fileExists: fakes.fileExists,
@@ -95,9 +81,7 @@ void main() {
   late Directory testSupportDir;
 
   setUpAll(() async {
-    testSupportDir = await Directory.systemTemp.createTemp(
-      'storypad_asset_import_test_',
-    );
+    testSupportDir = await Directory.systemTemp.createTemp('storypad_asset_import_test_');
     kSupportDirectory = testSupportDir;
   });
 
@@ -159,16 +143,7 @@ void main() {
         expect(fakes.savedAssets.single.type, AssetType.video);
       });
 
-      for (final ext in [
-        '.mov',
-        '.m4v',
-        '.avi',
-        '.mkv',
-        '.webm',
-        '.3gp',
-        '.wmv',
-        '.flv',
-      ]) {
+      for (final ext in ['.mov', '.m4v', '.avi', '.mkv', '.webm', '.3gp', '.wmv', '.flv']) {
         test('infers video for root-level $ext', () async {
           const id = 1714986140007;
           final fakes = _fakes();
@@ -180,23 +155,20 @@ void main() {
         });
       }
 
-      test(
-        'a subdirectory that merely starts with "videos" is not treated as the videos/ prefix',
-        () async {
-          // Regression guard for the trailing-slash check in _inferType: a
-          // subdirectory name like "videosextra" must not be misread as the
-          // `videos/` prefix -- falls back to the (image) extension here.
-          const id = 1714986140008;
-          final fakes = _fakes();
-          final stream = _buildTarGz([
-            ('videosextra/$id.jpg', [1]),
-          ]);
+      test('a subdirectory that merely starts with "videos" is not treated as the videos/ prefix', () async {
+        // Regression guard for the trailing-slash check in _inferType: a
+        // subdirectory name like "videosextra" must not be misread as the
+        // `videos/` prefix -- falls back to the (image) extension here.
+        const id = 1714986140008;
+        final fakes = _fakes();
+        final stream = _buildTarGz([
+          ('videosextra/$id.jpg', [1]),
+        ]);
 
-          await _run(fakes, stream);
+        await _run(fakes, stream);
 
-          expect(fakes.savedAssets.single.type, AssetType.image);
-        },
-      );
+        expect(fakes.savedAssets.single.type, AssetType.image);
+      });
 
       test('infers image type for root-level jpg', () async {
         const id = 1714986140002;
@@ -241,10 +213,7 @@ void main() {
       test('writes file and creates DB record', () async {
         const id = 1714986140010;
         final bytes = [10, 20, 30];
-        final storagePath = AssetType.image.getStoragePath(
-          id: id,
-          extension: '.jpg',
-        );
+        final storagePath = AssetType.image.getStoragePath(id: id, extension: '.jpg');
         final fakes = _fakes();
         final stream = _buildTarGz([('images/$id.jpg', bytes)]);
 
@@ -254,10 +223,7 @@ void main() {
         expect(result.skipped, 0);
         expect(fakes.writtenFiles[storagePath], bytes);
         expect(fakes.savedAssets.single.id, id);
-        expect(
-          fakes.savedAssets.single.createdAt,
-          DateTime.fromMillisecondsSinceEpoch(id),
-        );
+        expect(fakes.savedAssets.single.createdAt, DateTime.fromMillisecondsSinceEpoch(id));
       });
 
       test('counts multiple new entries correctly', () async {
@@ -282,11 +248,7 @@ void main() {
     group('restore (existing record, missing file)', () {
       test('writes file but does NOT create a new DB record', () async {
         const id = 1714986140020;
-        final existingAsset = AssetDbModel.fromLocalPath(
-          id: id,
-          localPath: 'images/$id.jpg',
-          type: AssetType.image,
-        );
+        final existingAsset = AssetDbModel.fromLocalPath(id: id, localPath: 'images/$id.jpg', type: AssetType.image);
         final storagePath = existingAsset.localFilePath;
         final fakes = _fakes(existing: [existingAsset]);
         final stream = _buildTarGz([
@@ -301,36 +263,23 @@ void main() {
         expect(fakes.savedAssets, isEmpty); // existing record kept
       });
 
-      test(
-        'restores to the existing asset path when archive metadata differs',
-        () async {
-          const id = 1714986140021;
-          final existingAsset = AssetDbModel.fromLocalPath(
-            id: id,
-            localPath: 'audio/$id.m4a',
-            type: AssetType.audio,
-          );
-          final storagePath = existingAsset.localFilePath;
-          final fakes = _fakes(existing: [existingAsset]);
-          final stream = _buildTarGz([
-            ('images/$id.jpg', [7, 8, 9]),
-          ]);
+      test('restores to the existing asset path when archive metadata differs', () async {
+        const id = 1714986140021;
+        final existingAsset = AssetDbModel.fromLocalPath(id: id, localPath: 'audio/$id.m4a', type: AssetType.audio);
+        final storagePath = existingAsset.localFilePath;
+        final fakes = _fakes(existing: [existingAsset]);
+        final stream = _buildTarGz([
+          ('images/$id.jpg', [7, 8, 9]),
+        ]);
 
-          final result = await _run(fakes, stream);
+        final result = await _run(fakes, stream);
 
-          expect(result.imported, 1);
-          expect(result.skipped, 0);
-          expect(fakes.writtenFiles[storagePath], [7, 8, 9]);
-          expect(
-            fakes.writtenFiles[AssetType.image.getStoragePath(
-              id: id,
-              extension: '.jpg',
-            )],
-            isNull,
-          );
-          expect(fakes.savedAssets, isEmpty);
-        },
-      );
+        expect(result.imported, 1);
+        expect(result.skipped, 0);
+        expect(fakes.writtenFiles[storagePath], [7, 8, 9]);
+        expect(fakes.writtenFiles[AssetType.image.getStoragePath(id: id, extension: '.jpg')], isNull);
+        expect(fakes.savedAssets, isEmpty);
+      });
     });
 
     // --- skip ---
@@ -338,16 +287,9 @@ void main() {
     group('skip (existing record AND file already on disk)', () {
       test('skips entry and writes nothing', () async {
         const id = 1714986140030;
-        final existingAsset = AssetDbModel.fromLocalPath(
-          id: id,
-          localPath: 'images/$id.jpg',
-          type: AssetType.image,
-        );
+        final existingAsset = AssetDbModel.fromLocalPath(id: id, localPath: 'images/$id.jpg', type: AssetType.image);
         final storagePath = existingAsset.localFilePath;
-        final fakes = _fakes(
-          existing: [existingAsset],
-          existingFiles: {storagePath},
-        );
+        final fakes = _fakes(existing: [existingAsset], existingFiles: {storagePath});
         final stream = _buildTarGz([
           ('images/$id.jpg', [1]),
         ]);

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:storypad/core/databases/models/asset_db_model.dart';
 import 'package:storypad/core/helpers/path_helper.dart';
 import 'package:storypad/core/services/assets/backup_asset_downloader_service.dart';
@@ -35,10 +36,7 @@ class DbAssetLoaderService {
   /// Load a file by relative path.
   /// Returns cached result if exists and still valid; deduplicates concurrent requests for same path.
   /// On errors, removes in-flight entry to allow retry.
-  Future<File> load({
-    required String relativePath,
-    required List<BackupCloudService> signedInServices,
-  }) {
+  Future<File> load({required String relativePath, required List<BackupCloudService> signedInServices}) {
     // Check if already cached and file still exists on disk
     final cached = _resolvedByRelativePath[relativePath];
     if (cached != null) {
@@ -53,10 +51,7 @@ class DbAssetLoaderService {
     final completer = Completer<File>();
     _inFlightByRelativePath[relativePath] = completer;
 
-    _loadInternal(
-          relativePath: relativePath,
-          signedInServices: signedInServices,
-        )
+    _loadInternal(relativePath: relativePath, signedInServices: signedInServices)
         .then((file) {
           _resolvedByRelativePath[relativePath] = file;
           _evictOldestIfNeeded();
@@ -72,10 +67,7 @@ class DbAssetLoaderService {
     return completer.future;
   }
 
-  Future<File> _loadInternal({
-    required String relativePath,
-    required List<BackupCloudService> signedInServices,
-  }) async {
+  Future<File> _loadInternal({required String relativePath, required List<BackupCloudService> signedInServices}) async {
     int? id = AssetType.parseAssetId(relativePath);
     AssetType? type = AssetType.getTypeFromLink(relativePath);
 
@@ -83,10 +75,7 @@ class DbAssetLoaderService {
       throw BackupAssetDownloadException('$relativePath is invalid.');
     }
 
-    String filePath = type.getStoragePath(
-      id: id,
-      extension: extension(relativePath),
-    );
+    String filePath = type.getStoragePath(id: id, extension: extension(relativePath));
     File file = File(filePath);
 
     if (file.existsSync()) return file;
@@ -96,18 +85,13 @@ class DbAssetLoaderService {
 
     if (asset != null && localFile == null && signedInServices.isNotEmpty) {
       final downloader = BackupAssetDownloaderService();
-      final localFilePath = await downloader.downloadAsset(
-        asset: asset,
-        signedInServices: signedInServices,
-      );
+      final localFilePath = await downloader.downloadAsset(asset: asset, signedInServices: signedInServices);
 
       return File(localFilePath);
     }
 
     if (localFile != null) return localFile;
-    throw BackupAssetDownloadException(
-      'Asset file for $relativePath not found.',
-    );
+    throw BackupAssetDownloadException('Asset file for $relativePath not found.');
   }
 
   /// Remove oldest inserted cached entry if max capacity exceeded (FIFO eviction).

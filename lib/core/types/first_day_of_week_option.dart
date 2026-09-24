@@ -1,7 +1,6 @@
 enum FirstDayOfWeekOption {
   monday,
-  sunday,
-  ;
+  sunday;
 
   static const defaultValue = FirstDayOfWeekOption.monday;
 

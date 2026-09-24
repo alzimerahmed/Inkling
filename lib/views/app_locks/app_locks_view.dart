@@ -14,22 +14,14 @@ class AppLocksRoute extends BaseRoute {
   AppLocksRoute();
 
   @override
-  Future<T?> push<T extends Object?>(
-    BuildContext context, {
-    bool rootNavigator = false,
-  }) async {
-    bool authenticated = await context
-        .read<AppLockProvider>()
-        .authenticateIfHas(
-          context: context,
-          debugSource: '$runtimeType#push',
-        );
+  Future<T?> push<T extends Object?>(BuildContext context, {bool rootNavigator = false}) async {
+    bool authenticated = await context.read<AppLockProvider>().authenticateIfHas(
+      context: context,
+      debugSource: '$runtimeType#push',
+    );
 
     if (!authenticated || !context.mounted) return null;
-    return super.push(
-      context,
-      rootNavigator: rootNavigator,
-    );
+    return super.push(context, rootNavigator: rootNavigator);
   }
 
   @override
@@ -37,10 +29,7 @@ class AppLocksRoute extends BaseRoute {
 }
 
 class AppLocksView extends StatelessWidget {
-  const AppLocksView({
-    super.key,
-    required this.params,
-  });
+  const AppLocksView({super.key, required this.params});
 
   final AppLocksRoute params;
 

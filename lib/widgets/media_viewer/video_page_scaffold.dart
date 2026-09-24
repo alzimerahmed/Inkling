@@ -15,12 +15,7 @@ const List<double> _kSpeeds = [0.5, 1.0, 1.5, 2.0];
 /// compete with zoom for the same taps. Controls auto-hide 3s after they're
 /// last shown while the video is playing.
 class _VideoPageScaffold extends StatefulWidget {
-  const _VideoPageScaffold({
-    required this.item,
-    required this.index,
-    required this.total,
-    required this.controller,
-  });
+  const _VideoPageScaffold({required this.item, required this.index, required this.total, required this.controller});
 
   final SpMediaViewerItem item;
   final int index;
@@ -77,17 +72,14 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
     _preferencesProvider = context.read<DevicePreferencesProvider>();
     _playbackSpeed = _preferencesProvider.preferences.videoPlaybackSpeed;
     _muted = _preferencesProvider.preferences.videoMuted;
-    _preferencesProvider.addListenerForVideoPlaybackSpeed(
-      _onSpeedPreferenceChanged,
-    );
+    _preferencesProvider.addListenerForVideoPlaybackSpeed(_onSpeedPreferenceChanged);
     _preferencesProvider.addListenerForVideoMuted(_onMutedPreferenceChanged);
     DeviceVolumeService.instance.addOnIncreaseListener(_handleVolumeIncreased);
   }
 
   void _onSpeedPreferenceChanged() {
     if (!mounted) return;
-    if (_playbackSpeed == _preferencesProvider.preferences.videoPlaybackSpeed)
-      return;
+    if (_playbackSpeed == _preferencesProvider.preferences.videoPlaybackSpeed) return;
 
     _playbackSpeed = _preferencesProvider.preferences.videoPlaybackSpeed;
     controller?.setPlaybackSpeed(_playbackSpeed);
@@ -144,9 +136,7 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
   // hasClients guards the very first frame: PageController.page asserts if no
   // PageView is attached yet, and _createController can resolve that early.
   bool get _isCurrentPage {
-    final page = widget.controller.hasClients
-        ? widget.controller.page?.round()
-        : null;
+    final page = widget.controller.hasClients ? widget.controller.page?.round() : null;
     return (page ?? widget.controller.initialPage) == widget.index;
   }
 
@@ -154,12 +144,8 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
   void dispose() {
     _autoHideTimer?.cancel();
     widget.controller.removeListener(_handlePageChange);
-    DeviceVolumeService.instance.removeOnIncreaseListener(
-      _handleVolumeIncreased,
-    );
-    _preferencesProvider.removeListenerForVideoPlaybackSpeed(
-      _onSpeedPreferenceChanged,
-    );
+    DeviceVolumeService.instance.removeOnIncreaseListener(_handleVolumeIncreased);
+    _preferencesProvider.removeListenerForVideoPlaybackSpeed(_onSpeedPreferenceChanged);
     _preferencesProvider.removeListenerForVideoMuted(_onMutedPreferenceChanged);
     controller?.removeListener(_handleControllerValueChanged);
     controller?.dispose();
@@ -240,11 +226,7 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
   /// tap-play right at the end) racing to swap `controller` -- without the
   /// check, the loser's newController is never disposed either, since each
   /// call only disposes the oldController *it* captured.
-  Future<void> _createController(
-    File file, {
-    required bool autoplay,
-    Duration seekTo = Duration.zero,
-  }) async {
+  Future<void> _createController(File file, {required bool autoplay, Duration seekTo = Duration.zero}) async {
     final int generation = ++_controllerGeneration;
 
     final newController = VideoPlayerController.file(file);
@@ -256,19 +238,13 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
       // Nothing is awaiting this call (it's kicked off from build), so an
       // escaping exception here would surface as an unhandled async error
       // rather than anything the user can act on.
-      AppLogger.error(
-        '$runtimeType: failed to initialize video',
-        error: error,
-        stackTrace: stackTrace,
-      );
+      AppLogger.error('$runtimeType: failed to initialize video', error: error, stackTrace: stackTrace);
       await newController.dispose();
 
       // Only surface the failure when there's nothing on screen to keep: a
       // failed *re*-create (the EOS workaround) leaves the still-working
       // controller alone instead of tearing the video off the page.
-      if (mounted &&
-          controller == null &&
-          generation == _controllerGeneration) {
+      if (mounted && controller == null && generation == _controllerGeneration) {
         setState(() => _failed = true);
       }
       return;
@@ -372,8 +348,7 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
       await current.seekTo(target);
     } else if (_hasReachedEnd) {
       final file = _file;
-      if (file != null)
-        await _createController(file, autoplay: wasPlaying, seekTo: target);
+      if (file != null) await _createController(file, autoplay: wasPlaying, seekTo: target);
     } else {
       await current.seekTo(target);
       if (wasPlaying) await current.play();
@@ -386,10 +361,7 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
     final current = controller;
     if (current == null) return;
 
-    final target = _clamp(
-      current.value.position + delta,
-      current.value.duration,
-    );
+    final target = _clamp(current.value.position + delta, current.value.duration);
     await _seekAndMaybeResume(target);
   }
 
@@ -403,8 +375,7 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
     controller?.seekTo(position);
   }
 
-  Future<void> _handleSeekEnd(Duration position) =>
-      _seekAndMaybeResume(position);
+  Future<void> _handleSeekEnd(Duration position) => _seekAndMaybeResume(position);
 
   @override
   Widget build(BuildContext context) {
@@ -416,12 +387,7 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: _Chrome(
           visible: controlsVisible,
-          child: _buildAppBar(
-            context,
-            index: widget.index,
-            total: widget.total,
-            item: widget.item,
-          ),
+          child: _buildAppBar(context, index: widget.index, total: widget.total, item: widget.item),
         ),
       ),
       bottomNavigationBar: _Chrome(
@@ -450,20 +416,12 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
         // same dead end for the user as a file that never loaded, so it gets
         // the same icon rather than a spinner that would never resolve.
         if (error != null || _failed) {
-          return const Center(
-            child: Icon(
-              SpIcons.imageNotSupported,
-              color: Colors.white,
-              size: 40.0,
-            ),
-          );
+          return const Center(child: Icon(SpIcons.imageNotSupported, color: Colors.white, size: 40.0));
         }
 
         final playerController = controller;
         if (playerController == null || !playerController.value.isInitialized) {
-          return const Center(
-            child: CircularProgressIndicator.adaptive(),
-          );
+          return const Center(child: CircularProgressIndicator.adaptive());
         }
 
         return Stack(
@@ -477,9 +435,7 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
                 initialScale: PhotoViewComputedScale.contained,
                 minScale: PhotoViewComputedScale.contained,
                 maxScale: PhotoViewComputedScale.contained * 4.0,
-                backgroundDecoration: const BoxDecoration(
-                  color: Colors.transparent,
-                ),
+                backgroundDecoration: const BoxDecoration(color: Colors.transparent),
                 onTapUp: (context, details, value) => _toggleControls(),
                 child: VideoPlayer(playerController),
               ),
@@ -551,18 +507,12 @@ class _VideoControls extends StatelessWidget {
 
   Widget _buildContainer(BuildContext context, VideoPlayerValue value) {
     return Container(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).padding.bottom + 32.0,
-      ),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 32.0),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.bottomCenter,
           end: Alignment.topCenter,
-          colors: [
-            Colors.black,
-            Colors.black54,
-            Colors.transparent,
-          ],
+          colors: [Colors.black, Colors.black54, Colors.transparent],
         ),
       ),
       child: Column(
@@ -582,10 +532,7 @@ class _VideoControls extends StatelessWidget {
                 const Spacer(),
                 TextButton(
                   onPressed: onCycleSpeed,
-                  child: Text(
-                    '${playbackSpeed}x',
-                    style: const TextStyle(color: Colors.white),
-                  ),
+                  child: Text('${playbackSpeed}x', style: const TextStyle(color: Colors.white)),
                 ),
                 IconButton(
                   color: Colors.white,
@@ -607,10 +554,7 @@ class _VideoControls extends StatelessWidget {
 
   Widget _buildScrubber(BuildContext context, VideoPlayerValue value) {
     final durationMs = value.duration.inMilliseconds.toDouble();
-    final positionMs = value.position.inMilliseconds.toDouble().clamp(
-      0.0,
-      durationMs <= 0 ? 0.0 : durationMs,
-    );
+    final positionMs = value.position.inMilliseconds.toDouble().clamp(0.0, durationMs <= 0 ? 0.0 : durationMs);
 
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
@@ -624,10 +568,8 @@ class _VideoControls extends StatelessWidget {
         max: durationMs > 0 ? durationMs : 1.0,
         activeColor: Colors.white,
         inactiveColor: Colors.white24,
-        onChanged: (newValue) =>
-            onSeekChanged(Duration(milliseconds: newValue.toInt())),
-        onChangeEnd: (newValue) =>
-            onSeekEnd(Duration(milliseconds: newValue.toInt())),
+        onChanged: (newValue) => onSeekChanged(Duration(milliseconds: newValue.toInt())),
+        onChangeEnd: (newValue) => onSeekEnd(Duration(milliseconds: newValue.toInt())),
       ),
     );
   }
@@ -658,11 +600,7 @@ class _VideoCenterControls extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       spacing: 16.0,
       children: [
-        _buildButton(
-          icon: const Icon(SpIcons.replay5),
-          size: 32.0,
-          onPressed: onSeekBackward,
-        ),
+        _buildButton(icon: const Icon(SpIcons.replay5), size: 32.0, onPressed: onSeekBackward),
         _buildButton(
           icon: SpAnimatedIcons.fadeScale(
             showFirst: isPlaying,
@@ -672,20 +610,12 @@ class _VideoCenterControls extends StatelessWidget {
           size: 56.0,
           onPressed: onPlayPause,
         ),
-        _buildButton(
-          icon: const Icon(SpIcons.forward5),
-          size: 32.0,
-          onPressed: onSeekForward,
-        ),
+        _buildButton(icon: const Icon(SpIcons.forward5), size: 32.0, onPressed: onSeekForward),
       ],
     );
   }
 
-  Widget _buildButton({
-    required Widget icon,
-    required double size,
-    required VoidCallback onPressed,
-  }) {
+  Widget _buildButton({required Widget icon, required double size, required VoidCallback onPressed}) {
     return IconButton(
       color: Colors.white,
       iconSize: size,

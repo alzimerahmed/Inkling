@@ -3,25 +3,21 @@ import 'package:provider/provider.dart';
 import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
 import 'package:storypad/core/objects/calendar_segment_id.dart';
 import 'package:storypad/providers/device_preferences_provider.dart';
+
 import 'calendar_view.dart';
 
 class CalendarViewModel extends ChangeNotifier with DisposeAwareMixin {
   final CalendarRoute params;
   final BuildContext viewContext;
 
-  CalendarViewModel({
-    required this.params,
-    required this.viewContext,
-  }) {
+  CalendarViewModel({required this.params, required this.viewContext}) {
     monthYearNotifier = ValueNotifier((
       year: params.initialYear ?? DateTime.now().year,
       month: params.initialMonth ?? DateTime.now().month,
     ));
 
     _setSegments();
-    selectedSegment =
-        params.initialSegment != null &&
-            _segments.contains(params.initialSegment)
+    selectedSegment = params.initialSegment != null && _segments.contains(params.initialSegment)
         ? params.initialSegment!
         : _segments.first;
   }
@@ -38,10 +34,7 @@ class CalendarViewModel extends ChangeNotifier with DisposeAwareMixin {
       CalendarSegmentId.mood,
 
       // Use read (no need to listen) as this view is opened as sheet, so the enabled status is ready before this page is being built.
-      if (viewContext.read<DevicePreferencesProvider>().enablePeriodCalendar(
-        viewContext,
-      ))
-        CalendarSegmentId.period,
+      if (viewContext.read<DevicePreferencesProvider>().enablePeriodCalendar(viewContext)) CalendarSegmentId.period,
     ];
   }
 

@@ -12,14 +12,10 @@ class _HomeScrollInfo {
   List<HomeItem> get items => viewModel().items;
   List<int> get months => viewModel().months;
 
-  _HomeScrollAppBarInfo appBar(BuildContext context) => _HomeScrollAppBarInfo(
-    context: context,
-    extraExpandedHeight: extraExpandedHeight,
-  );
+  _HomeScrollAppBarInfo appBar(BuildContext context) =>
+      _HomeScrollAppBarInfo(context: context, extraExpandedHeight: extraExpandedHeight);
 
-  _HomeScrollInfo({
-    required this.viewModel,
-  }) {
+  _HomeScrollInfo({required this.viewModel}) {
     scrollController.addListener(_listener);
   }
 
@@ -51,17 +47,10 @@ class _HomeScrollInfo {
       if (context == null) continue;
 
       double expandedHeight = appBar(context).getExpandedHeight();
-      double scrollOffset = max(
-        0.0,
-        scrollController.offset -
-            expandedHeight +
-            MediaQuery.of(context).padding.top,
-      );
+      double scrollOffset = max(0.0, scrollController.offset - expandedHeight + MediaQuery.of(context).padding.top);
 
       final renderBox = context.findRenderObject() as RenderBox?;
-      double? itemPosition = renderBox
-          ?.localToGlobal(Offset(0.0, scrollOffset))
-          .dy;
+      double? itemPosition = renderBox?.localToGlobal(Offset(0.0, scrollOffset)).dy;
 
       if (itemPosition != null && itemPosition > scrollOffset + 48) {
         int monthIndex = months.indexWhere((e) => e == item.story.month);
@@ -74,19 +63,11 @@ class _HomeScrollInfo {
   Future<void> scrollToTop() async {
     // No need to set _scrolling = true here because we want to trigger
     // the listener so tab will be reset to first tab.
-    await scrollController.animateTo(
-      0,
-      duration: Durations.medium3,
-      curve: Curves.ease,
-    );
+    await scrollController.animateTo(0, duration: Durations.medium3, curve: Curves.ease);
   }
 
-  Future<void> moveToStory({
-    required int targetStoryId,
-  }) async {
-    final targetIndex = items.indexWhere(
-      (item) => item.storyId == targetStoryId,
-    );
+  Future<void> moveToStory({required int targetStoryId}) async {
+    final targetIndex = items.indexWhere((item) => item.storyId == targetStoryId);
     if (targetIndex == -1) return;
 
     final item = items[targetIndex];
@@ -117,10 +98,7 @@ class _HomeScrollInfo {
     });
   }
 
-  Future<void> moveToMonthIndex({
-    required int targetMonthIndex,
-    required BuildContext context,
-  }) async {
+  Future<void> moveToMonthIndex({required int targetMonthIndex, required BuildContext context}) async {
     if (targetMonthIndex < 0 || targetMonthIndex >= months.length) return;
     final targetMonth = months[targetMonthIndex];
 
@@ -128,13 +106,9 @@ class _HomeScrollInfo {
     // over its first story tile, so tapping a month tab lands on the
     // recap summary rather than scrolling past it.
     int findTargetIndex() {
-      final recapIndex = items.indexWhere(
-        (item) => item is HomeMonthRecapItem && item.story.month == targetMonth,
-      );
+      final recapIndex = items.indexWhere((item) => item is HomeMonthRecapItem && item.story.month == targetMonth);
       if (recapIndex != -1) return recapIndex;
-      return items.indexWhere(
-        (item) => item is HomeStoryItem && item.story.month == targetMonth,
-      );
+      return items.indexWhere((item) => item is HomeStoryItem && item.story.month == targetMonth);
     }
 
     int targetIndex = findTargetIndex();
@@ -142,18 +116,14 @@ class _HomeScrollInfo {
     // Target month may not have loaded yet (pagination hasn't reached it).
     // Pages load strictly newest-first, so loading forward always converges.
     if (targetIndex == -1 && viewModel().hasMoreStories) {
-      AppLogger.d(
-        '🚧 $runtimeType#moveToMonthIndex month $targetMonth not loaded yet, loading forward',
-      );
+      AppLogger.d('🚧 $runtimeType#moveToMonthIndex month $targetMonth not loaded yet, loading forward');
     }
     while (targetIndex == -1 && viewModel().hasMoreStories) {
       await viewModel().loadNextPage();
       targetIndex = findTargetIndex();
     }
     if (targetIndex == -1) {
-      AppLogger.d(
-        '🚧 $runtimeType#moveToMonthIndex gave up: month $targetMonth not found after loading all pages',
-      );
+      AppLogger.d('🚧 $runtimeType#moveToMonthIndex gave up: month $targetMonth not found after loading all pages');
       return;
     }
 
@@ -193,21 +163,13 @@ class _HomeScrollInfo {
       if (visibleIndices.isEmpty) break;
 
       // Determine direction and find nearest visible key
-      bool isMovingForward = visibleIndices.every(
-        (index) => targetIndex > index,
-      );
-      int nearestIndex = isMovingForward
-          ? visibleIndices.last
-          : visibleIndices.first;
+      bool isMovingForward = visibleIndices.every((index) => targetIndex > index);
+      int nearestIndex = isMovingForward ? visibleIndices.last : visibleIndices.first;
 
       // Jump to nearest visible key (no animation) to trigger rendering of more items
       final nearestKey = keys[nearestIndex];
       if (nearestKey.currentContext != null) {
-        await Scrollable.ensureVisible(
-          nearestKey.currentContext!,
-          duration: Duration.zero,
-          curve: Curves.ease,
-        );
+        await Scrollable.ensureVisible(nearestKey.currentContext!, duration: Duration.zero, curve: Curves.ease);
 
         Completer<void> completer = Completer<void>();
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -219,11 +181,7 @@ class _HomeScrollInfo {
 
     // Finally, smoothly scroll to target if it's now visible
     if (targetKey.currentContext != null) {
-      await Scrollable.ensureVisible(
-        targetKey.currentContext!,
-        duration: Durations.medium3,
-        curve: Curves.ease,
-      );
+      await Scrollable.ensureVisible(targetKey.currentContext!, duration: Durations.medium3, curve: Curves.ease);
     }
 
     _scrolling = false;

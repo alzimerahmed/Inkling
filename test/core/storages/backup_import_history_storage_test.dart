@@ -16,89 +16,51 @@ void main() {
 
     group('getImportHistoryByYear', () {
       test('returns empty list when storage is empty', () async {
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
 
         expect(history, isEmpty);
       });
 
       test('returns empty list when service not found', () async {
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          DateTime(2024, 1, 15),
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, DateTime(2024, 1, 15));
 
         // Trying to get history for a different service
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2025,
-        );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2025);
 
         expect(history, isEmpty);
       });
 
       test('returns single timestamp when one import recorded', () async {
         final timestamp = DateTime(2024, 1, 15, 10, 30);
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          timestamp,
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, timestamp);
 
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
 
         expect(history.length, 1);
         expect(history[0], timestamp);
       });
 
-      test(
-        'returns multiple timestamps in reverse chronological order',
-        () async {
-          final timestamps = [
-            DateTime(2024, 1, 15, 10, 30),
-            DateTime(2024, 1, 10, 8, 0),
-            DateTime(2024, 1, 5, 14, 45),
-          ];
+      test('returns multiple timestamps in reverse chronological order', () async {
+        final timestamps = [DateTime(2024, 1, 15, 10, 30), DateTime(2024, 1, 10, 8, 0), DateTime(2024, 1, 5, 14, 45)];
 
-          for (final ts in timestamps) {
-            await storage.markAsImported(
-              BackupServiceType.google_drive,
-              2024,
-              ts,
-            );
-          }
+        for (final ts in timestamps) {
+          await storage.markAsImported(BackupServiceType.google_drive, 2024, ts);
+        }
 
-          final history = await storage.getImportHistoryByYear(
-            BackupServiceType.google_drive,
-            2024,
-          );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
 
-          expect(history.length, 3);
-          // Should be in reverse chronological order (most recent first)
-          expect(history[0], timestamps[2]); // Last added
-          expect(history[1], timestamps[1]);
-          expect(history[2], timestamps[0]); // First added
-        },
-      );
+        expect(history.length, 3);
+        // Should be in reverse chronological order (most recent first)
+        expect(history[0], timestamps[2]); // Last added
+        expect(history[1], timestamps[1]);
+        expect(history[2], timestamps[0]); // First added
+      });
 
       test('preserves timezone information in timestamps', () async {
         final timestamp = DateTime(2024, 1, 15, 10, 30, 0, 123).toUtc();
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          timestamp,
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, timestamp);
 
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
 
         expect(history.length, 1);
         // DateTime equality checks both date, time, and UTC conversion
@@ -109,16 +71,9 @@ void main() {
     group('markAsImported', () {
       test('stores a single timestamp', () async {
         final timestamp = DateTime(2024, 1, 15, 10, 30);
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          timestamp,
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, timestamp);
 
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
 
         expect(history.length, 1);
         expect(history[0], timestamp);
@@ -128,21 +83,10 @@ void main() {
         final timestamp1 = DateTime(2024, 1, 15, 10, 30);
         final timestamp2 = DateTime(2024, 1, 20, 14, 0);
 
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          timestamp1,
-        );
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          timestamp2,
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, timestamp1);
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, timestamp2);
 
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
 
         expect(history.length, 2);
         expect(history[0], timestamp2); // Most recent first
@@ -153,17 +97,10 @@ void main() {
         // Add 35 timestamps to test that only last 30 are kept
         for (int i = 0; i < 35; i++) {
           final timestamp = DateTime(2024, 1, 1).add(Duration(days: i));
-          await storage.markAsImported(
-            BackupServiceType.google_drive,
-            2024,
-            timestamp,
-          );
+          await storage.markAsImported(BackupServiceType.google_drive, 2024, timestamp);
         }
 
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
 
         expect(history.length, 30);
       });
@@ -172,25 +109,11 @@ void main() {
         final ts2024 = DateTime(2024, 1, 15, 10, 30);
         final ts2025 = DateTime(2025, 1, 15, 10, 30);
 
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          ts2024,
-        );
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2025,
-          ts2025,
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, ts2024);
+        await storage.markAsImported(BackupServiceType.google_drive, 2025, ts2025);
 
-        final history2024 = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
-        final history2025 = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2025,
-        );
+        final history2024 = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
+        final history2025 = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2025);
 
         expect(history2024.length, 1);
         expect(history2024[0], ts2024);
@@ -201,16 +124,9 @@ void main() {
       test('maintains separate history for different services', () async {
         final timestamp = DateTime(2024, 1, 15, 10, 30);
 
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          timestamp,
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, timestamp);
 
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
 
         expect(history.length, 1);
         expect(history[0], timestamp);
@@ -219,27 +135,13 @@ void main() {
 
     group('clearService', () {
       test('removes all history for a service', () async {
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          DateTime(2024, 1, 15),
-        );
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2025,
-          DateTime(2025, 1, 15),
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, DateTime(2024, 1, 15));
+        await storage.markAsImported(BackupServiceType.google_drive, 2025, DateTime(2025, 1, 15));
 
         await storage.clearService(BackupServiceType.google_drive);
 
-        final history2024 = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
-        final history2025 = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2025,
-        );
+        final history2024 = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
+        final history2025 = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2025);
 
         expect(history2024, isEmpty);
         expect(history2025, isEmpty);
@@ -249,20 +151,13 @@ void main() {
         // Should not throw
         await storage.clearService(BackupServiceType.google_drive);
 
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
 
         expect(history, isEmpty);
       });
 
       test('clears entire storage when removing only service', () async {
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          DateTime(2024, 1, 15),
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, DateTime(2024, 1, 15));
 
         await storage.clearService(BackupServiceType.google_drive);
 
@@ -272,20 +167,13 @@ void main() {
       });
 
       test('maintains other service data when clearing one', () async {
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          DateTime(2024, 1, 15),
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, DateTime(2024, 1, 15));
 
         // Note: In current implementation, only google_drive exists,
         // but this test structure supports future service additions
         await storage.clearService(BackupServiceType.google_drive);
 
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
 
         expect(history, isEmpty);
       });
@@ -297,19 +185,12 @@ void main() {
 
         // Mark each year as imported
         for (final year in years) {
-          await storage.markAsImported(
-            BackupServiceType.google_drive,
-            year,
-            DateTime(year, 1, 15),
-          );
+          await storage.markAsImported(BackupServiceType.google_drive, year, DateTime(year, 1, 15));
         }
 
         // Verify each year's history
         for (final year in years) {
-          final history = await storage.getImportHistoryByYear(
-            BackupServiceType.google_drive,
-            year,
-          );
+          final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, year);
           expect(history.length, 1);
           expect(history[0].year, year);
         }
@@ -326,17 +207,10 @@ void main() {
 
         // Rapidly add multiple timestamps
         for (final ts in timestamps) {
-          await storage.markAsImported(
-            BackupServiceType.google_drive,
-            2024,
-            ts,
-          );
+          await storage.markAsImported(BackupServiceType.google_drive, 2024, ts);
         }
 
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
 
         expect(history.length, 5);
         // Verify all timestamps are present (in reverse order)
@@ -347,33 +221,19 @@ void main() {
 
       test('recovery scenario: sign out and re-import', () async {
         // Initial import
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          DateTime(2024, 1, 15),
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, DateTime(2024, 1, 15));
 
         // User signs out
         await storage.clearService(BackupServiceType.google_drive);
 
         // Verify cleaned
-        var history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
+        var history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
         expect(history, isEmpty);
 
         // User signs back in and imports
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          DateTime(2024, 1, 20),
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, DateTime(2024, 1, 20));
 
-        history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
+        history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
         expect(history.length, 1);
         expect(history[0].day, 20); // New import
       });
@@ -382,16 +242,9 @@ void main() {
     group('Edge cases', () {
       test('handles leap year dates correctly', () async {
         final leapYearDate = DateTime(2024, 2, 29, 12, 0);
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          leapYearDate,
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, leapYearDate);
 
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
 
         expect(history.length, 1);
         expect(history[0], leapYearDate);
@@ -401,25 +254,11 @@ void main() {
         final newYearsEveTimestamp = DateTime(2024, 12, 31, 23, 59, 59);
         final newYearsEveTimestamp2025 = DateTime(2025, 1, 1, 0, 0, 0);
 
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          newYearsEveTimestamp,
-        );
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2025,
-          newYearsEveTimestamp2025,
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, newYearsEveTimestamp);
+        await storage.markAsImported(BackupServiceType.google_drive, 2025, newYearsEveTimestamp2025);
 
-        final history2024 = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
-        final history2025 = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2025,
-        );
+        final history2024 = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
+        final history2025 = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2025);
 
         expect(history2024.length, 1);
         expect(history2025.length, 1);
@@ -429,16 +268,9 @@ void main() {
 
       test('handles microseconds precision in timestamps', () async {
         final preciseTimestamp = DateTime(2024, 1, 15, 10, 30, 45, 123456);
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2024,
-          preciseTimestamp,
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2024, preciseTimestamp);
 
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2024,
-        );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2024);
 
         expect(history.length, 1);
         // Verify microseconds are preserved through ISO8601 round-trip
@@ -447,16 +279,9 @@ void main() {
 
       test('handles very old dates (year 2000)', () async {
         final oldDate = DateTime(2000, 1, 1);
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2000,
-          oldDate,
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2000, oldDate);
 
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2000,
-        );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2000);
 
         expect(history.length, 1);
         expect(history[0].year, 2000);
@@ -464,16 +289,9 @@ void main() {
 
       test('handles future dates', () async {
         final futureDate = DateTime(2099, 12, 31);
-        await storage.markAsImported(
-          BackupServiceType.google_drive,
-          2099,
-          futureDate,
-        );
+        await storage.markAsImported(BackupServiceType.google_drive, 2099, futureDate);
 
-        final history = await storage.getImportHistoryByYear(
-          BackupServiceType.google_drive,
-          2099,
-        );
+        final history = await storage.getImportHistoryByYear(BackupServiceType.google_drive, 2099);
 
         expect(history.length, 1);
         expect(history[0].year, 2099);

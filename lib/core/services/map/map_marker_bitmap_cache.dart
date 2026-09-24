@@ -53,10 +53,7 @@ class MapMarkerBitmapCache {
     final Future<Uint8List>? inFlight = _inFlightByFileName[fileName];
     if (inFlight != null) return inFlight;
 
-    final Future<Uint8List> future = _resolveInternal(
-      fileName: fileName,
-      render: render,
-    );
+    final Future<Uint8List> future = _resolveInternal(fileName: fileName, render: render);
     _inFlightByFileName[fileName] = future;
 
     return future.whenComplete(() => _inFlightByFileName.remove(fileName));
@@ -66,9 +63,7 @@ class MapMarkerBitmapCache {
     required String fileName,
     required Future<({Uint8List bytes, bool cacheable})> Function() render,
   }) async {
-    final File file = File(
-      '${SupportDirectoryPath.map_markers.directoryPath}/$fileName',
-    );
+    final File file = File('${SupportDirectoryPath.map_markers.directoryPath}/$fileName');
 
     try {
       if (file.existsSync()) return await file.readAsBytes();
@@ -103,15 +98,10 @@ class MapMarkerBitmapCache {
     _pruneScheduled = true;
 
     try {
-      final List<File> files = SupportDirectoryPath.map_markers.directory
-          .listSync()
-          .whereType<File>()
-          .toList();
+      final List<File> files = SupportDirectoryPath.map_markers.directory.listSync().whereType<File>().toList();
       if (files.length <= _maxEntries) return;
 
-      files.sort(
-        (a, b) => a.statSync().modified.compareTo(b.statSync().modified),
-      );
+      files.sort((a, b) => a.statSync().modified.compareTo(b.statSync().modified));
       for (final File file in files.take(files.length - _maxEntries)) {
         try {
           file.deleteSync();

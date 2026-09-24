@@ -8,17 +8,10 @@ class _HomeAppBarNickname extends StatelessWidget {
     final provider = Provider.of<NicknameProvider>(context);
 
     return Text(
-      tr(
-        "page.home.app_bar.hello_nickname",
-        namedArgs: {
-          "NICKNAME": provider.nickname ?? "",
-        },
-      ),
+      tr("page.home.app_bar.hello_nickname", namedArgs: {"NICKNAME": provider.nickname ?? ""}),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: TextTheme.of(
-        context,
-      ).titleLarge?.copyWith(color: ColorScheme.of(context).primary),
+      style: TextTheme.of(context).titleLarge?.copyWith(color: ColorScheme.of(context).primary),
     );
   }
 }

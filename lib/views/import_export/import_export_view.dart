@@ -18,11 +18,7 @@ part 'import_export_content.dart';
 part 'local_widgets/export_section.dart';
 
 class ImportExportRoute extends BaseRoute {
-  const ImportExportRoute({
-    this.initialExportOption,
-    this.showExport,
-    this.showImport,
-  });
+  const ImportExportRoute({this.initialExportOption, this.showExport, this.showImport});
 
   final AppExportOption? initialExportOption;
   final bool? showExport;
@@ -33,10 +29,7 @@ class ImportExportRoute extends BaseRoute {
 }
 
 class ImportExportView extends StatelessWidget {
-  const ImportExportView({
-    super.key,
-    required this.params,
-  });
+  const ImportExportView({super.key, required this.params});
 
   final ImportExportRoute params;
 

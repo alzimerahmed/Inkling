@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+
 import 'package:animated_clipper/animated_clipper.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -62,15 +63,8 @@ class QuillRichTextController extends RichTextController {
   /// The underlying QuillController instance
   final quill.QuillController _quillController;
 
-  QuillRichTextController({
-    required quill.Document document,
-    required TextSelection selection,
-    bool readOnly = false,
-  }) : _quillController = quill.QuillController(
-         document: document,
-         selection: selection,
-         readOnly: readOnly,
-       ) {
+  QuillRichTextController({required quill.Document document, required TextSelection selection, bool readOnly = false})
+    : _quillController = quill.QuillController(document: document, selection: selection, readOnly: readOnly) {
     // Forward notifications from QuillController
     _quillController.addListener(_onQuillControllerChanged);
   }
@@ -82,11 +76,7 @@ class QuillRichTextController extends RichTextController {
     bool readOnly = false,
   }) {
     final document = quill.Document.fromJson(json);
-    return QuillRichTextController(
-      document: document,
-      selection: selection,
-      readOnly: readOnly,
-    );
+    return QuillRichTextController(document: document, selection: selection, readOnly: readOnly);
   }
 
   void _onQuillControllerChanged() {
@@ -115,12 +105,7 @@ class QuillRichTextController extends RichTextController {
   // ========================================================================
 
   @override
-  void replaceText(
-    int index,
-    int length,
-    Object data,
-    TextSelection? textSelection,
-  ) {
+  void replaceText(int index, int length, Object data, TextSelection? textSelection) {
     final Object quillData;
     if (data is Map<String, dynamic>) {
       final type = data.keys.first;
@@ -162,31 +147,18 @@ class QuillRichTextController extends RichTextController {
   // ========================================================================
 
   @override
-  void insertEmbed({
-    required String embedType,
-    required String value,
-    Map<String, dynamic>? attributes,
-  }) {
+  void insertEmbed({required String embedType, required String value, Map<String, dynamic>? attributes}) {
     final index = _quillController.selection.baseOffset;
     final length = _quillController.selection.extentOffset - index;
 
-    final delta = _buildEmbedDelta(
-      embedType: embedType,
-      value: value,
-      attributes: attributes,
-    );
+    final delta = _buildEmbedDelta(embedType: embedType, value: value, attributes: attributes);
 
     _quillController.replaceText(index, length, delta, null);
     _quillController.moveCursorToPosition(index + 1);
   }
 
   @override
-  void replaceEmbed({
-    required int offset,
-    required int length,
-    required String embedType,
-    required String value,
-  }) {
+  void replaceEmbed({required int offset, required int length, required String embedType, required String value}) {
     final line = _quillController.document.queryChild(offset).node;
     Map<String, dynamic>? attributes;
 
@@ -200,18 +172,9 @@ class QuillRichTextController extends RichTextController {
       }
     }
 
-    final delta = _buildEmbedDelta(
-      embedType: embedType,
-      value: value,
-      attributes: attributes,
-    );
+    final delta = _buildEmbedDelta(embedType: embedType, value: value, attributes: attributes);
 
-    _quillController.replaceText(
-      offset,
-      length,
-      delta,
-      _quillController.selection,
-    );
+    _quillController.replaceText(offset, length, delta, _quillController.selection);
   }
 
   // ========================================================================

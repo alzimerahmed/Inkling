@@ -21,8 +21,7 @@ import 'package:storypad/views/templates/stories/template_stories_view.dart';
 
 import 'show_template_gallery_view.dart';
 
-class ShowTemplateGalleryViewModel extends ChangeNotifier
-    with DisposeAwareMixin, DebounchedCallback {
+class ShowTemplateGalleryViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
   final ShowTemplateGalleryRoute params;
   final PageController pageController = PageController();
 
@@ -54,9 +53,7 @@ class ShowTemplateGalleryViewModel extends ChangeNotifier
     );
 
     draftContent = content.copyWith(
-      richPages: content.richPages
-          ?.map((e) => pagesManager.pagesMap[e.id]?.page ?? e)
-          .toList(),
+      richPages: content.richPages?.map((e) => pagesManager.pagesMap[e.id]?.page ?? e).toList(),
     );
 
     galleryTemplate = galleryTemplate.copyWith(lazyDraftContent: draftContent);
@@ -75,16 +72,11 @@ class ShowTemplateGalleryViewModel extends ChangeNotifier
   }
 
   void goToPreviousStories(BuildContext context) async {
-    TemplateStoriesRoute(
-      template: null,
-      galleryTemplate: galleryTemplate,
-    ).push(context);
+    TemplateStoriesRoute(template: null, galleryTemplate: galleryTemplate).push(context);
   }
 
   void saveTemplate(BuildContext context) async {
-    final result = await TemplateDbModel.db.where(
-      filters: {'gallery_template_id': galleryTemplate.id},
-    );
+    final result = await TemplateDbModel.db.where(filters: {'gallery_template_id': galleryTemplate.id});
 
     if (!context.mounted) return;
     if (result?.items.isNotEmpty == true) {
@@ -113,10 +105,7 @@ class ShowTemplateGalleryViewModel extends ChangeNotifier
       permanentlyDeletedAt: null,
     );
 
-    var newResult = await EditTemplateRoute(
-      flowType: .create,
-      initialTemplate: newTemplate,
-    ).push(context);
+    var newResult = await EditTemplateRoute(flowType: .create, initialTemplate: newTemplate).push(context);
 
     if (context.mounted && newResult is TemplateDbModel) {
       MessengerService.of(context).showSuccess();
@@ -124,17 +113,10 @@ class ShowTemplateGalleryViewModel extends ChangeNotifier
   }
 
   void useTemplate(BuildContext context) async {
-    AnalyticsService.instance.logUseGalleryTemplate(
-      templateId: galleryTemplate.id,
-      source: 'gallery',
-    );
-    GalleryTemplateUsageService.instance.recordTemplateUsage(
-      templateId: galleryTemplate.id,
-    );
+    AnalyticsService.instance.logUseGalleryTemplate(templateId: galleryTemplate.id, source: 'gallery');
+    GalleryTemplateUsageService.instance.recordTemplateUsage(templateId: galleryTemplate.id);
 
-    final result = await EditStoryRoute(
-      galleryTemplate: galleryTemplate,
-    ).push(context);
+    final result = await EditStoryRoute(galleryTemplate: galleryTemplate).push(context);
 
     if (context.mounted && result is StoryDbModel) {
       Future.delayed(const Duration(seconds: 1)).then((_) {

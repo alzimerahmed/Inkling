@@ -19,9 +19,7 @@ class _OnboardingStep1Content extends StatelessWidget {
           VisibleWhenNotified(
             notifier: viewModel.showHomePageNotifier,
             child: FadeInBuilder(
-              transformBuilder: (a) =>
-                  Matrix4.identity()
-                    ..spTranslate(0.0, lerpDouble(64.0, 0.0, a.value)!),
+              transformBuilder: (a) => Matrix4.identity()..spTranslate(0.0, lerpDouble(64.0, 0.0, a.value)!),
               duration: const Duration(milliseconds: 1000),
               child: const HomeScreenshot(),
             ),
@@ -30,19 +28,13 @@ class _OnboardingStep1Content extends StatelessWidget {
             notifier: viewModel.showStoryDetailsPageNotifier,
             child: FadeInBuilder(
               duration: viewModel.storyDetailsAnimationDuration,
-              transformBuilder: (a) =>
-                  Matrix4.identity()
-                    ..spTranslate(0.0, lerpDouble(360.0, 0.0, a.value)!),
+              transformBuilder: (a) => Matrix4.identity()..spTranslate(0.0, lerpDouble(360.0, 0.0, a.value)!),
               child: const StoryDetailsScreenshot(),
             ),
           ),
           VisibleWhenNotified(
             notifier: viewModel.showStoryClickedNotifier,
-            child: const ClickAnimation(
-              left: 0,
-              right: 0,
-              top: 188,
-            ),
+            child: const ClickAnimation(left: 0, right: 0, top: 188),
           ),
         ],
       ),
@@ -58,10 +50,7 @@ class _OnboardingStep1Content extends StatelessWidget {
         child: Text(tr("button.next")),
       );
     } else {
-      return OutlinedButton(
-        child: Text(tr("button.next")),
-        onPressed: () => viewModel.next(context),
-      );
+      return OutlinedButton(child: Text(tr("button.next")), onPressed: () => viewModel.next(context));
     }
   }
 }

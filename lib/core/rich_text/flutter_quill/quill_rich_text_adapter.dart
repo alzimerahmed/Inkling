@@ -33,16 +33,8 @@ class QuillRichTextAdapter implements RichTextAdapter {
   }
 
   @override
-  Widget buildToolbar({
-    required BuildContext context,
-    required RichTextController controller,
-    Color? backgroundColor,
-  }) {
-    return buildQuillToolbar(
-      context: context,
-      controller: controller,
-      backgroundColor: backgroundColor,
-    );
+  Widget buildToolbar({required BuildContext context, required RichTextController controller, Color? backgroundColor}) {
+    return buildQuillToolbar(context: context, controller: controller, backgroundColor: backgroundColor);
   }
 
   /// Filters out non-insert operations (delete/retain) from a Delta JSON list.
@@ -64,17 +56,11 @@ class QuillRichTextAdapter implements RichTextAdapter {
     final sanitized = _sanitizeDeltaJson(json);
     if (sanitized.isEmpty) return createEmptyController(readOnly: readOnly);
 
-    return QuillRichTextController.fromJson(
-      json: sanitized,
-      selection: selection,
-      readOnly: readOnly,
-    );
+    return QuillRichTextController.fromJson(json: sanitized, selection: selection, readOnly: readOnly);
   }
 
   @override
-  RichTextController createEmptyController({
-    required bool readOnly,
-  }) {
+  RichTextController createEmptyController({required bool readOnly}) {
     return QuillRichTextController(
       document: quill.Document(),
       selection: const TextSelection.collapsed(offset: 0),
@@ -83,9 +69,7 @@ class QuillRichTextAdapter implements RichTextAdapter {
   }
 
   @override
-  RichTextDocument createDocument({
-    required List<dynamic> json,
-  }) {
+  RichTextDocument createDocument({required List<dynamic> json}) {
     // Handle empty JSON - flutter_quill doesn't accept empty deltas
     if (json.isEmpty) return createEmptyDocument();
 
@@ -101,27 +85,16 @@ class QuillRichTextAdapter implements RichTextAdapter {
   }
 
   @override
-  void insertMedia({
-    required RichTextController controller,
-    required String mediaPath,
-  }) {
+  void insertMedia({required RichTextController controller, required String mediaPath}) {
     controller.insertEmbed(
       embedType: 'media',
       value: mediaPath,
-      attributes: {
-        _EmbedSizeAttribute.maxSize.key: _EmbedSizeAttribute.maxSize.value,
-      },
+      attributes: {_EmbedSizeAttribute.maxSize.key: _EmbedSizeAttribute.maxSize.value},
     );
   }
 
   @override
-  void insertAudio({
-    required RichTextController controller,
-    required String audioPath,
-  }) {
-    controller.insertEmbed(
-      embedType: 'audio',
-      value: audioPath,
-    );
+  void insertAudio({required RichTextController controller, required String audioPath}) {
+    controller.insertEmbed(embedType: 'audio', value: audioPath);
   }
 }

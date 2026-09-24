@@ -1,9 +1,7 @@
 part of '../home_view.dart';
 
 class _HomeFloatingButtons extends StatefulWidget {
-  const _HomeFloatingButtons({
-    required this.viewModel,
-  });
+  const _HomeFloatingButtons({required this.viewModel});
 
   final HomeViewModel viewModel;
 
@@ -11,15 +9,9 @@ class _HomeFloatingButtons extends StatefulWidget {
   State<_HomeFloatingButtons> createState() => _HomeFloatingButtonsState();
 }
 
-class _HomeFloatingButtonsState extends State<_HomeFloatingButtons>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController animationController = AnimationController(
-    vsync: this,
-    duration: Durations.medium2,
-  );
-  late Animation<double> animation = animationController.drive(
-    CurveTween(curve: Curves.ease),
-  );
+class _HomeFloatingButtonsState extends State<_HomeFloatingButtons> with SingleTickerProviderStateMixin {
+  late final AnimationController animationController = AnimationController(vsync: this, duration: Durations.medium2);
+  late Animation<double> animation = animationController.drive(CurveTween(curve: Curves.ease));
 
   OverlayEntry? floating;
 
@@ -40,9 +32,7 @@ class _HomeFloatingButtonsState extends State<_HomeFloatingButtons>
   }
 
   OverlayEntry createFloating(BuildContext buttons) {
-    return OverlayEntry(
-      builder: (context) => buildExpandedScaffold(context),
-    );
+    return OverlayEntry(builder: (context) => buildExpandedScaffold(context));
   }
 
   @override
@@ -75,10 +65,7 @@ class _HomeFloatingButtonsState extends State<_HomeFloatingButtons>
         shape: const StadiumBorder(),
       );
     } else {
-      return FloatingActionButton(
-        onPressed: () => toggle(context),
-        child: const Icon(SpIcons.newStory),
-      );
+      return FloatingActionButton(onPressed: () => toggle(context), child: const Icon(SpIcons.newStory));
     }
   }
 
@@ -157,9 +144,7 @@ class _HomeFloatingButtonsState extends State<_HomeFloatingButtons>
             return Container(
               width: double.infinity,
               height: double.infinity,
-              color: Colors.black.withValues(
-                alpha: lerpDouble(0.0, 0.75, animation.value),
-              ),
+              color: Colors.black.withValues(alpha: lerpDouble(0.0, 0.75, animation.value)),
             );
           },
         ),
@@ -180,17 +165,10 @@ class _HomeFloatingButtonsState extends State<_HomeFloatingButtons>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   spacing: 8.0,
                   children: [
-                    Text(
-                      button.tooltip!,
-                      style: TextTheme.of(
-                        context,
-                      ).labelLarge?.copyWith(color: Colors.white),
-                    ),
+                    Text(button.tooltip!, style: TextTheme.of(context).labelLarge?.copyWith(color: Colors.white)),
                     Padding(
                       padding: button.visualDensity?.horizontal != null
-                          ? EdgeInsets.only(
-                              right: button.visualDensity!.horizontal,
-                            )
+                          ? EdgeInsets.only(right: button.visualDensity!.horizontal)
                           : EdgeInsets.zero,
                       child: button,
                     ),
@@ -204,10 +182,7 @@ class _HomeFloatingButtonsState extends State<_HomeFloatingButtons>
                 tooltip: tr("button.cancel"),
                 backgroundColor: Colors.grey.shade900,
                 foregroundColor: Colors.white,
-                child: SpFadeIn.bound(
-                  duration: Durations.medium1,
-                  child: const Icon(SpIcons.clear),
-                ),
+                child: SpFadeIn.bound(duration: Durations.medium1, child: const Icon(SpIcons.clear)),
                 onPressed: () => toggle(context),
               ),
             ),

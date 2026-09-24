@@ -1,24 +1,12 @@
 part of 'backup_exception.dart';
 
-enum AuthExceptionType {
-  tokenExpired,
-  tokenRevoked,
-  insufficientScopes,
-  signInRequired,
-  signInFailed,
-}
+enum AuthExceptionType { tokenExpired, tokenRevoked, insufficientScopes, signInRequired, signInFailed }
 
 /// Google authentication and authorization exceptions
 class AuthException extends BackupException {
   final AuthExceptionType type;
 
-  const AuthException(
-    super.message,
-    this.type, {
-    super.context,
-    super.isRetryable = false,
-    super.serviceType,
-  });
+  const AuthException(super.message, this.type, {super.context, super.isRetryable = false, super.serviceType});
 
   @override
   String get userFriendlyMessage {

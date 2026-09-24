@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:animations/animations.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,10 +15,7 @@ import 'package:storypad/core/objects/device_preferences_object.dart';
 import 'package:storypad/providers/device_preferences_provider.dart';
 
 class AppTheme extends StatelessWidget {
-  const AppTheme({
-    super.key,
-    required this.builder,
-  });
+  const AppTheme({super.key, required this.builder});
 
   final Widget Function(
     BuildContext context,
@@ -37,11 +35,7 @@ class AppTheme extends StatelessWidget {
       context.read<DevicePreferencesProvider>().preferences.colorSeed == Colors.black ||
       context.read<DevicePreferencesProvider>().preferences.colorSeed == Colors.white;
 
-  static T? getDirectionValue<T extends Object>(
-    BuildContext context,
-    T? rtlValue,
-    T? ltrValue,
-  ) {
+  static T? getDirectionValue<T extends Object>(BuildContext context, T? rtlValue, T? ltrValue) {
     if (Directionality.of(context) == TextDirection.rtl) {
       return rtlValue;
     } else {
@@ -49,10 +43,7 @@ class AppTheme extends StatelessWidget {
     }
   }
 
-  static FontWeight getThemeFontWeight(
-    BuildContext context,
-    FontWeight defaultWeight,
-  ) {
+  static FontWeight getThemeFontWeight(BuildContext context, FontWeight defaultWeight) {
     FontWeight preferredFontWeight = context.read<DevicePreferencesProvider>().preferences.fontWeight;
 
     final fontWeights = {
@@ -106,13 +97,7 @@ class AppTheme extends StatelessWidget {
                 systemNavigationBarDividerColor: Colors.transparent,
                 systemNavigationBarContrastEnforced: false,
               ),
-              child: builder(
-                context,
-                provider.preferences,
-                lightTheme,
-                darkTheme,
-                provider.themeMode,
-              ),
+              child: builder(context, provider.preferences, lightTheme, darkTheme, provider.themeMode),
             );
           },
         );
@@ -131,13 +116,8 @@ class AppTheme extends StatelessWidget {
     bool darkMode = colorScheme.brightness == Brightness.dark;
     ThemeData baseTheme = darkMode ? ThemeData.dark() : ThemeData.light();
 
-    TextStyle calculateTextStyle(
-      TextStyle textStyle,
-      FontWeight defaultFontWeight,
-    ) {
-      return textStyle.copyWith(
-        fontWeight: _calculateFontWeight(defaultFontWeight, fontWeight),
-      );
+    TextStyle calculateTextStyle(TextStyle textStyle, FontWeight defaultFontWeight) {
+      return textStyle.copyWith(fontWeight: _calculateFontWeight(defaultFontWeight, fontWeight));
     }
 
     Color? dividerColor = colorScheme.onSurface.withValues(alpha: 0.15);
@@ -148,12 +128,8 @@ class AppTheme extends StatelessWidget {
       splashFactory: kIsCupertino ? NoSplash.splashFactory : null,
       scaffoldBackgroundColor: scaffoldBackgroundColor,
       colorScheme: colorScheme,
-      pageTransitionsTheme: getPageTransitionTheme(
-        fillColor: scaffoldBackgroundColor,
-      ),
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        shape: kIsCupertino ? CircleBorder() : null,
-      ),
+      pageTransitionsTheme: getPageTransitionTheme(fillColor: scaffoldBackgroundColor),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(shape: kIsCupertino ? CircleBorder() : null),
       cupertinoOverrideTheme: CupertinoThemeData(
         brightness: colorScheme.brightness,
         scaffoldBackgroundColor: scaffoldBackgroundColor,
@@ -161,9 +137,7 @@ class AppTheme extends StatelessWidget {
         primaryContrastingColor: colorScheme.onPrimary,
         textTheme: CupertinoTextThemeData(primaryColor: colorScheme.primary),
       ),
-      popupMenuTheme: PopupMenuThemeData(
-        color: colorScheme.readOnly.surface5,
-      ),
+      popupMenuTheme: PopupMenuThemeData(color: colorScheme.readOnly.surface5),
       appBarTheme: AppBarTheme(
         titleSpacing: NavigationToolbar.kMiddleSpacing,
         backgroundColor: colorScheme.surface,
@@ -180,85 +154,34 @@ class AppTheme extends StatelessWidget {
       drawerTheme: const DrawerThemeData(),
       dividerColor: dividerColor,
       dividerTheme: DividerThemeData(color: dividerColor),
-      inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-      ),
+      inputDecorationTheme: InputDecorationTheme(border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0))),
       outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(color: dividerColor),
-        ),
+        style: OutlinedButton.styleFrom(side: BorderSide(color: dividerColor)),
       ),
       textTheme: GoogleFonts.getTextTheme(
         GoogleFonts.asMap().keys.contains(fontFamily) ? fontFamily : kDefaultFontFamily,
         TextTheme(
-          displayLarge: calculateTextStyle(
-            baseTheme.textTheme.displayLarge!,
-            FontWeight.w400,
-          ),
-          displayMedium: calculateTextStyle(
-            baseTheme.textTheme.displayMedium!,
-            FontWeight.w400,
-          ),
-          displaySmall: calculateTextStyle(
-            baseTheme.textTheme.displaySmall!,
-            FontWeight.w400,
-          ),
-          headlineLarge: calculateTextStyle(
-            baseTheme.textTheme.headlineLarge!,
-            FontWeight.w400,
-          ),
-          headlineMedium: calculateTextStyle(
-            baseTheme.textTheme.headlineMedium!,
-            FontWeight.w400,
-          ),
-          headlineSmall: calculateTextStyle(
-            baseTheme.textTheme.headlineSmall!,
-            FontWeight.w400,
-          ),
-          titleLarge: calculateTextStyle(
-            baseTheme.textTheme.titleLarge!,
-            FontWeight.w400,
-          ),
-          titleMedium: calculateTextStyle(
-            baseTheme.textTheme.titleMedium!,
-            FontWeight.w400,
-          ),
-          titleSmall: calculateTextStyle(
-            baseTheme.textTheme.titleSmall!,
-            FontWeight.w500,
-          ),
-          bodyLarge: calculateTextStyle(
-            baseTheme.textTheme.bodyLarge!,
-            FontWeight.w400,
-          ),
-          bodyMedium: calculateTextStyle(
-            baseTheme.textTheme.bodyMedium!,
-            FontWeight.w400,
-          ),
-          bodySmall: calculateTextStyle(
-            baseTheme.textTheme.bodySmall!,
-            FontWeight.w400,
-          ),
-          labelLarge: calculateTextStyle(
-            baseTheme.textTheme.labelLarge!,
-            FontWeight.w500,
-          ),
-          labelMedium: calculateTextStyle(
-            baseTheme.textTheme.labelMedium!,
-            FontWeight.w500,
-          ),
-          labelSmall: calculateTextStyle(
-            baseTheme.textTheme.labelSmall!,
-            FontWeight.w500,
-          ),
+          displayLarge: calculateTextStyle(baseTheme.textTheme.displayLarge!, FontWeight.w400),
+          displayMedium: calculateTextStyle(baseTheme.textTheme.displayMedium!, FontWeight.w400),
+          displaySmall: calculateTextStyle(baseTheme.textTheme.displaySmall!, FontWeight.w400),
+          headlineLarge: calculateTextStyle(baseTheme.textTheme.headlineLarge!, FontWeight.w400),
+          headlineMedium: calculateTextStyle(baseTheme.textTheme.headlineMedium!, FontWeight.w400),
+          headlineSmall: calculateTextStyle(baseTheme.textTheme.headlineSmall!, FontWeight.w400),
+          titleLarge: calculateTextStyle(baseTheme.textTheme.titleLarge!, FontWeight.w400),
+          titleMedium: calculateTextStyle(baseTheme.textTheme.titleMedium!, FontWeight.w400),
+          titleSmall: calculateTextStyle(baseTheme.textTheme.titleSmall!, FontWeight.w500),
+          bodyLarge: calculateTextStyle(baseTheme.textTheme.bodyLarge!, FontWeight.w400),
+          bodyMedium: calculateTextStyle(baseTheme.textTheme.bodyMedium!, FontWeight.w400),
+          bodySmall: calculateTextStyle(baseTheme.textTheme.bodySmall!, FontWeight.w400),
+          labelLarge: calculateTextStyle(baseTheme.textTheme.labelLarge!, FontWeight.w500),
+          labelMedium: calculateTextStyle(baseTheme.textTheme.labelMedium!, FontWeight.w500),
+          labelSmall: calculateTextStyle(baseTheme.textTheme.labelSmall!, FontWeight.w500),
         ),
       ),
     );
   }
 
-  static PageTransitionsTheme getPageTransitionTheme({
-    Color? fillColor,
-  }) {
+  static PageTransitionsTheme getPageTransitionTheme({Color? fillColor}) {
     return PageTransitionsTheme(
       builders: <TargetPlatform, PageTransitionsBuilder>{
         TargetPlatform.iOS: const CupertinoPageTransitionsBuilder(),
@@ -336,10 +259,7 @@ class AppTheme extends StatelessWidget {
     );
   }
 
-  static FontWeight _calculateFontWeight(
-    FontWeight defaultWeight,
-    FontWeight preferredFontWeight,
-  ) {
+  static FontWeight _calculateFontWeight(FontWeight defaultWeight, FontWeight preferredFontWeight) {
     int changeBy = defaultWeight == FontWeight.w400 ? 0 : 1;
 
     Map<int, FontWeight> fontWeights = {

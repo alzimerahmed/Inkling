@@ -1,11 +1,7 @@
 part of '../library_view.dart';
 
 class _ImageStatus extends StatelessWidget {
-  const _ImageStatus({
-    required this.context,
-    required this.asset,
-    required this.provider,
-  });
+  const _ImageStatus({required this.context, required this.asset, required this.provider});
 
   final BuildContext context;
   final AssetDbModel asset;
@@ -13,9 +9,7 @@ class _ImageStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final destination = asset.matchingCloudDestinationFor(
-      provider.signedInServices,
-    );
+    final destination = asset.matchingCloudDestinationFor(provider.signedInServices);
 
     if (destination == null) {
       return SpAssetStatusBadge(
@@ -37,8 +31,7 @@ class _ImageStatus extends StatelessWidget {
       backgroundColor: ColorScheme.of(context).bootstrap.success.color,
       foregroundColor: ColorScheme.of(context).bootstrap.success.onColor,
       icon: SpIcons.cloudDone,
-      tooltipMessage:
-          '${destination.serviceType.displayName}: ${destination.identifier}',
+      tooltipMessage: '${destination.serviceType.displayName}: ${destination.identifier}',
     );
   }
 }

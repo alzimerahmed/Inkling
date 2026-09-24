@@ -43,10 +43,7 @@ class SpAnimatedIcons extends StatelessWidget {
           turns: child.key == firstChild.key
               ? Tween<double>(begin: 0.25, end: 0).animate(animation)
               : Tween<double>(begin: 0.75, end: 1).animate(animation),
-          child: ScaleTransition(
-            scale: animation,
-            child: child,
-          ),
+          child: ScaleTransition(scale: animation, child: child),
         );
       },
     );
@@ -70,10 +67,7 @@ class SpAnimatedIcons extends StatelessWidget {
       transitionBuilder: (child, animation) {
         return FadeTransition(
           opacity: animation,
-          child: ScaleTransition(
-            scale: animation,
-            child: child,
-          ),
+          child: ScaleTransition(scale: animation, child: child),
         );
       },
     );
@@ -85,16 +79,10 @@ class SpAnimatedIcons extends StatelessWidget {
     Widget secondChild = this.secondChild;
 
     if (firstChild.key == null) {
-      firstChild = SizedBox(
-        key: const ValueKey("1"),
-        child: firstChild,
-      );
+      firstChild = SizedBox(key: const ValueKey("1"), child: firstChild);
     }
     if (secondChild.key == null) {
-      secondChild = SizedBox(
-        key: const ValueKey("2"),
-        child: secondChild,
-      );
+      secondChild = SizedBox(key: const ValueKey("2"), child: secondChild);
     }
 
     return AnimatedSwitcher(

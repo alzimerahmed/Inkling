@@ -21,19 +21,14 @@ class SearchRoute extends BaseRoute {
   @override
   String get routeName => 'search';
 
-  SearchRoute({
-    this.initialFilter,
-  });
+  SearchRoute({this.initialFilter});
 
   @override
   Widget buildPage(BuildContext context) => SearchView(params: this);
 }
 
 class SearchView extends StatelessWidget {
-  const SearchView({
-    super.key,
-    required this.params,
-  });
+  const SearchView({super.key, required this.params});
 
   final SearchRoute params;
 

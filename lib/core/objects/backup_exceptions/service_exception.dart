@@ -16,13 +16,7 @@ enum ServiceExceptionType {
 class ServiceException extends BackupException {
   final ServiceExceptionType type;
 
-  const ServiceException(
-    super.message,
-    this.type, {
-    super.context,
-    super.isRetryable = false,
-    super.serviceType,
-  });
+  const ServiceException(super.message, this.type, {super.context, super.isRetryable = false, super.serviceType});
 
   @override
   String get userFriendlyMessage {

@@ -13,15 +13,8 @@ class SpFocusNodeBuilder2 extends StatefulWidget {
   final Widget? child;
   final FocusNode focusNode1;
   final FocusNode focusNode2;
-  final void Function(bool node1Focused, bool node2Focused)?
-  onFucusChangeAfterInitialized;
-  final Widget Function(
-    BuildContext context,
-    bool node1Focused,
-    bool node2Focused,
-    Widget? child,
-  )
-  builder;
+  final void Function(bool node1Focused, bool node2Focused)? onFucusChangeAfterInitialized;
+  final Widget Function(BuildContext context, bool node1Focused, bool node2Focused, Widget? child) builder;
 
   @override
   State<SpFocusNodeBuilder2> createState() => SpFocusNodeBuilder2State();
@@ -63,11 +56,6 @@ class SpFocusNodeBuilder2State extends State<SpFocusNodeBuilder2> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(
-      context,
-      node1Focused,
-      node2Focused,
-      widget.child,
-    );
+    return widget.builder(context, node1Focused, node2Focused, widget.child);
   }
 }

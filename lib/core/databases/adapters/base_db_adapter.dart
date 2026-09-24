@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:storypad/core/databases/models/base_db_model.dart';
 import 'package:storypad/core/databases/models/collection_db_model.dart';
@@ -31,15 +32,10 @@ abstract class BaseDbAdapter<T extends BaseDbModel> {
   /// For a table where [isYearPartitioned] is `false`, implementations return a
   /// single entry keyed by `BackupFileObject.kGlobalBackupYear` covering every
   /// row, regardless of that row's actual `createdAt`.
-  Future<Map<int, DateTime?>> getLastUpdatedAtByYear({
-    bool? fromThisDeviceOnly,
-  });
+  Future<Map<int, DateTime?>> getLastUpdatedAtByYear({bool? fromThisDeviceOnly});
   Future<T?> find(int id, {bool returnDeleted = false});
 
-  Future<int> count({
-    Map<String, dynamic>? filters,
-    required String? debugSource,
-  });
+  Future<int> count({Map<String, dynamic>? filters, required String? debugSource});
 
   Future<CollectionDbModel<T>?> where({
     Map<String, dynamic>? filters,
@@ -47,37 +43,17 @@ abstract class BaseDbAdapter<T extends BaseDbModel> {
     bool returnDeleted = false,
   });
 
-  Future<T?> touch(
-    T record, {
-    bool runCallbacks = true,
-  });
+  Future<T?> touch(T record, {bool runCallbacks = true});
 
-  Future<T?> set(
-    T record, {
-    bool runCallbacks = true,
-  });
+  Future<T?> set(T record, {bool runCallbacks = true});
 
-  Future<void> setAll(
-    List<T> records, {
-    bool runCallbacks = true,
-  });
+  Future<void> setAll(List<T> records, {bool runCallbacks = true});
 
-  Future<T?> update(
-    T record, {
-    bool runCallbacks = true,
-  });
+  Future<T?> update(T record, {bool runCallbacks = true});
 
-  Future<T?> create(
-    T record, {
-    bool runCallbacks = true,
-  });
+  Future<T?> create(T record, {bool runCallbacks = true});
 
-  Future<T?> delete(
-    int id, {
-    bool softDelete = true,
-    bool runCallbacks = true,
-    DateTime? deletedAt,
-  });
+  Future<T?> delete(int id, {bool softDelete = true, bool runCallbacks = true, DateTime? deletedAt});
 
   bool hasDeleted(int id);
 
@@ -95,30 +71,20 @@ abstract class BaseDbAdapter<T extends BaseDbModel> {
     }
   }
 
-  void addGlobalListener(
-    Future<void> Function() callback,
-  ) {
+  void addGlobalListener(Future<void> Function() callback) {
     _globalListeners.add(callback);
   }
 
-  void removeGlobalListener(
-    void Function() callback,
-  ) {
+  void removeGlobalListener(void Function() callback) {
     _globalListeners.remove(callback);
   }
 
-  void addListener({
-    required int recordId,
-    required void Function(T?) callback,
-  }) {
+  void addListener({required int recordId, required void Function(T?) callback}) {
     _listeners[recordId] ??= [];
     _listeners[recordId]?.add(callback);
   }
 
-  void removeListener({
-    required int recordId,
-    required void Function(T?) callback,
-  }) {
+  void removeListener({required int recordId, required void Function(T?) callback}) {
     _listeners[recordId] ??= [];
     _listeners[recordId]?.remove(callback);
   }

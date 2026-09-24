@@ -33,9 +33,7 @@ RegExp _email = RegExp(
 );
 
 RegExp _ipv4Maybe = RegExp(r'^(\d?\d?\d)\.(\d?\d?\d)\.(\d?\d?\d)\.(\d?\d?\d)$');
-RegExp _ipv6 = RegExp(
-  r'^::|^::1|^([a-fA-F0-9]{1,4}::?){1,7}([a-fA-F0-9]{1,4})$',
-);
+RegExp _ipv6 = RegExp(r'^::|^::1|^([a-fA-F0-9]{1,4}::?){1,7}([a-fA-F0-9]{1,4})$');
 
 RegExp _surrogatePairsRegExp = RegExp(r'[\uD800-\uDBFF][\uDC00-\uDFFF]');
 
@@ -43,15 +41,11 @@ RegExp _alpha = RegExp(r'^[a-zA-Z]+$');
 RegExp _alphanumeric = RegExp(r'^[a-zA-Z0-9]+$');
 RegExp _numeric = RegExp(r'^-?[0-9]+$');
 RegExp _int = RegExp(r'^(?:-?(?:0|[1-9][0-9]*))$');
-RegExp _float = RegExp(
-  r'^(?:-?(?:[0-9]+))?(?:\.[0-9]*)?(?:[eE][\+\-]?(?:[0-9]+))?$',
-);
+RegExp _float = RegExp(r'^(?:-?(?:[0-9]+))?(?:\.[0-9]*)?(?:[eE][\+\-]?(?:[0-9]+))?$');
 RegExp _hexadecimal = RegExp(r'^[0-9a-fA-F]+$');
 RegExp _hexColor = RegExp(r'^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$');
 
-RegExp _base64 = RegExp(
-  r'^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{4})$',
-);
+RegExp _base64 = RegExp(r'^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{4})$');
 
 RegExp _creditCard = RegExp(
   r'^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$',
@@ -61,28 +55,16 @@ RegExp _isbn10Maybe = RegExp(r'^(?:[0-9]{9}X|[0-9]{10})$');
 RegExp _isbn13Maybe = RegExp(r'^(?:[0-9]{13})$');
 
 Map<String, RegExp> _uuid = {
-  '3': RegExp(
-    r'^[0-9A-F]{8}-[0-9A-F]{4}-3[0-9A-F]{3}-[0-9A-F]{4}-[0-9A-F]{12}$',
-  ),
-  '4': RegExp(
-    r'^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$',
-  ),
-  '5': RegExp(
-    r'^[0-9A-F]{8}-[0-9A-F]{4}-5[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$',
-  ),
-  'all': RegExp(
-    r'^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$',
-  ),
+  '3': RegExp(r'^[0-9A-F]{8}-[0-9A-F]{4}-3[0-9A-F]{3}-[0-9A-F]{4}-[0-9A-F]{12}$'),
+  '4': RegExp(r'^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$'),
+  '5': RegExp(r'^[0-9A-F]{8}-[0-9A-F]{4}-5[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$'),
+  'all': RegExp(r'^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$'),
 };
 
 RegExp _multibyte = RegExp(r'[^\x00-\x7F]');
 RegExp _ascii = RegExp(r'^[\x00-\x7F]+$');
-RegExp _fullWidth = RegExp(
-  r'[^\u0020-\u007E\uFF61-\uFF9F\uFFA0-\uFFDC\uFFE8-\uFFEE0-9a-zA-Z]',
-);
-RegExp _halfWidth = RegExp(
-  r'[\u0020-\u007E\uFF61-\uFF9F\uFFA0-\uFFDC\uFFE8-\uFFEE0-9a-zA-Z]',
-);
+RegExp _fullWidth = RegExp(r'[^\u0020-\u007E\uFF61-\uFF9F\uFFA0-\uFFDC\uFFE8-\uFFEE0-9a-zA-Z]');
+RegExp _halfWidth = RegExp(r'[\u0020-\u007E\uFF61-\uFF9F\uFFA0-\uFFDC\uFFE8-\uFFEE0-9a-zA-Z]');
 
 /// check if the string matches the comparison
 bool equals(String str, Object? comparison) {
@@ -119,10 +101,7 @@ bool isEmail(String str) {
 /// 'require_protocol': false, 'allow_underscores': false }`.
 bool isURL(String? input, [Map<String, Object>? options]) {
   var str = input;
-  if (str == null ||
-      str.isEmpty ||
-      str.length > 2083 ||
-      str.indexOf('mailto:') == 0) {
+  if (str == null || str.isEmpty || str.length > 2083 || str.indexOf('mailto:') == 0) {
     return false;
   }
 
@@ -197,16 +176,12 @@ bool isURL(String? input, [Map<String, Object>? options]) {
   if (split.isNotEmpty) {
     final portStr = split.join(':');
     final port = int.tryParse(portStr, radix: 10);
-    if (!RegExp(r'^[0-9]+$').hasMatch(portStr) ||
-        port == null ||
-        port <= 0 ||
-        port > 65535) {
+    if (!RegExp(r'^[0-9]+$').hasMatch(portStr) || port == null || port <= 0 || port > 65535) {
       return false;
     }
   }
 
-  if (host == null ||
-      !isIP(host) && !isFQDN(host, options) && host != 'localhost') {
+  if (host == null || !isIP(host) && !isFQDN(host, options) && host != 'localhost') {
     return false;
   }
 
@@ -256,9 +231,7 @@ bool isFQDN(String str, [Map<String, Object>? options]) {
     if (!RegExp(r'^[a-z\\u00a1-\\uffff0-9-]+$').hasMatch(part)) {
       return false;
     }
-    if (part[0] == '-' ||
-        part[part.length - 1] == '-' ||
-        part.contains('---')) {
+    if (part[0] == '-' || part[part.length - 1] == '-' || part.contains('---')) {
       return false;
     }
   }

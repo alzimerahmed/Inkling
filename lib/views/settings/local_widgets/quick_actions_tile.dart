@@ -9,9 +9,7 @@ import 'package:storypad/widgets/sp_setting_icon_badge.dart';
 class QuickActionsTile extends StatelessWidget {
   // Ignore const so changing locale work.
   // ignore: prefer_const_constructors_in_immutables
-  QuickActionsTile({
-    super.key,
-  });
+  QuickActionsTile({super.key});
 
   @override
   Widget build(BuildContext context) {

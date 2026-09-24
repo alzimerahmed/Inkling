@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:storypad/core/extensions/matrix_4_extension.dart';
 import 'package:storypad/widgets/sp_page_view_datas.dart';
@@ -36,8 +37,7 @@ class _SpPageViewState extends State<SpPageView> {
   }
 
   void _listener() {
-    if (widget.controller.hasClients)
-      offsetNotifier.value = widget.controller.offset;
+    if (widget.controller.hasClients) offsetNotifier.value = widget.controller.offset;
   }
 
   @override
@@ -89,10 +89,7 @@ class _SpPageViewState extends State<SpPageView> {
                   transform: Matrix4.identity()
                     ..spTranslate(datas.translateX1)
                     ..spTranslate(datas.translateX2),
-                  child: Opacity(
-                    opacity: datas.opacity,
-                    child: child,
-                  ),
+                  child: Opacity(opacity: datas.opacity, child: child),
                 );
               },
             );

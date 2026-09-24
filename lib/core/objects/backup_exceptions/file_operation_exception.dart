@@ -1,11 +1,6 @@
 part of 'backup_exception.dart';
 
-enum FileOperationType {
-  upload,
-  download,
-  delete,
-  list,
-}
+enum FileOperationType { upload, download, delete, list }
 
 /// File operation exceptions
 class FileOperationException extends BackupException {

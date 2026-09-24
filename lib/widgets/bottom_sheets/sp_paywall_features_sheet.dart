@@ -4,9 +4,7 @@ import 'package:storypad/views/paywall/features/paywall_features_view.dart';
 import 'package:storypad/widgets/bottom_sheets/base_bottom_sheet.dart';
 
 class SpPaywallFeaturesSheet extends BaseBottomSheet {
-  SpPaywallFeaturesSheet({
-    required this.params,
-  });
+  SpPaywallFeaturesSheet({required this.params});
 
   final PaywallFeaturesRoute params;
 
@@ -23,10 +21,7 @@ class SpPaywallFeaturesSheet extends BaseBottomSheet {
         initialChildSize: 0.8,
         maxChildSize: 0.9,
         builder: (context, controller) {
-          return PrimaryScrollController(
-            controller: controller,
-            child: buildView(),
-          );
+          return PrimaryScrollController(controller: controller, child: buildView());
         },
       );
     }

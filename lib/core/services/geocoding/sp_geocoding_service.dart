@@ -27,8 +27,7 @@ abstract class SpGeocodingService {
   ///
   /// - iOS / Android / macOS → [SpSystemGeocodingService] (system geocoder, free)
   /// - Linux / Windows / Web → [SpNullGeocodingService] (no-op)
-  static final systemInstance =
-      (!kIsWeb && (Platform.isIOS || Platform.isAndroid || Platform.isMacOS))
+  static final systemInstance = (!kIsWeb && (Platform.isIOS || Platform.isAndroid || Platform.isMacOS))
       ? SpSystemGeocodingService()
       : const SpNullGeocodingService();
 
@@ -65,10 +64,7 @@ abstract class SpGeocodingService {
       east: (latLng.longitude + longitudeDelta).clamp(-180.0, 180.0),
     );
 
-    final nearbyStories = await StoryDbModel.db.getStoriesWithLocation(
-      bounds: bounds,
-      limit: fetchLimit,
-    );
+    final nearbyStories = await StoryDbModel.db.getStoriesWithLocation(bounds: bounds, limit: fetchLimit);
     if (nearbyStories.isEmpty) return null;
 
     final firstMatch = nearbyStories.first;

@@ -9,9 +9,7 @@ import 'new_year_view_model.dart';
 part 'new_year_content.dart';
 
 class NewYearRoute extends BaseRoute {
-  NewYearRoute({
-    required this.years,
-  });
+  NewYearRoute({required this.years});
 
   Map<int, int>? years;
 
@@ -20,10 +18,7 @@ class NewYearRoute extends BaseRoute {
 }
 
 class NewYearView extends StatelessWidget {
-  const NewYearView({
-    super.key,
-    required this.params,
-  });
+  const NewYearView({super.key, required this.params});
 
   final NewYearRoute params;
 

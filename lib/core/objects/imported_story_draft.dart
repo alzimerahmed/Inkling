@@ -48,11 +48,7 @@ class ImportedStoryDraft {
 
 /// Result of parsing an external export file.
 class ImportedParseResult {
-  const ImportedParseResult({
-    required this.drafts,
-    this.skippedCount = 0,
-    this.photoFiles = const {},
-  });
+  const ImportedParseResult({required this.drafts, this.skippedCount = 0, this.photoFiles = const {}});
 
   final List<ImportedStoryDraft> drafts;
 

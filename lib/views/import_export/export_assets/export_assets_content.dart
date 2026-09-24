@@ -18,18 +18,12 @@ class _ExportAssetsContent extends StatelessWidget {
                   alignment: PlaceholderAlignment.middle,
                   child: Container(
                     margin: const EdgeInsets.only(left: 6.0),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 2.0,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.0),
                       color: ColorScheme.of(context).readOnly.surface2,
                     ),
-                    child: Text(
-                      'EN',
-                      style: TextTheme.of(context).labelMedium,
-                    ),
+                    child: Text('EN', style: TextTheme.of(context).labelMedium),
                   ),
                 ),
             ],
@@ -37,12 +31,9 @@ class _ExportAssetsContent extends StatelessWidget {
         ),
       ),
       body: ListView(
-        padding:
-            MediaQuery.paddingOf(
-                  context,
-                )
-                .copyWith(top: 16.0, bottom: 16.0)
-                .add(const EdgeInsets.symmetric(horizontal: 16.0)),
+        padding: MediaQuery.paddingOf(context)
+            .copyWith(top: 16.0, bottom: 16.0)
+            .add(const EdgeInsets.symmetric(horizontal: 16.0)),
         children: [
           buildStatistics(context),
           const SizedBox(height: 12.0),
@@ -92,23 +83,13 @@ audio/
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Your Media',
-              style: TextTheme.of(context).titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text('Your Media', style: TextTheme.of(context).titleMedium?.copyWith(fontWeight: FontWeight.bold)),
             const SizedBox(height: 12.0),
             ...AssetType.values.map((type) {
               final total = viewModel.assetCountsByType[type] ?? 0;
               final downloaded = viewModel.downloadedCountsByType[type] ?? 0;
 
-              return _buildStatRow(
-                context,
-                type.icon,
-                type.label,
-                '$downloaded / $total',
-              );
+              return _buildStatRow(context, type.icon, type.label, '$downloaded / $total');
             }),
           ],
         ),
@@ -116,30 +97,15 @@ audio/
     );
   }
 
-  Widget _buildStatRow(
-    BuildContext context,
-    IconData icon,
-    String label,
-    String value,
-  ) {
+  Widget _buildStatRow(BuildContext context, IconData icon, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         children: [
           Icon(icon, size: 20),
           const SizedBox(width: 12.0),
-          Expanded(
-            child: Text(
-              label,
-              style: TextTheme.of(context).bodyMedium,
-            ),
-          ),
-          Text(
-            value,
-            style: TextTheme.of(context).bodyLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          Expanded(child: Text(label, style: TextTheme.of(context).bodyMedium)),
+          Text(value, style: TextTheme.of(context).bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -149,10 +115,7 @@ audio/
     if (viewModel.isDownloading) {
       return OutlinedButton.icon(
         onPressed: null,
-        icon: const SizedBox.square(
-          dimension: 24,
-          child: CircularProgressIndicator.adaptive(),
-        ),
+        icon: const SizedBox.square(dimension: 24, child: CircularProgressIndicator.adaptive()),
         label: const Text('Downloading...'),
       );
     }

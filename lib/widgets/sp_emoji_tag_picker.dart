@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
@@ -20,19 +21,13 @@ class SpEmojiTagPicker extends StatefulWidget {
   final Future<bool> Function(List<int> tags) onUpdated;
   final FutureOr<void> Function() close;
 
-  const SpEmojiTagPicker({
-    super.key,
-    required this.initialTags,
-    required this.onUpdated,
-    required this.close,
-  });
+  const SpEmojiTagPicker({super.key, required this.initialTags, required this.onUpdated, required this.close});
 
   @override
   State<SpEmojiTagPicker> createState() => _SpEmojiTagPicker();
 }
 
-class _SpEmojiTagPicker extends State<SpEmojiTagPicker>
-    with DebounchedCallback {
+class _SpEmojiTagPicker extends State<SpEmojiTagPicker> with DebounchedCallback {
   late Set<int> selectedTags = widget.initialTags.toSet();
   Map<TagCategoryDbModel, List<TagDbModel>>? emojisByCategory;
 
@@ -43,16 +38,12 @@ class _SpEmojiTagPicker extends State<SpEmojiTagPicker>
   }
 
   Future<void> _load() async {
-    final result = await TagCategoryDbModel.db.getSuggestTagsByCategory(
-      selectedTagIds: selectedTags,
-    );
+    final result = await TagCategoryDbModel.db.getSuggestTagsByCategory(selectedTagIds: selectedTags);
     if (mounted) setState(() => emojisByCategory = result);
   }
 
   Future<void> _onToggle(TagDbModel tag) async {
-    final entry = emojisByCategory?.entries.firstWhere(
-      (e) => e.key.id == tag.categoryId,
-    );
+    final entry = emojisByCategory?.entries.firstWhere((e) => e.key.id == tag.categoryId);
     final category = entry?.key;
     if (category == null) return;
 
@@ -65,12 +56,7 @@ class _SpEmojiTagPicker extends State<SpEmojiTagPicker>
       if (selectedTags.contains(tag.id)) {
         newTags = ({...selectedTags}..remove(tag.id)).toList();
       } else {
-        final others =
-            emojisByCategory?[category]
-                ?.map((e) => e.id)
-                .where((id) => id != tag.id)
-                .toSet() ??
-            {};
+        final others = emojisByCategory?[category]?.map((e) => e.id).where((id) => id != tag.id).toSet() ?? {};
         newTags =
             ({...selectedTags}
                   ..removeAll(others)
@@ -88,10 +74,7 @@ class _SpEmojiTagPicker extends State<SpEmojiTagPicker>
     debouncedCallback(_load);
   }
 
-  Future<void> _onPickCustomEmoji(
-    String emoji,
-    TagCategoryDbModel category,
-  ) async {
+  Future<void> _onPickCustomEmoji(String emoji, TagCategoryDbModel category) async {
     // 1 emoji = 1 tag: deterministic ID guarantees no duplicates across categories.
     final tag = TagDbModel.emoji(emoji, categoryId: category.id);
 
@@ -103,12 +86,7 @@ class _SpEmojiTagPicker extends State<SpEmojiTagPicker>
     } else if (category.multiSelect) {
       newTags = ({...selectedTags, tag.id}).toList();
     } else {
-      final others =
-          emojisByCategory?[category]
-              ?.map((e) => e.id)
-              .where((id) => id != tag.id)
-              .toSet() ??
-          {};
+      final others = emojisByCategory?[category]?.map((e) => e.id).where((id) => id != tag.id).toSet() ?? {};
       newTags =
           ({...selectedTags}
                 ..removeAll(others)
@@ -159,9 +137,7 @@ class _SpEmojiTagPicker extends State<SpEmojiTagPicker>
             side: BorderSide(color: Theme.of(context).dividerColor),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: SpNestedNavigation(
-            initialScreen: _buildMainPage(context),
-          ),
+          child: SpNestedNavigation(initialScreen: _buildMainPage(context)),
         ),
       ),
     );
@@ -185,8 +161,7 @@ class _SpEmojiTagPicker extends State<SpEmojiTagPicker>
               tags: entry.value,
               selectedTags: selectedTags,
               onToggle: _onToggle,
-              onPickCustomEmoji: (emoji) =>
-                  _onPickCustomEmoji(emoji, entry.key),
+              onPickCustomEmoji: (emoji) => _onPickCustomEmoji(emoji, entry.key),
             );
           }).toList(),
         ),
@@ -223,9 +198,7 @@ class _EmojiPicker extends StatelessWidget {
             builder: (context, constraints) {
               const gap = 6.0;
               final itemCount = constraints.maxWidth ~/ 40;
-              final itemWidth =
-                  constraints.maxWidth / itemCount -
-                  gap * (itemCount - 1) / itemCount;
+              final itemWidth = constraints.maxWidth / itemCount - gap * (itemCount - 1) / itemCount;
 
               return Wrap(
                 spacing: gap,
@@ -245,23 +218,16 @@ class _EmojiPicker extends StatelessWidget {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: isSelected
-                              ? ColorScheme.of(
-                                  context,
-                                ).surface.withValues(alpha: 0.5)
+                              ? ColorScheme.of(context).surface.withValues(alpha: 0.5)
                               : Colors.transparent,
                           border: Border.all(
                             color: isSelected
                                 ? ColorScheme.of(context).onSurface
-                                : Theme.of(
-                                    context,
-                                  ).disabledColor.withValues(alpha: 0.1),
+                                : Theme.of(context).disabledColor.withValues(alpha: 0.1),
                             width: isSelected ? 2 : 1.0,
                           ),
                         ),
-                        child: Text(
-                          tag.emoji ?? '',
-                          style: const TextStyle(fontSize: 22.0),
-                        ),
+                        child: Text(tag.emoji ?? '', style: const TextStyle(fontSize: 22.0)),
                       ),
                     );
                   }),
@@ -271,19 +237,12 @@ class _EmojiPicker extends StatelessWidget {
                     scaleActive: 1.3,
                     effects: [.scaleDown],
                     onTap: () async {
-                      final preferredCategory = await PreferredEmojiTabStorage()
-                          .getCategoryFor(category.id);
-                      final picker = _CustomEmojiPicker(
-                        category: category,
-                        initialCategory: preferredCategory,
-                      );
+                      final preferredCategory = await PreferredEmojiTabStorage().getCategoryFor(category.id);
+                      final picker = _CustomEmojiPicker(category: category, initialCategory: preferredCategory);
 
                       if (!context.mounted) return;
-                      final emoji = await Navigator.of(
-                        context,
-                      ).push(MaterialPageRoute(builder: (_) => picker));
-                      if (emoji != null && emoji is String)
-                        await onPickCustomEmoji(emoji);
+                      final emoji = await Navigator.of(context).push(MaterialPageRoute(builder: (_) => picker));
+                      if (emoji != null && emoji is String) await onPickCustomEmoji(emoji);
                     },
                     child: Container(
                       width: itemWidth,
@@ -291,19 +250,12 @@ class _EmojiPicker extends StatelessWidget {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Theme.of(
-                            context,
-                          ).disabledColor.withValues(alpha: 0.15),
-                          width: 1.0,
-                        ),
+                        border: Border.all(color: Theme.of(context).disabledColor.withValues(alpha: 0.15), width: 1.0),
                       ),
                       child: Icon(
                         SpIcons.add,
                         size: itemWidth * 0.45,
-                        color: ColorScheme.of(
-                          context,
-                        ).onSurface.withValues(alpha: 0.4),
+                        color: ColorScheme.of(context).onSurface.withValues(alpha: 0.4),
                       ),
                     ),
                   ),
@@ -318,20 +270,14 @@ class _EmojiPicker extends StatelessWidget {
 }
 
 class _CustomEmojiPicker extends StatelessWidget {
-  const _CustomEmojiPicker({
-    required this.initialCategory,
-    required this.category,
-  });
+  const _CustomEmojiPicker({required this.initialCategory, required this.category});
 
   final Category? initialCategory;
   final TagCategoryDbModel category;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: ColorScheme.of(context).surface,
-      child: buildContent(context),
-    );
+    return Material(color: ColorScheme.of(context).surface, child: buildContent(context));
   }
 
   Widget buildContent(BuildContext context) {
@@ -347,16 +293,11 @@ class _CustomEmojiPicker extends StatelessWidget {
       mainAxisSize: .min,
       crossAxisAlignment: .start,
       children: [
-        const Padding(
-          padding: EdgeInsets.all(4.0),
-          child: BackButton(),
-        ),
+        const Padding(padding: EdgeInsets.all(4.0), child: BackButton()),
         Expanded(
           child: EmojiPicker(
-            onEmojiSelected: (_, emoji) =>
-                Navigator.of(context).pop(emoji.emoji),
-            onCategoryChanged: (category) => PreferredEmojiTabStorage()
-                .setCategoryFor(this.category.id, category),
+            onEmojiSelected: (_, emoji) => Navigator.of(context).pop(emoji.emoji),
+            onCategoryChanged: (category) => PreferredEmojiTabStorage().setCategoryFor(this.category.id, category),
             config: Config(
               locale: context.locale,
               emojiViewConfig: EmojiViewConfig(
@@ -367,24 +308,16 @@ class _CustomEmojiPicker extends StatelessWidget {
               ),
               categoryViewConfig: CategoryViewConfig(
                 initCategory: initialCategory,
-                backgroundColor: ColorScheme.of(
-                  context,
-                ).surfaceContainerHighest,
+                backgroundColor: ColorScheme.of(context).surfaceContainerHighest,
                 indicatorColor: ColorScheme.of(context).primary,
-                iconColor: ColorScheme.of(
-                  context,
-                ).onSurface.withValues(alpha: 0.4),
+                iconColor: ColorScheme.of(context).onSurface.withValues(alpha: 0.4),
                 iconColorSelected: ColorScheme.of(context).primary,
               ),
               searchViewConfig: SearchViewConfig(
-                backgroundColor: ColorScheme.of(
-                  context,
-                ).surfaceContainerHighest,
+                backgroundColor: ColorScheme.of(context).surfaceContainerHighest,
                 buttonIconColor: ColorScheme.of(context).onSurface,
               ),
-              bottomActionBarConfig: const BottomActionBarConfig(
-                enabled: false,
-              ),
+              bottomActionBarConfig: const BottomActionBarConfig(enabled: false),
             ),
           ),
         ),

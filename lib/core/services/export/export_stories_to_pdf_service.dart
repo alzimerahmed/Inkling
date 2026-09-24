@@ -43,11 +43,7 @@ class ExportStoriesToPdfService {
       final bodyText = content.richPages
           ?.map((page) {
             if (page.body == null) return '';
-            return QuillDeltaToPlainTextService.call(
-              page.body!,
-              markdown: false,
-              includeMarkdownEmbeds: false,
-            );
+            return QuillDeltaToPlainTextService.call(page.body!, markdown: false, includeMarkdownEmbeds: false);
           })
           .where((t) => t.trim().isNotEmpty)
           .join('\n\n');
@@ -60,43 +56,22 @@ class ExportStoriesToPdfService {
             if (content.title?.trim().isNotEmpty == true)
               pw.Padding(
                 padding: const pw.EdgeInsets.only(bottom: 8),
-                child: pw.Text(
-                  content.title!,
-                  style: pw.TextStyle(
-                    fontSize: 20,
-                    fontWeight: pw.FontWeight.bold,
-                  ),
-                ),
+                child: pw.Text(content.title!, style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold)),
               ),
-            pw.Text(
-              dateStr,
-              style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey600),
-            ),
+            pw.Text(dateStr, style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey600)),
             if (tagNames.isNotEmpty)
               pw.Padding(
                 padding: const pw.EdgeInsets.only(top: 4),
                 child: pw.Text(
                   'Tags: ${tagNames.join(', ')}',
-                  style: const pw.TextStyle(
-                    fontSize: 10,
-                    color: PdfColors.grey600,
-                  ),
+                  style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey600),
                 ),
               ),
-            pw.Padding(
-              padding: const pw.EdgeInsets.symmetric(vertical: 12),
-              child: pw.Divider(),
-            ),
+            pw.Padding(padding: const pw.EdgeInsets.symmetric(vertical: 12), child: pw.Divider()),
             if (bodyText != null && bodyText.trim().isNotEmpty)
               pw.Text(bodyText, style: const pw.TextStyle(fontSize: 12))
             else
-              pw.Text(
-                '[photo]',
-                style: const pw.TextStyle(
-                  fontSize: 12,
-                  color: PdfColors.grey400,
-                ),
-              ),
+              pw.Text('[photo]', style: const pw.TextStyle(fontSize: 12, color: PdfColors.grey400)),
           ],
         ),
       );

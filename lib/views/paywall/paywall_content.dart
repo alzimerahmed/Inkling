@@ -14,9 +14,7 @@ class _PaywallContent extends StatelessWidget {
       appBar: AppBar(
         forceMaterialTransparency: false,
         scrolledUnderElevation: 3.0,
-        actions: [
-          const _PurchaseSyncAvatarButton(),
-        ],
+        actions: [const _PurchaseSyncAvatarButton()],
       ),
       body: buildBody(context, iapProvider),
       bottomNavigationBar: activeDeal.displayPrice == null
@@ -27,13 +25,9 @@ class _PaywallContent extends StatelessWidget {
                 mainAxisSize: .min,
                 children: [
                   if (!iapProvider.isProUser &&
-                      (activeDeal.badgeLabel != null ||
-                          activeDeal.displayComparePrice != null)) ...[
+                      (activeDeal.badgeLabel != null || activeDeal.displayComparePrice != null)) ...[
                     if (activeDeal.badgeLabel != null) ...[
-                      Text(
-                        activeDeal.badgeLabel!,
-                        style: TextTheme.of(context).bodyMedium,
-                      ),
+                      Text(activeDeal.badgeLabel!, style: TextTheme.of(context).bodyMedium),
                     ],
                     if (activeDeal.displayComparePrice != null) ...[
                       Text(
@@ -56,12 +50,7 @@ class _PaywallContent extends StatelessWidget {
                       foregroundColor: ColorScheme.of(context).onPrimary,
                       shape: const StadiumBorder(),
                       label: Text(
-                        tr(
-                          'button.purchase_for_args',
-                          namedArgs: {
-                            'PRICE': activeDeal.displayPrice ?? 'N/A',
-                          },
-                        ),
+                        tr('button.purchase_for_args', namedArgs: {'PRICE': activeDeal.displayPrice ?? 'N/A'}),
                       ),
                       icon: const Icon(SpIcons.star),
                       onPressed: () => iapProvider.purchase(context),
@@ -91,21 +80,14 @@ class _PaywallContent extends StatelessWidget {
             const Divider(height: 1),
             const SizedBox(height: 16),
             for (int i = 0; i < features.length; i++) ...[
-              _FeatureTile(
-                key: viewModel.featureKeys[i],
-                viewModel: viewModel,
-                feature: features[i],
-              ),
+              _FeatureTile(key: viewModel.featureKeys[i], viewModel: viewModel, feature: features[i]),
             ],
             ListTile(
               leading: const SpSettingIconBadge(weekday: 4, icon: SpIcons.star),
               title: Text(tr('list_tile.support_indie_dev.title')),
               subtitle: Text(tr('list_tile.support_indie_dev.subtitle')),
               contentPadding: const EdgeInsets.symmetric(horizontal: 16.0).add(
-                EdgeInsets.only(
-                  left: MediaQuery.of(context).padding.left,
-                  right: MediaQuery.of(context).padding.right,
-                ),
+                EdgeInsets.only(left: MediaQuery.of(context).padding.left, right: MediaQuery.of(context).padding.right),
               ),
             ),
             const SizedBox(height: 20.0),

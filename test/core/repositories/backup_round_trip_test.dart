@@ -32,12 +32,7 @@ void main() {
     );
   }
 
-  StoryDbModel buildStory({
-    required int id,
-    required int year,
-    required int month,
-    required int day,
-  }) {
+  StoryDbModel buildStory({required int id, required int year, required int month, required int day}) {
     final DateTime now = DateTime(year, month, day, 9, 30);
     final StoryContentDbModel content = StoryContentDbModel(
       id: id * 10,
@@ -91,20 +86,12 @@ void main() {
 
   group('backup JSON round-trip', () {
     test('story survives backup encode → JSON file → decode unchanged', () {
-      final StoryDbModel story = buildStory(
-        id: 1,
-        year: 2026,
-        month: 9,
-        day: 1,
-      );
+      final StoryDbModel story = buildStory(id: 1, year: 2026, month: 9, day: 1);
 
       // 1. Serialize into a backup payload (what the tar file contains).
-      final Map<String, dynamic> contents = buildBackup(
-        {
-          'stories': [story.toJson()],
-        },
-        story.updatedAt,
-      ).toContents();
+      final Map<String, dynamic> contents = buildBackup({
+        'stories': [story.toJson()],
+      }, story.updatedAt).toContents();
 
       // 2. Simulate the file write + read: JSON encode then decode.
       final Map<String, dynamic> fromFile = jsonDecode(jsonEncode(contents));
@@ -125,53 +112,30 @@ void main() {
         buildStory(id: 3, year: 2026, month: 9, day: 22),
       ];
 
-      final Map<String, dynamic> contents = buildBackup(
-        {
-          'stories': [for (final story in stories) story.toJson()],
-        },
-        stories.last.updatedAt,
-      ).toContents();
+      final Map<String, dynamic> contents = buildBackup({
+        'stories': [for (final story in stories) story.toJson()],
+      }, stories.last.updatedAt).toContents();
 
       final Map<String, dynamic> fromFile = jsonDecode(jsonEncode(contents));
-      final decoded = JsonTablesToModelService.decode(
-        fromFile['tables'] as Map<String, dynamic>,
-      );
+      final decoded = JsonTablesToModelService.decode(fromFile['tables'] as Map<String, dynamic>);
 
       expect(decoded['stories']!.length, 3);
-      expect(
-        [for (final item in decoded['stories']!) item.toJson()],
-        [for (final story in stories) story.toJson()],
-      );
+      expect([for (final item in decoded['stories']!) item.toJson()], [for (final story in stories) story.toJson()]);
     });
 
-    test(
-      'backup payload carries file metadata needed for restore decisions',
-      () {
-        final StoryDbModel story = buildStory(
-          id: 1,
-          year: 2026,
-          month: 9,
-          day: 1,
-        );
+    test('backup payload carries file metadata needed for restore decisions', () {
+      final StoryDbModel story = buildStory(id: 1, year: 2026, month: 9, day: 1);
 
-        final Map<String, dynamic> contents = buildBackup(
-          {
-            'stories': [story.toJson()],
-          },
-          story.updatedAt,
-        ).toContents();
+      final Map<String, dynamic> contents = buildBackup({
+        'stories': [story.toJson()],
+      }, story.updatedAt).toContents();
 
-        final Map<String, dynamic> fromFile = jsonDecode(jsonEncode(contents));
-        final BackupObject restored = BackupObject.fromContents(fromFile);
+      final Map<String, dynamic> fromFile = jsonDecode(jsonEncode(contents));
+      final BackupObject restored = BackupObject.fromContents(fromFile);
 
-        expect(restored.tables['stories'], isA<List>());
-        expect(restored.fileInfo.createdAt, story.updatedAt);
-        expect(
-          restored.year,
-          isNull,
-          reason: 'full backups are not year-partitioned',
-        );
-      },
-    );
+      expect(restored.tables['stories'], isA<List>());
+      expect(restored.fileInfo.createdAt, story.updatedAt);
+      expect(restored.year, isNull, reason: 'full backups are not year-partitioned');
+    });
   });
 }

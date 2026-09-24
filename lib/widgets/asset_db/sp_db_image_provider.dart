@@ -2,7 +2,9 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import 'dart:ui' as ui;
+
 import 'package:storypad/core/services/backups/backup_cloud_service.dart';
 import 'package:storypad/widgets/asset_db/sp_db_asset_loader.dart';
 
@@ -11,11 +13,7 @@ class SpDbImageProvider extends ImageProvider<SpDbImageProvider> {
   final double scale;
   final List<BackupCloudService> signedInServices;
 
-  SpDbImageProvider({
-    required this.relativePath,
-    required this.signedInServices,
-    this.scale = 1,
-  });
+  SpDbImageProvider({required this.relativePath, required this.signedInServices, this.scale = 1});
 
   @override
   Future<SpDbImageProvider> obtainKey(ImageConfiguration configuration) {
@@ -23,24 +21,16 @@ class SpDbImageProvider extends ImageProvider<SpDbImageProvider> {
   }
 
   @override
-  ImageStreamCompleter loadImage(
-    SpDbImageProvider key,
-    ImageDecoderCallback decode,
-  ) {
+  ImageStreamCompleter loadImage(SpDbImageProvider key, ImageDecoderCallback decode) {
     return MultiFrameImageStreamCompleter(
       codec: _loadAsync(key, decode: decode),
       scale: key.scale,
       debugLabel: key.relativePath,
-      informationCollector: () => <DiagnosticsNode>[
-        ErrorDescription('Asset relative path: $relativePath'),
-      ],
+      informationCollector: () => <DiagnosticsNode>[ErrorDescription('Asset relative path: $relativePath')],
     );
   }
 
-  Future<ui.Codec> _loadAsync(
-    SpDbImageProvider key, {
-    required ImageDecoderCallback decode,
-  }) async {
+  Future<ui.Codec> _loadAsync(SpDbImageProvider key, {required ImageDecoderCallback decode}) async {
     final file = await SpDbAssetLoader.load(relativePath, signedInServices);
     return decode(await ui.ImmutableBuffer.fromFilePath(file.path));
   }
@@ -49,8 +39,7 @@ class SpDbImageProvider extends ImageProvider<SpDbImageProvider> {
   /// token/refresh state, since resolving a destination via
   /// [BackupCloudService.downloadFileBytes] no longer depends on a
   /// caller-held token the way the old raw-HTTP Drive downloader did.
-  String get _accountsKey =>
-      signedInServices.map((s) => s.currentUser?.destinationKey).join(',');
+  String get _accountsKey => signedInServices.map((s) => s.currentUser?.destinationKey).join(',');
 
   @override
   bool operator ==(Object other) {

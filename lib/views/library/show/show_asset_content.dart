@@ -12,11 +12,7 @@ class _ShowAssetContent extends StatelessWidget {
       body: SpStoryList.withQuery(
         viewOnly: viewModel.params.storyViewOnly,
         disableMultiEdit: true,
-        filter: SearchFilterObject(
-          assetId: viewModel.params.assetId,
-          years: {},
-          types: {},
-        ),
+        filter: SearchFilterObject(assetId: viewModel.params.assetId, years: {}, types: {}),
       ),
     );
   }

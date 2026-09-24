@@ -18,10 +18,7 @@ part 'license_text.dart';
 part 'gallery_template_card.dart';
 
 class GalleryTab extends StatefulWidget {
-  const GalleryTab({
-    super.key,
-    required this.params,
-  });
+  const GalleryTab({super.key, required this.params});
 
   final TemplatesRoute params;
 
@@ -44,18 +41,13 @@ class _GalleryTabState extends State<GalleryTab> {
     setState(() {});
   }
 
-  Future<void> openTemplate(
-    BuildContext context,
-    GalleryTemplateObject template,
-  ) async {
+  Future<void> openTemplate(BuildContext context, GalleryTemplateObject template) async {
     if (widget.params.pickMode) {
       Navigator.maybePop(context, TemplatePickResult.gallery(template));
       return;
     }
 
-    final result = await ShowTemplateGalleryRoute(
-      galleryTemplate: template,
-    ).push(context);
+    final result = await ShowTemplateGalleryRoute(galleryTemplate: template).push(context);
 
     if (context.mounted && result is StoryDbModel) {
       Navigator.maybePop(context, result);
@@ -85,19 +77,12 @@ class _GalleryTabState extends State<GalleryTab> {
             return const _LicenseText();
           }
 
-          GalleryTemplateCategoryObject category = templates!.keys.elementAt(
-            index,
-          );
-          List<GalleryTemplateObject> templatesInCategory = templates!.values
-              .elementAt(index);
+          GalleryTemplateCategoryObject category = templates!.keys.elementAt(index);
+          List<GalleryTemplateObject> templatesInCategory = templates!.values.elementAt(index);
 
           return SpFadeInFadeOutGradient(
             color: Theme.of(context).scaffoldBackgroundColor,
-            child: buildTemplatesSection(
-              category,
-              context,
-              templatesInCategory,
-            ),
+            child: buildTemplatesSection(category, context, templatesInCategory),
           );
         },
       ),
@@ -124,18 +109,12 @@ class _GalleryTabState extends State<GalleryTab> {
                     alignment: PlaceholderAlignment.middle,
                     child: Container(
                       margin: const EdgeInsets.only(left: 6.0),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 2.0,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8.0),
                         color: ColorScheme.of(context).readOnly.surface2,
                       ),
-                      child: Text(
-                        'EN',
-                        style: TextTheme.of(context).labelMedium,
-                      ),
+                      child: Text('EN', style: TextTheme.of(context).labelMedium),
                     ),
                   ),
               ],
@@ -144,10 +123,7 @@ class _GalleryTabState extends State<GalleryTab> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            category.description,
-            style: TextTheme.of(context).bodyMedium,
-          ),
+          child: Text(category.description, style: TextTheme.of(context).bodyMedium),
         ),
         const SizedBox(height: 12.0),
         SingleChildScrollView(
@@ -160,13 +136,10 @@ class _GalleryTabState extends State<GalleryTab> {
                 for (int i = 0; i < templatesInCategory.length; i++)
                   Container(
                     width: 170,
-                    margin: EdgeInsets.only(
-                      right: i < templatesInCategory.length - 1 ? 12.0 : 0.0,
-                    ),
+                    margin: EdgeInsets.only(right: i < templatesInCategory.length - 1 ? 12.0 : 0.0),
                     child: _GalleryTemplateCard(
                       template: templatesInCategory[i],
-                      onTap: () =>
-                          openTemplate(context, templatesInCategory[i]),
+                      onTap: () => openTemplate(context, templatesInCategory[i]),
                     ),
                   ),
               ],

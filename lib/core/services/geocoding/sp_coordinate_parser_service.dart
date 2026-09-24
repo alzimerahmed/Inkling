@@ -37,9 +37,7 @@ class SpCoordinateParserService {
     final String text = input.trim();
     if (text.isEmpty) return null;
 
-    return _tryDecimal(text) ??
-        _tryCardinal(text) ??
-        await _tryPlusCode(text, referenceResolver, fallbackReference);
+    return _tryDecimal(text) ?? _tryCardinal(text) ?? await _tryPlusCode(text, referenceResolver, fallbackReference);
   }
 
   // ---------------------------------------------------------------------------
@@ -65,12 +63,8 @@ class SpCoordinateParserService {
     final int commaIdx = text.indexOf(',');
     if (commaIdx == -1) return null;
 
-    final Match? m1 = _cardinalPartRegex.firstMatch(
-      text.substring(0, commaIdx).trim(),
-    );
-    final Match? m2 = _cardinalPartRegex.firstMatch(
-      text.substring(commaIdx + 1).trim(),
-    );
+    final Match? m1 = _cardinalPartRegex.firstMatch(text.substring(0, commaIdx).trim());
+    final Match? m2 = _cardinalPartRegex.firstMatch(text.substring(commaIdx + 1).trim());
     if (m1 == null || m2 == null) return null;
 
     final double? v1 = double.tryParse(m1.group(1)!);
@@ -119,12 +113,8 @@ class SpCoordinateParserService {
       delimiterIdx = commaIdx;
     }
 
-    final String codeToken = delimiterIdx == -1
-        ? text
-        : text.substring(0, delimiterIdx);
-    final String? locationHint = delimiterIdx == -1
-        ? null
-        : text.substring(delimiterIdx + 1).trim();
+    final String codeToken = delimiterIdx == -1 ? text : text.substring(0, delimiterIdx);
+    final String? locationHint = delimiterIdx == -1 ? null : text.substring(delimiterIdx + 1).trim();
 
     if (!codeToken.contains('+')) return null;
 
@@ -138,16 +128,10 @@ class SpCoordinateParserService {
 
       if (!code.isShort()) return null;
 
-      final SpLatLng? reference = await _resolveReference(
-        locationHint,
-        referenceResolver,
-        fallbackReference,
-      );
+      final SpLatLng? reference = await _resolveReference(locationHint, referenceResolver, fallbackReference);
       if (reference == null) return null;
 
-      final olc.PlusCode full = code.recoverNearest(
-        olc.LatLng(reference.latitude, reference.longitude),
-      );
+      final olc.PlusCode full = code.recoverNearest(olc.LatLng(reference.latitude, reference.longitude));
       final olc.CodeArea area = full.decode();
       return SpLatLng(area.center.latitude, area.center.longitude);
     } catch (_) {
@@ -166,10 +150,7 @@ class SpCoordinateParserService {
     SpLatLng? fallbackReference,
   ) async {
     if (locationHint != null && locationHint.isNotEmpty) {
-      final SpLatLng? viaHint = await _geocodeHint(
-        locationHint,
-        referenceResolver,
-      );
+      final SpLatLng? viaHint = await _geocodeHint(locationHint, referenceResolver);
       if (viaHint != null) return viaHint;
     }
 
@@ -187,9 +168,7 @@ class SpCoordinateParserService {
     }
 
     try {
-      final results = await SpGeocodingService.systemInstance.searchPlaces(
-        locationHint,
-      );
+      final results = await SpGeocodingService.systemInstance.searchPlaces(locationHint);
       if (results.isEmpty) return null;
       return results.first.latLng;
     } catch (_) {

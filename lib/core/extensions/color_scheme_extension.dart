@@ -13,38 +13,23 @@ class _M3ReadOnlyColor {
   _M3ReadOnlyColor(this._color);
 
   Color? get surface1 {
-    return Color.alphaBlend(
-      _color.primary.withValues(alpha: 0.05),
-      _color.surface,
-    );
+    return Color.alphaBlend(_color.primary.withValues(alpha: 0.05), _color.surface);
   }
 
   Color? get surface2 {
-    return Color.alphaBlend(
-      _color.primary.withValues(alpha: 0.08),
-      _color.surface,
-    );
+    return Color.alphaBlend(_color.primary.withValues(alpha: 0.08), _color.surface);
   }
 
   Color? get surface3 {
-    return Color.alphaBlend(
-      _color.primary.withValues(alpha: 0.11),
-      _color.surface,
-    );
+    return Color.alphaBlend(_color.primary.withValues(alpha: 0.11), _color.surface);
   }
 
   Color? get surface4 {
-    return Color.alphaBlend(
-      _color.primary.withValues(alpha: 0.12),
-      _color.surface,
-    );
+    return Color.alphaBlend(_color.primary.withValues(alpha: 0.12), _color.surface);
   }
 
   Color? get surface5 {
-    return Color.alphaBlend(
-      _color.primary.withValues(alpha: 0.14),
-      _color.surface,
-    );
+    return Color.alphaBlend(_color.primary.withValues(alpha: 0.14), _color.surface);
   }
 
   Color? get black => const Color(0xFF000000);
@@ -57,12 +42,7 @@ class _Scheme {
   final Color container;
   final Color onContainer;
 
-  _Scheme(
-    this.color,
-    this.onColor,
-    this.container,
-    this.onContainer,
-  );
+  _Scheme(this.color, this.onColor, this.container, this.onContainer);
 }
 
 /// Base on bootstrap:
@@ -73,12 +53,7 @@ class M3CustomColor {
   final _Scheme warning;
   final _Scheme info;
 
-  M3CustomColor._({
-    required this.success,
-    required this.danger,
-    required this.warning,
-    required this.info,
-  });
+  M3CustomColor._({required this.success, required this.danger, required this.warning, required this.info});
 
   static final Map<Brightness, M3CustomColor> _cached = {};
   static M3CustomColor getScheme(Brightness brightness) {
@@ -96,15 +71,7 @@ class M3CustomColor {
   }
 
   static _Scheme _schemeFrom(Color color, Brightness brightness) {
-    ColorScheme scheme = ColorScheme.fromSeed(
-      seedColor: color,
-      brightness: brightness,
-    );
-    return _Scheme(
-      scheme.primary,
-      scheme.onPrimary,
-      scheme.primaryContainer,
-      scheme.onPrimaryContainer,
-    );
+    ColorScheme scheme = ColorScheme.fromSeed(seedColor: color, brightness: brightness);
+    return _Scheme(scheme.primary, scheme.onPrimary, scheme.primaryContainer, scheme.onPrimaryContainer);
   }
 }

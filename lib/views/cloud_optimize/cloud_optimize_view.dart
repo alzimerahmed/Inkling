@@ -15,10 +15,7 @@ class CloudOptimizeRoute extends BaseRoute {
   final BackupCloudService service;
   final String userIdentifier;
 
-  const CloudOptimizeRoute({
-    required this.service,
-    required this.userIdentifier,
-  });
+  const CloudOptimizeRoute({required this.service, required this.userIdentifier});
 
   @override
   String? get routeName => null;
@@ -28,10 +25,7 @@ class CloudOptimizeRoute extends BaseRoute {
 }
 
 class CloudOptimizeView extends StatelessWidget {
-  const CloudOptimizeView({
-    super.key,
-    required this.params,
-  });
+  const CloudOptimizeView({super.key, required this.params});
 
   final CloudOptimizeRoute params;
 
@@ -47,9 +41,7 @@ class CloudOptimizeView extends StatelessWidget {
 
           final backupProvider = context.read<BackupProvider>();
           return backupProvider.recheckAndSync(
-            services: backupProvider.services
-                .where((service) => service.isSignedIn)
-                .toList(),
+            services: backupProvider.services.where((service) => service.isSignedIn).toList(),
             context: context,
           );
         },

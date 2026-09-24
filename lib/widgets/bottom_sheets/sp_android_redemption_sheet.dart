@@ -31,27 +31,18 @@ class SpAndroidRedemptionSheet extends BaseBottomSheet {
   Widget buildTitle(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Text(
-        "How to Redeem Promo Code?",
-        style: Theme.of(context).textTheme.titleLarge,
-      ),
+      child: Text("How to Redeem Promo Code?", style: Theme.of(context).textTheme.titleLarge),
     );
   }
 
   Widget buildStepsCarousel(BuildContext context) {
     final steps = [
-      (
-        title: 'Tap "Purchase"',
-        imagePath: '/android_redemption_flow/1_purchase_dialog.png',
-      ),
+      (title: 'Tap "Purchase"', imagePath: '/android_redemption_flow/1_purchase_dialog.png'),
       (
         title: 'Select "Redeem code" from payment methods',
         imagePath: '/android_redemption_flow/2_list_all_methods.png',
       ),
-      (
-        title: 'Enter and apply the promo code',
-        imagePath: '/android_redemption_flow/3_apply_promo.png',
-      ),
+      (title: 'Enter and apply the promo code', imagePath: '/android_redemption_flow/3_apply_promo.png'),
     ];
 
     // Calculate card height: title row (40) + spacing (12) + image height (360) + padding
@@ -70,31 +61,19 @@ class SpAndroidRedemptionSheet extends BaseBottomSheet {
     );
   }
 
-  Widget buildStepCard(
-    BuildContext context,
-    ({String imagePath, String title}) step,
-    int stepNumber,
-  ) {
+  Widget buildStepCard(BuildContext context, ({String imagePath, String title}) step, int stepNumber) {
     return Container(
       width: imageWidth + 24.0,
       margin: const EdgeInsets.only(right: 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: [
-          buildStepTitle(context, stepNumber, step),
-          const SizedBox(height: 12.0),
-          buildStepDemoImage(step),
-        ],
+        children: [buildStepTitle(context, stepNumber, step), const SizedBox(height: 12.0), buildStepDemoImage(step)],
       ),
     );
   }
 
-  Widget buildStepTitle(
-    BuildContext context,
-    int stepNumber,
-    ({String imagePath, String title}) step,
-  ) {
+  Widget buildStepTitle(BuildContext context, int stepNumber, ({String imagePath, String title}) step) {
     return SizedBox(
       height: 40.0,
       child: Row(
@@ -102,10 +81,7 @@ class SpAndroidRedemptionSheet extends BaseBottomSheet {
           Container(
             width: 28,
             height: 28,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary, shape: BoxShape.circle),
             child: Center(
               child: Text(
                 '$stepNumber',
@@ -131,9 +107,7 @@ class SpAndroidRedemptionSheet extends BaseBottomSheet {
     );
   }
 
-  Widget buildStepDemoImage(
-    ({String imagePath, String title}) step,
-  ) {
+  Widget buildStepDemoImage(({String imagePath, String title}) step) {
     return Material(
       clipBehavior: Clip.hardEdge,
       elevation: 1.0,
@@ -145,12 +119,7 @@ class SpAndroidRedemptionSheet extends BaseBottomSheet {
           filePath: step.imagePath,
           builder: (context, file, failed) {
             if (failed) {
-              return SpImage.buildImageError(
-                imageWidth,
-                imageHeight,
-                context,
-                'Failed to load',
-              );
+              return SpImage.buildImageError(imageWidth, imageHeight, context, 'Failed to load');
             }
 
             if (file == null) return const SizedBox.shrink();
@@ -161,8 +130,7 @@ class SpAndroidRedemptionSheet extends BaseBottomSheet {
               height: imageHeight,
               fit: BoxFit.cover,
               cacheWidth: imageWidth != double.infinity
-                  ? (imageWidth * MediaQuery.of(context).devicePixelRatio)
-                        .round()
+                  ? (imageWidth * MediaQuery.of(context).devicePixelRatio).round()
                   : null,
             );
           },

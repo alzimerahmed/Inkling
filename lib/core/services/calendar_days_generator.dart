@@ -18,72 +18,36 @@ class CalendarDaysGenerator {
   }) {
     final firstDayWeekday = DateTime(year, month, 1).weekday;
     final visiblePreviousMonthDayCount =
-        (firstDayWeekday - firstDayOfWeek.value + DateTime.daysPerWeek) %
-        DateTime.daysPerWeek;
-    int visibleCurrentMonthDayCount = DaysCountInMonthService.get(
-      year: year,
-      month: month,
-    );
-    int visibleNextMonthDayCount =
-        totalCells - visibleCurrentMonthDayCount - visiblePreviousMonthDayCount;
+        (firstDayWeekday - firstDayOfWeek.value + DateTime.daysPerWeek) % DateTime.daysPerWeek;
+    int visibleCurrentMonthDayCount = DaysCountInMonthService.get(year: year, month: month);
+    int visibleNextMonthDayCount = totalCells - visibleCurrentMonthDayCount - visiblePreviousMonthDayCount;
 
-    List<DateTime> visiblePreviousMonthDays = generatePreviousMonthDays(
-      visiblePreviousMonthDayCount,
-      month,
-      year,
-    );
-    List<DateTime> visibleCurrentMonthDays = generateCurrentMonthDays(
-      visibleCurrentMonthDayCount,
-      year,
-      month,
-    );
-    List<DateTime> visibleNextMonthDays = generateNextMonthDays(
-      visibleNextMonthDayCount,
-      month,
-      year,
-    );
+    List<DateTime> visiblePreviousMonthDays = generatePreviousMonthDays(visiblePreviousMonthDayCount, month, year);
+    List<DateTime> visibleCurrentMonthDays = generateCurrentMonthDays(visibleCurrentMonthDayCount, year, month);
+    List<DateTime> visibleNextMonthDays = generateNextMonthDays(visibleNextMonthDayCount, month, year);
 
-    return [
-      ...visiblePreviousMonthDays,
-      ...visibleCurrentMonthDays,
-      ...visibleNextMonthDays,
-    ];
+    return [...visiblePreviousMonthDays, ...visibleCurrentMonthDays, ...visibleNextMonthDays];
   }
 
-  static List<DateTime> generatePreviousMonthDays(
-    int dayCount,
-    int month,
-    int year,
-  ) {
+  static List<DateTime> generatePreviousMonthDays(int dayCount, int month, int year) {
     return List.generate(dayCount, (index) {
       int yearForThisMonth = month - 1 == 0 ? year - 1 : year;
       int previousMonth = month - 1 == 0 ? 12 : month - 1;
 
-      int dayCountForMonth = DaysCountInMonthService.get(
-        year: yearForThisMonth,
-        month: previousMonth,
-      );
+      int dayCountForMonth = DaysCountInMonthService.get(year: yearForThisMonth, month: previousMonth);
       int day = dayCountForMonth - dayCount + (index + 1);
 
       return DateTime(yearForThisMonth, previousMonth, day);
     });
   }
 
-  static List<DateTime> generateCurrentMonthDays(
-    int dayCount,
-    int year,
-    int month,
-  ) {
+  static List<DateTime> generateCurrentMonthDays(int dayCount, int year, int month) {
     return List.generate(dayCount, (index) {
       return DateTime(year, month, index + 1);
     });
   }
 
-  static List<DateTime> generateNextMonthDays(
-    int dayCount,
-    int month,
-    int year,
-  ) {
+  static List<DateTime> generateNextMonthDays(int dayCount, int month, int year) {
     return List.generate(dayCount, (index) {
       int yearForThisMonth = month + 1 == 13 ? year + 1 : year;
       int nextMonth = month + 1 == 13 ? 1 : month + 1;

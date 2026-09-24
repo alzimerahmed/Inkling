@@ -24,40 +24,22 @@ void main() {
       expect(service.currentUser, isNull);
     });
 
-    test(
-      'canAccessRequestedScopes/requestScope are false when signed out',
-      () async {
-        expect(await service.canAccessRequestedScopes(), isFalse);
-        expect(await service.requestScope(), isFalse);
-      },
-    );
+    test('canAccessRequestedScopes/requestScope are false when signed out', () async {
+      expect(await service.canAccessRequestedScopes(), isFalse);
+      expect(await service.requestScope(), isFalse);
+    });
 
-    test(
-      'reauthenticateIfNeeded throws signInRequired when never connected',
-      () async {
-        await expectLater(
-          service.reauthenticateIfNeeded(),
-          throwsA(
-            isA<AuthException>().having(
-              (e) => e.type,
-              'type',
-              AuthExceptionType.signInRequired,
-            ),
-          ),
-        );
-      },
-    );
+    test('reauthenticateIfNeeded throws signInRequired when never connected', () async {
+      await expectLater(
+        service.reauthenticateIfNeeded(),
+        throwsA(isA<AuthException>().having((e) => e.type, 'type', AuthExceptionType.signInRequired)),
+      );
+    });
 
     test('file operations throw signInRequired when not connected', () async {
       await expectLater(
         service.deleteFile('id:whatever'),
-        throwsA(
-          isA<AuthException>().having(
-            (e) => e.type,
-            'type',
-            AuthExceptionType.signInRequired,
-          ),
-        ),
+        throwsA(isA<AuthException>().having((e) => e.type, 'type', AuthExceptionType.signInRequired)),
       );
     });
   });

@@ -21,173 +21,106 @@ void main() {
 
     group('Checkbox Filtering', () {
       test('removes unchecked markdown checkbox markers', () {
-        expect(
-          MarkdownContentFilterService.call('- [ ] Buy milk'),
-          'Buy milk',
-        );
+        expect(MarkdownContentFilterService.call('- [ ] Buy milk'), 'Buy milk');
       });
 
       test('removes unchecked emoji checkbox markers', () {
-        expect(
-          MarkdownContentFilterService.call('⏹️ Buy milk'),
-          'Buy milk',
-        );
+        expect(MarkdownContentFilterService.call('⏹️ Buy milk'), 'Buy milk');
       });
 
       test('removes checked markdown checkbox markers', () {
-        expect(
-          MarkdownContentFilterService.call('- [x] Completed task'),
-          'Completed task',
-        );
+        expect(MarkdownContentFilterService.call('- [x] Completed task'), 'Completed task');
       });
 
       test('removes checked emoji checkbox markers', () {
-        expect(
-          MarkdownContentFilterService.call('✅ Completed task'),
-          'Completed task',
-        );
+        expect(MarkdownContentFilterService.call('✅ Completed task'), 'Completed task');
       });
 
       test('handles multiple checkboxes', () {
         expect(
-          MarkdownContentFilterService.call(
-            '- [ ] Task 1\n- [x] Task 2\n⏹️ Task 3\n✅ Task 4',
-          ),
+          MarkdownContentFilterService.call('- [ ] Task 1\n- [x] Task 2\n⏹️ Task 3\n✅ Task 4'),
           'Task 1\nTask 2\nTask 3\nTask 4',
         );
       });
 
       test('counts only actual task text, not checkbox markers', () {
         const filtered = 'Task description';
-        expect(
-          MarkdownContentFilterService.call('- [ ] Task description'),
-          filtered,
-        );
-        expect(
-          MarkdownContentFilterService.call('⏹️ Task description'),
-          filtered,
-        );
+        expect(MarkdownContentFilterService.call('- [ ] Task description'), filtered);
+        expect(MarkdownContentFilterService.call('⏹️ Task description'), filtered);
         expect(filtered.length, 16); // Only counts actual content
       });
     });
 
     group('Bullet List Filtering', () {
       test('removes dash bullet markers', () {
-        expect(
-          MarkdownContentFilterService.call('- Item 1\n- Item 2'),
-          'Item 1\nItem 2',
-        );
+        expect(MarkdownContentFilterService.call('- Item 1\n- Item 2'), 'Item 1\nItem 2');
       });
 
       test('removes asterisk bullet markers', () {
-        expect(
-          MarkdownContentFilterService.call('* Item 1\n* Item 2'),
-          'Item 1\nItem 2',
-        );
+        expect(MarkdownContentFilterService.call('* Item 1\n* Item 2'), 'Item 1\nItem 2');
       });
 
       test('removes bullet point (•) markers', () {
-        expect(
-          MarkdownContentFilterService.call('• Item 1\n• Item 2'),
-          'Item 1\nItem 2',
-        );
+        expect(MarkdownContentFilterService.call('• Item 1\n• Item 2'), 'Item 1\nItem 2');
       });
 
       test('preserves dashes inside text content', () {
-        expect(
-          MarkdownContentFilterService.call('- one-two-three'),
-          'one-two-three',
-        );
+        expect(MarkdownContentFilterService.call('- one-two-three'), 'one-two-three');
       });
     });
 
     group('Ordered List Filtering', () {
       test('removes numeric list markers', () {
-        expect(
-          MarkdownContentFilterService.call('1. First\n2. Second\n10. Tenth'),
-          'First\nSecond\nTenth',
-        );
+        expect(MarkdownContentFilterService.call('1. First\n2. Second\n10. Tenth'), 'First\nSecond\nTenth');
       });
 
       test('removes alphabetic list markers', () {
-        expect(
-          MarkdownContentFilterService.call('a. First\nb. Second\nc. Third'),
-          'First\nSecond\nThird',
-        );
+        expect(MarkdownContentFilterService.call('a. First\nb. Second\nc. Third'), 'First\nSecond\nThird');
       });
 
       test('removes roman numeral list markers', () {
         expect(
-          MarkdownContentFilterService.call(
-            'i. First\nii. Second\niii. Third\niv. Fourth',
-          ),
+          MarkdownContentFilterService.call('i. First\nii. Second\niii. Third\niv. Fourth'),
           'First\nSecond\nThird\nFourth',
         );
       });
 
       test('preserves numbers inside text content', () {
-        expect(
-          MarkdownContentFilterService.call('1. There are 42 items'),
-          'There are 42 items',
-        );
+        expect(MarkdownContentFilterService.call('1. There are 42 items'), 'There are 42 items');
       });
     });
 
     group('Markdown Formatting Filtering', () {
       test('removes bold markdown with double asterisks', () {
-        expect(
-          MarkdownContentFilterService.call('This is **bold** text'),
-          'This is bold text',
-        );
+        expect(MarkdownContentFilterService.call('This is **bold** text'), 'This is bold text');
       });
 
       test('removes bold markdown with double underscores', () {
-        expect(
-          MarkdownContentFilterService.call('This is __bold__ text'),
-          'This is bold text',
-        );
+        expect(MarkdownContentFilterService.call('This is __bold__ text'), 'This is bold text');
       });
 
       test('removes italic markdown with single asterisk', () {
-        expect(
-          MarkdownContentFilterService.call('This is *italic* text'),
-          'This is italic text',
-        );
+        expect(MarkdownContentFilterService.call('This is *italic* text'), 'This is italic text');
       });
 
       test('removes italic markdown with single underscore', () {
-        expect(
-          MarkdownContentFilterService.call('This is _italic_ text'),
-          'This is italic text',
-        );
+        expect(MarkdownContentFilterService.call('This is _italic_ text'), 'This is italic text');
       });
 
       test('removes bold+italic markdown with triple asterisks', () {
-        expect(
-          MarkdownContentFilterService.call('This is ***bold italic*** text'),
-          'This is bold italic text',
-        );
+        expect(MarkdownContentFilterService.call('This is ***bold italic*** text'), 'This is bold italic text');
       });
 
       test('removes strikethrough markdown', () {
-        expect(
-          MarkdownContentFilterService.call('This is ~~deleted~~ text'),
-          'This is deleted text',
-        );
+        expect(MarkdownContentFilterService.call('This is ~~deleted~~ text'), 'This is deleted text');
       });
 
       test('removes inline code backticks', () {
-        expect(
-          MarkdownContentFilterService.call('Use the `print()` function'),
-          'Use the print() function',
-        );
+        expect(MarkdownContentFilterService.call('Use the `print()` function'), 'Use the print() function');
       });
 
       test('removes multiple formatting in same line', () {
-        expect(
-          MarkdownContentFilterService.call('**Bold** and *italic* and `code`'),
-          'Bold and italic and code',
-        );
+        expect(MarkdownContentFilterService.call('**Bold** and *italic* and `code`'), 'Bold and italic and code');
       });
 
       test('counts only content text, not formatting markers', () {
@@ -200,141 +133,85 @@ void main() {
 
     group('Link and Image Filtering', () {
       test('extracts text from markdown links, removes URL', () {
-        expect(
-          MarkdownContentFilterService.call(
-            '[Click here](https://example.com)',
-          ),
-          'Click here',
-        );
+        expect(MarkdownContentFilterService.call('[Click here](https://example.com)'), 'Click here');
       });
 
       test('removes image syntax entirely (not text content)', () {
-        expect(
-          MarkdownContentFilterService.call('![alt text](image.jpg)'),
-          '',
-        );
+        expect(MarkdownContentFilterService.call('![alt text](image.jpg)'), '');
       });
 
       test('removes images but preserves surrounding text', () {
-        expect(
-          MarkdownContentFilterService.call('Before ![img](pic.jpg) after'),
-          'Before  after',
-        );
+        expect(MarkdownContentFilterService.call('Before ![img](pic.jpg) after'), 'Before  after');
       });
 
       test('preserves link text in mixed content', () {
-        expect(
-          MarkdownContentFilterService.call('Visit [our site](url) for more'),
-          'Visit our site for more',
-        );
+        expect(MarkdownContentFilterService.call('Visit [our site](url) for more'), 'Visit our site for more');
       });
 
       test('counts only link text, not URL', () {
         const filtered = 'Google';
-        expect(
-          MarkdownContentFilterService.call('[Google](https://google.com)'),
-          filtered,
-        );
+        expect(MarkdownContentFilterService.call('[Google](https://google.com)'), filtered);
         expect(filtered.length, 6); // Not counting URL
       });
     });
 
     group('Header Filtering', () {
       test('removes header markers (single #)', () {
-        expect(
-          MarkdownContentFilterService.call('# Heading 1'),
-          'Heading 1',
-        );
+        expect(MarkdownContentFilterService.call('# Heading 1'), 'Heading 1');
       });
 
       test('removes header markers (multiple #)', () {
-        expect(
-          MarkdownContentFilterService.call('### Heading 3'),
-          'Heading 3',
-        );
+        expect(MarkdownContentFilterService.call('### Heading 3'), 'Heading 3');
       });
 
       test('removes header markers (max level)', () {
-        expect(
-          MarkdownContentFilterService.call('###### Heading 6'),
-          'Heading 6',
-        );
+        expect(MarkdownContentFilterService.call('###### Heading 6'), 'Heading 6');
       });
 
       test('preserves # symbols inside text', () {
-        expect(
-          MarkdownContentFilterService.call('## Issue #42'),
-          'Issue #42',
-        );
+        expect(MarkdownContentFilterService.call('## Issue #42'), 'Issue #42');
       });
     });
 
     group('Blockquote Filtering', () {
       test('removes single blockquote marker', () {
-        expect(
-          MarkdownContentFilterService.call('> quoted text'),
-          'quoted text',
-        );
+        expect(MarkdownContentFilterService.call('> quoted text'), 'quoted text');
       });
 
       test('removes nested blockquote markers', () {
-        expect(
-          MarkdownContentFilterService.call('> > nested quote'),
-          'nested quote',
-        );
+        expect(MarkdownContentFilterService.call('> > nested quote'), 'nested quote');
       });
 
       test('removes triple nested blockquote markers', () {
-        expect(
-          MarkdownContentFilterService.call('> > > deep quote'),
-          'deep quote',
-        );
+        expect(MarkdownContentFilterService.call('> > > deep quote'), 'deep quote');
       });
     });
 
     group('Code Block Filtering', () {
       test('removes code block markers', () {
-        expect(
-          MarkdownContentFilterService.call('```\ncode here\n```'),
-          'code here',
-        );
+        expect(MarkdownContentFilterService.call('```\ncode here\n```'), 'code here');
       });
 
       test('preserves code content', () {
-        expect(
-          MarkdownContentFilterService.call('```\nconst x = 5;\n```'),
-          'const x = 5;',
-        );
+        expect(MarkdownContentFilterService.call('```\nconst x = 5;\n```'), 'const x = 5;');
       });
     });
 
     group('Horizontal Rule Filtering', () {
       test('removes horizontal rule with dashes', () {
-        expect(
-          MarkdownContentFilterService.call('---'),
-          '',
-        );
+        expect(MarkdownContentFilterService.call('---'), '');
       });
 
       test('removes horizontal rule with asterisks', () {
-        expect(
-          MarkdownContentFilterService.call('***'),
-          '',
-        );
+        expect(MarkdownContentFilterService.call('***'), '');
       });
 
       test('removes horizontal rule with underscores', () {
-        expect(
-          MarkdownContentFilterService.call('___'),
-          '',
-        );
+        expect(MarkdownContentFilterService.call('___'), '');
       });
 
       test('removes horizontal rule between paragraphs', () {
-        expect(
-          MarkdownContentFilterService.call('First\n---\nSecond'),
-          'First\nSecond',
-        );
+        expect(MarkdownContentFilterService.call('First\n---\nSecond'), 'First\nSecond');
       });
 
       test('counts only text, not horizontal rules', () {
@@ -342,42 +219,27 @@ void main() {
         final filtered = MarkdownContentFilterService.call(text);
         expect(filtered, 'First\nSecond');
         // 'First\nSecond' has 12 characters total
-        expect(
-          filtered.replaceAll('\n', ' ').trim().length,
-          12,
-        ); // "First Second" with space
+        expect(filtered.replaceAll('\n', ' ').trim().length, 12); // "First Second" with space
       });
     });
 
     group('Indentation Filtering', () {
       test('removes leading tabs', () {
-        expect(
-          MarkdownContentFilterService.call('\tIndented line'),
-          'Indented line',
-        );
+        expect(MarkdownContentFilterService.call('\tIndented line'), 'Indented line');
       });
 
       test('removes multiple leading tabs', () {
-        expect(
-          MarkdownContentFilterService.call('\t\t\tDeep indent'),
-          'Deep indent',
-        );
+        expect(MarkdownContentFilterService.call('\t\t\tDeep indent'), 'Deep indent');
       });
 
       test('preserves tabs inside content', () {
-        expect(
-          MarkdownContentFilterService.call('\tColumn1\tColumn2'),
-          'Column1\tColumn2',
-        );
+        expect(MarkdownContentFilterService.call('\tColumn1\tColumn2'), 'Column1\tColumn2');
       });
     });
 
     group('Embedded Widget Filtering', () {
       test('removes object replacement character (widget placeholder)', () {
-        expect(
-          MarkdownContentFilterService.call('Before \uFFFC after'),
-          'Before  after',
-        );
+        expect(MarkdownContentFilterService.call('Before \uFFFC after'), 'Before  after');
       });
 
       test('removes multiple widget placeholders', () {
@@ -389,10 +251,7 @@ void main() {
 
       test('counts only text, not widget markers', () {
         const filtered = 'Hello  world'; // Double space where widget was
-        expect(
-          MarkdownContentFilterService.call('Hello \uFFFC world'),
-          filtered,
-        );
+        expect(MarkdownContentFilterService.call('Hello \uFFFC world'), filtered);
         expect(filtered.length, 12);
       });
     });
@@ -413,10 +272,7 @@ void main() {
       });
 
       test('filters nested structures', () {
-        expect(
-          MarkdownContentFilterService.call('\t- **Item** with *formatting*'),
-          'Item with formatting',
-        );
+        expect(MarkdownContentFilterService.call('\t- **Item** with *formatting*'), 'Item with formatting');
       });
 
       test('preserves actual content in complex scenario', () {
@@ -451,18 +307,12 @@ void main() {
 
     group('Empty Lines and Whitespace', () {
       test('removes lines that become empty after filtering', () {
-        expect(
-          MarkdownContentFilterService.call('Text\n---\n\t\nMore text'),
-          'Text\nMore text',
-        );
+        expect(MarkdownContentFilterService.call('Text\n---\n\t\nMore text'), 'Text\nMore text');
       });
 
       test('removes empty lines after filtering', () {
         // Blank lines become empty after filtering and are removed
-        expect(
-          MarkdownContentFilterService.call('Para 1\n\nPara 2'),
-          'Para 1\nPara 2',
-        );
+        expect(MarkdownContentFilterService.call('Para 1\n\nPara 2'), 'Para 1\nPara 2');
       });
     });
 
@@ -474,10 +324,7 @@ void main() {
       });
 
       test('handles unclosed markdown syntax', () {
-        expect(
-          MarkdownContentFilterService.call('**bold without close'),
-          '**bold without close',
-        );
+        expect(MarkdownContentFilterService.call('**bold without close'), '**bold without close');
       });
 
       test('handles special characters in content', () {

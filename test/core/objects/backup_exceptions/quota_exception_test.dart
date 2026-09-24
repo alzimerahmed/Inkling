@@ -18,61 +18,40 @@ void main() {
       expect(exception.isRetryable, isFalse);
       expect(
         exception.userFriendlyMessage,
-        equals(
-          'Google Drive storage is full. Please free up space or upgrade your storage plan.',
-        ),
+        equals('Google Drive storage is full. Please free up space or upgrade your storage plan.'),
       );
     });
 
-    test(
-      'userFriendlyMessage names the actual provider, not always Google Drive',
-      () {
-        const exception = QuotaException(
-          'Storage full',
-          QuotaExceptionType.storageQuotaExceeded,
-          serviceType: BackupServiceType.nextcloud,
-        );
+    test('userFriendlyMessage names the actual provider, not always Google Drive', () {
+      const exception = QuotaException(
+        'Storage full',
+        QuotaExceptionType.storageQuotaExceeded,
+        serviceType: BackupServiceType.nextcloud,
+      );
 
-        expect(
-          exception.userFriendlyMessage,
-          equals(
-            'Nextcloud storage is full. Please free up space or upgrade your storage plan.',
-          ),
-        );
-      },
-    );
+      expect(
+        exception.userFriendlyMessage,
+        equals('Nextcloud storage is full. Please free up space or upgrade your storage plan.'),
+      );
+    });
 
-    test(
-      'userFriendlyMessage falls back to a neutral provider name when serviceType is unset',
-      () {
-        const exception = QuotaException(
-          'Storage full',
-          QuotaExceptionType.storageQuotaExceeded,
-        );
+    test('userFriendlyMessage falls back to a neutral provider name when serviceType is unset', () {
+      const exception = QuotaException('Storage full', QuotaExceptionType.storageQuotaExceeded);
 
-        expect(
-          exception.userFriendlyMessage,
-          equals(
-            'Cloud storage is full. Please free up space or upgrade your storage plan.',
-          ),
-        );
-      },
-    );
+      expect(
+        exception.userFriendlyMessage,
+        equals('Cloud storage is full. Please free up space or upgrade your storage plan.'),
+      );
+    });
 
     test('creates with correct properties for rate limit exceeded', () {
-      const exception = QuotaException(
-        'Rate limit exceeded',
-        QuotaExceptionType.rateLimitExceeded,
-      );
+      const exception = QuotaException('Rate limit exceeded', QuotaExceptionType.rateLimitExceeded);
 
       expect(exception.message, equals('Rate limit exceeded'));
       expect(exception.type, equals(QuotaExceptionType.rateLimitExceeded));
       expect(exception.context, isNull);
       expect(exception.isRetryable, isFalse);
-      expect(
-        exception.userFriendlyMessage,
-        equals('Too many requests. Please wait a moment before trying again.'),
-      );
+      expect(exception.userFriendlyMessage, equals('Too many requests. Please wait a moment before trying again.'));
     });
 
     test('creates with correct properties for daily limit exceeded', () {
@@ -86,17 +65,11 @@ void main() {
       expect(exception.type, equals(QuotaExceptionType.dailyLimitExceeded));
       expect(exception.context, equals('api_calls'));
       expect(exception.isRetryable, isFalse);
-      expect(
-        exception.userFriendlyMessage,
-        equals('Daily API limit reached. Please try again tomorrow.'),
-      );
+      expect(exception.userFriendlyMessage, equals('Daily API limit reached. Please try again tomorrow.'));
     });
 
     test('is not retryable by default', () {
-      const exception = QuotaException(
-        'Quota exceeded',
-        QuotaExceptionType.storageQuotaExceeded,
-      );
+      const exception = QuotaException('Quota exceeded', QuotaExceptionType.storageQuotaExceeded);
       expect(exception.isRetryable, isFalse);
     });
 
@@ -115,38 +88,20 @@ void main() {
         QuotaExceptionType.storageQuotaExceeded,
         context: 'backup_upload',
       );
-      expect(
-        exception.toString(),
-        equals('BackupException: Storage full (backup_upload)'),
-      );
+      expect(exception.toString(), equals('BackupException: Storage full (backup_upload)'));
     });
 
     test('toString works without context', () {
-      const exception = QuotaException(
-        'Rate limit exceeded',
-        QuotaExceptionType.rateLimitExceeded,
-      );
-      expect(
-        exception.toString(),
-        equals('BackupException: Rate limit exceeded'),
-      );
+      const exception = QuotaException('Rate limit exceeded', QuotaExceptionType.rateLimitExceeded);
+      expect(exception.toString(), equals('BackupException: Rate limit exceeded'));
     });
 
     group('QuotaExceptionType enum', () {
       test('has all expected values', () {
         expect(QuotaExceptionType.values, hasLength(3));
-        expect(
-          QuotaExceptionType.values,
-          contains(QuotaExceptionType.storageQuotaExceeded),
-        );
-        expect(
-          QuotaExceptionType.values,
-          contains(QuotaExceptionType.rateLimitExceeded),
-        );
-        expect(
-          QuotaExceptionType.values,
-          contains(QuotaExceptionType.dailyLimitExceeded),
-        );
+        expect(QuotaExceptionType.values, contains(QuotaExceptionType.storageQuotaExceeded));
+        expect(QuotaExceptionType.values, contains(QuotaExceptionType.rateLimitExceeded));
+        expect(QuotaExceptionType.values, contains(QuotaExceptionType.dailyLimitExceeded));
       });
     });
   });

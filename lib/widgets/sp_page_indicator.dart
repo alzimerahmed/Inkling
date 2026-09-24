@@ -88,9 +88,7 @@ class _SpPageIndicatorState extends State<SpPageIndicator> {
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeOutCubic,
                 // Center the current dot and move others accordingly
-                left:
-                    (centerIndex + offsetFromCenter) *
-                    (widget.dotSize + widget.spacing),
+                left: (centerIndex + offsetFromCenter) * (widget.dotSize + widget.spacing),
                 top: (widget.dotSize - (widget.dotSize * scale)) / 2,
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
@@ -100,9 +98,7 @@ class _SpPageIndicatorState extends State<SpPageIndicator> {
                     shape: BoxShape.circle,
                     color: index == currentPage.round()
                         ? widget.activeColor
-                        : widget.inactiveColor.withValues(
-                            alpha: scale.clamp(0.2, 1.0),
-                          ),
+                        : widget.inactiveColor.withValues(alpha: scale.clamp(0.2, 1.0)),
                   ),
                 ),
               );

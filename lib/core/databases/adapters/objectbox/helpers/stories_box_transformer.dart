@@ -7,9 +7,7 @@ StoryDbModel _objectToModel(Map<String, dynamic> map) {
   StoryObjectBox object = map['object'];
   Map<String, dynamic>? options = map['options'];
 
-  Iterable<PathType> types = PathType.values.where(
-    (e) => e.name == object.type,
-  );
+  Iterable<PathType> types = PathType.values.where((e) => e.name == object.type);
   Map<int, EventDbModel> eventsByDate = options != null && options.containsKey('eventsByDate')
       ? options['eventsByDate']
       : {};
@@ -44,9 +42,7 @@ StoryDbModel _objectToModel(Map<String, dynamic> map) {
     place: object.place != null ? PlaceDbModel.fromJson(jsonDecode(object.place!)) : null,
   );
 
-  return story.copyWith(
-    event: eventsByDate[periodDateKey(object.year, object.month, object.day)],
-  );
+  return story.copyWith(event: eventsByDate[periodDateKey(object.year, object.month, object.day)]);
 }
 
 List<StoryDbModel> _objectsToModels(Map<String, dynamic> map) {
@@ -55,10 +51,7 @@ List<StoryDbModel> _objectsToModels(Map<String, dynamic> map) {
 
   List<StoryDbModel> docs = [];
   for (StoryObjectBox object in objects) {
-    StoryDbModel json = _objectToModel({
-      'object': object,
-      'options': options,
-    });
+    StoryDbModel json = _objectToModel({'object': object, 'options': options});
 
     docs.add(json);
   }
@@ -72,10 +65,7 @@ List<StoryObjectBox> _modelsToObjects(Map<String, dynamic> map) {
 
   List<StoryObjectBox> docs = [];
   for (StoryDbModel model in models) {
-    StoryObjectBox json = _modelToObject({
-      'model': model,
-      'options': options,
-    });
+    StoryObjectBox json = _modelToObject({'model': model, 'options': options});
 
     docs.add(json);
   }
@@ -161,9 +151,7 @@ String? _generateSearchMetadata(
   // ---- Extended date tokens ----
   final year = DateFormat('yyyy').format(storyDate); // 2024
   final monthPad = DateFormat('MM').format(storyDate); // 08
-  final monthFull = DateFormat(
-    'MMMM',
-  ).format(storyDate).toLowerCase(); // august
+  final monthFull = DateFormat('MMMM').format(storyDate).toLowerCase(); // august
   final dayPad = DateFormat('dd').format(storyDate); // 05
   final weekday = DateFormat('EEEE').format(storyDate).toLowerCase(); // monday
 

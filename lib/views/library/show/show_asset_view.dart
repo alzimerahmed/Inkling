@@ -9,10 +9,7 @@ import 'show_asset_view_model.dart';
 part 'show_asset_content.dart';
 
 class ShowAssetRoute extends BaseRoute {
-  ShowAssetRoute({
-    required this.assetId,
-    required this.storyViewOnly,
-  });
+  ShowAssetRoute({required this.assetId, required this.storyViewOnly});
 
   final int assetId;
   final bool storyViewOnly;
@@ -22,10 +19,7 @@ class ShowAssetRoute extends BaseRoute {
 }
 
 class ShowAssetView extends StatelessWidget {
-  const ShowAssetView({
-    super.key,
-    required this.params,
-  });
+  const ShowAssetView({super.key, required this.params});
 
   final ShowAssetRoute params;
 

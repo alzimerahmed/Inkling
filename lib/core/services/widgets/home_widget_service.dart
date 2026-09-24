@@ -24,9 +24,7 @@ class HomeWidgetService {
 
   static bool get supported => Platform.isAndroid || Platform.isIOS;
 
-  static Future<void> initialize({
-    required GlobalKey<NavigatorState> navigatorKey,
-  }) async {
+  static Future<void> initialize({required GlobalKey<NavigatorState> navigatorKey}) async {
     if (!supported) return;
 
     // Widget tap while the app was fully terminated.
@@ -44,8 +42,7 @@ class HomeWidgetService {
   }
 
   static bool uriIsQuickCapture({required Uri? initialUri}) =>
-      initialUri?.host == 'widget' &&
-      initialUri?.queryParameters['action'] == 'new_story';
+      initialUri?.host == 'widget' && initialUri?.queryParameters['action'] == 'new_story';
 
   /// Refreshes the widget's "today" snapshot. Called opportunistically on
   /// home navigation (see RootViewModel) — cheap query, no isolate needed.
@@ -54,31 +51,18 @@ class HomeWidgetService {
 
     try {
       final DateTime now = DateTime.now();
-      final stories = await StoryDbModel.db.where(
-        filters: {
-          'year': now.year,
-          'month': now.month,
-          'day': now.day,
-        },
-      );
+      final stories = await StoryDbModel.db.where(filters: {'year': now.year, 'month': now.month, 'day': now.day});
 
       final items = stories?.items ?? [];
       final bool exists = items.isNotEmpty;
-      final String title = exists
-          ? (items.first.latestContent?.title ?? '').trim()
-          : '';
-      final int wordCount = exists
-          ? (items.first.latestContent?.wordCount ?? 0)
-          : 0;
+      final String title = exists ? (items.first.latestContent?.title ?? '').trim() : '';
+      final int wordCount = exists ? (items.first.latestContent?.wordCount ?? 0) : 0;
 
       await HomeWidget.saveWidgetData<bool>('today_exists', exists);
       await HomeWidget.saveWidgetData<String>('today_title', title);
       await HomeWidget.saveWidgetData<int>('today_word_count', wordCount);
 
-      await HomeWidget.updateWidget(
-        name: 'InklingWidgetProvider',
-        androidName: 'InklingWidgetProvider',
-      );
+      await HomeWidget.updateWidget(name: 'InklingWidgetProvider', androidName: 'InklingWidgetProvider');
     } catch (e) {
       // Widget updates must never break app startup/navigation.
       assert(() {

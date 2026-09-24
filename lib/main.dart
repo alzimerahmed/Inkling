@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:easy_localization/easy_localization.dart' show EasyLocalization;
@@ -21,25 +22,19 @@ import 'package:storypad/core/initializers/theme_initializer.dart' show ThemeIni
 import 'package:storypad/provider_scope.dart' show ProviderScope;
 import 'package:storypad/widgets/sp_splash_screen_wrapper.dart';
 
-void main({
-  FirebaseOptions? firebaseOptions,
-}) async {
+void main({FirebaseOptions? firebaseOptions}) async {
   WidgetsFlutterBinding.ensureInitialized();
   await SpSplashScreenWrapper.ensureInitialized();
 
   runApp(
     SpSplashScreenWrapper(
       onLoad: () => _initializeApp(firebaseOptions: firebaseOptions),
-      app: const ProviderScope(
-        child: App(),
-      ),
+      app: const ProviderScope(child: App()),
     ),
   );
 }
 
-Future<void> _initializeApp({
-  FirebaseOptions? firebaseOptions,
-}) async {
+Future<void> _initializeApp({FirebaseOptions? firebaseOptions}) async {
   // firebase initialize (never blocks startup beyond its own timeout)
   await FirebaseInitializer.call(options: firebaseOptions);
   CrashlyticsInitializer.call();

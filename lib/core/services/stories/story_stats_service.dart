@@ -24,9 +24,7 @@ class StoryStatsService {
     DateTime? now,
   }) {
     final DateTime today = now ?? DateTime.now();
-    final Map<int, TagDbModel> tagById = {
-      for (final tag in allTags) tag.id: tag,
-    };
+    final Map<int, TagDbModel> tagById = {for (final tag in allTags) tag.id: tag};
 
     final int feelingCategoryId = TagCategoryDbModel.feeling().id;
     final int activityCategoryId = TagCategoryDbModel.activity().id;
@@ -66,18 +64,11 @@ class StoryStatsService {
 
       final content = story.latestContent ?? story.draftContent;
       wordCount += content?.wordCount ?? 0;
-      dailyWordCounts[day] =
-          (dailyWordCounts[day] ?? 0) + (content?.wordCount ?? 0);
+      dailyWordCounts[day] = (dailyWordCounts[day] ?? 0) + (content?.wordCount ?? 0);
 
-      final int storyPhotoCount = StoryContentEmbedExtractor.photos(
-        content,
-      ).length;
-      final int storyVideoCount = StoryContentEmbedExtractor.videos(
-        content,
-      ).length;
-      final int storyVoiceCount = StoryContentEmbedExtractor.audio(
-        content,
-      ).length;
+      final int storyPhotoCount = StoryContentEmbedExtractor.photos(content).length;
+      final int storyVideoCount = StoryContentEmbedExtractor.videos(content).length;
+      final int storyVoiceCount = StoryContentEmbedExtractor.audio(content).length;
       photoCount += storyPhotoCount;
       videoCount += storyVideoCount;
       voiceCount += storyVoiceCount;
@@ -177,63 +168,29 @@ class StoryStatsService {
     return longest;
   }
 
-  static List<EmojiStatItem> _topEmojis(
-    Map<int, int> counts,
-    Map<int, TagDbModel> tagById,
-  ) {
-    final entries = counts.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+  static List<EmojiStatItem> _topEmojis(Map<int, int> counts, Map<int, TagDbModel> tagById) {
+    final entries = counts.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
     return entries
-        .map(
-          (e) => EmojiStatItem(
-            tagId: e.key,
-            emoji: tagById[e.key]?.emoji ?? '',
-            count: e.value,
-          ),
-        )
+        .map((e) => EmojiStatItem(tagId: e.key, emoji: tagById[e.key]?.emoji ?? '', count: e.value))
         .where((item) => item.emoji.isNotEmpty)
         .toList();
   }
 
-  static List<LabelStatItem> _topTagLabels(
-    Map<int, int> counts,
-    Map<int, TagDbModel> tagById,
-  ) {
-    final entries = counts.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+  static List<LabelStatItem> _topTagLabels(Map<int, int> counts, Map<int, TagDbModel> tagById) {
+    final entries = counts.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
     return entries
-        .map(
-          (e) => LabelStatItem(
-            label: tagById[e.key]?.title ?? '',
-            count: e.value,
-            tagId: e.key,
-          ),
-        )
+        .map((e) => LabelStatItem(label: tagById[e.key]?.title ?? '', count: e.value, tagId: e.key))
         .where((item) => item.label.isNotEmpty)
         .toList();
   }
 
-  static List<LabelStatItem> _topPlaceLabels(
-    Map<String, Set<int>> placeStoryIds,
-  ) {
-    final entries = placeStoryIds.entries.toList()
-      ..sort((a, b) => b.value.length.compareTo(a.value.length));
-    return entries
-        .map(
-          (e) => LabelStatItem(
-            label: e.key,
-            count: e.value.length,
-            storyIds: e.value,
-          ),
-        )
-        .toList();
+  static List<LabelStatItem> _topPlaceLabels(Map<String, Set<int>> placeStoryIds) {
+    final entries = placeStoryIds.entries.toList()..sort((a, b) => b.value.length.compareTo(a.value.length));
+    return entries.map((e) => LabelStatItem(label: e.key, count: e.value.length, storyIds: e.value)).toList();
   }
 
   static List<LabelStatItem> _topCountryLabels(Map<String, int> counts) {
-    final entries = counts.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
-    return entries
-        .map((e) => LabelStatItem(label: e.key, count: e.value))
-        .toList();
+    final entries = counts.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    return entries.map((e) => LabelStatItem(label: e.key, count: e.value)).toList();
   }
 }

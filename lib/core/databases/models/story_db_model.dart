@@ -82,13 +82,7 @@ class StoryDbModel extends BaseDbModel {
   final DateTime? permanentlyDeletedAt;
 
   DateTime get displayPathDate {
-    return DateTime(
-      year,
-      month,
-      day,
-      hour ?? createdAt.hour,
-      minute ?? createdAt.minute,
-    );
+    return DateTime(year, month, day, hour ?? createdAt.hour, minute ?? createdAt.minute);
   }
 
   // tags are mistaken stores in DB in string.
@@ -161,16 +155,8 @@ class StoryDbModel extends BaseDbModel {
   }
 
   bool sameDayAs(StoryDbModel story) {
-    return [
-          displayPathDate.year,
-          displayPathDate.month,
-          displayPathDate.day,
-        ].join("-") ==
-        [
-          story.displayPathDate.year,
-          story.displayPathDate.month,
-          story.displayPathDate.day,
-        ].join("-");
+    return [displayPathDate.year, displayPathDate.month, displayPathDate.day].join("-") ==
+        [story.displayPathDate.year, story.displayPathDate.month, story.displayPathDate.day].join("-");
   }
 
   StoryContentDbModel generateDraftContent() {
@@ -183,52 +169,31 @@ class StoryDbModel extends BaseDbModel {
     }
   }
 
-  Future<StoryDbModel?> putBack({
-    bool runCallbacks = true,
-  }) async {
+  Future<StoryDbModel?> putBack({bool runCallbacks = true}) async {
     if (!putBackAble) return null;
 
     return db.set(
       runCallbacks: runCallbacks,
-      copyWith(
-        type: PathType.docs,
-        updatedAt: DateTime.now(),
-        movedToBinAt: null,
-        permanentlyDeletedAt: null,
-      ),
+      copyWith(type: PathType.docs, updatedAt: DateTime.now(), movedToBinAt: null, permanentlyDeletedAt: null),
     );
   }
 
-  Future<StoryDbModel?> moveToBin({
-    bool runCallbacks = true,
-  }) async {
+  Future<StoryDbModel?> moveToBin({bool runCallbacks = true}) async {
     if (!canMoveToBin) return null;
 
     return db.set(
       runCallbacks: runCallbacks,
-      copyWith(
-        type: PathType.bins,
-        updatedAt: DateTime.now(),
-        movedToBinAt: DateTime.now(),
-      ),
+      copyWith(type: PathType.bins, updatedAt: DateTime.now(), movedToBinAt: DateTime.now()),
     );
   }
 
   Future<StoryDbModel?> toggleStarred() async {
     if (!editable) return null;
 
-    return db.set(
-      copyWith(
-        starred: !(starred == true),
-        updatedAt: DateTime.now(),
-      ),
-    );
+    return db.set(copyWith(starred: !(starred == true), updatedAt: DateTime.now()));
   }
 
-  Future<StoryDbModel?> setPinned(
-    bool pinned, {
-    bool runCallbacks = true,
-  }) async {
+  Future<StoryDbModel?> setPinned(bool pinned, {bool runCallbacks = true}) async {
     if (!editable) return null;
 
     return db.set(
@@ -237,30 +202,18 @@ class StoryDbModel extends BaseDbModel {
     );
   }
 
-  Future<StoryDbModel?> updatePreferences({
-    required StoryPreferencesDbModel preferences,
-  }) async {
+  Future<StoryDbModel?> updatePreferences({required StoryPreferencesDbModel preferences}) async {
     if (!editable) return null;
 
-    return db.set(
-      copyWith(
-        preferencesOrNull: preferences,
-        updatedAt: DateTime.now(),
-      ),
-    );
+    return db.set(copyWith(preferencesOrNull: preferences, updatedAt: DateTime.now()));
   }
 
-  Future<StoryDbModel?> archive({
-    bool runCallbacks = true,
-  }) async {
+  Future<StoryDbModel?> archive({bool runCallbacks = true}) async {
     if (!archivable) return null;
 
     return db.set(
       runCallbacks: runCallbacks,
-      copyWith(
-        type: PathType.archives,
-        updatedAt: DateTime.now(),
-      ),
+      copyWith(type: PathType.archives, updatedAt: DateTime.now()),
     );
   }
 
@@ -306,10 +259,7 @@ class StoryDbModel extends BaseDbModel {
 
     StoryPreferencesDbModel preferences =
         template?.preferences ?? defaultStoryPreferences?.toStoryPreference() ?? StoryPreferencesDbModel.create();
-    if (galleryTemplate != null)
-      preferences = preferences.copyWith(
-        layoutType: galleryTemplate.pageLayoutType,
-      );
+    if (galleryTemplate != null) preferences = preferences.copyWith(layoutType: galleryTemplate.pageLayoutType);
 
     final now = DateTime.now();
     return StoryDbModel(

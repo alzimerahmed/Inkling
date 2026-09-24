@@ -5,9 +5,7 @@ import 'package:storypad/widgets/sp_fade_in.dart';
 import 'package:storypad/widgets/base_view/base_route.dart';
 
 class OnboardingHelloRoute extends BaseRoute {
-  OnboardingHelloRoute({
-    required this.nickname,
-  });
+  OnboardingHelloRoute({required this.nickname});
 
   final String nickname;
 
@@ -16,10 +14,7 @@ class OnboardingHelloRoute extends BaseRoute {
 }
 
 class OnboardingHelloView extends StatefulWidget {
-  const OnboardingHelloView({
-    super.key,
-    required this.params,
-  });
+  const OnboardingHelloView({super.key, required this.params});
 
   final OnboardingHelloRoute params;
 
@@ -49,29 +44,18 @@ class _OnboardingHelloViewState extends State<OnboardingHelloView> {
     double paddingBottom = MediaQuery.of(context).padding.bottom + 24;
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        forceMaterialTransparency: true,
-      ),
+      appBar: AppBar(automaticallyImplyLeading: false, forceMaterialTransparency: true),
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        padding: EdgeInsets.only(
-          top: paddingTop,
-          bottom: paddingBottom,
-        ),
+        padding: EdgeInsets.only(top: paddingTop, bottom: paddingBottom),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children:
               [
                 Text(
-                  tr(
-                    "page.home.app_bar.hello_nickname",
-                    namedArgs: {
-                      'NICKNAME': widget.params.nickname,
-                    },
-                  ),
+                  tr("page.home.app_bar.hello_nickname", namedArgs: {'NICKNAME': widget.params.nickname}),
                   style: TextTheme.of(context).titleLarge,
                   textAlign: TextAlign.center,
                 ),

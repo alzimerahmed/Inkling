@@ -5,11 +5,7 @@ class CloudStorageQuotaObject {
   final int? accountUsageInBytes; // Total account usage (null if not supported)
   final int? limitInBytes; // Account quota limit
 
-  const CloudStorageQuotaObject({
-    required this.appUsageInBytes,
-    this.accountUsageInBytes,
-    this.limitInBytes,
-  });
+  const CloudStorageQuotaObject({required this.appUsageInBytes, this.accountUsageInBytes, this.limitInBytes});
 
   /// Fraction of app storage used relative to account limit (0.0 – 1.0), or null if limit is unknown.
   double? get appFraction => limitInBytes != null && limitInBytes! > 0 ? appUsageInBytes / limitInBytes! : null;
@@ -40,9 +36,7 @@ class CloudStorageQuotaObject {
   static CloudStorageQuotaObject? tryParseJsonString(String? value) {
     if (value == null || value.isEmpty) return null;
     try {
-      return CloudStorageQuotaObject.fromJson(
-        jsonDecode(value) as Map<String, dynamic>,
-      );
+      return CloudStorageQuotaObject.fromJson(jsonDecode(value) as Map<String, dynamic>);
     } catch (_) {
       return null;
     }

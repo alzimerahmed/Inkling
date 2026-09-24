@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -48,9 +49,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
     AnalyticsService.instance.logViewHome(year: year);
     reload(debugSource: 'HomeViewModel#_constructor');
 
-    BackupProvider.repoInstance.restoreService.addListener(
-      _restoreServiceListener,
-    );
+    BackupProvider.repoInstance.restoreService.addListener(_restoreServiceListener);
   }
 
   int year = DateTime.now().year;
@@ -127,30 +126,18 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
   /// GlobalKeys unconditionally on every data change.
   List<HomeItem> get items => _items;
 
-  void setStories(
-    CollectionDbModel<StoryDbModel>? value,
-    CollectionDbModel<StoryDbModel>? pinnedValue,
-  ) {
-    _stories = value?.deduplicateAndSort(
-      comparator: (a, b) => b.displayPathDate.compareTo(a.displayPathDate),
-    );
+  void setStories(CollectionDbModel<StoryDbModel>? value, CollectionDbModel<StoryDbModel>? pinnedValue) {
+    _stories = value?.deduplicateAndSort(comparator: (a, b) => b.displayPathDate.compareTo(a.displayPathDate));
     _pinnedStories = pinnedValue?.deduplicateAndSort(
       comparator: (a, b) => b.displayPathDate.compareTo(a.displayPathDate),
     );
 
-    StoryContentEmbedExtractor.preloadAssetAspectRatios([
-      ...?stories?.items,
-      ...?pinnedStories?.items,
-    ]);
+    StoryContentEmbedExtractor.preloadAssetAspectRatios([...?stories?.items, ...?pinnedStories?.items]);
 
     _refreshMonthsForYear();
 
-    final renderableStories = _confirmedCompleteUnpinnedStories(
-      stories?.items ?? [],
-    );
-    _monthlyStats = MonthlyStoryStatsService.getByMonth(
-      stories: renderableStories,
-    );
+    final renderableStories = _confirmedCompleteUnpinnedStories(stories?.items ?? []);
+    _monthlyStats = MonthlyStoryStatsService.getByMonth(stories: renderableStories);
     _items = _buildItems(renderableStories);
   }
 
@@ -162,15 +149,11 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
   /// field doc on [_pendingBoundaryMonth]); same (year, month) stories are
   /// always contiguous in a date-sorted list regardless of insertion order,
   /// so this is equivalent to removing one contiguous run.
-  List<StoryDbModel> _confirmedCompleteUnpinnedStories(
-    List<StoryDbModel> allUnpinnedStories,
-  ) {
+  List<StoryDbModel> _confirmedCompleteUnpinnedStories(List<StoryDbModel> allUnpinnedStories) {
     final boundary = _pendingBoundaryMonth;
     if (boundary == null) return allUnpinnedStories;
 
-    return allUnpinnedStories
-        .where((story) => (story.year, story.month) != boundary)
-        .toList();
+    return allUnpinnedStories.where((story) => (story.year, story.month) != boundary).toList();
   }
 
   List<HomeItem> _buildItems(List<StoryDbModel> renderableStories) {
@@ -178,30 +161,15 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
 
     if (hasThrowback) {
       items.add(
-        HomeThrowbackItem(
-          throwbackDates: throwbackDates ?? [],
-          listHasStories: stories?.items.isNotEmpty == true,
-        ),
+        HomeThrowbackItem(throwbackDates: throwbackDates ?? [], listHasStories: stories?.items.isNotEmpty == true),
       );
     }
 
     // Pinned run: headers yes, recap tiles never (matches the previous
     // `eligibleToShowRecap: false` behavior for pinned stories). Pinned
     // stories aren't paginated, so no completeness trimming needed here.
-    items.addAll(
-      _buildRunItems(
-        pinnedStories?.items ?? [],
-        pinned: true,
-        monthlyStats: null,
-      ),
-    );
-    items.addAll(
-      _buildRunItems(
-        renderableStories,
-        pinned: false,
-        monthlyStats: _monthlyStats,
-      ),
-    );
+    items.addAll(_buildRunItems(pinnedStories?.items ?? [], pinned: true, monthlyStats: null));
+    items.addAll(_buildRunItems(renderableStories, pinned: false, monthlyStats: _monthlyStats));
 
     if (_hasMoreStories) items.add(HomeLoadMoreItem());
 
@@ -223,22 +191,12 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
       final showMonogram = previous == null || !previous.sameDayAs(story);
 
       if (previous?.month != story.month || previous?.year != story.year) {
-        result.add(
-          HomeMonthHeaderItem(
-            story: story,
-            isFirstOfRun: i == 0,
-            pinned: pinned,
-          ),
-        );
+        result.add(HomeMonthHeaderItem(story: story, isFirstOfRun: i == 0, pinned: pinned));
 
         final monthStats = monthlyStats?[story.month];
         if (monthStats != null && monthStats.shouldShowRecap) {
           result.add(
-            HomeMonthRecapItem(
-              story: story,
-              stats: monthStats,
-              showFullTimelineDivider: showFullTimelineDivider,
-            ),
+            HomeMonthRecapItem(story: story, stats: monthStats, showFullTimelineDivider: showFullTimelineDivider),
           );
         }
       }
@@ -250,19 +208,14 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
                 showMonogram: showMonogram,
                 showFullTimelineDivider: showFullTimelineDivider,
               )
-            : HomeStoryItem(
-                story: story,
-                showMonogram: showMonogram,
-                showFullTimelineDivider: showFullTimelineDivider,
-              ),
+            : HomeStoryItem(story: story, showMonogram: showMonogram, showFullTimelineDivider: showFullTimelineDivider),
       );
     }
 
     return result;
   }
 
-  List<int> get months =>
-      _monthsForYear.isNotEmpty ? _monthsForYear : [DateTime.now().month];
+  List<int> get months => _monthsForYear.isNotEmpty ? _monthsForYear : [DateTime.now().month];
 
   /// Re-derives [_monthsForYear] from the DB. Called unconditionally from
   /// [setStories] — cheap (no content decode), so simpler to always keep it
@@ -279,9 +232,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
     );
   }
 
-  Future<void> reload({
-    required String debugSource,
-  }) async {
+  Future<void> reload({required String debugSource}) async {
     AppLogger.d('🚧 Reload home from $debugSource 🏠');
 
     final generation = ++_loadGeneration;
@@ -314,13 +265,10 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
                   assetId: null,
                 ).toDatabaseFilter(),
               )
-              .then(
-                (e) => e?.items.map((e) => e.displayPathDate).toSet().toList(),
-              )
+              .then((e) => e?.items.map((e) => e.displayPathDate).toSet().toList())
         : null;
 
-    if (generation != _loadGeneration)
-      return; // superseded while awaiting the above
+    if (generation != _loadGeneration) return; // superseded while awaiting the above
 
     // reset: true so this fetches offset 0 regardless of whatever [_stories]
     // still holds from before this reload (the old year/search-refresh data,
@@ -367,10 +315,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
     final completer = Completer<void>();
     _pageFetchCompleter = completer;
 
-    _fetchNextPage(
-      reset: reset,
-      generation: generation,
-    ).then(completer.complete, onError: completer.completeError);
+    _fetchNextPage(reset: reset, generation: generation).then(completer.complete, onError: completer.completeError);
     completer.future.whenComplete(() {
       // Only clear if this call's completer is still the current one — an
       // older, now-superseded call's whenComplete must not clear a newer
@@ -381,14 +326,9 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
     return completer.future;
   }
 
-  Future<void> _fetchNextPage({
-    required bool reset,
-    required int generation,
-  }) async {
+  Future<void> _fetchNextPage({required bool reset, required int generation}) async {
     final offset = reset ? 0 : (stories?.items.length ?? 0);
-    AppLogger.d(
-      '🚧 $runtimeType#loadNextPage fetching offset: $offset, limit: $_pageSize, year: $year',
-    );
+    AppLogger.d('🚧 $runtimeType#loadNextPage fetching offset: $offset, limit: $_pageSize, year: $year');
 
     final nextPage = await StoryDbModel.db.where(
       filters: SearchFilterObject(
@@ -406,9 +346,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
       // counts too — e.g. pull-to-refresh, or a restore-triggered reload —
       // not just a year switch) — it already started its own fetch, discard
       // this stale one instead of mutating _stories under it.
-      AppLogger.d(
-        '🚧 $runtimeType#loadNextPage discarded: generation $generation -> $_loadGeneration mid-flight',
-      );
+      AppLogger.d('🚧 $runtimeType#loadNextPage discarded: generation $generation -> $_loadGeneration mid-flight');
       return;
     }
 
@@ -422,9 +360,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
     );
 
     setStories(
-      CollectionDbModel<StoryDbModel>(
-        items: [if (!reset) ...?stories?.items, ...?nextPage?.items],
-      ),
+      CollectionDbModel<StoryDbModel>(items: [if (!reset) ...?stories?.items, ...?nextPage?.items]),
       pinnedStories,
     );
     notifyListeners();
@@ -440,19 +376,13 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
     year = newYear;
     await reload(debugSource: '$runtimeType#changeYear $newYear');
 
-    AnalyticsService.instance.logViewHome(
-      year: year,
-    );
+    AnalyticsService.instance.logViewHome(year: year);
   }
 
   Future<void> goToViewPage(BuildContext context, StoryDbModel story) async {
-    final editedStory = await ShowStoryRoute(
-      id: story.id,
-      story: story,
-    ).push(context);
+    final editedStory = await ShowStoryRoute(id: story.id, story: story).push(context);
 
-    if (editedStory is StoryDbModel &&
-        editedStory.updatedAt != story.updatedAt) {
+    if (editedStory is StoryDbModel && editedStory.updatedAt != story.updatedAt) {
       year = editedStory.year;
       await reload(debugSource: '$runtimeType#goToNewPage');
 
@@ -463,10 +393,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   Future<void> goToNewPage(BuildContext context) async {
-    final addedStory = await EditStoryRoute(
-      id: null,
-      initialYear: year,
-    ).push(context);
+    final addedStory = await EditStoryRoute(id: null, initialYear: year).push(context);
     await _checkNewStoryResult(addedStory);
   }
 
@@ -474,16 +401,11 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final result = await const SpVoiceRecordingSheet().show(
-          context: context,
-        );
+        final result = await const SpVoiceRecordingSheet().show(context: context);
         if (result is! VoiceRecordingResult) return;
         if (HomeView.homeContext?.mounted != true) return;
 
-        final asset = await InsertFileToDbService.insertAudio(
-          result.filePath,
-          durationInMs: result.durationInMs,
-        );
+        final asset = await InsertFileToDbService.insertAudio(result.filePath, durationInMs: result.durationInMs);
 
         if (asset == null) return;
 
@@ -502,20 +424,11 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context
-            .read<DevicePreferencesProvider>()
-            .preferences
-            .assetCompression;
-        final photo = await AppFilePickerService.pickImage(
-          source: ImageSource.camera,
-          compression: compression,
-        );
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final photo = await AppFilePickerService.pickImage(source: ImageSource.camera, compression: compression);
         if (photo == null) return;
 
-        AssetDbModel? asset = await InsertFileToDbService.insertImage(
-          photo.file,
-          size: photo.size,
-        );
+        AssetDbModel? asset = await InsertFileToDbService.insertImage(photo.file, size: photo.size);
         if (asset == null) return;
 
         AnalyticsService.instance.logTakePhoto();
@@ -535,10 +448,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context
-            .read<DevicePreferencesProvider>()
-            .preferences
-            .assetCompression;
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
         final video = await AppFilePickerService.pickVideo(
           context: context,
           source: ImageSource.camera,
@@ -546,10 +456,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
         );
         if (video == null) return;
 
-        AssetDbModel? asset = await InsertFileToDbService.insertVideo(
-          video.file,
-          size: video.size,
-        );
+        AssetDbModel? asset = await InsertFileToDbService.insertVideo(video.file, size: video.size);
         if (asset == null) return;
 
         AnalyticsService.instance.logRecordVideo();
@@ -566,9 +473,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   Future<void> goToTemplatePage(BuildContext context) async {
-    final addedStory = await TemplatesRoute(
-      initialYear: year,
-    ).push(context);
+    final addedStory = await TemplatesRoute(initialYear: year).push(context);
     await _checkNewStoryResult(addedStory);
   }
 
@@ -597,11 +502,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
       ),
     );
 
-    final addedStory = await EditStoryRoute(
-      id: null,
-      initialYear: year,
-      template: template,
-    ).push(context);
+    final addedStory = await EditStoryRoute(id: null, initialYear: year, template: template).push(context);
     await _checkNewStoryResult(addedStory);
   }
 
@@ -621,10 +522,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
     Scaffold.of(context).openEndDrawer();
   }
 
-  Future<void> togglePinForStories(
-    SpStoryListMultiEditWrapperState state,
-    BuildContext context,
-  ) async {
+  Future<void> togglePinForStories(SpStoryListMultiEditWrapperState state, BuildContext context) async {
     final allStories = [
       ...stories?.items.where((story) {
             return state.selectedStories.contains(story.id);
@@ -653,13 +551,8 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   void onAStoryDeleted(StoryDbModel story) {
-    AppLogger.d(
-      '🚧 Removed ${story.id}:${story.type.name} by $runtimeType#onAStoryDeleted',
-    );
-    setStories(
-      stories?.removeElement(story),
-      pinnedStories?.removeElement(story),
-    );
+    AppLogger.d('🚧 Removed ${story.id}:${story.type.name} by $runtimeType#onAStoryDeleted');
+    setStories(stories?.removeElement(story), pinnedStories?.removeElement(story));
     notifyListeners();
   }
 
@@ -668,20 +561,12 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
       // Either archived/binned, or moved back into a year Home isn't
       // currently showing — in both cases it doesn't belong in the
       // current view, so just drop it if present rather than inserting it.
-      setStories(
-        stories?.removeElement(updatedStory),
-        pinnedStories?.removeElement(updatedStory),
-      );
-      AppLogger.d(
-        '🚧 Removed ${updatedStory.id}:${updatedStory.type.name} by $runtimeType#onAStoryReloaded',
-      );
+      setStories(stories?.removeElement(updatedStory), pinnedStories?.removeElement(updatedStory));
+      AppLogger.d('🚧 Removed ${updatedStory.id}:${updatedStory.type.name} by $runtimeType#onAStoryReloaded');
     } else {
       if (updatedStory.pinned == true) {
         if (pinnedStories == null || pinnedStories?.items.isEmpty == true) {
-          setStories(
-            stories?.removeElement(updatedStory),
-            CollectionDbModel(items: [updatedStory]),
-          );
+          setStories(stories?.removeElement(updatedStory), CollectionDbModel(items: [updatedStory]));
         } else {
           setStories(
             stories?.removeElement(updatedStory),
@@ -694,10 +579,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
         // pinned == false or pinned == null — both treated as unpinned,
         // consistent with the DB query which uses: pinned.equals(false).or(pinned.isNull())
         if (stories == null || stories?.items.isEmpty == true) {
-          setStories(
-            CollectionDbModel(items: [updatedStory]),
-            pinnedStories?.removeElement(updatedStory),
-          );
+          setStories(CollectionDbModel(items: [updatedStory]), pinnedStories?.removeElement(updatedStory));
         } else {
           setStories(
             stories?.exists(updatedStory.id) == true
@@ -707,9 +589,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
           );
         }
       }
-      AppLogger.d(
-        '🚧 Updated ${updatedStory.id}:${updatedStory.type.name} contents by $runtimeType#onAStoryReloaded',
-      );
+      AppLogger.d('🚧 Updated ${updatedStory.id}:${updatedStory.type.name} contents by $runtimeType#onAStoryReloaded');
     }
     notifyListeners();
   }
@@ -720,11 +600,8 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
         // setStories will automatically sort the stories by displayPathDate
         // Check existence before adding to prevent duplicates
         if (addedStory.pinned == true) {
-          final pinnedCollection =
-              pinnedStories ?? CollectionDbModel(items: []);
-          final isNew =
-              !pinnedCollection.exists(addedStory.id) &&
-              !(stories?.exists(addedStory.id) ?? false);
+          final pinnedCollection = pinnedStories ?? CollectionDbModel(items: []);
+          final isNew = !pinnedCollection.exists(addedStory.id) && !(stories?.exists(addedStory.id) ?? false);
           setStories(
             stories?.removeElement(addedStory),
             pinnedCollection.exists(addedStory.id)
@@ -734,9 +611,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
           if (isNew) unawaited(InAppReviewService.maybeRequest());
         } else {
           final storiesCollection = stories ?? CollectionDbModel(items: []);
-          final isNew =
-              !storiesCollection.exists(addedStory.id) &&
-              !(pinnedStories?.exists(addedStory.id) ?? false);
+          final isNew = !storiesCollection.exists(addedStory.id) && !(pinnedStories?.exists(addedStory.id) ?? false);
           setStories(
             storiesCollection.exists(addedStory.id)
                 ? storiesCollection.replaceElement(addedStory)
@@ -774,9 +649,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
   @override
   void dispose() {
     scrollInfo.dispose();
-    BackupProvider.repoInstance.restoreService.removeListener(
-      _restoreServiceListener,
-    );
+    BackupProvider.repoInstance.restoreService.removeListener(_restoreServiceListener);
     super.dispose();
   }
 }

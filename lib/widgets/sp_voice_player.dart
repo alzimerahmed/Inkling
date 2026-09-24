@@ -116,8 +116,7 @@ class SpVoicePlayer extends StatefulWidget {
   State<SpVoicePlayer> createState() => _SpVoicePlayerState();
 }
 
-class _SpVoicePlayerState extends State<SpVoicePlayer>
-    with WidgetsBindingObserver {
+class _SpVoicePlayerState extends State<SpVoicePlayer> with WidgetsBindingObserver {
   /// AudioPlayer instance managed by this widget.
   /// Handles actual playback using the just_audio package.
   final AudioPlayer player = AudioPlayer();
@@ -177,9 +176,7 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
     // setup to read voicePlaybackSpeed from provider
     _preferencesProvider = context.read<DevicePreferencesProvider>();
     _playbackSpeed = _preferencesProvider.preferences.voicePlaybackSpeed;
-    _preferencesProvider.addListenerForVoicePlaybackSpeed(
-      _onPreferencesChanged,
-    );
+    _preferencesProvider.addListenerForVoicePlaybackSpeed(_onPreferencesChanged);
 
     setupListeners();
 
@@ -200,12 +197,9 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
 
   void _onPreferencesChanged() async {
     if (!mounted) return;
-    if (_playbackSpeed == _preferencesProvider.preferences.voicePlaybackSpeed)
-      return;
+    if (_playbackSpeed == _preferencesProvider.preferences.voicePlaybackSpeed) return;
 
-    AppLogger.debug(
-      '$runtimeType#_onPreferencesChanged setting _playbackSpeed',
-    );
+    AppLogger.debug('$runtimeType#_onPreferencesChanged setting _playbackSpeed');
 
     _playbackSpeed = _preferencesProvider.preferences.voicePlaybackSpeed;
     await player.setSpeed(_playbackSpeed);
@@ -216,9 +210,7 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _preferencesProvider.removeListenerForVoicePlaybackSpeed(
-      _onPreferencesChanged,
-    );
+    _preferencesProvider.removeListenerForVoicePlaybackSpeed(_onPreferencesChanged);
     player.dispose();
     super.dispose();
   }
@@ -238,10 +230,7 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
       // can report `playing: true` immediately after `play()` even if the
       // player is still `idle` (no audio source set), which would otherwise
       // show a "playing" UI with no audible sound.
-      setState(
-        () => playing =
-            state.playing && state.processingState != ProcessingState.idle,
-      );
+      setState(() => playing = state.playing && state.processingState != ProcessingState.idle);
 
       // When audio reaches the end, pause and reset to beginning
       if (state.processingState == ProcessingState.completed) {
@@ -278,11 +267,7 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
         await player.setFilePath(filePath);
         return true;
       } catch (retryError) {
-        AppLogger.error(
-          'Error loading audio (retry)',
-          tag: '$runtimeType',
-          error: retryError,
-        );
+        AppLogger.error('Error loading audio (retry)', tag: '$runtimeType', error: retryError);
         return false;
       }
     }
@@ -299,10 +284,7 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
 
     if (filePath == null) {
       if (widget.onDownloadRequested == null) {
-        AppLogger.error(
-          'No file path or download callback provided',
-          tag: '$runtimeType',
-        );
+        AppLogger.error('No file path or download callback provided', tag: '$runtimeType');
         return;
       }
 
@@ -337,10 +319,7 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
       } else {
         if (Platform.isAndroid && _listenToPositionStream == null) {
           _listenToPositionStream = false;
-          Future.delayed(
-            const Duration(milliseconds: 300),
-            () => _listenToPositionStream = true,
-          );
+          Future.delayed(const Duration(milliseconds: 300), () => _listenToPositionStream = true);
         }
 
         player.play();
@@ -383,9 +362,7 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
 
     final dragDelta = details.delta.dx;
     final percentageChange = dragDelta / maxWidth;
-    final timeChange = Duration(
-      milliseconds: (_duration.inMilliseconds * percentageChange).toInt(),
-    );
+    final timeChange = Duration(milliseconds: (_duration.inMilliseconds * percentageChange).toInt());
     final newPosition = _draggedPosition + timeChange;
 
     Duration clampPosition(Duration position, Duration min, Duration max) {
@@ -394,11 +371,7 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
       return position;
     }
 
-    final clampedPosition = clampPosition(
-      newPosition,
-      Duration.zero,
-      _duration,
-    );
+    final clampedPosition = clampPosition(newPosition, Duration.zero, _duration);
 
     setState(() {
       _draggedPosition = clampedPosition;
@@ -414,11 +387,7 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
       _listenToPositionStream = null;
       await player.seek(_draggedPosition);
     } catch (e) {
-      AppLogger.error(
-        'Error seeking to position',
-        tag: '$runtimeType',
-        error: e,
-      );
+      AppLogger.error('Error seeking to position', tag: '$runtimeType', error: e);
     }
   }
 
@@ -434,13 +403,8 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
                   widget.onLongPress!();
                 }
               : null,
-          onHorizontalDragUpdate: downloading
-              ? null
-              : (details) =>
-                    handleHorizontalDrag(details, constraints.maxWidth),
-          onHorizontalDragEnd: downloading
-              ? null
-              : (_) => handleHorizontalDragEnd(),
+          onHorizontalDragUpdate: downloading ? null : (details) => handleHorizontalDrag(details, constraints.maxWidth),
+          onHorizontalDragEnd: downloading ? null : (_) => handleHorizontalDragEnd(),
           child: Material(
             color: Colors.transparent,
             clipBehavior: Clip.hardEdge,
@@ -455,19 +419,15 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
                   children: [
                     buildPlayPauseButton(context),
                     Text(
-                      DurationFormatService.formatDuration(
-                        _isDragging ? _draggedPosition : _position,
-                      ),
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                      DurationFormatService.formatDuration(_isDragging ? _draggedPosition : _position),
+                      style: Theme.of(context).textTheme.labelSmall
+                          ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     ),
                     Expanded(child: buildSpeedLabelButton(context)),
                     Text(
                       DurationFormatService.formatDuration(_duration),
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                      style: Theme.of(context).textTheme.labelSmall
+                          ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     ),
                     const SizedBox(width: 16.0),
                   ],
@@ -489,24 +449,14 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
               width: 18.0,
               height: 18.0,
               child: CircularProgressIndicator.adaptive(
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).colorScheme.primary,
-                ),
+                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primary),
               ),
             )
           : SpAnimatedIcons.fadeScale(
               duration: Durations.medium4,
               showFirst: playing,
-              firstChild: Icon(
-                SpIcons.pauseCircle,
-                color: Theme.of(context).colorScheme.primary,
-                size: 18.0,
-              ),
-              secondChild: Icon(
-                SpIcons.playCircle,
-                color: Theme.of(context).colorScheme.primary,
-                size: 18.0,
-              ),
+              firstChild: Icon(SpIcons.pauseCircle, color: Theme.of(context).colorScheme.primary, size: 18.0),
+              secondChild: Icon(SpIcons.playCircle, color: Theme.of(context).colorScheme.primary, size: 18.0),
             ),
     );
   }
@@ -522,16 +472,11 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
             child: SpTapEffect(
               onTap: cycleToNextSpeed,
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 8.0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                 child: Text(
                   '${speed}x',
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: Theme.of(context).textTheme.labelSmall
+                      ?.copyWith(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -542,10 +487,7 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
   }
 
   /// Build progress bar background that fills from left to right.
-  Widget buildCurrentPositionBackground(
-    BoxConstraints constraints,
-    BuildContext context,
-  ) {
+  Widget buildCurrentPositionBackground(BoxConstraints constraints, BuildContext context) {
     return Positioned(
       left: 0,
       bottom: 0,
@@ -553,10 +495,7 @@ class _SpVoicePlayerState extends State<SpVoicePlayer>
       child: Container(
         width:
             (_duration.inMilliseconds > 0
-                ? (_isDragging
-                          ? _draggedPosition.inMilliseconds
-                          : _position.inMilliseconds) /
-                      _duration.inMilliseconds
+                ? (_isDragging ? _draggedPosition.inMilliseconds : _position.inMilliseconds) / _duration.inMilliseconds
                 : 0) *
             constraints.maxWidth,
         color: Theme.of(context).colorScheme.readOnly.surface5,

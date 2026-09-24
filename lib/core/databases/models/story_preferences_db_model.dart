@@ -80,11 +80,7 @@ class StoryPreferencesDbModel extends BaseDbModel {
       ].every((e) => e == null) &&
       layoutType == PageLayoutType.list;
 
-  bool get titleReseted => [
-    titleFontFamily,
-    titleFontWeightIndex,
-    titleExpanded,
-  ].every((e) => e == null);
+  bool get titleReseted => [titleFontFamily, titleFontWeightIndex, titleExpanded].every((e) => e == null);
 
   StoryPreferencesDbModel resetTheme() {
     return copyWith(

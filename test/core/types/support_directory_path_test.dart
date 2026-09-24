@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storypad/core/constants/app_constants.dart';
 import 'package:storypad/core/types/support_directory_path.dart';
@@ -26,10 +27,7 @@ void main() {
       });
 
       test('objectbox returns correct relative path', () {
-        expect(
-          SupportDirectoryPath.objectbox.relativePath,
-          equals('database/objectbox'),
-        );
+        expect(SupportDirectoryPath.objectbox.relativePath, equals('database/objectbox'));
       });
 
       test('images returns correct relative path', () {
@@ -45,17 +43,11 @@ void main() {
       });
 
       test('export_assets returns correct relative path', () {
-        expect(
-          SupportDirectoryPath.export_assets.relativePath,
-          equals('export_assets'),
-        );
+        expect(SupportDirectoryPath.export_assets.relativePath, equals('export_assets'));
       });
 
       test('downloaded_from_firestore returns correct relative path', () {
-        expect(
-          SupportDirectoryPath.downloaded_from_firestore.relativePath,
-          equals('downloaded_from_firestore'),
-        );
+        expect(SupportDirectoryPath.downloaded_from_firestore.relativePath, equals('downloaded_from_firestore'));
       });
     });
 

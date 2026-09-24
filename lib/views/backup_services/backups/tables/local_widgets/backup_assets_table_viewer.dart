@@ -4,10 +4,7 @@ import 'package:storypad/core/databases/models/asset_db_model.dart';
 import 'package:storypad/core/helpers/path_helper.dart';
 
 class BackupAssetsTableViewer extends StatelessWidget {
-  const BackupAssetsTableViewer({
-    super.key,
-    required this.assets,
-  });
+  const BackupAssetsTableViewer({super.key, required this.assets});
 
   final List<AssetDbModel> assets;
 
@@ -22,11 +19,7 @@ class BackupAssetsTableViewer extends StatelessWidget {
           subtitle: Text(
             tr(
               'general.uploaded_to_args',
-              namedArgs: {
-                'URL':
-                    asset.getGoogleDriveForEmails()?.join(", ") ??
-                    tr('general.na'),
-              },
+              namedArgs: {'URL': asset.getGoogleDriveForEmails()?.join(", ") ?? tr('general.na')},
             ),
           ),
         );

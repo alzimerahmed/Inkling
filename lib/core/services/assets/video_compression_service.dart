@@ -41,10 +41,7 @@ class VideoCompressionService {
   ///
   /// Never throws: compression is an optimization, so any failure has to
   /// degrade into "keep what the user picked", not into a lost recording.
-  static Future<XFile?> compress(
-    XFile file,
-    AssetCompressionOption compression,
-  ) async {
+  static Future<XFile?> compress(XFile file, AssetCompressionOption compression) async {
     if (!kSupportVideoCompression) return null;
 
     final quality = _quality(compression);
@@ -58,9 +55,7 @@ class VideoCompressionService {
       final originalSize = await file.length();
 
       if (await _alreadyWithinTarget(file.path, originalSize)) {
-        AppLogger.info(
-          'VideoCompressionService#compress: skipped, $originalSize bytes already within target',
-        );
+        AppLogger.info('VideoCompressionService#compress: skipped, $originalSize bytes already within target');
         return null;
       }
 
@@ -87,17 +82,12 @@ class VideoCompressionService {
         return null;
       }
 
-      AppLogger.info(
-        'VideoCompressionService#compress: $originalSize -> $compressedSize bytes',
-      );
+      AppLogger.info('VideoCompressionService#compress: $originalSize -> $compressedSize bytes');
       if (File(file.path).existsSync()) File(file.path).deleteSync();
 
       return XFile(compressedPath);
     } catch (e, s) {
-      AppLogger.error(
-        'VideoCompressionService#compress error: $e',
-        stackTrace: s,
-      );
+      AppLogger.error('VideoCompressionService#compress error: $e', stackTrace: s);
       return null;
     }
   }
@@ -109,10 +99,7 @@ class VideoCompressionService {
   /// behaviour (compress, then let the size guard decide) rather than into no
   /// compression at all. The try/catch is this method's own rather than the
   /// caller's for the same reason: `compress`'s would skip the whole re-encode.
-  static Future<bool> _alreadyWithinTarget(
-    String path,
-    int originalSize,
-  ) async {
+  static Future<bool> _alreadyWithinTarget(String path, int originalSize) async {
     try {
       final info = await VideoCompress.getMediaInfo(path);
 
@@ -131,15 +118,11 @@ class VideoCompressionService {
       // iOS that field is `track.totalSampleDataLength`, the video track alone, so
       // it under-reports and would make clips look more compact than they are.
       final sourceBitrate = originalSize * 8 / (durationMs / 1000);
-      final targetBitrate =
-          _bitsPerPixelPerSecond * width * height * _assumedFrameRate;
+      final targetBitrate = _bitsPerPixelPerSecond * width * height * _assumedFrameRate;
 
       return sourceBitrate <= targetBitrate * _worthCompressingRatio;
     } catch (e, s) {
-      AppLogger.error(
-        'VideoCompressionService#_alreadyWithinTarget error: $e',
-        stackTrace: s,
-      );
+      AppLogger.error('VideoCompressionService#_alreadyWithinTarget error: $e', stackTrace: s);
       return false;
     }
   }

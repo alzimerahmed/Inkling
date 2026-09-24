@@ -6,11 +6,7 @@ void main() {
     AppQuickActionObject roundTrip(AppQuickActionObject original) {
       final osKey = original.toId();
       final decoded = AppQuickActionObject.tryFromId(osKey);
-      expect(
-        decoded,
-        isNotNull,
-        reason: 'tryFromId returned null for ${original.key}',
-      );
+      expect(decoded, isNotNull, reason: 'tryFromId returned null for ${original.key}');
       return decoded!;
     }
 
@@ -53,16 +49,10 @@ void main() {
           label: 'My Template',
           type: AppQuickActionType.template,
           nativeIcon: AppQuickActionObject.templateNativeIcon,
-          templateReference: const AppQuickActionTemplateReference(
-            type: AppQuickActionTemplateType.custom,
-            id: '123',
-          ),
+          templateReference: const AppQuickActionTemplateReference(type: AppQuickActionTemplateType.custom, id: '123'),
         );
         final decoded = roundTrip(original);
-        expect(
-          decoded.templateReference?.type,
-          AppQuickActionTemplateType.custom,
-        );
+        expect(decoded.templateReference?.type, AppQuickActionTemplateType.custom);
         expect(decoded.templateReference?.id, '123');
         expect(decoded.label, 'My Template');
         expect(decoded.key, 'template:custom:123');
@@ -81,10 +71,7 @@ void main() {
           ),
         );
         final decoded = roundTrip(original);
-        expect(
-          decoded.templateReference?.type,
-          AppQuickActionTemplateType.gallery,
-        );
+        expect(decoded.templateReference?.type, AppQuickActionTemplateType.gallery);
         expect(decoded.templateReference?.id, 'daily_journal');
         expect(decoded.key, 'template:gallery:daily_journal');
       });
@@ -103,11 +90,7 @@ void main() {
       });
 
       test('tag key is tag:<tagId>', () {
-        const object = AppQuickActionObject(
-          label: '',
-          type: AppQuickActionType.tag,
-          tagId: 7,
-        );
+        const object = AppQuickActionObject(label: '', type: AppQuickActionType.tag, tagId: 7);
         expect(object.key, 'tag:7');
       });
 
@@ -115,10 +98,7 @@ void main() {
         const object = AppQuickActionObject(
           label: '',
           type: AppQuickActionType.template,
-          templateReference: AppQuickActionTemplateReference(
-            type: AppQuickActionTemplateType.custom,
-            id: '99',
-          ),
+          templateReference: AppQuickActionTemplateReference(type: AppQuickActionTemplateType.custom, id: '99'),
         );
         expect(object.key, 'template:custom:99');
       });
@@ -136,16 +116,8 @@ void main() {
       });
 
       test('different labels produce different os keys', () {
-        const a = AppQuickActionObject(
-          label: 'Personal',
-          type: AppQuickActionType.tag,
-          tagId: 7,
-        );
-        const b = AppQuickActionObject(
-          label: 'Work',
-          type: AppQuickActionType.tag,
-          tagId: 7,
-        );
+        const a = AppQuickActionObject(label: 'Personal', type: AppQuickActionType.tag, tagId: 7);
+        const b = AppQuickActionObject(label: 'Work', type: AppQuickActionType.tag, tagId: 7);
         expect(a.toId(), isNot(b.toId()));
       });
     });

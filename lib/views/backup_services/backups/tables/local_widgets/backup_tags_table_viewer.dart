@@ -5,10 +5,7 @@ import 'package:storypad/core/helpers/date_format_helper.dart';
 import 'package:storypad/widgets/sp_icons.dart';
 
 class BackupTagsTableViewer extends StatelessWidget {
-  const BackupTagsTableViewer({
-    super.key,
-    required this.tags,
-  });
+  const BackupTagsTableViewer({super.key, required this.tags});
 
   final List<TagDbModel> tags;
 
@@ -21,10 +18,7 @@ class BackupTagsTableViewer extends StatelessWidget {
         return ListTile(
           leading: const Icon(SpIcons.tag),
           title: Text(tag.title),
-          subtitle: Text(
-            DateFormatHelper.yMEd_jmNullable(tag.updatedAt, context.locale) ??
-                tr("general.na"),
-          ),
+          subtitle: Text(DateFormatHelper.yMEd_jmNullable(tag.updatedAt, context.locale) ?? tr("general.na")),
         );
       },
     );

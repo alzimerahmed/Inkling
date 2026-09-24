@@ -5,9 +5,7 @@ import 'package:storypad/core/services/audio_player_service.dart';
 class MultiAudioPlayersService {
   final void Function(bool? playing) onStateChanged;
 
-  MultiAudioPlayersService({
-    required this.onStateChanged,
-  });
+  MultiAudioPlayersService({required this.onStateChanged});
 
   final Map<String, AudioPlayerService> _players = {};
   final Map<String, PlayerState> _playingStates = {};
@@ -17,24 +15,16 @@ class MultiAudioPlayersService {
 
   bool exist(String urlPath) => _players.keys.contains(urlPath);
   double? getVolume(String soundUrl) => _players[soundUrl]?.getVolume();
-  void setVolume(String soundUrl, double volume) =>
-      _players[soundUrl]?.setVolume(volume);
+  void setVolume(String soundUrl, double volume) => _players[soundUrl]?.setVolume(volume);
 
   void _notifyListeners(String debugSource) {
-    debugPrint(
-      '🎸 MultiAudioPlayersService#_notifyListeners $_playingStates from $debugSource',
-    );
-    bool? playing = playingStates.values.isEmpty
-        ? null
-        : playingStates.values.any((e) => e.playing);
+    debugPrint('🎸 MultiAudioPlayersService#_notifyListeners $_playingStates from $debugSource');
+    bool? playing = playingStates.values.isEmpty ? null : playingStates.values.any((e) => e.playing);
     onStateChanged(playing);
   }
 
   // make sure to download file from UI before playing.
-  Future<void> playAnAudio(
-    String urlPath, {
-    double? initialVolume,
-  }) async {
+  Future<void> playAnAudio(String urlPath, {double? initialVolume}) async {
     _playingStates[urlPath] ??= PlayerState(false, ProcessingState.idle);
     _players[urlPath] ??= _constructAudioService(urlPath);
 

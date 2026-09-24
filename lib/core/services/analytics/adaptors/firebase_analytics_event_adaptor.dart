@@ -4,10 +4,7 @@ import 'package:storypad/core/services/analytics/adaptors/base_analytics_event_a
 class FirebaseAnalyticsEventAdaptor extends BaseAnalyticsEventAdaptor {
   @override
   Future<void> logEvent(String name, {Map<String, Object>? parameters}) {
-    return FirebaseAnalytics.instance.logEvent(
-      name: name,
-      parameters: parameters,
-    );
+    return FirebaseAnalytics.instance.logEvent(name: name, parameters: parameters);
   }
 
   @override

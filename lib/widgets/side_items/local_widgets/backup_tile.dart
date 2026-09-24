@@ -18,10 +18,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 class BackupTile extends StatelessWidget {
   // No need const constructor for translation to work properly.
   // ignore: prefer_const_constructors_in_immutables
-  BackupTile({
-    super.key,
-    required this.onNavigate,
-  });
+  BackupTile({super.key, required this.onNavigate});
 
   final void Function(BaseRoute route) onNavigate;
 
@@ -41,15 +38,9 @@ class BackupTile extends StatelessWidget {
     // this tile's status/actions driven by a service that can never sync,
     // including a Retry/Refresh/Sync button that silently does nothing.
     final eligibleServices = provider.services
-        .where(
-          (service) =>
-              service.isSignedIn &&
-              (isProUser || !service.serviceType.isProOnly),
-        )
+        .where((service) => service.isSignedIn && (isProUser || !service.serviceType.isProOnly))
         .toList();
-    final aggregateStatus = eligibleServices.isNotEmpty
-        ? _aggregateConnectionStatus(eligibleServices, provider)
-        : null;
+    final aggregateStatus = eligibleServices.isNotEmpty ? _aggregateConnectionStatus(eligibleServices, provider) : null;
 
     if (!provider.isSignedIn) {
       leading = const Icon(SpIcons.cloudOff);
@@ -70,8 +61,7 @@ class BackupTile extends StatelessWidget {
       action = FilledButton.icon(
         icon: const Icon(SpIcons.starCircle),
         label: Text(tr('list_tile.upgrade_to_pro.title')),
-        onPressed: () =>
-            onNavigate(const PaywallRoute(initialFocus: .multi_cloud_sync)),
+        onPressed: () => onNavigate(const PaywallRoute(initialFocus: .multi_cloud_sync)),
       );
     } else {
       switch (aggregateStatus) {
@@ -82,10 +72,7 @@ class BackupTile extends StatelessWidget {
           action = FilledButton.icon(
             icon: const Icon(SpIcons.refresh),
             label: Text(tr('button.retry')),
-            onPressed: () => provider.recheckAndSync(
-              services: eligibleServices,
-              context: context,
-            ),
+            onPressed: () => provider.recheckAndSync(services: eligibleServices, context: context),
           );
           break;
         case .noInternet:
@@ -95,10 +82,7 @@ class BackupTile extends StatelessWidget {
           action = FilledButton.icon(
             icon: const Icon(SpIcons.refresh),
             label: Text(tr('button.refresh')),
-            onPressed: () => provider.recheckAndSync(
-              services: eligibleServices,
-              context: context,
-            ),
+            onPressed: () => provider.recheckAndSync(services: eligibleServices, context: context),
           );
           break;
         case .needServicePermission:
@@ -110,11 +94,7 @@ class BackupTile extends StatelessWidget {
             label: Text(tr('button.fix_connection')),
             onPressed: () => onNavigate(
               ShowBackupServiceRoute(
-                service: _serviceWithStatus(
-                  eligibleServices,
-                  provider,
-                  BackupConnectionStatus.needServicePermission,
-                ),
+                service: _serviceWithStatus(eligibleServices, provider, BackupConnectionStatus.needServicePermission),
               ),
             ),
           );
@@ -122,22 +102,14 @@ class BackupTile extends StatelessWidget {
         case .readyToSync:
           leading = Icon(_connectedServiceIcon(eligibleServices));
           title = Text(tr("list_tile.backup.title"));
-          subtitle = Text(
-            tr('list_tile.backup.some_data_has_not_sync_subtitle'),
-          );
+          subtitle = Text(tr('list_tile.backup.some_data_has_not_sync_subtitle'));
           action = FilledButton(
             child: Text(tr('button.sync')),
-            onPressed: () => provider.recheckAndSync(
-              services: eligibleServices,
-              context: context,
-            ),
+            onPressed: () => provider.recheckAndSync(services: eligibleServices, context: context),
           );
           break;
         case null:
-          leading = const SizedBox.square(
-            dimension: 24,
-            child: CircularProgressIndicator.adaptive(),
-          );
+          leading = const SizedBox.square(dimension: 24, child: CircularProgressIndicator.adaptive());
           title = Text(tr("list_tile.backup.title"));
           subtitle = Text(tr('list_tile.backup.setting_up_connection'));
           action = null;
@@ -155,13 +127,7 @@ class BackupTile extends StatelessWidget {
         provider.allYearSynced &&
         provider.pendingMediaCount == 0) {
       leading = Icon(_connectedServiceIcon(eligibleServices));
-      subtitle = Text(
-        DateFormatHelper.yMEd_jmNullable(
-              provider.lastSyncedAt,
-              context.locale,
-            ) ??
-            '...',
-      );
+      subtitle = Text(DateFormatHelper.yMEd_jmNullable(provider.lastSyncedAt, context.locale) ?? '...');
       action = null;
       title = Text.rich(
         TextSpan(
@@ -170,11 +136,7 @@ class BackupTile extends StatelessWidget {
           children: [
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
-              child: Icon(
-                SpIcons.cloudDone,
-                color: ColorScheme.of(context).bootstrap.success.color,
-                size: 16.0,
-              ),
+              child: Icon(SpIcons.cloudDone, color: ColorScheme.of(context).bootstrap.success.color, size: 16.0),
             ),
           ],
         ),
@@ -186,10 +148,7 @@ class BackupTile extends StatelessWidget {
       action = null;
 
       final progress = _overallSyncProgress(eligibleServices, provider);
-      if (progress != null)
-        subtitle = Text(
-          "${tr("general.syncing")} ${progress.current}/${progress.total}",
-        );
+      if (progress != null) subtitle = Text("${tr("general.syncing")} ${progress.current}/${progress.total}");
 
       title = Text.rich(
         TextSpan(
@@ -200,10 +159,7 @@ class BackupTile extends StatelessWidget {
               alignment: PlaceholderAlignment.middle,
               child: Padding(
                 padding: EdgeInsets.only(left: 8.0),
-                child: SizedBox.square(
-                  dimension: 12,
-                  child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-                ),
+                child: SizedBox.square(dimension: 12, child: CircularProgressIndicator.adaptive(strokeWidth: 2)),
               ),
             ),
           ],
@@ -233,10 +189,7 @@ class BackupTile extends StatelessWidget {
           subtitle: subtitle,
         ),
         if (action != null) ...[
-          Padding(
-            padding: const EdgeInsets.only(left: 52.0),
-            child: action,
-          ),
+          Padding(padding: const EdgeInsets.only(left: 52.0), child: action),
           const SizedBox(height: 4.0),
         ],
       ],
@@ -258,8 +211,7 @@ class BackupTile extends StatelessWidget {
   }
 
   IconData _connectedServiceIcon(List<BackupCloudService> services) {
-    return _firstSignedInService(services)?.serviceType.icon ??
-        SpIcons.cloudDone;
+    return _firstSignedInService(services)?.serviceType.icon ?? SpIcons.cloudDone;
   }
 
   /// Worst-case-wins summary across every signed-in service's own connection
@@ -269,14 +221,8 @@ class BackupTile extends StatelessWidget {
   /// must already be entitlement-filtered by the caller (see the
   /// `eligibleServices` local in [build]) so a locked Nextcloud/iCloud
   /// connection can't drive this tile's status/actions for a free user.
-  BackupConnectionStatus? _aggregateConnectionStatus(
-    List<BackupCloudService> services,
-    BackupProvider provider,
-  ) {
-    final signedInTypes = services
-        .where((s) => s.isSignedIn)
-        .map((s) => s.serviceType)
-        .toList();
+  BackupConnectionStatus? _aggregateConnectionStatus(List<BackupCloudService> services, BackupProvider provider) {
+    final signedInTypes = services.where((s) => s.isSignedIn).map((s) => s.serviceType).toList();
     if (signedInTypes.isEmpty) return null;
 
     const priority = [
@@ -286,17 +232,13 @@ class BackupTile extends StatelessWidget {
     ];
 
     for (final candidate in priority) {
-      if (signedInTypes.any(
-        (type) => provider.statusFor(type).connectionStatus == candidate,
-      )) {
+      if (signedInTypes.any((type) => provider.statusFor(type).connectionStatus == candidate)) {
         return candidate;
       }
     }
 
     final allReady = signedInTypes.every(
-      (type) =>
-          provider.statusFor(type).connectionStatus ==
-          BackupConnectionStatus.readyToSync,
+      (type) => provider.statusFor(type).connectionStatus == BackupConnectionStatus.readyToSync,
     );
     return allReady ? BackupConnectionStatus.readyToSync : null;
   }
@@ -310,9 +252,7 @@ class BackupTile extends StatelessWidget {
     BackupConnectionStatus status,
   ) {
     for (final service in services) {
-      if (service.isSignedIn &&
-          provider.statusFor(service.serviceType).connectionStatus == status)
-        return service;
+      if (service.isSignedIn && provider.statusFor(service.serviceType).connectionStatus == status) return service;
     }
     return _firstSignedInService(services) ?? services.first;
   }
@@ -323,13 +263,8 @@ class BackupTile extends StatelessWidget {
   /// (see BackupProvider._syncBackupAcrossDevices), so a signed-in service
   /// earlier in that order than the currently active one has already
   /// completed all 4 of its own steps.
-  ({int current, int total})? _overallSyncProgress(
-    List<BackupCloudService> services,
-    BackupProvider provider,
-  ) {
-    final signedIn = provider.services
-        .where((service) => service.isSignedIn)
-        .toList();
+  ({int current, int total})? _overallSyncProgress(List<BackupCloudService> services, BackupProvider provider) {
+    final signedIn = provider.services.where((service) => service.isSignedIn).toList();
     if (signedIn.isEmpty) return null;
 
     for (var i = 0; i < signedIn.length; i++) {

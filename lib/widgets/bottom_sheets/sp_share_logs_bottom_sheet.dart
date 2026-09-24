@@ -21,24 +21,16 @@ class SpShareLogsBottomSheet extends BaseBottomSheet {
   SpShareLogsBottomSheet();
 
   @override
-  Future<T?> show<T>({
-    required BuildContext context,
-    bool useRootNavigator = false,
-  }) async {
+  Future<T?> show<T>({required BuildContext context, bool useRootNavigator = false}) async {
     backupEmail = context.read<BackupProvider>().currentGoogleUser?.email;
-    emailHash = EmailHasherService(
-      secretKey: kEmailHasherSecreyKey,
-    ).hmacEmail(backupEmail ?? "");
+    emailHash = EmailHasherService(secretKey: kEmailHasherSecreyKey).hmacEmail(backupEmail ?? "");
 
     rcatAnonymous = await Purchases.isAnonymous;
     rcatAppUserID = await Purchases.appUserID;
     isConfigured = await Purchases.isConfigured;
 
     if (context.mounted) {
-      return super.show(
-        context: context,
-        useRootNavigator: useRootNavigator,
-      );
+      return super.show(context: context, useRootNavigator: useRootNavigator);
     }
 
     return null;
@@ -106,10 +98,7 @@ class SpShareLogsBottomSheet extends BaseBottomSheet {
     );
   }
 
-  Future<void> shareLog(
-    BuildContext context,
-    ValueNotifier<String> notifier,
-  ) async {
+  Future<void> shareLog(BuildContext context, ValueNotifier<String> notifier) async {
     RenderBox? box = context.findRenderObject() as RenderBox?;
     await SharePlus.instance.share(
       ShareParams(
@@ -117,9 +106,7 @@ class SpShareLogsBottomSheet extends BaseBottomSheet {
 
         // iPad requires sharePositionOrigin for proper share sheet positioning
         // Ensure passing correct button context to have proper positioning.
-        sharePositionOrigin: box != null
-            ? box.localToGlobal(Offset.zero) & box.size
-            : null,
+        sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
       ),
     );
   }

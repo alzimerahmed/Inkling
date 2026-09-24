@@ -33,9 +33,7 @@ class _HomeContent extends StatelessWidget {
 
     return Drawer(
       width: bigScreen ? 400 : null,
-      child: bigScreen
-          ? const SpNestedNavigation(initialScreen: HomeEndDrawer())
-          : const HomeEndDrawer(),
+      child: bigScreen ? const SpNestedNavigation(initialScreen: HomeEndDrawer()) : const HomeEndDrawer(),
     );
   }
 
@@ -74,28 +72,17 @@ class _HomeContent extends StatelessWidget {
           editing: true,
           onCancel: () => state.turnOffEditing(),
           buttons: [
-            _PinStoryIconButton(
-              state: state,
-              allPinned: allPinned,
-              stories: stories,
-              viewModel: viewModel,
-            ),
+            _PinStoryIconButton(state: state, allPinned: allPinned, stories: stories, viewModel: viewModel),
             IconButton.outlined(
-              tooltip:
-                  "${tr("button.archive")} (${state.selectedStories.length})",
+              tooltip: "${tr("button.archive")} (${state.selectedStories.length})",
               icon: const Icon(SpIcons.archive),
-              onPressed: stories.isEmpty
-                  ? null
-                  : () => state.archiveAll(context),
+              onPressed: stories.isEmpty ? null : () => state.archiveAll(context),
             ),
             IconButton.outlined(
               color: ColorScheme.of(context).error,
-              tooltip:
-                  "${tr("button.move_to_bin")} (${state.selectedStories.length})",
+              tooltip: "${tr("button.move_to_bin")} (${state.selectedStories.length})",
               icon: const Icon(SpIcons.delete),
-              onPressed: stories.isEmpty
-                  ? null
-                  : () => state.moveToBinAll(context),
+              onPressed: stories.isEmpty ? null : () => state.moveToBinAll(context),
             ),
           ],
         );
@@ -105,18 +92,12 @@ class _HomeContent extends StatelessWidget {
 
   Widget buildBody(BuildContext listContext) {
     if (viewModel.stories == null) {
-      return const SliverFillRemaining(
-        child: Center(
-          child: CircularProgressIndicator.adaptive(),
-        ),
-      );
+      return const SliverFillRemaining(child: Center(child: CircularProgressIndicator.adaptive()));
     }
 
     final items = viewModel.items;
     if (items.isEmpty) {
-      return SliverFillRemaining(
-        child: _HomeEmpty(viewModel: viewModel),
-      );
+      return SliverFillRemaining(child: _HomeEmpty(viewModel: viewModel));
     }
 
     return SliverPadding(
@@ -124,8 +105,7 @@ class _HomeContent extends StatelessWidget {
         top: 0.0,
         left: MediaQuery.of(listContext).padding.left,
         right: MediaQuery.of(listContext).padding.right,
-        bottom:
-            kToolbarHeight + 200 + MediaQuery.of(listContext).padding.bottom,
+        bottom: kToolbarHeight + 200 + MediaQuery.of(listContext).padding.bottom,
       ),
       sliver: SliverList.builder(
         itemCount: items.length,
@@ -134,48 +114,28 @@ class _HomeContent extends StatelessWidget {
     );
   }
 
-  Widget buildItem(
-    BuildContext context,
-    BuildContext listContext,
-    HomeItem item,
-  ) {
+  Widget buildItem(BuildContext context, BuildContext listContext, HomeItem item) {
     return switch (item) {
-      HomeThrowbackItem() => SpThrowbackTile(
-        throwbackDates: item.throwbackDates,
-        listHasStories: item.listHasStories,
-      ),
+      HomeThrowbackItem() => SpThrowbackTile(throwbackDates: item.throwbackDates, listHasStories: item.listHasStories),
       HomeMonthHeaderItem() => buildMonthHeader(item),
       HomeMonthRecapItem() => buildMonthRecap(item),
-      HomeLoadMoreItem() => _HomeLoadMoreTile(
-        key: item.key,
-        viewModel: viewModel,
+      HomeLoadMoreItem() => _HomeLoadMoreTile(key: item.key, viewModel: viewModel),
+      HomeStoryItem(:final story, :final showMonogram, :final showFullTimelineDivider) => buildStoryTile(
+        context,
+        listContext,
+        item.key,
+        story,
+        showMonogram,
+        showFullTimelineDivider,
       ),
-      HomeStoryItem(
-        :final story,
-        :final showMonogram,
-        :final showFullTimelineDivider,
-      ) =>
-        buildStoryTile(
-          context,
-          listContext,
-          item.key,
-          story,
-          showMonogram,
-          showFullTimelineDivider,
-        ),
-      HomePinnedStoryItem(
-        :final story,
-        :final showMonogram,
-        :final showFullTimelineDivider,
-      ) =>
-        buildStoryTile(
-          context,
-          listContext,
-          item.key,
-          story,
-          showMonogram,
-          showFullTimelineDivider,
-        ),
+      HomePinnedStoryItem(:final story, :final showMonogram, :final showFullTimelineDivider) => buildStoryTile(
+        context,
+        listContext,
+        item.key,
+        story,
+        showMonogram,
+        showFullTimelineDivider,
+      ),
     };
   }
 
@@ -187,25 +147,14 @@ class _HomeContent extends StatelessWidget {
         // when this is the first header of its run and there is no throwback,
         // add extra spacing at top; else no padding to make UI look nicer
         // relative to the throwback tile / previous section above it.
-        if (item.isFirstOfRun && !viewModel.hasThrowback)
-          const SizedBox(height: 12.0),
+        if (item.isFirstOfRun && !viewModel.hasThrowback) const SizedBox(height: 12.0),
 
         Stack(
           children: [
             // connector divider from the previous section's last story to
             // this header, when this header isn't the first of its run.
-            if (!item.isFirstOfRun)
-              const Positioned(
-                left: 32.0,
-                top: 0,
-                bottom: 0,
-                child: VerticalDivider(width: 1),
-              ),
-            StoryMonthHeader(
-              isFirstOfRun: item.isFirstOfRun,
-              story: item.story,
-              showYear: false,
-            ),
+            if (!item.isFirstOfRun) const Positioned(left: 32.0, top: 0, bottom: 0, child: VerticalDivider(width: 1)),
+            StoryMonthHeader(isFirstOfRun: item.isFirstOfRun, story: item.story, showYear: false),
           ],
         ),
       ],
@@ -233,22 +182,18 @@ class _HomeContent extends StatelessWidget {
     return SpStoryListenerBuilder(
       key: key,
       story: story,
-      onChanged: (StoryDbModel updatedStory) =>
-          viewModel.onAStoryReloaded(updatedStory),
+      onChanged: (StoryDbModel updatedStory) => viewModel.onAStoryReloaded(updatedStory),
       onDeleted: () => viewModel.onAStoryDeleted(story),
       builder: (_) {
         return Stack(
           children: [
             Positioned.fill(
               child: ValueListenableBuilder(
-                valueListenable:
-                    viewModel.scrollInfo.scrollingToStoryIdNotifier,
+                valueListenable: viewModel.scrollInfo.scrollingToStoryIdNotifier,
                 builder: (context, storyId, child) {
                   return AnimatedContainer(
                     duration: Durations.long4,
-                    color: storyId == story.id
-                        ? ColorScheme.of(context).readOnly.surface5
-                        : Colors.transparent,
+                    color: storyId == story.id ? ColorScheme.of(context).readOnly.surface5 : Colors.transparent,
                     curve: Curves.easeInOut,
                   );
                 },
@@ -280,19 +225,10 @@ class _HomeContent extends StatelessWidget {
   Widget buildTimelineDivider(bool showFullTimelineDivider) {
     if (showFullTimelineDivider) {
       // 1. show line all the way from header to bottom.
-      return const Positioned(
-        left: 32.0,
-        top: 0,
-        bottom: 0,
-        child: VerticalDivider(width: 1),
-      );
+      return const Positioned(left: 32.0, top: 0, bottom: 0, child: VerticalDivider(width: 1));
     } else {
       // 2. only show line from header to dot/monogram when there is no story.
-      return const Positioned(
-        left: 32.0,
-        height: 16.0,
-        child: VerticalDivider(width: 1),
-      );
+      return const Positioned(left: 32.0, height: 16.0, child: VerticalDivider(width: 1));
     }
   }
 }
@@ -317,9 +253,7 @@ class _HomeLoadMoreTileState extends State<_HomeLoadMoreTile> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => widget.viewModel.loadNextPage(),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) => widget.viewModel.loadNextPage());
   }
 
   @override
@@ -327,11 +261,7 @@ class _HomeLoadMoreTileState extends State<_HomeLoadMoreTile> {
     return const Padding(
       padding: EdgeInsets.symmetric(vertical: 24.0),
       child: Center(
-        child: SizedBox(
-          width: 20.0,
-          height: 20.0,
-          child: CircularProgressIndicator.adaptive(strokeWidth: 2.0),
-        ),
+        child: SizedBox(width: 20.0, height: 20.0, child: CircularProgressIndicator.adaptive(strokeWidth: 2.0)),
       ),
     );
   }

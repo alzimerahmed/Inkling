@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:storypad/core/constants/app_constants.dart';
 import 'package:storypad/core/databases/models/asset_db_model.dart';
 import 'package:storypad/core/databases/models/event_db_model.dart';
@@ -44,13 +45,9 @@ class DatabaseInitializer {
     bool initialComputed = await ComputedInitialTagsForAssetsStorage().read() ?? false;
 
     if (initialComputed == false) {
-      AppLogger.d(
-        '$DatabaseInitializer.computeStoryTagsForAsset initialComputed: $initialComputed',
-      );
+      AppLogger.d('$DatabaseInitializer.computeStoryTagsForAsset initialComputed: $initialComputed');
 
-      var assets = await AssetDbModel.db.where().then(
-        (e) => e?.items ?? <AssetDbModel>[],
-      );
+      var assets = await AssetDbModel.db.where().then((e) => e?.items ?? <AssetDbModel>[]);
       for (int i = 0; i < assets.length; i++) {
         var tags = await StoryDbModel.db.computeStoriesTagsForAsset(assets[i]);
         final isLastAsset = i == assets.length - 1;
@@ -62,9 +59,7 @@ class DatabaseInitializer {
   }
 
   // With the new asset embedding approach, we can export and import stories more reliably.
-  static Future<void> migrateEmbedAssetsToUseRelativeFilePaths({
-    List<int>? assetIds,
-  }) async {
+  static Future<void> migrateEmbedAssetsToUseRelativeFilePaths({List<int>? assetIds}) async {
     var assets = assetIds != null
         ? await AssetDbModel.db.where(filters: {'ids': assetIds}).then((e) => e?.items ?? <AssetDbModel>[])
         : await AssetDbModel.db.where(filters: {'version': 1}).then((e) => e?.items ?? <AssetDbModel>[]);
@@ -89,20 +84,11 @@ class DatabaseInitializer {
       };
 
       for (int j = 0; j < result.length; j++) {
-        result[j].draftContent = result[j].draftContent?.replaceAll(
-          legacyEmbedLink,
-          asset.relativeLocalFilePath,
-        );
-        result[j].latestContent = result[j].latestContent?.replaceAll(
-          legacyEmbedLink,
-          asset.relativeLocalFilePath,
-        );
+        result[j].draftContent = result[j].draftContent?.replaceAll(legacyEmbedLink, asset.relativeLocalFilePath);
+        result[j].latestContent = result[j].latestContent?.replaceAll(legacyEmbedLink, asset.relativeLocalFilePath);
       }
 
-      asset = asset.copyWith(
-        version: 2,
-        originalSource: asset.relativeLocalFilePath,
-      );
+      asset = asset.copyWith(version: 2, originalSource: asset.relativeLocalFilePath);
       await StoryDbModel.db.box.putManyAsync(result);
       await AssetDbModel.db.set(asset, runCallbacks: false);
     }
@@ -110,37 +96,21 @@ class DatabaseInitializer {
 
   static Future<void> moveExistingAssetToSupportDirectory() async {
     if (Directory("${kApplicationDirectory.path}/images").existsSync()) {
-      for (final image in Directory(
-        "${kApplicationDirectory.path}/images",
-      ).listSync()) {
-        final destinationFile = File(
-          image.path.replaceAll(
-            kApplicationDirectory.path,
-            kSupportDirectory.path,
-          ),
-        );
+      for (final image in Directory("${kApplicationDirectory.path}/images").listSync()) {
+        final destinationFile = File(image.path.replaceAll(kApplicationDirectory.path, kSupportDirectory.path));
         if (!await destinationFile.parent.exists()) await destinationFile.create(recursive: true);
-        await destinationFile.writeAsBytes(
-          await File(image.path).readAsBytes(),
-        );
+        await destinationFile.writeAsBytes(await File(image.path).readAsBytes());
         await image.delete(recursive: true);
       }
 
-      await Directory(
-        "${kApplicationDirectory.path}/images",
-      ).delete(recursive: true);
-      final items = await AssetDbModel.db.where().then(
-        (e) => e?.items ?? <AssetDbModel>[],
-      );
+      await Directory("${kApplicationDirectory.path}/images").delete(recursive: true);
+      final items = await AssetDbModel.db.where().then((e) => e?.items ?? <AssetDbModel>[]);
 
       for (final asset in items) {
         await AssetDbModel.db.set(
           runCallbacks: false,
           asset.copyWith(
-            originalSource: asset.originalSource.replaceAll(
-              kApplicationDirectory.path,
-              kSupportDirectory.path,
-            ),
+            originalSource: asset.originalSource.replaceAll(kApplicationDirectory.path, kSupportDirectory.path),
           ),
         );
       }

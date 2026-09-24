@@ -23,10 +23,7 @@ class OnboardingRoute extends BaseRoute {
 }
 
 class OnboardingView extends StatelessWidget {
-  const OnboardingView({
-    super.key,
-    required this.params,
-  });
+  const OnboardingView({super.key, required this.params});
 
   final OnboardingRoute params;
 

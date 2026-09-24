@@ -26,19 +26,13 @@ class TemplatesBox extends BaseBox<TemplateObjectBox, TemplateDbModel> {
   QueryDateProperty<TemplateObjectBox> get permanentlyDeletedAtProperty => TemplateObjectBox_.permanentlyDeletedAt;
 
   @override
-  QueryBuilder<TemplateObjectBox> buildQuery({
-    Map<String, dynamic>? filters,
-    bool returnDeleted = false,
-  }) {
+  QueryBuilder<TemplateObjectBox> buildQuery({Map<String, dynamic>? filters, bool returnDeleted = false}) {
     int? order = filters?["order"];
     bool? archived = filters?["archived"] == true;
     String? galleryTemplateId = filters?["gallery_template_id"];
 
     Condition<TemplateObjectBox> conditions = TemplateObjectBox_.id.notNull();
-    if (!returnDeleted)
-      conditions = conditions.and(
-        TemplateObjectBox_.permanentlyDeletedAt.isNull(),
-      );
+    if (!returnDeleted) conditions = conditions.and(TemplateObjectBox_.permanentlyDeletedAt.isNull());
 
     if (archived == true) {
       conditions = conditions.and(TemplateObjectBox_.archivedAt.notNull());
@@ -47,9 +41,7 @@ class TemplatesBox extends BaseBox<TemplateObjectBox, TemplateDbModel> {
     }
 
     if (galleryTemplateId != null) {
-      conditions = conditions.and(
-        TemplateObjectBox_.galleryTemplateId.equals(galleryTemplateId),
-      );
+      conditions = conditions.and(TemplateObjectBox_.galleryTemplateId.equals(galleryTemplateId));
     }
 
     QueryBuilder<TemplateObjectBox> queryBuilder = box.query(conditions);
@@ -65,34 +57,22 @@ class TemplatesBox extends BaseBox<TemplateObjectBox, TemplateDbModel> {
   }
 
   @override
-  Future<List<TemplateDbModel>> objectsToModels(
-    List<TemplateObjectBox> objects, [
-    Map<String, dynamic>? options,
-  ]) {
+  Future<List<TemplateDbModel>> objectsToModels(List<TemplateObjectBox> objects, [Map<String, dynamic>? options]) {
     return compute(_objectsToModels, {'objects': objects, 'options': options});
   }
 
   @override
-  Future<List<TemplateObjectBox>> modelsToObjects(
-    List<TemplateDbModel> models, [
-    Map<String, dynamic>? options,
-  ]) {
+  Future<List<TemplateObjectBox>> modelsToObjects(List<TemplateDbModel> models, [Map<String, dynamic>? options]) {
     return compute(_modelsToObjects, {'models': models, 'options': options});
   }
 
   @override
-  Future<TemplateObjectBox> modelToObject(
-    TemplateDbModel model, [
-    Map<String, dynamic>? options,
-  ]) {
+  Future<TemplateObjectBox> modelToObject(TemplateDbModel model, [Map<String, dynamic>? options]) {
     return compute(_modelToObject, {'model': model, 'options': options});
   }
 
   @override
-  Future<TemplateDbModel> objectToModel(
-    TemplateObjectBox object, [
-    Map<String, dynamic>? options,
-  ]) {
+  Future<TemplateDbModel> objectToModel(TemplateObjectBox object, [Map<String, dynamic>? options]) {
     return compute(_objectToModel, {'object': object, 'options': options});
   }
 }

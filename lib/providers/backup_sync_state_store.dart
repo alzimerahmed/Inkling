@@ -61,14 +61,10 @@ class BackupSyncStateStore extends ChangeNotifier {
 
   /// Results of a connection check — one status per currently signed-in
   /// service, never just the first one that failed.
-  void onConnectionChecked(
-    Map<BackupServiceType, BackupConnectionStatus> statusByService,
-  ) {
+  void onConnectionChecked(Map<BackupServiceType, BackupConnectionStatus> statusByService) {
     for (final entry in statusByService.entries) {
       final current = statusFor(entry.key);
-      _statusByService[entry.key] = current.copyWith(
-        connectionStatus: entry.value,
-      );
+      _statusByService[entry.key] = current.copyWith(connectionStatus: entry.value);
     }
     notifyListeners();
   }

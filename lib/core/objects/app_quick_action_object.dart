@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -14,8 +15,7 @@ enum AppDefaultQuickActionType {
   takePhoto('take_photo'),
   recordVideo('record_video'),
   recordVoice('record_voice'),
-  editShortcuts('edit_shortcuts'),
-  ;
+  editShortcuts('edit_shortcuts');
 
   const AppDefaultQuickActionType(this.id);
 
@@ -51,10 +51,7 @@ enum AppDefaultQuickActionType {
 
 @JsonSerializable()
 class AppQuickActionTemplateReference {
-  const AppQuickActionTemplateReference({
-    required this.type,
-    required this.id,
-  });
+  const AppQuickActionTemplateReference({required this.type, required this.id});
 
   final AppQuickActionTemplateType type;
   final String id;

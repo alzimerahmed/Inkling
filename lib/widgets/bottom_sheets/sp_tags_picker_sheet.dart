@@ -17,17 +17,12 @@ class SpTagsPickerSheet extends BaseBottomSheet {
     if (kIsCupertino) {
       return buildView();
     } else {
-      double maxChildSize =
-          1 -
-          View.of(context).viewPadding.top / MediaQuery.of(context).size.height;
+      double maxChildSize = 1 - View.of(context).viewPadding.top / MediaQuery.of(context).size.height;
       return DraggableScrollableSheet(
         expand: false,
         maxChildSize: maxChildSize,
         builder: (context, controller) {
-          return PrimaryScrollController(
-            controller: controller,
-            child: buildView(),
-          );
+          return PrimaryScrollController(controller: controller, child: buildView());
         },
       );
     }

@@ -8,12 +8,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/sp_setting_icon_badge.dart';
 
 class TimeFormatTile extends StatelessWidget {
-  const TimeFormatTile({
-    super.key,
-    required this.weekday,
-    required this.currentTimeFormat,
-    required this.onChanged,
-  });
+  const TimeFormatTile({super.key, required this.weekday, required this.currentTimeFormat, required this.onChanged});
 
   final int weekday;
 
@@ -34,20 +29,14 @@ class TimeFormatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final label = context
-        .read<DevicePreferencesProvider>()
-        .timeFormatOf(context)
-        .label;
+    final label = context.read<DevicePreferencesProvider>().timeFormatOf(context).label;
 
     return ListTile(
       leading: SpSettingIconBadge(weekday: weekday, icon: SpIcons.timer),
       title: Text(context.tr('general.time_format')),
       subtitle: Text(label),
       onTap: () {
-        SpTimeFormatSheet(
-          timeFormat: currentTimeFormat,
-          onChanged: onChanged,
-        ).show(context: context);
+        SpTimeFormatSheet(timeFormat: currentTimeFormat, onChanged: onChanged).show(context: context);
       },
     );
   }

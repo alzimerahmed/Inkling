@@ -61,10 +61,7 @@ class TagsBox extends BaseBox<TagObjectBox, TagDbModel> {
   }
 
   @override
-  QueryBuilder<TagObjectBox> buildQuery({
-    Map<String, dynamic>? filters,
-    bool returnDeleted = false,
-  }) {
+  QueryBuilder<TagObjectBox> buildQuery({Map<String, dynamic>? filters, bool returnDeleted = false}) {
     int? order = filters?["order"];
     int? categoryId = filters?["category_id"];
 
@@ -99,34 +96,22 @@ class TagsBox extends BaseBox<TagObjectBox, TagDbModel> {
   }
 
   @override
-  Future<List<TagDbModel>> objectsToModels(
-    List<TagObjectBox> objects, [
-    Map<String, dynamic>? options,
-  ]) {
+  Future<List<TagDbModel>> objectsToModels(List<TagObjectBox> objects, [Map<String, dynamic>? options]) {
     return compute(_objectsToModels, {'objects': objects, 'options': options});
   }
 
   @override
-  Future<List<TagObjectBox>> modelsToObjects(
-    List<TagDbModel> models, [
-    Map<String, dynamic>? options,
-  ]) {
+  Future<List<TagObjectBox>> modelsToObjects(List<TagDbModel> models, [Map<String, dynamic>? options]) {
     return compute(_modelsToObjects, {'models': models, 'options': options});
   }
 
   @override
-  Future<TagObjectBox> modelToObject(
-    TagDbModel model, [
-    Map<String, dynamic>? options,
-  ]) {
+  Future<TagObjectBox> modelToObject(TagDbModel model, [Map<String, dynamic>? options]) {
     return compute(_modelToObject, {'model': model, 'options': options});
   }
 
   @override
-  Future<TagDbModel> objectToModel(
-    TagObjectBox object, [
-    Map<String, dynamic>? options,
-  ]) {
+  Future<TagDbModel> objectToModel(TagObjectBox object, [Map<String, dynamic>? options]) {
     return compute(_objectToModel, {'object': object, 'options': options});
   }
 }

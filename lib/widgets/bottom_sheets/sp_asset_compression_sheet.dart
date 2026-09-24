@@ -6,10 +6,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/sp_single_state_widget.dart';
 
 class SpAssetCompressionSheet extends BaseBottomSheet {
-  const SpAssetCompressionSheet({
-    required this.assetCompression,
-    required this.onChanged,
-  });
+  const SpAssetCompressionSheet({required this.assetCompression, required this.onChanged});
 
   final AssetCompressionOption assetCompression;
   final void Function(AssetCompressionOption assetCompression) onChanged;
@@ -35,10 +32,7 @@ class SpAssetCompressionSheet extends BaseBottomSheet {
                   trailing: Visibility(
                     visible: assetCompression == selectedAssetCompression,
                     child: SpFadeIn.fromBottom(
-                      child: Icon(
-                        SpIcons.checkCircle,
-                        color: ColorScheme.of(context).primary,
-                      ),
+                      child: Icon(SpIcons.checkCircle, color: ColorScheme.of(context).primary),
                     ),
                   ),
                   onTap: () {

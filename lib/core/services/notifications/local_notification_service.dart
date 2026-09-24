@@ -26,8 +26,7 @@ class LocalNotificationService {
   LocalNotificationService._();
   static final LocalNotificationService instance = LocalNotificationService._();
 
-  final FlutterLocalNotificationsPlugin _plugin =
-      FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _plugin = FlutterLocalNotificationsPlugin();
   GlobalKey<NavigatorState>? _navigatorKey;
   bool _initialized = false;
 
@@ -46,8 +45,7 @@ class LocalNotificationService {
   // call superseded before its turn comes up does no wasted native work.
   Future<void> _rescheduleQueue = Future<void>.value();
 
-  bool get supported =>
-      Platform.isAndroid || Platform.isIOS || Platform.isMacOS;
+  bool get supported => Platform.isAndroid || Platform.isIOS || Platform.isMacOS;
 
   /// Initializes the plugin, handles a cold-launch tap, and schedules the
   /// enabled reminders — a one-time, idempotent setup guarded by [_initialized].
@@ -75,9 +73,7 @@ class LocalNotificationService {
     // The OS requires a default icon at init time, before any specific
     // notification (and its channel) is known — use the generic custom-reminder
     // icon as that fallback.
-    final androidSettings = AndroidInitializationSettings(
-      NotificationChannel.reminderCustom.androidIcon,
-    );
+    final androidSettings = AndroidInitializationSettings(NotificationChannel.reminderCustom.androidIcon);
     // Shared by iOS and macOS — both use the same Darwin notification APIs.
     // One category per built-in type (keyed by ReminderType.notificationActionId),
     // each with its single action button — see _detailsFor.
@@ -91,22 +87,13 @@ class LocalNotificationService {
           if (type.notificationActionId case final actionId?)
             DarwinNotificationCategory(
               actionId,
-              actions: [
-                DarwinNotificationAction.plain(
-                  actionId,
-                  type.notificationActionLabel!,
-                ),
-              ],
+              actions: [DarwinNotificationAction.plain(actionId, type.notificationActionLabel!)],
             ),
       ],
     );
 
     await _plugin.initialize(
-      settings: InitializationSettings(
-        android: androidSettings,
-        iOS: darwinSettings,
-        macOS: darwinSettings,
-      ),
+      settings: InitializationSettings(android: androidSettings, iOS: darwinSettings, macOS: darwinSettings),
       onDidReceiveNotificationResponse: _onTap,
     );
 
@@ -121,9 +108,7 @@ class LocalNotificationService {
     // timezone changes) and survive app data restore. Done here (rather than
     // leaving callers to do it) so init() always leaves reminders fully
     // scheduled — see this method's doc comment for the ordering constraint.
-    await rescheduleAll(
-      DevicePreferencesStorage.appInstance.preferences.reminders,
-    );
+    await rescheduleAll(DevicePreferencesStorage.appInstance.preferences.reminders);
   }
 
   // The OS rejects a second permission request while one is still pending
@@ -143,37 +128,18 @@ class LocalNotificationService {
     if (!supported) return false;
 
     if (Platform.isAndroid) {
-      final android = _plugin
-          .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin
-          >();
+      final android = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
       return await android?.requestNotificationsPermission() ?? false;
     }
 
     if (Platform.isIOS) {
-      final ios = _plugin
-          .resolvePlatformSpecificImplementation<
-            IOSFlutterLocalNotificationsPlugin
-          >();
-      return await ios?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-          ) ??
-          false;
+      final ios = _plugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+      return await ios?.requestPermissions(alert: true, badge: true, sound: true) ?? false;
     }
 
     if (Platform.isMacOS) {
-      final macOS = _plugin
-          .resolvePlatformSpecificImplementation<
-            MacOSFlutterLocalNotificationsPlugin
-          >();
-      return await macOS?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-          ) ??
-          false;
+      final macOS = _plugin.resolvePlatformSpecificImplementation<MacOSFlutterLocalNotificationsPlugin>();
+      return await macOS?.requestPermissions(alert: true, badge: true, sound: true) ?? false;
     }
 
     return false;
@@ -188,17 +154,12 @@ class LocalNotificationService {
     // Chained onto the previous run (regardless of whether it's done yet) so
     // no two runs ever call cancelAll()/schedule concurrently — see
     // [_rescheduleQueue].
-    final run = _rescheduleQueue.then(
-      (_) => _runReschedule(version, reminders),
-    );
+    final run = _rescheduleQueue.then((_) => _runReschedule(version, reminders));
     _rescheduleQueue = run;
     return run;
   }
 
-  Future<void> _runReschedule(
-    int version,
-    List<ReminderObject>? reminders,
-  ) async {
+  Future<void> _runReschedule(int version, List<ReminderObject>? reminders) async {
     // A newer reschedule request arrived before this one's turn came up —
     // skip it entirely rather than doing a cancelAll()+schedule pass whose
     // result would just be immediately superseded.
@@ -244,36 +205,22 @@ class LocalNotificationService {
         id: _notificationId(reminder.id, slot),
         title: title,
         body: body,
-        scheduledDate: _nextInstance(
-          hour: reminder.hour,
-          minute: reminder.minute,
-          weekday: weekday,
-        ),
+        scheduledDate: _nextInstance(hour: reminder.hour, minute: reminder.minute, weekday: weekday),
         notificationDetails: details,
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-        matchDateTimeComponents: weekday == null
-            ? DateTimeComponents.time
-            : DateTimeComponents.dayOfWeekAndTime,
+        matchDateTimeComponents: weekday == null ? DateTimeComponents.time : DateTimeComponents.dayOfWeekAndTime,
         payload: payload,
       );
     }
   }
 
   Future<void> _schedulePeriod(ReminderObject reminder) async {
-    final predicted =
-        await PeriodPredictionService.loadPredictedNextPeriodStart();
+    final predicted = await PeriodPredictionService.loadPredictedNextPeriodStart();
     if (predicted == null) return;
 
     final daysAhead = reminder.daysAhead ?? 2;
     final target = predicted.subtract(Duration(days: daysAhead));
-    final scheduled = tz.TZDateTime(
-      tz.local,
-      target.year,
-      target.month,
-      target.day,
-      reminder.hour,
-      reminder.minute,
-    );
+    final scheduled = tz.TZDateTime(tz.local, target.year, target.month, target.day, reminder.hour, reminder.minute);
 
     // Skip when the reminder moment has already passed.
     if (!scheduled.isAfter(tz.TZDateTime.now(tz.local))) return;
@@ -295,10 +242,7 @@ class LocalNotificationService {
     // Bounded horizon + result cap: keeps this a handful of cheap indexed
     // count() queries (see OnThisDayPredictionService) and keeps the number of
     // pending notifications well under the OS limits (iOS caps at 64 total).
-    final dates = await OnThisDayPredictionService.loadUpcomingMemoryDates(
-      horizonDays: 30,
-      maxResults: 20,
-    );
+    final dates = await OnThisDayPredictionService.loadUpcomingMemoryDates(horizonDays: 30, maxResults: 20);
     if (dates.isEmpty) return;
 
     final details = _detailsFor(reminder.type);
@@ -306,14 +250,7 @@ class LocalNotificationService {
     final now = tz.TZDateTime.now(tz.local);
 
     for (final date in dates) {
-      final scheduled = tz.TZDateTime(
-        tz.local,
-        date.year,
-        date.month,
-        date.day,
-        reminder.hour,
-        reminder.minute,
-      );
+      final scheduled = tz.TZDateTime(tz.local, date.year, date.month, date.day, reminder.hour, reminder.minute);
       if (!scheduled.isAfter(now)) continue;
 
       final (title, body) = await ReminderNavigationService.copyFor(reminder);
@@ -336,23 +273,11 @@ class LocalNotificationService {
   /// Derived id for one-shot, date-specific notifications (on-this-day). Uses a
   /// much larger multiplier than [_notificationId] so the two id spaces never
   /// collide for realistic reminder ids.
-  int _dateNotificationId(int reminderId, DateTime date) =>
-      reminderId * 100000 + date.month * 100 + date.day;
+  int _dateNotificationId(int reminderId, DateTime date) => reminderId * 100000 + date.month * 100 + date.day;
 
-  tz.TZDateTime _nextInstance({
-    required int hour,
-    required int minute,
-    int? weekday,
-  }) {
+  tz.TZDateTime _nextInstance({required int hour, required int minute, int? weekday}) {
     final now = tz.TZDateTime.now(tz.local);
-    var scheduled = tz.TZDateTime(
-      tz.local,
-      now.year,
-      now.month,
-      now.day,
-      hour,
-      minute,
-    );
+    var scheduled = tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
 
     if (weekday != null) {
       while (scheduled.weekday != weekday) {
@@ -379,11 +304,7 @@ class LocalNotificationService {
         icon: channel.androidIcon,
         actions: [
           if (actionId != null)
-            AndroidNotificationAction(
-              actionId,
-              type.notificationActionLabel!,
-              showsUserInterface: true,
-            ),
+            AndroidNotificationAction(actionId, type.notificationActionLabel!, showsUserInterface: true),
         ],
       ),
       iOS: DarwinNotificationDetails(categoryIdentifier: actionId),
@@ -397,8 +318,7 @@ class LocalNotificationService {
 
     int? reminderId;
     try {
-      reminderId =
-          (jsonDecode(payload) as Map<String, dynamic>)['reminderId'] as int?;
+      reminderId = (jsonDecode(payload) as Map<String, dynamic>)['reminderId'] as int?;
     } catch (_) {
       return;
     }

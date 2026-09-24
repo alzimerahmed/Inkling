@@ -1,9 +1,7 @@
 part of '../relax_sounds_view.dart';
 
 class _SoundsTab extends StatelessWidget {
-  const _SoundsTab({
-    required this.viewModel,
-  });
+  const _SoundsTab({required this.viewModel});
 
   final RelaxSoundsViewModel viewModel;
 
@@ -16,9 +14,7 @@ class _SoundsTab extends StatelessWidget {
     Iterable<String> musicSoundUrls = musicSounds.map((e) => e.soundUrlPath);
 
     Iterable<RelaxSoundObject> relaxSounds = provider.relaxSounds.values;
-    relaxSounds = relaxSounds.where(
-      (sound) => !musicSoundUrls.contains(sound.soundUrlPath),
-    );
+    relaxSounds = relaxSounds.where((sound) => !musicSoundUrls.contains(sound.soundUrlPath));
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -38,12 +34,7 @@ class _SoundsTab extends StatelessWidget {
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 16.0,
                 itemBuilder: (context, index) {
-                  return buildSoundItem(
-                    context: context,
-                    relaxSounds: musicSounds,
-                    index: index,
-                    provider: provider,
-                  );
+                  return buildSoundItem(context: context, relaxSounds: musicSounds, index: index, provider: provider);
                 },
               ),
             ),
@@ -59,23 +50,14 @@ class _SoundsTab extends StatelessWidget {
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 16.0,
                 itemBuilder: (context, index) {
-                  return buildSoundItem(
-                    context: context,
-                    relaxSounds: relaxSounds,
-                    index: index,
-                    provider: provider,
-                  );
+                  return buildSoundItem(context: context, relaxSounds: relaxSounds, index: index, provider: provider);
                 },
               ),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
             const SliverToBoxAdapter(child: Divider(height: 1)),
             const SliverToBoxAdapter(child: _LicenseText()),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: MediaQuery.of(context).padding.bottom + 120.0,
-              ),
-            ),
+            SliverToBoxAdapter(child: SizedBox(height: MediaQuery.of(context).padding.bottom + 120.0)),
           ],
         );
       },
@@ -95,8 +77,7 @@ class _SoundsTab extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         buildSoundCardContents(provider, relaxSound, selected, context),
-        if (selected && provider.getVolume(relaxSound) != null)
-          _VolumeSlider(relaxSound: relaxSound),
+        if (selected && provider.getVolume(relaxSound) != null) _VolumeSlider(relaxSound: relaxSound),
       ],
     );
   }
@@ -117,28 +98,17 @@ class _SoundsTab extends StatelessWidget {
         children: [
           Stack(
             children: [
-              _SoundIconCard(
-                relaxSound: relaxSound,
-                selected: selected,
-              ),
+              _SoundIconCard(relaxSound: relaxSound, selected: selected),
               buildStatusIcon(provider, context, relaxSound),
             ],
           ),
-          Text(
-            relaxSound.label,
-            style: TextTheme.of(context).bodyMedium,
-            textAlign: TextAlign.center,
-          ),
+          Text(relaxSound.label, style: TextTheme.of(context).bodyMedium, textAlign: TextAlign.center),
         ],
       ),
     );
   }
 
-  Widget buildStatusIcon(
-    RelaxSoundsProvider provider,
-    BuildContext context,
-    RelaxSoundObject relaxSound,
-  ) {
+  Widget buildStatusIcon(RelaxSoundsProvider provider, BuildContext context, RelaxSoundObject relaxSound) {
     PlayerState? state = provider.playerStateFor(relaxSound.soundUrlPath);
 
     if (viewModel.downloaded(relaxSound)) return const SizedBox.shrink();
@@ -147,20 +117,13 @@ class _SoundsTab extends StatelessWidget {
       return const Positioned(
         top: 8.0,
         right: 8.0,
-        child: SizedBox.square(
-          dimension: 16.0,
-          child: CircularProgressIndicator.adaptive(),
-        ),
+        child: SizedBox.square(dimension: 16.0, child: CircularProgressIndicator.adaptive()),
       );
     } else {
       return Positioned(
         top: 8.0,
         right: 8.0,
-        child: Icon(
-          SpIcons.download,
-          color: ColorScheme.of(context).onSurface.withValues(alpha: 0.5),
-          size: 16.0,
-        ),
+        child: Icon(SpIcons.download, color: ColorScheme.of(context).onSurface.withValues(alpha: 0.5), size: 16.0),
       );
     }
   }

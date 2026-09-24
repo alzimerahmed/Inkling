@@ -56,10 +56,7 @@ class TagDbModel extends BaseDbModel {
       lastSavedDeviceId = null,
       permanentlyDeletedAt = null;
 
-  factory TagDbModel.emoji(
-    String emoji, {
-    required int categoryId,
-  }) {
+  factory TagDbModel.emoji(String emoji, {required int categoryId}) {
     return TagDbModel(
       id: TagIdGeneratorService.emojiId(emoji),
       version: 0,
@@ -88,10 +85,7 @@ class TagDbModel extends BaseDbModel {
   }
 
   Future<void> save() async {
-    await db.set(
-      this,
-      debugSource: '$runtimeType#save',
-    );
+    await db.set(this, debugSource: '$runtimeType#save');
   }
 
   bool exist() => db.exist(id);

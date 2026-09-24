@@ -3,12 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class SpCountDown extends StatefulWidget {
-  const SpCountDown({
-    super.key,
-    required this.endTime,
-    required this.endWidget,
-    required this.builder,
-  });
+  const SpCountDown({super.key, required this.endTime, required this.endWidget, required this.builder});
 
   final DateTime endTime;
   final Widget endWidget;
@@ -24,9 +19,7 @@ class _SpCountDownState extends State<SpCountDown> {
   @override
   void initState() {
     timer = Timer.periodic(const Duration(milliseconds: 500), (_) {
-      DateTime abitBeforeEndTime = widget.endTime.add(
-        const Duration(milliseconds: 500),
-      );
+      DateTime abitBeforeEndTime = widget.endTime.add(const Duration(milliseconds: 500));
       if (DateTime.now().isBefore(abitBeforeEndTime)) {
         setState(() {});
       }
@@ -42,9 +35,6 @@ class _SpCountDownState extends State<SpCountDown> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(
-      DateTime.now().isAfter(widget.endTime),
-      widget.endWidget,
-    );
+    return widget.builder(DateTime.now().isAfter(widget.endTime), widget.endWidget);
   }
 }

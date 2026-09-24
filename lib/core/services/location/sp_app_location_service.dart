@@ -20,9 +20,7 @@ class SpAppLocationService {
     bool skipReverseGeocoding = false,
   }) async {
     while (context.mounted) {
-      final result = await SpLocationService.fetchCurrentPlace(
-        skipReverseGeocoding: skipReverseGeocoding,
-      );
+      final result = await SpLocationService.fetchCurrentPlace(skipReverseGeocoding: skipReverseGeocoding);
       if (!context.mounted) return null;
 
       switch (result.status) {
@@ -67,10 +65,7 @@ class SpAppLocationService {
           await SpLocationService.openLocationSettings();
           continue;
         case SpLocationFetchStatus.failed:
-          MessengerService.of(context).showSnackBar(
-            tr("snack_bar.could_not_get_current_location"),
-            success: false,
-          );
+          MessengerService.of(context).showSnackBar(tr("snack_bar.could_not_get_current_location"), success: false);
           return null;
       }
     }

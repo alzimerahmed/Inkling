@@ -12,10 +12,7 @@ import 'package:storypad/widgets/bottom_sheets/base_bottom_sheet.dart';
 import 'package:storypad/widgets/story_list/sp_story_list.dart';
 
 class SpStoriesBottomSheet extends BaseBottomSheet {
-  const SpStoriesBottomSheet({
-    required this.filter,
-    required this.storyLocation,
-  });
+  const SpStoriesBottomSheet({required this.filter, required this.storyLocation});
 
   final SearchFilterObject filter;
   final SpLatLng? storyLocation;
@@ -28,22 +25,15 @@ class SpStoriesBottomSheet extends BaseBottomSheet {
     return SizedBox(
       height: MediaQuery.sizeOf(context).height * 0.5,
       child: Scaffold(
-        floatingActionButton: storyLocation != null
-            ? _MapAppOpenerButton(storyLocation: storyLocation!)
-            : null,
-        body: SpStoryList.withQuery(
-          filter: filter,
-          disableMultiEdit: true,
-        ),
+        floatingActionButton: storyLocation != null ? _MapAppOpenerButton(storyLocation: storyLocation!) : null,
+        body: SpStoryList.withQuery(filter: filter, disableMultiEdit: true),
       ),
     );
   }
 }
 
 class _MapAppOpenerButton extends StatelessWidget {
-  const _MapAppOpenerButton({
-    required this.storyLocation,
-  });
+  const _MapAppOpenerButton({required this.storyLocation});
 
   final SpLatLng storyLocation;
 
@@ -55,19 +45,13 @@ class _MapAppOpenerButton extends StatelessWidget {
         final actions = [
           if (Platform.isIOS || Platform.isMacOS) ...[
             SheetAction(
-              label: tr(
-                "button.open_in_args",
-                namedArgs: {"OPENEE_NAME": "Apple Maps"},
-              ),
+              label: tr("button.open_in_args", namedArgs: {"OPENEE_NAME": "Apple Maps"}),
               icon: SpIcons.apple,
               key: "apple",
             ),
           ],
           SheetAction(
-            label: tr(
-              "button.open_in_args",
-              namedArgs: {"OPENEE_NAME": "Google Maps"},
-            ),
+            label: tr("button.open_in_args", namedArgs: {"OPENEE_NAME": "Google Maps"}),
             icon: SpIcons.googleMaps,
             key: "google",
           ),
@@ -80,19 +64,13 @@ class _MapAppOpenerButton extends StatelessWidget {
                 actions: [
                   if (Platform.isIOS || Platform.isMacOS) ...[
                     SheetAction(
-                      label: tr(
-                        "button.open_in_args",
-                        namedArgs: {"OPENEE_NAME": "Apple Maps"},
-                      ),
+                      label: tr("button.open_in_args", namedArgs: {"OPENEE_NAME": "Apple Maps"}),
                       icon: SpIcons.apple,
                       key: "apple",
                     ),
                   ],
                   SheetAction(
-                    label: tr(
-                      "button.open_in_args",
-                      namedArgs: {"OPENEE_NAME": "Google Maps"},
-                    ),
+                    label: tr("button.open_in_args", namedArgs: {"OPENEE_NAME": "Google Maps"}),
                     icon: SpIcons.googleMaps,
                     key: "google",
                   ),
@@ -112,16 +90,11 @@ class _MapAppOpenerButton extends StatelessWidget {
           url = "https://maps.apple.com/?ll=$latitude,$longitude";
         } else if (result == "google") {
           prefersDeepLink = Platform.isAndroid;
-          url =
-              "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude";
+          url = "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude";
         }
 
         if (url != null) {
-          UrlOpenerService.openInCustomTab(
-            context,
-            url,
-            prefersDeepLink: prefersDeepLink,
-          );
+          UrlOpenerService.openInCustomTab(context, url, prefersDeepLink: prefersDeepLink);
         }
       },
     );

@@ -1,9 +1,7 @@
 part of '../onboarding_view.dart';
 
 class _NicknameField extends StatelessWidget {
-  const _NicknameField({
-    required this.viewModel,
-  });
+  const _NicknameField({required this.viewModel});
 
   final OnboardingViewModel viewModel;
 
@@ -26,10 +24,7 @@ class _NicknameField extends StatelessWidget {
     );
   }
 
-  TextFormField buildMaterialField(
-    FormFieldState<String> state,
-    BuildContext context,
-  ) {
+  TextFormField buildMaterialField(FormFieldState<String> state, BuildContext context) {
     InputBorder border = OutlineInputBorder(
       borderSide: state.hasError
           ? BorderSide(color: Theme.of(context).colorScheme.error, width: 2.0)
@@ -52,10 +47,7 @@ class _NicknameField extends StatelessWidget {
     );
   }
 
-  CupertinoTextField buildCupertinoField(
-    FormFieldState<String> state,
-    BuildContext context,
-  ) {
+  CupertinoTextField buildCupertinoField(FormFieldState<String> state, BuildContext context) {
     BoxDecoration decoration;
 
     if (state.hasError) {
@@ -72,14 +64,9 @@ class _NicknameField extends StatelessWidget {
         ),
         border: Border.all(
           width: 0.0,
-          color: const CupertinoDynamicColor.withBrightness(
-            color: Color(0x33000000),
-            darkColor: Color(0x33FFFFFF),
-          ),
+          color: const CupertinoDynamicColor.withBrightness(color: Color(0x33000000), darkColor: Color(0x33FFFFFF)),
         ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(5.0),
-        ),
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
       );
     }
 

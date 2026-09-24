@@ -61,14 +61,9 @@ class _SpPopupMenuButtonState extends State<SpPopupMenuButton> {
   Size get screenSize => MediaQuery.of(context).size;
 
   RelativeRect? get relativeRect {
-    if (childPosition == null || childSize == null || overlayBox == null)
-      return null;
+    if (childPosition == null || childSize == null || overlayBox == null) return null;
     return RelativeRect.fromSize(
-      Rect.fromCenter(
-        center: childPosition!,
-        width: childSize!.width,
-        height: childSize!.height,
-      ),
+      Rect.fromCenter(center: childPosition!, width: childSize!.width, height: childSize!.height),
       overlayBox!.size,
     );
   }
@@ -96,23 +91,15 @@ class _SpPopupMenuButtonState extends State<SpPopupMenuButton> {
         childPosition = const Offset(0, 0);
       }
 
-      childPosition = Offset(
-        dxGetter(childPosition!.dx),
-        dyGetter(childPosition!.dy),
-      );
+      childPosition = Offset(dxGetter(childPosition!.dx), dyGetter(childPosition!.dy));
     } else {
       if (widget.smartDx && tapPosition != null) {
         childPosition = Offset(
-          dxGetter(
-            tapPosition!.dx > screenSize.width / 2 ? screenSize.width : 0.0,
-          ),
+          dxGetter(tapPosition!.dx > screenSize.width / 2 ? screenSize.width : 0.0),
           dyGetter(childPosition!.dy),
         );
       } else {
-        childPosition = Offset(
-          dxGetter(childPosition!.dx),
-          dyGetter(childPosition!.dy),
-        );
+        childPosition = Offset(dxGetter(childPosition!.dx), dyGetter(childPosition!.dy));
       }
     }
   }
@@ -157,9 +144,7 @@ class _SpPopupMenuButtonState extends State<SpPopupMenuButton> {
             : null,
         title: Text(e.title, style: e.titleStyle),
         trailing: e.trailingIconData != null ? Icon(e.trailingIconData) : null,
-        subtitle: e.subtitle != null
-            ? Text(e.subtitle!, style: e.subtitleStyle)
-            : null,
+        subtitle: e.subtitle != null ? Text(e.subtitle!, style: e.subtitleStyle) : null,
       ),
     );
   }

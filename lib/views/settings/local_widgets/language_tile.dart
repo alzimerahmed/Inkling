@@ -6,10 +6,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/sp_setting_icon_badge.dart';
 
 class LanguageTile extends StatelessWidget {
-  const LanguageTile({
-    super.key,
-    required this.weekday,
-  });
+  const LanguageTile({super.key, required this.weekday});
 
   final int weekday;
 

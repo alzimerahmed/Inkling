@@ -20,12 +20,10 @@ class SpScrollableChoiceChips<T> extends StatefulWidget {
   final double? wrapWidth;
 
   @override
-  State<SpScrollableChoiceChips<T>> createState() =>
-      SpScrollableChoiceChipsState<T>();
+  State<SpScrollableChoiceChips<T>> createState() => SpScrollableChoiceChipsState<T>();
 }
 
-class SpScrollableChoiceChipsState<T>
-    extends State<SpScrollableChoiceChips<T>> {
+class SpScrollableChoiceChipsState<T> extends State<SpScrollableChoiceChips<T>> {
   final Map<int, GlobalKey> _chipKeys = {};
 
   @override
@@ -37,9 +35,7 @@ class SpScrollableChoiceChipsState<T>
     });
   }
 
-  void scrollToFirstSelected({
-    bool animated = true,
-  }) {
+  void scrollToFirstSelected({bool animated = true}) {
     int? lastSelectedIndex;
 
     for (int i = 0; i < widget.choices.length; i++) {
@@ -65,12 +61,8 @@ class SpScrollableChoiceChipsState<T>
   Widget build(BuildContext context) {
     Widget child = SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 16.0).add(
-        EdgeInsets.only(
-          left: MediaQuery.of(context).padding.left,
-          right: MediaQuery.of(context).padding.right,
-        ),
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0)
+          .add(EdgeInsets.only(left: MediaQuery.of(context).padding.left, right: MediaQuery.of(context).padding.right)),
       child: SizedBox(
         width: widget.wrapWidth,
         child: Wrap(
@@ -88,25 +80,17 @@ class SpScrollableChoiceChipsState<T>
               materialTapTargetSize: .shrinkWrap,
               showCheckmark: false,
               selected: widget.selected(choice),
-              onSelected: widget.onToggle != null
-                  ? (_) => widget.onToggle!(choice)
-                  : null,
+              onSelected: widget.onToggle != null ? (_) => widget.onToggle!(choice) : null,
               label: Row(
                 mainAxisAlignment: .center,
                 crossAxisAlignment: .center,
                 spacing: 4.0,
                 mainAxisSize: .min,
                 children: [
-                  Text(
-                    label,
-                    style: TextTheme.of(context).labelMedium,
-                  ),
+                  Text(label, style: TextTheme.of(context).labelMedium),
                   if (storyCount != null)
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6.0,
-                        vertical: 2,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2),
                       decoration: BoxDecoration(
                         color: ColorScheme.of(context).surface,
                         borderRadius: BorderRadius.circular(48.0),
@@ -133,9 +117,6 @@ class SpScrollableChoiceChipsState<T>
       return child;
     }
 
-    return SpFadeInFadeOutGradient(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: child,
-    );
+    return SpFadeInFadeOutGradient(color: Theme.of(context).scaffoldBackgroundColor, child: child);
   }
 }

@@ -47,16 +47,12 @@ class _ShowTableContent extends StatelessWidget {
         viewer = BackupEventsTableViewer(events: models);
         break;
       default:
-        viewer = BackupDefaultTableViewer(
-          tableContents: viewModel.params.tableContents,
-        );
+        viewer = BackupDefaultTableViewer(tableContents: viewModel.params.tableContents);
         break;
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(viewModel.params.translateTabledName),
-      ),
+      appBar: AppBar(title: Text(viewModel.params.translateTabledName)),
       body: viewer,
     );
   }

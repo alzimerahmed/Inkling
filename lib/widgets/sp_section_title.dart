@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SpSectionTitle extends StatelessWidget {
-  const SpSectionTitle({
-    super.key,
-    required this.title,
-    this.trailing,
-    this.padding,
-  });
+  const SpSectionTitle({super.key, required this.title, this.trailing, this.padding});
 
   final String title;
   final Widget? trailing;
@@ -17,14 +12,8 @@ class SpSectionTitle extends StatelessWidget {
     return Padding(
       padding:
           padding ??
-          const EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 4.0,
-          ).add(
-            EdgeInsets.only(
-              left: MediaQuery.of(context).padding.left,
-              right: MediaQuery.of(context).padding.right,
-            ),
+          const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0).add(
+            EdgeInsets.only(left: MediaQuery.of(context).padding.left, right: MediaQuery.of(context).padding.right),
           ),
       child: Row(
         spacing: 8.0,
@@ -32,14 +21,10 @@ class SpSectionTitle extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: TextTheme.of(
-                context,
-              ).titleSmall?.copyWith(color: ColorScheme.of(context).primary),
+              style: TextTheme.of(context).titleSmall?.copyWith(color: ColorScheme.of(context).primary),
             ),
           ),
-          if (trailing != null) ...[
-            trailing!,
-          ],
+          if (trailing != null) ...[trailing!],
         ],
       ),
     );

@@ -6,9 +6,7 @@ import 'package:storypad/providers/device_preferences_provider.dart';
 class ColorFromDayService {
   final BuildContext context;
 
-  ColorFromDayService({
-    required this.context,
-  });
+  ColorFromDayService({required this.context});
 
   // Resolves a single weekday directly to avoid building the full map on every lookup (hot path: tiles/badges/markers).
   Color? get(int weekday) {
@@ -27,26 +25,21 @@ class ColorFromDayService {
 
     return {
       for (int weekday = DateTime.monday; weekday <= DateTime.sunday; weekday++)
-        weekday: _resolve(
-          names?[weekday] ?? kDefaultColorNamesByDay[weekday]!,
-          darkMode,
-        ),
+        weekday: _resolve(names?[weekday] ?? kDefaultColorNamesByDay[weekday]!, darkMode),
     };
   }
 
   bool get _isDarkMode => Theme.of(context).brightness == Brightness.dark;
 
   // User customizations from the in-memory preferences (no extra cache needed).
-  Map<int, String>? get _names =>
-      context.read<DevicePreferencesProvider>().preferences.colorByDay;
+  Map<int, String>? get _names => context.read<DevicePreferencesProvider>().preferences.colorByDay;
 
   String? _colorNameFor(int weekday) {
     return _names?[weekday] ?? kDefaultColorNamesByDay[weekday];
   }
 
   Color _resolve(String name, bool darkMode) {
-    if (name == kBlackWhiteColorName)
-      return darkMode ? Colors.white : Colors.black;
+    if (name == kBlackWhiteColorName) return darkMode ? Colors.white : Colors.black;
 
     final MaterialColor swatch = kMaterialColorsByName[name] ?? Colors.grey;
     return (darkMode ? swatch[300] : swatch[700])!;

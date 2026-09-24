@@ -9,10 +9,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/sp_setting_icon_badge.dart';
 
 class DefaultStoryPreferencesTile extends StatelessWidget {
-  const DefaultStoryPreferencesTile({
-    super.key,
-    required this.weekday,
-  });
+  const DefaultStoryPreferencesTile({super.key, required this.weekday});
 
   final int weekday;
 
@@ -28,18 +25,14 @@ class DefaultStoryPreferencesTile extends StatelessWidget {
         // The sheet has no save button for pro users; it reports its live draft and
         // we commit it once here, after the sheet closes.
         DefaultStoryPreferencesObject? draft;
-        await SpDefaultStoryPreferencesSheet(
-          onChanged: (result) => draft = result,
-        ).show(context: context);
+        await SpDefaultStoryPreferencesSheet(onChanged: (result) => draft = result).show(context: context);
 
         if (!context.mounted || draft == null) return;
 
         // Non-pro users are gated by the locked save button inside the sheet (paywall),
         // so their draft is never persisted here.
         if (context.read<InAppPurchaseProvider>().isProUser) {
-          context.read<DevicePreferencesProvider>().setDefaultStoryPreferences(
-            draft!,
-          );
+          context.read<DevicePreferencesProvider>().setDefaultStoryPreferences(draft!);
         }
       },
     );

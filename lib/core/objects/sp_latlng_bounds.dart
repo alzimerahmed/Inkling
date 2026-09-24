@@ -1,22 +1,14 @@
 import 'package:storypad/core/objects/sp_latlng.dart';
 
 class SpLatLngBounds {
-  const SpLatLngBounds({
-    required this.south,
-    required this.west,
-    required this.north,
-    required this.east,
-  });
+  const SpLatLngBounds({required this.south, required this.west, required this.north, required this.east});
 
   final double south;
   final double west;
   final double north;
   final double east;
 
-  SpLatLng get center => SpLatLng(
-    (south + north) / 2,
-    (west + east) / 2,
-  );
+  SpLatLng get center => SpLatLng((south + north) / 2, (west + east) / 2);
 
   bool contains(SpLatLng point) {
     return point.latitude >= south && point.latitude <= north && point.longitude >= west && point.longitude <= east;

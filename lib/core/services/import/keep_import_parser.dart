@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:storypad/core/objects/imported_story_draft.dart';
 
 /// Parses a single Google Keep JSON export note into an [ImportedStoryDraft].
@@ -22,12 +23,8 @@ class KeepImportParser {
   }
 
   static ImportedStoryDraft? parseNote(Map<dynamic, dynamic> note) {
-    final createdMs = int.tryParse(
-      note['createdTimestampUtc']?.toString() ?? '',
-    );
-    final editedMs = int.tryParse(
-      note['userEditedTimestampUtc']?.toString() ?? '',
-    );
+    final createdMs = int.tryParse(note['createdTimestampUtc']?.toString() ?? '');
+    final editedMs = int.tryParse(note['userEditedTimestampUtc']?.toString() ?? '');
     final date = _fromMillis(createdMs) ?? _fromMillis(editedMs);
     if (date == null) return null;
 
@@ -40,10 +37,7 @@ class KeepImportParser {
     if (body == null && listContent is List) {
       body = listContent
           .whereType<Map>()
-          .map(
-            (item) =>
-                '${item['isChecked'] == true ? '[x] ' : '[ ] '}${item['text']?.toString() ?? ''}',
-          )
+          .map((item) => '${item['isChecked'] == true ? '[x] ' : '[ ] '}${item['text']?.toString() ?? ''}')
           .join('\n');
     }
 
@@ -59,12 +53,7 @@ class KeepImportParser {
       }
     }
 
-    return ImportedStoryDraft(
-      date: date,
-      title: _nonEmpty(note['title']?.toString()),
-      body: body.trim(),
-      tags: labels,
-    );
+    return ImportedStoryDraft(date: date, title: _nonEmpty(note['title']?.toString()), body: body.trim(), tags: labels);
   }
 
   static DateTime? _fromMillis(int? ms) {
@@ -73,8 +62,7 @@ class KeepImportParser {
     return DateTime.fromMillisecondsSinceEpoch(ms, isUtc: true).toLocal();
   }
 
-  static String? _nonEmpty(String? value) =>
-      (value == null || value.trim().isEmpty) ? null : value.trim();
+  static String? _nonEmpty(String? value) => (value == null || value.trim().isEmpty) ? null : value.trim();
 
   static String? _stripHtml(String? html) {
     if (html == null) return null;

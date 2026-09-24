@@ -68,51 +68,27 @@ class MarkdownContentFilterService {
 
       // Remove inline markdown formatting
       // Bold+Italic: ***text*** (must be before bold and italic)
-      sanitized = sanitized.replaceAllMapped(
-        RegExp(r'\*\*\*([^*]+)\*\*\*'),
-        (match) => match.group(1)!,
-      );
+      sanitized = sanitized.replaceAllMapped(RegExp(r'\*\*\*([^*]+)\*\*\*'), (match) => match.group(1)!);
 
       // Bold: **text** or __text__
-      sanitized = sanitized.replaceAllMapped(
-        RegExp(r'\*\*([^*]+)\*\*'),
-        (match) => match.group(1)!,
-      );
-      sanitized = sanitized.replaceAllMapped(
-        RegExp(r'__([^_]+)__'),
-        (match) => match.group(1)!,
-      );
+      sanitized = sanitized.replaceAllMapped(RegExp(r'\*\*([^*]+)\*\*'), (match) => match.group(1)!);
+      sanitized = sanitized.replaceAllMapped(RegExp(r'__([^_]+)__'), (match) => match.group(1)!);
 
       // Italic: *text* or _text* (but not inside words)
-      sanitized = sanitized.replaceAllMapped(
-        RegExp(r'\*([^*]+)\*'),
-        (match) => match.group(1)!,
-      );
-      sanitized = sanitized.replaceAllMapped(
-        RegExp(r'\b_([^_]+)_\b'),
-        (match) => match.group(1)!,
-      );
+      sanitized = sanitized.replaceAllMapped(RegExp(r'\*([^*]+)\*'), (match) => match.group(1)!);
+      sanitized = sanitized.replaceAllMapped(RegExp(r'\b_([^_]+)_\b'), (match) => match.group(1)!);
 
       // Strikethrough: ~~text~~
-      sanitized = sanitized.replaceAllMapped(
-        RegExp(r'~~([^~]+)~~'),
-        (match) => match.group(1)!,
-      );
+      sanitized = sanitized.replaceAllMapped(RegExp(r'~~([^~]+)~~'), (match) => match.group(1)!);
 
       // Inline code: `code`
-      sanitized = sanitized.replaceAllMapped(
-        RegExp(r'`([^`]+)`'),
-        (match) => match.group(1)!,
-      );
+      sanitized = sanitized.replaceAllMapped(RegExp(r'`([^`]+)`'), (match) => match.group(1)!);
 
       // Images: ![alt](url) -> remove entirely (it's not text content) (must be before links)
       sanitized = sanitized.replaceAll(RegExp(r'!\[([^\]]*)\]\([^)]+\)'), '');
 
       // Links: [text](url) -> keep only text
-      sanitized = sanitized.replaceAllMapped(
-        RegExp(r'\[([^\]]+)\]\([^)]+\)'),
-        (match) => match.group(1)!,
-      );
+      sanitized = sanitized.replaceAllMapped(RegExp(r'\[([^\]]+)\]\([^)]+\)'), (match) => match.group(1)!);
 
       // Headers: ## text -> text
       sanitized = sanitized.replaceAll(RegExp(r'^#{1,6}\s+'), '');

@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SpFadeInFadeOutGradient extends StatelessWidget {
-  const SpFadeInFadeOutGradient({
-    super.key,
-    required this.child,
-    required this.color,
-  });
+  const SpFadeInFadeOutGradient({super.key, required this.child, required this.color});
 
   final Widget child;
   final Color color;
@@ -25,10 +21,7 @@ class SpFadeInFadeOutGradient extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                colors: [
-                  color,
-                  color.withValues(alpha: 0.0),
-                ],
+                colors: [color, color.withValues(alpha: 0.0)],
               ),
             ),
           ),
@@ -43,10 +36,7 @@ class SpFadeInFadeOutGradient extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.centerRight,
                 end: Alignment.centerLeft,
-                colors: [
-                  color,
-                  color.withValues(alpha: 0.0),
-                ],
+                colors: [color, color.withValues(alpha: 0.0)],
               ),
             ),
           ),

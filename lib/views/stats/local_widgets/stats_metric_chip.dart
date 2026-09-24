@@ -11,12 +11,7 @@ part of '../stats_view.dart';
 /// └──────────────┘
 /// ```
 class _StatsMetricChip extends StatelessWidget {
-  const _StatsMetricChip({
-    required this.icon,
-    required this.value,
-    required this.label,
-    this.onTap,
-  });
+  const _StatsMetricChip({required this.icon, required this.value, required this.label, this.onTap});
 
   final IconData icon;
   final String value;
@@ -34,10 +29,7 @@ class _StatsMetricChip extends StatelessWidget {
 
     final Widget chip = Container(
       padding: const EdgeInsets.all(12.0),
-      decoration: BoxDecoration(
-        color: colorScheme.readOnly.surface3,
-        borderRadius: BorderRadius.circular(12.0),
-      ),
+      decoration: BoxDecoration(color: colorScheme.readOnly.surface3, borderRadius: BorderRadius.circular(12.0)),
       child: Column(
         crossAxisAlignment: .start,
         spacing: 8.0,
@@ -50,17 +42,13 @@ class _StatsMetricChip extends StatelessWidget {
                 value,
                 maxLines: 1,
                 overflow: .ellipsis,
-                style: textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               Text(
                 label,
                 maxLines: 1,
                 overflow: .ellipsis,
-                style: textTheme.bodySmall?.copyWith(
-                  color: colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
+                style: textTheme.bodySmall?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.6)),
               ),
             ],
           ),

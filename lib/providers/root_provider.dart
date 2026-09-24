@@ -14,16 +14,11 @@ class RootProvider extends ChangeNotifier with DisposeAwareMixin, DebounchedCall
   final String initialRoute = const HomeRoute().routeName;
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  final ValueNotifier<String> selectedRootRouteNameNotifier = ValueNotifier(
-    'home',
-  );
+  final ValueNotifier<String> selectedRootRouteNameNotifier = ValueNotifier('home');
   final HeroController heroController = MaterialApp.createMaterialHeroController();
 
   final ValueNotifier<RootViewSideBarInfo> sideBarInfoNotifier = ValueNotifier(
-    RootViewSideBarInfo(
-      colorScheme: null,
-      temporaryHidden: false,
-    ),
+    RootViewSideBarInfo(colorScheme: null, temporaryHidden: false),
   );
 
   RootProvider() {
@@ -42,10 +37,7 @@ class RootProvider extends ChangeNotifier with DisposeAwareMixin, DebounchedCall
   void navigate(BaseRoute route) {
     bool alreadySelected = selectedRootRouteNameNotifier.value == route.routeName;
 
-    AnalyticsService.instance.logViewRoute(
-      routeObject: route,
-      analyticsParameters: route.analyticsParameters,
-    );
+    AnalyticsService.instance.logViewRoute(routeObject: route, analyticsParameters: route.analyticsParameters);
 
     if (route.routeName == const HomeRoute().routeName) {
       if (selectedRootRouteNameNotifier.value == route.routeName) {
@@ -54,15 +46,9 @@ class RootProvider extends ChangeNotifier with DisposeAwareMixin, DebounchedCall
         navigatorKey.currentState?.popUntil((r) => r.isFirst);
       }
     } else if (alreadySelected) {
-      navigatorKey.currentState?.popUntil(
-        (r) => r.settings.name == route.routeName,
-      );
+      navigatorKey.currentState?.popUntil((r) => r.settings.name == route.routeName);
     } else {
-      navigatorKey.currentState?.pushNamedAndRemoveUntil(
-        route.routeName!,
-        (r) => r.isFirst,
-        arguments: route,
-      );
+      navigatorKey.currentState?.pushNamedAndRemoveUntil(route.routeName!, (r) => r.isFirst, arguments: route);
     }
   }
 
@@ -80,28 +66,21 @@ class RootProvider extends ChangeNotifier with DisposeAwareMixin, DebounchedCall
 
     if (route == null) return null;
 
-    return MaterialPageRoute(
-      settings: settings,
-      builder: (context) => route!.buildPage(context),
-    );
+    return MaterialPageRoute(settings: settings, builder: (context) => route!.buildPage(context));
   }
 
   // Allows screens with customizable backgrounds to update the sidebar icon foreground color for visibility.
   // When a page closes, reset the foreground color to null to restore the default color based on the theme.
   void setSideBarColorScheme(ColorScheme? colorScheme) {
     if (colorScheme == sideBarInfoNotifier.value.colorScheme) return;
-    sideBarInfoNotifier.value = sideBarInfoNotifier.value.copyWithColorScheme(
-      colorScheme,
-    );
+    sideBarInfoNotifier.value = sideBarInfoNotifier.value.copyWithColorScheme(colorScheme);
   }
 
   // (optional) Used by temporary hidden sidebars to show/hide the sidebar.
   // When opening sheets or dialogs, we can optionally hide the sidebar temporarily for better focus.
   void setTemporaryHidden(bool temporaryHidden) {
     if (temporaryHidden == sideBarInfoNotifier.value.temporaryHidden) return;
-    sideBarInfoNotifier.value = sideBarInfoNotifier.value.copyWith(
-      temporaryHidden: temporaryHidden,
-    );
+    sideBarInfoNotifier.value = sideBarInfoNotifier.value.copyWith(temporaryHidden: temporaryHidden);
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -32,8 +33,7 @@ import 'package:storypad/widgets/sp_app_lock_wrapper.dart';
 typedef AppQuickActionLaunchHandler = FutureOr<void> Function(String actionId);
 
 class AppQuickActionsService {
-  AppQuickActionsService({QuickActions quickActions = const QuickActions()})
-    : _quickActions = quickActions {
+  AppQuickActionsService({QuickActions quickActions = const QuickActions()}) : _quickActions = quickActions {
     if (supported) {
       _actionStream.stream.listen((actionId) async {
         _handleLaunch(actionId);
@@ -58,19 +58,15 @@ class AppQuickActionsService {
       ? androidMaxActionCount
       : 0;
 
-  Future<void> initialize({
-    required GlobalKey<NavigatorState> navigatorKey,
-  }) async {
+  Future<void> initialize({required GlobalKey<NavigatorState> navigatorKey}) async {
     if (!supported || _initCompleter.isCompleted) return;
 
     _navigatorKey = navigatorKey;
     _quickActions.initialize(_actionStream.add);
     _initCompleter.complete();
 
-    final homeQuickActions =
-        DevicePreferencesStorage.appInstance.preferences.homeQuickActions;
-    if (homeQuickActions == null || homeQuickActions.isEmpty)
-      await setActions([]);
+    final homeQuickActions = DevicePreferencesStorage.appInstance.preferences.homeQuickActions;
+    if (homeQuickActions == null || homeQuickActions.isEmpty) await setActions([]);
   }
 
   Future<void> setActions(List<AppQuickActionObject>? actions) async {
@@ -82,11 +78,7 @@ class AppQuickActionsService {
 
     _quickActions.setShortcutItems([
       for (final action in validActions.take(maxActionCount))
-        ShortcutItem(
-          type: action.toId(),
-          localizedTitle: action.label,
-          icon: action.nativeIcon,
-        ),
+        ShortcutItem(type: action.toId(), localizedTitle: action.label, icon: action.nativeIcon),
     ]);
   }
 
@@ -104,10 +96,7 @@ class AppQuickActionsService {
       final context = await _waitForNavigatorContext();
       if (context == null || !context.mounted) return;
 
-      AnalyticsService.instance.logQuickActionLaunched(
-        type: action.type.name,
-        action: action.defaultActionType?.name,
-      );
+      AnalyticsService.instance.logQuickActionLaunched(type: action.type.name, action: action.defaultActionType?.name);
 
       switch (action.type) {
         case AppQuickActionType.defaultAction:
@@ -129,10 +118,7 @@ class AppQuickActionsService {
     }
   }
 
-  Future<void> _handleDefaultAction(
-    AppQuickActionObject action,
-    BuildContext context,
-  ) async {
+  Future<void> _handleDefaultAction(AppQuickActionObject action, BuildContext context) async {
     final defaultAction = action.defaultActionType;
     if (defaultAction == null) return;
 
@@ -157,10 +143,7 @@ class AppQuickActionsService {
     }
   }
 
-  Future<void> _handleTemplateAction(
-    AppQuickActionObject action,
-    BuildContext context,
-  ) async {
+  Future<void> _handleTemplateAction(AppQuickActionObject action, BuildContext context) async {
     final reference = action.templateReference;
     if (reference == null) return;
 
@@ -195,10 +178,7 @@ class AppQuickActionsService {
     }
   }
 
-  Future<void> _handleTagAction(
-    AppQuickActionObject action,
-    BuildContext context,
-  ) async {
+  Future<void> _handleTagAction(AppQuickActionObject action, BuildContext context) async {
     final tagId = action.tagId;
     if (tagId == null) return;
 
@@ -216,10 +196,7 @@ class AppQuickActionsService {
       return;
     }
 
-    final result = await EditStoryRoute(
-      id: null,
-      initialYear: DateTime.now().year,
-    ).push(context);
+    final result = await EditStoryRoute(id: null, initialYear: DateTime.now().year).push(context);
     await _reloadHomeIfStoryCreated(result);
   }
 
@@ -246,20 +223,11 @@ class AppQuickActionsService {
     await SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context
-            .read<DevicePreferencesProvider>()
-            .preferences
-            .assetCompression;
-        final photo = await AppFilePickerService.pickImage(
-          source: ImageSource.camera,
-          compression: compression,
-        );
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final photo = await AppFilePickerService.pickImage(source: ImageSource.camera, compression: compression);
         if (photo == null) return;
 
-        final asset = await InsertFileToDbService.insertImage(
-          photo.file,
-          size: photo.size,
-        );
+        final asset = await InsertFileToDbService.insertImage(photo.file, size: photo.size);
         if (asset == null || !context.mounted) return;
 
         AnalyticsService.instance.logTakePhoto();
@@ -278,10 +246,7 @@ class AppQuickActionsService {
     await SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context
-            .read<DevicePreferencesProvider>()
-            .preferences
-            .assetCompression;
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
         final video = await AppFilePickerService.pickVideo(
           context: context,
           source: ImageSource.camera,
@@ -289,10 +254,7 @@ class AppQuickActionsService {
         );
         if (video == null) return;
 
-        final asset = await InsertFileToDbService.insertVideo(
-          video.file,
-          size: video.size,
-        );
+        final asset = await InsertFileToDbService.insertVideo(video.file, size: video.size);
         if (asset == null || !context.mounted) return;
 
         AnalyticsService.instance.logRecordVideo();
@@ -304,24 +266,17 @@ class AppQuickActionsService {
   Future<void> _recordVoice(BuildContext context) async {
     final homeContext = HomeView.homeContext;
     if (homeContext?.mounted == true) {
-      await homeContext!.read<HomeViewModel>().goToNewPageWithVoice(
-        homeContext,
-      );
+      await homeContext!.read<HomeViewModel>().goToNewPageWithVoice(homeContext);
       return;
     }
 
     await SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final result = await const SpVoiceRecordingSheet().show(
-          context: context,
-        );
+        final result = await const SpVoiceRecordingSheet().show(context: context);
         if (result is! VoiceRecordingResult) return;
 
-        final asset = await InsertFileToDbService.insertAudio(
-          result.filePath,
-          durationInMs: result.durationInMs,
-        );
+        final asset = await InsertFileToDbService.insertAudio(result.filePath, durationInMs: result.durationInMs);
         if (asset == null || !context.mounted) return;
 
         await _openStoryWithAsset(context, asset);
@@ -329,24 +284,15 @@ class AppQuickActionsService {
     );
   }
 
-  Future<void> _openStoryWithAsset(
-    BuildContext context,
-    AssetDbModel asset,
-  ) async {
-    final result = await EditStoryRoute(
-      id: null,
-      initialYear: DateTime.now().year,
-      initialAsset: asset,
-    ).push(context);
+  Future<void> _openStoryWithAsset(BuildContext context, AssetDbModel asset) async {
+    final result = await EditStoryRoute(id: null, initialYear: DateTime.now().year, initialAsset: asset).push(context);
 
     await _reloadHomeIfStoryCreated(result);
   }
 
   Future<void> _reloadHomeIfStoryCreated(Object? result) async {
     if (result is StoryDbModel) {
-      await HomeView.reload(
-        debugSource: '$runtimeType#_reloadHomeIfStoryCreated',
-      );
+      await HomeView.reload(debugSource: '$runtimeType#_reloadHomeIfStoryCreated');
     }
   }
 
@@ -364,9 +310,7 @@ class AppQuickActionsService {
               body: MarkdownToQuillDeltaService.call(template.pages[i].content),
             ),
         ];
-        final draftContent = StoryContentDbModel.create().copyWith(
-          richPages: richPages,
-        );
+        final draftContent = StoryContentDbModel.create().copyWith(richPages: richPages);
         return template.copyWith(lazyDraftContent: draftContent);
       }
     }

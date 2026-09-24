@@ -8,10 +8,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/sp_setting_icon_badge.dart';
 
 class MyTemplatesTile extends StatelessWidget {
-  const MyTemplatesTile({
-    super.key,
-    required this.weekday,
-  });
+  const MyTemplatesTile({super.key, required this.weekday});
 
   final int weekday;
 

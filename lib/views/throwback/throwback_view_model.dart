@@ -4,14 +4,13 @@ import 'package:storypad/core/objects/search_filter_object.dart';
 import 'package:storypad/core/types/path_type.dart';
 import 'package:storypad/views/home/home_view.dart';
 import 'package:storypad/views/stories/edit/edit_story_view.dart';
+
 import 'throwback_view.dart';
 
 class ThrowbackViewModel extends ChangeNotifier with DisposeAwareMixin {
   final ThrowbackRoute params;
 
-  ThrowbackViewModel({
-    required this.params,
-  });
+  ThrowbackViewModel({required this.params});
 
   late final int month = params.month;
   late final int day = params.day;

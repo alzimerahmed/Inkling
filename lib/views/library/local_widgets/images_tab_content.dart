@@ -1,9 +1,7 @@
 part of '../library_view.dart';
 
 class _ImagesTabContent extends StatefulWidget {
-  const _ImagesTabContent({
-    required this.constraints,
-  });
+  const _ImagesTabContent({required this.constraints});
 
   final BoxConstraints constraints;
 
@@ -36,9 +34,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
 
   Future<void> _load() async {
     assets = await AssetDbModel.db.where(filters: filters);
-    storiesCount = StoryDbModel.db.getStoryCountByAssets(
-      assetIds: assets?.items.map((e) => e.id).toList() ?? [],
-    );
+    storiesCount = StoryDbModel.db.getStoryCountByAssets(assetIds: assets?.items.map((e) => e.id).toList() ?? []);
     groupedAssets = _groupAssetsByDay(assets?.items ?? []);
 
     if (mounted) {
@@ -58,11 +54,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
 
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-        return [
-          SliverToBoxAdapter(
-            child: buildFilterableTags(),
-          ),
-        ];
+        return [SliverToBoxAdapter(child: buildFilterableTags())];
       },
       body: buildBody(context, provider),
     );
@@ -75,8 +67,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
           padding: const EdgeInsets.only(top: 12.0),
           child: SpScrollableChoiceChips<TagDbModel>(
             choices: tagsProvider.tags?.items ?? [],
-            storiesCount: (TagDbModel tag) =>
-                tag.id == selectedTagId ? assets?.items.length : null,
+            storiesCount: (TagDbModel tag) => tag.id == selectedTagId ? assets?.items.length : null,
             toLabel: (TagDbModel tag) => tag.title,
             selected: (TagDbModel tag) => selectedTagId == tag.id,
             onToggle: (TagDbModel tag) {
@@ -90,8 +81,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
   }
 
   Widget buildBody(BuildContext context, BackupProvider provider) {
-    if (groupedAssets == null)
-      return const Center(child: CircularProgressIndicator.adaptive());
+    if (groupedAssets == null) return const Center(child: CircularProgressIndicator.adaptive());
     if (groupedAssets!.isEmpty) return _EmptyBody(context: context);
 
     return KeyedSubtree(
@@ -117,9 +107,8 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
                   padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
                   child: Text(
                     dayLabel,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
+                    style: Theme.of(context).textTheme.titleSmall
+                        ?.copyWith(color: Theme.of(context).colorScheme.outline),
                   ),
                 ),
                 MasonryGridView.builder(
@@ -134,11 +123,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
                     crossAxisCount: max(1, widget.constraints.maxWidth ~/ 120),
                   ),
                   itemBuilder: (context, assetIndex) {
-                    return _buildItem(
-                      dayAssets[assetIndex],
-                      provider,
-                      context,
-                    );
+                    return _buildItem(dayAssets[assetIndex], provider, context);
                   },
                 ),
               ],
@@ -166,10 +151,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
       });
 
     return sortedKeys.map((key) {
-      return {
-        'label': key,
-        'assets': groupedMap[key]!,
-      };
+      return {'label': key, 'assets': groupedMap[key]!};
     }).toList();
   }
 
@@ -198,11 +180,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
     }
   }
 
-  Widget _buildItem(
-    AssetDbModel asset,
-    BackupProvider provider,
-    BuildContext context,
-  ) {
+  Widget _buildItem(AssetDbModel asset, BackupProvider provider, BuildContext context) {
     return SpPopupMenuButton(
       dyGetter: (dy) => dy + 100,
       items: (context) {
@@ -213,18 +191,13 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
             SpPopMenuItem(
               leadingIconData: SpIcons.book,
               title: tr("general.stories"),
-              onPressed: () => ShowAssetRoute(
-                assetId: asset.id,
-                storyViewOnly: false,
-              ).push(context),
+              onPressed: () => ShowAssetRoute(assetId: asset.id, storyViewOnly: false).push(context),
             ),
           SpPopMenuItem(
             leadingIconData: SpIcons.photo,
             title: tr("button.view"),
             onPressed: () {
-              final embedLinks =
-                  assets?.items.map((e) => e.relativeLocalFilePath).toList() ??
-                  [];
+              final embedLinks = assets?.items.map((e) => e.relativeLocalFilePath).toList() ?? [];
               SpMediaViewer.fromString(
                 images: embedLinks,
                 initialIndex: embedLinks.indexOf(asset.relativeLocalFilePath),
@@ -235,8 +208,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
           SpPopMenuItem(
             leadingIconData: SpIcons.info,
             title: tr("button.info"),
-            onPressed: () =>
-                SpAssetInfoSheet(asset: asset).show(context: context),
+            onPressed: () => SpAssetInfoSheet(asset: asset).show(context: context),
           ),
           if (asset.localFile?.existsSync() == true)
             SpPopMenuItem(
@@ -250,9 +222,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
                   ShareParams(
                     title: basename(asset.localFile!.path),
                     files: [XFile(asset.localFile!.path)],
-                    sharePositionOrigin: box != null
-                        ? box.localToGlobal(Offset.zero) & box.size
-                        : null,
+                    sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
                   ),
                 );
               },
@@ -276,9 +246,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
                           clipBehavior: Clip.hardEdge,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
-                            side: BorderSide(
-                              color: Theme.of(context).dividerColor,
-                            ),
+                            side: BorderSide(color: Theme.of(context).dividerColor),
                           ),
                           child: SpMediaTile(
                             link: asset.relativeLocalFilePath,
@@ -288,15 +256,8 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
                         );
                       },
                     ),
-                    _ImageStatus(
-                      context: context,
-                      asset: asset,
-                      provider: provider,
-                    ),
-                    SpAssetStoryCountOverlay(
-                      storyCount: storiesCount[asset.id] ?? 0,
-                      showArchiveIconWhenZero: true,
-                    ),
+                    _ImageStatus(context: context, asset: asset, provider: provider),
+                    SpAssetStoryCountOverlay(storyCount: storiesCount[asset.id] ?? 0, showArchiveIconWhenZero: true),
                   ],
                 ),
               ],
@@ -307,12 +268,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
     );
   }
 
-  SpPopMenuItem _buildDeleteButton(
-    BuildContext context,
-    BackupProvider provider,
-    AssetDbModel asset,
-    int storyCount,
-  ) {
+  SpPopMenuItem _buildDeleteButton(BuildContext context, BackupProvider provider, AssetDbModel asset, int storyCount) {
     final reachableServices = asset
         .matchingCloudDestinationsFor(provider.signedInServices)
         .map((d) => d.serviceType)
@@ -325,21 +281,13 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
           ? tr("button.delete")
           : tr(
               "button.delete_from_args",
-              namedArgs: {
-                'SP_SERVICES': reachableServices
-                    .map((e) => e.displayName)
-                    .join(', '),
-              },
+              namedArgs: {'SP_SERVICES': reachableServices.map((e) => e.displayName).join(', ')},
             ),
       onPressed: () => _deleteAsset(context, asset, storyCount),
     );
   }
 
-  Future<void> _deleteAsset(
-    BuildContext context,
-    AssetDbModel asset,
-    int storyCount,
-  ) async {
+  Future<void> _deleteAsset(BuildContext context, AssetDbModel asset, int storyCount) async {
     final viewModel = context.read<LibraryViewModel>();
     await viewModel.deleteAsset(context, asset, storyCount);
     if (mounted) {

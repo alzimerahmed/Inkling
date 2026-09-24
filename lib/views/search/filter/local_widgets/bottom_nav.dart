@@ -1,9 +1,7 @@
 part of '../search_filter_view.dart';
 
 class _BottomNav extends StatelessWidget {
-  const _BottomNav({
-    required this.viewModel,
-  });
+  const _BottomNav({required this.viewModel});
 
   final SearchFilterViewModel viewModel;
 
@@ -16,14 +14,13 @@ class _BottomNav extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0)
-                .add(
-                  EdgeInsets.only(
-                    bottom: MediaQuery.of(context).padding.bottom,
-                    left: MediaQuery.of(context).padding.left,
-                    right: MediaQuery.of(context).padding.right,
-                  ),
-                ),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0).add(
+              EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom,
+                left: MediaQuery.of(context).padding.left,
+                right: MediaQuery.of(context).padding.right,
+              ),
+            ),
             scrollDirection: Axis.horizontal,
             reverse: true,
             child: Row(
@@ -33,15 +30,11 @@ class _BottomNav extends StatelessWidget {
                 FilledButton.tonalIcon(
                   icon: const Icon(SpIcons.clear),
                   label: Text(tr("button.clear")),
-                  onPressed: viewModel.filtered
-                      ? () => viewModel.reset(context)
-                      : null,
+                  onPressed: viewModel.filtered ? () => viewModel.reset(context) : null,
                 ),
                 FilledButton.icon(
                   icon: const Icon(SpIcons.search),
-                  label: Text(
-                    viewModel.params.submitButtonLabel ?? tr("button.search"),
-                  ),
+                  label: Text(viewModel.params.submitButtonLabel ?? tr("button.search")),
                   onPressed: () => viewModel.search(context),
                 ),
               ],

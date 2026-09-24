@@ -12,10 +12,7 @@ import 'package:storypad/core/services/stories/story_content_embed_extractor.dar
 class MonthlyStoryStatsService {
   /// Returns recap stats keyed by month of the year (1–12). Months without any
   /// stories are absent from the map.
-  static Map<int, MonthRecapStatsObject> getByMonth({
-    required List<StoryDbModel> stories,
-    DateTime? now,
-  }) {
+  static Map<int, MonthRecapStatsObject> getByMonth({required List<StoryDbModel> stories, DateTime? now}) {
     final DateTime today = now ?? DateTime.now();
 
     final Map<int, List<StoryDbModel>> storiesByMonth = {};
@@ -41,9 +38,7 @@ class MonthlyStoryStatsService {
       }
 
       final bool isCurrentMonth = year == today.year && month == today.month;
-      final int totalDays = isCurrentMonth
-          ? today.day
-          : DaysCountInMonthService.get(year: year, month: month);
+      final int totalDays = isCurrentMonth ? today.day : DaysCountInMonthService.get(year: year, month: month);
 
       result[month] = MonthRecapStatsObject(
         month: month,

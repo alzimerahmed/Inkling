@@ -32,12 +32,7 @@ abstract class RichTextController extends ChangeNotifier {
   /// - Map: Embed data (e.g., {"media": "path/to/image.jpg"})
   ///
   /// [textSelection] is the new cursor position after replacement.
-  void replaceText(
-    int index,
-    int length,
-    Object data,
-    TextSelection? textSelection,
-  );
+  void replaceText(int index, int length, Object data, TextSelection? textSelection);
 
   // ========================================================================
   // Content Extraction & Serialization
@@ -60,11 +55,7 @@ abstract class RichTextController extends ChangeNotifier {
   /// [embedType]: The embed type key (e.g., 'media', 'audio')
   /// [value]: The embed value (e.g., file path or pipe-delimited paths)
   /// [attributes]: Optional formatting attributes to apply (e.g., size, alignment)
-  void insertEmbed({
-    required String embedType,
-    required String value,
-    Map<String, dynamic>? attributes,
-  });
+  void insertEmbed({required String embedType, required String value, Map<String, dynamic>? attributes});
 
   /// Replaces an embed's data at [offset] while preserving its existing attributes.
   ///
@@ -75,12 +66,7 @@ abstract class RichTextController extends ChangeNotifier {
   /// [length]: The length of the embed (typically 1)
   /// [embedType]: The embed type key (e.g., 'media')
   /// [value]: The new embed value
-  void replaceEmbed({
-    required int offset,
-    required int length,
-    required String embedType,
-    required String value,
-  });
+  void replaceEmbed({required int offset, required int length, required String embedType, required String value});
 
   // ========================================================================
   // Cursor Navigation

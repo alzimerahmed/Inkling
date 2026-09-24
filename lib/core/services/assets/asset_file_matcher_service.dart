@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:storypad/core/databases/models/asset_db_model.dart';
 import 'package:storypad/core/helpers/path_helper.dart';
 import 'package:storypad/core/services/logger/app_logger.dart';
@@ -27,15 +28,13 @@ class AssetFileMatcherService {
     final Map<AssetDbModel, File> matches = {};
 
     // Sort assets by creation time
-    final sortedAssets = List<AssetDbModel>.from(assets)
-      ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    final sortedAssets = List<AssetDbModel>.from(assets)..sort((a, b) => a.createdAt.compareTo(b.createdAt));
 
     // Get file stats and sort by creation time
     final fileStats = await _getFileStats(availableFiles);
     if (fileStats.isEmpty) return {};
 
-    final sortedFiles = fileStats.entries.toList()
-      ..sort((a, b) => a.value.modified.compareTo(b.value.modified));
+    final sortedFiles = fileStats.entries.toList()..sort((a, b) => a.value.modified.compareTo(b.value.modified));
 
     // Match each asset with the next available file
     int fileIndex = 0;
@@ -72,11 +71,7 @@ class AssetFileMatcherService {
   /// Find the next available file created after an asset
   ///
   /// Returns a tuple of (File, fileIndex) or null if no match found
-  static (File, int)? _findNextFile(
-    AssetDbModel asset,
-    List<MapEntry<File, FileStat>> sortedFiles,
-    int startIndex,
-  ) {
+  static (File, int)? _findNextFile(AssetDbModel asset, List<MapEntry<File, FileStat>> sortedFiles, int startIndex) {
     final assetCreatedAt = asset.createdAt;
     final expectedExt = extension(asset.originalSource);
 

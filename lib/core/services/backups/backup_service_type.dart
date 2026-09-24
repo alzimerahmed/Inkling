@@ -4,11 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:storypad/widgets/sp_icons.dart';
 
 enum BackupServiceType {
-  google_drive(
-    id: 'google_drive',
-    displayName: 'Google Drive',
-    hasGlobalUserId: true,
-  ),
+  google_drive(id: 'google_drive', displayName: 'Google Drive', hasGlobalUserId: true),
   // CloudKit's fetchUserRecordID gives a real, stable per-account identifier
   // — aliased into RevenueCat identity same as Drive/Nextcloud. See
   // ICloudUserObject.globalId.
@@ -31,11 +27,7 @@ enum BackupServiceType {
   /// Only Google Drive syncs for free — Nextcloud and iCloud require Pro.
   bool get isProOnly => this != google_drive;
 
-  const BackupServiceType({
-    required this.id,
-    required this.displayName,
-    required this.hasGlobalUserId,
-  });
+  const BackupServiceType({required this.id, required this.displayName, required this.hasGlobalUserId});
 
   /// Get the icon for this service type
   ///

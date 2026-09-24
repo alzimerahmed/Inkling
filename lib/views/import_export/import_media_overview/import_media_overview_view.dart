@@ -24,15 +24,11 @@ class ImportMediaOverviewRoute extends BaseRoute {
   final String tarFilePath;
 
   @override
-  Widget buildPage(BuildContext context) =>
-      ImportMediaOverviewView(params: this);
+  Widget buildPage(BuildContext context) => ImportMediaOverviewView(params: this);
 }
 
 class ImportMediaOverviewView extends StatelessWidget {
-  const ImportMediaOverviewView({
-    super.key,
-    required this.params,
-  });
+  const ImportMediaOverviewView({super.key, required this.params});
 
   final ImportMediaOverviewRoute params;
 

@@ -5,10 +5,7 @@ class CloudFileListObject {
   final List<CloudFileObject> files;
   final String? nextPageToken;
 
-  CloudFileListObject({
-    required this.files,
-    required this.nextPageToken,
-  });
+  CloudFileListObject({required this.files, required this.nextPageToken});
 
   factory CloudFileListObject.fromGoogleDrive(drive.FileList fileList) {
     List<CloudFileObject> list = [];
@@ -18,9 +15,6 @@ class CloudFileListObject {
       list.add(CloudFileObject.fromGoogleDrive(file));
     }
 
-    return CloudFileListObject(
-      files: list,
-      nextPageToken: fileList.nextPageToken,
-    );
+    return CloudFileListObject(files: list, nextPageToken: fileList.nextPageToken);
   }
 }

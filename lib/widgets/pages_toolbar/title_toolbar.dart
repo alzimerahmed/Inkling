@@ -1,20 +1,14 @@
 part of 'sp_pages_toolbar.dart';
 
 class _TitleToolbar extends StatelessWidget {
-  const _TitleToolbar({
-    required this.preferences,
-    required this.onThemeChanged,
-  });
+  const _TitleToolbar({required this.preferences, required this.onThemeChanged});
 
   final StoryPreferencesDbModel preferences;
   final void Function(StoryPreferencesDbModel preferences) onThemeChanged;
 
   @override
   Widget build(BuildContext context) {
-    final fontWeight = AppTheme.getThemeFontWeight(
-      context,
-      preferences.titleFontWeight ?? kTitleDefaultFontWeight,
-    );
+    final fontWeight = AppTheme.getThemeFontWeight(context, preferences.titleFontWeight ?? kTitleDefaultFontWeight);
     final fontFamily =
         preferences.titleFontFamily ??
         preferences.fontFamily ??
@@ -38,39 +32,21 @@ class _TitleToolbar extends StatelessWidget {
               buildFontWeightButton(fontWeight, context),
               IconButton.outlined(
                 tooltip: tr('general.font_size'),
-                onPressed: () => onThemeChanged(
-                  preferences.copyWith(
-                    titleExpanded: !preferences.titleExpandedFallback,
-                  ),
-                ),
+                onPressed: () =>
+                    onThemeChanged(preferences.copyWith(titleExpanded: !preferences.titleExpandedFallback)),
                 color: ColorScheme.of(context).primary,
-                style: IconButton.styleFrom(
-                  side: BorderSide(
-                    color: Theme.of(context).dividerColor,
-                  ),
-                ),
-                icon: Transform.flip(
-                  flipX: preferences.titleExpandedFallback,
-                  child: const Icon(SpIcons.fontSize),
-                ),
+                style: IconButton.styleFrom(side: BorderSide(color: Theme.of(context).dividerColor)),
+                icon: Transform.flip(flipX: preferences.titleExpandedFallback, child: const Icon(SpIcons.fontSize)),
               ),
               IconButton.outlined(
                 tooltip: tr('button.reset'),
                 color: ColorScheme.of(context).primary,
-                style: IconButton.styleFrom(
-                  side: BorderSide(
-                    color: Theme.of(context).dividerColor,
-                  ),
-                ),
+                style: IconButton.styleFrom(side: BorderSide(color: Theme.of(context).dividerColor)),
                 icon: const Icon(SpIcons.refresh),
                 onPressed: preferences.titleReseted
                     ? null
                     : () => onThemeChanged(
-                        preferences.copyWith(
-                          titleFontFamily: null,
-                          titleFontWeightIndex: null,
-                          titleExpanded: null,
-                        ),
+                        preferences.copyWith(titleFontFamily: null, titleFontWeightIndex: null, titleExpanded: null),
                       ),
               ),
             ],
@@ -81,33 +57,22 @@ class _TitleToolbar extends StatelessWidget {
     );
   }
 
-  Widget buildFontWeightButton(
-    FontWeight currentFontWeight,
-    BuildContext context,
-  ) {
+  Widget buildFontWeightButton(FontWeight currentFontWeight, BuildContext context) {
     return OutlinedButton.icon(
       icon: const Icon(SpIcons.fontWeight),
-      label: Text(
-        FontWeightTile.getFontWeightTitle(currentFontWeight, context),
-      ),
+      label: Text(FontWeightTile.getFontWeightTitle(currentFontWeight, context)),
       onPressed: () {
         SpFontWeightSheet(
           showDefaultLabel: false,
           defaultFontWeight: kTitleDefaultFontWeight,
           fontWeight: currentFontWeight,
-          onChanged: (fontWeight) => onThemeChanged(
-            preferences.copyWith(titleFontWeightIndex: fontWeight.weightIndex),
-          ),
+          onChanged: (fontWeight) => onThemeChanged(preferences.copyWith(titleFontWeightIndex: fontWeight.weightIndex)),
         ).show(context: context);
       },
     );
   }
 
-  Widget buildFontFamilyButton(
-    String fontFamily,
-    FontWeight fontWeight,
-    BuildContext context,
-  ) {
+  Widget buildFontFamilyButton(String fontFamily, FontWeight fontWeight, BuildContext context) {
     return OutlinedButton.icon(
       icon: const Icon(SpIcons.font),
       label: Text(fontFamily),
@@ -115,8 +80,7 @@ class _TitleToolbar extends StatelessWidget {
         SpFontsSheet(
           currentFontFamily: fontFamily,
           currentFontWeight: fontWeight,
-          onChanged: (fontFamily) =>
-              onThemeChanged(preferences.copyWith(titleFontFamily: fontFamily)),
+          onChanged: (fontFamily) => onThemeChanged(preferences.copyWith(titleFontFamily: fontFamily)),
         ).show(context: context);
       },
     );

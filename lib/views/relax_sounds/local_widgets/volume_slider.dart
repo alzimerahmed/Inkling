@@ -1,9 +1,7 @@
 part of '../relax_sounds_view.dart';
 
 class _VolumeSlider extends StatelessWidget {
-  const _VolumeSlider({
-    required this.relaxSound,
-  });
+  const _VolumeSlider({required this.relaxSound});
 
   final RelaxSoundObject relaxSound;
 

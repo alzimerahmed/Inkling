@@ -5,10 +5,7 @@ String? shift(List<String> elements) {
   return elements.removeAt(0);
 }
 
-Map<String, Object> merge(
-  Map<String, Object>? obj,
-  Map<String, Object> defaults,
-) {
+Map<String, Object> merge(Map<String, Object>? obj, Map<String, Object> defaults) {
   if (obj == null) {
     return defaults;
   }

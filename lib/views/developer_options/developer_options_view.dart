@@ -14,19 +14,14 @@ class DeveloperOptionsRoute extends BaseRoute {
 }
 
 class DeveloperOptionsView extends StatelessWidget {
-  const DeveloperOptionsView({
-    super.key,
-    required this.params,
-  });
+  const DeveloperOptionsView({super.key, required this.params});
 
   final DeveloperOptionsRoute params;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Developer Options"),
-      ),
+      appBar: AppBar(title: const Text("Developer Options")),
       body: ListView(
         children: [
           ListTile(
@@ -48,9 +43,7 @@ class DeveloperOptionsView extends StatelessWidget {
             onTap: () => SpShareLogsBottomSheet().show(context: context),
           ),
           const Divider(),
-          ...SupportDirectoryPath.values.where((path) => path.directory.existsSync()).map((
-            supportPath,
-          ) {
+          ...SupportDirectoryPath.values.where((path) => path.directory.existsSync()).map((supportPath) {
             bool allowedToDelete =
                 supportPath != SupportDirectoryPath.objectbox &&
                 supportPath != SupportDirectoryPath.audio &&
@@ -61,9 +54,7 @@ class DeveloperOptionsView extends StatelessWidget {
               subtitle: Text(
                 "Size: ${supportPath.directory.listSync().map((e) => e.statSync().size).fold<int>(0, (a, b) => a + b) ~/ 1024} KB",
               ),
-              trailing: allowedToDelete
-                  ? Icon(SpIcons.delete, color: ColorScheme.of(context).error)
-                  : null,
+              trailing: allowedToDelete ? Icon(SpIcons.delete, color: ColorScheme.of(context).error) : null,
               onTap: !allowedToDelete
                   ? null
                   : () async {

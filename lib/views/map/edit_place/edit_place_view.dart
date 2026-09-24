@@ -10,9 +10,7 @@ import 'edit_place_view_model.dart';
 part 'edit_place_content.dart';
 
 class EditPlaceRoute extends BaseRoute {
-  const EditPlaceRoute({
-    required this.place,
-  });
+  const EditPlaceRoute({required this.place});
 
   final PlaceDbModel place;
 
@@ -21,10 +19,7 @@ class EditPlaceRoute extends BaseRoute {
 }
 
 class EditPlaceView extends StatelessWidget {
-  const EditPlaceView({
-    super.key,
-    required this.params,
-  });
+  const EditPlaceView({super.key, required this.params});
 
   final EditPlaceRoute params;
 

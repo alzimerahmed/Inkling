@@ -39,10 +39,7 @@ void main() {
       expect(
         () async => await RetryExecutor.execute(() async {
           callCount++;
-          throw const AuthException(
-            'Auth error',
-            AuthExceptionType.signInFailed,
-          );
+          throw const AuthException('Auth error', AuthExceptionType.signInFailed);
         }),
         throwsA(isA<AuthException>()),
       );
@@ -52,10 +49,7 @@ void main() {
 
     test('respects max attempts', () async {
       var callCount = 0;
-      const policy = RetryPolicy(
-        maxAttempts: 2,
-        retryableExceptions: {NetworkException},
-      );
+      const policy = RetryPolicy(maxAttempts: 2, retryableExceptions: {NetworkException});
 
       try {
         await RetryExecutor.execute(() async {
@@ -70,10 +64,7 @@ void main() {
     });
 
     test('handles timeout when specified', () async {
-      const policy = RetryPolicy(
-        timeout: Duration(milliseconds: 100),
-        maxAttempts: 1,
-      );
+      const policy = RetryPolicy(timeout: Duration(milliseconds: 100), maxAttempts: 1);
 
       expect(
         () async => await RetryExecutor.execute(() async {

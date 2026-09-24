@@ -27,18 +27,13 @@ class EvernoteEnexImportParser {
     final drafts = <ImportedStoryDraft>[];
     int skipped = 0;
 
-    final noteMatches = RegExp(
-      r'<note>([\s\S]*?)</note>',
-    ).allMatches(content).toList();
-    if (noteMatches.isEmpty)
-      return const ImportedParseResult(drafts: [], skippedCount: 1);
+    final noteMatches = RegExp(r'<note>([\s\S]*?)</note>').allMatches(content).toList();
+    if (noteMatches.isEmpty) return const ImportedParseResult(drafts: [], skippedCount: 1);
 
     for (final noteMatch in noteMatches) {
       final note = noteMatch.group(1)!;
 
-      final date =
-          _parseEnDate(_element(note, 'created')) ??
-          _parseEnDate(_element(note, 'updated'));
+      final date = _parseEnDate(_element(note, 'created')) ?? _parseEnDate(_element(note, 'updated'));
       if (date == null) {
         skipped++;
         continue;
@@ -86,9 +81,7 @@ class EvernoteEnexImportParser {
   /// Evernote date format: `20230102T103000Z`.
   static DateTime? _parseEnDate(String? value) {
     if (value == null) return null;
-    final match = RegExp(
-      r'^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$',
-    ).firstMatch(value.trim());
+    final match = RegExp(r'^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$').firstMatch(value.trim());
     if (match == null) return null;
     return DateTime.utc(
       int.parse(match.group(1)!),

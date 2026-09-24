@@ -72,11 +72,7 @@ class QuillDeltaToPlainTextService {
 
           for (int i = 0; i < parts.length; i++) {
             if (parts[i].isNotEmpty) {
-              final formattedText = _applyTextFormatting(
-                parts[i],
-                attributes,
-                markdown,
-              );
+              final formattedText = _applyTextFormatting(parts[i], attributes, markdown);
               currentLineText += formattedText;
             }
 
@@ -86,9 +82,7 @@ class QuillDeltaToPlainTextService {
               // Example: {"insert": "\n", "attributes": {"list": "bullet", "indent": 1}}
               final indentLevel = attributes['indent'] as int?;
               final indent = '\t' * (indentLevel ?? 0);
-              final list =
-                  attributes['list']
-                      as String?; // 'bullet', 'ordered', 'checked', 'unchecked'
+              final list = attributes['list'] as String?; // 'bullet', 'ordered', 'checked', 'unchecked'
               final isBlockquote = attributes.containsKey('blockquote');
               final isCodeBlock = attributes.containsKey('code-block');
 
@@ -110,9 +104,7 @@ class QuillDeltaToPlainTextService {
               } else if (isBlockquote) {
                 // Blockquotes: prefix with '>' (multiple '>' for nested quotes)
                 // Example: "> quoted text\n" or "> > nested quote\n"
-                linePrefix = indentLevel != null
-                    ? '> ' * (indentLevel + 1)
-                    : '> ';
+                linePrefix = indentLevel != null ? '> ' * (indentLevel + 1) : '> ';
               } else if (list == 'bullet') {
                 // Bullet list: prefix with '- '
                 // Example: "- Item 1\n"
@@ -122,8 +114,7 @@ class QuillDeltaToPlainTextService {
                 // Level 0: 1. 2. 3.
                 // Level 1: a. b. c. (with bounds check: max 26, then falls back to numbers)
                 // Level 2: i. ii. iii. (Roman numerals)
-                int index = orderedListCounter[indentLevel ?? 0] =
-                    (orderedListCounter[indentLevel ?? 0] ?? 0) + 1;
+                int index = orderedListCounter[indentLevel ?? 0] = (orderedListCounter[indentLevel ?? 0] ?? 0) + 1;
                 final formattedIndex = switch (indentLevel) {
                   0 => '$index.', // 1. 2. 3.
                   1 =>
@@ -150,11 +141,7 @@ class QuillDeltaToPlainTextService {
           }
         } else {
           // Text without newline - just accumulate with formatting
-          final formattedText = _applyTextFormatting(
-            insert,
-            attributes,
-            markdown,
-          );
+          final formattedText = _applyTextFormatting(insert, attributes, markdown);
           currentLineText += formattedText;
         }
       } else if (insert is Map) {
@@ -165,9 +152,7 @@ class QuillDeltaToPlainTextService {
         // 'image' is the legacy embed key from before the image->media
         // rename -- stories saved before that still use it, and it means
         // exactly the same thing (see _QuillMediaBlockEmbed's doc).
-        if (embedType == 'media' ||
-            embedType == 'image' ||
-            embedType == 'audio') {
+        if (embedType == 'media' || embedType == 'image' || embedType == 'audio') {
           if (includeMarkdownEmbeds) {
             final raw = insert[embedType].toString();
             final urls = raw.split('|').where((s) => s.isNotEmpty);
@@ -184,25 +169,17 @@ class QuillDeltaToPlainTextService {
               // which MarkdownContentFilterService strips entirely, `[...]()`
               // keeps its visible text and would silently inflate wordCount.
               final isVideo = AssetType.getTypeFromLink(url) == AssetType.video;
-              final label = isVideo
-                  ? 'video'
-                  : (embedType == 'audio' ? 'audio' : 'image');
+              final label = isVideo ? 'video' : (embedType == 'audio' ? 'audio' : 'image');
 
               if (AssetType.values
                   .map((e) => e.subDirectory)
-                  .any(
-                    (subDirectory) => url.startsWith(subDirectory.relativePath),
-                  )) {
+                  .any((subDirectory) => url.startsWith(subDirectory.relativePath))) {
                 // Markdown image syntax: ![alt text](../images/001.jpg) when embedRelativePath is '../'
                 // Markdown image syntax: ![alt text](images/001.jpg) when embedRelativePath is ''
-                currentLineText += isVideo
-                    ? '[$label]($embedRelativePath$url)'
-                    : '![$label]($embedRelativePath$url)';
+                currentLineText += isVideo ? '[$label]($embedRelativePath$url)' : '![$label]($embedRelativePath$url)';
               } else {
                 // Markdown image syntax: ![alt text](url)
-                currentLineText += isVideo
-                    ? '[$label]($url)'
-                    : '![$label]($url)';
+                currentLineText += isVideo ? '[$label]($url)' : '![$label]($url)';
               }
             }
           }
@@ -239,11 +216,7 @@ class QuillDeltaToPlainTextService {
   /// [attributes] - Delta attributes map containing formatting info
   /// [markdown] - Whether to apply markdown formatting
   /// [prefix] - Optional prefix to prepend to the text
-  static String _applyTextFormatting(
-    String text,
-    Map<String, dynamic> attributes,
-    bool markdown,
-  ) {
+  static String _applyTextFormatting(String text, Map<String, dynamic> attributes, bool markdown) {
     if (!markdown) return text;
 
     final isBold = attributes.containsKey('bold');

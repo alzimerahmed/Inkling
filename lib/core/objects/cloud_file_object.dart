@@ -36,11 +36,7 @@ class CloudFileObject {
 
   /// [remotePath] is the file's full WebDAV path — used as [id] since Nextcloud
   /// has no separate stable file-ID concept exposed over plain WebDAV.
-  factory CloudFileObject.fromNextcloud(
-    webdav.File file, {
-    required String remotePath,
-    bool trashed = false,
-  }) {
+  factory CloudFileObject.fromNextcloud(webdav.File file, {required String remotePath, bool trashed = false}) {
     return CloudFileObject(
       fileName: file.name,
       id: remotePath,
@@ -56,11 +52,7 @@ class CloudFileObject {
   /// container data root — used as [id] since, like Nextcloud, ubiquity
   /// containers have no separate stable file-ID concept. [file] is the
   /// metadata dictionary returned by the native `ICloudBackupService`.
-  factory CloudFileObject.fromICloud(
-    Map<Object?, Object?> file, {
-    required String remotePath,
-    bool trashed = false,
-  }) {
+  factory CloudFileObject.fromICloud(Map<Object?, Object?> file, {required String remotePath, bool trashed = false}) {
     DateTime? epochSecondsToDateTime(Object? value) {
       if (value is num) return DateTime.fromMillisecondsSinceEpoch((value * 1000).round());
       return null;
@@ -81,11 +73,7 @@ class CloudFileObject {
   /// `files/upload`, `files/get_metadata`, `files/list_folder`, etc. Unlike
   /// Nextcloud/iCloud, Dropbox assigns a real stable file ID (`id:xxxx`)
   /// independent of path — that ID is used as [id] here, not the path.
-  factory CloudFileObject.fromDropbox(
-    Map<String, dynamic> file, {
-    bool trashed = false,
-    String? idOverride,
-  }) {
+  factory CloudFileObject.fromDropbox(Map<String, dynamic> file, {bool trashed = false, String? idOverride}) {
     return CloudFileObject(
       fileName: file['name'] as String?,
       // Deleted-file metadata (`.tag == 'deleted'`) carries no `id` field at
@@ -101,11 +89,7 @@ class CloudFileObject {
   }
 
   factory CloudFileObject.fromLegacyStoryPad(drive.File file) {
-    return CloudFileObject(
-      fileName: file.name,
-      id: file.id!,
-      description: file.description,
-    );
+    return CloudFileObject(fileName: file.name, id: file.id!, description: file.description);
   }
 
   bool? get hasCompression => getFileInfo()?.hasCompression;

@@ -5,14 +5,13 @@ import 'package:storypad/core/databases/models/story_db_model.dart';
 import 'package:storypad/widgets/story_list/sp_story_list_multi_edit_wrapper.dart';
 import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
 import 'package:storypad/core/types/path_type.dart';
+
 import 'archives_view.dart';
 
 class ArchivesViewModel extends ChangeNotifier with DisposeAwareMixin {
   final ArchivesRoute params;
 
-  ArchivesViewModel({
-    required this.params,
-  }) {
+  ArchivesViewModel({required this.params}) {
     load();
   }
 
@@ -38,11 +37,7 @@ class ArchivesViewModel extends ChangeNotifier with DisposeAwareMixin {
   /// tab's story list too — without remounting it (no loading-spinner flash).
   Future<void> refreshList() => load();
 
-  Future<void> onPopInvokedWithResult(
-    bool didPop,
-    dynamic result,
-    BuildContext context,
-  ) async {
+  Future<void> onPopInvokedWithResult(bool didPop, dynamic result, BuildContext context) async {
     if (didPop) return;
 
     bool shouldPop = true;
@@ -57,9 +52,6 @@ class ArchivesViewModel extends ChangeNotifier with DisposeAwareMixin {
       shouldPop = result == OkCancelResult.ok;
     }
 
-    if (shouldPop &&
-        context.mounted &&
-        ModalRoute.of(context)?.isCurrent == true)
-      Navigator.of(context).pop(result);
+    if (shouldPop && context.mounted && ModalRoute.of(context)?.isCurrent == true) Navigator.of(context).pop(result);
   }
 }

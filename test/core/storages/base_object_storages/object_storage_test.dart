@@ -45,22 +45,13 @@ class FakeObject {
   final String name;
   final int value;
 
-  const FakeObject(
-    this.name,
-    this.value,
-  );
+  const FakeObject(this.name, this.value);
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'value': value,
-    };
+    return {'name': name, 'value': value};
   }
 
   factory FakeObject.fromJson(Map<String, dynamic> json) {
-    return FakeObject(
-      json['name']!,
-      json['value']!,
-    );
+    return FakeObject(json['name']!, json['value']!);
   }
 }

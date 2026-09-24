@@ -8,11 +8,7 @@ import 'package:storypad/widgets/sp_demo_images.dart';
 /// horizontal carousel of demo screenshots. Callers own what either looks
 /// like and does — this sheet only lays them out.
 class SpDemoImagesSheet extends BaseBottomSheet {
-  const SpDemoImagesSheet({
-    required this.demoImages,
-    this.header,
-    this.bottom,
-  });
+  const SpDemoImagesSheet({required this.demoImages, this.header, this.bottom});
 
   final List<String> demoImages;
   final Widget? header;
@@ -42,8 +38,7 @@ class SpDemoImagesSheet extends BaseBottomSheet {
   /// for [icloudSettingsDemoImages] before its real screenshots existed.
   /// Already covered by [relaxSoundDemoImages] in [allDemoImages]'s preload,
   /// so not repeated there.
-  static const List<String> macosICloudSettingsDemoImages =
-      relaxSoundDemoImages;
+  static const List<String> macosICloudSettingsDemoImages = relaxSoundDemoImages;
 
   static const List<String> allDemoImages = [
     ...periodCalendarDemoImages,
@@ -66,19 +61,9 @@ class SpDemoImagesSheet extends BaseBottomSheet {
     return Column(
       mainAxisSize: .min,
       children: [
-        if (header case final header?) ...[
-          const SizedBox(height: 8),
-          header,
-          const SizedBox(height: 8),
-        ],
-        SpDemoImages(
-          demoImageUrlPaths: demoImages,
-          skeletonCount: demoImages.length,
-        ),
-        if (bottom case final bottom?) ...[
-          const SizedBox(height: 8),
-          bottom,
-        ],
+        if (header case final header?) ...[const SizedBox(height: 8), header, const SizedBox(height: 8)],
+        SpDemoImages(demoImageUrlPaths: demoImages, skeletonCount: demoImages.length),
+        if (bottom case final bottom?) ...[const SizedBox(height: 8), bottom],
         SizedBox(height: bottomPadding + 16.0),
       ],
     );

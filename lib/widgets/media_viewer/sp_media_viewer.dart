@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
@@ -67,11 +68,7 @@ class SpMediaViewerItem {
 /// text leaks into another page's state. Image and video pages live in
 /// separate part files ([_ImagePageScaffold], [_VideoPageScaffold]).
 class SpMediaViewer extends StatefulWidget {
-  const SpMediaViewer({
-    super.key,
-    required this.items,
-    required this.initialIndex,
-  });
+  const SpMediaViewer({super.key, required this.items, required this.initialIndex});
 
   final List<SpMediaViewerItem> items;
   final int initialIndex;
@@ -86,19 +83,10 @@ class SpMediaViewer extends StatefulWidget {
     for (final path in images) {
       // Non-null only for relative asset paths (images/, audio/, videos/),
       // which are the ones backed by an AssetDbModel row.
-      final String? assetRelativePath = AssetType.getTypeFromLink(path) != null
-          ? path
-          : null;
+      final String? assetRelativePath = AssetType.getTypeFromLink(path) != null ? path : null;
 
       if (AssetType.getTypeFromLink(path) == AssetType.video) {
-        items.add(
-          SpMediaViewerItem(
-            type: AssetType.video,
-            tag: path,
-            alt: null,
-            assetRelativePath: assetRelativePath,
-          ),
-        );
+        items.add(SpMediaViewerItem(type: AssetType.video, tag: path, alt: null, assetRelativePath: assetRelativePath));
         continue;
       }
 
@@ -128,10 +116,7 @@ class SpMediaViewer extends StatefulWidget {
       );
     }
 
-    return SpMediaViewer(
-      initialIndex: items.length != images.length ? 0 : initialIndex,
-      items: items,
-    );
+    return SpMediaViewer(initialIndex: items.length != images.length ? 0 : initialIndex, items: items);
   }
 
   Future<void> show(BuildContext context) async {
@@ -142,11 +127,7 @@ class SpMediaViewer extends StatefulWidget {
       videosCount: items.where((item) => item.type == AssetType.video).length,
     );
 
-    await context.pushTransparentRoute(
-      this,
-      rootNavigator: true,
-      backgroundColor: Colors.transparent,
-    );
+    await context.pushTransparentRoute(this, rootNavigator: true, backgroundColor: Colors.transparent);
   }
 
   @override
@@ -159,9 +140,7 @@ class _SpMediaViewerState extends State<SpMediaViewer> {
   @override
   void initState() {
     super.initState();
-    controller = PageController(
-      initialPage: min(widget.initialIndex, widget.items.length - 1),
-    );
+    controller = PageController(initialPage: min(widget.initialIndex, widget.items.length - 1));
   }
 
   @override
@@ -185,19 +164,10 @@ class _SpMediaViewerState extends State<SpMediaViewer> {
           final item = widget.items[index];
 
           if (item.isVideo) {
-            return _VideoPageScaffold(
-              item: item,
-              index: index,
-              total: widget.items.length,
-              controller: controller,
-            );
+            return _VideoPageScaffold(item: item, index: index, total: widget.items.length, controller: controller);
           }
 
-          return _ImagePageScaffold(
-            item: item,
-            index: index,
-            total: widget.items.length,
-          );
+          return _ImagePageScaffold(item: item, index: index, total: widget.items.length);
         },
       ),
     );
@@ -207,27 +177,16 @@ class _SpMediaViewerState extends State<SpMediaViewer> {
 /// Shared chrome (title, info, share, close) every page's app bar renders the
 /// same way -- kept as a plain function rather than a widget since it's
 /// stateless given (index, total, item).
-AppBar _buildAppBar(
-  BuildContext context, {
-  required int index,
-  required int total,
-  required SpMediaViewerItem item,
-}) {
+AppBar _buildAppBar(BuildContext context, {required int index, required int total, required SpMediaViewerItem item}) {
   return AppBar(
     backgroundColor: Colors.transparent,
     foregroundColor: _foregroundColor,
     elevation: 0.0,
     automaticallyImplyLeading: false,
-    title: Text(
-      '${index + 1}/$total',
-      style: TextTheme.of(
-        context,
-      ).titleMedium?.copyWith(color: _foregroundColor),
-    ),
+    title: Text('${index + 1}/$total', style: TextTheme.of(context).titleMedium?.copyWith(color: _foregroundColor)),
     actions: [
       _ShareButton(tag: item.tag),
-      if (item.assetRelativePath != null)
-        _InfoButton(assetRelativePath: item.assetRelativePath!),
+      if (item.assetRelativePath != null) _InfoButton(assetRelativePath: item.assetRelativePath!),
       const CloseButton(color: _foregroundColor),
     ],
   );
@@ -270,9 +229,7 @@ class _InfoButton extends StatelessWidget {
       color: _foregroundColor,
       icon: const Icon(SpIcons.info),
       onPressed: () async {
-        final asset = await AssetDbModel.findBy(
-          relativePath: assetRelativePath,
-        );
+        final asset = await AssetDbModel.findBy(relativePath: assetRelativePath);
         if (!context.mounted || asset == null) return;
         SpAssetInfoSheet(asset: asset).show(context: context);
       },
@@ -311,9 +268,7 @@ class _ShareButton extends StatelessWidget {
               SharePlus.instance.share(
                 ShareParams(
                   files: [XFile(existFilePath)],
-                  sharePositionOrigin: box != null
-                      ? box.localToGlobal(Offset.zero) & box.size
-                      : null,
+                  sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
                 ),
               );
             },

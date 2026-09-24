@@ -28,10 +28,7 @@ class FadeInBuilder extends StatelessWidget {
           animation: animation,
           child: child,
           builder: (context, child) {
-            return Container(
-              transform: transformBuilder(animation),
-              child: child!,
-            );
+            return Container(transform: transformBuilder(animation), child: child!);
           },
         );
       },

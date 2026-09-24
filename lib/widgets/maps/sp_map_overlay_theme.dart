@@ -19,11 +19,7 @@ import 'package:storypad/providers/root_provider.dart';
 /// )
 /// ```
 class SpMapOverlayTheme extends StatefulWidget {
-  const SpMapOverlayTheme({
-    super.key,
-    required this.brightness,
-    required this.child,
-  });
+  const SpMapOverlayTheme({super.key, required this.brightness, required this.child});
 
   final Brightness brightness;
   final Widget child;
@@ -55,23 +51,15 @@ class _SpMapOverlayThemeState extends State<SpMapOverlayTheme> {
 
     final baseTheme = AppTheme.getTheme(
       colorScheme: colorScheme,
-      fontFamily: context
-          .read<DevicePreferencesProvider>()
-          .preferences
-          .fontFamily,
-      fontWeight: context
-          .read<DevicePreferencesProvider>()
-          .preferences
-          .fontWeight,
+      fontFamily: context.read<DevicePreferencesProvider>().preferences.fontFamily,
+      fontWeight: context.read<DevicePreferencesProvider>().preferences.fontWeight,
       scaffoldBackgroundColor: colorScheme.surface,
     );
 
     final theme = baseTheme.copyWith(
       iconButtonTheme: IconButtonThemeData(
         style: IconButton.styleFrom(
-          shape: CircleBorder(
-            side: BorderSide(color: baseTheme.dividerColor),
-          ),
+          shape: CircleBorder(side: BorderSide(color: baseTheme.dividerColor)),
           backgroundColor: colorScheme.surface.withValues(alpha: 0.8),
           foregroundColor: colorScheme.onSurface,
         ),
@@ -82,9 +70,6 @@ class _SpMapOverlayThemeState extends State<SpMapOverlayTheme> {
       rootProvider.setSideBarColorScheme(colorScheme);
     });
 
-    return Theme(
-      data: theme,
-      child: widget.child,
-    );
+    return Theme(data: theme, child: widget.child);
   }
 }

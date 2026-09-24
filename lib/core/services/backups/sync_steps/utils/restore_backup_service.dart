@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:storypad/core/databases/adapters/base_db_adapter.dart';
 import 'package:storypad/core/databases/models/base_db_model.dart';
 import 'package:storypad/core/repositories/backup_repository.dart';
@@ -8,9 +9,7 @@ import 'package:storypad/core/objects/backup_object.dart';
 class RestoreBackupService {
   final List<FutureOr<void> Function()> _listeners = [];
 
-  void addListener(
-    Future<void> Function() callback,
-  ) {
+  void addListener(Future<void> Function() callback) {
     _listeners.add(callback);
   }
 
@@ -21,14 +20,9 @@ class RestoreBackupService {
   /// Set [notifyCallbacks] to false when restoring several backups in a row (e.g. one file
   /// per year). Listeners rebuild from the whole database, so firing them between files
   /// exposes a half-restored state — call [tri] once the batch is complete.
-  Future<int> restoreOnlyNewData({
-    required BackupObject backup,
-    bool notifyCallbacks = true,
-  }) async {
+  Future<int> restoreOnlyNewData({required BackupObject backup, bool notifyCallbacks = true}) async {
     Map<String, dynamic> tables = backup.tables;
-    Map<String, List<BaseDbModel>> datas = JsonTablesToModelService.decode(
-      tables,
-    );
+    Map<String, List<BaseDbModel>> datas = JsonTablesToModelService.decode(tables);
 
     int changesCount = 0;
 
@@ -37,20 +31,11 @@ class RestoreBackupService {
 
       if (items != null) {
         for (BaseDbModel newRecord in items) {
-          BaseDbModel? existingRecord = await db.find(
-            newRecord.id,
-            returnDeleted: true,
-          );
+          BaseDbModel? existingRecord = await db.find(newRecord.id, returnDeleted: true);
 
-          if (existingRecord != null &&
-              existingRecord.updatedAt != null &&
-              newRecord.updatedAt != null) {
-            bool backupHasNewerContent = existingRecord.updatedAt!.isBefore(
-              newRecord.updatedAt!,
-            );
-            bool deviceHasNewerContent = existingRecord.updatedAt!.isAfter(
-              newRecord.updatedAt!,
-            );
+          if (existingRecord != null && existingRecord.updatedAt != null && newRecord.updatedAt != null) {
+            bool backupHasNewerContent = existingRecord.updatedAt!.isBefore(newRecord.updatedAt!);
+            bool deviceHasNewerContent = existingRecord.updatedAt!.isAfter(newRecord.updatedAt!);
 
             if (backupHasNewerContent) {
               await db.set(newRecord, runCallbacks: false);
@@ -78,13 +63,9 @@ class RestoreBackupService {
   /// Notify listeners that a batch of restores has finished. See [restoreOnlyNewData].
   Future<void> notify() => _triggerCallback();
 
-  Future<void> forceRestore({
-    required BackupObject backup,
-  }) async {
+  Future<void> forceRestore({required BackupObject backup}) async {
     Map<String, dynamic> tables = backup.tables;
-    Map<String, List<BaseDbModel>> datas = JsonTablesToModelService.decode(
-      tables,
-    );
+    Map<String, List<BaseDbModel>> datas = JsonTablesToModelService.decode(tables);
 
     for (BaseDbAdapter db in BackupRepository.databases) {
       List<BaseDbModel>? items = datas[db.tableName];

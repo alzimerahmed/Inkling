@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:flutter/services.dart';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
-    as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
 import 'package:storypad/core/objects/cloud_file_object.dart';
 import 'package:storypad/core/objects/cloud_storage_quota_object.dart';
 import 'package:storypad/core/objects/icloud_user_object.dart';
@@ -55,8 +54,7 @@ class ICloudCloudService extends BackupCloudService {
   /// Two-tiered live check: [_isAvailable] (fast, local, offline) gates
   /// whether to attempt [_fetchAccountId] (a real CloudKit round-trip) — see
   /// [_AvailabilityStatus] for why its outcomes are handled differently.
-  Future<({_AvailabilityStatus status, bool hasCachedUser})>
-  _checkAvailability() async {
+  Future<({_AvailabilityStatus status, bool hasCachedUser})> _checkAvailability() async {
     final available = await _isAvailable();
     if (!available) {
       _currentUser = null;
@@ -77,20 +75,14 @@ class ICloudCloudService extends BackupCloudService {
 
         if (identityConfirmedUnchanged) {
           _currentUser = stored;
-          return (
-            status: _AvailabilityStatus.transientFailure,
-            hasCachedUser: true,
-          );
+          return (status: _AvailabilityStatus.transientFailure, hasCachedUser: true);
         }
 
         // No match (or nothing cached) — don't trust it. Only the in-memory
         // reference is cleared; the persisted record survives, so
         // autoBackupEnabled/account recover normally next successful check.
         _currentUser = null;
-        return (
-          status: _AvailabilityStatus.transientFailure,
-          hasCachedUser: false,
-        );
+        return (status: _AvailabilityStatus.transientFailure, hasCachedUser: false);
       }
       _currentUser = null;
       return (status: _AvailabilityStatus.notAvailable, hasCachedUser: false);
@@ -114,9 +106,7 @@ class ICloudCloudService extends BackupCloudService {
     } else if (stored.identityTokenFingerprint != currentFingerprint) {
       // Keep the preference, refresh the fingerprint so a later transient
       // failure has a current value to compare against.
-      final refreshed = stored.copyWith(
-        identityTokenFingerprint: currentFingerprint,
-      );
+      final refreshed = stored.copyWith(identityTokenFingerprint: currentFingerprint);
       _currentUser = refreshed;
       await ICloudUserStorage().writeObject(refreshed);
     } else {
@@ -195,9 +185,7 @@ class ICloudCloudService extends BackupCloudService {
   /// called directly by the UI when [isSignedIn] is false.
   Future<bool> openAppSettings() async {
     try {
-      final result = await _channel.invokeMethod(
-        'ICloudBackupService.openAppSettings',
-      );
+      final result = await _channel.invokeMethod('ICloudBackupService.openAppSettings');
       return result == true;
     } catch (e) {
       AppLogger.d('ICloudCloudService#openAppSettings failed: $e');
@@ -205,8 +193,7 @@ class ICloudCloudService extends BackupCloudService {
     }
   }
 
-  String _joinPath(String? folder, String name) =>
-      (folder == null || folder.isEmpty) ? name : '$folder/$name';
+  String _joinPath(String? folder, String name) => (folder == null || folder.isEmpty) ? name : '$folder/$name';
 
   String _parentOf(String path) {
     final index = path.lastIndexOf('/');
@@ -228,10 +215,7 @@ class ICloudCloudService extends BackupCloudService {
         final existing = yearlyBackups[year];
         final existingTs = existing?.lastUpdatedAt;
         final newTs = file.lastUpdatedAt;
-        final isNewer =
-            existing == null ||
-            (newTs != null &&
-                (existingTs == null || newTs.isAfter(existingTs)));
+        final isNewer = existing == null || (newTs != null && (existingTs == null || newTs.isAfter(existingTs)));
         if (isNewer) yearlyBackups[year] = file;
       }
 
@@ -240,19 +224,12 @@ class ICloudCloudService extends BackupCloudService {
   }
 
   Future<List<CloudFileObject>> _listFiles(String folderName) async {
-    final raw = await _channel.invokeMethod('ICloudBackupService.listFiles', {
-      'relativeFolderPath': folderName,
-    });
+    final raw = await _channel.invokeMethod('ICloudBackupService.listFiles', {'relativeFolderPath': folderName});
 
     final list = (raw as List?) ?? const [];
     return list
         .whereType<Map>()
-        .map(
-          (entry) => CloudFileObject.fromICloud(
-            entry,
-            remotePath: entry['path'] as String,
-          ),
-        )
+        .map((entry) => CloudFileObject.fromICloud(entry, remotePath: entry['path'] as String))
         .toList();
   }
 
@@ -274,12 +251,7 @@ class ICloudCloudService extends BackupCloudService {
   @override
   Future<List<int>?> downloadFileBytes(String fileId) async {
     return _run('downloadFileBytes', () async {
-      final result = await _channel.invokeMethod(
-        'ICloudBackupService.downloadFile',
-        {
-          'relativePath': fileId,
-        },
-      );
+      final result = await _channel.invokeMethod('ICloudBackupService.downloadFile', {'relativePath': fileId});
 
       if (result == null) return null;
       if (result is Uint8List) return result;
@@ -291,9 +263,7 @@ class ICloudCloudService extends BackupCloudService {
   @override
   Future<CloudFileObject?> findFileById(String fileId) async {
     return _run('findFileById', () async {
-      final raw = await _channel.invokeMethod('ICloudBackupService.statFile', {
-        'relativePath': fileId,
-      });
+      final raw = await _channel.invokeMethod('ICloudBackupService.statFile', {'relativePath': fileId});
 
       if (raw == null) return null;
       return CloudFileObject.fromICloud(raw as Map, remotePath: fileId);
@@ -307,28 +277,17 @@ class ICloudCloudService extends BackupCloudService {
 
     return _run('findFileByIdIncludingTrashed', () async {
       final trashPath = _trashPathFor(fileId);
-      final raw = await _channel.invokeMethod('ICloudBackupService.statFile', {
-        'relativePath': trashPath,
-      });
+      final raw = await _channel.invokeMethod('ICloudBackupService.statFile', {'relativePath': trashPath});
 
       if (raw == null) return null;
-      return CloudFileObject.fromICloud(
-        raw as Map,
-        remotePath: trashPath,
-        trashed: true,
-      );
+      return CloudFileObject.fromICloud(raw as Map, remotePath: trashPath, trashed: true);
     });
   }
 
   @override
   Future<bool> deleteFile(String cloudFileId) async {
     return _run('deleteFile', () async {
-      final result = await _channel.invokeMethod(
-        'ICloudBackupService.deleteFile',
-        {
-          'relativePath': cloudFileId,
-        },
-      );
+      final result = await _channel.invokeMethod('ICloudBackupService.deleteFile', {'relativePath': cloudFileId});
       return result == true;
     });
   }
@@ -336,13 +295,10 @@ class ICloudCloudService extends BackupCloudService {
   @override
   Future<bool> trashFile(String cloudFileId) async {
     return _run('trashFile', () async {
-      final result = await _channel.invokeMethod(
-        'ICloudBackupService.moveFile',
-        {
-          'fromRelativePath': cloudFileId,
-          'toRelativePath': _trashPathFor(cloudFileId),
-        },
-      );
+      final result = await _channel.invokeMethod('ICloudBackupService.moveFile', {
+        'fromRelativePath': cloudFileId,
+        'toRelativePath': _trashPathFor(cloudFileId),
+      });
       return result == true;
     });
   }
@@ -350,23 +306,16 @@ class ICloudCloudService extends BackupCloudService {
   @override
   Future<bool> restoreFileFromTrash(String cloudFileId) async {
     return _run('restoreFileFromTrash', () async {
-      final result = await _channel.invokeMethod(
-        'ICloudBackupService.moveFile',
-        {
-          'fromRelativePath': _trashPathFor(cloudFileId),
-          'toRelativePath': cloudFileId,
-        },
-      );
+      final result = await _channel.invokeMethod('ICloudBackupService.moveFile', {
+        'fromRelativePath': _trashPathFor(cloudFileId),
+        'toRelativePath': cloudFileId,
+      });
       return result == true;
     });
   }
 
   @override
-  Future<CloudFileObject?> uploadFile(
-    String fileName,
-    io.File file, {
-    String? folderName,
-  }) async {
+  Future<CloudFileObject?> uploadFile(String fileName, io.File file, {String? folderName}) async {
     return _run('uploadFile', () async {
       if (!file.existsSync()) {
         throw exp.FileOperationException(
@@ -378,13 +327,10 @@ class ICloudCloudService extends BackupCloudService {
       }
 
       final remotePath = _joinPath(folderName, fileName);
-      final raw = await _channel.invokeMethod(
-        'ICloudBackupService.uploadFile',
-        {
-          'localPath': file.path,
-          'relativePath': remotePath,
-        },
-      );
+      final raw = await _channel.invokeMethod('ICloudBackupService.uploadFile', {
+        'localPath': file.path,
+        'relativePath': remotePath,
+      });
 
       if (raw == null) return null;
       return CloudFileObject.fromICloud(raw as Map, remotePath: remotePath);
@@ -392,11 +338,7 @@ class ICloudCloudService extends BackupCloudService {
   }
 
   @override
-  Future<CloudFileObject?> updateFile({
-    required String fileId,
-    required String fileName,
-    required io.File file,
-  }) async {
+  Future<CloudFileObject?> updateFile({required String fileId, required String fileName, required io.File file}) async {
     return _run('updateFile', () async {
       if (!file.existsSync()) {
         throw exp.FileOperationException(
@@ -408,25 +350,18 @@ class ICloudCloudService extends BackupCloudService {
       }
 
       final remotePath = _joinPath(_parentOf(fileId), fileName);
-      final raw = await _channel.invokeMethod(
-        'ICloudBackupService.uploadFile',
-        {
-          'localPath': file.path,
-          'relativePath': remotePath,
-        },
-      );
+      final raw = await _channel.invokeMethod('ICloudBackupService.uploadFile', {
+        'localPath': file.path,
+        'relativePath': remotePath,
+      });
 
       // Yearly backup filenames embed a timestamp, so an "update" writes a
       // new path; clean up the old one once the new content has landed.
       if (remotePath != fileId) {
         try {
-          await _channel.invokeMethod('ICloudBackupService.deleteFile', {
-            'relativePath': fileId,
-          });
+          await _channel.invokeMethod('ICloudBackupService.deleteFile', {'relativePath': fileId});
         } catch (e) {
-          AppLogger.d(
-            'ICloudCloudService#updateFile: failed to remove old file $fileId: $e',
-          );
+          AppLogger.d('ICloudCloudService#updateFile: failed to remove old file $fileId: $e');
         }
       }
 
@@ -447,9 +382,7 @@ class ICloudCloudService extends BackupCloudService {
 
   Future<bool> _isAvailable() async {
     try {
-      final result = await _channel.invokeMethod(
-        'ICloudBackupService.isAvailable',
-      );
+      final result = await _channel.invokeMethod('ICloudBackupService.isAvailable');
       return result == true;
     } catch (e) {
       AppLogger.d('ICloudCloudService#_isAvailable failed: $e');
@@ -462,14 +395,10 @@ class ICloudCloudService extends BackupCloudService {
   /// treat as "not signed in" — see [_checkAvailability].
   Future<({String? accountId, bool transientFailure})> _fetchAccountId() async {
     try {
-      final result = await _channel.invokeMethod(
-        'ICloudBackupService.fetchAccountId',
-      );
+      final result = await _channel.invokeMethod('ICloudBackupService.fetchAccountId');
       return (accountId: result as String?, transientFailure: false);
     } on PlatformException catch (e) {
-      AppLogger.d(
-        'ICloudCloudService#_fetchAccountId failed (${e.code}): ${e.message}',
-      );
+      AppLogger.d('ICloudCloudService#_fetchAccountId failed (${e.code}): ${e.message}');
       return (accountId: null, transientFailure: e.code == 'NETWORK');
     } catch (e) {
       AppLogger.d('ICloudCloudService#_fetchAccountId failed: $e');
@@ -494,14 +423,10 @@ class ICloudCloudService extends BackupCloudService {
   /// fingerprint just means "no match", already the safe default.
   Future<String?> _fetchIdentityTokenFingerprint() async {
     try {
-      final result = await _channel.invokeMethod(
-        'ICloudBackupService.fetchIdentityTokenFingerprint',
-      );
+      final result = await _channel.invokeMethod('ICloudBackupService.fetchIdentityTokenFingerprint');
       return result as String?;
     } catch (e) {
-      AppLogger.d(
-        'ICloudCloudService#_fetchIdentityTokenFingerprint failed: $e',
-      );
+      AppLogger.d('ICloudCloudService#_fetchIdentityTokenFingerprint failed: $e');
       return null;
     }
   }

@@ -12,15 +12,11 @@ class RecentlyDeletedRecordsRoute extends BaseRoute {
   const RecentlyDeletedRecordsRoute();
 
   @override
-  Widget buildPage(BuildContext context) =>
-      RecentlyDeletedRecordsView(params: this);
+  Widget buildPage(BuildContext context) => RecentlyDeletedRecordsView(params: this);
 }
 
 class RecentlyDeletedRecordsView extends StatelessWidget {
-  const RecentlyDeletedRecordsView({
-    super.key,
-    required this.params,
-  });
+  const RecentlyDeletedRecordsView({super.key, required this.params});
 
   final RecentlyDeletedRecordsRoute params;
 

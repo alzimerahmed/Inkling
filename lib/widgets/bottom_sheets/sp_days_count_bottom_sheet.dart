@@ -8,10 +8,7 @@ class SpDaysCountBottomSheet extends BaseBottomSheet {
   final StoryDbModel story;
   final Future<void> Function()? onToggleShowDayCount;
 
-  SpDaysCountBottomSheet({
-    this.onToggleShowDayCount,
-    required this.story,
-  });
+  SpDaysCountBottomSheet({this.onToggleShowDayCount, required this.story});
 
   @override
   bool get fullScreen => false;
@@ -19,26 +16,16 @@ class SpDaysCountBottomSheet extends BaseBottomSheet {
   @override
   Widget build(BuildContext context, double bottomPadding) {
     return Container(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).padding.bottom + 16.0,
-      ),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 16.0),
       width: double.infinity,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 12.0),
+          Text(tr("dialog.lookings_back.title"), style: Theme.of(context).textTheme.bodyMedium),
           Text(
-            tr("dialog.lookings_back.title"),
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          Text(
-            plural(
-              "dialog.lookings_back.subtitle",
-              story.dateDifferentCount.inDays,
-            ),
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: ColorScheme.of(context).primary,
-            ),
+            plural("dialog.lookings_back.subtitle", story.dateDifferentCount.inDays),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(color: ColorScheme.of(context).primary),
           ),
           const SizedBox(height: 12.0),
           buildShowTimeOnHomeCheckBox(),

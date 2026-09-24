@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:storypad/core/extensions/matrix_4_extension.dart';
 
-enum SpTapEffectType {
-  touchableOpacity,
-  scaleDown,
-  border,
-}
+enum SpTapEffectType { touchableOpacity, scaleDown, border }
 
 class SpTapEffectBorderOption {
   final BoxShape shape;
@@ -14,12 +10,7 @@ class SpTapEffectBorderOption {
   final double width;
   final Color color;
 
-  SpTapEffectBorderOption({
-    required this.shape,
-    required this.scale,
-    required this.width,
-    required this.color,
-  });
+  SpTapEffectBorderOption({required this.shape, required this.scale, required this.width, required this.color});
 }
 
 class SpTapEffect extends StatefulWidget {
@@ -31,9 +22,7 @@ class SpTapEffect extends StatefulWidget {
     this.duration = const Duration(milliseconds: 100),
     this.vibrate = false,
     this.behavior = HitTestBehavior.opaque,
-    this.effects = const [
-      SpTapEffectType.touchableOpacity,
-    ],
+    this.effects = const [SpTapEffectType.touchableOpacity],
     this.curve = Curves.ease,
     this.onLongPressed,
     this.borderOption,
@@ -56,8 +45,7 @@ class SpTapEffect extends StatefulWidget {
   State<SpTapEffect> createState() => _SpTapEffectState();
 }
 
-class _SpTapEffectState extends State<SpTapEffect>
-    with SingleTickerProviderStateMixin {
+class _SpTapEffectState extends State<SpTapEffect> with SingleTickerProviderStateMixin {
   final double opacityActive = 0.2;
   late AnimationController controller;
   late Animation<double> scaleAnimation;
@@ -68,15 +56,15 @@ class _SpTapEffectState extends State<SpTapEffect>
   @override
   void initState() {
     controller = AnimationController(vsync: this, duration: widget.duration);
-    scaleAnimation = Tween<double>(begin: 1, end: widget.scaleActive).animate(
-      CurvedAnimation(parent: controller, curve: widget.curve),
-    );
-    opacityAnimation = Tween<double>(begin: 1, end: opacityActive).animate(
-      CurvedAnimation(parent: controller, curve: widget.curve),
-    );
-    borderAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: controller, curve: widget.curve),
-    );
+    scaleAnimation = Tween<double>(
+      begin: 1,
+      end: widget.scaleActive,
+    ).animate(CurvedAnimation(parent: controller, curve: widget.curve));
+    opacityAnimation = Tween<double>(
+      begin: 1,
+      end: opacityActive,
+    ).animate(CurvedAnimation(parent: controller, curve: widget.curve));
+    borderAnimation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(parent: controller, curve: widget.curve));
     _internalFocusNode = FocusNode();
     super.initState();
   }
@@ -124,10 +112,7 @@ class _SpTapEffectState extends State<SpTapEffect>
     }
 
     // Handle mouse hover events like InkWell.
-    result = MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: result,
-    );
+    result = MouseRegion(cursor: SystemMouseCursors.click, child: result);
 
     // Handle keyboard events for accessibility.
     // Same behaviour to inkwell.
@@ -135,12 +120,8 @@ class _SpTapEffectState extends State<SpTapEffect>
       focusNode: _internalFocusNode,
       onKeyEvent: (node, event) {
         if (widget.onTap != null &&
-            (HardwareKeyboard.instance.isLogicalKeyPressed(
-                  LogicalKeyboardKey.enter,
-                ) ||
-                HardwareKeyboard.instance.isLogicalKeyPressed(
-                  LogicalKeyboardKey.space,
-                ))) {
+            (HardwareKeyboard.instance.isLogicalKeyPressed(LogicalKeyboardKey.enter) ||
+                HardwareKeyboard.instance.isLogicalKeyPressed(LogicalKeyboardKey.space))) {
           onTapUp(null);
           return KeyEventResult.handled;
         }
@@ -177,16 +158,14 @@ class _SpTapEffectState extends State<SpTapEffect>
                   result,
                   Positioned.fill(
                     child: Container(
-                      transform: Matrix4.identity()
-                        ..spScale(widget.borderOption?.scale ?? 1.25),
+                      transform: Matrix4.identity()..spScale(widget.borderOption?.scale ?? 1.25),
                       transformAlignment: Alignment.center,
                       decoration: BoxDecoration(
                         border: Border.all(
                           width: widget.borderOption?.width ?? 2,
                           color: Color.lerp(
                             Colors.transparent,
-                            widget.borderOption?.color ??
-                                Theme.of(context).colorScheme.onSurface,
+                            widget.borderOption?.color ?? Theme.of(context).colorScheme.onSurface,
                             borderAnimation.value,
                           )!,
                         ),

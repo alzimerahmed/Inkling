@@ -23,12 +23,9 @@ class _HomeYearsContent extends StatelessWidget {
   }
 
   Widget buildBody() {
-    if (viewModel.years == null)
-      return const Center(child: CircularProgressIndicator.adaptive());
+    if (viewModel.years == null) return const Center(child: CircularProgressIndicator.adaptive());
 
-    return ListView(
-      children: buildYearsTiles(),
-    );
+    return ListView(children: buildYearsTiles());
   }
 
   List<Widget> buildYearsTiles() {
@@ -48,10 +45,7 @@ class _HomeYearsContent extends StatelessWidget {
                 selected: selected,
                 title: Text(entry.key.toString()),
                 subtitle: Text(plural("plural.entry", entry.value)),
-                trailing: Visibility(
-                  visible: selected,
-                  child: const Icon(SpIcons.check),
-                ),
+                trailing: Visibility(visible: selected, child: const Icon(SpIcons.check)),
               ),
               AnimatedContainer(
                 duration: Durations.long4,
@@ -59,9 +53,7 @@ class _HomeYearsContent extends StatelessWidget {
                 height: loading ? 4.0 : 0,
                 clipBehavior: Clip.hardEdge,
                 decoration: const BoxDecoration(),
-                child: const Wrap(
-                  children: [LinearProgressIndicator()],
-                ),
+                child: const Wrap(children: [LinearProgressIndicator()]),
               ),
             ],
           );

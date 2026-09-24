@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,30 +10,18 @@ import 'package:storypad/providers/app_lock_provider.dart';
 import 'package:storypad/widgets/sp_icons.dart';
 
 class SpAppLockWrapper extends StatelessWidget {
-  const SpAppLockWrapper({
-    super.key,
-    required this.child,
-  });
+  const SpAppLockWrapper({super.key, required this.child});
 
   final Widget child;
 
-  static final GlobalKey<_LockedBarrierState> _globalKey =
-      GlobalKey<_LockedBarrierState>();
+  static final GlobalKey<_LockedBarrierState> _globalKey = GlobalKey<_LockedBarrierState>();
 
   static bool authenticated(BuildContext context) =>
-      context.read<AppLockProvider>().hasAppLock
-      ? _globalKey.currentState?.authenticated == true
-      : true;
+      context.read<AppLockProvider>().hasAppLock ? _globalKey.currentState?.authenticated == true : true;
 
-  static Future<T> disableAppLockIfHas<T>(
-    BuildContext context, {
-    required FutureOr<T> Function() callback,
-  }) async {
+  static Future<T> disableAppLockIfHas<T>(BuildContext context, {required FutureOr<T> Function() callback}) async {
     if (_globalKey.currentState == null) return callback();
-    return _globalKey.currentState!.disableAppLockIfHas(
-      context,
-      callback: callback,
-    );
+    return _globalKey.currentState!.disableAppLockIfHas(context, callback: callback);
   }
 
   @override
@@ -55,16 +44,13 @@ class SpAppLockWrapper extends StatelessWidget {
 }
 
 class _LockedBarrier extends StatefulWidget {
-  const _LockedBarrier({
-    super.key,
-  });
+  const _LockedBarrier({super.key});
 
   @override
   State<_LockedBarrier> createState() => _LockedBarrierState();
 }
 
-class _LockedBarrierState extends State<_LockedBarrier>
-    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+class _LockedBarrierState extends State<_LockedBarrier> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late final AnimationController animationController;
 
   bool authenticated = false;
@@ -79,10 +65,7 @@ class _LockedBarrierState extends State<_LockedBarrier>
 
   Timer? _reEnableLifeCycleTimer;
 
-  Future<T> disableAppLockIfHas<T>(
-    BuildContext context, {
-    required FutureOr<T> Function() callback,
-  }) async {
+  Future<T> disableAppLockIfHas<T>(BuildContext context, {required FutureOr<T> Function() callback}) async {
     _reEnableLifeCycleTimer?.cancel();
     listenToLifeCycle = false;
 
@@ -106,11 +89,7 @@ class _LockedBarrierState extends State<_LockedBarrier>
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
-    animationController = AnimationController(
-      vsync: this,
-      value: 1.0,
-      duration: Durations.long1,
-    );
+    animationController = AnimationController(vsync: this, value: 1.0, duration: Durations.long1);
 
     authenticate();
   }
@@ -153,8 +132,7 @@ class _LockedBarrierState extends State<_LockedBarrier>
           // Belt-and-suspenders: skip if an authentication attempt is already in flight
           // (e.g. the native biometric prompt itself caused a real pause/resume on some
           // platform), so we never fire a second concurrent prompt.
-          if (!context.read<AppLockProvider>().avoidDublciated.isRunning)
-            authenticate();
+          if (!context.read<AppLockProvider>().avoidDublciated.isRunning) authenticate();
         }
         break;
     }
@@ -190,12 +168,7 @@ class _LockedBarrierState extends State<_LockedBarrier>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        if (barrierShown) buildBlurFilter(),
-        if (barrierShown) buildActionButtons(context),
-      ],
-    );
+    return Stack(children: [if (barrierShown) buildBlurFilter(), if (barrierShown) buildActionButtons(context)]);
   }
 
   Widget buildBlurFilter() {
@@ -204,9 +177,7 @@ class _LockedBarrierState extends State<_LockedBarrier>
         opacity: animationController,
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Container(
-            color: ColorScheme.of(context).surface.withValues(alpha: 0.5),
-          ),
+          child: Container(color: ColorScheme.of(context).surface.withValues(alpha: 0.5)),
         ),
       ),
     );
@@ -225,8 +196,7 @@ class _LockedBarrierState extends State<_LockedBarrier>
             spacing: kIsCupertino ? 8.0 : 4.0,
             children: [
               buildUnlockButtons(),
-              if (context.read<AppLockProvider>().appLock.pin != null)
-                buildForgotPinButton(context),
+              if (context.read<AppLockProvider>().appLock.pin != null) buildForgotPinButton(context),
             ],
           ),
         ),
@@ -257,10 +227,7 @@ class _LockedBarrierState extends State<_LockedBarrier>
         child: Row(
           mainAxisSize: MainAxisSize.min,
           spacing: 8.0,
-          children: [
-            const Icon(SpIcons.lock),
-            Text(tr('button.unlock')),
-          ],
+          children: [const Icon(SpIcons.lock), Text(tr('button.unlock'))],
         ),
       );
     } else {

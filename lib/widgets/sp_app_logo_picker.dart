@@ -7,11 +7,7 @@ import 'package:storypad/widgets/sp_fade_in.dart';
 import 'package:storypad/widgets/sp_icons.dart';
 
 class SpAppLogoPicker extends StatelessWidget {
-  const SpAppLogoPicker({
-    super.key,
-    required this.onLogoSelected,
-    required this.selectedAppLogo,
-  });
+  const SpAppLogoPicker({super.key, required this.onLogoSelected, required this.selectedAppLogo});
 
   final void Function(AppLogo) onLogoSelected;
   final AppLogo selectedAppLogo;
@@ -43,24 +39,14 @@ class SpAppLogoPicker extends StatelessWidget {
         children: logos.map((logo) {
           return Stack(
             children: [
-              logo.asset.image(
-                width: 72,
-                height: 72,
-                fit: .cover,
-              ),
+              logo.asset.image(width: 72, height: 72, fit: .cover),
               if (!logo.free && !iapProvider.isProUser)
-                const Positioned(
-                  top: 4,
-                  right: 4,
-                  child: Icon(SpIcons.lock, size: 16.0, color: Colors.black),
-                ),
+                const Positioned(top: 4, right: 4, child: Icon(SpIcons.lock, size: 16.0, color: Colors.black)),
               if (selectedAppLogo == logo)
                 Positioned(
                   bottom: 4.0,
                   right: 4.0,
-                  child: SpFadeIn.fromBottom(
-                    child: const Icon(SpIcons.checkCircle, color: Colors.black),
-                  ),
+                  child: SpFadeIn.fromBottom(child: const Icon(SpIcons.checkCircle, color: Colors.black)),
                 ),
             ],
           );

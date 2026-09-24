@@ -1,8 +1,5 @@
 class DaysCountInMonthService {
-  static int get({
-    required int year,
-    required int month,
-  }) {
+  static int get({required int year, required int month}) {
     bool leapYear = (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0));
 
     Map<int, int> dayCountByMonth = {

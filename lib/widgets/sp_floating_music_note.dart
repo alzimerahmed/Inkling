@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -6,24 +7,18 @@ import 'package:provider/provider.dart';
 import 'package:storypad/providers/relax_sounds_provider.dart';
 
 class SpFloatingMusicNote extends StatefulWidget {
-  const SpFloatingMusicNote._({
-    required this.child,
-  });
+  const SpFloatingMusicNote._({required this.child});
 
   final Widget child;
 
-  static Widget wrapIfPlaying({
-    required Widget child,
-  }) {
+  static Widget wrapIfPlaying({required Widget child}) {
     return Consumer<RelaxSoundsProvider>(
       child: child,
       builder: (context, provider, child) {
         bool notPlaying =
             provider.audioPlayersService.playingStates.keys.isEmpty ||
             provider.audioPlayersService.playingStates.values.every(
-              (p) =>
-                  p.processingState == ProcessingState.idle ||
-                  p.processingState == ProcessingState.loading,
+              (p) => p.processingState == ProcessingState.idle || p.processingState == ProcessingState.loading,
             );
 
         if (notPlaying) return child!;
@@ -36,29 +31,16 @@ class SpFloatingMusicNote extends StatefulWidget {
   State<SpFloatingMusicNote> createState() => _SpFloatingMusicNoteState();
 }
 
-class _SpFloatingMusicNoteState extends State<SpFloatingMusicNote>
-    with TickerProviderStateMixin {
+class _SpFloatingMusicNoteState extends State<SpFloatingMusicNote> with TickerProviderStateMixin {
   late final List<AnimationController> _controllers;
   late final List<Animation<double>> _animations;
 
   // Configuration: Floating paths
   final List<_FloatingPath> _floatingPaths = [
     // Path 1: Right side
-    const _FloatingPath(
-      startX: 48,
-      startY: 8,
-      endX: 60,
-      endY: -50,
-      icon: CupertinoIcons.music_note,
-    ),
+    const _FloatingPath(startX: 48, startY: 8, endX: 60, endY: -50, icon: CupertinoIcons.music_note),
     // Path 2: Center
-    const _FloatingPath(
-      startX: 28,
-      startY: 10,
-      endX: 35,
-      endY: -45,
-      icon: CupertinoIcons.double_music_note,
-    ),
+    const _FloatingPath(startX: 28, startY: 10, endX: 35, endY: -45, icon: CupertinoIcons.double_music_note),
   ];
 
   // Animation timing configuration
@@ -70,17 +52,11 @@ class _SpFloatingMusicNoteState extends State<SpFloatingMusicNote>
     super.initState();
     _controllers = List.generate(
       _floatingPaths.length,
-      (index) => AnimationController(
-        vsync: this,
-        duration: _animationDuration,
-      ),
+      (index) => AnimationController(vsync: this, duration: _animationDuration),
     );
 
     _animations = _controllers.map((controller) {
-      return CurvedAnimation(
-        parent: controller,
-        curve: Curves.linear,
-      );
+      return CurvedAnimation(parent: controller, curve: Curves.linear);
     }).toList();
 
     // Start animations with delays
@@ -119,8 +95,7 @@ class _SpFloatingMusicNoteState extends State<SpFloatingMusicNote>
               // Calculate position along the path with smooth easing
               double easedProgress = Curves.easeOut.transform(progress);
               double x = path.startX + (path.endX - path.startX) * progress;
-              double y =
-                  path.startY + (path.endY - path.startY) * easedProgress;
+              double y = path.startY + (path.endY - path.startY) * easedProgress;
 
               // Add subtle horizontal drift for natural movement
               double drift = math.sin(progress * math.pi * 2) * 3;
@@ -141,13 +116,7 @@ class _SpFloatingMusicNoteState extends State<SpFloatingMusicNote>
                 top: y - 12,
                 child: Opacity(
                   opacity: opacity,
-                  child: Icon(
-                    path.icon,
-                    size: 16,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.primary.withValues(alpha: 0.6),
-                  ),
+                  child: Icon(path.icon, size: 16, color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.6)),
                 ),
               );
             },

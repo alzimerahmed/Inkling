@@ -114,17 +114,12 @@ class NextcloudUserObject extends CloudServiceUser {
   /// the service's detail screen, never a place for secrets.
   @override
   List<({String label, String value})> get configuration => [
-    (
-      label: tr("input.nextcloud_folder_name.hint"),
-      value: "~/${folderName ?? defaultFolderName}",
-    ),
+    (label: tr("input.nextcloud_folder_name.hint"), value: "~/${folderName ?? defaultFolderName}"),
   ];
 
   Map<String, String> get authHeaders {
     final credentials = base64Encode(utf8.encode('$username:$appPassword'));
-    return <String, String>{
-      'Authorization': 'Basic $credentials',
-    };
+    return <String, String>{'Authorization': 'Basic $credentials'};
   }
 
   Map<String, dynamic> toJson() => _$NextcloudUserObjectToJson(this);

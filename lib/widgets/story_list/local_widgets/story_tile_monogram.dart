@@ -1,11 +1,7 @@
 part of '../sp_story_tile.dart';
 
 class _StoryTileMonogram extends StatelessWidget {
-  const _StoryTileMonogram({
-    required this.showMonogram,
-    required this.monogramSize,
-    required this.story,
-  });
+  const _StoryTileMonogram({required this.showMonogram, required this.monogramSize, required this.story});
 
   final bool showMonogram;
   final double monogramSize;
@@ -21,10 +17,7 @@ class _StoryTileMonogram extends StatelessWidget {
         child: Container(
           width: 3,
           height: 3,
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            color: ColorScheme.of(context).onSurface,
-          ),
+          decoration: BoxDecoration(shape: BoxShape.rectangle, color: ColorScheme.of(context).onSurface),
         ),
       );
     }
@@ -50,9 +43,7 @@ class _StoryTileMonogram extends StatelessWidget {
           width: monogramSize,
           height: monogramSize,
           decoration: BoxDecoration(
-            color: ColorFromDayService(
-              context: context,
-            ).get(story.displayPathDate.weekday),
+            color: ColorFromDayService(context: context).get(story.displayPathDate.weekday),
             shape: BoxShape.circle,
           ),
           alignment: Alignment.center,
@@ -60,9 +51,7 @@ class _StoryTileMonogram extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               story.displayPathDate.day.toString(),
-              style: TextTheme.of(
-                context,
-              ).bodyMedium?.copyWith(color: ColorScheme.of(context).onPrimary),
+              style: TextTheme.of(context).bodyMedium?.copyWith(color: ColorScheme.of(context).onPrimary),
             ),
           ),
         ),

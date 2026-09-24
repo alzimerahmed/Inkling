@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:macos_window_utils/window_manipulator.dart';
 import 'package:provider/provider.dart';
@@ -74,13 +75,9 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
         .colorSeed => updated.copyWith(colorSeedValue: defaults.colorSeedValue),
         .fontSize => updated.copyWith(fontSize: defaults.fontSize),
         .fontFamily => updated.copyWith(fontFamily: defaults.fontFamily),
-        .fontWeight => updated.copyWith(
-          fontWeightIndex: defaults.fontWeightIndex,
-        ),
+        .fontWeight => updated.copyWith(fontWeightIndex: defaults.fontWeightIndex),
         .dayColors => updated.copyWith(colorByDay: defaults.colorByDay),
-        .storyTilePreferences => updated.copyWith(
-          storyTilePreferences: defaults.storyTilePreferences,
-        ),
+        .storyTilePreferences => updated.copyWith(storyTilePreferences: defaults.storyTilePreferences),
       };
     }
 
@@ -89,9 +86,7 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
     notifyListeners();
 
     if (keys.contains(AppearancePreferenceKey.fontFamily)) {
-      AnalyticsUserProperyService.instance.logSetFontFamily(
-        newFontFamily: _preferences.fontFamily,
-      );
+      AnalyticsUserProperyService.instance.logSetFontFamily(newFontFamily: _preferences.fontFamily);
     }
 
     if (keys.contains(AppearancePreferenceKey.colorSeed)) {
@@ -99,15 +94,11 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
     }
 
     if (keys.contains(AppearancePreferenceKey.themeMode)) {
-      AnalyticsUserProperyService.instance.logSetThemeMode(
-        newThemeMode: ThemeMode.system,
-      );
+      AnalyticsUserProperyService.instance.logSetThemeMode(newThemeMode: ThemeMode.system);
     }
 
     if (keys.contains(AppearancePreferenceKey.fontWeight)) {
-      AnalyticsUserProperyService.instance.logSetFontWeight(
-        newFontWeight: kDefaultFontWeight,
-      );
+      AnalyticsUserProperyService.instance.logSetFontWeight(newFontWeight: kDefaultFontWeight);
     }
   }
 
@@ -119,9 +110,7 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
     storage.writeObject(_preferences);
     notifyListeners();
 
-    AnalyticsUserProperyService.instance.logSetColorSeedTheme(
-      newColor: _preferences.colorSeed,
-    );
+    AnalyticsUserProperyService.instance.logSetColorSeedTheme(newColor: _preferences.colorSeed);
   }
 
   void setColorForDay(int weekday, String colorName) {
@@ -138,9 +127,7 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
     updated.remove(weekday);
 
     // Reset to null once there are no customizations left, so stored preferences stay clean.
-    _preferences = _preferences.copyWith(
-      colorByDay: updated.isEmpty ? null : updated,
-    );
+    _preferences = _preferences.copyWith(colorByDay: updated.isEmpty ? null : updated);
     storage.writeObject(_preferences);
     notifyListeners();
   }
@@ -157,22 +144,16 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
       storage.writeObject(_preferences);
       notifyListeners();
 
-      AnalyticsUserProperyService.instance.logSetThemeMode(
-        newThemeMode: value,
-      );
+      AnalyticsUserProperyService.instance.logSetThemeMode(newThemeMode: value);
     }
   }
 
   void setFontWeight(FontWeight fontWeight) {
-    _preferences = _preferences.copyWith(
-      fontWeightIndex: fontWeight.weightIndex,
-    );
+    _preferences = _preferences.copyWith(fontWeightIndex: fontWeight.weightIndex);
     storage.writeObject(_preferences);
     notifyListeners();
 
-    AnalyticsUserProperyService.instance.logSetFontWeight(
-      newFontWeight: fontWeight,
-    );
+    AnalyticsUserProperyService.instance.logSetFontWeight(newFontWeight: fontWeight);
   }
 
   void setFontFamily(String fontFamily) {
@@ -180,9 +161,7 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
     storage.writeObject(_preferences);
     notifyListeners();
 
-    AnalyticsUserProperyService.instance.logSetFontFamily(
-      newFontFamily: fontFamily,
-    );
+    AnalyticsUserProperyService.instance.logSetFontFamily(newFontFamily: fontFamily);
   }
 
   void setFontSize(FontSizeOption? fontSize) {
@@ -190,9 +169,7 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
     storage.writeObject(_preferences);
     notifyListeners();
 
-    AnalyticsUserProperyService.instance.logSetFontSize(
-      newFontSize: fontSize,
-    );
+    AnalyticsUserProperyService.instance.logSetFontSize(newFontSize: fontSize);
   }
 
   void setTimeFormat(TimeFormatOption? timeFormat) {
@@ -200,9 +177,7 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
     storage.writeObject(_preferences);
     notifyListeners();
 
-    AnalyticsUserProperyService.instance.logSetTimeFormat(
-      timeFormat: timeFormat,
-    );
+    AnalyticsUserProperyService.instance.logSetTimeFormat(timeFormat: timeFormat);
   }
 
   void setFirstDayOfWeek(FirstDayOfWeekOption value) {
@@ -210,9 +185,7 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
     storage.writeObject(_preferences);
     notifyListeners();
 
-    AnalyticsUserProperyService.instance.logSetFirstDayOfWeek(
-      firstDayOfWeek: value,
-    );
+    AnalyticsUserProperyService.instance.logSetFirstDayOfWeek(firstDayOfWeek: value);
   }
 
   void setAssetCompression(AssetCompressionOption value) {
@@ -273,10 +246,7 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
     }
 
     storage.writeObject(_preferences);
-    AnalyticsUserProperyService.instance.logToggleAddOn(
-      addOn: addOn,
-      enabled: enabled,
-    );
+    AnalyticsUserProperyService.instance.logToggleAddOn(addOn: addOn, enabled: enabled);
     _listeners['add_on']?.forEach((listener) => listener());
   }
 
@@ -439,10 +409,7 @@ class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserv
     await _writeReminders(updated);
   }
 
-  Future<void> toggleThemeMode(
-    BuildContext context, {
-    Duration? delay,
-  }) async {
+  Future<void> toggleThemeMode(BuildContext context, {Duration? delay}) async {
     if (delay != null) await Future.delayed(delay, () {});
     setThemeMode(isDarkMode ? ThemeMode.light : ThemeMode.dark);
   }

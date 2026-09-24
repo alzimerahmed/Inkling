@@ -15,10 +15,7 @@ part 'languages_content.dart';
 part 'local_widgets/feedback_banner.dart';
 
 class LanguagesRoute extends BaseRoute {
-  LanguagesRoute({
-    this.showBetaBanner = true,
-    this.fromOnboarding = false,
-  });
+  LanguagesRoute({this.showBetaBanner = true, this.fromOnboarding = false});
 
   final bool showBetaBanner;
   final bool fromOnboarding;
@@ -28,10 +25,7 @@ class LanguagesRoute extends BaseRoute {
 }
 
 class LanguagesView extends StatelessWidget {
-  const LanguagesView({
-    super.key,
-    required this.params,
-  });
+  const LanguagesView({super.key, required this.params});
 
   final LanguagesRoute params;
 

@@ -8,20 +8,12 @@ class BaseSqliteDbAdapter extends BaseDbAdapter {
   String get tableName => throw UnimplementedError();
 
   @override
-  Future<BaseDbModel?> create(
-    BaseDbModel record, {
-    bool runCallbacks = true,
-  }) {
+  Future<BaseDbModel?> create(BaseDbModel record, {bool runCallbacks = true}) {
     throw UnimplementedError();
   }
 
   @override
-  Future<BaseDbModel?> delete(
-    int id, {
-    bool softDelete = true,
-    bool runCallbacks = true,
-    DateTime? deletedAt,
-  }) {
+  Future<BaseDbModel?> delete(int id, {bool softDelete = true, bool runCallbacks = true, DateTime? deletedAt}) {
     throw UnimplementedError();
   }
 
@@ -36,18 +28,12 @@ class BaseSqliteDbAdapter extends BaseDbAdapter {
   }
 
   @override
-  Future<BaseDbModel?> update(
-    BaseDbModel record, {
-    bool runCallbacks = true,
-  }) {
+  Future<BaseDbModel?> update(BaseDbModel record, {bool runCallbacks = true}) {
     throw UnimplementedError();
   }
 
   @override
-  Future<int> count({
-    Map<String, dynamic>? filters,
-    required String? debugSource,
-  }) {
+  Future<int> count({Map<String, dynamic>? filters, required String? debugSource}) {
     throw UnimplementedError();
   }
 
@@ -61,18 +47,12 @@ class BaseSqliteDbAdapter extends BaseDbAdapter {
   }
 
   @override
-  Future<BaseDbModel?> touch(
-    BaseDbModel record, {
-    bool runCallbacks = true,
-  }) {
+  Future<BaseDbModel?> touch(BaseDbModel record, {bool runCallbacks = true}) {
     throw UnimplementedError();
   }
 
   @override
-  Future<BaseDbModel?> set(
-    BaseDbModel record, {
-    bool runCallbacks = true,
-  }) {
+  Future<BaseDbModel?> set(BaseDbModel record, {bool runCallbacks = true}) {
     throw UnimplementedError();
   }
 
@@ -82,17 +62,12 @@ class BaseSqliteDbAdapter extends BaseDbAdapter {
   }
 
   @override
-  Future<void> setAll(
-    List<BaseDbModel> records, {
-    bool runCallbacks = true,
-  }) {
+  Future<void> setAll(List<BaseDbModel> records, {bool runCallbacks = true}) {
     throw UnimplementedError();
   }
 
   @override
-  Future<Map<int, DateTime?>> getLastUpdatedAtByYear({
-    bool? fromThisDeviceOnly,
-  }) {
+  Future<Map<int, DateTime?>> getLastUpdatedAtByYear({bool? fromThisDeviceOnly}) {
     throw UnimplementedError();
   }
 }

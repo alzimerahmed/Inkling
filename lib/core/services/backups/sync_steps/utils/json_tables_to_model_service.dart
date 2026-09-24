@@ -7,9 +7,7 @@ class JsonTablesToModelService {
   //   "stories": [ story1, story2 ],
   //   "todos": [ todo1, todo2 ]
   // }
-  static Map<String, List<BaseDbModel>> decode(
-    Map<String, dynamic> tables,
-  ) {
+  static Map<String, List<BaseDbModel>> decode(Map<String, dynamic> tables) {
     Map<String, List<BaseDbModel>> maps = {};
 
     for (BaseDbAdapter db in BackupRepository.databases) {
@@ -22,10 +20,7 @@ class JsonTablesToModelService {
     return maps;
   }
 
-  static List<T> _decodeContents<T extends BaseDbModel>(
-    List contents,
-    BaseDbAdapter<T> db,
-  ) {
+  static List<T> _decodeContents<T extends BaseDbModel>(List contents, BaseDbAdapter<T> db) {
     List<T> items = [];
 
     for (dynamic json in contents) {

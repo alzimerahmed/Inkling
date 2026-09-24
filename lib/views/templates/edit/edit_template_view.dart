@@ -23,10 +23,7 @@ part 'edit_template_content.dart';
 part 'local_widgets/done_button.dart';
 
 class EditTemplateRoute extends BaseRoute {
-  EditTemplateRoute({
-    required this.flowType,
-    this.initialTemplate,
-  });
+  EditTemplateRoute({required this.flowType, this.initialTemplate});
 
   final TemplateDbModel? initialTemplate;
   final EditingFlowType flowType;
@@ -36,10 +33,7 @@ class EditTemplateRoute extends BaseRoute {
 }
 
 class EditTemplateView extends StatelessWidget {
-  const EditTemplateView({
-    super.key,
-    required this.params,
-  });
+  const EditTemplateView({super.key, required this.params});
 
   final EditTemplateRoute params;
 
@@ -52,8 +46,7 @@ class EditTemplateView extends StatelessWidget {
 
         return PopScope(
           canPop: false,
-          onPopInvokedWithResult: (didPop, result) =>
-              viewModel.onPopInvokedWithResult(didPop, result, context),
+          onPopInvokedWithResult: (didPop, result) => viewModel.onPopInvokedWithResult(didPop, result, context),
           child: SpStoryPreferenceTheme(
             preferences: viewModel.template.preferences,
             child: _EditTemplateContent(viewModel),

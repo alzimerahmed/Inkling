@@ -18,10 +18,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 class BackupServiceTile extends StatelessWidget {
   final BackupCloudService service;
 
-  const BackupServiceTile({
-    super.key,
-    required this.service,
-  });
+  const BackupServiceTile({super.key, required this.service});
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +26,13 @@ class BackupServiceTile extends StatelessWidget {
     final status = provider.statusFor(service.serviceType);
     final metadata = service.serviceType;
 
-    final locked =
-        metadata.isProOnly &&
-        !Provider.of<InAppPurchaseProvider>(context).isProUser;
+    final locked = metadata.isProOnly && !Provider.of<InAppPurchaseProvider>(context).isProUser;
     if (locked) {
       return ListTile(
         leading: Icon(metadata.icon),
         title: Text(metadata.displayName),
         trailing: const Icon(SpIcons.lock),
-        onTap: () =>
-            const PaywallRoute(initialFocus: .multi_cloud_sync).push(context),
+        onTap: () => const PaywallRoute(initialFocus: .multi_cloud_sync).push(context),
       );
     }
 
@@ -53,9 +47,7 @@ class BackupServiceTile extends StatelessWidget {
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
               child: CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(
-                  service.currentUser!.photoUrl!,
-                ),
+                backgroundImage: CachedNetworkImageProvider(service.currentUser!.photoUrl!),
                 onBackgroundImageError: (_, _) {},
                 radius: 8.0,
               ),
@@ -90,10 +82,7 @@ class BackupServiceTile extends StatelessWidget {
       );
       onPressed = () => provider.signIn(context, service.serviceType);
     } else {
-      trailing = Icon(
-        SpIcons.keyboardRight,
-        color: ColorScheme.of(context).bootstrap.success.color,
-      );
+      trailing = Icon(SpIcons.keyboardRight, color: ColorScheme.of(context).bootstrap.success.color);
 
       subtitle = Text(service.currentUser?.identifier ?? '...');
       onPressed = () => ShowBackupServiceRoute(service: service).push(context);
@@ -109,9 +98,7 @@ class BackupServiceTile extends StatelessWidget {
           subtitle = Text(tr('list_tile.backup.no_permission_subtitle'));
           break;
         case BackupConnectionStatus.readyToSync:
-          subtitle = Text(
-            tr('list_tile.backup.some_data_has_not_sync_subtitle'),
-          );
+          subtitle = Text(tr('list_tile.backup.some_data_has_not_sync_subtitle'));
           break;
         case null:
           break;
@@ -124,46 +111,25 @@ class BackupServiceTile extends StatelessWidget {
       // service's own lastSyncedAt, not provider.lastSyncedAt (a global max
       // across every service) — otherwise a freshly-connected Nextcloud tile
       // could show Drive's timestamp despite never having synced itself.
-      if (status.connectionStatus == BackupConnectionStatus.readyToSync &&
-          status.lastSyncedAt != null) {
-        subtitle = Text(
-          DateFormatHelper.yMEd_jmNullable(
-                status.lastSyncedAt,
-                context.locale,
-              ) ??
-              '...',
-        );
+      if (status.connectionStatus == BackupConnectionStatus.readyToSync && status.lastSyncedAt != null) {
+        subtitle = Text(DateFormatHelper.yMEd_jmNullable(status.lastSyncedAt, context.locale) ?? '...');
       }
     }
 
     if (service.isSignedIn && status.activity == SyncActivity.active) {
-      trailing = const SizedBox.square(
-        dimension: 24,
-        child: CircularProgressIndicator.adaptive(),
-      );
+      trailing = const SizedBox.square(dimension: 24, child: CircularProgressIndicator.adaptive());
       subtitle = Text(tr("general.syncing"));
       onPressed = () => ShowBackupServiceRoute(service: service).push(context);
 
       if (status.currentStep != null) {
-        subtitle = Text(
-          "${tr("general.syncing")} ${status.currentStep!.stepNumber}/4",
-        );
+        subtitle = Text("${tr("general.syncing")} ${status.currentStep!.stepNumber}/4");
       }
     } else if (service.isSignedIn && status.activity == SyncActivity.queued) {
-      trailing = const SizedBox.square(
-        dimension: 24,
-        child: CircularProgressIndicator.adaptive(),
-      );
+      trailing = const SizedBox.square(dimension: 24, child: CircularProgressIndicator.adaptive());
       subtitle = Text(tr("list_tile.backup.waiting_to_sync_subtitle"));
       onPressed = () => ShowBackupServiceRoute(service: service).push(context);
     }
 
-    return ListTile(
-      onTap: onPressed,
-      leading: leading,
-      title: title,
-      subtitle: subtitle,
-      trailing: trailing,
-    );
+    return ListTile(onTap: onPressed, leading: leading, title: title, subtitle: subtitle, trailing: trailing);
   }
 }

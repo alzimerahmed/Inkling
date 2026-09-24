@@ -14,11 +14,7 @@ class _QuillMediaBlockEmbed extends quill.EmbedBuilder {
   final PageLayoutType? layoutType;
   final String embedKey;
 
-  _QuillMediaBlockEmbed({
-    required this.fetchAllMedia,
-    required this.layoutType,
-    this.embedKey = 'media',
-  });
+  _QuillMediaBlockEmbed({required this.fetchAllMedia, required this.layoutType, this.embedKey = 'media'});
 
   @override
   String get key => embedKey;
@@ -54,12 +50,7 @@ class _QuillMediaRenderer extends StatelessWidget {
 
   void remove() {
     if (readOnly) return;
-    controller.replaceText(
-      node.documentOffset,
-      node.length,
-      '',
-      controller.selection,
-    );
+    controller.replaceText(node.documentOffset, node.length, '', controller.selection);
   }
 
   void _updatePaths(List<String> newPaths) {
@@ -76,12 +67,7 @@ class _QuillMediaRenderer extends StatelessWidget {
       value: newPaths.join('|'),
       attributes: attributes,
     );
-    controller.replaceText(
-      node.documentOffset,
-      node.length,
-      delta,
-      controller.selection,
-    );
+    controller.replaceText(node.documentOffset, node.length, delta, controller.selection);
   }
 
   @override
@@ -103,23 +89,11 @@ class _QuillMediaRenderer extends StatelessWidget {
           height = null;
         } else {
           if (layoutType == PageLayoutType.grid) {
-            width = min(
-              constraints.maxWidth,
-              MediaQuery.textScalerOf(context).scale(88),
-            );
-            height = min(
-              constraints.maxWidth,
-              MediaQuery.textScalerOf(context).scale(88),
-            );
+            width = min(constraints.maxWidth, MediaQuery.textScalerOf(context).scale(88));
+            height = min(constraints.maxWidth, MediaQuery.textScalerOf(context).scale(88));
           } else {
-            width = min(
-              constraints.maxWidth,
-              MediaQuery.textScalerOf(context).scale(150),
-            );
-            height = min(
-              constraints.maxWidth,
-              MediaQuery.textScalerOf(context).scale(150),
-            );
+            width = min(constraints.maxWidth, MediaQuery.textScalerOf(context).scale(150));
+            height = min(constraints.maxWidth, MediaQuery.textScalerOf(context).scale(150));
           }
         }
 
@@ -127,11 +101,7 @@ class _QuillMediaRenderer extends StatelessWidget {
           width: double.infinity,
           alignment:
               _EmbedAlignmentAttribute.toAlignment(node) ??
-              AppTheme.getDirectionValue(
-                context,
-                Alignment.centerRight,
-                Alignment.centerLeft,
-              ),
+              AppTheme.getDirectionValue(context, Alignment.centerRight, Alignment.centerLeft),
           child: Stack(
             children: [
               GestureDetector(
@@ -139,9 +109,7 @@ class _QuillMediaRenderer extends StatelessWidget {
                 onLongPress: () async {
                   Feedback.forLongPress(context);
                   final relativePath = node.value.data;
-                  final asset = await AssetDbModel.findBy(
-                    relativePath: relativePath,
-                  );
+                  final asset = await AssetDbModel.findBy(relativePath: relativePath);
                   if (!context.mounted || asset == null) return;
                   SpAssetInfoSheet(
                     asset: asset,
@@ -154,19 +122,10 @@ class _QuillMediaRenderer extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8.0),
                     side: BorderSide(color: Theme.of(context).dividerColor),
                   ),
-                  child: SpMediaTile(
-                    link: link,
-                    width: width,
-                    height: height,
-                  ),
+                  child: SpMediaTile(link: link, width: width, height: height),
                 ),
               ),
-              if (!readOnly)
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: buildMoreVertButton(context),
-                ),
+              if (!readOnly) Positioned(top: 0, right: 0, child: buildMoreVertButton(context)),
             ],
           ),
         );
@@ -191,28 +150,17 @@ class _QuillMediaRenderer extends StatelessWidget {
           width: double.infinity,
           alignment:
               _EmbedAlignmentAttribute.toAlignment(node) ??
-              AppTheme.getDirectionValue(
-                context,
-                Alignment.centerRight,
-                Alignment.centerLeft,
-              ),
+              AppTheme.getDirectionValue(context, Alignment.centerRight, Alignment.centerLeft),
           child: Stack(
             children: [
               ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: maxWidth ?? double.infinity,
-                ),
+                constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
                 child: SpAlbumGrid(
                   paths: paths,
                   onTap: readOnly ? (index) => _viewMediaAt(context, paths, index) : null,
                 ),
               ),
-              if (!readOnly)
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: buildMoreVertButton(context),
-                ),
+              if (!readOnly) Positioned(top: 0, right: 0, child: buildMoreVertButton(context)),
             ],
           ),
         );
@@ -247,27 +195,19 @@ class _QuillMediaRenderer extends StatelessWidget {
             : () => _EmbedAlignmentAttribute.right.toggle(controller, node),
       ),
       IconButton(
-        icon: Icon(
-          _EmbedSizeAttribute.maxSize.hasApplied(node) ? SpIcons.zoomOut : SpIcons.zoomIn,
-        ),
+        icon: Icon(_EmbedSizeAttribute.maxSize.hasApplied(node) ? SpIcons.zoomOut : SpIcons.zoomIn),
         onPressed: () => _EmbedSizeAttribute.toggle(controller, node),
       ),
 
       IconButton(
         icon: isAlbum ? const Icon(SpIcons.edit) : const Icon(SpIcons.addPhoto),
         onPressed: () async {
-          final result = await SpAlbumManagementSheet(
-            paths: paths,
-          ).show<List<String>?>(context: context);
+          final result = await SpAlbumManagementSheet(paths: paths).show<List<String>?>(context: context);
           if (!context.mounted) return;
           if (result is List<String>) _updatePaths(result);
         },
       ),
-      IconButton(
-        color: ColorScheme.of(context).error,
-        icon: const Icon(SpIcons.delete),
-        onPressed: () => remove(),
-      ),
+      IconButton(color: ColorScheme.of(context).error, icon: const Icon(SpIcons.delete), onPressed: () => remove()),
     ];
 
     int rowCount = (buttons.length / 3).ceilToDouble().toInt();
@@ -311,9 +251,7 @@ class _QuillMediaRenderer extends StatelessWidget {
                     color: button.color,
                     style: IconButton.styleFrom(
                       side: selected ? BorderSide(color: Theme.of(context).dividerColor) : null,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
                     ),
                     onPressed: button.onPressed == null
                         ? null
@@ -329,10 +267,7 @@ class _QuillMediaRenderer extends StatelessWidget {
         );
       },
       builder: (callback) {
-        return IconButton.filledTonal(
-          icon: const Icon(SpIcons.moreVert),
-          onPressed: callback,
-        );
+        return IconButton.filledTonal(icon: const Icon(SpIcons.moreVert), onPressed: callback);
       },
     );
   }
@@ -343,31 +278,15 @@ class _QuillMediaRenderer extends StatelessWidget {
     List<String> media = fetchAllMedia();
 
     if (media.contains(link)) {
-      SpMediaViewer.fromString(
-        images: media,
-        initialIndex: media.indexOf(link),
-        context: context,
-      ).show(context);
+      SpMediaViewer.fromString(images: media, initialIndex: media.indexOf(link), context: context).show(context);
     } else {
-      SpMediaViewer.fromString(
-        images: [link],
-        initialIndex: 0,
-        context: context,
-      ).show(context);
+      SpMediaViewer.fromString(images: [link], initialIndex: 0, context: context).show(context);
     }
   }
 
-  Future<void> _viewMediaAt(
-    BuildContext context,
-    List<String> paths,
-    int index,
-  ) async {
+  Future<void> _viewMediaAt(BuildContext context, List<String> paths, int index) async {
     Feedback.forTap(context);
 
-    SpMediaViewer.fromString(
-      images: paths,
-      initialIndex: index,
-      context: context,
-    ).show(context);
+    SpMediaViewer.fromString(images: paths, initialIndex: index, context: context).show(context);
   }
 }

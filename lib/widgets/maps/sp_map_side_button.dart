@@ -28,11 +28,7 @@ class SpMapSideButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.0),
           border: Border.all(color: Theme.of(context).dividerColor),
           boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
-              blurRadius: 18.0,
-              offset: const Offset(0.0, 8.0),
-            ),
+            BoxShadow(color: Colors.black.withValues(alpha: 0.12), blurRadius: 18.0, offset: const Offset(0.0, 8.0)),
           ],
         ),
         child: Material(
@@ -44,9 +40,7 @@ class SpMapSideButton extends StatelessWidget {
               dimension: size,
               child: Center(
                 child: IconTheme(
-                  data: IconThemeData(
-                    color: isDanger ? colorScheme.error : colorScheme.onSurface,
-                  ),
+                  data: IconThemeData(color: isDanger ? colorScheme.error : colorScheme.onSurface),
                   child: icon,
                 ),
               ),

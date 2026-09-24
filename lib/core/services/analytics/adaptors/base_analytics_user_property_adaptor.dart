@@ -11,9 +11,7 @@ import 'package:storypad/core/types/time_format_option.dart';
 
 abstract class BaseAnalyticsUserPropertyAdaptor {
   static BaseAnalyticsUserPropertyAdaptor create() {
-    return kFirebaseAvailable
-        ? FirebaseAnalyticsUserPropertyAdaptor()
-        : NoneAnalyticsUserPropertyAdaptor();
+    return kFirebaseAvailable ? FirebaseAnalyticsUserPropertyAdaptor() : NoneAnalyticsUserPropertyAdaptor();
   }
 
   // ---------------------------------------------------------------------------
@@ -31,10 +29,7 @@ abstract class BaseAnalyticsUserPropertyAdaptor {
   }
 
   Future<void> logSetColorSeedTheme({Color? newColor}) {
-    return setUserProperty(
-      'color_seed',
-      newColor?.toARGB32().toString() ?? 'default',
-    );
+    return setUserProperty('color_seed', newColor?.toARGB32().toString() ?? 'default');
   }
 
   Future<void> logSetThemeMode({required ThemeMode newThemeMode}) {
@@ -57,9 +52,7 @@ abstract class BaseAnalyticsUserPropertyAdaptor {
     return setUserProperty('time_format', timeFormat?.label ?? 'system');
   }
 
-  Future<void> logSetFirstDayOfWeek({
-    required FirstDayOfWeekOption firstDayOfWeek,
-  }) {
+  Future<void> logSetFirstDayOfWeek({required FirstDayOfWeekOption firstDayOfWeek}) {
     return setUserProperty('first_day_of_week', firstDayOfWeek.name);
   }
 
@@ -67,10 +60,7 @@ abstract class BaseAnalyticsUserPropertyAdaptor {
     return setUserProperty('media_sync', mediaSync.name);
   }
 
-  Future<void> logToggleAddOn({
-    required AddOnType addOn,
-    required bool enabled,
-  }) {
+  Future<void> logToggleAddOn({required AddOnType addOn, required bool enabled}) {
     return setUserProperty('add_on_${addOn.name}', enabled.toString());
   }
 

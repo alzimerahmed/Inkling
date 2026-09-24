@@ -15,12 +15,7 @@ import 'package:storypad/widgets/sp_setting_icon_badge.dart';
 /// way to tell from inside the app — the SDK initialises perfectly happily and
 /// only the tiles never arrive, so a blank map looks identical to a slow one.
 class MapProviderTile extends StatelessWidget {
-  const MapProviderTile({
-    super.key,
-    required this.weekday,
-    required this.currentMapRenderer,
-    required this.onChanged,
-  });
+  const MapProviderTile({super.key, required this.weekday, required this.currentMapRenderer, required this.onChanged});
 
   final int weekday;
   final SpMapRenderer currentMapRenderer;
@@ -33,9 +28,7 @@ class MapProviderTile extends StatelessWidget {
         // already switched, wherever they are now. Hiding it the moment they
         // travel out of the region would be a one-way door.
         final bool visible =
-            SpMapRenderer.selectable(kLocalTimezone) ||
-            provider.preferences.mapRenderer != null ||
-            kDebugMode;
+            SpMapRenderer.selectable(kLocalTimezone) || provider.preferences.mapRenderer != null || kDebugMode;
         if (!visible) return const SizedBox.shrink();
 
         return MapProviderTile(
@@ -54,10 +47,7 @@ class MapProviderTile extends StatelessWidget {
       title: Text(context.tr('list_tile.map_provider.title')),
       subtitle: Text(currentMapRenderer.label),
       onTap: () {
-        SpMapProviderSheet(
-          mapRenderer: currentMapRenderer,
-          onChanged: onChanged,
-        ).show(context: context);
+        SpMapProviderSheet(mapRenderer: currentMapRenderer, onChanged: onChanged).show(context: context);
       },
     );
   }

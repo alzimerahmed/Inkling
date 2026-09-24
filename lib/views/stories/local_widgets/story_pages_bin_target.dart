@@ -5,11 +5,7 @@ class _StoryPagesBinTarget extends StatelessWidget {
   final void Function(int pageIndex) onDeletePage;
   final EdgeInsets mediaQueryPadding;
 
-  const _StoryPagesBinTarget({
-    required this.pagesManager,
-    required this.onDeletePage,
-    required this.mediaQueryPadding,
-  });
+  const _StoryPagesBinTarget({required this.pagesManager, required this.onDeletePage, required this.mediaQueryPadding});
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +20,9 @@ class _StoryPagesBinTarget extends StatelessWidget {
                   ? ColorScheme.of(context).errorContainer
                   : ColorScheme.of(context).readOnly.surface3,
             ),
-            padding: EdgeInsets.only(
-              top: 16.0,
-              bottom: mediaQueryPadding.bottom + 16.0,
-            ),
+            padding: EdgeInsets.only(top: 16.0, bottom: mediaQueryPadding.bottom + 16.0),
             child: candidateItems.isNotEmpty
-                ? Icon(
-                    SpIcons.deleteEmpty,
-                    size: 32,
-                    color: ColorScheme.of(context).error,
-                  )
+                ? Icon(SpIcons.deleteEmpty, size: 32, color: ColorScheme.of(context).error)
                 : const Icon(SpIcons.deleteOutline, size: 32),
           );
         },
@@ -41,9 +30,7 @@ class _StoryPagesBinTarget extends StatelessWidget {
       builder: (context, dragging, child) {
         return Visibility(
           visible: dragging && pagesManager.canDeletePage,
-          child: SpFadeIn.fromBottom(
-            child: child!,
-          ),
+          child: SpFadeIn.fromBottom(child: child!),
         );
       },
     );

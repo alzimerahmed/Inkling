@@ -6,10 +6,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/sp_single_state_widget.dart';
 
 class SpThemeModeSheet extends BaseBottomSheet {
-  const SpThemeModeSheet({
-    required this.themeMode,
-    required this.onChanged,
-  });
+  const SpThemeModeSheet({required this.themeMode, required this.onChanged});
 
   final ThemeMode themeMode;
   final void Function(ThemeMode themeMode) onChanged;
@@ -31,16 +28,11 @@ class SpThemeModeSheet extends BaseBottomSheet {
             children: [
               ...ThemeMode.values.map((themeMode) {
                 return ListTile(
-                  title: Text(
-                    ThemeModeTile.getLocalizedThemeMode(themeMode, context),
-                  ),
+                  title: Text(ThemeModeTile.getLocalizedThemeMode(themeMode, context)),
                   trailing: Visibility(
                     visible: themeMode == selectedThemeMode,
                     child: SpFadeIn.fromBottom(
-                      child: Icon(
-                        SpIcons.checkCircle,
-                        color: ColorScheme.of(context).primary,
-                      ),
+                      child: Icon(SpIcons.checkCircle, color: ColorScheme.of(context).primary),
                     ),
                   ),
                   onTap: () {

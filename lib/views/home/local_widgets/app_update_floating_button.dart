@@ -24,15 +24,10 @@ class _AppUpdateFloatingButton extends StatelessWidget {
                       ),
                     ),
                     icon: provider.displayStatus?.loading == true
-                        ? const SizedBox.square(
-                            dimension: 16.0,
-                            child: CircularProgressIndicator.adaptive(),
-                          )
+                        ? const SizedBox.square(dimension: 16.0, child: CircularProgressIndicator.adaptive())
                         : const Icon(SpIcons.update),
                     label: Text(provider.displayStatus?.label ?? ''),
-                    onPressed: provider.displayStatus?.loading == true
-                        ? null
-                        : () => provider.update(),
+                    onPressed: provider.displayStatus?.loading == true ? null : () => provider.update(),
                   );
                 },
               ),

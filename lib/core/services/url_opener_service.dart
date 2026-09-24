@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:io';
+
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -15,25 +16,17 @@ import 'package:url_launcher/url_launcher.dart' as launcher;
 export 'package:url_launcher/url_launcher.dart' show LaunchMode;
 
 class UrlOpenerService {
-  static Future<bool> launchUrlString(
-    String url, {
-    bool deeplinkOnly = false,
-  }) {
+  static Future<bool> launchUrlString(String url, {bool deeplinkOnly = false}) {
     final uri = Uri.parse(url);
 
     return launchUrl(
       uri,
-      mode: deeplinkOnly
-          ? launcher.LaunchMode.externalNonBrowserApplication
-          : launcher.LaunchMode.platformDefault,
+      mode: deeplinkOnly ? launcher.LaunchMode.externalNonBrowserApplication : launcher.LaunchMode.platformDefault,
     );
   }
 
   static Future<bool> canLaunchUrl(Uri uri) => launcher.canLaunchUrl(uri);
-  static Future<bool> launchUrl(
-    Uri uri, {
-    launcher.LaunchMode mode = launcher.LaunchMode.platformDefault,
-  }) async {
+  static Future<bool> launchUrl(Uri uri, {launcher.LaunchMode mode = launcher.LaunchMode.platformDefault}) async {
     if (await launcher.canLaunchUrl(uri)) {
       bool launched = false;
 
@@ -41,18 +34,14 @@ class UrlOpenerService {
         launched = await launcher.launchUrl(
           uri,
           mode: mode,
-          browserConfiguration: const launcher.BrowserConfiguration(
-            showTitle: true,
-          ),
+          browserConfiguration: const launcher.BrowserConfiguration(showTitle: true),
         );
       } catch (e) {
         debugPrint('$UrlOpenerService.launchUrl failed $e');
       }
 
       if (launched) {
-        AnalyticsService.instance.logLaunchUrl(
-          url: uri.toString(),
-        );
+        AnalyticsService.instance.logLaunchUrl(url: uri.toString());
       }
 
       return launched;
@@ -61,11 +50,7 @@ class UrlOpenerService {
     }
   }
 
-  static Future<void> openInCustomTab(
-    BuildContext context,
-    String url, {
-    bool prefersDeepLink = false,
-  }) async {
+  static Future<void> openInCustomTab(BuildContext context, String url, {bool prefersDeepLink = false}) async {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
@@ -74,27 +59,19 @@ class UrlOpenerService {
           return;
         }
 
-        Color toolbarColor =
-            Theme.of(context).appBarTheme.backgroundColor ?? Colors.white;
-        Color foregroundColor =
-            Theme.of(context).appBarTheme.foregroundColor ??
-            toolbarColor.darken(0.5);
+        Color toolbarColor = Theme.of(context).appBarTheme.backgroundColor ?? Colors.white;
+        Color foregroundColor = Theme.of(context).appBarTheme.foregroundColor ?? toolbarColor.darken(0.5);
 
-        AnalyticsService.instance.logOpenLinkInCustomTab(
-          url: url,
-        );
+        AnalyticsService.instance.logOpenLinkInCustomTab(url: url);
 
         await custom_tab.launchUrl(
           Uri.parse(url),
           prefersDeepLink: prefersDeepLink,
-          customTabsOptions: custom_tab.CustomTabsOptions(
-            colorSchemes: custom_tab.CustomTabsColorSchemes.defaults(),
-          ),
+          customTabsOptions: custom_tab.CustomTabsOptions(colorSchemes: custom_tab.CustomTabsColorSchemes.defaults()),
           safariVCOptions: custom_tab.SafariViewControllerOptions(
             preferredBarTintColor: toolbarColor,
             preferredControlTintColor: foregroundColor,
-            dismissButtonStyle:
-                custom_tab.SafariViewControllerDismissButtonStyle.close,
+            dismissButtonStyle: custom_tab.SafariViewControllerDismissButtonStyle.close,
           ),
         );
       },
@@ -111,10 +88,7 @@ class UrlOpenerService {
     openInCustomTab(context, href);
   }
 
-  static Future<void> openForRichContent({
-    required BuildContext context,
-    required String url,
-  }) async {
+  static Future<void> openForRichContent({required BuildContext context, required String url}) async {
     final result = await showModalActionSheet(
       context: context,
       actions: [

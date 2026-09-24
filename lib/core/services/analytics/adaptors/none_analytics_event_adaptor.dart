@@ -2,8 +2,7 @@ import 'package:storypad/core/services/analytics/adaptors/base_analytics_event_a
 
 class NoneAnalyticsEventAdaptor extends BaseAnalyticsEventAdaptor {
   @override
-  Future<void> logEvent(String name, {Map<String, Object>? parameters}) =>
-      Future.value();
+  Future<void> logEvent(String name, {Map<String, Object>? parameters}) => Future.value();
 
   @override
   Future<void> logScreenView({

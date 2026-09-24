@@ -53,12 +53,8 @@ class SpPagesToolbarState extends State<SpPagesToolbar> {
       titleFocusListenters[index] = () => titleFocusListener(index);
       bodyFocusListenters[index] = () => bodyFocusListener(index);
 
-      widget.pages[index].titleFocusNode.addListener(
-        titleFocusListenters[index]!,
-      );
-      widget.pages[index].bodyFocusNode.addListener(
-        bodyFocusListenters[index]!,
-      );
+      widget.pages[index].titleFocusNode.addListener(titleFocusListenters[index]!);
+      widget.pages[index].bodyFocusNode.addListener(bodyFocusListenters[index]!);
     }
   }
 
@@ -73,14 +69,10 @@ class SpPagesToolbarState extends State<SpPagesToolbar> {
   void clearPreviousListeners() {
     for (int index = 0; index < widget.pages.length; index++) {
       if (titleFocusListenters[index] != null) {
-        widget.pages[index].titleFocusNode.removeListener(
-          titleFocusListenters[index]!,
-        );
+        widget.pages[index].titleFocusNode.removeListener(titleFocusListenters[index]!);
       }
       if (bodyFocusListenters[index] != null) {
-        widget.pages[index].bodyFocusNode.removeListener(
-          bodyFocusListenters[index]!,
-        );
+        widget.pages[index].bodyFocusNode.removeListener(bodyFocusListenters[index]!);
       }
     }
 
@@ -101,9 +93,7 @@ class SpPagesToolbarState extends State<SpPagesToolbar> {
     if (widget.pages[index].titleFocusNode.hasFocus) {
       titleFocused = true;
     } else {
-      bool everyBodyNoFocus = widget.pages.every(
-        (e) => !e.bodyFocusNode.hasFocus,
-      );
+      bool everyBodyNoFocus = widget.pages.every((e) => !e.bodyFocusNode.hasFocus);
       if (everyBodyNoFocus && titleFocused) {
         titleFocused = true;
       } else {
@@ -139,27 +129,22 @@ class SpPagesToolbarState extends State<SpPagesToolbar> {
         children: [
           if (titleFocused) buildTitleToolbar(context),
           if (!titleFocused)
-            ...List.generate(
-              widget.pages.length,
-              (index) {
-                return Visibility(
-                  visible: index == bodyFocusedIndex,
-                  child: Container(
-                    color: widget.backgroundColor,
-                    padding: EdgeInsets.only(
-                      bottom:
-                          MediaQuery.of(context).padding.bottom +
-                          MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: editorAdapter.buildToolbar(
-                      context: context,
-                      controller: widget.pages[index].bodyController,
-                      backgroundColor: widget.backgroundColor,
-                    ),
+            ...List.generate(widget.pages.length, (index) {
+              return Visibility(
+                visible: index == bodyFocusedIndex,
+                child: Container(
+                  color: widget.backgroundColor,
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom,
                   ),
-                );
-              },
-            ),
+                  child: editorAdapter.buildToolbar(
+                    context: context,
+                    controller: widget.pages[index].bodyController,
+                    backgroundColor: widget.backgroundColor,
+                  ),
+                ),
+              );
+            }),
         ],
       ),
     );
@@ -171,9 +156,7 @@ class SpPagesToolbarState extends State<SpPagesToolbar> {
       padding: EdgeInsets.only(
         left: MediaQuery.of(context).padding.left,
         right: MediaQuery.of(context).padding.right,
-        bottom:
-            MediaQuery.of(context).padding.bottom +
-            MediaQuery.of(context).viewInsets.bottom,
+        bottom: MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom,
       ),
       child: _TitleToolbar(
         preferences: widget.preferences,

@@ -14,20 +14,11 @@ class BackupDatabasesToBackupObjectService {
     required DateTime lastUpdatedAt,
     SearchFilterObject? storyFilter,
     required bool hasCompression,
-    int?
-    year, // Optional: filter records by createdAt.year for v3 yearly backups
+    int? year, // Optional: filter records by createdAt.year for v3 yearly backups
   }) async {
-    debugPrint(
-      'BackupDatabasesToBackupObjectService#constructBackup year=$year hasCompression=$hasCompression',
-    );
-    Map<String, dynamic> tables = await _constructTables(
-      databases,
-      storyFilter: storyFilter,
-      year: year,
-    );
-    debugPrint(
-      'BackupDatabasesToBackupObjectService#constructBackup ${tables.keys}',
-    );
+    debugPrint('BackupDatabasesToBackupObjectService#constructBackup year=$year hasCompression=$hasCompression');
+    Map<String, dynamic> tables = await _constructTables(databases, storyFilter: storyFilter, year: year);
+    debugPrint('BackupDatabasesToBackupObjectService#constructBackup ${tables.keys}');
 
     return BackupObject(
       tables: tables,
@@ -61,18 +52,13 @@ class BackupDatabasesToBackupObjectService {
       if (isGlobalBucket && db.isYearPartitioned) continue;
       if (isYearlyBucket && !db.isYearPartitioned) continue;
 
-      Map<String, dynamic>? filters = isYearlyBucket
-          ? {'created_year': year}
-          : null;
+      Map<String, dynamic>? filters = isYearlyBucket ? {'created_year': year} : null;
 
       if (db.tableName == StoryDbModel.db.tableName && storyFilter != null) {
         filters ??= storyFilter.toDatabaseFilter();
       }
 
-      CollectionDbModel<BaseDbModel>? items = await db.where(
-        filters: filters,
-        returnDeleted: true,
-      );
+      CollectionDbModel<BaseDbModel>? items = await db.where(filters: filters, returnDeleted: true);
 
       tables[db.tableName] = items ?? CollectionDbModel(items: []);
     }
@@ -80,9 +66,7 @@ class BackupDatabasesToBackupObjectService {
     return compute(_toJson, tables);
   }
 
-  static Map<String, dynamic> _toJson(
-    Map<String, CollectionDbModel<BaseDbModel>?> tables,
-  ) {
+  static Map<String, dynamic> _toJson(Map<String, CollectionDbModel<BaseDbModel>?> tables) {
     Map<String, dynamic> result = {};
 
     tables.forEach((key, value) {

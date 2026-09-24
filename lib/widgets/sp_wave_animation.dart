@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class SpWaveAnimation extends StatefulWidget {
@@ -25,8 +26,7 @@ class SpWaveAnimation extends StatefulWidget {
   State<SpWaveAnimation> createState() => _SpWaveAnimationState();
 }
 
-class _SpWaveAnimationState extends State<SpWaveAnimation>
-    with SingleTickerProviderStateMixin {
+class _SpWaveAnimationState extends State<SpWaveAnimation> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
   late List<double> _waveOffsets;
@@ -46,29 +46,20 @@ class _SpWaveAnimationState extends State<SpWaveAnimation>
       (_) => _random.nextDouble() * 2 * pi, // Random phase offset
     );
 
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.animationDuration,
-    );
+    _controller = AnimationController(vsync: this, duration: widget.animationDuration);
 
     // Create a curved animation for smoother motion
     _animation =
         Tween<double>(
-            begin: 0,
-            end: _waveLength * _waveSpeed,
-          ).animate(
-            CurvedAnimation(
-              parent: _controller,
-              curve: Curves.linear,
-            ),
-          )
-          ..addListener(() {
-            if (mounted) {
-              setState(() {
-                // Trigger rebuild with the new animation value
-              });
-            }
-          });
+          begin: 0,
+          end: _waveLength * _waveSpeed,
+        ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear))..addListener(() {
+          if (mounted) {
+            setState(() {
+              // Trigger rebuild with the new animation value
+            });
+          }
+        });
 
     _controller.repeat();
   }
@@ -88,31 +79,16 @@ class _SpWaveAnimationState extends State<SpWaveAnimation>
     final position = index / widget.numberOfBars;
 
     // Base wave with smooth movement
-    final wave = sin(
-      wavePosition + position * _waveLength * 1.5 + _waveOffsets[index],
-    );
+    final wave = sin(wavePosition + position * _waveLength * 1.5 + _waveOffsets[index]);
 
     // Secondary wave with different frequency for organic feel
-    final secondaryWave =
-        sin(
-          wavePosition * 0.7 +
-              position * _waveLength * 2.0 +
-              _waveOffsets[index],
-        ) *
-        0.3;
+    final secondaryWave = sin(wavePosition * 0.7 + position * _waveLength * 2.0 + _waveOffsets[index]) * 0.3;
 
     // Tertiary wave for subtle variation
-    final tertiaryWave =
-        cos(
-          wavePosition * 0.3 +
-              position * _waveLength * 0.5 -
-              _waveOffsets[index],
-        ) *
-        0.2;
+    final tertiaryWave = cos(wavePosition * 0.3 + position * _waveLength * 0.5 - _waveOffsets[index]) * 0.2;
 
     // Combine waves with different weights for natural movement
-    final waveValue =
-        (wave * 0.7 + secondaryWave * 0.2 + tertiaryWave * 0.1) * 0.8;
+    final waveValue = (wave * 0.7 + secondaryWave * 0.2 + tertiaryWave * 0.1) * 0.8;
 
     // Normalize to 0.1-0.9 range and apply wave height
     return 0.1 + ((waveValue + 1) / 2) * widget.waveHeight * 0.8;
@@ -175,15 +151,10 @@ class _WavePainter extends CustomPainter {
         end: Alignment.bottomCenter,
       );
 
-      _paint.shader = gradient.createShader(
-        Rect.fromLTWH(left, top, barWidth, height),
-      );
+      _paint.shader = gradient.createShader(Rect.fromLTWH(left, top, barWidth, height));
 
       // Draw rounded rectangle for each bar
-      final rect = RRect.fromRectAndRadius(
-        Rect.fromLTWH(left, top, barWidth, height),
-        Radius.circular(radius),
-      );
+      final rect = RRect.fromRectAndRadius(Rect.fromLTWH(left, top, barWidth, height), Radius.circular(radius));
 
       canvas.drawRRect(rect, _paint);
     }

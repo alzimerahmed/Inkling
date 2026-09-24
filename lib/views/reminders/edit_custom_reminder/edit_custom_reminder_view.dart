@@ -29,16 +29,11 @@ class EditCustomReminderRoute extends BaseRoute {
   final bool isNew;
 
   @override
-  Widget buildPage(BuildContext context) =>
-      EditCustomReminderView(reminder: reminder, isNew: isNew);
+  Widget buildPage(BuildContext context) => EditCustomReminderView(reminder: reminder, isNew: isNew);
 }
 
 class EditCustomReminderView extends StatelessWidget {
-  const EditCustomReminderView({
-    super.key,
-    required this.reminder,
-    this.isNew = false,
-  });
+  const EditCustomReminderView({super.key, required this.reminder, this.isNew = false});
 
   final ReminderObject reminder;
   final bool isNew;
@@ -46,8 +41,7 @@ class EditCustomReminderView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<EditCustomReminderViewModel>(
-      create: (context) =>
-          EditCustomReminderViewModel(reminder: reminder, isNew: isNew),
+      create: (context) => EditCustomReminderViewModel(reminder: reminder, isNew: isNew),
       builder: (context, child) {
         return _EditCustomReminderContent(Provider.of(context));
       },

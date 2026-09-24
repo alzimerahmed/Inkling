@@ -28,9 +28,7 @@ class _AutoBackupTileState extends State<AutoBackupTile> {
 
   Future<void> _load() async {
     final enabled = await AutoBackupEnabledStorage().read() ?? false;
-    final interval =
-        await AutoBackupIntervalStorage().read() ??
-        AutoBackupService.intervalOptionsInHours.first;
+    final interval = await AutoBackupIntervalStorage().read() ?? AutoBackupService.intervalOptionsInHours.first;
     if (mounted)
       setState(() {
         _enabled = enabled;
@@ -40,26 +38,16 @@ class _AutoBackupTileState extends State<AutoBackupTile> {
 
   String _label(int hours) {
     if (hours >= 24 && hours % 24 == 0) {
-      return tr(
-        'page.settings.auto_backup.interval_days',
-        namedArgs: {'DAYS': '${hours ~/ 24}'},
-      );
+      return tr('page.settings.auto_backup.interval_days', namedArgs: {'DAYS': '${hours ~/ 24}'});
     }
-    return tr(
-      'page.settings.auto_backup.interval_hours',
-      namedArgs: {'HOURS': '$hours'},
-    );
+    return tr('page.settings.auto_backup.interval_hours', namedArgs: {'HOURS': '$hours'});
   }
 
   Future<void> pickInterval(BuildContext context) async {
-    final current =
-        _intervalHours ?? AutoBackupService.intervalOptionsInHours.first;
+    final current = _intervalHours ?? AutoBackupService.intervalOptionsInHours.first;
     await SpPickerSheet(
       selectedValue: current,
-      options: [
-        for (final hours in AutoBackupService.intervalOptionsInHours)
-          (value: hours, label: _label(hours)),
-      ],
+      options: [for (final hours in AutoBackupService.intervalOptionsInHours) (value: hours, label: _label(hours))],
       onChanged: (hours) async {
         await AutoBackupIntervalStorage().write(hours);
         await AutoBackupEnabledStorage().write(true);
@@ -82,18 +70,10 @@ class _AutoBackupTileState extends State<AutoBackupTile> {
     final bool enabled = _enabled ?? false;
 
     return ListTile(
-      leading: SpSettingIconBadge(
-        weekday: widget.weekday,
-        icon: SpIcons.cloudUpload,
-      ),
+      leading: SpSettingIconBadge(weekday: widget.weekday, icon: SpIcons.cloudUpload),
       title: Text(tr('page.settings.auto_backup.title')),
       subtitle: enabled
-          ? Text(
-              _label(
-                _intervalHours ??
-                    AutoBackupService.intervalOptionsInHours.first,
-              ),
-            )
+          ? Text(_label(_intervalHours ?? AutoBackupService.intervalOptionsInHours.first))
           : Text(tr('general.off')),
       onTap: () => pickInterval(context),
       trailing: Switch(value: enabled, onChanged: toggle),

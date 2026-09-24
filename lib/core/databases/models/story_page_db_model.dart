@@ -23,13 +23,7 @@ class StoryPageDbModel {
   // List: Returns JSON-serializable version of quill delta.
   final List<dynamic>? body;
 
-  StoryPageDbModel({
-    required this.id,
-    required this.title,
-    required this.body,
-    this.wordCount,
-    this.characterCount,
-  });
+  StoryPageDbModel({required this.id, required this.title, required this.body, this.wordCount, this.characterCount});
 
   Map<String, dynamic> toJson() => _$StoryPageDbModelToJson(this);
   factory StoryPageDbModel.fromJson(Map<String, dynamic> json) => _$StoryPageDbModelFromJson(json);

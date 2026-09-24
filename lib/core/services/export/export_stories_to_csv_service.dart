@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:csv/csv.dart' as csv_pkg;
 import 'package:storypad/core/databases/models/story_content_db_model.dart';
 import 'package:storypad/core/databases/models/story_db_model.dart';
@@ -6,17 +7,7 @@ import 'package:storypad/core/services/quill/quill_delta_to_plain_text_service.d
 
 /// Service to export stories to a single CSV file, one row per story.
 class ExportStoriesToCsvService {
-  static const List<String> header = [
-    'id',
-    'year',
-    'month',
-    'day',
-    'title',
-    'body',
-    'tags',
-    'starred',
-    'pinned',
-  ];
+  static const List<String> header = ['id', 'year', 'month', 'day', 'title', 'body', 'tags', 'starred', 'pinned'];
 
   /// [tagNameGetter] - Optional callback to resolve tag ID to tag name
   static Future<File> call({
@@ -53,14 +44,9 @@ class ExportStoriesToCsvService {
 
     String tagsCell = '';
     if (story.validTags?.isNotEmpty == true && tagNameGetter != null) {
-      final tagNames = await Future.wait(
-        story.validTags!.map((tagId) => tagNameGetter(tagId)),
-      );
+      final tagNames = await Future.wait(story.validTags!.map((tagId) => tagNameGetter(tagId)));
 
-      final validTagNames = tagNames
-          .whereType<String>()
-          .where((name) => name.isNotEmpty)
-          .toList();
+      final validTagNames = tagNames.whereType<String>().where((name) => name.isNotEmpty).toList();
       tagsCell = validTagNames.join('|');
     }
 

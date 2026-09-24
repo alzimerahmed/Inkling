@@ -11,18 +11,10 @@ class AppLockObject {
   final bool? enabledBiometric;
   final Map<AppLockQuestion, String>? securityAnswers;
 
-  AppLockObject({
-    required this.pin,
-    required this.enabledBiometric,
-    required this.securityAnswers,
-  });
+  AppLockObject({required this.pin, required this.enabledBiometric, required this.securityAnswers});
 
   factory AppLockObject.init() {
-    return AppLockObject(
-      pin: null,
-      enabledBiometric: false,
-      securityAnswers: null,
-    );
+    return AppLockObject(pin: null, enabledBiometric: false, securityAnswers: null);
   }
 
   Map<String, dynamic> toJson() => _$AppLockObjectToJson(this);

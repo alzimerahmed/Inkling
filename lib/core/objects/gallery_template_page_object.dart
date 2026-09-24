@@ -9,10 +9,7 @@ class GalleryTemplatePageObject {
   final String title;
   final String content;
 
-  const GalleryTemplatePageObject({
-    required this.title,
-    required this.content,
-  });
+  const GalleryTemplatePageObject({required this.title, required this.content});
 
   factory GalleryTemplatePageObject.fromJson(Map<String, dynamic> json) => _$GalleryTemplatePageObjectFromJson(json);
 

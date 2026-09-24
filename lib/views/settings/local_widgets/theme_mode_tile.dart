@@ -9,12 +9,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/sp_setting_icon_badge.dart';
 
 class ThemeModeTile extends StatelessWidget {
-  const ThemeModeTile({
-    super.key,
-    required this.weekday,
-    required this.currentThemeMode,
-    required this.onChanged,
-  });
+  const ThemeModeTile({super.key, required this.weekday, required this.currentThemeMode, required this.onChanged});
 
   final int weekday;
 
@@ -35,9 +30,7 @@ class ThemeModeTile extends StatelessWidget {
 
   bool isDarkMode(BuildContext context) {
     if (currentThemeMode == ThemeMode.system) {
-      Brightness? brightness = View.maybeOf(
-        context,
-      )?.platformDispatcher.platformBrightness;
+      Brightness? brightness = View.maybeOf(context)?.platformDispatcher.platformBrightness;
       return brightness == Brightness.dark;
     } else {
       return currentThemeMode == ThemeMode.dark;
@@ -51,24 +44,15 @@ class ThemeModeTile extends StatelessWidget {
         weekday: weekday,
         child: SpAnimatedIcons(
           duration: Durations.medium4,
-          firstChild: Icon(
-            SpIcons.darkMode,
-            color: ColorFromDayService(context: context).getForeground(),
-          ),
-          secondChild: Icon(
-            SpIcons.lightMode,
-            color: ColorFromDayService(context: context).getForeground(),
-          ),
+          firstChild: Icon(SpIcons.darkMode, color: ColorFromDayService(context: context).getForeground()),
+          secondChild: Icon(SpIcons.lightMode, color: ColorFromDayService(context: context).getForeground()),
           showFirst: isDarkMode(context),
         ),
       ),
       title: Text(tr('list_tile.theme_mode.title')),
       subtitle: Text(getLocalizedThemeMode(currentThemeMode, context)),
       onTap: () {
-        SpThemeModeSheet(
-          themeMode: currentThemeMode,
-          onChanged: onChanged,
-        ).show(context: context);
+        SpThemeModeSheet(themeMode: currentThemeMode, onChanged: onChanged).show(context: context);
       },
     );
   }

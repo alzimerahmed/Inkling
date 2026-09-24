@@ -35,10 +35,7 @@ void main() {
 
     test('promotes a short first line to title for body-only drafts', () {
       final story = ImportStoryMapper.toStory(
-        draft: ImportedStoryDraft(
-          date: DateTime(2023, 1, 2),
-          body: 'Short title\nLonger body follows here',
-        ),
+        draft: ImportedStoryDraft(date: DateTime(2023, 1, 2), body: 'Short title\nLonger body follows here'),
         id: 456,
         tagIds: [],
       );

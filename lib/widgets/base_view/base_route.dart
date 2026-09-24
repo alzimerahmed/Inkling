@@ -30,14 +30,8 @@ abstract class BaseRoute {
 
   Widget buildPage(BuildContext context);
 
-  Future<T?> push<T extends Object?>(
-    BuildContext context, {
-    bool rootNavigator = false,
-  }) async {
-    AnalyticsService.instance.logViewRoute(
-      routeObject: this,
-      analyticsParameters: analyticsParameters,
-    );
+  Future<T?> push<T extends Object?>(BuildContext context, {bool rootNavigator = false}) async {
+    AnalyticsService.instance.logViewRoute(routeObject: this, analyticsParameters: analyticsParameters);
 
     if (!context.mounted) return null;
 
@@ -47,26 +41,14 @@ abstract class BaseRoute {
     final nestedNavigator = SpNestedNavigation.maybeOf(context);
 
     if (nestedNavigator != null || routeName == null) {
-      return Navigator.of(
-        context,
-        rootNavigator: rootNavigator,
-      ).push(buildRoute<T>(context));
+      return Navigator.of(context, rootNavigator: rootNavigator).push(buildRoute<T>(context));
     } else {
-      return Navigator.of(
-        context,
-        rootNavigator: rootNavigator,
-      ).pushNamed(routeName!, arguments: this);
+      return Navigator.of(context, rootNavigator: rootNavigator).pushNamed(routeName!, arguments: this);
     }
   }
 
-  Future<T?> pushReplacement<T extends Object?>(
-    BuildContext context, {
-    bool rootNavigator = false,
-  }) {
-    AnalyticsService.instance.logViewRoute(
-      routeObject: this,
-      analyticsParameters: analyticsParameters,
-    );
+  Future<T?> pushReplacement<T extends Object?>(BuildContext context, {bool rootNavigator = false}) {
+    AnalyticsService.instance.logViewRoute(routeObject: this, analyticsParameters: analyticsParameters);
 
     // - When a SpNestedNavigation exists: use pushReplacement() so the tag view is stacked locally and the sidebar selection is preserved.
     // - When no SpNestedNavigation exists and routeName is null: use pushReplacement() directly as well.
@@ -74,15 +56,9 @@ abstract class BaseRoute {
     final nestedNavigator = SpNestedNavigation.maybeOf(context);
 
     if (nestedNavigator != null || routeName == null) {
-      return Navigator.of(
-        context,
-        rootNavigator: rootNavigator,
-      ).pushReplacement(buildRoute<T>(context));
+      return Navigator.of(context, rootNavigator: rootNavigator).pushReplacement(buildRoute<T>(context));
     } else {
-      return Navigator.of(
-        context,
-        rootNavigator: rootNavigator,
-      ).pushReplacementNamed(routeName!, arguments: this);
+      return Navigator.of(context, rootNavigator: rootNavigator).pushReplacementNamed(routeName!, arguments: this);
     }
   }
 
@@ -92,28 +68,18 @@ abstract class BaseRoute {
         : buildMaterialRoute(context: context, fullscreenDialog: false);
   }
 
-  PageRoute<T> buildCupertinoRoute<T>({
-    required BuildContext context,
-    required bool fullscreenDialog,
-  }) {
+  PageRoute<T> buildCupertinoRoute<T>({required BuildContext context, required bool fullscreenDialog}) {
     return CupertinoSheetRoute<T>(
       scrollableBuilder: (context, controller) =>
-          SpCupertinoFullPageSheetConfigurations(
-            context: context,
-            child: buildPage(context),
-          ),
+          SpCupertinoFullPageSheetConfigurations(context: context, child: buildPage(context)),
     );
   }
 
-  PageRoute<T> buildMaterialRoute<T>({
-    required BuildContext context,
-    required bool fullscreenDialog,
-  }) {
+  PageRoute<T> buildMaterialRoute<T>({required BuildContext context, required bool fullscreenDialog}) {
     if (fullscreenDialog) {
       return PageRouteBuilder(
         fullscreenDialog: fullscreenDialog,
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            buildPage(context),
+        pageBuilder: (context, animation, secondaryAnimation) => buildPage(context),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SharedAxisTransition(
             animation: animation,
@@ -125,9 +91,6 @@ abstract class BaseRoute {
       );
     }
 
-    return MaterialPageRoute<T>(
-      fullscreenDialog: fullscreenDialog,
-      builder: (context) => buildPage(context),
-    );
+    return MaterialPageRoute<T>(fullscreenDialog: fullscreenDialog, builder: (context) => buildPage(context));
   }
 }

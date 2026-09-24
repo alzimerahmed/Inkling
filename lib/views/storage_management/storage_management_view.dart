@@ -30,18 +30,14 @@ class StorageManagementRoute extends BaseRoute {
 }
 
 class StorageManagementView extends StatelessWidget {
-  const StorageManagementView({
-    super.key,
-    required this.params,
-  });
+  const StorageManagementView({super.key, required this.params});
 
   final StorageManagementRoute params;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<StorageManagementViewModel>(
-      create: (context) =>
-          StorageManagementViewModel(params: params, context: context),
+      create: (context) => StorageManagementViewModel(params: params, context: context),
       builder: (context, child) {
         return _StorageManagementContent(Provider.of(context));
       },

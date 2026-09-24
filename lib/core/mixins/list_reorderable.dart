@@ -1,8 +1,5 @@
 extension ListReoderable<T> on List<T> {
-  List<T> swap({
-    required int oldIndex,
-    required int newIndex,
-  }) {
+  List<T> swap({required int oldIndex, required int newIndex}) {
     List<T> newItems = [...this];
     final temp = newItems[oldIndex];
 
@@ -12,10 +9,7 @@ extension ListReoderable<T> on List<T> {
     return newItems;
   }
 
-  List<T> reorder({
-    required int oldIndex,
-    required int newIndex,
-  }) {
+  List<T> reorder({required int oldIndex, required int newIndex}) {
     if (oldIndex < 0 || oldIndex >= length) return this;
     if (newIndex < 0 || newIndex > length) return this;
 

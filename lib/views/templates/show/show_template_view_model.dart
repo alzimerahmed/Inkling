@@ -19,8 +19,7 @@ import 'package:storypad/widgets/bottom_sheets/sp_template_info_sheet.dart';
 
 import 'show_template_view.dart';
 
-class ShowTemplateViewModel extends ChangeNotifier
-    with DisposeAwareMixin, DebounchedCallback {
+class ShowTemplateViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
   final ShowTemplateRoute params;
   final PageController pageController = PageController();
 
@@ -55,13 +54,8 @@ class ShowTemplateViewModel extends ChangeNotifier
   }
 
   void useTemplate(BuildContext context) async {
-    AnalyticsService.instance.logUseGalleryTemplate(
-      templateId: template.id.toString(),
-      source: 'my_templates',
-    );
-    GalleryTemplateUsageService.instance.recordTemplateUsage(
-      templateId: template.id.toString(),
-    );
+    AnalyticsService.instance.logUseGalleryTemplate(templateId: template.id.toString(), source: 'my_templates');
+    GalleryTemplateUsageService.instance.recordTemplateUsage(templateId: template.id.toString());
 
     final result = await EditStoryRoute(
       initialYear: params.initialYear,
@@ -79,17 +73,11 @@ class ShowTemplateViewModel extends ChangeNotifier
   }
 
   void goToPreviousStories(BuildContext context) async {
-    TemplateStoriesRoute(
-      template: template,
-      galleryTemplate: null,
-    ).push(context);
+    TemplateStoriesRoute(template: template, galleryTemplate: null).push(context);
   }
 
   Future<void> goToEditPage(BuildContext context) async {
-    await EditTemplateRoute(
-      initialTemplate: template,
-      flowType: .update,
-    ).push(context);
+    await EditTemplateRoute(initialTemplate: template, flowType: .update).push(context);
     template = await TemplateDbModel.db.find(template.id) ?? template;
     _setTemplate(template);
     await load();
@@ -97,8 +85,7 @@ class ShowTemplateViewModel extends ChangeNotifier
 
   void _setTemplate(TemplateDbModel template) {
     this.template = template;
-    draftContent =
-        template.content ?? StoryContentDbModel.create(createdAt: openedOn);
+    draftContent = template.content ?? StoryContentDbModel.create(createdAt: openedOn);
 
     bool alreadyHasPage = draftContent?.richPages?.isNotEmpty == true;
     if (!alreadyHasPage) draftContent = draftContent?.addRichPage();
@@ -112,25 +99,17 @@ class ShowTemplateViewModel extends ChangeNotifier
   }
 
   void archive(BuildContext context) async {
-    TemplateDbModel archivedTemplate = template.copyWith(
-      archivedAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    );
+    TemplateDbModel archivedTemplate = template.copyWith(archivedAt: DateTime.now(), updatedAt: DateTime.now());
     await TemplateDbModel.db.set(archivedTemplate);
 
     if (context.mounted) {
-      MessengerService.of(
-        context,
-      ).showSnackBar(tr('snack_bar.archive_success'), success: true);
+      MessengerService.of(context).showSnackBar(tr('snack_bar.archive_success'), success: true);
       Navigator.maybePop(context);
     }
   }
 
   void putBack(BuildContext context) async {
-    TemplateDbModel putBackTemplate = template.copyWith(
-      archivedAt: null,
-      updatedAt: DateTime.now(),
-    );
+    TemplateDbModel putBackTemplate = template.copyWith(archivedAt: null, updatedAt: DateTime.now());
     await TemplateDbModel.db.set(putBackTemplate);
 
     if (context.mounted) {
@@ -153,9 +132,6 @@ class ShowTemplateViewModel extends ChangeNotifier
   }
 
   void showInfo(BuildContext context) {
-    SpTemplateInfoSheet(
-      template: template,
-      persisted: true,
-    ).show(context: context);
+    SpTemplateInfoSheet(template: template, persisted: true).show(context: context);
   }
 }

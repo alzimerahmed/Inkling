@@ -2,20 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:storypad/views/onboarding/steps/step_3/onboarding_step_3_view.dart';
 import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
 import 'package:storypad/views/onboarding/steps/step_4/onboarding_step_4_view.dart';
+
 import 'onboarding_step_2_view.dart';
 
 class OnboardingStep2ViewModel extends ChangeNotifier with DisposeAwareMixin {
   final OnboardingStep2Route params;
 
-  OnboardingStep2ViewModel({
-    required this.params,
-  }) {
+  OnboardingStep2ViewModel({required this.params}) {
     startAnimations();
   }
 
-  final Duration storyDetailsAnimationDuration = const Duration(
-    milliseconds: 1500,
-  );
+  final Duration storyDetailsAnimationDuration = const Duration(milliseconds: 1500);
   final Duration toolbarFadeInDuration = const Duration(milliseconds: 750);
 
   final ValueNotifier<bool> showStoryDetailsPageNotifier = ValueNotifier(false);
@@ -65,8 +62,7 @@ class OnboardingStep2ViewModel extends ChangeNotifier with DisposeAwareMixin {
   void enableAutoscrollToolbar() {
     if (disposed) return;
     if (!toolbarScrollController.hasClients) return;
-    if (toolbarScrollController.offset != 0)
-      toolbarScrollController.jumpTo(0.0);
+    if (toolbarScrollController.offset != 0) toolbarScrollController.jumpTo(0.0);
 
     toolbarScrollController.animateTo(
       toolbarScrollController.position.maxScrollExtent,

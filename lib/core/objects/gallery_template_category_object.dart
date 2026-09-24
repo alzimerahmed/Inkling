@@ -11,11 +11,7 @@ class GalleryTemplateCategoryObject {
   final String description;
   final List<GalleryTemplateObject> templates;
 
-  const GalleryTemplateCategoryObject({
-    required this.name,
-    required this.description,
-    required this.templates,
-  });
+  const GalleryTemplateCategoryObject({required this.name, required this.description, required this.templates});
 
   factory GalleryTemplateCategoryObject.fromJson(Map<String, dynamic> json) =>
       _$GalleryTemplateCategoryObjectFromJson(json);

@@ -20,10 +20,7 @@ class AddOnsRoute extends BaseRoute {
 }
 
 class AddOnsView extends StatelessWidget {
-  const AddOnsView({
-    super.key,
-    required this.params,
-  });
+  const AddOnsView({super.key, required this.params});
 
   final AddOnsRoute params;
 

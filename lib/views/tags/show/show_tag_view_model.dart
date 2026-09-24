@@ -12,14 +12,13 @@ import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
 import 'package:storypad/core/databases/models/tag_db_model.dart';
 import 'package:storypad/core/objects/search_filter_object.dart';
 import 'package:storypad/views/search/search_view.dart';
+
 import 'show_tag_view.dart';
 
 class ShowTagViewModel extends ChangeNotifier with DisposeAwareMixin {
   final ShowTagRoute params;
 
-  ShowTagViewModel({
-    required this.params,
-  }) {
+  ShowTagViewModel({required this.params}) {
     _tag = params.tag;
     load();
   }
@@ -29,12 +28,7 @@ class ShowTagViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   List<int>? years;
 
-  late final initialTune = SearchFilterObject(
-    years: {},
-    types: {},
-    tagIds: {tag.id},
-    assetId: null,
-  );
+  late final initialTune = SearchFilterObject(years: {}, types: {}, tagIds: {tag.id}, assetId: null);
 
   Future<void> load() async {
     years = await StoryDbModel.db
@@ -71,10 +65,7 @@ class ShowTagViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   Future<void> goToNewPage(BuildContext context) async {
-    await EditStoryRoute(
-      id: null,
-      initialTagIds: [tag.id],
-    ).push(context);
+    await EditStoryRoute(id: null, initialTagIds: [tag.id]).push(context);
 
     refreshList();
 
@@ -84,17 +75,11 @@ class ShowTagViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   Future<void> goToSearchPage(BuildContext context) async {
-    await SearchRoute(
-      initialFilter: initialTune,
-    ).push(context);
+    await SearchRoute(initialFilter: initialTune).push(context);
     refreshList();
   }
 
-  Future<void> onPopInvokedWithResult(
-    bool didPop,
-    dynamic result,
-    BuildContext context,
-  ) async {
+  Future<void> onPopInvokedWithResult(bool didPop, dynamic result, BuildContext context) async {
     if (didPop) return;
 
     bool shouldPop = true;
@@ -109,9 +94,6 @@ class ShowTagViewModel extends ChangeNotifier with DisposeAwareMixin {
       shouldPop = result == OkCancelResult.ok;
     }
 
-    if (shouldPop &&
-        context.mounted &&
-        ModalRoute.of(context)?.isCurrent == true)
-      Navigator.of(context).pop(result);
+    if (shouldPop && context.mounted && ModalRoute.of(context)?.isCurrent == true) Navigator.of(context).pop(result);
   }
 }

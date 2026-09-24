@@ -4,26 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
 import 'package:storypad/core/databases/models/asset_db_model.dart';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
-    as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
 import 'package:storypad/core/services/analytics/analytics_service.dart';
 import 'package:storypad/core/services/internet_checker_service.dart';
 import 'package:storypad/core/services/messenger_service.dart';
 import 'package:storypad/providers/backup_provider.dart';
+
 import 'library_view.dart';
 
 class LibraryViewModel extends ChangeNotifier with DisposeAwareMixin {
   final LibraryRoute params;
 
-  LibraryViewModel({
-    required this.params,
-  });
+  LibraryViewModel({required this.params});
 
-  Future<void> deleteAsset(
-    BuildContext context,
-    AssetDbModel asset,
-    int storyCount,
-  ) async {
+  Future<void> deleteAsset(BuildContext context, AssetDbModel asset, int storyCount) async {
     // This is important as user could just recently deleted the story with this asset in it which show a snack to undo.
     // So if we don't clear it, it will show the snack bar, user can restore back the story, but the asset will still be deleted.
     // This is rare case, but still important to handle.
@@ -54,11 +48,7 @@ class LibraryViewModel extends ChangeNotifier with DisposeAwareMixin {
     }
   }
 
-  Future<bool> _deleteAsset(
-    BuildContext context,
-    AssetDbModel asset,
-    int storyCount,
-  ) async {
+  Future<bool> _deleteAsset(BuildContext context, AssetDbModel asset, int storyCount) async {
     AnalyticsService.instance.logDeleteAsset(asset: asset);
 
     final provider = context.read<BackupProvider>();
@@ -73,9 +63,7 @@ class LibraryViewModel extends ChangeNotifier with DisposeAwareMixin {
     // trashes them after a grace period, so an unreachable leftover gets
     // caught the next time this asset's other provider is connected and
     // Optimize runs there.
-    final destinations = asset.matchingCloudDestinationsFor(
-      provider.signedInServices,
-    );
+    final destinations = asset.matchingCloudDestinationsFor(provider.signedInServices);
 
     for (final destination in destinations) {
       final service = provider.repository.getService(destination.serviceType);

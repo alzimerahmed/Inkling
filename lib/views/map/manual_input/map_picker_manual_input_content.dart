@@ -14,9 +14,7 @@ class _MapPickerManualInputContent extends StatelessWidget {
         title: Text(tr("button.manual_input")),
         actions: [
           FilledButton(
-            onPressed: viewModel.canConfirm
-                ? () => viewModel.apply(context)
-                : null,
+            onPressed: viewModel.canConfirm ? () => viewModel.apply(context) : null,
             child: Text(tr("button.save")),
           ),
           const SizedBox(width: 12.0),
@@ -37,10 +35,7 @@ class _MapPickerManualInputContent extends StatelessWidget {
             onSubmitted: (_) {
               if (viewModel.canConfirm) viewModel.apply(context);
             },
-            decoration: InputDecoration(
-              labelText: tr("input.coordinates.label"),
-              errorText: viewModel.errorText,
-            ),
+            decoration: InputDecoration(labelText: tr("input.coordinates.label"), errorText: viewModel.errorText),
           ),
           const SizedBox(height: 12.0),
           _buildFormatHints(context),
@@ -62,11 +57,10 @@ class _MapPickerManualInputContent extends StatelessWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final TextStyle? labelStyle = textTheme.bodySmall;
-    final TextStyle valueStyle = (textTheme.bodySmall ?? const TextStyle())
-        .copyWith(
-          fontWeight: FontWeight.bold,
-          color: colorScheme.primary,
-        );
+    final TextStyle valueStyle = (textTheme.bodySmall ?? const TextStyle()).copyWith(
+      fontWeight: FontWeight.bold,
+      color: colorScheme.primary,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,10 +101,7 @@ class _MapPickerManualInputContent extends StatelessWidget {
           SizedBox(height: 16.0),
           Row(
             children: [
-              SizedBox.square(
-                dimension: 18.0,
-                child: CircularProgressIndicator.adaptive(),
-              ),
+              SizedBox.square(dimension: 18.0, child: CircularProgressIndicator.adaptive()),
               SizedBox(width: 12.0),
               Expanded(child: Text('Resolving location…')),
             ],
@@ -138,11 +129,7 @@ class _MapPickerManualInputContent extends StatelessWidget {
           contentPadding: EdgeInsets.zero,
           leading: Icon(SpIcons.locationPin, color: colorScheme.primary),
           title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
-          subtitle: Text(
-            subtitle,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+          subtitle: Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
         ),
         const SizedBox(height: 8.0),
         _MapPreview(place: place),
@@ -163,21 +150,13 @@ class _MapPreview extends StatefulWidget {
 class _MapPreviewState extends State<_MapPreview> {
   final SpMapController _mapController = SpMapController();
 
-  SpMapCamera get _camera => SpMapCamera(
-    target: SpLatLng(widget.place.latitude, widget.place.longitude),
-    zoom: 15.0,
-  );
+  SpMapCamera get _camera => SpMapCamera(target: SpLatLng(widget.place.latitude, widget.place.longitude), zoom: 15.0);
 
   @override
   void didUpdateWidget(_MapPreview oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.place.latitude != oldWidget.place.latitude ||
-        widget.place.longitude != oldWidget.place.longitude) {
-      _mapController.animateTo(
-        widget.place.latitude,
-        widget.place.longitude,
-        zoom: 15.0,
-      );
+    if (widget.place.latitude != oldWidget.place.latitude || widget.place.longitude != oldWidget.place.longitude) {
+      _mapController.animateTo(widget.place.latitude, widget.place.longitude, zoom: 15.0);
     }
   }
 
@@ -197,9 +176,7 @@ class _MapPreviewState extends State<_MapPreview> {
       child: IgnorePointer(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12.0),
-          child: switch (context
-              .watch<DevicePreferencesProvider>()
-              .mapRenderer) {
+          child: switch (context.watch<DevicePreferencesProvider>().mapRenderer) {
             SpMapRenderer.googleMap => SpGoogleMap<PlaceDbModel>(
               mapController: _mapController,
               initialCamera: _camera,

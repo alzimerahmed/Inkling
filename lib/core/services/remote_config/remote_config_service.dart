@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:storypad/core/constants/app_constants.dart';
 
@@ -25,8 +26,7 @@ class RemoteConfigService {
   RemoteConfigService._();
 
   final Map<Type, void Function()> _listeners = {};
-  void clearListeners(String key, void Function() callback) =>
-      _listeners.clear();
+  void clearListeners(String key, void Function() callback) => _listeners.clear();
   void notifyListeners() {
     for (var callback in _listeners.values) {
       callback.call();
@@ -49,11 +49,7 @@ class RemoteConfigService {
     'https://storypad.me#footer',
   );
 
-  static const featureFlags = _RemoteConfigObject<Map>(
-    'FEATURE_FLAGS',
-    _RemoteConfigValueType.json,
-    {},
-  );
+  static const featureFlags = _RemoteConfigObject<Map>('FEATURE_FLAGS', _RemoteConfigValueType.json, {});
 
   static const localizationSupportUrl = _RemoteConfigObject<String>(
     'LOCALIZATION_SUPPORT_URL',
@@ -91,11 +87,7 @@ class RemoteConfigService {
     'variant_1',
   );
 
-  static const surveyUrl = _RemoteConfigObject<String>(
-    'SURVEY_URL',
-    _RemoteConfigValueType.string,
-    '',
-  );
+  static const surveyUrl = _RemoteConfigObject<String>('SURVEY_URL', _RemoteConfigValueType.string, '');
 
   static const tiktokUsername = _RemoteConfigObject<String>(
     'TIKTOK_USERNAME',
@@ -118,9 +110,7 @@ class RemoteConfigService {
   Future<void> initialize() async {
     final defaults = {
       for (final element in _registeredKeys)
-        element.key: element.defaultValue is Map
-            ? jsonEncode(element.defaultValue)
-            : element.defaultValue,
+        element.key: element.defaultValue is Map ? jsonEncode(element.defaultValue) : element.defaultValue,
     };
 
     await kRemoteConfigAdaptor.initialize(defaults);

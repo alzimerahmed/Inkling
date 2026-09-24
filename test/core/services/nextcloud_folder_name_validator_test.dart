@@ -21,10 +21,7 @@ void main() {
     });
 
     test('ignores blank/./.. segments rather than erroring on them', () {
-      expect(
-        NextcloudFolderNameValidator.validate('Journals//MyDiary'),
-        isNull,
-      );
+      expect(NextcloudFolderNameValidator.validate('Journals//MyDiary'), isNull);
       expect(NextcloudFolderNameValidator.validate('./myjournal'), isNull);
       expect(NextcloudFolderNameValidator.validate('../myjournal'), isNull);
     });
@@ -47,10 +44,7 @@ void main() {
 
     test('rejects a single segment over the length limit', () {
       final tooLong = 'a' * 251;
-      expect(
-        NextcloudFolderNameValidator.validate(tooLong),
-        NextcloudFolderNameValidationError.segmentTooLong,
-      );
+      expect(NextcloudFolderNameValidator.validate(tooLong), NextcloudFolderNameValidationError.segmentTooLong);
     });
 
     test('accepts a segment right at the length limit', () {
@@ -71,10 +65,7 @@ void main() {
       // WebDAV server/filesystem actually allows for one path segment.
       final segment = 'あ' * 250;
       expect(segment.length, 250); // would have passed the old (buggy) check
-      expect(
-        NextcloudFolderNameValidator.validate(segment),
-        NextcloudFolderNameValidationError.segmentTooLong,
-      );
+      expect(NextcloudFolderNameValidator.validate(segment), NextcloudFolderNameValidationError.segmentTooLong);
     });
 
     test('accepts a multi-byte segment within the real byte limit', () {
@@ -84,10 +75,7 @@ void main() {
 
     test('rejects a multi-byte segment just over the real byte limit', () {
       final segment = 'あ' * 84; // 252 bytes
-      expect(
-        NextcloudFolderNameValidator.validate(segment),
-        NextcloudFolderNameValidationError.segmentTooLong,
-      );
+      expect(NextcloudFolderNameValidator.validate(segment), NextcloudFolderNameValidationError.segmentTooLong);
     });
   });
 }

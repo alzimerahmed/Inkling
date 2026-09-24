@@ -34,18 +34,14 @@ class SearchFilterRoute extends BaseRoute {
 }
 
 class SearchFilterView extends StatelessWidget {
-  const SearchFilterView({
-    super.key,
-    required this.params,
-  });
+  const SearchFilterView({super.key, required this.params});
 
   final SearchFilterRoute params;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SearchFilterViewModel>(
-      create: (context) =>
-          SearchFilterViewModel(params: params, context: context),
+      create: (context) => SearchFilterViewModel(params: params, context: context),
       builder: (context, child) {
         return _SearchFilterContent(Provider.of(context));
       },

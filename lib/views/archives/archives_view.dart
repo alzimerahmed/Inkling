@@ -19,26 +19,16 @@ part 'archives_content.dart';
 class ArchivesRoute extends BaseRoute {
   final PathType pathType;
 
-  ArchivesRoute({
-    required this.pathType,
-  });
+  ArchivesRoute({required this.pathType});
 
   @override
-  Future<T?> push<T extends Object?>(
-    BuildContext context, {
-    bool rootNavigator = false,
-  }) async {
-    bool authenticated = await context
-        .read<AppLockProvider>()
-        .authenticateIfHas(
-          context: context,
-          debugSource: '$runtimeType#push',
-        );
-    if (!authenticated || !context.mounted) return null;
-    return super.push(
-      context,
-      rootNavigator: rootNavigator,
+  Future<T?> push<T extends Object?>(BuildContext context, {bool rootNavigator = false}) async {
+    bool authenticated = await context.read<AppLockProvider>().authenticateIfHas(
+      context: context,
+      debugSource: '$runtimeType#push',
     );
+    if (!authenticated || !context.mounted) return null;
+    return super.push(context, rootNavigator: rootNavigator);
   }
 
   @override
@@ -49,10 +39,7 @@ class ArchivesRoute extends BaseRoute {
 }
 
 class ArchivesView extends StatelessWidget {
-  const ArchivesView({
-    super.key,
-    required this.params,
-  });
+  const ArchivesView({super.key, required this.params});
 
   final ArchivesRoute params;
 

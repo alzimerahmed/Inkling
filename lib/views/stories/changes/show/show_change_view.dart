@@ -11,10 +11,7 @@ import 'show_change_view_model.dart';
 part 'show_change_content.dart';
 
 class ShowChangeRoute extends BaseRoute {
-  ShowChangeRoute({
-    required this.content,
-    required this.preferences,
-  });
+  ShowChangeRoute({required this.content, required this.preferences});
 
   final StoryContentDbModel content;
   final StoryPreferencesDbModel? preferences;
@@ -24,10 +21,7 @@ class ShowChangeRoute extends BaseRoute {
 }
 
 class ShowChangeView extends StatelessWidget {
-  const ShowChangeView({
-    super.key,
-    required this.params,
-  });
+  const ShowChangeView({super.key, required this.params});
 
   final ShowChangeRoute params;
 

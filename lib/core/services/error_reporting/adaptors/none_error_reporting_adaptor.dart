@@ -3,15 +3,10 @@ import 'package:storypad/core/services/error_reporting/adaptors/base_error_repor
 
 class NoneErrorReportingAdaptor extends BaseErrorReportingAdaptor {
   @override
-  Future<void> recordError(
-    Object error,
-    StackTrace? stack, {
-    bool fatal = false,
-  }) => Future.value();
+  Future<void> recordError(Object error, StackTrace? stack, {bool fatal = false}) => Future.value();
 
   @override
-  Future<void> recordFlutterFatalError(FlutterErrorDetails details) =>
-      Future.value();
+  Future<void> recordFlutterFatalError(FlutterErrorDetails details) => Future.value();
 
   @override
   Future<void> log(String message) => Future.value();

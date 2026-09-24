@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:storypad/core/databases/models/asset_db_model.dart';
 import 'package:storypad/core/services/logger/app_logger.dart';
 import 'package:storypad/core/services/assets/asset_file_matcher_service.dart';
@@ -20,26 +21,14 @@ class AssetOrphanedFixerService {
     _RanAssetOrphanedFixerStorage().write(true);
 
     final tmpDir = SupportDirectoryPath.tmp.directory;
-    if (!tmpDir.existsSync())
-      return AppLogger.d('❌ /tmp directory does not exist');
+    if (!tmpDir.existsSync()) return AppLogger.d('❌ /tmp directory does not exist');
 
-    var assets = await AssetDbModel.db.where().then(
-      (e) => e?.items ?? <AssetDbModel>[],
-    );
-    var orphanedAssets = assets
-        .where(
-          (asset) => asset.cloudDestinations.isEmpty && asset.localFile == null,
-        )
-        .toList();
-    if (orphanedAssets.isEmpty)
-      return AppLogger.d('✅ No orphaned assets found');
+    var assets = await AssetDbModel.db.where().then((e) => e?.items ?? <AssetDbModel>[]);
+    var orphanedAssets = assets.where((asset) => asset.cloudDestinations.isEmpty && asset.localFile == null).toList();
+    if (orphanedAssets.isEmpty) return AppLogger.d('✅ No orphaned assets found');
     AppLogger.d('🔍 Found ${orphanedAssets.length} orphaned assets');
 
-    final availableFiles = tmpDir
-        .listSync()
-        .whereType<File>()
-        .where((f) => f.path.endsWith('.m4a'))
-        .toList();
+    final availableFiles = tmpDir.listSync().whereType<File>().where((f) => f.path.endsWith('.m4a')).toList();
     AppLogger.d('📁 Found ${availableFiles.length} files in tmp directory');
 
     int matchedCount = 0;
@@ -51,9 +40,7 @@ class AssetOrphanedFixerService {
     );
 
     for (final entry in filesByAssets.entries) {
-      AppLogger.d(
-        '🔗 Matched asset ${entry.key.id} with file ${entry.value.path}',
-      );
+      AppLogger.d('🔗 Matched asset ${entry.key.id} with file ${entry.value.path}');
 
       final asset = entry.key;
       final matchedFile = entry.value;

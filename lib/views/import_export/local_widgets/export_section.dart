@@ -1,9 +1,7 @@
 part of '../import_export_view.dart';
 
 class _ExportSection extends StatefulWidget {
-  const _ExportSection({
-    required this.viewModel,
-  });
+  const _ExportSection({required this.viewModel});
 
   final ImportExportViewModel viewModel;
 
@@ -12,8 +10,7 @@ class _ExportSection extends StatefulWidget {
 }
 
 class _ExportSectionState extends State<_ExportSection> {
-  late AppExportOption selectedOption =
-      widget.viewModel.params.initialExportOption ?? .storyPadJson;
+  late AppExportOption selectedOption = widget.viewModel.params.initialExportOption ?? .storyPadJson;
 
   @override
   Widget build(BuildContext context) {
@@ -33,20 +30,14 @@ class _ExportSectionState extends State<_ExportSection> {
             secondary: const Icon(SpIcons.importOffline),
             title: Text(tr('list_tile.export_storypad_json.title')),
             subtitle: Text(tr('list_tile.export_storypad_json.subtitle')),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 6.0,
-            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
             value: AppExportOption.storyPadJson,
           ),
           RadioListTile(
             secondary: const Icon(SpIcons.text),
             title: Text(tr('list_tile.export_txt.title')),
             subtitle: Text(tr('list_tile.export_txt.subtitle')),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 6.0,
-            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
             value: AppExportOption.text,
           ),
           Consumer<InAppPurchaseProvider>(
@@ -55,9 +46,7 @@ class _ExportSectionState extends State<_ExportSection> {
               return GestureDetector(
                 onTap: provider.isProUser
                     ? null
-                    : () => const PaywallRoute(
-                        initialFocus: .markdown_export,
-                      ).push(context),
+                    : () => const PaywallRoute(initialFocus: .markdown_export).push(context),
                 child: RadioListTile(
                   enabled: provider.isProUser,
                   secondary: Builder(
@@ -67,21 +56,14 @@ class _ExportSectionState extends State<_ExportSection> {
                         clipBehavior: Clip.none,
                         children: [
                           Icon(SpIcons.table),
-                          Positioned(
-                            top: 0,
-                            right: -8,
-                            child: Icon(SpIcons.lock, size: 12.0),
-                          ),
+                          Positioned(top: 0, right: -8, child: Icon(SpIcons.lock, size: 12.0)),
                         ],
                       );
                     },
                   ),
                   title: Text(tr('list_tile.export_csv.title')),
                   subtitle: Text(tr('list_tile.export_csv.subtitle')),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 6.0,
-                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
                   value: AppExportOption.csv,
                 ),
               );
@@ -93,34 +75,24 @@ class _ExportSectionState extends State<_ExportSection> {
               return GestureDetector(
                 onTap: provider.isProUser
                     ? null
-                    : () => const PaywallRoute(
-                        initialFocus: .markdown_export,
-                      ).push(context),
+                    : () => const PaywallRoute(initialFocus: .markdown_export).push(context),
                 child: RadioListTile(
                   enabled: provider.isProUser,
                   secondary: Builder(
                     builder: (context) {
-                      if (provider.isProUser)
-                        return const Icon(SpIcons.markdown);
+                      if (provider.isProUser) return const Icon(SpIcons.markdown);
                       return const Stack(
                         clipBehavior: Clip.none,
                         children: [
                           Icon(SpIcons.markdown),
-                          Positioned(
-                            top: 0,
-                            right: -8,
-                            child: Icon(SpIcons.lock, size: 12.0),
-                          ),
+                          Positioned(top: 0, right: -8, child: Icon(SpIcons.lock, size: 12.0)),
                         ],
                       );
                     },
                   ),
                   title: Text(tr('list_tile.export_markdown.title')),
                   subtitle: Text(tr('list_tile.export_markdown.subtitle')),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 6.0,
-                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
                   value: AppExportOption.markdown,
                 ),
               );
@@ -130,34 +102,22 @@ class _ExportSectionState extends State<_ExportSection> {
             secondary: const Icon(SpIcons.pdf),
             title: Text(tr('list_tile.export_pdf.title')),
             subtitle: Text(tr('list_tile.export_pdf.subtitle')),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 6.0,
-            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
             value: AppExportOption.pdf,
           ),
           Container(
             width: double.infinity,
-            margin:
-                MediaQuery.paddingOf(
-                      context,
-                    )
-                    .copyWith(top: 0.0, bottom: 0)
-                    .add(const EdgeInsets.symmetric(horizontal: 16.0)),
+            margin: MediaQuery.paddingOf(context)
+                .copyWith(top: 0.0, bottom: 0)
+                .add(const EdgeInsets.symmetric(horizontal: 16.0)),
             child: Builder(
               builder: (context) {
                 return FilledButton(
-                  onPressed:
-                      widget.viewModel.storyCount == null ||
-                          widget.viewModel.storyCount == 0
+                  onPressed: widget.viewModel.storyCount == null || widget.viewModel.storyCount == 0
                       ? null
                       : () => widget.viewModel.export(context, selectedOption),
                   child: Text(
-                    [
-                      tr('button.export'),
-                      if (selectedOption == AppExportOption.markdown)
-                        '(.tar.gz)',
-                    ].join(' '),
+                    [tr('button.export'), if (selectedOption == AppExportOption.markdown) '(.tar.gz)'].join(' '),
                   ),
                 );
               },
@@ -166,12 +126,9 @@ class _ExportSectionState extends State<_ExportSection> {
           const Divider(height: 32.0),
           Container(
             width: double.infinity,
-            margin:
-                MediaQuery.paddingOf(
-                      context,
-                    )
-                    .copyWith(top: 0.0, bottom: 0)
-                    .add(const EdgeInsets.symmetric(horizontal: 16.0)),
+            margin: MediaQuery.paddingOf(context)
+                .copyWith(top: 0.0, bottom: 0)
+                .add(const EdgeInsets.symmetric(horizontal: 16.0)),
             child: TextButton.icon(
               icon: const Icon(SpIcons.photo),
               label: Text(tr('button.export_assets')),

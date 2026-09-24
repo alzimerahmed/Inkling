@@ -9,10 +9,7 @@ class StoryTimePickerService {
   final BuildContext context;
   final StoryDbModel story;
 
-  StoryTimePickerService({
-    required this.context,
-    required this.story,
-  });
+  StoryTimePickerService({required this.context, required this.story});
 
   Future<TimeOfDay?> showPicker() async {
     TimeOfDay? newTime;
@@ -39,11 +36,7 @@ class StoryTimePickerService {
       builder: (context, child) {
         return GestureDetector(
           onTap: () => Navigator.maybePop(context),
-          child: Center(
-            child: SingleChildScrollView(
-              child: child!,
-            ),
-          ),
+          child: Center(child: SingleChildScrollView(child: child!)),
         );
       },
     );
@@ -62,9 +55,7 @@ class StoryTimePickerService {
                 left: MediaQuery.of(context).padding.left,
                 right: MediaQuery.of(context).padding.right,
               ),
-              margin: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
               color: CupertinoColors.systemBackground.resolveFrom(context),
               child: MediaQuery.removePadding(
                 context: context,
@@ -80,8 +71,7 @@ class StoryTimePickerService {
                         minutes: story.displayPathDate.minute,
                       ),
                       mode: CupertinoTimerPickerMode.hm,
-                      onTimerDurationChanged: (duration) =>
-                          notifier.value = _durationToTimeOfDay(duration),
+                      onTimerDurationChanged: (duration) => notifier.value = _durationToTimeOfDay(duration),
                     ),
                   ],
                 ),
@@ -93,21 +83,12 @@ class StoryTimePickerService {
     );
   }
 
-  Widget _buildCupertinoNavigator(
-    BuildContext context,
-    CmValueNotifier<TimeOfDay?> notifier,
-  ) {
+  Widget _buildCupertinoNavigator(BuildContext context, CmValueNotifier<TimeOfDay?> notifier) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CupertinoButton(
-          onPressed: () => Navigator.pop(context, null),
-          child: Text(tr("button.cancel")),
-        ),
-        CupertinoButton(
-          child: Text(tr("button.done")),
-          onPressed: () => Navigator.pop(context, notifier.value),
-        ),
+        CupertinoButton(onPressed: () => Navigator.pop(context, null), child: Text(tr("button.cancel"))),
+        CupertinoButton(child: Text(tr("button.done")), onPressed: () => Navigator.pop(context, notifier.value)),
       ],
     );
   }

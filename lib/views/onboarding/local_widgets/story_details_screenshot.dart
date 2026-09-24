@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:storypad/gen/assets.gen.dart';
 
 class StoryDetailsScreenshot extends StatelessWidget {
-  const StoryDetailsScreenshot({
-    super.key,
-  });
+  const StoryDetailsScreenshot({super.key});
 
   @override
   Widget build(BuildContext context) {

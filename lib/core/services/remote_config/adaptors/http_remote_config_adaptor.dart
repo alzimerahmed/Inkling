@@ -22,12 +22,9 @@ class HttpRemoteConfigAdaptor extends BaseRemoteConfigAdaptor {
   final http.Client _httpClient;
   final RemoteConfigCacheStorage _cache;
 
-  HttpRemoteConfigAdaptor({
-    this.baseUrl = kCdnBaseUrl,
-    http.Client? httpClient,
-    RemoteConfigCacheStorage? cache,
-  }) : _httpClient = httpClient ?? http.Client(),
-       _cache = cache ?? RemoteConfigCacheStorage();
+  HttpRemoteConfigAdaptor({this.baseUrl = kCdnBaseUrl, http.Client? httpClient, RemoteConfigCacheStorage? cache})
+    : _httpClient = httpClient ?? http.Client(),
+      _cache = cache ?? RemoteConfigCacheStorage();
 
   Map<String, dynamic> _values = {};
   final _updatesController = StreamController<Set<String>>.broadcast();
@@ -40,9 +37,7 @@ class HttpRemoteConfigAdaptor extends BaseRemoteConfigAdaptor {
       final cached = await _cache.readMap();
       if (cached != null) _values = {..._values, ...cached};
     } catch (error) {
-      debugPrint(
-        'HttpRemoteConfigAdaptor#initialize cache read failed: $error',
-      );
+      debugPrint('HttpRemoteConfigAdaptor#initialize cache read failed: $error');
     }
 
     unawaited(_refetchAndApply());

@@ -1,6 +1,1 @@
-enum BackupConnectionStatus {
-  noInternet,
-  needServicePermission,
-  readyToSync,
-  unknownError,
-}
+enum BackupConnectionStatus { noInternet, needServicePermission, readyToSync, unknownError }

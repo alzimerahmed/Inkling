@@ -10,17 +10,14 @@ import 'package:storypad/core/objects/relax_sound_object.dart';
 import 'package:storypad/core/services/cloud_storage/cloud_storage_service.dart';
 import 'package:storypad/providers/relax_sounds_provider.dart';
 import 'package:storypad/views/relax_sounds/edit_mix/edit_mix_view.dart';
+
 import 'relax_sounds_view.dart';
 
-class RelaxSoundsViewModel extends ChangeNotifier
-    with DisposeAwareMixin, DebounchedCallback {
+class RelaxSoundsViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
   final RelaxSoundsRoute params;
   final RelaxSoundsProvider provider;
 
-  RelaxSoundsViewModel({
-    required this.params,
-    required this.provider,
-  }) {
+  RelaxSoundsViewModel({required this.params, required this.provider}) {
     load();
 
     // on state change, some sounds may be downloaded, so we need to check again.
@@ -43,21 +40,17 @@ class RelaxSoundsViewModel extends ChangeNotifier
   List<RelaxSoundMixModel>? get mixes => _mixes;
 
   final Set<String> _downloadedSoundUrlPaths = {};
-  bool downloaded(RelaxSoundObject relaxSound) =>
-      _downloadedSoundUrlPaths.contains(relaxSound.soundUrlPath);
+  bool downloaded(RelaxSoundObject relaxSound) => _downloadedSoundUrlPaths.contains(relaxSound.soundUrlPath);
 
   Future<void> load() async {
-    _mixes =
-        await RelaxSoundMixModel.db.where().then((value) => value?.items) ?? [];
+    _mixes = await RelaxSoundMixModel.db.where().then((value) => value?.items) ?? [];
     loadDownloadSounds();
     notifyListeners();
   }
 
   void loadDownloadSounds() {
     for (final sound in RelaxSoundObject.defaultSoundsList().values) {
-      File? cachedFile = CloudStorageService.instance.getCachedFile(
-        sound.soundUrlPath,
-      );
+      File? cachedFile = CloudStorageService.instance.getCachedFile(sound.soundUrlPath);
       if (cachedFile != null) _downloadedSoundUrlPaths.add(sound.soundUrlPath);
     }
   }
@@ -74,16 +67,13 @@ class RelaxSoundsViewModel extends ChangeNotifier
       sounds.add(
         RelaxSoundModel(
           soundUrlPath: soundUrlPath,
-          volume:
-              provider.getVolume(provider.relaxSounds[soundUrlPath]!) ?? 0.5,
+          volume: provider.getVolume(provider.relaxSounds[soundUrlPath]!) ?? 0.5,
         ),
       );
     }
 
     // save to existing mix with different volume when exist.
-    RelaxSoundMixModel? existingMix = await provider.findExistingMix(
-      ignoreVolume: true,
-    );
+    RelaxSoundMixModel? existingMix = await provider.findExistingMix(ignoreVolume: true);
     await RelaxSoundMixModel.db.set(
       RelaxSoundMixModel(
         id: existingMix?.id ?? now.millisecondsSinceEpoch,
@@ -103,8 +93,7 @@ class RelaxSoundsViewModel extends ChangeNotifier
     await RelaxSoundMixModel.db.delete(mix.id);
     await load();
 
-    if (context.mounted)
-      context.read<RelaxSoundsProvider>().refreshCanSaveMix();
+    if (context.mounted) context.read<RelaxSoundsProvider>().refreshCanSaveMix();
   }
 
   // [newIndex] already accounts for the removed item (ReorderableListView's `onReorderItem`).
@@ -123,28 +112,19 @@ class RelaxSoundsViewModel extends ChangeNotifier
     for (int i = 0; i < length; i++) {
       final item = _mixes!.elementAt(i);
       if (item.index != i) {
-        await RelaxSoundMixModel.db.set(
-          item.copyWith(index: i, updatedAt: DateTime.now()),
-        );
+        await RelaxSoundMixModel.db.set(item.copyWith(index: i, updatedAt: DateTime.now()));
       }
     }
 
     await load();
   }
 
-  void playMix(
-    BuildContext context,
-    RelaxSoundMixModel mix,
-    Iterable<RelaxSoundObject> sounds,
-  ) async {
+  void playMix(BuildContext context, RelaxSoundMixModel mix, Iterable<RelaxSoundObject> sounds) async {
     if (!context.mounted) return;
     await context.read<RelaxSoundsProvider>().playAll(
       soundWithInitialVolume: {
         for (var sound in sounds)
-          sound: mix.sounds
-              .where((saved) => saved.soundUrlPath == sound.soundUrlPath)
-              .firstOrNull
-              ?.volume,
+          sound: mix.sounds.where((saved) => saved.soundUrlPath == sound.soundUrlPath).firstOrNull?.volume,
       },
     );
   }
@@ -153,12 +133,7 @@ class RelaxSoundsViewModel extends ChangeNotifier
     Object? result = await EditMixRoute(mix: mix).push(context);
 
     if (result is List && result.first is String) {
-      await RelaxSoundMixModel.db.set(
-        mix.copyWith(
-          name: result.first,
-          updatedAt: DateTime.now(),
-        ),
-      );
+      await RelaxSoundMixModel.db.set(mix.copyWith(name: result.first, updatedAt: DateTime.now()));
       await load();
     }
   }

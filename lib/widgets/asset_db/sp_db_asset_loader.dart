@@ -1,30 +1,23 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
-    as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
 import 'package:storypad/core/services/assets/backup_asset_downloader_service.dart';
 import 'package:storypad/core/services/assets/db_asset_loader_service.dart';
 import 'package:storypad/core/services/backups/backup_cloud_service.dart';
 import 'package:storypad/providers/backup_provider.dart';
 
 class SpDbAssetLoader extends StatefulWidget {
-  const SpDbAssetLoader({
-    super.key,
-    required this.builder,
-    required this.signedInServices,
-    required this.relativePath,
-  });
+  const SpDbAssetLoader({super.key, required this.builder, required this.signedInServices, required this.relativePath});
 
   final String relativePath;
   final List<BackupCloudService> signedInServices;
-  final Widget Function(BuildContext context, File? file, Object? error)
-  builder;
+  final Widget Function(BuildContext context, File? file, Object? error) builder;
 
   static Widget withUser({
     required String relativePath,
-    required Widget Function(BuildContext context, File? file, Object? error)
-    builder,
+    required Widget Function(BuildContext context, File? file, Object? error) builder,
   }) {
     return Consumer<BackupProvider>(
       builder: (context, backupProvider, child) {
@@ -45,14 +38,8 @@ class SpDbAssetLoader extends StatefulWidget {
     );
   }
 
-  static Future<File> load(
-    String relativePath,
-    List<BackupCloudService> signedInServices,
-  ) async {
-    return DbAssetLoaderService.instance.load(
-      relativePath: relativePath,
-      signedInServices: signedInServices,
-    );
+  static Future<File> load(String relativePath, List<BackupCloudService> signedInServices) async {
+    return DbAssetLoaderService.instance.load(relativePath: relativePath, signedInServices: signedInServices);
   }
 
   @override
@@ -63,9 +50,7 @@ class _SpDbAssetLoaderState extends State<SpDbAssetLoader> {
   String get relativePath => widget.relativePath;
   List<BackupCloudService> get signedInServices => widget.signedInServices;
 
-  late File? file = DbAssetLoaderService.instance.getCachedFile(
-    widget.relativePath,
-  );
+  late File? file = DbAssetLoaderService.instance.getCachedFile(widget.relativePath);
   Object? error;
 
   @override

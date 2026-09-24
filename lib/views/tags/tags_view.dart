@@ -38,10 +38,7 @@ class TagsRoute extends BaseRoute {
 }
 
 class TagsView extends StatelessWidget {
-  const TagsView({
-    super.key,
-    required this.params,
-  });
+  const TagsView({super.key, required this.params});
 
   final TagsRoute params;
 

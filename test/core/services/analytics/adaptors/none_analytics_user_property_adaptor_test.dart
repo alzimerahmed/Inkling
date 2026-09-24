@@ -8,34 +8,19 @@ void main() {
 
   group('NoneAnalyticsUserPropertyAdaptor', () {
     test('setUserProperty completes without throwing', () async {
-      await expectLater(
-        adaptor.setUserProperty('theme_mode', 'dark'),
-        completes,
-      );
+      await expectLater(adaptor.setUserProperty('theme_mode', 'dark'), completes);
     });
 
-    test(
-      'setUserProperty with null value completes without throwing',
-      () async {
-        await expectLater(
-          adaptor.setUserProperty('font_family', null),
-          completes,
-        );
-      },
-    );
+    test('setUserProperty with null value completes without throwing', () async {
+      await expectLater(adaptor.setUserProperty('font_family', null), completes);
+    });
 
     test('logSetThemeMode completes without throwing', () async {
-      await expectLater(
-        adaptor.logSetThemeMode(newThemeMode: .dark),
-        completes,
-      );
+      await expectLater(adaptor.logSetThemeMode(newThemeMode: .dark), completes);
     });
 
     test('logSetFontFamily completes without throwing', () async {
-      await expectLater(
-        adaptor.logSetFontFamily(newFontFamily: 'Roboto'),
-        completes,
-      );
+      await expectLater(adaptor.logSetFontFamily(newFontFamily: 'Roboto'), completes);
     });
 
     test('logSetStoryTilePreferences completes without throwing', () async {

@@ -1,11 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class SpKeyboardListener extends StatefulWidget {
-  const SpKeyboardListener({
-    super.key,
-    required this.child,
-    this.onKeyEvent,
-  });
+  const SpKeyboardListener({super.key, required this.child, this.onKeyEvent});
 
   final Widget child;
   final ValueChanged<KeyEvent>? onKeyEvent;
@@ -25,11 +21,6 @@ class _SpKeyboardListenerState extends State<SpKeyboardListener> {
 
   @override
   Widget build(BuildContext context) {
-    return KeyboardListener(
-      onKeyEvent: widget.onKeyEvent,
-      autofocus: true,
-      focusNode: _focusNode,
-      child: widget.child,
-    );
+    return KeyboardListener(onKeyEvent: widget.onKeyEvent, autofocus: true, focusNode: _focusNode, child: widget.child);
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
@@ -41,9 +42,7 @@ class LibraryRoute extends BaseRoute {
   @override
   String get routeName => 'library';
 
-  LibraryRoute({
-    this.initialTabIndex = 0,
-  });
+  LibraryRoute({this.initialTabIndex = 0});
 
   final int initialTabIndex;
 
@@ -52,10 +51,7 @@ class LibraryRoute extends BaseRoute {
 }
 
 class LibraryView extends StatelessWidget {
-  const LibraryView({
-    super.key,
-    required this.params,
-  });
+  const LibraryView({super.key, required this.params});
 
   final LibraryRoute params;
 

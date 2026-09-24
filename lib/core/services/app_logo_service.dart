@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:storypad/core/constants/app_constants.dart';
 import 'package:storypad/core/services/analytics/analytics_user_propery_service.dart';
@@ -27,17 +28,12 @@ class AppLogoService {
     try {
       await _channel.invokeMethod('AppLogoService.set', {
         if (Platform.isIOS) 'xcodeLogoName': logo.xcodeLogoName,
-        if (Platform.isAndroid)
-          'androidActivityAliasName': logo.androidActivityAliasName,
+        if (Platform.isAndroid) 'androidActivityAliasName': logo.androidActivityAliasName,
       });
 
       set = true;
     } catch (e) {
-      AppLogger.error(
-        e.toString(),
-        stackTrace: e is Error ? e.stackTrace : null,
-        tag: 'AppLogoService#set',
-      );
+      AppLogger.error(e.toString(), stackTrace: e is Error ? e.stackTrace : null, tag: 'AppLogoService#set');
       set = false;
     }
 
@@ -56,17 +52,11 @@ class AppLogoService {
     try {
       await _channel.invokeMethod('AppLogoService.set', {
         if (Platform.isIOS) 'xcodeLogoName': null,
-        if (Platform.isAndroid)
-          'androidActivityAliasName':
-              AppLogo.values.first.androidActivityAliasName,
+        if (Platform.isAndroid) 'androidActivityAliasName': AppLogo.values.first.androidActivityAliasName,
       });
       cleared = true;
     } catch (e) {
-      AppLogger.error(
-        e.toString(),
-        stackTrace: e is Error ? e.stackTrace : null,
-        tag: 'AppLogoService#reset',
-      );
+      AppLogger.error(e.toString(), stackTrace: e is Error ? e.stackTrace : null, tag: 'AppLogoService#reset');
       cleared = false;
     }
 

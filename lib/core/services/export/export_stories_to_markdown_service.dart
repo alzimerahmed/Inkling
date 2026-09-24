@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:storypad/core/databases/models/story_content_db_model.dart';
 import 'package:storypad/core/databases/models/story_db_model.dart';
 import 'package:storypad/core/services/quill/quill_delta_to_plain_text_service.dart';
@@ -45,11 +46,7 @@ class ExportStoriesToMarkdownService {
       await yearDir.create(recursive: true);
 
       for (final story in yearStories) {
-        await _exportStory(
-          story,
-          yearDir,
-          tagNameGetter: tagNameGetter,
-        );
+        await _exportStory(story, yearDir, tagNameGetter: tagNameGetter);
       }
     }
 
@@ -74,24 +71,18 @@ class ExportStoriesToMarkdownService {
         '${date.minute.toString().padLeft(2, '0')}.'
         '${date.second.toString().padLeft(2, '0')}';
 
-    final title = content.title?.trim().isNotEmpty == true
-        ? _sanitizeFilename(content.title!)
-        : 'Untitled';
+    final title = content.title?.trim().isNotEmpty == true ? _sanitizeFilename(content.title!) : 'Untitled';
     final filename = '$dateStr $title.md';
 
     // Build YAML frontmatter
-    final frontmatter = await _buildFrontmatter(
-      story,
-      tagNameGetter: tagNameGetter,
-    );
+    final frontmatter = await _buildFrontmatter(story, tagNameGetter: tagNameGetter);
 
     // Build markdown content with page headers
     final markdownContent = _buildMarkdownContent(content).trim();
 
     // Combine frontmatter + content
     // Format: ---\n[frontmatter]---\n[content] (no blank line after closing ---)
-    final fullContent =
-        '---\n${frontmatter.trimRight()}\n---\n$markdownContent';
+    final fullContent = '---\n${frontmatter.trimRight()}\n---\n$markdownContent';
 
     // Write file
     final file = File('${yearDir.path}/$filename');
@@ -118,9 +109,7 @@ class ExportStoriesToMarkdownService {
 
     // Tags (convert IDs to tag names)
     if (story.validTags?.isNotEmpty == true && tagNameGetter != null) {
-      final tagNames = await Future.wait(
-        story.validTags!.map((tagId) => tagNameGetter(tagId)),
-      );
+      final tagNames = await Future.wait(story.validTags!.map((tagId) => tagNameGetter(tagId)));
 
       final validTagNames = tagNames
           .whereType<String>()
@@ -215,15 +204,9 @@ class ExportStoriesToMarkdownService {
     return tag
         .toLowerCase() // Convert to lowercase for consistency
         .replaceAll(RegExp(r'\s+'), '_') // Replace spaces with underscores
-        .replaceAll(
-          RegExp(r'[^a-z0-9_-]'),
-          '',
-        ) // Remove special chars (including emojis) except underscore and hyphen
+        .replaceAll(RegExp(r'[^a-z0-9_-]'), '') // Remove special chars (including emojis) except underscore and hyphen
         .trim()
-        .replaceAll(
-          RegExp(r'^_+|_+$'),
-          '',
-        ); // Remove leading/trailing underscores
+        .replaceAll(RegExp(r'^_+|_+$'), ''); // Remove leading/trailing underscores
   }
 
   static String _escapeYaml(String value) {

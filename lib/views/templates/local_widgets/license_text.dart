@@ -26,9 +26,7 @@ class _LicenseText extends StatelessWidget {
           children: [
             WidgetSpan(
               child: Container(
-                margin: EdgeInsets.only(
-                  right: MediaQuery.textScalerOf(context).scale(4.0),
-                ),
+                margin: EdgeInsets.only(right: MediaQuery.textScalerOf(context).scale(4.0)),
                 child: Icon(
                   SpIcons.license,
                   size: MediaQuery.textScalerOf(context).scale(16.0),
@@ -38,10 +36,8 @@ class _LicenseText extends StatelessWidget {
             ),
             TextSpan(
               text: tr("list_tile.licenses.title"),
-              style: TextTheme.of(context).titleMedium?.copyWith(
-                color: foregroundColor,
-                decorationColor: foregroundColor,
-              ),
+              style: TextTheme.of(context).titleMedium
+                  ?.copyWith(color: foregroundColor, decorationColor: foregroundColor),
             ),
           ],
         ),
@@ -56,33 +52,23 @@ class _LicenseText extends StatelessWidget {
       builder: (context) {
         return AlertDialog.adaptive(
           content: MarkdownBody(
-            listItemCrossAxisAlignment:
-                MarkdownListItemCrossAxisAlignment.start,
+            listItemCrossAxisAlignment: MarkdownListItemCrossAxisAlignment.start,
             styleSheet: MarkdownStyleSheet(
-              p: TextTheme.of(context).bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+              p: TextTheme.of(context).bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
               a: TextTheme.of(context).bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurface,
-                decorationColor: Theme.of(
-                  context,
-                ).colorScheme.onSurface.withValues(alpha: 0.5),
+                decorationColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
                 decoration: TextDecoration.underline,
               ),
             ),
             data: tr(
               'general.icons_credit',
               namedArgs: {
-                'ICON_LINK':
-                    '[Freepik](https://www.freepik.com/author/juicy-fish/icons/juicy-fish-sketchy_908)',
+                'ICON_LINK': '[Freepik](https://www.freepik.com/author/juicy-fish/icons/juicy-fish-sketchy_908)',
               },
             ),
-            onTapLink: (text, href, title) => UrlOpenerService.openForMarkdown(
-              context: context,
-              text: text,
-              href: href,
-              title: title,
-            ),
+            onTapLink: (text, href, title) =>
+                UrlOpenerService.openForMarkdown(context: context, text: text, href: href, title: title),
           ),
         );
       },

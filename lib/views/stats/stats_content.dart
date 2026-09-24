@@ -17,24 +17,14 @@ class _StatsContent extends StatelessWidget {
       appBar: AppBar(
         title: SpTapEffect(
           onTap: () => viewModel.pickYear(context),
-          child: Row(
-            mainAxisSize: .min,
-            spacing: 4.0,
-            children: [
-              Text('$year'),
-              const Icon(SpIcons.dropDown),
-            ],
-          ),
+          child: Row(mainAxisSize: .min, spacing: 4.0, children: [Text('$year'), const Icon(SpIcons.dropDown)]),
         ),
         actions: [
           IconButton(
             tooltip: tr('button.more_options'),
             icon: const Icon(SpIcons.moreVert),
             onPressed: () => SpToggleListSheet<StatsSection>(
-              items: [
-                for (final section in viewModel.sectionsForCurrentTab())
-                  (value: section, label: section.label),
-              ],
+              items: [for (final section in viewModel.sectionsForCurrentTab()) (value: section, label: section.label)],
               isEnabled: viewModel.isSectionVisible,
               onToggle: viewModel.toggleSection,
               onReset: viewModel.resetSections,
@@ -48,23 +38,14 @@ class _StatsContent extends StatelessWidget {
           tabs: [
             Tab(text: tr('general.all')),
             for (int month = 1; month <= 12; month++)
-              Tab(
-                text: DateFormatHelper.MMM(
-                  DateTime(year, month),
-                  context.locale,
-                ),
-              ),
+              Tab(text: DateFormatHelper.MMM(DateTime(year, month), context.locale)),
           ],
         ),
       ),
       body: TabBarView(
         children: [
           for (int tabIndex = 0; tabIndex <= 12; tabIndex++)
-            _buildTabBody(
-              context,
-              tabIndex: tabIndex,
-              stats: viewModel.statsFor(tabIndex),
-            ),
+            _buildTabBody(context, tabIndex: tabIndex, stats: viewModel.statsFor(tabIndex)),
         ],
       ),
     );
@@ -73,11 +54,7 @@ class _StatsContent extends StatelessWidget {
   /// One stats tab. All data loading is owned by [StatsViewModel]; this just
   /// renders what it receives: a spinner while loading, an empty state, or the
   /// ranked sections.
-  Widget _buildTabBody(
-    BuildContext context, {
-    required int tabIndex,
-    required StoryStatsObject? stats,
-  }) {
+  Widget _buildTabBody(BuildContext context, {required int tabIndex, required StoryStatsObject? stats}) {
     if (stats == null) {
       return const Center(child: CircularProgressIndicator.adaptive());
     }
@@ -89,12 +66,7 @@ class _StatsContent extends StatelessWidget {
             context,
             title: section.label,
             child: section.hasEnoughData(stats)
-                ? _buildSectionChild(
-                    context,
-                    section: section,
-                    stats: stats,
-                    tabIndex: tabIndex,
-                  )
+                ? _buildSectionChild(context, section: section, stats: stats, tabIndex: tabIndex)
                 : _buildNotEnoughData(context),
           ),
       const _StatsShareFooter(),
@@ -124,21 +96,14 @@ class _StatsContent extends StatelessWidget {
 
   /// Titled block: a [SpSectionTitle] header above arbitrary content, inset to
   /// the page gutter.
-  Widget _buildStatsSection(
-    BuildContext context, {
-    required String title,
-    required Widget child,
-  }) {
+  Widget _buildStatsSection(BuildContext context, {required String title, required Widget child}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         crossAxisAlignment: .start,
         spacing: 8.0,
         children: [
-          SpSectionTitle(
-            title: title,
-            padding: EdgeInsets.zero,
-          ),
+          SpSectionTitle(title: title, padding: EdgeInsets.zero),
           child,
         ],
       ),
@@ -152,19 +117,12 @@ class _StatsContent extends StatelessWidget {
     required StoryStatsObject stats,
     required int tabIndex,
   }) {
-    void openTag(int tagId) =>
-        viewModel.openStoriesForTag(context, tagId, tabIndex);
+    void openTag(int tagId) => viewModel.openStoriesForTag(context, tagId, tabIndex);
 
     return switch (section) {
       StatsSection.overview => _buildOverview(context, stats, tabIndex),
-      StatsSection.feelings => _StatsEmojiGrid(
-        items: stats.topFeelings,
-        onTap: openTag,
-      ),
-      StatsSection.activities => _StatsEmojiGrid(
-        items: stats.topActivities,
-        onTap: openTag,
-      ),
+      StatsSection.feelings => _StatsEmojiGrid(items: stats.topFeelings, onTap: openTag),
+      StatsSection.activities => _StatsEmojiGrid(items: stats.topActivities, onTap: openTag),
       StatsSection.tags => _StatsLabelList(
         items: stats.topTags,
         icon: SpIcons.tag,
@@ -180,14 +138,8 @@ class _StatsContent extends StatelessWidget {
         icon: SpIcons.locationPin,
         onTap: (item) => viewModel.openStoriesForPlace(context, item, tabIndex),
       ),
-      StatsSection.countries => _StatsLabelList(
-        items: stats.topCountries,
-        icon: SpIcons.globe,
-      ),
-      StatsSection.trend => _StatsTrend(
-        stats: stats,
-        range: viewModel.rangeForTab(tabIndex),
-      ),
+      StatsSection.countries => _StatsLabelList(items: stats.topCountries, icon: SpIcons.globe),
+      StatsSection.trend => _StatsTrend(stats: stats, range: viewModel.rangeForTab(tabIndex)),
     };
   }
 
@@ -195,9 +147,7 @@ class _StatsContent extends StatelessWidget {
   Widget _buildNotEnoughData(BuildContext context) {
     return Text(
       tr('page.stats.not_enough_data'),
-      style: TextTheme.of(context).bodySmall?.copyWith(
-        color: ColorScheme.of(context).onSurface.withValues(alpha: 0.5),
-      ),
+      style: TextTheme.of(context).bodySmall?.copyWith(color: ColorScheme.of(context).onSurface.withValues(alpha: 0.5)),
     );
   }
 
@@ -208,93 +158,53 @@ class _StatsContent extends StatelessWidget {
   /// open the filtered stories sheet on tap; metrics without a story list
   /// (active days, words) carry a null [onTap] and stay inert to avoid
   /// confusion.
-  Widget _buildOverview(
-    BuildContext context,
-    StoryStatsObject stats,
-    int tabIndex,
-  ) {
-    final List<
-      ({IconData icon, String value, String label, VoidCallback? onTap})
-    >
-    metrics = [
+  Widget _buildOverview(BuildContext context, StoryStatsObject stats, int tabIndex) {
+    final List<({IconData icon, String value, String label, VoidCallback? onTap})> metrics = [
       (
         icon: SpIcons.book,
         value: '${stats.entryCount}',
         label: tr('general.entries'),
         onTap: () => viewModel.openStoriesForRange(context, tabIndex),
       ),
-      (
-        icon: SpIcons.calendar,
-        value: '${stats.activeDays}',
-        label: tr('general.active_days'),
-        onTap: null,
-      ),
+      (icon: SpIcons.calendar, value: '${stats.activeDays}', label: tr('general.active_days'), onTap: null),
       if (stats.currentStreak > 0)
-        (
-          icon: SpIcons.fire,
-          value: '${stats.currentStreak}',
-          label: tr('general.streak'),
-          onTap: null,
-        ),
-      if (viewModel.dailyGoal > 0 &&
-          viewModel.rangeForTab(tabIndex).contains(DateTime.now()))
+        (icon: SpIcons.fire, value: '${stats.currentStreak}', label: tr('general.streak'), onTap: null),
+      if (viewModel.dailyGoal > 0 && viewModel.rangeForTab(tabIndex).contains(DateTime.now()))
         (
           icon: SpIcons.text,
-          value:
-              '${WritingGoalService.todayWords(stats.dailyWordCounts, DateTime.now())} / ${viewModel.dailyGoal}',
+          value: '${WritingGoalService.todayWords(stats.dailyWordCounts, DateTime.now())} / ${viewModel.dailyGoal}',
           label: tr('general.words_today'),
           onTap: null,
         ),
       if (stats.wordCount > 0)
-        (
-          icon: SpIcons.text,
-          value: '${stats.wordCount}',
-          label: tr('general.words'),
-          onTap: null,
-        ),
+        (icon: SpIcons.text, value: '${stats.wordCount}', label: tr('general.words'), onTap: null),
       if (stats.photoCount > 0)
         (
           icon: SpIcons.photo,
           value: '${stats.photoCount}',
           label: tr('general.photos'),
-          onTap: () => viewModel.openStoriesForIds(
-            context,
-            stats.photoStoryIds,
-            tabIndex,
-          ),
+          onTap: () => viewModel.openStoriesForIds(context, stats.photoStoryIds, tabIndex),
         ),
       if (stats.videoCount > 0)
         (
           icon: SpIcons.videoCamera,
           value: '${stats.videoCount}',
           label: tr('general.videos'),
-          onTap: () => viewModel.openStoriesForIds(
-            context,
-            stats.videoStoryIds,
-            tabIndex,
-          ),
+          onTap: () => viewModel.openStoriesForIds(context, stats.videoStoryIds, tabIndex),
         ),
       if (stats.voiceCount > 0)
         (
           icon: SpIcons.voice,
           value: '${stats.voiceCount}',
           label: tr('general.voices'),
-          onTap: () => viewModel.openStoriesForIds(
-            context,
-            stats.voiceStoryIds,
-            tabIndex,
-          ),
+          onTap: () => viewModel.openStoriesForIds(context, stats.voiceStoryIds, tabIndex),
         ),
       if (stats.locatedCount > 0)
         (
           icon: SpIcons.locationPin,
           value: '${stats.locatedCount}',
           label: tr('general.places'),
-          onTap: () => viewModel.openStoriesForIds(
-            context,
-            stats.locatedStoryIds,
-            tabIndex,
-          ),
+          onTap: () => viewModel.openStoriesForIds(context, stats.locatedStoryIds, tabIndex),
         ),
     ];
 

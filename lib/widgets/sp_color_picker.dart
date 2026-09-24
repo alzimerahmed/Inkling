@@ -3,15 +3,9 @@ import 'package:storypad/core/constants/app_constants.dart';
 import 'package:storypad/widgets/sp_cross_fade.dart';
 import 'package:storypad/widgets/sp_tap_effect.dart';
 
-enum SpColorPickerLevel {
-  one,
-  two,
-}
+enum SpColorPickerLevel { one, two }
 
-enum SpColorPickerPosition {
-  top,
-  bottom,
-}
+enum SpColorPickerPosition { top, bottom }
 
 class SpColorPicker extends StatefulWidget {
   const SpColorPicker({
@@ -82,10 +76,10 @@ class SpColorPickerState extends State<SpColorPicker> {
   }
 
   ColorSwatch<dynamic> getBlackWhiteSwatch() {
-    final ColorSwatch blackWhiteSwatchColor = ColorSwatch(
-      widget.isDarkMode ? 0xFFFFFFFF : 0xFF000000,
-      const {50: Color(0xff000000), 100: Color(0xffffffff)},
-    );
+    final ColorSwatch blackWhiteSwatchColor = ColorSwatch(widget.isDarkMode ? 0xFFFFFFFF : 0xFF000000, const {
+      50: Color(0xff000000),
+      100: Color(0xffffffff),
+    });
 
     return blackWhiteSwatchColor;
   }
@@ -142,8 +136,7 @@ class SpColorPickerState extends State<SpColorPicker> {
     });
 
     Future.delayed(const Duration(milliseconds: 100)).then((value) {
-      if (widget.currentColor != null &&
-          _colorNormal.contains(widget.currentColor)) {
+      if (widget.currentColor != null && _colorNormal.contains(widget.currentColor)) {
         setState(() {
           currentSelectedColor = widget.currentColor;
         });
@@ -181,20 +174,14 @@ class SpColorPickerState extends State<SpColorPicker> {
         ),
         secondChild: buildColorListWrapper(
           context: context,
-          height: _colorsMap!.length == 1
-              ? spOnPickingColorHeight - 32 - 12
-              : spOnPickingColorHeight,
+          height: _colorsMap!.length == 1 ? spOnPickingColorHeight - 32 - 12 : spOnPickingColorHeight,
           child: buildColorListing(context),
         ),
       ),
     );
   }
 
-  Widget buildColorListWrapper({
-    required BuildContext context,
-    required Widget child,
-    required double height,
-  }) {
+  Widget buildColorListWrapper({required BuildContext context, required Widget child, required double height}) {
     return Container(
       constraints: const BoxConstraints(minWidth: spColorPickerMinWidth),
       height: height,
@@ -204,12 +191,7 @@ class SpColorPickerState extends State<SpColorPicker> {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16.0),
-          border: Border.all(
-            color: Theme.of(
-              context,
-            ).colorScheme.onSurface.withValues(alpha: 0.1),
-            width: 1,
-          ),
+          border: Border.all(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1), width: 1),
         ),
         child: child,
       ),
@@ -219,22 +201,14 @@ class SpColorPickerState extends State<SpColorPicker> {
   Widget buildColorListing(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: List.generate(
-        _colorsMap!.length,
-        (c) {
-          final List<int>? childrenIndex = _colorsMap![c];
-          final double bottom = _colorsMap!.length - 1 == c ? 0 : 8.0;
-          return Container(
-            margin: EdgeInsets.only(bottom: bottom),
-            child: Row(
-              children: List.generate(
-                _colorsMap![c]!.length,
-                (i) => buildColorItem(childrenIndex, i, context),
-              ),
-            ),
-          );
-        },
-      ),
+      children: List.generate(_colorsMap!.length, (c) {
+        final List<int>? childrenIndex = _colorsMap![c];
+        final double bottom = _colorsMap!.length - 1 == c ? 0 : 8.0;
+        return Container(
+          margin: EdgeInsets.only(bottom: bottom),
+          child: Row(children: List.generate(_colorsMap![c]!.length, (i) => buildColorItem(childrenIndex, i, context))),
+        );
+      }),
     );
   }
 
@@ -243,8 +217,7 @@ class SpColorPickerState extends State<SpColorPicker> {
     final double right = i != (childrenIndex.length) - 1 ? 8.0 : 0;
     final dynamic color;
     color = isColorChildPicking ? _colorNormal[index] : _colorsSwatch[index];
-    final bool isSelected =
-        currentSelectedColor == color || currentSelectedColorsSwatch == color;
+    final bool isSelected = currentSelectedColor == color || currentSelectedColorsSwatch == color;
 
     return SpColorItem(
       color: color,
@@ -281,18 +254,14 @@ class SpColorItem extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(
           width: 2.0,
-          color: Theme.of(
-            context,
-          ).colorScheme.onSurface.withValues(alpha: selected ? 1 : 0.1),
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: selected ? 1 : 0.1),
         ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(1.0),
         child: SpTapEffect(
           onTap: onPressed != null ? () => onPressed!(color) : null,
-          effects: const [
-            SpTapEffectType.border,
-          ],
+          effects: const [SpTapEffectType.border],
           child: Container(
             width: size - 2,
             height: size - 2,

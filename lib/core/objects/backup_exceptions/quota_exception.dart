@@ -1,23 +1,13 @@
 part of 'backup_exception.dart';
 
-enum QuotaExceptionType {
-  storageQuotaExceeded,
-  rateLimitExceeded,
-  dailyLimitExceeded,
-}
+enum QuotaExceptionType { storageQuotaExceeded, rateLimitExceeded, dailyLimitExceeded }
 
 /// Cloud provider quota and storage exceptions — any [BackupCloudService]
 /// (Drive's API quota, Nextcloud's WebDAV 507) can throw one of these.
 class QuotaException extends BackupException {
   final QuotaExceptionType type;
 
-  const QuotaException(
-    super.message,
-    this.type, {
-    super.context,
-    super.isRetryable = false,
-    super.serviceType,
-  });
+  const QuotaException(super.message, this.type, {super.context, super.isRetryable = false, super.serviceType});
 
   @override
   String get userFriendlyMessage {

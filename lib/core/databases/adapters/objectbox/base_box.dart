@@ -36,15 +36,11 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
   }
 
   @override
-  Future<Map<int, DateTime?>> getLastUpdatedAtByYear({
-    bool? fromThisDeviceOnly,
-  }) async {
+  Future<Map<int, DateTime?>> getLastUpdatedAtByYear({bool? fromThisDeviceOnly}) async {
     Condition<B>? conditions = idProperty.notNull();
 
     if (fromThisDeviceOnly == true) {
-      conditions = conditions.and(
-        lastSavedDeviceIdProperty.equals(kDeviceInfo.id),
-      );
+      conditions = conditions.and(lastSavedDeviceIdProperty.equals(kDeviceInfo.id));
     }
 
     // We don't need to filter out deleted records here because
@@ -76,16 +72,10 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
   }
 
   Future<B> modelToObject(T model, [Map<String, dynamic>? options]);
-  Future<List<B>> modelsToObjects(
-    List<T> models, [
-    Map<String, dynamic>? options,
-  ]);
+  Future<List<B>> modelsToObjects(List<T> models, [Map<String, dynamic>? options]);
 
   Future<T> objectToModel(B object, [Map<String, dynamic>? options]);
-  Future<List<T>> objectsToModels(
-    List<B> objects, [
-    Map<String, dynamic>? options,
-  ]);
+  Future<List<T>> objectsToModels(List<B> objects, [Map<String, dynamic>? options]);
 
   Future<void> initilize() async {
     await _initializeStore();
@@ -107,11 +97,7 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
   }
 
   @override
-  Future<T?> find(
-    int id, {
-    bool returnDeleted = false,
-    String? debugSource,
-  }) async {
+  Future<T?> find(int id, {bool returnDeleted = false, String? debugSource}) async {
     AppLogger.info("Triggering $tableName#find $id 🍎 from $debugSource");
 
     B? object = box.get(id);
@@ -129,22 +115,12 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
     return box.get(id)?.permanentlyDeletedAt != null;
   }
 
-  QueryBuilder<B> buildQuery({
-    Map<String, dynamic>? filters,
-    required bool returnDeleted,
-  });
+  QueryBuilder<B> buildQuery({Map<String, dynamic>? filters, required bool returnDeleted});
 
   @override
-  Future<int> count({
-    Map<String, dynamic>? filters,
-    bool returnDeleted = false,
-    required String? debugSource,
-  }) async {
+  Future<int> count({Map<String, dynamic>? filters, bool returnDeleted = false, required String? debugSource}) async {
     AppLogger.info("Triggering $tableName#count from $debugSource 🍎");
-    QueryBuilder<B>? queryBuilder = buildQuery(
-      filters: filters,
-      returnDeleted: returnDeleted,
-    );
+    QueryBuilder<B>? queryBuilder = buildQuery(filters: filters, returnDeleted: returnDeleted);
     Query<B>? query = queryBuilder.build();
     return query.count();
   }
@@ -158,10 +134,7 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
     AppLogger.info("Triggering $tableName#where 🍎");
 
     List<B> objects;
-    QueryBuilder<B>? queryBuilder = buildQuery(
-      filters: filters,
-      returnDeleted: returnDeleted,
-    );
+    QueryBuilder<B>? queryBuilder = buildQuery(filters: filters, returnDeleted: returnDeleted);
 
     Query<B>? query = queryBuilder.build();
 
@@ -174,10 +147,7 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
   }
 
   @override
-  Future<T?> touch(
-    T record, {
-    bool runCallbacks = true,
-  }) async {
+  Future<T?> touch(T record, {bool runCallbacks = true}) async {
     AppLogger.info("Triggering $tableName#touch 🍎🍎");
     B constructed = await modelToObject(record);
 
@@ -189,11 +159,7 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
   }
 
   @override
-  Future<T?> set(
-    T record, {
-    bool runCallbacks = true,
-    String? debugSource,
-  }) async {
+  Future<T?> set(T record, {bool runCallbacks = true, String? debugSource}) async {
     AppLogger.info("Triggering $tableName#set 🍎 from $debugSource");
     B constructed = await modelToObject(record);
 
@@ -205,10 +171,7 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
   }
 
   @override
-  Future<void> setAll(
-    List<T> records, {
-    bool runCallbacks = true,
-  }) async {
+  Future<void> setAll(List<T> records, {bool runCallbacks = true}) async {
     AppLogger.info("Triggering $tableName#setAll 🍎");
     List<B> objects = await modelsToObjects(records.whereType<T>().toList());
 
@@ -221,10 +184,7 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
   }
 
   @override
-  Future<T?> update(
-    T record, {
-    bool runCallbacks = true,
-  }) async {
+  Future<T?> update(T record, {bool runCallbacks = true}) async {
     AppLogger.info("Triggering $tableName#update 🍎");
     B constructed = await modelToObject(record);
 
@@ -236,10 +196,7 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
   }
 
   @override
-  Future<T?> create(
-    T record, {
-    bool runCallbacks = true,
-  }) async {
+  Future<T?> create(T record, {bool runCallbacks = true}) async {
     AppLogger.info("Triggering $tableName#create 🍎");
     B constructed = await modelToObject(record);
 
@@ -257,12 +214,7 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends B
   /// Soft deletion helps synchronize deletions across devices (e.g., when data is restored
   /// from a backup). However, if the data hasn’t been backed up yet, you can set
   /// `softDelete = false` to delete it immediately.
-  Future<T?> delete(
-    int id, {
-    bool softDelete = true,
-    bool runCallbacks = true,
-    DateTime? deletedAt,
-  }) async {
+  Future<T?> delete(int id, {bool softDelete = true, bool runCallbacks = true, DateTime? deletedAt}) async {
     AppLogger.info("Triggering $tableName#delete 🍎");
     B? object = box.get(id);
 

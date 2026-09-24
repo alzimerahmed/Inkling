@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -44,10 +45,7 @@ class ConstantsInitializer {
     return Directory(Platform.environment['HOME'] ?? Directory.current.path);
   }
 
-  static Future<Directory> _getDirectoryOrFallback(
-    Future<Directory> Function() getter,
-    Directory fallback,
-  ) async {
+  static Future<Directory> _getDirectoryOrFallback(Future<Directory> Function() getter, Directory fallback) async {
     try {
       return await getter();
     } catch (_) {

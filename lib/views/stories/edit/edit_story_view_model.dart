@@ -13,6 +13,7 @@ import 'package:storypad/core/types/asset_type.dart';
 import 'package:storypad/core/types/editing_flow_type.dart';
 import 'package:storypad/providers/device_preferences_provider.dart';
 import 'package:storypad/views/stories/local_widgets/base_story_view_model.dart';
+
 import 'edit_story_view.dart';
 
 class EditStoryViewModel extends BaseStoryViewModel {
@@ -21,20 +22,12 @@ class EditStoryViewModel extends BaseStoryViewModel {
   @override
   bool get readOnly => false;
 
-  EditStoryViewModel({
-    required this.params,
-    required BuildContext context,
-  }) : super(
-         initialPageScrollOffet: params.initialPageScrollOffet,
-         initialPageIndex: params.initialPageIndex,
-       ) {
+  EditStoryViewModel({required this.params, required BuildContext context})
+    : super(initialPageScrollOffet: params.initialPageScrollOffet, initialPageIndex: params.initialPageIndex) {
     init(
       initialStory: params.story,
       initialPagesMap: params.pagesMap,
-      defaultStoryPreferences: context
-          .read<DevicePreferencesProvider>()
-          .preferences
-          .defaultStoryPreferences,
+      defaultStoryPreferences: context.read<DevicePreferencesProvider>().preferences.defaultStoryPreferences,
     ).then((_) => requestFocus());
   }
 
@@ -52,11 +45,8 @@ class EditStoryViewModel extends BaseStoryViewModel {
   }) async {
     story = this.initialStory = initialStory;
 
-    if (params.id != null)
-      story = this.initialStory =
-          initialStory ?? await StoryDbModel.db.find(params.id!);
-    if (story?.draftContent != null)
-      lastSavedAtNotifier.value = story?.updatedAt;
+    if (params.id != null) story = this.initialStory = initialStory ?? await StoryDbModel.db.find(params.id!);
+    if (story?.draftContent != null) lastSavedAtNotifier.value = story?.updatedAt;
 
     flowType = story == null ? EditingFlowType.create : EditingFlowType.update;
     story ??= StoryDbModel.fromDate(
@@ -83,25 +73,17 @@ class EditStoryViewModel extends BaseStoryViewModel {
     // Copy with richPages from pagesManager instead, since DB-loaded pages have null plainText.
     // plainText is needed when saving back to draft content for homepage display & search.
     draftContent = content.copyWith(
-      richPages: content.richPages
-          ?.map((e) => pagesManager.pagesMap[e.id]?.page ?? e)
-          .toList(),
+      richPages: content.richPages?.map((e) => pagesManager.pagesMap[e.id]?.page ?? e).toList(),
     );
 
     if (params.initialAsset?.relativeLocalFilePath != null) {
       final asset = params.initialAsset!;
-      final index =
-          pagesManager.pagesMap.first.bodyController.selection.baseOffset;
-      final length =
-          pagesManager.pagesMap.first.bodyController.selection.extentOffset -
-          index;
+      final index = pagesManager.pagesMap.first.bodyController.selection.baseOffset;
+      final length = pagesManager.pagesMap.first.bodyController.selection.extentOffset - index;
       final embedKey = asset.type == AssetType.audio ? 'audio' : 'media';
-      pagesManager.pagesMap.first.bodyController.replaceText(
-        index,
-        length,
-        {embedKey: asset.relativeLocalFilePath},
-        null,
-      );
+      pagesManager.pagesMap.first.bodyController.replaceText(index, length, {
+        embedKey: asset.relativeLocalFilePath,
+      }, null);
     }
 
     notifyListeners();
@@ -135,10 +117,7 @@ class EditStoryViewModel extends BaseStoryViewModel {
   }
 
   Future<void> _revertIfNoChange() async {
-    bool shouldRevert = await StoryShouldRevertChangeService.call(
-      currentStory: story,
-      initialStory: initialStory,
-    );
+    bool shouldRevert = await StoryShouldRevertChangeService.call(currentStory: story, initialStory: initialStory);
     if (shouldRevert) {
       debugPrint("Reverting story back... ${initialStory?.id}");
 
@@ -157,25 +136,20 @@ class EditStoryViewModel extends BaseStoryViewModel {
 
         // only focus when it is a selection (no tap)
         if (page != null &&
-            (page.titleController.selection.baseOffset !=
-                page.titleController.selection.extentOffset)) {
+            (page.titleController.selection.baseOffset != page.titleController.selection.extentOffset)) {
           page.titleFocusNode.requestFocus();
           requested = true;
         }
 
         // only focus when it is a selection (no tap)
-        if (page != null &&
-            (page.bodyController.selection.baseOffset !=
-                page.bodyController.selection.extentOffset)) {
+        if (page != null && (page.bodyController.selection.baseOffset != page.bodyController.selection.extentOffset)) {
           page.bodyFocusNode.requestFocus();
           requested = true;
         }
       }
 
       if (!requested && params.initialPageIndex != null) {
-        final page = draftContent?.richPages?.elementAtOrNull(
-          params.initialPageIndex ?? -1,
-        );
+        final page = draftContent?.richPages?.elementAtOrNull(params.initialPageIndex ?? -1);
         if (page != null) {
           pagesManager.pagesMap[page.id]?.bodyFocusNode.requestFocus();
           requested = true;
@@ -183,8 +157,7 @@ class EditStoryViewModel extends BaseStoryViewModel {
       }
 
       if (!requested) {
-        pagesManager.pagesMap[draftContent!.richPages!.first.id]?.bodyFocusNode
-            .requestFocus();
+        pagesManager.pagesMap[draftContent!.richPages!.first.id]?.bodyFocusNode.requestFocus();
         requested = true;
       }
     });
@@ -193,18 +166,10 @@ class EditStoryViewModel extends BaseStoryViewModel {
   void handleKeyEvent(KeyEvent event, BuildContext context) {
     if (event is KeyDownEvent) {
       final isCtrlOrCmd =
-          HardwareKeyboard.instance.isLogicalKeyPressed(
-            LogicalKeyboardKey.controlLeft,
-          ) ||
-          HardwareKeyboard.instance.isLogicalKeyPressed(
-            LogicalKeyboardKey.controlRight,
-          ) ||
-          HardwareKeyboard.instance.isLogicalKeyPressed(
-            LogicalKeyboardKey.metaLeft,
-          ) ||
-          HardwareKeyboard.instance.isLogicalKeyPressed(
-            LogicalKeyboardKey.metaRight,
-          );
+          HardwareKeyboard.instance.isLogicalKeyPressed(LogicalKeyboardKey.controlLeft) ||
+          HardwareKeyboard.instance.isLogicalKeyPressed(LogicalKeyboardKey.controlRight) ||
+          HardwareKeyboard.instance.isLogicalKeyPressed(LogicalKeyboardKey.metaLeft) ||
+          HardwareKeyboard.instance.isLogicalKeyPressed(LogicalKeyboardKey.metaRight);
 
       final isS = event.logicalKey == LogicalKeyboardKey.keyS;
 
@@ -214,11 +179,7 @@ class EditStoryViewModel extends BaseStoryViewModel {
     }
   }
 
-  Future<void> onPopInvokedWithResult(
-    bool didPop,
-    Object? _,
-    BuildContext context,
-  ) async {
+  Future<void> onPopInvokedWithResult(bool didPop, Object? _, BuildContext context) async {
     if (pagesManager.managingPage) return pagesManager.toggleManagingPage();
     if (didPop) return;
 
@@ -237,8 +198,7 @@ class EditStoryViewModel extends BaseStoryViewModel {
         if (userAction == OkCancelResult.ok) {
           await StoryDbModel.db.delete(story!.id, softDelete: false);
           story = null;
-          if (context.mounted && ModalRoute.of(context)?.isCurrent == true)
-            return Navigator.of(context).pop(null);
+          if (context.mounted && ModalRoute.of(context)?.isCurrent == true) return Navigator.of(context).pop(null);
         } else {
           return;
         }
@@ -251,8 +211,7 @@ class EditStoryViewModel extends BaseStoryViewModel {
         if (userAction == OkCancelResult.ok) {
           await StoryDbModel.db.set(initialStory!);
           story = initialStory;
-          if (context.mounted && ModalRoute.of(context)?.isCurrent == true)
-            return Navigator.of(context).pop(null);
+          if (context.mounted && ModalRoute.of(context)?.isCurrent == true) return Navigator.of(context).pop(null);
         }
       } else {
         if (context.mounted) Navigator.of(context).pop(null);

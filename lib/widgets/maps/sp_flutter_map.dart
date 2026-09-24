@@ -12,10 +12,8 @@ import 'package:storypad/core/objects/sp_latlng_bounds.dart';
 import 'package:storypad/widgets/maps/map_types.dart';
 import 'package:storypad/widgets/maps/sp_map_controller.dart';
 
-typedef SpFlutterMapMarkerBuilder<T> =
-    Widget Function(BuildContext context, SpMapMarker<T> marker);
-typedef SpFlutterMapClusterMarkerBuilder<T> =
-    Widget Function(BuildContext context, List<SpMapMarker<T>> markers);
+typedef SpFlutterMapMarkerBuilder<T> = Widget Function(BuildContext context, SpMapMarker<T> marker);
+typedef SpFlutterMapClusterMarkerBuilder<T> = Widget Function(BuildContext context, List<SpMapMarker<T>> markers);
 
 class SpFlutterMap<T> extends StatefulWidget {
   const SpFlutterMap({
@@ -53,8 +51,7 @@ class SpFlutterMap<T> extends StatefulWidget {
   State<SpFlutterMap<T>> createState() => _SpFlutterMapState<T>();
 }
 
-class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
-    with DebounchedCallback {
+class _SpFlutterMapState<T> extends State<SpFlutterMap<T>> with DebounchedCallback {
   static const double _clusterRadiusPx = 72.0;
   static const double _tileSize = 256.0;
   static const double _minZoom = 3.0;
@@ -129,8 +126,7 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
             _currentRotation = camera.rotation;
           }
 
-          final bool shouldRebuildClusters =
-              (previousZoom - _currentZoom).abs() > 0.0001;
+          final bool shouldRebuildClusters = (previousZoom - _currentZoom).abs() > 0.0001;
           if (shouldRebuildClusters && mounted) setState(() {});
 
           if (!mounted) return;
@@ -145,11 +141,8 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
               () {
                 if (!mounted) return;
                 _isGesturing = false;
-                final latlong.LatLng center =
-                    _flutterMapController.camera.center;
-                widget.onCameraIdle?.call(
-                  SpLatLng(center.latitude, center.longitude),
-                );
+                final latlong.LatLng center = _flutterMapController.camera.center;
+                widget.onCameraIdle?.call(SpLatLng(center.latitude, center.longitude));
               },
               duration: const Duration(milliseconds: 300),
               key: 'idle',
@@ -169,9 +162,7 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
         TileLayer(
           urlTemplate: widget.mapStyle.mapTilerUrlTemplate,
           userAgentPackageName: kPackageInfo.packageName,
-          tileProvider: NetworkTileProvider(
-            headers: {'X-Map-Proxy-Secret': kMapTileProxySecret},
-          ),
+          tileProvider: NetworkTileProvider(headers: {'X-Map-Proxy-Secret': kMapTileProxySecret}),
         ),
         if (_currentLocation != null)
           CircleLayer(
@@ -210,17 +201,13 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
       }
-      if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever) {
+      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
         return;
       }
 
       final Position? lastKnown = await Geolocator.getLastKnownPosition();
       if (mounted && lastKnown != null) {
-        final latlong.LatLng? lastKnownLatLng = _safeLatLng(
-          lastKnown.latitude,
-          lastKnown.longitude,
-        );
+        final latlong.LatLng? lastKnownLatLng = _safeLatLng(lastKnown.latitude, lastKnown.longitude);
         if (lastKnownLatLng == null) return;
         setState(() {
           _currentLocation = lastKnownLatLng;
@@ -229,10 +216,7 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
 
       final Position currentPosition = await Geolocator.getCurrentPosition();
       if (mounted) {
-        final latlong.LatLng? currentLatLng = _safeLatLng(
-          currentPosition.latitude,
-          currentPosition.longitude,
-        );
+        final latlong.LatLng? currentLatLng = _safeLatLng(currentPosition.latitude, currentPosition.longitude);
         if (currentLatLng == null) return;
         setState(() {
           _currentLocation = currentLatLng;
@@ -241,24 +225,15 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
 
       _positionSubscription =
           Geolocator.getPositionStream(
-            locationSettings: const LocationSettings(
-              accuracy: LocationAccuracy.high,
-              distanceFilter: 5,
-            ),
-          ).listen(
-            (Position position) {
-              if (!mounted) return;
-              final latlong.LatLng? nextLatLng = _safeLatLng(
-                position.latitude,
-                position.longitude,
-              );
-              if (nextLatLng == null) return;
-              setState(() {
-                _currentLocation = nextLatLng;
-              });
-            },
-            onError: (_) {},
-          );
+            locationSettings: const LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 5),
+          ).listen((Position position) {
+            if (!mounted) return;
+            final latlong.LatLng? nextLatLng = _safeLatLng(position.latitude, position.longitude);
+            if (nextLatLng == null) return;
+            setState(() {
+              _currentLocation = nextLatLng;
+            });
+          }, onError: (_) {});
     } catch (_) {}
   }
 
@@ -271,8 +246,7 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
         rotate: true,
         child: GestureDetector(
           onTap: () {
-            final ValueChanged<List<SpMapMarker<T>>>? onClusterTap =
-                widget.onClusterTap;
+            final ValueChanged<List<SpMapMarker<T>>>? onClusterTap = widget.onClusterTap;
             if (onClusterTap != null) {
               onClusterTap(cluster.markers);
               return;
@@ -280,14 +254,8 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
 
             if (!_isFiniteLatLng(cluster.position)) return;
 
-            final double nextZoom = (_safeZoom(_currentZoom) + 2.0)
-                .clamp(_minZoom, _maxZoom)
-                .toDouble();
-            _flutterMapController.moveAndRotate(
-              cluster.position,
-              nextZoom,
-              _safeRotation(_currentRotation),
-            );
+            final double nextZoom = (_safeZoom(_currentZoom) + 2.0).clamp(_minZoom, _maxZoom).toDouble();
+            _flutterMapController.moveAndRotate(cluster.position, nextZoom, _safeRotation(_currentRotation));
           },
           child:
               widget.clusterMarkerBuilder?.call(context, cluster.markers) ??
@@ -301,18 +269,13 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
       point: _toLatLng(marker.point),
       width: marker.size.width,
       height: marker.size.height,
-      alignment: widget.markerBuilder != null
-          ? Alignment.center
-          : const Alignment(0.0, -0.6),
+      alignment: widget.markerBuilder != null ? Alignment.center : const Alignment(0.0, -0.6),
       rotate: true,
       child: GestureDetector(
         onTap: () => widget.onMarkerTap?.call(marker),
         child:
             widget.markerBuilder?.call(context, marker) ??
-            const _FlutterMapDefaultMarker(
-              tipOffset: -4.0,
-              color: Colors.redAccent,
-            ),
+            const _FlutterMapDefaultMarker(tipOffset: -4.0, color: Colors.redAccent),
       ),
     );
   }
@@ -320,38 +283,23 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
   List<_MapCluster<T>> _buildClusters() {
     final List<_MapCluster<T>> fixedClusters = widget.markers
         .where((marker) => !marker.clusterable)
-        .map(
-          (marker) => _MapCluster<T>(
-            markers: <SpMapMarker<T>>[marker],
-            position: _toLatLng(marker.point),
-          ),
-        )
+        .map((marker) => _MapCluster<T>(markers: <SpMapMarker<T>>[marker], position: _toLatLng(marker.point)))
         .toList();
-    final List<SpMapMarker<T>> clusterableMarkers = widget.markers
-        .where((marker) => marker.clusterable)
-        .toList();
+    final List<SpMapMarker<T>> clusterableMarkers = widget.markers.where((marker) => marker.clusterable).toList();
 
     final double zoom = _safeZoom(_currentZoom);
     if (zoom >= 18.0) {
       return <_MapCluster<T>>[
         ...fixedClusters,
         ...clusterableMarkers.map(
-          (marker) => _MapCluster<T>(
-            markers: <SpMapMarker<T>>[marker],
-            position: _toLatLng(marker.point),
-          ),
+          (marker) => _MapCluster<T>(markers: <SpMapMarker<T>>[marker], position: _toLatLng(marker.point)),
         ),
       ];
     }
 
     final List<_MapClusterPoint<T>> points =
         clusterableMarkers
-            .map(
-              (marker) => _MapClusterPoint<T>(
-                marker: marker,
-                projected: _project(_toLatLng(marker.point), zoom),
-              ),
-            )
+            .map((marker) => _MapClusterPoint<T>(marker: marker, projected: _project(_toLatLng(marker.point), zoom)))
             .toList()
           ..sort((a, b) {
             final int xCompare = a.projected.x.compareTo(b.projected.x);
@@ -359,16 +307,13 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
             return a.projected.y.compareTo(b.projected.y);
           });
 
-    final List<_ClusterAccumulator<T>> accumulators =
-        <_ClusterAccumulator<T>>[];
+    final List<_ClusterAccumulator<T>> accumulators = <_ClusterAccumulator<T>>[];
     for (final _MapClusterPoint<T> point in points) {
       _ClusterAccumulator<T>? best;
       double bestDistanceSquared = _clusterRadiusPx * _clusterRadiusPx;
 
       for (final _ClusterAccumulator<T> accumulator in accumulators) {
-        final double distanceSquared = accumulator.distanceSquaredTo(
-          point.projected,
-        );
+        final double distanceSquared = accumulator.distanceSquaredTo(point.projected);
         if (distanceSquared <= bestDistanceSquared) {
           best = accumulator;
           bestDistanceSquared = distanceSquared;
@@ -376,12 +321,7 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
       }
 
       if (best == null) {
-        accumulators.add(
-          _ClusterAccumulator<T>(
-            marker: point.marker,
-            projected: point.projected,
-          ),
-        );
+        accumulators.add(_ClusterAccumulator<T>(marker: point.marker, projected: point.projected));
       } else {
         best.add(point.marker, point.projected);
       }
@@ -390,20 +330,13 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
     return <_MapCluster<T>>[
       ...fixedClusters,
       ...accumulators.map(
-        (accumulator) => _MapCluster<T>(
-          markers: accumulator.markers,
-          position: _unproject(accumulator.centroid, zoom),
-        ),
+        (accumulator) => _MapCluster<T>(markers: accumulator.markers, position: _unproject(accumulator.centroid, zoom)),
       ),
     ];
   }
 
   void _attachMapController() {
-    widget.mapController.attach(
-      zoomBy: _zoomBy,
-      animateTo: _animateTo,
-      resetRotation: _resetRotation,
-    );
+    widget.mapController.attach(zoomBy: _zoomBy, animateTo: _animateTo, resetRotation: _resetRotation);
   }
 
   void _notifyViewportChanged(MapCamera camera) {
@@ -413,16 +346,8 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
     final bounds = camera.visibleBounds;
     onViewportChanged(
       SpMapViewport(
-        bounds: SpLatLngBounds(
-          south: bounds.south,
-          west: bounds.west,
-          north: bounds.north,
-          east: bounds.east,
-        ),
-        center: SpLatLng(
-          camera.center.latitude,
-          camera.center.longitude,
-        ),
+        bounds: SpLatLngBounds(south: bounds.south, west: bounds.west, north: bounds.north, east: bounds.east),
+        center: SpLatLng(camera.center.latitude, camera.center.longitude),
         zoom: camera.zoom,
       ),
     );
@@ -432,22 +357,11 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
     final latlong.LatLng center = _flutterMapController.camera.center;
     if (!_isFiniteLatLng(center)) return;
 
-    final double nextZoom = (_safeZoom(_currentZoom) + delta)
-        .clamp(_minZoom, _maxZoom)
-        .toDouble();
-    _flutterMapController.moveAndRotate(
-      center,
-      nextZoom,
-      _safeRotation(_currentRotation),
-    );
+    final double nextZoom = (_safeZoom(_currentZoom) + delta).clamp(_minZoom, _maxZoom).toDouble();
+    _flutterMapController.moveAndRotate(center, nextZoom, _safeRotation(_currentRotation));
   }
 
-  Future<void> _animateTo(
-    double latitude,
-    double longitude, {
-    double? zoom,
-    double? bearing,
-  }) async {
+  Future<void> _animateTo(double latitude, double longitude, {double? zoom, double? bearing}) async {
     final latlong.LatLng? position = _safeLatLng(latitude, longitude);
     if (position == null) return;
 
@@ -493,10 +407,7 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
     final double sinLatitude = math.sin(latitudeRadians).clamp(-0.9999, 0.9999);
     final double worldSize = _tileSize * math.pow(2.0, safeZoom);
     final double x = (latLng.longitude + 180.0) / 360.0 * worldSize;
-    final double y =
-        (0.5 -
-            math.log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * math.pi)) *
-        worldSize;
+    final double y = (0.5 - math.log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * math.pi)) * worldSize;
     return _ScreenPoint(x, y);
   }
 
@@ -506,8 +417,7 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
     final double longitude = point.x / worldSize * 360.0 - 180.0;
     final double n = math.pi - 2.0 * math.pi * point.y / worldSize;
     final double latitude = math.atan(_sinh(n)) * 180.0 / math.pi;
-    return _safeLatLng(latitude, longitude) ??
-        _toLatLng(widget.initialCamera.target);
+    return _safeLatLng(latitude, longitude) ?? _toLatLng(widget.initialCamera.target);
   }
 
   double _sinh(double value) {
@@ -516,31 +426,23 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
 }
 
 class _MapCluster<T> {
-  const _MapCluster({
-    required this.markers,
-    required this.position,
-  });
+  const _MapCluster({required this.markers, required this.position});
 
   final List<SpMapMarker<T>> markers;
   final latlong.LatLng position;
 }
 
 class _MapClusterPoint<T> {
-  const _MapClusterPoint({
-    required this.marker,
-    required this.projected,
-  });
+  const _MapClusterPoint({required this.marker, required this.projected});
 
   final SpMapMarker<T> marker;
   final _ScreenPoint projected;
 }
 
 class _ClusterAccumulator<T> {
-  _ClusterAccumulator({
-    required SpMapMarker<T> marker,
-    required _ScreenPoint projected,
-  }) : markers = <SpMapMarker<T>>[marker],
-       centroid = projected;
+  _ClusterAccumulator({required SpMapMarker<T> marker, required _ScreenPoint projected})
+    : markers = <SpMapMarker<T>>[marker],
+      centroid = projected;
 
   final List<SpMapMarker<T>> markers;
   _ScreenPoint centroid;
@@ -583,21 +485,13 @@ class _FlutterMapClusterMarker extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(color: colorScheme.surface, width: 3.0),
         boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.24),
-            blurRadius: 14.0,
-            offset: const Offset(0.0, 6.0),
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.24), blurRadius: 14.0, offset: const Offset(0.0, 6.0)),
         ],
       ),
       child: Center(
         child: Text(
           count.toString(),
-          style: TextStyle(
-            color: colorScheme.onPrimary,
-            fontSize: 15.0,
-            fontWeight: FontWeight.w800,
-          ),
+          style: TextStyle(color: colorScheme.onPrimary, fontSize: 15.0, fontWeight: FontWeight.w800),
         ),
       ),
     );
@@ -614,10 +508,7 @@ class _FlutterMapClusterMarker extends StatelessWidget {
 /// - negative values move the tip upward (pin appears higher)
 /// - positive values move the tip downward (pin appears lower)
 class _FlutterMapDefaultMarker extends StatelessWidget {
-  const _FlutterMapDefaultMarker({
-    required this.color,
-    required this.tipOffset,
-  });
+  const _FlutterMapDefaultMarker({required this.color, required this.tipOffset});
 
   /// Pin fill color
   final Color color;
@@ -667,25 +558,14 @@ class _PinPainter extends CustomPainter {
     // Tail: smooth teardrop path meeting at bottom-center tip.
     // Tangent points are at ±35° from the bottom of the circle.
     const double angle = 35.0 * math.pi / 180.0;
-    final Offset leftTangent = Offset(
-      cx - r * math.sin(angle),
-      cy + r * math.cos(angle),
-    );
-    final Offset rightTangent = Offset(
-      cx + r * math.sin(angle),
-      cy + r * math.cos(angle),
-    );
+    final Offset leftTangent = Offset(cx - r * math.sin(angle), cy + r * math.cos(angle));
+    final Offset rightTangent = Offset(cx + r * math.sin(angle), cy + r * math.cos(angle));
     final Offset tip = Offset(cx, size.height + tipOffset);
 
     final Path tail = Path()
       ..moveTo(leftTangent.dx, leftTangent.dy)
       ..quadraticBezierTo(cx - 2.0, size.height - 4.0, tip.dx, tip.dy)
-      ..quadraticBezierTo(
-        cx + 2.0,
-        size.height - 4.0,
-        rightTangent.dx,
-        rightTangent.dy,
-      )
+      ..quadraticBezierTo(cx + 2.0, size.height - 4.0, rightTangent.dx, rightTangent.dy)
       ..close();
     canvas.drawPath(tail, fill);
 
@@ -694,8 +574,7 @@ class _PinPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_PinPainter old) =>
-      old.color != color || old.tipOffset != tipOffset;
+  bool shouldRepaint(_PinPainter old) => old.color != color || old.tipOffset != tipOffset;
 }
 
 class _FlutterMapCurrentLocationMarker extends StatelessWidget {
@@ -707,16 +586,9 @@ class _FlutterMapCurrentLocationMarker extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF1A73E8),
         shape: BoxShape.circle,
-        border: Border.all(
-          color: Colors.white,
-          width: 3.0,
-        ),
+        border: Border.all(color: Colors.white, width: 3.0),
         boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.22),
-            blurRadius: 6.0,
-            offset: const Offset(0.0, 2.0),
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.22), blurRadius: 6.0, offset: const Offset(0.0, 2.0)),
         ],
       ),
     );

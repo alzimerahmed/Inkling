@@ -4,10 +4,7 @@ import 'package:storypad/core/databases/models/story_db_model.dart';
 import 'package:storypad/widgets/story_list/sp_story_list.dart';
 
 class BackupStoriesTableViewer extends StatelessWidget {
-  const BackupStoriesTableViewer({
-    super.key,
-    required this.stories,
-  });
+  const BackupStoriesTableViewer({super.key, required this.stories});
 
   final List<StoryDbModel> stories;
 

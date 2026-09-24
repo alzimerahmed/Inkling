@@ -11,10 +11,7 @@ class _StorageManagementContent extends StatelessWidget {
       appBar: AppBar(
         title: Text(tr('page.storage_management.title')),
         bottom: (viewModel.loading || viewModel.reloading)
-            ? const PreferredSize(
-                preferredSize: Size.fromHeight(3),
-                child: LinearProgressIndicator(),
-              )
+            ? const PreferredSize(preferredSize: Size.fromHeight(3), child: LinearProgressIndicator())
             : null,
       ),
       body: RefreshIndicator.adaptive(
@@ -40,9 +37,7 @@ class _StorageManagementContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SpSectionTitle(
-          title: tr('page.storage_management.section.local_storage'),
-        ),
+        SpSectionTitle(title: tr('page.storage_management.section.local_storage')),
         _buildLocalTile(
           context,
           icon: SpIcons.photo,
@@ -59,24 +54,16 @@ class _StorageManagementContent extends StatelessWidget {
           label: tr('page.storage_management.label.backups_and_database'),
           paths: [SupportDirectoryPath.backups, SupportDirectoryPath.objectbox],
         ),
-        _buildCacheFilesTile(
-          context,
-          icon: SpIcons.file,
-          label: tr('page.storage_management.label.cache_files'),
-        ),
+        _buildCacheFilesTile(context, icon: SpIcons.file, label: tr('page.storage_management.label.cache_files')),
         ListTile(
           dense: true,
           title: Text(
             tr('page.storage_management.label.total'),
-            style: TextTheme.of(context).bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextTheme.of(context).bodyMedium?.copyWith(fontWeight: FontWeight.w600),
           ),
           trailing: Text(
             _formatBytes(viewModel.totalLocalBytes),
-            style: TextTheme.of(context).bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextTheme.of(context).bodyMedium?.copyWith(fontWeight: FontWeight.w600),
           ),
         ),
       ],
@@ -89,22 +76,11 @@ class _StorageManagementContent extends StatelessWidget {
     required String label,
     required List<SupportDirectoryPath> paths,
   }) {
-    final size = paths.fold<int>(
-      0,
-      (a, p) => a + (viewModel.localSizes[p] ?? 0),
-    );
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(label),
-      trailing: Text(_formatBytes(size)),
-    );
+    final size = paths.fold<int>(0, (a, p) => a + (viewModel.localSizes[p] ?? 0));
+    return ListTile(leading: Icon(icon), title: Text(label), trailing: Text(_formatBytes(size)));
   }
 
-  Widget _buildCacheFilesTile(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-  }) {
+  Widget _buildCacheFilesTile(BuildContext context, {required IconData icon, required String label}) {
     final size = viewModel.cacheFilesBytes;
     return ListTile(
       leading: Icon(icon),
@@ -116,9 +92,7 @@ class _StorageManagementContent extends StatelessWidget {
           if (size > 0) ...[
             const SizedBox(width: 8),
             TextButton.icon(
-              style: TextButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.error,
-              ),
+              style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.error),
               onPressed: () => viewModel.clearCacheFiles(context),
               icon: const Icon(SpIcons.delete),
               label: Text(tr('button.clear')),
@@ -134,20 +108,13 @@ class _StorageManagementContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SpSectionTitle(
-          title: tr('page.storage_management.section.cloud_storage'),
-        ),
-        for (final entry in viewModel.cloudQuotas.entries)
-          ?_buildCloudTile(context, entry.key, entry.value),
+        SpSectionTitle(title: tr('page.storage_management.section.cloud_storage')),
+        for (final entry in viewModel.cloudQuotas.entries) ?_buildCloudTile(context, entry.key, entry.value),
       ],
     );
   }
 
-  Widget? _buildCloudTile(
-    BuildContext context,
-    BackupServiceType serviceType,
-    CloudStorageQuotaObject? quota,
-  ) {
+  Widget? _buildCloudTile(BuildContext context, BackupServiceType serviceType, CloudStorageQuotaObject? quota) {
     final provider = context.read<BackupProvider>();
     final email = provider.currentGoogleUser?.email;
 
@@ -160,26 +127,15 @@ class _StorageManagementContent extends StatelessWidget {
     final limitBytes = quota.limitInBytes;
 
     final appUsedLabel = _formatBytes(appUsageBytes);
-    final accountUsedLabel = accountUsageBytes != null
-        ? _formatBytes(accountUsageBytes)
-        : 'N/A';
+    final accountUsedLabel = accountUsageBytes != null ? _formatBytes(accountUsageBytes) : 'N/A';
     final limitLabel = limitBytes != null ? _formatBytes(limitBytes) : 'N/A';
 
-    final hasFullQuotaData =
-        accountUsageBytes != null && limitBytes != null && limitBytes > 0;
-    final otherUsageBytes = hasFullQuotaData
-        ? (accountUsageBytes - appUsageBytes).clamp(0, accountUsageBytes)
-        : 0;
-    final freeBytes = hasFullQuotaData
-        ? (limitBytes - accountUsageBytes).clamp(0, limitBytes)
-        : 0;
+    final hasFullQuotaData = accountUsageBytes != null && limitBytes != null && limitBytes > 0;
+    final otherUsageBytes = hasFullQuotaData ? (accountUsageBytes - appUsageBytes).clamp(0, accountUsageBytes) : 0;
+    final freeBytes = hasFullQuotaData ? (limitBytes - accountUsageBytes).clamp(0, limitBytes) : 0;
 
-    final appFraction = hasFullQuotaData
-        ? (appUsageBytes / limitBytes).clamp(0.0, 1.0)
-        : 0.0;
-    final otherFraction = hasFullQuotaData
-        ? (otherUsageBytes / limitBytes).clamp(0.0, 1.0)
-        : 0.0;
+    final appFraction = hasFullQuotaData ? (appUsageBytes / limitBytes).clamp(0.0, 1.0) : 0.0;
+    final otherFraction = hasFullQuotaData ? (otherUsageBytes / limitBytes).clamp(0.0, 1.0) : 0.0;
     final usedFraction = (appFraction + otherFraction).clamp(0.0, 1.0);
 
     final appColor = ColorFromDayService(context: context).get(2)!;
@@ -187,19 +143,13 @@ class _StorageManagementContent extends StatelessWidget {
     final freeColor = ColorScheme.of(context).readOnly.surface5!;
 
     return ListTile(
-      leading: Column(
-        mainAxisAlignment: .center,
-        children: [
-          Icon(serviceType.icon),
-        ],
-      ),
+      leading: Column(mainAxisAlignment: .center, children: [Icon(serviceType.icon)]),
       title: Text(serviceType.displayName),
       isThreeLine: true,
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (email != null)
-            Text(email, style: TextTheme.of(context).bodySmall),
+          if (email != null) Text(email, style: TextTheme.of(context).bodySmall),
           const SizedBox(height: 8),
           Row(
             children: [
@@ -210,15 +160,9 @@ class _StorageManagementContent extends StatelessWidget {
                   hasFullQuotaData
                       ? tr(
                           'page.storage_management.label.free_of',
-                          namedArgs: {
-                            'SIZE': _formatBytes(freeBytes),
-                            'TOTAL': limitLabel,
-                          },
+                          namedArgs: {'SIZE': _formatBytes(freeBytes), 'TOTAL': limitLabel},
                         )
-                      : tr(
-                          'page.storage_management.label.overall',
-                          namedArgs: {'SIZE': accountUsedLabel},
-                        ),
+                      : tr('page.storage_management.label.overall', namedArgs: {'SIZE': accountUsedLabel}),
                   style: TextTheme.of(context).bodySmall,
                 ),
               ),
@@ -231,10 +175,7 @@ class _StorageManagementContent extends StatelessWidget {
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
-                  tr(
-                    'page.storage_management.label.this_app',
-                    namedArgs: {'SIZE': appUsedLabel},
-                  ),
+                  tr('page.storage_management.label.this_app', namedArgs: {'SIZE': appUsedLabel}),
                   style: TextTheme.of(context).bodySmall,
                 ),
               ),
@@ -247,10 +188,7 @@ class _StorageManagementContent extends StatelessWidget {
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
-                  tr(
-                    'page.storage_management.label.other_apps',
-                    namedArgs: {'SIZE': _formatBytes(otherUsageBytes)},
-                  ),
+                  tr('page.storage_management.label.other_apps', namedArgs: {'SIZE': _formatBytes(otherUsageBytes)}),
                   style: TextTheme.of(context).bodySmall,
                 ),
               ),
@@ -269,35 +207,20 @@ class _StorageManagementContent extends StatelessWidget {
                     // constraints.maxWidth can be negative or non-finite in squeezed/overflowing
                     // layouts, which would make the clamps below throw ArgumentError.
                     final rawBarWidth = constraints.maxWidth;
-                    final barWidth = rawBarWidth.isFinite
-                        ? math.max(rawBarWidth, 0.0)
-                        : 0.0;
-                    final rawUsedWidth = (barWidth * usedFraction)
-                        .clamp(0.0, barWidth)
-                        .toDouble();
-                    final rawAppWidth = (barWidth * appFraction)
-                        .clamp(0.0, barWidth)
-                        .toDouble();
+                    final barWidth = rawBarWidth.isFinite ? math.max(rawBarWidth, 0.0) : 0.0;
+                    final rawUsedWidth = (barWidth * usedFraction).clamp(0.0, barWidth).toDouble();
+                    final rawAppWidth = (barWidth * appFraction).clamp(0.0, barWidth).toDouble();
 
                     // Tiny app usage may be sub-pixel; keep it visible while preserving total used width.
-                    final appWidthUpperBound = math.max(
-                      rawUsedWidth > 0 ? rawUsedWidth : barWidth,
-                      minVisibleAppWidth,
-                    );
+                    final appWidthUpperBound = math.max(rawUsedWidth > 0 ? rawUsedWidth : barWidth, minVisibleAppWidth);
                     final appWidth = appFraction > 0
-                        ? rawAppWidth
-                              .clamp(minVisibleAppWidth, appWidthUpperBound)
-                              .toDouble()
+                        ? rawAppWidth.clamp(minVisibleAppWidth, appWidthUpperBound).toDouble()
                         : 0.0;
-                    final otherWidth = (rawUsedWidth - appWidth)
-                        .clamp(0.0, barWidth)
-                        .toDouble();
+                    final otherWidth = (rawUsedWidth - appWidth).clamp(0.0, barWidth).toDouble();
 
                     return Stack(
                       children: [
-                        Positioned.fill(
-                          child: ColoredBox(color: freeColor),
-                        ),
+                        Positioned.fill(child: ColoredBox(color: freeColor)),
                         if (otherWidth > 0)
                           Positioned(
                             left: appWidth,
@@ -332,10 +255,7 @@ class _StorageManagementContent extends StatelessWidget {
                     .where((s) => s.serviceType == serviceType && s.isSignedIn)
                     .firstOrNull;
                 if (service == null || service.currentUser == null) return;
-                CloudOptimizeRoute(
-                  service: service,
-                  userIdentifier: service.currentUser!.identifier,
-                ).push(context);
+                CloudOptimizeRoute(service: service, userIdentifier: service.currentUser!.identifier).push(context);
               },
               icon: const Icon(SpIcons.tune),
               label: Text(tr('button.optimize')),
@@ -350,10 +270,7 @@ class _StorageManagementContent extends StatelessWidget {
     return Container(
       width: 8,
       height: 8,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }
 

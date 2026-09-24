@@ -16,10 +16,7 @@ class SpShareAppBottomSheet extends BaseBottomSheet {
     return SpSingleStateWidget(
       initialValue: tr(
         'general.share_app_sample_text',
-        namedArgs: {
-          'APP_NAME': kAppName,
-          'URL': 'https://storypad.me',
-        },
+        namedArgs: {'APP_NAME': kAppName, 'URL': 'https://storypad.me'},
       ),
       builder: (context, notifier) {
         return SingleChildScrollView(
@@ -62,9 +59,7 @@ class SpShareAppBottomSheet extends BaseBottomSheet {
 
         // iPad requires sharePositionOrigin for proper share sheet positioning
         // Ensure passing correct button context to have proper positioning.
-        sharePositionOrigin: box != null
-            ? box.localToGlobal(Offset.zero) & box.size
-            : null,
+        sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
       ),
     );
   }

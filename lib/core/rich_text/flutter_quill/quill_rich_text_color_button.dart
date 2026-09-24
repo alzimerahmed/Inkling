@@ -119,9 +119,7 @@ class _QuillRichTextColorButtonState extends State<_QuillRichTextColorButton> {
     } else {
       // Apply color formatting
       final hexColor = '#${_colorToHex(color)}';
-      _quillController.formatSelection(
-        quill.Attribute.fromKeyValue(attributeKey, hexColor),
-      );
+      _quillController.formatSelection(quill.Attribute.fromKeyValue(attributeKey, hexColor));
     }
   }
 
@@ -198,9 +196,7 @@ class _QuillRichTextColorButtonState extends State<_QuillRichTextColorButton> {
         return IconButton(
           tooltip: defaultTooltip,
           icon: Icon(iconData, color: displayIconColor),
-          style: ButtonStyle(
-            backgroundColor: fillColor != null ? WidgetStatePropertyAll(fillColor) : null,
-          ),
+          style: ButtonStyle(backgroundColor: fillColor != null ? WidgetStatePropertyAll(fillColor) : null),
           onPressed: open,
         );
       },

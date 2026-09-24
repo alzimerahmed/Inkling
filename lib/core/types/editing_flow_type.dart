@@ -1,4 +1,1 @@
-enum EditingFlowType {
-  create,
-  update,
-}
+enum EditingFlowType { create, update }

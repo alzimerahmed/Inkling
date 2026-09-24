@@ -7,11 +7,7 @@ class _RemoteConfigObject<T> {
   final _RemoteConfigValueType type;
   final T defaultValue;
 
-  const _RemoteConfigObject(
-    this.key,
-    this.type,
-    this.defaultValue,
-  );
+  const _RemoteConfigObject(this.key, this.type, this.defaultValue);
 
   T get() {
     final adaptor = kRemoteConfigAdaptor;
@@ -34,9 +30,7 @@ class _RemoteConfigObject<T> {
         final result = adaptor.getJsonString(key, '');
 
         if (result.trim().isEmpty) {
-          debugPrint(
-            '🐛 [remote_config] Either $key is not set or wrong content type.',
-          );
+          debugPrint('🐛 [remote_config] Either $key is not set or wrong content type.');
           break;
         }
 
@@ -44,10 +38,7 @@ class _RemoteConfigObject<T> {
           value = jsonDecode(result);
         } on FormatException catch (e) {
           debugPrint("$runtimeType#get() decode JSON failed $e");
-          kErrorReportingService.recordError(
-            e,
-            StackTrace.fromString(e.message),
-          );
+          kErrorReportingService.recordError(e, StackTrace.fromString(e.message));
         }
 
         break;

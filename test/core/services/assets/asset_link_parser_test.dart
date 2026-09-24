@@ -97,9 +97,7 @@ void main() {
             'insert': {'image': 'images/123.jpg'},
           },
         ];
-        expect(AssetLinkParser.extractEmbedSources(body, 'image'), [
-          'images/123.jpg',
-        ]);
+        expect(AssetLinkParser.extractEmbedSources(body, 'image'), ['images/123.jpg']);
       });
 
       test('extracts external URL', () {
@@ -108,9 +106,7 @@ void main() {
             'insert': {'image': 'https://example.com/photo.jpg'},
           },
         ];
-        expect(AssetLinkParser.extractEmbedSources(body, 'image'), [
-          'https://example.com/photo.jpg',
-        ]);
+        expect(AssetLinkParser.extractEmbedSources(body, 'image'), ['https://example.com/photo.jpg']);
       });
 
       // --- Album format ---
@@ -121,10 +117,11 @@ void main() {
             'insert': {'image': 'images/111.jpg|images/222.jpg|images/333.jpg'},
           },
         ];
-        expect(
-          AssetLinkParser.extractEmbedSources(body, 'image'),
-          ['images/111.jpg', 'images/222.jpg', 'images/333.jpg'],
-        );
+        expect(AssetLinkParser.extractEmbedSources(body, 'image'), [
+          'images/111.jpg',
+          'images/222.jpg',
+          'images/333.jpg',
+        ]);
       });
 
       test('ignores empty segments in pipe-delimited value', () {
@@ -133,9 +130,7 @@ void main() {
             'insert': {'image': 'images/111.jpg|'},
           },
         ];
-        expect(AssetLinkParser.extractEmbedSources(body, 'image'), [
-          'images/111.jpg',
-        ]);
+        expect(AssetLinkParser.extractEmbedSources(body, 'image'), ['images/111.jpg']);
       });
 
       test('does not cross-contaminate audio embeds when querying image', () {
@@ -147,12 +142,8 @@ void main() {
             'insert': {'audio': 'audio/222.m4a'},
           },
         ];
-        expect(AssetLinkParser.extractEmbedSources(body, 'image'), [
-          'images/111.jpg',
-        ]);
-        expect(AssetLinkParser.extractEmbedSources(body, 'audio'), [
-          'audio/222.m4a',
-        ]);
+        expect(AssetLinkParser.extractEmbedSources(body, 'image'), ['images/111.jpg']);
+        expect(AssetLinkParser.extractEmbedSources(body, 'audio'), ['audio/222.m4a']);
       });
 
       test('collects paths from multiple album embeds in order', () {
@@ -164,10 +155,7 @@ void main() {
             'insert': {'image': 'images/3.jpg'},
           },
         ];
-        expect(
-          AssetLinkParser.extractEmbedSources(body, 'image'),
-          ['images/1.jpg', 'images/2.jpg', 'images/3.jpg'],
-        );
+        expect(AssetLinkParser.extractEmbedSources(body, 'image'), ['images/1.jpg', 'images/2.jpg', 'images/3.jpg']);
       });
     });
 
@@ -187,21 +175,16 @@ void main() {
             'insert': {'image': 'videos/3.mp4'},
           },
         ];
-        expect(
-          AssetLinkParser.extractEmbedSourcesAny(body, {'media', 'image'}),
-          ['images/1.jpg', 'images/2.jpg', 'videos/3.mp4'],
-        );
+        expect(AssetLinkParser.extractEmbedSourcesAny(body, {'media', 'image'}), [
+          'images/1.jpg',
+          'images/2.jpg',
+          'videos/3.mp4',
+        ]);
       });
 
       test('returns empty list when body is null or empty', () {
-        expect(
-          AssetLinkParser.extractEmbedSourcesAny(null, {'media', 'image'}),
-          isEmpty,
-        );
-        expect(
-          AssetLinkParser.extractEmbedSourcesAny([], {'media', 'image'}),
-          isEmpty,
-        );
+        expect(AssetLinkParser.extractEmbedSourcesAny(null, {'media', 'image'}), isEmpty);
+        expect(AssetLinkParser.extractEmbedSourcesAny([], {'media', 'image'}), isEmpty);
       });
     });
   });

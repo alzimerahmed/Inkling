@@ -4,15 +4,13 @@ import 'package:storypad/core/databases/models/collection_db_model.dart';
 import 'package:storypad/core/databases/models/story_db_model.dart';
 import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
 import 'package:storypad/objectbox.g.dart';
+
 import 'recently_deleted_records_view.dart';
 
-class RecentlyDeletedRecordsViewModel extends ChangeNotifier
-    with DisposeAwareMixin {
+class RecentlyDeletedRecordsViewModel extends ChangeNotifier with DisposeAwareMixin {
   final RecentlyDeletedRecordsRoute params;
 
-  RecentlyDeletedRecordsViewModel({
-    required this.params,
-  }) {
+  RecentlyDeletedRecordsViewModel({required this.params}) {
     load();
   }
 
@@ -24,13 +22,9 @@ class RecentlyDeletedRecordsViewModel extends ChangeNotifier
   }
 
   Future<CollectionDbModel<StoryDbModel>?> getDeletedRecords() async {
-    final conditions = StoryObjectBox_.permanentlyDeletedAt.notNull().and(
-      StoryObjectBox_.latestContent.notNull(),
-    );
+    final conditions = StoryObjectBox_.permanentlyDeletedAt.notNull().and(StoryObjectBox_.latestContent.notNull());
 
-    QueryBuilder<StoryObjectBox> queryBuilder = StoryDbModel.db.box.query(
-      conditions,
-    );
+    QueryBuilder<StoryObjectBox> queryBuilder = StoryDbModel.db.box.query(conditions);
 
     queryBuilder
       ..order(StoryObjectBox_.year, flags: Order.descending)
@@ -42,10 +36,7 @@ class RecentlyDeletedRecordsViewModel extends ChangeNotifier
     Query<StoryObjectBox>? query = queryBuilder.build();
     List<StoryObjectBox> objects = await query.findAsync();
 
-    List<StoryDbModel> docs = await StoryDbModel.db.objectsToModels(
-      objects,
-      {},
-    );
+    List<StoryDbModel> docs = await StoryDbModel.db.objectsToModels(objects, {});
     return CollectionDbModel<StoryDbModel>(items: docs);
   }
 }

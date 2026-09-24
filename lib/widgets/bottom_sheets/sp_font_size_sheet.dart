@@ -7,11 +7,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/sp_single_state_widget.dart';
 
 class SpFontSizeSheet extends BaseBottomSheet {
-  const SpFontSizeSheet({
-    required this.fontSize,
-    required this.isDefaultToSystem,
-    required this.onChanged,
-  });
+  const SpFontSizeSheet({required this.fontSize, required this.isDefaultToSystem, required this.onChanged});
 
   final FontSizeOption? fontSize;
   final bool isDefaultToSystem;
@@ -36,8 +32,7 @@ class SpFontSizeSheet extends BaseBottomSheet {
                 String? label = fontSize?.label;
 
                 if (isDefaultToSystem) {
-                  label ??=
-                      "${tr('general.system')} (${tr('general.default')})";
+                  label ??= "${tr('general.system')} (${tr('general.default')})";
                 } else {
                   label ??= tr('general.default');
                 }
@@ -47,10 +42,7 @@ class SpFontSizeSheet extends BaseBottomSheet {
                   trailing: Visibility(
                     visible: fontSize == selectedFontSize,
                     child: SpFadeIn.fromBottom(
-                      child: Icon(
-                        SpIcons.checkCircle,
-                        color: ColorScheme.of(context).primary,
-                      ),
+                      child: Icon(SpIcons.checkCircle, color: ColorScheme.of(context).primary),
                     ),
                   ),
                   onTap: () {

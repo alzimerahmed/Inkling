@@ -8,24 +8,14 @@ class SearchHighlightService {
   /// ignored (single letters would highlight half the page).
   static List<String> terms(String? query) {
     if (query == null) return const [];
-    return query
-        .trim()
-        .split(RegExp(r'\s+'))
-        .where((t) => t.length >= 2)
-        .toList();
+    return query.trim().split(RegExp(r'\s+')).where((t) => t.length >= 2).toList();
   }
 
   /// Returns the [text] split into segments; segments with
   /// `isMatch == true` should be rendered highlighted.
-  static List<({String text, bool isMatch})> segments(
-    String text,
-    String? query,
-  ) {
+  static List<({String text, bool isMatch})> segments(String text, String? query) {
     final queryTerms = terms(query);
-    if (queryTerms.isEmpty)
-      return [
-        (text: text, isMatch: false),
-      ];
+    if (queryTerms.isEmpty) return [(text: text, isMatch: false)];
 
     final matches = <({int start, int end})>[];
     for (final term in queryTerms) {
@@ -43,8 +33,7 @@ class SearchHighlightService {
     for (final m in matches.skip(1)) {
       final last = merged.last;
       if (m.start <= last.end) {
-        if (m.end > last.end)
-          merged[merged.length - 1] = (start: last.start, end: m.end);
+        if (m.end > last.end) merged[merged.length - 1] = (start: last.start, end: m.end);
       } else {
         merged.add(m);
       }
@@ -53,13 +42,11 @@ class SearchHighlightService {
     final segments = <({String text, bool isMatch})>[];
     int cursor = 0;
     for (final m in merged) {
-      if (m.start > cursor)
-        segments.add((text: text.substring(cursor, m.start), isMatch: false));
+      if (m.start > cursor) segments.add((text: text.substring(cursor, m.start), isMatch: false));
       segments.add((text: text.substring(m.start, m.end), isMatch: true));
       cursor = m.end;
     }
-    if (cursor < text.length)
-      segments.add((text: text.substring(cursor), isMatch: false));
+    if (cursor < text.length) segments.add((text: text.substring(cursor), isMatch: false));
     return segments;
   }
 }

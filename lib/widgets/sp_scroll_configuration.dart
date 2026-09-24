@@ -1,11 +1,9 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class SpScrollConfiguration extends StatelessWidget {
-  const SpScrollConfiguration({
-    super.key,
-    required this.child,
-  });
+  const SpScrollConfiguration({super.key, required this.child});
 
   final Widget child;
 
@@ -19,9 +17,6 @@ class SpScrollConfiguration extends StatelessWidget {
     // On desktop, there is auto added trailing icon.
     // So it does not look nice with scrollbars at all.
     // Hiding scrollbars to make it look better. Scrollbar is truly optional anyways for tags view.
-    return ScrollConfiguration(
-      behavior: const ScrollBehavior().copyWith(scrollbars: false),
-      child: child,
-    );
+    return ScrollConfiguration(behavior: const ScrollBehavior().copyWith(scrollbars: false), child: child);
   }
 }

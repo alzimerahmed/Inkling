@@ -34,9 +34,7 @@ enum AssetType {
 
   final SupportDirectoryPath subDirectory;
 
-  const AssetType({
-    required this.subDirectory,
-  });
+  const AssetType({required this.subDirectory});
 
   /// Icon representing this asset type, so call sites don't branch on the type
   /// themselves (media stats rows, import review tabs, ...).
@@ -63,19 +61,13 @@ enum AssetType {
     }
   }
 
-  String getStoragePath({
-    required int id,
-    required String extension,
-  }) {
+  String getStoragePath({required int id, required String extension}) {
     /// Get the storage path for an asset based on ID, extension, and type.
     /// This is the single source of truth for path construction.
     return "${subDirectory.directoryPath}/$id$extension";
   }
 
-  String getRelativeStoragePath({
-    required int id,
-    required String extension,
-  }) {
+  String getRelativeStoragePath({required int id, required String extension}) {
     /// Get the relative storage path for an asset based on ID, extension, and type.
     /// This is used for storing paths in the database.
     return "${subDirectory.relativePath}/$id$extension";

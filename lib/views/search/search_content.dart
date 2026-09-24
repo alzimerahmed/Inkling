@@ -11,18 +11,14 @@ class _SearchContent extends StatelessWidget {
       builder: (context, state) {
         return PopScope(
           canPop: !state.editing,
-          onPopInvokedWithResult: (didPop, result) =>
-              viewModel.onPopInvokedWithResult(didPop, result, context),
+          onPopInvokedWithResult: (didPop, result) => viewModel.onPopInvokedWithResult(didPop, result, context),
           child: buildScaffold(context, state),
         );
       },
     );
   }
 
-  Widget buildScaffold(
-    BuildContext context,
-    SpStoryListMultiEditWrapperState state,
-  ) {
+  Widget buildScaffold(BuildContext context, SpStoryListMultiEditWrapperState state) {
     var visibleTags =
         viewModel.tags?.where((tag) {
           if (tag.id == 0) return true;
@@ -40,10 +36,7 @@ class _SearchContent extends StatelessWidget {
           style: Theme.of(context).appBarTheme.titleTextStyle,
           keyboardType: TextInputType.text,
           autofocus: false,
-          decoration: InputDecoration(
-            hintText: tr("input.story_search.hint"),
-            border: InputBorder.none,
-          ),
+          decoration: InputDecoration(hintText: tr("input.story_search.hint"), border: InputBorder.none),
           onChanged: (value) => viewModel.searchText(value),
           onSubmitted: (value) => viewModel.searchText(value),
         ),
@@ -59,10 +52,7 @@ class _SearchContent extends StatelessWidget {
           IconButton(
             tooltip: tr("page.search_filter.title"),
             icon: viewModel.hasHiddenTagFilters
-                ? Badge(
-                    backgroundColor: ColorScheme.of(context).primary,
-                    child: const Icon(SpIcons.tune),
-                  )
+                ? Badge(backgroundColor: ColorScheme.of(context).primary, child: const Icon(SpIcons.tune))
                 : const Icon(SpIcons.tune),
             onPressed: () => viewModel.goToFilterPage(context),
           ),
@@ -83,10 +73,8 @@ class _SearchContent extends StatelessWidget {
                         choices: visibleTags,
                         storiesCount: (TagDbModel tag) => tag.storiesCount,
                         toLabel: (TagDbModel tag) => tag.title,
-                        selected: (TagDbModel tag) =>
-                            viewModel.tagSelected(tag),
-                        onToggle: (TagDbModel tag) =>
-                            viewModel.toggleTag(tag, context),
+                        selected: (TagDbModel tag) => viewModel.tagSelected(tag),
+                        onToggle: (TagDbModel tag) => viewModel.toggleTag(tag, context),
                       ),
                     ),
                     const SizedBox(height: 12.0),
@@ -99,10 +87,7 @@ class _SearchContent extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: .start,
                   children: [
-                    SizedBox(
-                      width: .infinity,
-                      child: _buildPresetChips(context),
-                    ),
+                    SizedBox(width: .infinity, child: _buildPresetChips(context)),
                     const SizedBox(height: 12.0),
                   ],
                 ),
@@ -115,20 +100,13 @@ class _SearchContent extends StatelessWidget {
   }
 
   Widget buildBody() {
-    if (viewModel.searchFilter == null)
-      return const Center(child: CircularProgressIndicator.adaptive());
-    return SpStoryList.withQuery(
-      filter: viewModel.searchFilter,
-    );
+    if (viewModel.searchFilter == null) return const Center(child: CircularProgressIndicator.adaptive());
+    return SpStoryList.withQuery(filter: viewModel.searchFilter);
   }
 
   /// One-tap filter presets shown while a query is active (Phase 4, gap #14).
   Widget _buildPresetChips(BuildContext context) {
-    Widget presetChip({
-      required String label,
-      required bool selected,
-      required VoidCallback onTap,
-    }) {
+    Widget presetChip({required String label, required bool selected, required VoidCallback onTap}) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
         child: FilterChip(
@@ -165,27 +143,18 @@ class _SearchContent extends StatelessWidget {
     );
   }
 
-  Widget buildBottomNavigationBar(
-    BuildContext context,
-    SpStoryListMultiEditWrapperState state,
-  ) {
+  Widget buildBottomNavigationBar(BuildContext context, SpStoryListMultiEditWrapperState state) {
     return SpMultiEditBottomNavBar(
       editing: state.editing,
       onCancel: () => state.turnOffEditing(),
       buttons: [
         OutlinedButton(
-          child: Text(
-            "${tr("button.archive")} (${state.selectedStories.length})",
-          ),
+          child: Text("${tr("button.archive")} (${state.selectedStories.length})"),
           onPressed: () => state.archiveAll(context),
         ),
         FilledButton(
-          style: FilledButton.styleFrom(
-            backgroundColor: ColorScheme.of(context).error,
-          ),
-          child: Text(
-            "${tr("button.move_to_bin")} (${state.selectedStories.length})",
-          ),
+          style: FilledButton.styleFrom(backgroundColor: ColorScheme.of(context).error),
+          child: Text("${tr("button.move_to_bin")} (${state.selectedStories.length})"),
           onPressed: () => state.moveToBinAll(context),
         ),
       ],

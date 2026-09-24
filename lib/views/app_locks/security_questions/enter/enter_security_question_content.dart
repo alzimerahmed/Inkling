@@ -18,25 +18,18 @@ class _EnterSecurityQuestionContent extends StatelessWidget {
             controller: viewModel.controller,
             textInputAction: TextInputAction.done,
             keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
-              hintText: "...",
-            ),
+            decoration: const InputDecoration(hintText: "..."),
             onFieldSubmitted: (text) => viewModel.save(context),
           ),
           const SizedBox(height: 16.0),
-          FilledButton.icon(
-            label: Text(tr("button.save")),
-            onPressed: () => viewModel.save(context),
-          ),
+          FilledButton.icon(label: Text(tr("button.save")), onPressed: () => viewModel.save(context)),
           const SizedBox(height: 4.0),
           ValueListenableBuilder(
             valueListenable: viewModel.controller,
             builder: (context, value, child) {
               return OutlinedButton.icon(
                 label: Text(tr("button.clear")),
-                onPressed: value.text.isNotEmpty
-                    ? () => viewModel.controller.clear()
-                    : null,
+                onPressed: value.text.isNotEmpty ? () => viewModel.controller.clear() : null,
               );
             },
           ),

@@ -11,10 +11,8 @@ import 'template_stories_view_model.dart';
 part 'template_stories_content.dart';
 
 class TemplateStoriesRoute extends BaseRoute {
-  TemplateStoriesRoute({
-    required this.template,
-    required this.galleryTemplate,
-  }) : assert(template?.id != null || galleryTemplate?.id != null);
+  TemplateStoriesRoute({required this.template, required this.galleryTemplate})
+    : assert(template?.id != null || galleryTemplate?.id != null);
 
   final TemplateDbModel? template;
   final GalleryTemplateObject? galleryTemplate;
@@ -24,10 +22,7 @@ class TemplateStoriesRoute extends BaseRoute {
 }
 
 class TemplateStoriesView extends StatelessWidget {
-  const TemplateStoriesView({
-    super.key,
-    required this.params,
-  });
+  const TemplateStoriesView({super.key, required this.params});
 
   final TemplateStoriesRoute params;
 

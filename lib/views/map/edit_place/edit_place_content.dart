@@ -12,9 +12,7 @@ class _EditPlaceContent extends StatelessWidget {
         title: Text(tr("page.map.edit_place.title")),
         actions: [
           FilledButton(
-            onPressed: viewModel.canApply
-                ? () => viewModel.apply(context)
-                : null,
+            onPressed: viewModel.canApply ? () => viewModel.apply(context) : null,
             child: Text(tr("button.apply")),
           ),
           const SizedBox(width: 12.0),
@@ -50,10 +48,7 @@ class _EditPlaceContent extends StatelessWidget {
             const SizedBox(height: 16),
             SpSectionTitle(
               title: tr("page.map.edit_place.recent_labels"),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 4.0,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14.0),
@@ -61,10 +56,7 @@ class _EditPlaceContent extends StatelessWidget {
                 spacing: 8,
                 children: viewModel.recentLabels
                     .map(
-                      (label) => ActionChip(
-                        label: Text(label),
-                        onPressed: () => viewModel.useLabelSuggestion(label),
-                      ),
+                      (label) => ActionChip(label: Text(label), onPressed: () => viewModel.useLabelSuggestion(label)),
                     )
                     .toList(),
               ),

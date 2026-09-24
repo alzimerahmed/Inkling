@@ -24,10 +24,7 @@ void main() {
 
       expect(controller.getPlainText(), equals('Hello World\n'));
       expect(controller.readOnly, isFalse);
-      expect(
-        controller.selection,
-        equals(const TextSelection.collapsed(offset: 0)),
-      );
+      expect(controller.selection, equals(const TextSelection.collapsed(offset: 0)));
     });
 
     test('fromJson handles empty JSON through adapter', () {
@@ -82,10 +79,7 @@ void main() {
         readOnly: false,
       );
 
-      expect(
-        controller.getPlainText(),
-        equals('Bold text and italic text\n'),
-      );
+      expect(controller.getPlainText(), equals('Bold text and italic text\n'));
     });
 
     test('serialize returns optimized JSON structure', () {
@@ -178,10 +172,7 @@ void main() {
       );
 
       // Use adapter to insert media (it handles the Embeddable conversion)
-      editorAdapter.insertMedia(
-        controller: controller,
-        mediaPath: 'images/test.jpg',
-      );
+      editorAdapter.insertMedia(controller: controller, mediaPath: 'images/test.jpg');
 
       final serialized = controller.serialize();
       final hasImage = serialized.any((op) {
@@ -204,21 +195,13 @@ void main() {
       controller.insertEmbed(
         embedType: 'media',
         value: 'images/2.jpg|images/3.jpg',
-        attributes: {
-          'custom-embed-alignment': 'left',
-          'custom-embed-size': 'max',
-        },
+        attributes: {'custom-embed-alignment': 'left', 'custom-embed-size': 'max'},
       );
 
       final serialized = controller.serialize();
-      final embedOp = serialized.firstWhere(
-        (op) => op['insert'] is Map && op['insert']['media'] != null,
-      );
+      final embedOp = serialized.firstWhere((op) => op['insert'] is Map && op['insert']['media'] != null);
       expect(embedOp['insert'], {'media': 'images/2.jpg|images/3.jpg'});
-      expect(embedOp['attributes'], {
-        'custom-embed-alignment': 'left',
-        'custom-embed-size': 'max',
-      });
+      expect(embedOp['attributes'], {'custom-embed-alignment': 'left', 'custom-embed-size': 'max'});
     });
 
     test('replaceEmbed preserves existing attributes', () {
@@ -226,10 +209,7 @@ void main() {
         json: [
           {
             'insert': {'media': 'images/1.jpg'},
-            'attributes': {
-              'custom-embed-alignment': 'left',
-              'custom-embed-size': 'max',
-            },
+            'attributes': {'custom-embed-alignment': 'left', 'custom-embed-size': 'max'},
           },
           {'insert': '\n'},
         ],
@@ -237,21 +217,11 @@ void main() {
         readOnly: false,
       );
 
-      controller.replaceEmbed(
-        offset: 0,
-        length: 1,
-        embedType: 'media',
-        value: 'images/2.jpg|images/3.jpg',
-      );
+      controller.replaceEmbed(offset: 0, length: 1, embedType: 'media', value: 'images/2.jpg|images/3.jpg');
 
       final serialized = controller.serialize();
-      expect(serialized[0]['insert'], {
-        'media': 'images/2.jpg|images/3.jpg',
-      });
-      expect(serialized[0]['attributes'], {
-        'custom-embed-alignment': 'left',
-        'custom-embed-size': 'max',
-      });
+      expect(serialized[0]['insert'], {'media': 'images/2.jpg|images/3.jpg'});
+      expect(serialized[0]['attributes'], {'custom-embed-alignment': 'left', 'custom-embed-size': 'max'});
     });
 
     test('selection getter returns current selection', () {
@@ -278,10 +248,7 @@ void main() {
         readOnly: false,
       );
 
-      controller.selection = const TextSelection(
-        baseOffset: 6,
-        extentOffset: 11,
-      );
+      controller.selection = const TextSelection(baseOffset: 6, extentOffset: 11);
 
       expect(controller.selection.baseOffset, equals(6));
       expect(controller.selection.extentOffset, equals(11));

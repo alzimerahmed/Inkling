@@ -23,40 +23,26 @@ part 'map_picker_content.dart';
 enum MapPickerFinalAction { confirm, remove, cancel }
 
 class MapPickerResult {
-  const MapPickerResult._({
-    required this.action,
-    required this.place,
-  });
+  const MapPickerResult._({required this.action, required this.place});
 
   final MapPickerFinalAction action;
   final PlaceDbModel? place;
 
   factory MapPickerResult.confirm(PlaceDbModel place) {
-    return MapPickerResult._(
-      action: MapPickerFinalAction.confirm,
-      place: place,
-    );
+    return MapPickerResult._(action: MapPickerFinalAction.confirm, place: place);
   }
 
   factory MapPickerResult.remove() {
-    return const MapPickerResult._(
-      action: MapPickerFinalAction.remove,
-      place: null,
-    );
+    return const MapPickerResult._(action: MapPickerFinalAction.remove, place: null);
   }
 
   factory MapPickerResult.cancel(PlaceDbModel? initialPlace) {
-    return MapPickerResult._(
-      action: MapPickerFinalAction.cancel,
-      place: initialPlace,
-    );
+    return MapPickerResult._(action: MapPickerFinalAction.cancel, place: initialPlace);
   }
 }
 
 class MapPickerRoute extends BaseRoute {
-  const MapPickerRoute({
-    this.initialSelectedPlace,
-  });
+  const MapPickerRoute({this.initialSelectedPlace});
 
   final PlaceDbModel? initialSelectedPlace;
 
@@ -65,25 +51,18 @@ class MapPickerRoute extends BaseRoute {
 }
 
 class MapPickerView extends StatelessWidget {
-  const MapPickerView({
-    super.key,
-    required this.params,
-  });
+  const MapPickerView({super.key, required this.params});
 
   final MapPickerRoute params;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<MapPickerViewModel>(
-      create: (context) =>
-          MapPickerViewModel(params: params, viewContext: context),
+      create: (context) => MapPickerViewModel(params: params, viewContext: context),
       builder: (context, child) {
         final viewModel = Provider.of<MapPickerViewModel>(context);
 
-        return SpMapOverlayTheme(
-          brightness: viewModel.mapStyle.overlayBrightness,
-          child: _MapPickerContent(viewModel),
-        );
+        return SpMapOverlayTheme(brightness: viewModel.mapStyle.overlayBrightness, child: _MapPickerContent(viewModel));
       },
     );
   }

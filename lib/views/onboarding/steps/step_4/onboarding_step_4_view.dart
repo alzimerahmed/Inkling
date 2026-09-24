@@ -18,10 +18,7 @@ class OnboardingStep4Route extends BaseRoute {
 }
 
 class OnboardingStep4View extends StatelessWidget {
-  const OnboardingStep4View({
-    super.key,
-    required this.params,
-  });
+  const OnboardingStep4View({super.key, required this.params});
 
   final OnboardingStep4Route params;
 

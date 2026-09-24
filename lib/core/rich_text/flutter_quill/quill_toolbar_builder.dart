@@ -9,20 +9,12 @@ Widget buildQuillToolbar({
   required RichTextController controller,
   Color? backgroundColor,
 }) {
-  return _QuillToolbarWidget(
-    controller: controller,
-    context: context,
-    backgroundColor: backgroundColor,
-  );
+  return _QuillToolbarWidget(controller: controller, context: context, backgroundColor: backgroundColor);
 }
 
 /// Internal QuillToolbar widget implementation.
 class _QuillToolbarWidget extends StatelessWidget {
-  const _QuillToolbarWidget({
-    required this.controller,
-    required this.context,
-    required this.backgroundColor,
-  });
+  const _QuillToolbarWidget({required this.controller, required this.context, required this.backgroundColor});
 
   final RichTextController controller;
   final BuildContext context;
@@ -34,19 +26,13 @@ class _QuillToolbarWidget extends StatelessWidget {
       data: Theme.of(context).copyWith(
         iconButtonTheme: IconButtonThemeData(
           style: ButtonStyle(
-            shape: WidgetStatePropertyAll(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-            ),
+            shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0))),
           ),
         ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          const Divider(height: 1),
-          _buildToolbar(context),
-          const Divider(height: 1),
-        ],
+        children: [const Divider(height: 1), _buildToolbar(context), const Divider(height: 1)],
       ),
     );
   }
@@ -74,9 +60,7 @@ class _QuillToolbarWidget extends StatelessWidget {
             width: 1,
             height: 16,
             margin: const EdgeInsets.symmetric(horizontal: 10.0),
-            decoration: BoxDecoration(
-              color: Theme.of(context).dividerColor,
-            ),
+            decoration: BoxDecoration(color: Theme.of(context).dividerColor),
           ),
           quill.QuillSimpleToolbar(
             controller: quillController,
@@ -141,9 +125,7 @@ class _QuillToolbarWidget extends StatelessWidget {
             width: 1,
             height: 16,
             margin: const EdgeInsets.symmetric(horizontal: 10.0),
-            decoration: BoxDecoration(
-              color: Theme.of(context).dividerColor,
-            ),
+            decoration: BoxDecoration(color: Theme.of(context).dividerColor),
           ),
           ListenableBuilder(
             listenable: controller,
@@ -173,25 +155,16 @@ class _QuillToolbarWidget extends StatelessWidget {
     );
   }
 
-  Future<void> _handleAddMedia({
-    required BuildContext context,
-    required RichTextController controller,
-  }) async {
+  Future<void> _handleAddMedia({required BuildContext context, required RichTextController controller}) async {
     final action = await SpAddMediaActionSheet.pick(context: context);
     if (!context.mounted || action == null) return;
 
     switch (action) {
       case SpAddMediaAction.selectFromLibrary:
-        await SpImagePickerBottomSheet.showQuillPicker(
-          context: context,
-          controller: controller,
-        );
+        await SpImagePickerBottomSheet.showQuillPicker(context: context, controller: controller);
         break;
       case SpAddMediaAction.selectFromPhotos:
-        await SpImagePickerBottomSheet.showNativePicker(
-          context: context,
-          controller: controller,
-        );
+        await SpImagePickerBottomSheet.showNativePicker(context: context, controller: controller);
         break;
       case SpAddMediaAction.takePhoto:
         await SpImagePickerBottomSheet.showImagePicker(
@@ -209,10 +182,7 @@ class _QuillToolbarWidget extends StatelessWidget {
         break;
       case SpAddMediaAction.recordVoiceNote:
         if (!context.mounted) return;
-        await SpVoiceRecordingSheet.showQuillRecorder(
-          context: context,
-          controller: controller,
-        );
+        await SpVoiceRecordingSheet.showQuillRecorder(context: context, controller: controller);
         break;
     }
   }

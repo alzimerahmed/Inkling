@@ -11,17 +11,7 @@ import 'package:storypad/core/helpers/path_helper.dart' as path show extension;
 /// [isVideoExtension] serves a third caller that has no [XFile] to inspect:
 /// `ImportMediaFromTarService`, classifying archive entries by name alone.
 class AssetFileTypeService {
-  static const Set<String> _videoExtensions = {
-    '.mp4',
-    '.mov',
-    '.m4v',
-    '.avi',
-    '.mkv',
-    '.webm',
-    '.3gp',
-    '.wmv',
-    '.flv',
-  };
+  static const Set<String> _videoExtensions = {'.mp4', '.mov', '.m4v', '.avi', '.mkv', '.webm', '.3gp', '.wmv', '.flv'};
 
   static bool isVideo(XFile file) {
     final mimeType = file.mimeType;
@@ -32,8 +22,6 @@ class AssetFileTypeService {
   /// Whether [extension] (with or without a leading dot) names a video file.
   static bool isVideoExtension(String extension) {
     final normalized = extension.toLowerCase();
-    return _videoExtensions.contains(
-      normalized.startsWith('.') ? normalized : '.$normalized',
-    );
+    return _videoExtensions.contains(normalized.startsWith('.') ? normalized : '.$normalized');
   }
 }

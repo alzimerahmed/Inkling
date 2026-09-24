@@ -36,10 +36,7 @@ class _WritingGoalTileState extends State<WritingGoalTile> {
             value: option,
             label: option == 0
                 ? tr('general.off')
-                : tr(
-                    'page.settings.writing_goal.words_per_day',
-                    namedArgs: {'WORDS': '$option'},
-                  ),
+                : tr('page.settings.writing_goal.words_per_day', namedArgs: {'WORDS': '$option'}),
           ),
       ],
       onChanged: (goal) async {
@@ -57,12 +54,7 @@ class _WritingGoalTileState extends State<WritingGoalTile> {
       leading: SpSettingIconBadge(weekday: widget.weekday, icon: SpIcons.text),
       title: Text(tr('page.settings.writing_goal.title')),
       subtitle: goal > 0
-          ? Text(
-              tr(
-                'page.settings.writing_goal.words_per_day',
-                namedArgs: {'WORDS': '$goal'},
-              ),
-            )
+          ? Text(tr('page.settings.writing_goal.words_per_day', namedArgs: {'WORDS': '$goal'}))
           : Text(tr('general.off')),
       onTap: () => pickGoal(context),
     );

@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:device_info_plus/device_info_plus.dart';
 
 /// Device information with Android API level detection.
@@ -8,11 +9,7 @@ class DeviceInfoObject {
   final String id;
   final int? androidApiLevel;
 
-  DeviceInfoObject({
-    required this.model,
-    required this.id,
-    this.androidApiLevel,
-  });
+  DeviceInfoObject({required this.model, required this.id, this.androidApiLevel});
 
   bool get isAndroid16BaklavaOrAbove => androidApiLevel != null && androidApiLevel! >= 36;
   bool get isAndroid15VanillaIceCreamOrAbove => androidApiLevel != null && androidApiLevel! >= 35;
@@ -34,10 +31,7 @@ class DeviceInfoObject {
   static Future<DeviceInfoObject> get() async {
     bool unitTesting = Platform.environment.containsKey('FLUTTER_TEST');
     if (unitTesting) {
-      return DeviceInfoObject(
-        model: "Device Model",
-        id: "device_id",
-      );
+      return DeviceInfoObject(model: "Device Model", id: "device_id");
     }
 
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -76,10 +70,6 @@ class DeviceInfoObject {
       id = info.machineId;
     }
 
-    return DeviceInfoObject(
-      model: device ?? "Unknown",
-      id: id ?? "unknown_id",
-      androidApiLevel: androidApiLevel,
-    );
+    return DeviceInfoObject(model: device ?? "Unknown", id: id ?? "unknown_id", androidApiLevel: androidApiLevel);
   }
 }

@@ -50,28 +50,20 @@ void main() {
       expect(listFromStorage, null);
     });
 
-    test(
-      "it throw assert exception when element is not int, string, bool",
-      () async {
-        ListStorage<Map> fakeStorage = ListStorage<Map>();
-        Object? error;
+    test("it throw assert exception when element is not int, string, bool", () async {
+      ListStorage<Map> fakeStorage = ListStorage<Map>();
+      Object? error;
 
-        try {
-          await fakeStorage.writeList([
-            {'a': 1},
-            {'b': 1},
-          ]);
-        } catch (e) {
-          error = e;
-        }
+      try {
+        await fakeStorage.writeList([
+          {'a': 1},
+          {'b': 1},
+        ]);
+      } catch (e) {
+        error = e;
+      }
 
-        expect(
-          error.toString().contains(
-            'element is int || element is String || element is bool',
-          ),
-          true,
-        );
-      },
-    );
+      expect(error.toString().contains('element is int || element is String || element is bool'), true);
+    });
   });
 }

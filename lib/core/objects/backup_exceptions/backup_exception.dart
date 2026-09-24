@@ -14,12 +14,7 @@ abstract class BackupException implements Exception {
   final bool isRetryable;
   final BackupServiceType? serviceType;
 
-  const BackupException(
-    this.message, {
-    this.context,
-    this.isRetryable = false,
-    required this.serviceType,
-  });
+  const BackupException(this.message, {this.context, this.isRetryable = false, required this.serviceType});
 
   @override
   String toString() => 'BackupException: $message${context != null ? ' ($context)' : ''}';

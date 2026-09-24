@@ -32,15 +32,12 @@ part 'local_widgets/stats_trend.dart';
 part 'local_widgets/stats_share_footer.dart';
 
 class StatsRoute extends BaseRoute {
-  StatsRoute({
-    required this.initialRange,
-  });
+  StatsRoute({required this.initialRange});
 
   @override
   String get routeName => "stats";
 
-  factory StatsRoute.month(DateTime anchor) =>
-      StatsRoute(initialRange: StatsRange.month(anchor));
+  factory StatsRoute.month(DateTime anchor) => StatsRoute(initialRange: StatsRange.month(anchor));
 
   final StatsRange initialRange;
 
@@ -68,8 +65,7 @@ class StatsView extends StatelessWidget {
           create: (_) => StatsViewModel(
             initialRange: params.initialRange,
             tabController: DefaultTabController.of(context),
-            devicePreferencesProvider: context
-                .read<DevicePreferencesProvider>(),
+            devicePreferencesProvider: context.read<DevicePreferencesProvider>(),
           ),
           builder: (context, _) => _StatsContent(Provider.of(context)),
         ),

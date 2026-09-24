@@ -3,10 +3,7 @@ import 'package:storypad/core/extensions/color_scheme_extension.dart';
 import 'package:storypad/widgets/sp_icons.dart';
 
 class TemplateNote extends StatelessWidget {
-  const TemplateNote({
-    super.key,
-    required this.note,
-  });
+  const TemplateNote({super.key, required this.note});
 
   final String note;
 
@@ -22,10 +19,7 @@ class TemplateNote extends StatelessWidget {
       child: Text.rich(
         TextSpan(
           children: [
-            const WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: Icon(SpIcons.lightBulb, size: 16.0),
-            ),
+            const WidgetSpan(alignment: PlaceholderAlignment.middle, child: Icon(SpIcons.lightBulb, size: 16.0)),
             TextSpan(text: ' $note '),
           ],
         ),

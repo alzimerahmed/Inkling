@@ -18,10 +18,7 @@ import 'paywall_features_view_model.dart';
 part 'paywall_features_content.dart';
 
 class PaywallFeaturesRoute extends BaseRoute {
-  const PaywallFeaturesRoute({
-    required this.features,
-    required this.initialPage,
-  });
+  const PaywallFeaturesRoute({required this.features, required this.initialPage});
 
   final List<PaywallFeatureObject> features;
   final int initialPage;
@@ -31,10 +28,7 @@ class PaywallFeaturesRoute extends BaseRoute {
 }
 
 class PaywallFeaturesView extends StatelessWidget {
-  const PaywallFeaturesView({
-    super.key,
-    required this.params,
-  });
+  const PaywallFeaturesView({super.key, required this.params});
 
   final PaywallFeaturesRoute params;
 

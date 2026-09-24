@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -40,9 +41,7 @@ class SpMediaTile extends StatelessWidget {
     // time for both images and videos, so either kind of tile can size
     // correctly on its very first build, well before the file itself loads.
     final id = AssetType.parseAssetId(link);
-    final persistedAspectRatio = id != null
-        ? AssetDbModel.db.findAspectRatioSync(id)
-        : null;
+    final persistedAspectRatio = id != null ? AssetDbModel.db.findAspectRatioSync(id) : null;
 
     if (persistedAspectRatio == null) {
       // No persisted ratio (link isn't a DB-tracked asset, or predates this
@@ -55,44 +54,23 @@ class SpMediaTile extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final effectiveWidth = width != null && width!.isFinite
-            ? width!
-            : constraints.maxWidth;
-        return _buildChild(
-          effectiveWidth,
-          effectiveWidth / persistedAspectRatio,
-        );
+        final effectiveWidth = width != null && width!.isFinite ? width! : constraints.maxWidth;
+        return _buildChild(effectiveWidth, effectiveWidth / persistedAspectRatio);
       },
     );
   }
 
   Widget _buildChild(double? width, double? height) {
     if (AssetType.getTypeFromLink(link) == AssetType.video) {
-      return _SpVideoPreviewTile(
-        link: link,
-        width: width,
-        height: height,
-        fit: fit,
-      );
+      return _SpVideoPreviewTile(link: link, width: width, height: height, fit: fit);
     }
 
-    return SpImage(
-      link: link,
-      width: width,
-      height: height,
-      fit: fit,
-      errorWidget: errorWidget,
-    );
+    return SpImage(link: link, width: width, height: height, fit: fit, errorWidget: errorWidget);
   }
 }
 
 class _SpVideoPreviewTile extends StatefulWidget {
-  const _SpVideoPreviewTile({
-    required this.link,
-    required this.width,
-    required this.height,
-    required this.fit,
-  });
+  const _SpVideoPreviewTile({required this.link, required this.width, required this.height, required this.fit});
 
   final String link;
   final double? width;
@@ -136,11 +114,7 @@ class _SpVideoPreviewTileState extends State<_SpVideoPreviewTile> {
     try {
       await newController.initialize();
     } catch (error, stackTrace) {
-      AppLogger.error(
-        '$runtimeType: failed to initialize video preview',
-        error: error,
-        stackTrace: stackTrace,
-      );
+      AppLogger.error('$runtimeType: failed to initialize video preview', error: error, stackTrace: stackTrace);
       await newController.dispose();
       failed = true;
       initializing = false;
@@ -174,27 +148,17 @@ class _SpVideoPreviewTileState extends State<_SpVideoPreviewTile> {
   // controller's aspect ratio once it initializes, or a square guess before then.
   Widget _buildSizedTile(BuildContext context) {
     if (widget.height != null) {
-      return SizedBox(
-        width: widget.width,
-        height: widget.height,
-        child: _buildStack(context),
-      );
+      return SizedBox(width: widget.width, height: widget.height, child: _buildStack(context));
     }
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = widget.width != null && widget.width!.isFinite
-            ? widget.width!
-            : constraints.maxWidth;
+        final width = widget.width != null && widget.width!.isFinite ? widget.width! : constraints.maxWidth;
         final aspectRatio = controller?.value.isInitialized == true
             ? controller!.value.aspectRatio
             : _fallbackAspectRatio;
 
-        return SizedBox(
-          width: width,
-          height: width / aspectRatio,
-          child: _buildStack(context),
-        );
+        return SizedBox(width: width, height: width / aspectRatio, child: _buildStack(context));
       },
     );
   }
@@ -204,9 +168,7 @@ class _SpVideoPreviewTileState extends State<_SpVideoPreviewTile> {
       fit: .expand,
       children: [
         ClipRect(child: _buildPreview(context)),
-        const Center(
-          child: Icon(SpIcons.playCircle, color: Colors.white, size: 40.0),
-        ),
+        const Center(child: Icon(SpIcons.playCircle, color: Colors.white, size: 40.0)),
       ],
     );
   }
@@ -214,11 +176,7 @@ class _SpVideoPreviewTileState extends State<_SpVideoPreviewTile> {
   Widget _buildPreview(BuildContext context) {
     final playerController = controller;
     if (playerController == null || !playerController.value.isInitialized) {
-      return ColoredBox(
-        color:
-            ColorScheme.of(context).readOnly.surface3 ??
-            ColorScheme.of(context).surface,
-      );
+      return ColoredBox(color: ColorScheme.of(context).readOnly.surface3 ?? ColorScheme.of(context).surface);
     }
 
     return FittedBox(

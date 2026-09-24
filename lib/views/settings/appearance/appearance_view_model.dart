@@ -23,20 +23,14 @@ import 'package:storypad/widgets/sp_setting_icon_badge.dart';
 /// [resetKey] is `null` for tiles with nothing to reset (e.g. `AppIconTile`,
 /// `QuickActionsTile` — app shortcuts aren't a resettable preference).
 class AppearanceItem {
-  const AppearanceItem({
-    required this.builder,
-    this.resetKey,
-  });
+  const AppearanceItem({required this.builder, this.resetKey});
 
   final WidgetBuilder builder;
   final AppearancePreferenceKey? resetKey;
 }
 
 class AppearanceSection {
-  const AppearanceSection({
-    required this.title,
-    required this.items,
-  });
+  const AppearanceSection({required this.title, required this.items});
 
   final String title;
   final List<AppearanceItem> items;
@@ -48,11 +42,7 @@ class AppearanceViewModel extends ChangeNotifier with DisposeAwareMixin {
   final List<AppearanceSection> sections;
 
   Set<AppearancePreferenceKey> get resettableKeys {
-    return sections
-        .expand((section) => section.items)
-        .map((item) => item.resetKey)
-        .nonNulls
-        .toSet();
+    return sections.expand((section) => section.items).map((item) => item.resetKey).nonNulls.toSet();
   }
 
   void reset(BuildContext context) {
@@ -64,47 +54,25 @@ class AppearanceViewModel extends ChangeNotifier with DisposeAwareMixin {
       AppearanceSection(
         title: tr("general.appearance"),
         items: [
-          AppearanceItem(
-            builder: (context) => ThemeModeTile.globalTheme(weekday: 1),
-            resetKey: .themeMode,
-          ),
-          AppearanceItem(
-            builder: (context) => const ColorSeedTile(),
-            resetKey: .colorSeed,
-          ),
+          AppearanceItem(builder: (context) => ThemeModeTile.globalTheme(weekday: 1), resetKey: .themeMode),
+          AppearanceItem(builder: (context) => const ColorSeedTile(), resetKey: .colorSeed),
           if (kStoryPad) const AppearanceItem(builder: _buildAppIconTile),
         ],
       ),
       AppearanceSection(
         title: tr("general.text"),
         items: [
-          AppearanceItem(
-            builder: (context) => FontSizeTile.globalTheme(weekday: 2),
-            resetKey: .fontSize,
-          ),
-          AppearanceItem(
-            builder: (context) => FontFamilyTile.globalTheme(weekday: 3),
-            resetKey: .fontFamily,
-          ),
-          AppearanceItem(
-            builder: (context) => FontWeightTile.globalTheme(weekday: 4),
-            resetKey: .fontWeight,
-          ),
+          AppearanceItem(builder: (context) => FontSizeTile.globalTheme(weekday: 2), resetKey: .fontSize),
+          AppearanceItem(builder: (context) => FontFamilyTile.globalTheme(weekday: 3), resetKey: .fontFamily),
+          AppearanceItem(builder: (context) => FontWeightTile.globalTheme(weekday: 4), resetKey: .fontWeight),
         ],
       ),
       AppearanceSection(
         title: tr("general.advanced"),
         items: [
-          const AppearanceItem(
-            builder: _buildDayColorTile,
-            resetKey: .dayColors,
-          ),
-          const AppearanceItem(
-            builder: _buildStoryTilePreferencesTile,
-            resetKey: .storyTilePreferences,
-          ),
-          if (kSupportQuickActions)
-            const AppearanceItem(builder: _buildQuickActionsTile),
+          const AppearanceItem(builder: _buildDayColorTile, resetKey: .dayColors),
+          const AppearanceItem(builder: _buildStoryTilePreferencesTile, resetKey: .storyTilePreferences),
+          if (kSupportQuickActions) const AppearanceItem(builder: _buildQuickActionsTile),
         ],
       ),
     ];
@@ -112,11 +80,9 @@ class AppearanceViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   static Widget _buildAppIconTile(BuildContext context) => const AppIconTile();
 
-  static Widget _buildStoryTilePreferencesTile(BuildContext context) =>
-      const StoryTilePreferencesTile(weekday: 6);
+  static Widget _buildStoryTilePreferencesTile(BuildContext context) => const StoryTilePreferencesTile(weekday: 6);
 
-  static Widget _buildQuickActionsTile(BuildContext context) =>
-      QuickActionsTile();
+  static Widget _buildQuickActionsTile(BuildContext context) => QuickActionsTile();
 
   static Widget _buildDayColorTile(BuildContext context) {
     return Consumer<InAppPurchaseProvider>(

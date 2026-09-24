@@ -45,22 +45,13 @@ class EventDbModel extends BaseDbModel {
   DateTime? get date => DateTime(year, month, day);
 
   Future<EventDbModel?> createIfNotExist() async {
-    final existingEvents = await db.where(
-      filters: {
-        "year": year,
-        "month": month,
-        "day": day,
-        "event_type": eventType,
-      },
-    );
+    final existingEvents = await db.where(filters: {"year": year, "month": month, "day": day, "event_type": eventType});
 
     if (existingEvents?.items.isNotEmpty == true) return null;
     return db.create(this);
   }
 
-  factory EventDbModel.period({
-    required DateTime date,
-  }) {
+  factory EventDbModel.period({required DateTime date}) {
     final now = DateTime.now();
     return EventDbModel(
       id: DateTime.now().millisecondsSinceEpoch,

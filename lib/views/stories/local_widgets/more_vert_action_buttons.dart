@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:animated_clipper/animated_clipper.dart';
 import 'package:flutter/material.dart';
 import 'package:storypad/widgets/sp_floating_pop_up_button.dart';
@@ -37,8 +38,7 @@ class MoreVertActionButtons extends StatelessWidget {
       bottomToTop: false,
       dyGetter: (dy) => dy + 40,
       pathBuilder: PathBuilders.slideDown,
-      floatingBuilder: (void Function() close) =>
-          buildFloatingCard(close, context),
+      floatingBuilder: (void Function() close) => buildFloatingCard(close, context),
       builder: (callback) {
         return SpTapEffect(
           scaleActive: 0.95,
@@ -53,11 +53,7 @@ class MoreVertActionButtons extends StatelessWidget {
             ),
             child: Transform.scale(
               scale: 1.2,
-              child: Icon(
-                SpIcons.moreVert,
-                size: 16,
-                color: foregroundColor ?? ColorScheme.of(context).onPrimary,
-              ),
+              child: Icon(SpIcons.moreVert, size: 16, color: foregroundColor ?? ColorScheme.of(context).onPrimary),
             ),
           ),
         );
@@ -66,10 +62,7 @@ class MoreVertActionButtons extends StatelessWidget {
   }
 
   Widget buildFloatingCard(void Function() close, BuildContext context) {
-    void swap({
-      required int oldIndex,
-      required int newIndex,
-    }) {
+    void swap({required int oldIndex, required int newIndex}) {
       close();
       onSwap(oldIndex, newIndex);
     }
@@ -82,15 +75,11 @@ class MoreVertActionButtons extends StatelessWidget {
     final actions = [
       IconButton(
         icon: const Icon(SpIcons.keyboardUp),
-        onPressed: canMoveUp
-            ? () => swap(oldIndex: pageIndex, newIndex: pageIndex - 1)
-            : null,
+        onPressed: canMoveUp ? () => swap(oldIndex: pageIndex, newIndex: pageIndex - 1) : null,
       ),
       IconButton(
         icon: const Icon(SpIcons.keyboardDown),
-        onPressed: canMoveDown
-            ? () => swap(oldIndex: pageIndex, newIndex: pageIndex + 1)
-            : null,
+        onPressed: canMoveDown ? () => swap(oldIndex: pageIndex, newIndex: pageIndex + 1) : null,
       ),
       IconButton(
         color: ColorScheme.of(context).error,
@@ -122,11 +111,7 @@ class MoreVertActionButtons extends StatelessWidget {
         spacing: 0.0,
         runSpacing: 0.0,
         children: actions.map((child) {
-          return SizedBox(
-            width: itemSize,
-            height: itemSize,
-            child: child,
-          );
+          return SizedBox(width: itemSize, height: itemSize, child: child);
         }).toList(),
       ),
     );

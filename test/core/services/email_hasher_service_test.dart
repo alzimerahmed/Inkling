@@ -10,18 +10,13 @@ void main() {
     });
 
     test('normalizeEmail trims and lowercases', () {
-      expect(
-        hasher.normalizeEmail('  Foo.Bar@Example.COM  '),
-        equals('foo.bar@example.com'),
-      );
+      expect(hasher.normalizeEmail('  Foo.Bar@Example.COM  '), equals('foo.bar@example.com'));
     });
 
     test('hmacEmail returns deterministic hash for same email', () {
       const email = 'User@Example.com';
       final hash1 = hasher.hmacEmail(email);
-      final hash2 = hasher.hmacEmail(
-        ' user@example.COM  ',
-      ); // same email, different format
+      final hash2 = hasher.hmacEmail(' user@example.COM  '); // same email, different format
 
       // Should be equal after normalization
       expect(hash1, equals(hash2));

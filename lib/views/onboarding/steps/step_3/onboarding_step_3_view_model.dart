@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:storypad/views/onboarding/local_widgets/end_drawer_screenshot.dart';
 import 'package:storypad/views/onboarding/steps/step_4/onboarding_step_4_view.dart';
 import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
+
 import 'onboarding_step_3_view.dart';
 
 class OnboardingStep3ViewModel extends ChangeNotifier with DisposeAwareMixin {
   final OnboardingStep3Route params;
 
-  OnboardingStep3ViewModel({
-    required this.params,
-  }) {
+  OnboardingStep3ViewModel({required this.params}) {
     startAnimations();
   }
 
@@ -17,9 +16,7 @@ class OnboardingStep3ViewModel extends ChangeNotifier with DisposeAwareMixin {
   final clickDuration = const Duration(milliseconds: 500);
 
   final endDrawerOpenedNotifier = ValueNotifier(false);
-  final endDrawerStateNotifier = ValueNotifier(
-    EndDrawerScreenshotState.noSignedIn,
-  );
+  final endDrawerStateNotifier = ValueNotifier(EndDrawerScreenshotState.noSignedIn);
   final endDrawerScrollController = ScrollController();
 
   final showSignInClickedNotifier = ValueNotifier(false);
@@ -72,11 +69,7 @@ class OnboardingStep3ViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   Future<void> scrollToBackupSection() async {
     if (disposed) return;
-    await endDrawerScrollController.animateTo(
-      100,
-      duration: Durations.long4,
-      curve: Curves.fastEaseInToSlowEaseOut,
-    );
+    await endDrawerScrollController.animateTo(100, duration: Durations.long4, curve: Curves.fastEaseInToSlowEaseOut);
   }
 
   Future<void> showSignInClickAnimation() async {

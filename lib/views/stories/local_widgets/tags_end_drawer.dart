@@ -4,11 +4,7 @@ import 'package:storypad/views/tags/tags_view.dart';
 import 'package:storypad/widgets/sp_nested_navigation.dart';
 
 class TagsEndDrawer extends StatelessWidget {
-  const TagsEndDrawer({
-    super.key,
-    required this.initialTags,
-    required this.onUpdated,
-  });
+  const TagsEndDrawer({super.key, required this.initialTags, required this.onUpdated});
 
   final List<int> initialTags;
   final Future<bool> Function(List<int> tags) onUpdated;
@@ -22,16 +18,10 @@ class TagsEndDrawer extends StatelessWidget {
       removeLeft: true,
       child: Drawer(
         child: Theme(
-          data: Theme.of(context).copyWith(
-            scaffoldBackgroundColor: Theme.of(context).colorScheme.surface,
-          ),
+          data: Theme.of(context).copyWith(scaffoldBackgroundColor: Theme.of(context).colorScheme.surface),
           child: SpNestedNavigation(
             initialScreen: TagsView(
-              params: TagsRoute(
-                storyViewOnly: true,
-                initialSelectedTags: initialTags,
-                onToggleTags: onUpdated,
-              ),
+              params: TagsRoute(storyViewOnly: true, initialSelectedTags: initialTags, onToggleTags: onUpdated),
             ),
           ),
         ),

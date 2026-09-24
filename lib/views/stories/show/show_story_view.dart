@@ -23,10 +23,7 @@ class ShowStoryRoute extends BaseRoute {
   final int id;
   final StoryDbModel? story;
 
-  ShowStoryRoute({
-    required this.id,
-    required this.story,
-  });
+  ShowStoryRoute({required this.id, required this.story});
 
   @override
   String get routeName {
@@ -38,10 +35,7 @@ class ShowStoryRoute extends BaseRoute {
 }
 
 class ShowStoryView extends StatelessWidget {
-  const ShowStoryView({
-    super.key,
-    required this.params,
-  });
+  const ShowStoryView({super.key, required this.params});
 
   final ShowStoryRoute params;
 
@@ -54,8 +48,7 @@ class ShowStoryView extends StatelessWidget {
 
         return PopScope(
           canPop: !viewModel.pagesManager.managingPage,
-          onPopInvokedWithResult: (didPop, result) =>
-              viewModel.onPopInvokedWithResult(didPop, result, context),
+          onPopInvokedWithResult: (didPop, result) => viewModel.onPopInvokedWithResult(didPop, result, context),
           child: SpKeyboardListener(
             onKeyEvent: (event) => viewModel.handleKeyEvent(event, context),
             child: SpStoryPreferenceTheme(

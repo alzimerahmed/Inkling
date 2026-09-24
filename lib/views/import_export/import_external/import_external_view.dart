@@ -11,6 +11,7 @@ import 'package:storypad/core/services/import/import_external_stories_service.da
 import 'package:storypad/core/services/import/keep_import_parser.dart';
 import 'package:storypad/core/services/messenger_service.dart';
 import 'package:storypad/core/types/support_directory_path.dart';
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
@@ -31,10 +32,7 @@ class ImportExternalRoute extends BaseRoute {
 }
 
 class ImportExternalView extends StatelessWidget {
-  const ImportExternalView({
-    super.key,
-    required this.params,
-  });
+  const ImportExternalView({super.key, required this.params});
 
   final ImportExternalRoute params;
 
@@ -70,10 +68,9 @@ class ImportExternalViewModel extends ChangeNotifier with DisposeAwareMixin {
     final List<String> paths = await _pickFiles(source);
     if (paths.isEmpty || !context.mounted) return;
 
-    final result = await MessengerService.of(context).showLoading(
-      debugSource: '$runtimeType#parse',
-      future: () => Isolate.run(() => _parseInIsolate(source, paths)),
-    );
+    final result = await MessengerService.of(
+      context,
+    ).showLoading(debugSource: '$runtimeType#parse', future: () => Isolate.run(() => _parseInIsolate(source, paths)));
 
     if (result == null) {
       drafts = null;
@@ -104,9 +101,7 @@ class ImportExternalViewModel extends ChangeNotifier with DisposeAwareMixin {
         final file = await AppFilePickerService.pickCsvFile();
         return file == null ? [] : [file.path];
       case ExternalImportSource.keep:
-        return (await AppFilePickerService.pickMultipleJsonFiles())
-            .map((e) => e.path)
-            .toList();
+        return (await AppFilePickerService.pickMultipleJsonFiles()).map((e) => e.path).toList();
       case ExternalImportSource.evernote:
         final file = await AppFilePickerService.pickEnexFile();
         return file == null ? [] : [file.path];
@@ -115,10 +110,7 @@ class ImportExternalViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   /// Runs in a background isolate — file I/O + parsing only, no DB access
   /// (ObjectBox stores are per-isolate).
-  static Future<ImportedParseResult?> _parseInIsolate(
-    ExternalImportSource source,
-    List<String> paths,
-  ) async {
+  static Future<ImportedParseResult?> _parseInIsolate(ExternalImportSource source, List<String> paths) async {
     switch (source) {
       case ExternalImportSource.dayOne:
         final bytes = await File(paths.first).readAsBytes();
@@ -126,10 +118,7 @@ class ImportExternalViewModel extends ChangeNotifier with DisposeAwareMixin {
           final tempDir = Directory(
             '${SupportDirectoryPath.tmp.directoryPath}/day_one_import_${DateTime.now().millisecondsSinceEpoch}',
           );
-          return DayOneImportParser.parseZip(
-            zipBytes: bytes,
-            tempPhotoDir: tempDir,
-          );
+          return DayOneImportParser.parseZip(zipBytes: bytes, tempPhotoDir: tempDir);
         }
         return DayOneImportParser.parseJson(utf8.decode(bytes));
       case ExternalImportSource.daylio:
@@ -147,9 +136,7 @@ class ImportExternalViewModel extends ChangeNotifier with DisposeAwareMixin {
         }
         return ImportedParseResult(drafts: drafts, skippedCount: skipped);
       case ExternalImportSource.evernote:
-        return EvernoteEnexImportParser.parse(
-          await File(paths.first).readAsString(),
-        );
+        return EvernoteEnexImportParser.parse(await File(paths.first).readAsString());
     }
   }
 
@@ -182,11 +169,7 @@ class ImportExternalViewModel extends ChangeNotifier with DisposeAwareMixin {
     MessengerService.of(context).showSnackBar(
       tr(
         'snack_bar.import_external_done',
-        args: [
-          importedCount.toString(),
-          photosImported.toString(),
-          photosSkipped.toString(),
-        ],
+        args: [importedCount.toString(), photosImported.toString(), photosSkipped.toString()],
       ),
     );
     Navigator.of(context).maybePop(importedCount);
@@ -246,16 +229,9 @@ class _ImportExternalContent extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            SpIcons.importOffline,
-            size: 48.0,
-            color: ColorScheme.of(context).primary,
-          ),
+          Icon(SpIcons.importOffline, size: 48.0, color: ColorScheme.of(context).primary),
           const SizedBox(height: 16.0),
-          Text(
-            tr('import_external.pick_file_hint'),
-            textAlign: TextAlign.center,
-          ),
+          Text(tr('import_external.pick_file_hint'), textAlign: TextAlign.center),
           const SizedBox(height: 24.0),
           FilledButton.icon(
             icon: const Icon(SpIcons.importOffline),
@@ -267,10 +243,7 @@ class _ImportExternalContent extends StatelessWidget {
     );
   }
 
-  Widget _buildPreviewList(
-    BuildContext context,
-    List<ImportedStoryDraft> drafts,
-  ) {
+  Widget _buildPreviewList(BuildContext context, List<ImportedStoryDraft> drafts) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -281,10 +254,7 @@ class _ImportExternalContent extends StatelessWidget {
               plural('plural.entry', drafts.length),
               if (viewModel.skippedCount > 0) ...[
                 ' · ',
-                tr(
-                  'import_external.skipped',
-                  args: [viewModel.skippedCount.toString()],
-                ),
+                tr('import_external.skipped', args: [viewModel.skippedCount.toString()]),
               ],
             ].join(),
             style: TextTheme.of(context).titleSmall,
@@ -297,24 +267,17 @@ class _ImportExternalContent extends StatelessWidget {
               final draft = drafts[index];
               return ListTile(
                 title: Text(
-                  (draft.title?.trim().isNotEmpty == true)
-                      ? draft.title!
-                      : (draft.body?.split('\n').first ?? ''),
+                  (draft.title?.trim().isNotEmpty == true) ? draft.title! : (draft.body?.split('\n').first ?? ''),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 subtitle: Text(
                   [
-                    MaterialLocalizations.of(
-                      context,
-                    ).formatFullDate(draft.date),
+                    MaterialLocalizations.of(context).formatFullDate(draft.date),
                     if (draft.tags.isNotEmpty) draft.tags.join(', '),
                     if (draft.feeling != null) draft.feeling!,
                     if (draft.photoFileNames.isNotEmpty)
-                      tr(
-                        'import_external.photos',
-                        args: [draft.photoFileNames.length.toString()],
-                      ),
+                      tr('import_external.photos', args: [draft.photoFileNames.length.toString()]),
                   ].join(' · '),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -327,10 +290,7 @@ class _ImportExternalContent extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomBar(
-    BuildContext context,
-    List<ImportedStoryDraft>? drafts,
-  ) {
+  Widget _buildBottomBar(BuildContext context, List<ImportedStoryDraft>? drafts) {
     if (drafts == null || drafts.isEmpty) return const SizedBox.shrink();
     return SafeArea(
       child: Padding(
@@ -338,17 +298,11 @@ class _ImportExternalContent extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: OutlinedButton(
-                onPressed: () => viewModel.parse(context),
-                child: Text(tr('button.select_file')),
-              ),
+              child: OutlinedButton(onPressed: () => viewModel.parse(context), child: Text(tr('button.select_file'))),
             ),
             const SizedBox(width: 12.0),
             Expanded(
-              child: FilledButton(
-                onPressed: () => viewModel.confirm(context),
-                child: Text(tr('button.import')),
-              ),
+              child: FilledButton(onPressed: () => viewModel.confirm(context), child: Text(tr('button.import'))),
             ),
           ],
         ),

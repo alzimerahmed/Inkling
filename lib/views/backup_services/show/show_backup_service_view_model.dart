@@ -17,6 +17,7 @@ import 'package:storypad/providers/backup_provider.dart';
 import 'package:storypad/views/backup_services/backups/show/show_backup_view.dart';
 import 'package:storypad/widgets/bottom_sheets/sp_connect_nextcloud_sheet.dart';
 import 'package:storypad/widgets/bottom_sheets/sp_icloud_settings_sheet.dart';
+
 import 'show_backup_service_view.dart';
 
 class ShowBackupServiceViewModel extends ChangeNotifier with DisposeAwareMixin {
@@ -28,10 +29,7 @@ class ShowBackupServiceViewModel extends ChangeNotifier with DisposeAwareMixin {
   Map<int, CloudFileObject>? yearlyBackups;
   Map<String, BackupObject> loadedBackups = {};
 
-  ShowBackupServiceViewModel({
-    required this.params,
-    required BuildContext context,
-  }) {
+  ShowBackupServiceViewModel({required this.params, required BuildContext context}) {
     backupProvider = context.read<BackupProvider>();
     load();
   }
@@ -46,9 +44,7 @@ class ShowBackupServiceViewModel extends ChangeNotifier with DisposeAwareMixin {
   List<MapEntry<int, CloudFileObject>> getSortedYearlyBackups() {
     if (yearlyBackups == null) return [];
     final entries = yearlyBackups!.entries.toList();
-    entries.sort(
-      (a, b) => b.key.compareTo(a.key),
-    ); // Descending order (newest first)
+    entries.sort((a, b) => b.key.compareTo(a.key)); // Descending order (newest first)
     return entries;
   }
 
@@ -57,13 +53,8 @@ class ShowBackupServiceViewModel extends ChangeNotifier with DisposeAwareMixin {
     final latest = yearlyBackups!.values
         .map((e) => e.lastUpdatedAt)
         .whereType<DateTime>()
-        .fold<DateTime?>(
-          null,
-          (prev, curr) => prev == null || curr.isAfter(prev) ? curr : prev,
-        );
-    return latest != null
-        ? DateFormatHelper.yMEd_jmNullable(latest, context.locale) ?? '...'
-        : null;
+        .fold<DateTime?>(null, (prev, curr) => prev == null || curr.isAfter(prev) ? curr : prev);
+    return latest != null ? DateFormatHelper.yMEd_jmNullable(latest, context.locale) ?? '...' : null;
   }
 
   Future<void> load() async {
@@ -80,10 +71,7 @@ class ShowBackupServiceViewModel extends ChangeNotifier with DisposeAwareMixin {
     notifyListeners();
   }
 
-  Future<void> openCloudFile(
-    BuildContext context,
-    CloudFileObject cloudFile,
-  ) async {
+  Future<void> openCloudFile(BuildContext context, CloudFileObject cloudFile) async {
     BackupObject? backup =
         loadedBackups[cloudFile.id] ??
         await MessengerService.of(context).showLoading(
@@ -113,20 +101,13 @@ class ShowBackupServiceViewModel extends ChangeNotifier with DisposeAwareMixin {
     }
   }
 
-  Future<void> deleteCloudFile(
-    BuildContext context,
-    CloudFileObject file,
-  ) async {
+  Future<void> deleteCloudFile(BuildContext context, CloudFileObject file) async {
     AnalyticsService.instance.logDeleteCloudBackup(file: file);
 
     await MessengerService.of(context).showLoading(
       debugSource: '$runtimeType#deleteCloudFile',
       future: () async {
-        bool? success = await context
-            .read<BackupProvider>()
-            .repository
-            .getService(serviceType)
-            .deleteFile(file.id);
+        bool? success = await context.read<BackupProvider>().repository.getService(serviceType).deleteFile(file.id);
         if (success == true) yearlyBackups?.remove(file.year);
         notifyListeners();
       },
@@ -213,10 +194,7 @@ class ShowBackupServiceViewModel extends ChangeNotifier with DisposeAwareMixin {
       // permission" until the next unrelated sync happens to run.
       await MessengerService.of(context).showLoading(
         debugSource: '$runtimeType#reconnect',
-        future: () => backupProvider.recheckAndSync(
-          services: [service],
-          context: context,
-        ),
+        future: () => backupProvider.recheckAndSync(services: [service], context: context),
       );
       await load();
     } else if (serviceType == BackupServiceType.dropbox) {

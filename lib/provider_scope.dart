@@ -12,10 +12,7 @@ import 'package:storypad/providers/device_preferences_provider.dart';
 
 // global providers
 class ProviderScope extends StatelessWidget {
-  const ProviderScope({
-    super.key,
-    required this.child,
-  });
+  const ProviderScope({super.key, required this.child});
 
   final Widget child;
 
@@ -23,34 +20,15 @@ class ProviderScope extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ListenableProvider<RootProvider>(
-          create: (context) => RootProvider(),
-        ),
-        ListenableProvider<BackupProvider>(
-          create: (context) => BackupProvider(),
-        ),
-        ListenableProvider<TagsProvider>(
-          create: (context) => TagsProvider(),
-        ),
-        ListenableProvider<AppLockProvider>(
-          create: (context) => AppLockProvider(),
-        ),
-        ListenableProvider<DevicePreferencesProvider>(
-          create: (context) => DevicePreferencesProvider(),
-        ),
-        ListenableProvider<InAppUpdateProvider>(
-          create: (context) => InAppUpdateProvider(),
-        ),
-        ListenableProvider<InAppPurchaseProvider>(
-          create: (context) => InAppPurchaseProvider(),
-        ),
-        ListenableProvider<NicknameProvider>(
-          create: (context) => NicknameProvider(),
-        ),
-        ListenableProvider<RelaxSoundsProvider>(
-          lazy: true,
-          create: (context) => RelaxSoundsProvider(),
-        ),
+        ListenableProvider<RootProvider>(create: (context) => RootProvider()),
+        ListenableProvider<BackupProvider>(create: (context) => BackupProvider()),
+        ListenableProvider<TagsProvider>(create: (context) => TagsProvider()),
+        ListenableProvider<AppLockProvider>(create: (context) => AppLockProvider()),
+        ListenableProvider<DevicePreferencesProvider>(create: (context) => DevicePreferencesProvider()),
+        ListenableProvider<InAppUpdateProvider>(create: (context) => InAppUpdateProvider()),
+        ListenableProvider<InAppPurchaseProvider>(create: (context) => InAppPurchaseProvider()),
+        ListenableProvider<NicknameProvider>(create: (context) => NicknameProvider()),
+        ListenableProvider<RelaxSoundsProvider>(lazy: true, create: (context) => RelaxSoundsProvider()),
       ],
       child: child,
     );

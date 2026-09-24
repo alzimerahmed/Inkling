@@ -3,20 +3,17 @@ import 'package:provider/provider.dart';
 import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
 import 'package:storypad/core/services/cloud_storage/cloud_storage_service.dart';
 import 'package:storypad/providers/in_app_purchase_provider.dart';
+
 import 'paywall_features_view.dart';
 
 class PaywallFeaturesViewModel extends ChangeNotifier with DisposeAwareMixin {
   final PaywallFeaturesRoute params;
 
-  PaywallFeaturesViewModel({
-    required this.params,
-  }) {
+  PaywallFeaturesViewModel({required this.params}) {
     preloadFiles();
   }
 
-  late final PageController pageController = PageController(
-    initialPage: params.initialPage,
-  );
+  late final PageController pageController = PageController(initialPage: params.initialPage);
 
   void preloadFiles() {
     // downloadFile deduplicates requests using completers, so calling this

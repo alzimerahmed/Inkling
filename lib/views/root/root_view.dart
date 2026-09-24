@@ -14,13 +14,10 @@ part 'root_content.dart';
 part 'local_widgets/root_route_observer.dart';
 
 class RootView extends StatelessWidget {
-  const RootView({
-    super.key,
-  });
+  const RootView({super.key});
 
   static BuildContext? _rootContext;
-  static BuildContext? get rootContext =>
-      _rootContext?.mounted ?? false ? _rootContext : null;
+  static BuildContext? get rootContext => _rootContext?.mounted ?? false ? _rootContext : null;
 
   @override
   Widget build(BuildContext context) {

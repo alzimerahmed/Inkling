@@ -1,4 +1,5 @@
 import 'dart:io' show Platform;
+
 import 'package:flutter/foundation.dart' show ChangeNotifier, debugPrint;
 import 'package:in_app_update/in_app_update.dart'
     show AppUpdateInfo, AppUpdateResult, InAppUpdate, InstallStatus, UpdateAvailability;
@@ -30,9 +31,7 @@ class InAppUpdateProvider extends ChangeNotifier {
     }
 
     _androidInAppUpdateInfo = await _getAndroidInAppUpdateInfo();
-    debugPrint(
-      "💫 App Update Status: ${_versionStatus?.canUpdate} ${_versionStatus?.originalStoreVersion}",
-    );
+    debugPrint("💫 App Update Status: ${_versionStatus?.canUpdate} ${_versionStatus?.originalStoreVersion}");
 
     if (_versionStatus?.canUpdate == true || _androidInAppUpdateInfo?.canUpdate == true) {
       setDisplayStatus(InAppUpdateStatus.updateAvailable);
@@ -66,13 +65,9 @@ class InAppUpdateProvider extends ChangeNotifier {
       case InstallStatus.failed:
       case InstallStatus.canceled:
         if (_androidInAppUpdateInfo!.flexibleUpdateAllowed) {
-          InAppUpdate.startFlexibleUpdate().catchError(
-            (e) => AppUpdateResult.inAppUpdateFailed,
-          );
+          InAppUpdate.startFlexibleUpdate().catchError((e) => AppUpdateResult.inAppUpdateFailed);
         } else if (_androidInAppUpdateInfo!.immediateUpdateAllowed) {
-          InAppUpdate.performImmediateUpdate().catchError(
-            (e) => AppUpdateResult.inAppUpdateFailed,
-          );
+          InAppUpdate.performImmediateUpdate().catchError((e) => AppUpdateResult.inAppUpdateFailed);
         }
         break;
       case InstallStatus.downloaded:

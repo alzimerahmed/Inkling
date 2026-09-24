@@ -2,8 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 enum AssetCompressionOption {
   standard,
-  none,
-  ;
+  none;
 
   static const defaultValue = AssetCompressionOption.standard;
   static const standardQuality = 80;

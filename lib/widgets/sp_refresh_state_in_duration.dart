@@ -1,20 +1,16 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 // Make sure to remove this widget from widget tree when no using, otherwise it will always run.
 class SpRefreshStateInDuration extends StatefulWidget {
-  const SpRefreshStateInDuration({
-    super.key,
-    required this.duration,
-    required this.builder,
-  });
+  const SpRefreshStateInDuration({super.key, required this.duration, required this.builder});
 
   final Duration duration;
   final Widget Function(BuildContext context) builder;
 
   @override
-  State<SpRefreshStateInDuration> createState() =>
-      _SpRefreshStateInDurationState();
+  State<SpRefreshStateInDuration> createState() => _SpRefreshStateInDurationState();
 }
 
 class _SpRefreshStateInDurationState extends State<SpRefreshStateInDuration> {

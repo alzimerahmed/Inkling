@@ -1,9 +1,7 @@
 part of '../story_pages_builder.dart';
 
 class _PagesLayout extends StatefulWidget {
-  const _PagesLayout({
-    required this.builder,
-  });
+  const _PagesLayout({required this.builder});
 
   final StoryPagesBuilder builder;
 
@@ -48,10 +46,7 @@ class _PagesLayoutState extends State<_PagesLayout> {
               children: [
                 SingleChildScrollView(
                   clipBehavior: Clip.none,
-                  padding: EdgeInsets.only(
-                    top: widget.builder.padding.top,
-                    bottom: widget.builder.padding.bottom,
-                  ),
+                  padding: EdgeInsets.only(top: widget.builder.padding.top, bottom: widget.builder.padding.bottom),
                   child: Column(
                     children: [
                       if (widget.builder.headerBuilder != null)
@@ -69,11 +64,7 @@ class _PagesLayoutState extends State<_PagesLayout> {
                           right: widget.builder.padding.right,
                         ),
                         constraints: const BoxConstraints(minHeight: 200),
-                        child: widget.builder.buildPage(
-                          widget.builder.pages[index],
-                          context,
-                          smallPage: false,
-                        ),
+                        child: widget.builder.buildPage(widget.builder.pages[index], context, smallPage: false),
                       ),
                       widget.builder._buildAddButton(),
                     ],
@@ -88,17 +79,10 @@ class _PagesLayoutState extends State<_PagesLayout> {
     );
   }
 
-  Widget buildHeader({
-    required int pageIndex,
-    required double screenWidth,
-    required EdgeInsetsGeometry padding,
-  }) {
+  Widget buildHeader({required int pageIndex, required double screenWidth, required EdgeInsetsGeometry padding}) {
     return ValueListenableBuilder(
       valueListenable: pageOffset,
-      child: Padding(
-        padding: padding,
-        child: widget.builder.headerBuilder!(widget.builder.pages[pageIndex]),
-      ),
+      child: Padding(padding: padding, child: widget.builder.headerBuilder!(widget.builder.pages[pageIndex])),
       builder: (context, offset, child) {
         SpPageViewDatas datas = SpPageViewDatas.fromOffset(
           itemIndex: pageIndex,
@@ -112,14 +96,10 @@ class _PagesLayoutState extends State<_PagesLayout> {
               transform: Matrix4.identity()
                 ..spTranslate(datas.translateX1)
                 ..spTranslate(datas.translateX2),
-              child: Opacity(
-                opacity: datas.opacity,
-                child: child!,
-              ),
+              child: Opacity(opacity: datas.opacity, child: child!),
             ),
             Transform(
-              transform: Matrix4.identity()
-                ..spTranslate(offset - pageIndex * screenWidth),
+              transform: Matrix4.identity()..spTranslate(offset - pageIndex * screenWidth),
               child: Opacity(
                 opacity: datas.opacity,
                 child: const Padding(
@@ -145,14 +125,8 @@ class _PagesLayoutState extends State<_PagesLayout> {
           children: [
             TextSpan(
               text: " / ${widget.builder.storyContent.richPages?.length}",
-              style:
-                  TextTheme.of(
-                    context,
-                  ).bodySmall?.copyWith(
-                    color: ColorScheme.of(
-                      context,
-                    ).onSurface.withValues(alpha: 0.5),
-                  ),
+              style: TextTheme.of(context).bodySmall
+                  ?.copyWith(color: ColorScheme.of(context).onSurface.withValues(alpha: 0.5)),
             ),
           ],
         ),

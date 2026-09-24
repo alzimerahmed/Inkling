@@ -8,13 +8,7 @@ import 'package:storypad/core/services/stories/story_stats_service.dart';
 import 'package:storypad/core/services/stories/writing_goal_service.dart';
 import 'package:storypad/core/types/path_type.dart';
 
-StoryDbModel _story({
-  required int id,
-  required int year,
-  required int month,
-  required int day,
-  int words = 10,
-}) {
+StoryDbModel _story({required int id, required int year, required int month, required int day, int words = 10}) {
   final DateTime now = DateTime(year, month, day, 9);
   return StoryDbModel(
     type: PathType.docs,
@@ -38,14 +32,7 @@ StoryDbModel _story({
       title: null,
       plainText: 'x ' * words,
       createdAt: now,
-      richPages: [
-        StoryPageDbModel(
-          id: id * 100,
-          title: null,
-          body: const [],
-          wordCount: words,
-        ),
-      ],
+      richPages: [StoryPageDbModel(id: id * 100, title: null, body: const [], wordCount: words)],
     ),
     draftContent: null,
     galleryTemplateId: null,
@@ -133,14 +120,8 @@ void main() {
       );
 
       // Per-day words must sum to the total word count, keyed by date-only.
-      expect(
-        stats.dailyWordCounts.values.fold<int>(0, (a, b) => a + b),
-        stats.wordCount,
-      );
-      expect(
-        stats.dailyWordCounts.keys.every((d) => d.hour == 0 && d.minute == 0),
-        isTrue,
-      );
+      expect(stats.dailyWordCounts.values.fold<int>(0, (a, b) => a + b), stats.wordCount);
+      expect(stats.dailyWordCounts.keys.every((d) => d.hour == 0 && d.minute == 0), isTrue);
       expect(
         WritingGoalService.todayWords(stats.dailyWordCounts, now),
         stats.dailyWordCounts[DateTime(now.year, now.month, now.day)],
@@ -155,32 +136,20 @@ void main() {
   group('JournalingPromptsService', () {
     test('same date always returns the same prompt', () {
       final DateTime date = DateTime(2026, 9, 22);
-      expect(
-        JournalingPromptsService.promptFor(date),
-        JournalingPromptsService.promptFor(date),
-      );
+      expect(JournalingPromptsService.promptFor(date), JournalingPromptsService.promptFor(date));
     });
 
     test('prompt wraps around the list without going out of bounds', () {
       final prompts = <String>{};
       for (int day = 0; day < 400; day++) {
-        prompts.add(
-          JournalingPromptsService.promptFor(
-            DateTime(2026).add(Duration(days: day)),
-          ),
-        );
+        prompts.add(JournalingPromptsService.promptFor(DateTime(2026).add(Duration(days: day))));
       }
       expect(prompts.length, JournalingPromptsService.all.length);
     });
 
     test('prompts are non-empty', () {
       for (int day = 0; day < 60; day++) {
-        expect(
-          JournalingPromptsService.promptFor(
-            DateTime(2026, 1, 1).add(Duration(days: day)),
-          ),
-          isNotEmpty,
-        );
+        expect(JournalingPromptsService.promptFor(DateTime(2026, 1, 1).add(Duration(days: day))), isNotEmpty);
       }
     });
   });

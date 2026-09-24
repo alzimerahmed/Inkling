@@ -32,21 +32,13 @@ class SpImageBackgroundScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        image: DecorationImage(
-          image: backgroundImage,
-          fit: BoxFit.cover,
-          alignment: alignment,
-        ),
+        image: DecorationImage(image: backgroundImage, fit: BoxFit.cover, alignment: alignment),
       ),
       child: Stack(
         children: [
           // Overlay for better text readability
           Positioned.fill(
-            child: Container(
-              color: (overlayColor ?? Colors.black).withValues(
-                alpha: overlayOpacity,
-              ),
-            ),
+            child: Container(color: (overlayColor ?? Colors.black).withValues(alpha: overlayOpacity)),
           ),
           // Main content
           child,
@@ -85,10 +77,7 @@ class SpImageBackgroundSplashScreen extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        image: DecorationImage(
-          image: backgroundImage,
-          fit: BoxFit.cover,
-        ),
+        image: DecorationImage(image: backgroundImage, fit: BoxFit.cover),
       ),
       child: Stack(
         children: [
@@ -103,9 +92,7 @@ class SpImageBackgroundSplashScreen extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [
                         Colors.transparent,
-                        Colors.black.withValues(
-                          alpha: isDarkMode ? 0.4 : 0.5,
-                        ),
+                        Colors.black.withValues(alpha: isDarkMode ? 0.4 : 0.5),
                       ],
                     ),
               ),
@@ -129,10 +116,8 @@ class SpImageBackgroundSplashScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style:
                             titleStyle ??
-                            Theme.of(context).textTheme.displayMedium?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            Theme.of(context).textTheme.displayMedium
+                                ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                       if (subtitle != null) ...[
                         const SizedBox(height: 12),
@@ -140,10 +125,7 @@ class SpImageBackgroundSplashScreen extends StatelessWidget {
                           subtitle!,
                           textAlign: TextAlign.center,
                           style:
-                              subtitleStyle ??
-                              Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: Colors.white70,
-                              ),
+                              subtitleStyle ?? Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70),
                         ),
                       ],
                     ],

@@ -1,5 +1,6 @@
 import 'dart:io' show File;
 import 'dart:ui' as ui;
+
 import 'package:image_picker/image_picker.dart';
 import 'package:storypad/core/types/asset_type.dart';
 import 'package:storypad/core/databases/models/asset_db_model.dart';
@@ -35,8 +36,7 @@ class InsertFileToDbService {
     await File(sourcePath).copy(storagePath);
 
     // Clean up temporary source file
-    if (File(sourcePath).existsSync())
-      File(sourcePath).deleteSync(recursive: true);
+    if (File(sourcePath).existsSync()) File(sourcePath).deleteSync(recursive: true);
 
     // Create asset model
     var asset = AssetDbModel.fromLocalPath(
@@ -57,41 +57,20 @@ class InsertFileToDbService {
 
   /// [size] is read at pick time (see [PickedMediaObject.read]), not here --
   /// inserting only moves the file into storage.
-  static Future<AssetDbModel?> insertImage(
-    XFile file, {
-    required ui.Size? size,
-  }) {
-    return _insertAsset(
-      sourcePath: file.path,
-      assetType: AssetType.image,
-      width: size?.width,
-      height: size?.height,
-    );
+  static Future<AssetDbModel?> insertImage(XFile file, {required ui.Size? size}) {
+    return _insertAsset(sourcePath: file.path, assetType: AssetType.image, width: size?.width, height: size?.height);
   }
 
   /// See [insertImage] for where [size] comes from.
-  static Future<AssetDbModel?> insertVideo(
-    XFile file, {
-    required ui.Size? size,
-  }) {
-    return _insertAsset(
-      sourcePath: file.path,
-      assetType: AssetType.video,
-      width: size?.width,
-      height: size?.height,
-    );
+  static Future<AssetDbModel?> insertVideo(XFile file, {required ui.Size? size}) {
+    return _insertAsset(sourcePath: file.path, assetType: AssetType.video, width: size?.width, height: size?.height);
   }
 
-  static Future<AssetDbModel?> insertAudio(
-    String filePath, {
-    int? durationInMs,
-  }) {
+  static Future<AssetDbModel?> insertAudio(String filePath, {int? durationInMs}) {
     return _insertAsset(
       sourcePath: filePath,
       assetType: AssetType.audio,
-      metadata: durationInMs != null
-          ? {AssetDbModel.DURATION_KEY: durationInMs}
-          : null,
+      metadata: durationInMs != null ? {AssetDbModel.DURATION_KEY: durationInMs} : null,
     );
   }
 

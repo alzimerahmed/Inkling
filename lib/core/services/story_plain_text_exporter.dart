@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:storypad/core/databases/models/tag_db_model.dart';
 import 'package:storypad/core/objects/story_page_object.dart';
 import 'package:storypad/core/services/quill/quill_delta_to_plain_text_service.dart';
@@ -36,14 +37,8 @@ class StoryPlainTextExporter {
       headerParts.add(emojis.join(' '));
     }
 
-    final header = headerParts.isNotEmpty
-        ? "${headerParts.join('\n')}\n\n"
-        : '';
-    final pagesText = pages
-        .map(_pageContent)
-        .where((content) => content.isNotEmpty)
-        .join('\n\n---\n\n')
-        .trim();
+    final header = headerParts.isNotEmpty ? "${headerParts.join('\n')}\n\n" : '';
+    final pagesText = pages.map(_pageContent).where((content) => content.isNotEmpty).join('\n\n---\n\n').trim();
 
     return "$header$pagesText\n\n#StoryPad";
   }
@@ -54,10 +49,7 @@ class StoryPlainTextExporter {
     final title = page.titleController.text.trim().trim();
     if (title.isNotEmpty) parts.add(title);
 
-    String plainTexts = QuillDeltaToPlainTextService.call(
-      page.bodyController.serialize(),
-      markdown: markdown,
-    );
+    String plainTexts = QuillDeltaToPlainTextService.call(page.bodyController.serialize(), markdown: markdown);
 
     if (plainTexts.isNotEmpty) parts.add(plainTexts);
 

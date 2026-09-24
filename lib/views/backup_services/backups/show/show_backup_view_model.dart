@@ -8,37 +8,28 @@ import 'package:storypad/providers/tags_provider.dart';
 import 'package:storypad/views/backup_services/backups/tables/show/show_table_view.dart';
 import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
 import 'package:storypad/views/home/home_view.dart';
+
 import 'show_backup_view.dart';
 
 class ShowBackupsViewModel extends ChangeNotifier with DisposeAwareMixin {
   final ShowBackupsRoute params;
 
-  ShowBackupsViewModel({
-    required this.params,
-  });
+  ShowBackupsViewModel({required this.params});
 
   void restore(BuildContext context) async {
     await MessengerService.of(context).showLoading(
       debugSource: '$runtimeType#forceRestore',
-      future: () => context
-          .read<BackupProvider>()
-          .repository
-          .restoreService
-          .forceRestore(backup: params.backup),
+      future: () => context.read<BackupProvider>().repository.restoreService.forceRestore(backup: params.backup),
     );
 
     if (!context.mounted) return;
-    AnalyticsService.instance.logForceRestoreBackup(
-      backupFileInfo: params.backup.fileInfo,
-    );
+    AnalyticsService.instance.logForceRestoreBackup(backupFileInfo: params.backup.fileInfo);
 
     await context.read<TagsProvider>().reload();
     await HomeView.reload(debugSource: '$runtimeType#forceRestore');
 
     if (!context.mounted) return;
-    MessengerService.of(
-      context,
-    ).showSnackBar(tr("snack_bar.force_restore_success"));
+    MessengerService.of(context).showSnackBar(tr("snack_bar.force_restore_success"));
   }
 
   void viewBackupContent({
@@ -48,9 +39,7 @@ class ShowBackupsViewModel extends ChangeNotifier with DisposeAwareMixin {
     required BuildContext context,
   }) async {
     if (value is List) {
-      List<Map<String, dynamic>> tableContents = value
-          .whereType<Map<String, dynamic>>()
-          .toList();
+      List<Map<String, dynamic>> tableContents = value.whereType<Map<String, dynamic>>().toList();
       ShowTableRoute(
         translateTabledName: translateTabledName,
         tableName: tableName,

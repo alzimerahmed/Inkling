@@ -42,18 +42,9 @@ void main() {
     test('subdirectories match storage paths structure', () {
       // The getStoragePath method uses subDirectory in its path construction
       // verify the subDirectory values are correctly set
-      expect(
-        AssetType.image.subDirectory.relativePath,
-        isNotEmpty,
-      );
-      expect(
-        AssetType.audio.subDirectory.relativePath,
-        isNotEmpty,
-      );
-      expect(
-        AssetType.video.subDirectory.relativePath,
-        isNotEmpty,
-      );
+      expect(AssetType.image.subDirectory.relativePath, isNotEmpty);
+      expect(AssetType.audio.subDirectory.relativePath, isNotEmpty);
+      expect(AssetType.video.subDirectory.relativePath, isNotEmpty);
     });
   });
 
@@ -90,42 +81,26 @@ void main() {
     test('generates correct relative path for image', () {
       const id = 1762500783746;
       const extension = '.jpg';
-      expect(
-        AssetType.image.getRelativeStoragePath(id: id, extension: extension),
-        equals('images/1762500783746.jpg'),
-      );
+      expect(AssetType.image.getRelativeStoragePath(id: id, extension: extension), equals('images/1762500783746.jpg'));
     });
 
     test('generates correct relative path for audio', () {
       const id = 1762500783747;
       const extension = '.m4a';
-      expect(
-        AssetType.audio.getRelativeStoragePath(id: id, extension: extension),
-        equals('audio/1762500783747.m4a'),
-      );
+      expect(AssetType.audio.getRelativeStoragePath(id: id, extension: extension), equals('audio/1762500783747.m4a'));
     });
 
     test('generates correct relative path for video', () {
       const id = 1762500783748;
       const extension = '.mp4';
-      expect(
-        AssetType.video.getRelativeStoragePath(id: id, extension: extension),
-        equals('videos/1762500783748.mp4'),
-      );
+      expect(AssetType.video.getRelativeStoragePath(id: id, extension: extension), equals('videos/1762500783748.mp4'));
     });
 
     test('handles various extensions', () {
-      const testData = [
-        ('.jpg', 'images/123.jpg'),
-        ('.png', 'images/123.png'),
-        ('.gif', 'images/123.gif'),
-      ];
+      const testData = [('.jpg', 'images/123.jpg'), ('.png', 'images/123.png'), ('.gif', 'images/123.gif')];
 
       for (final (extension, expected) in testData) {
-        expect(
-          AssetType.image.getRelativeStoragePath(id: 123, extension: extension),
-          equals(expected),
-        );
+        expect(AssetType.image.getRelativeStoragePath(id: 123, extension: extension), equals(expected));
       }
     });
   });
@@ -153,25 +128,13 @@ void main() {
     });
 
     test('handles edge case IDs', () {
-      expect(
-        AssetType.parseAssetId('images/0.jpg'),
-        equals(0),
-      );
-      expect(
-        AssetType.parseAssetId('audio/999999999.m4a'),
-        equals(999999999),
-      );
+      expect(AssetType.parseAssetId('images/0.jpg'), equals(0));
+      expect(AssetType.parseAssetId('audio/999999999.m4a'), equals(999999999));
     });
 
     test('handles paths without extensions', () {
-      expect(
-        AssetType.parseAssetId('images/123'),
-        equals(123),
-      );
-      expect(
-        AssetType.parseAssetId('audio/456'),
-        equals(456),
-      );
+      expect(AssetType.parseAssetId('images/123'), equals(123));
+      expect(AssetType.parseAssetId('audio/456'), equals(456));
     });
   });
 
@@ -210,10 +173,7 @@ void main() {
       const extension = '.jpg';
 
       // Generate relative path
-      final path = AssetType.image.getRelativeStoragePath(
-        id: assetId,
-        extension: extension,
-      );
+      final path = AssetType.image.getRelativeStoragePath(id: assetId, extension: extension);
       expect(path, equals('images/1762500783746.jpg'));
 
       // Get type from path
@@ -230,10 +190,7 @@ void main() {
       const extension = '.m4a';
 
       // Generate relative path
-      final path = AssetType.audio.getRelativeStoragePath(
-        id: assetId,
-        extension: extension,
-      );
+      final path = AssetType.audio.getRelativeStoragePath(id: assetId, extension: extension);
       expect(path, equals('audio/1762500783747.m4a'));
 
       // Get type from path
@@ -250,10 +207,7 @@ void main() {
       const extension = '.mp4';
 
       // Generate relative path
-      final path = AssetType.video.getRelativeStoragePath(
-        id: assetId,
-        extension: extension,
-      );
+      final path = AssetType.video.getRelativeStoragePath(id: assetId, extension: extension);
       expect(path, equals('videos/1762500783748.mp4'));
 
       // Get type from path
@@ -278,29 +232,20 @@ void main() {
 
   group('AssetType - Storage paths', () {
     test('getRelativeStoragePath returns relative path', () {
-      final path = AssetType.image.getRelativeStoragePath(
-        id: 123,
-        extension: '.jpg',
-      );
+      final path = AssetType.image.getRelativeStoragePath(id: 123, extension: '.jpg');
       // Should start with subDirectory, not an absolute path
       expect(path, equals('images/123.jpg'));
       expect(path, isNot(startsWith('/')));
     });
 
     test('getRelativeStoragePath works for audio', () {
-      final path = AssetType.audio.getRelativeStoragePath(
-        id: 456,
-        extension: '.m4a',
-      );
+      final path = AssetType.audio.getRelativeStoragePath(id: 456, extension: '.m4a');
       expect(path, equals('audio/456.m4a'));
       expect(path, isNot(startsWith('/')));
     });
 
     test('getRelativeStoragePath works for video', () {
-      final path = AssetType.video.getRelativeStoragePath(
-        id: 789,
-        extension: '.mp4',
-      );
+      final path = AssetType.video.getRelativeStoragePath(id: 789, extension: '.mp4');
       expect(path, equals('videos/789.mp4'));
       expect(path, isNot(startsWith('/')));
     });

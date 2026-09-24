@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:storypad/gen/assets.gen.dart';
 
-enum EndDrawerScreenshotState {
-  noSignedIn,
-  signedIn,
-  syning,
-  synced,
-}
+enum EndDrawerScreenshotState { noSignedIn, signedIn, syning, synced }
 
 class EndDrawerScreenshot extends StatelessWidget {
-  const EndDrawerScreenshot({
-    super.key,
-    required this.state,
-  });
+  const EndDrawerScreenshot({super.key, required this.state});
 
   final EndDrawerScreenshotState state;
 
@@ -44,10 +36,6 @@ class EndDrawerScreenshot extends StatelessWidget {
         break;
     }
 
-    return imageGen.image(
-      width: 221,
-      height: 510,
-      alignment: Alignment.topCenter,
-    );
+    return imageGen.image(width: 221, height: 510, alignment: Alignment.topCenter);
   }
 }

@@ -21,28 +21,21 @@ class AutoBackupService {
   static const List<int> intervalOptionsInHours = [6, 12, 24, 24 * 7];
   static const int defaultKeepCount = 5;
 
-  static final AutoBackupEnabledStorage _enabledStorage =
-      AutoBackupEnabledStorage();
-  static final AutoBackupIntervalStorage _intervalStorage =
-      AutoBackupIntervalStorage();
-  static final AutoBackupKeepCountStorage _keepCountStorage =
-      AutoBackupKeepCountStorage();
-  static final AutoBackupLastRunStorage _lastRunStorage =
-      AutoBackupLastRunStorage();
+  static final AutoBackupEnabledStorage _enabledStorage = AutoBackupEnabledStorage();
+  static final AutoBackupIntervalStorage _intervalStorage = AutoBackupIntervalStorage();
+  static final AutoBackupKeepCountStorage _keepCountStorage = AutoBackupKeepCountStorage();
+  static final AutoBackupLastRunStorage _lastRunStorage = AutoBackupLastRunStorage();
 
   /// True when a backup was taken this call.
   static Future<bool> maybeRun() async {
     final bool enabled = await _enabledStorage.read() ?? false;
     if (!enabled) return false;
 
-    final int intervalHours =
-        await _intervalStorage.read() ?? intervalOptionsInHours.first;
+    final int intervalHours = await _intervalStorage.read() ?? intervalOptionsInHours.first;
     final String? lastRunAt = await _lastRunStorage.read();
 
     final DateTime now = DateTime.now();
-    final DateTime? lastRun = lastRunAt == null
-        ? null
-        : DateTime.tryParse(lastRunAt)?.toLocal();
+    final DateTime? lastRun = lastRunAt == null ? null : DateTime.tryParse(lastRunAt)?.toLocal();
 
     if (!isDue(lastRun, now, intervalHours)) return false;
 
@@ -63,22 +56,16 @@ class AutoBackupService {
       hasCompression: true,
     );
 
-    final Directory dir = Directory(
-      '${SupportDirectoryPath.backups.directoryPath}/auto_backup',
-    );
+    final Directory dir = Directory('${SupportDirectoryPath.backups.directoryPath}/auto_backup');
     if (!dir.existsSync()) dir.createSync(recursive: true);
 
     final String encoded = jsonEncode(backup.toContents());
     final List<int> bytes = GzipService.compress(encoded);
 
-    final String fileName =
-        'auto-backup-${now.toIso8601String().replaceAll(':', '.')}.json.gz';
+    final String fileName = 'auto-backup-${now.toIso8601String().replaceAll(':', '.')}.json.gz';
     await File('${dir.path}/$fileName').writeAsBytes(bytes);
 
-    await applyRetention(
-      directory: dir,
-      keep: await _keepCountStorage.read() ?? defaultKeepCount,
-    );
+    await applyRetention(directory: dir, keep: await _keepCountStorage.read() ?? defaultKeepCount);
   }
 
   /// Whether an auto-backup is due. Pure — unit-tested.
@@ -91,10 +78,7 @@ class AutoBackupService {
   /// Deletes oldest files in [directory] so only the newest [keep] remain.
   /// Returns the number of deleted files. Pure w.r.t. the file list —
   /// unit-tested via [prune].
-  static Future<int> applyRetention({
-    required Directory directory,
-    required int keep,
-  }) async {
+  static Future<int> applyRetention({required Directory directory, required int keep}) async {
     if (keep < 0) return 0;
 
     final List<File> files = directory.listSync().whereType<File>().toList()

@@ -10,10 +10,7 @@ void main() {
 
     test('finds case-insensitive matches', () {
       final segments = SearchHighlightService.segments('Hello World', 'world');
-      expect(segments, [
-        (text: 'Hello ', isMatch: false),
-        (text: 'World', isMatch: true),
-      ]);
+      expect(segments, [(text: 'Hello ', isMatch: false), (text: 'World', isMatch: true)]);
     });
 
     test('merges overlapping/adjacent matches', () {

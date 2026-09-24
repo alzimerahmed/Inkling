@@ -1,10 +1,7 @@
 part of '../relax_sounds_view.dart';
 
 class _SoundIconCard extends StatelessWidget {
-  const _SoundIconCard({
-    required this.relaxSound,
-    required this.selected,
-  });
+  const _SoundIconCard({required this.relaxSound, required this.selected});
 
   final RelaxSoundObject relaxSound;
   final bool selected;
@@ -19,11 +16,7 @@ class _SoundIconCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         color: selected ? ColorScheme.of(context).readOnly.surface2 : null,
-        border: Border.all(
-          color: selected
-              ? ColorScheme.of(context).primary
-              : Theme.of(context).dividerColor,
-        ),
+        border: Border.all(color: selected ? ColorScheme.of(context).primary : Theme.of(context).dividerColor),
       ),
       child: SpFirestoreStorageDownloaderBuilder(
         filePath: relaxSound.svgIconUrlPath,
@@ -35,18 +28,13 @@ class _SoundIconCard extends StatelessWidget {
     );
   }
 
-  Widget buildSvgIcon(
-    File file,
-    BuildContext context,
-  ) {
+  Widget buildSvgIcon(File file, BuildContext context) {
     Widget child = SvgPicture.file(
       file,
       semanticsLabel: relaxSound.label,
       height: 48,
       colorFilter: ColorFilter.mode(
-        selected
-            ? ColorScheme.of(context).primary
-            : ColorScheme.of(context).onSurface,
+        selected ? ColorScheme.of(context).primary : ColorScheme.of(context).onSurface,
         BlendMode.srcIn,
       ),
     );
@@ -62,9 +50,7 @@ class _SoundIconCard extends StatelessWidget {
             semanticsLabel: relaxSound.label,
             height: 48,
             colorFilter: ColorFilter.mode(
-              selected
-                  ? ColorScheme.of(context).primary
-                  : ColorScheme.of(context).onSurface,
+              selected ? ColorScheme.of(context).primary : ColorScheme.of(context).onSurface,
               BlendMode.srcIn,
             ),
           );
@@ -78,10 +64,7 @@ class _SoundIconCard extends StatelessWidget {
         curve: Curves.ease,
         child: child,
         builder: (context, value, child) {
-          return Transform.scale(
-            scale: lerpDouble(1, 0.9, value),
-            child: child!,
-          );
+          return Transform.scale(scale: lerpDouble(1, 0.9, value), child: child!);
         },
       );
     }

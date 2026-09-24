@@ -8,9 +8,7 @@ class _RecentlyDeletedRecordsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Deleted Records"),
-      ),
+      appBar: AppBar(title: const Text("Deleted Records")),
       body: SpStoryListMultiEditWrapper(
         disabled: true,
         builder: (BuildContext context) {

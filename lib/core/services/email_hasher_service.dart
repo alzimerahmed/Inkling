@@ -1,14 +1,13 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:convert';
+
 import 'package:crypto/crypto.dart';
 
 class EmailHasherService {
   final String secretKey;
 
-  EmailHasherService({
-    required this.secretKey,
-  });
+  EmailHasherService({required this.secretKey});
 
   String normalizeEmail(String email) {
     return email.trim().toLowerCase();

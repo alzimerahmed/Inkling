@@ -14,6 +14,7 @@ import 'package:storypad/core/services/map/initial_map_camera_resolver.dart';
 import 'package:storypad/providers/device_preferences_provider.dart';
 import 'package:storypad/widgets/maps/sp_map_controller.dart';
 import 'package:storypad/widgets/maps/map_types.dart';
+
 import 'map_picker_view.dart';
 
 class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
@@ -22,10 +23,7 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
   // Use view context to push / navigate to other pages to avoid using map overlay theme on those pages.
   final BuildContext viewContext;
 
-  MapPickerViewModel({
-    required this.params,
-    required this.viewContext,
-  }) : _selectedPlace = params.initialSelectedPlace {
+  MapPickerViewModel({required this.params, required this.viewContext}) : _selectedPlace = params.initialSelectedPlace {
     unawaited(resolveInitialCamera());
 
     // Auto-fill: if we opened with a place that only has coordinates (e.g. it
@@ -47,13 +45,9 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
   bool _showCurrentLocation = false;
   bool get showCurrentLocation => _showCurrentLocation;
 
-  SpMapRenderer get mapRenderer =>
-      viewContext.read<DevicePreferencesProvider>().mapRenderer;
+  SpMapRenderer get mapRenderer => viewContext.read<DevicePreferencesProvider>().mapRenderer;
 
-  late SpMapStyle _mapStyle = viewContext
-      .read<DevicePreferencesProvider>()
-      .preferences
-      .mapStyle;
+  late SpMapStyle _mapStyle = viewContext.read<DevicePreferencesProvider>().preferences.mapStyle;
   SpMapStyle get mapStyle => _mapStyle;
 
   PlaceDbModel? _selectedPlace;
@@ -75,12 +69,7 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
     final PlaceDbModel? initial = params.initialSelectedPlace;
     final PlaceDbModel? selected = _selectedPlace;
     if (initial == null || selected == null) return false;
-    return !_isSameLatLng(
-      selected.latitude,
-      selected.longitude,
-      initial.latitude,
-      initial.longitude,
-    );
+    return !_isSameLatLng(selected.latitude, selected.longitude, initial.latitude, initial.longitude);
   }
 
   SpMapCamera get initialSpMapCamera => _initialSpMapCamera;
@@ -96,23 +85,17 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
 
     return selectedPlace.latitude != initialPlace.latitude ||
         selectedPlace.longitude != initialPlace.longitude ||
-        _normalizeText(selectedPlace.placeName) !=
-            _normalizeText(initialPlace.placeName) ||
-        _normalizeText(selectedPlace.locality) !=
-            _normalizeText(initialPlace.locality) ||
-        _normalizeText(selectedPlace.country) !=
-            _normalizeText(initialPlace.country) ||
-        _normalizeText(selectedPlace.address) !=
-            _normalizeText(initialPlace.address);
+        _normalizeText(selectedPlace.placeName) != _normalizeText(initialPlace.placeName) ||
+        _normalizeText(selectedPlace.locality) != _normalizeText(initialPlace.locality) ||
+        _normalizeText(selectedPlace.country) != _normalizeText(initialPlace.country) ||
+        _normalizeText(selectedPlace.address) != _normalizeText(initialPlace.address);
   }
 
   Future<void> resolveInitialCamera() async {
     final resolver = InitialMapCameraResolver(
       fetchDeviceLocation: SpLocationService.fetchLastKnownLocation,
       fetchStoryLocations: () async {
-        final stories = await StoryDbModel.db.getRecentStoriesWithLocation(
-          limit: 20,
-        );
+        final stories = await StoryDbModel.db.getRecentStoriesWithLocation(limit: 20);
         return stories.map((story) => story.location).toList();
       },
       // The picker is about choosing one precise place, so start closer in
@@ -121,9 +104,7 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
       closeZoomBoost: 4.0,
     );
 
-    final result = await resolver.resolve(
-      selectedPlace: params.initialSelectedPlace,
-    );
+    final result = await resolver.resolve(selectedPlace: params.initialSelectedPlace);
     if (disposed) return;
     if (params.initialSelectedPlace == null && _selectedPlace != null) return;
 
@@ -158,13 +139,7 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
     _isDragging = false;
 
     final PlaceDbModel? current = _selectedPlace;
-    if (current != null &&
-        _isSameLatLng(
-          center.latitude,
-          center.longitude,
-          current.latitude,
-          current.longitude,
-        )) {
+    if (current != null && _isSameLatLng(center.latitude, center.longitude, current.latitude, current.longitude)) {
       notifyListeners();
       return;
     }
@@ -181,13 +156,7 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
       final SpLatLng center = viewport.center;
       final PlaceDbModel? current = _selectedPlace;
 
-      if (current != null &&
-          _isSameLatLng(
-            center.latitude,
-            center.longitude,
-            current.latitude,
-            current.longitude,
-          )) {
+      if (current != null && _isSameLatLng(center.latitude, center.longitude, current.latitude, current.longitude)) {
         return;
       }
 
@@ -209,27 +178,19 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
     notifyListeners();
 
     // Keep current zoom and bearing when resetting to initial location, as that's more likely what users expect.
-    await mapController.animateTo(
-      initial.latitude,
-      initial.longitude,
-    );
+    await mapController.animateTo(initial.latitude, initial.longitude);
   }
 
   void setSelectedLocation(double latitude, double longitude) {
     _selectedVersion += 1;
-    _selectedPlace = PlaceDbModel(
-      latitude: latitude,
-      longitude: longitude,
-    );
+    _selectedPlace = PlaceDbModel(latitude: latitude, longitude: longitude);
 
     notifyListeners();
     unawaited(_resolveSelectedPlace(selectedVersion: _selectedVersion));
   }
 
   Future<void> goToCurrentLocation(BuildContext context) async {
-    final place = await SpAppLocationService.fetchCurrentPlaceWithRecovery(
-      context,
-    );
+    final place = await SpAppLocationService.fetchCurrentPlaceWithRecovery(context);
     if (!context.mounted || place == null) return;
 
     _showCurrentLocation = true;
@@ -237,12 +198,7 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
     _selectedPlace = place;
     notifyListeners();
 
-    await mapController.animateTo(
-      place.latitude,
-      place.longitude,
-      zoom: 15.0,
-      bearing: 0.0,
-    );
+    await mapController.animateTo(place.latitude, place.longitude, zoom: 15.0, bearing: 0.0);
   }
 
   Future<void> resetRotation() async {
@@ -256,8 +212,7 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
     final String trimmed = query.trim();
 
     if (trimmed.isEmpty) return Future.value(const <PlaceDbModel>[]);
-    if (params.initialSelectedPlace == null)
-      return Future.value(const <PlaceDbModel>[]);
+    if (params.initialSelectedPlace == null) return Future.value(const <PlaceDbModel>[]);
 
     return SpGeocodingService.onlineInstance.searchPlaces(
       trimmed,
@@ -275,12 +230,7 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
     _selectedPlace = place;
     notifyListeners();
 
-    await mapController.animateTo(
-      place.latitude,
-      place.longitude,
-      zoom: 15.0,
-      bearing: 0.0,
-    );
+    await mapController.animateTo(place.latitude, place.longitude, zoom: 15.0, bearing: 0.0);
 
     unawaited(_resolveSelectedPlace(selectedVersion: _selectedVersion));
   }
@@ -312,10 +262,8 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
       // geocoding already failed once, so this is a last-chance retry on a
       // known-bad connection. We bound it so a hung geocoder doesn't silently
       // block the confirm action — on timeout we just save coordinates.
-      await _resolveSelectedPlace(selectedVersion: _selectedVersion).timeout(
-        SpLocationService.geocodeTimeout,
-        onTimeout: () {},
-      );
+      await _resolveSelectedPlace(selectedVersion: _selectedVersion)
+          .timeout(SpLocationService.geocodeTimeout, onTimeout: () {});
     }
 
     if (_selectedPlace == null) return null;
@@ -335,9 +283,7 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
     notifyListeners();
 
     try {
-      final resolved = await SpGeocodingService.systemInstance.reverseGeocode(
-        place.latLng,
-      );
+      final resolved = await SpGeocodingService.systemInstance.reverseGeocode(place.latLng);
       if (selectedVersion != _selectedVersion) return;
 
       _selectedPlace = resolved ?? place;

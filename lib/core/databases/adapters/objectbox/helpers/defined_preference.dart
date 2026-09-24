@@ -4,10 +4,7 @@ class _DefinedPreference<T> {
   final int id;
   final String key;
 
-  _DefinedPreference({
-    required this.id,
-    required this.key,
-  });
+  _DefinedPreference({required this.id, required this.key});
 
   T? get() {
     PreferenceObjectBox? record = PreferencesBox().box.get(id);

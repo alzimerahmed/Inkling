@@ -5,8 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 /// almost no bandwidth and is the data users actually can't afford to lose.
 enum MediaSyncOption {
   wifiAndCellular,
-  wifiOnly,
-  ;
+  wifiOnly;
 
   /// Wi-Fi + cellular, so upgrading users keep the pre-gating behavior and
   /// Wi-Fi-only is strictly opt-in.

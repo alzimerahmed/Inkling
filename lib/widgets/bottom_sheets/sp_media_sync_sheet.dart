@@ -6,10 +6,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/sp_single_state_widget.dart';
 
 class SpMediaSyncSheet extends BaseBottomSheet {
-  const SpMediaSyncSheet({
-    required this.mediaSync,
-    required this.onChanged,
-  });
+  const SpMediaSyncSheet({required this.mediaSync, required this.onChanged});
 
   final MediaSyncOption mediaSync;
   final void Function(MediaSyncOption mediaSync) onChanged;
@@ -35,10 +32,7 @@ class SpMediaSyncSheet extends BaseBottomSheet {
                   trailing: Visibility(
                     visible: mediaSync == selectedMediaSync,
                     child: SpFadeIn.fromBottom(
-                      child: Icon(
-                        SpIcons.checkCircle,
-                        color: ColorScheme.of(context).primary,
-                      ),
+                      child: Icon(SpIcons.checkCircle, color: ColorScheme.of(context).primary),
                     ),
                   ),
                   onTap: () {

@@ -8,10 +8,7 @@ class _AppLockInitialData {
   final LocalAuthService localAuth;
   final AppLockObject appLock;
 
-  _AppLockInitialData({
-    required this.localAuth,
-    required this.appLock,
-  });
+  _AppLockInitialData({required this.localAuth, required this.appLock});
 }
 
 class AppLockInitializer {
@@ -22,10 +19,7 @@ class AppLockInitializer {
     await localAuth.load();
     final appLock = await AppLockStorage().readObject() ?? AppLockObject.init();
 
-    _initialData = _AppLockInitialData(
-      localAuth: localAuth,
-      appLock: appLock,
-    );
+    _initialData = _AppLockInitialData(localAuth: localAuth, appLock: appLock);
   }
 
   static _AppLockInitialData? getAndClear() {

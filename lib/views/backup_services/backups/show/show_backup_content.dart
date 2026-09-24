@@ -9,10 +9,7 @@ class _ShowBackupContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? backupAt = DateFormatHelper.yMEd_jmNullable(
-      backup.fileInfo.createdAt,
-      context.locale,
-    );
+    String? backupAt = DateFormatHelper.yMEd_jmNullable(backup.fileInfo.createdAt, context.locale);
 
     String? sizeInKB;
 
@@ -27,17 +24,8 @@ class _ShowBackupContent extends StatelessWidget {
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    [
-                      backup.fileInfo.device.model,
-                      ?sizeInKB,
-                    ].join(" - "),
-                    style: TextTheme.of(context).titleSmall,
-                  ),
-                  Text(
-                    backupAt,
-                    style: TextTheme.of(context).bodyMedium,
-                  ),
+                  Text([backup.fileInfo.device.model, ?sizeInKB].join(" - "), style: TextTheme.of(context).titleSmall),
+                  Text(backupAt, style: TextTheme.of(context).bodyMedium),
                 ],
               )
             : Text(backup.fileInfo.device.model),
@@ -55,10 +43,7 @@ class _ShowBackupContent extends StatelessWidget {
               ];
             },
             builder: (callback) {
-              return IconButton(
-                onPressed: callback,
-                icon: const Icon(SpIcons.moreVert),
-              );
+              return IconButton(onPressed: callback, icon: const Icon(SpIcons.moreVert));
             },
           ),
         ],

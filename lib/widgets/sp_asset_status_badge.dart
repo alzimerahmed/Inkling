@@ -34,12 +34,7 @@ class SpAssetStatusBadge extends StatelessWidget {
     return Positioned(
       top: top,
       right: right,
-      child: tooltipMessage == null
-          ? badge
-          : Tooltip(
-              message: tooltipMessage,
-              child: badge,
-            ),
+      child: tooltipMessage == null ? badge : Tooltip(message: tooltipMessage, child: badge),
     );
   }
 }

@@ -8,10 +8,7 @@ class _AddOnsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorScheme.of(context).readOnly.surface1,
-        title: Text(tr("page.add_ons.title")),
-      ),
+      appBar: AppBar(backgroundColor: ColorScheme.of(context).readOnly.surface1, title: Text(tr("page.add_ons.title"))),
       body: ListView.separated(
         itemCount: AddOnType.values.length,
         separatorBuilder: (context, index) => const Divider(height: 1),
@@ -25,9 +22,7 @@ class _AddOnsContent extends StatelessWidget {
 }
 
 class _AddOnTile extends StatelessWidget {
-  const _AddOnTile({
-    required this.addOn,
-  });
+  const _AddOnTile({required this.addOn});
 
   final AddOnType addOn;
 
@@ -49,8 +44,7 @@ class _AddOnTile extends StatelessWidget {
 
     bool enabled =
         (provider.enableRelaxSounds && addOn == AddOnType.relax_sounds) ||
-        (provider.enablePeriodCalendar(context) &&
-            addOn == AddOnType.period_calendar);
+        (provider.enablePeriodCalendar(context) && addOn == AddOnType.period_calendar);
 
     // The switch reflects the true enabled state but doesn't toggle directly —
     // tapping it (like tapping the tile) opens the sheet, where the real
@@ -65,10 +59,7 @@ class _AddOnTile extends StatelessWidget {
     return ListTile(
       onTap: openSheet,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      leading: SpSettingIconBadge(
-        weekday: addOn.weekdayColor,
-        icon: addOn.icon,
-      ),
+      leading: SpSettingIconBadge(weekday: addOn.weekdayColor, icon: addOn.icon),
       title: _AddOnTitle(addOn: addOn),
       subtitle: Text(addOn.description),
       trailing: Switch.adaptive(value: enabled, onChanged: (_) => openSheet()),
@@ -99,10 +90,8 @@ class _AddOnSwitchTileState extends State<_AddOnSwitchTile> {
     super.initState();
     final provider = context.read<DevicePreferencesProvider>();
     _enabled =
-        (provider.enableRelaxSounds &&
-            widget.addOn == AddOnType.relax_sounds) ||
-        (provider.enablePeriodCalendar(context) &&
-            widget.addOn == AddOnType.period_calendar);
+        (provider.enableRelaxSounds && widget.addOn == AddOnType.relax_sounds) ||
+        (provider.enablePeriodCalendar(context) && widget.addOn == AddOnType.period_calendar);
   }
 
   void _setEnabled(bool value) {
@@ -115,10 +104,7 @@ class _AddOnSwitchTileState extends State<_AddOnSwitchTile> {
     return SwitchListTile.adaptive(
       contentPadding: const EdgeInsets.only(left: 16.0, right: 12.0),
       value: _enabled,
-      secondary: SpSettingIconBadge(
-        weekday: widget.addOn.weekdayColor,
-        icon: widget.addOn.icon,
-      ),
+      secondary: SpSettingIconBadge(weekday: widget.addOn.weekdayColor, icon: widget.addOn.icon),
       title: _AddOnTitle(addOn: widget.addOn),
       subtitle: Text(widget.addOn.description),
       onChanged: _setEnabled,
@@ -139,10 +125,7 @@ class _AddOnTitle extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyLarge,
         children: [
           if (addOn.designForFemale)
-            const WidgetSpan(
-              child: Icon(Icons.female_outlined, size: 22.0),
-              alignment: PlaceholderAlignment.middle,
-            ),
+            const WidgetSpan(child: Icon(Icons.female_outlined, size: 22.0), alignment: PlaceholderAlignment.middle),
         ],
       ),
     );

@@ -8,14 +8,7 @@ import 'package:storypad/core/databases/models/story_db_model.dart';
 /// substring query, which already filtered to matching stories.
 class SearchRankingService {
   static void rank(List<StoryDbModel> stories, String? query) {
-    final terms =
-        query
-            ?.trim()
-            .toLowerCase()
-            .split(RegExp(r'\s+'))
-            .where((t) => t.isNotEmpty)
-            .toList() ??
-        const [];
+    final terms = query?.trim().toLowerCase().split(RegExp(r'\s+')).where((t) => t.isNotEmpty).toList() ?? const [];
     if (terms.isEmpty) return;
 
     int score(StoryDbModel story) {

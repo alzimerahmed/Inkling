@@ -19,11 +19,7 @@ import 'package:storypad/widgets/sp_tap_effect.dart';
 /// All numbers come from [stats]; the model owns formatting/localization so
 /// this widget just renders and joins the labels.
 class StoryMonthRecapTile extends StatelessWidget {
-  const StoryMonthRecapTile({
-    super.key,
-    required this.story,
-    required this.stats,
-  });
+  const StoryMonthRecapTile({super.key, required this.story, required this.stats});
 
   final StoryDbModel story;
   final MonthRecapStatsObject stats;
@@ -51,16 +47,9 @@ class StoryMonthRecapTile extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: colorScheme.surface,
-              border: Border.all(
-                color: colorScheme.bootstrap.warning.color,
-                width: 1.0,
-              ),
+              border: Border.all(color: colorScheme.bootstrap.warning.color, width: 1.0),
             ),
-            child: Icon(
-              SpIcons.star,
-              size: 20.0,
-              color: colorScheme.bootstrap.warning.color,
-            ),
+            child: Icon(SpIcons.star, size: 20.0, color: colorScheme.bootstrap.warning.color),
           ),
           title: Text(stats.titleLabel(context.locale)),
           subtitle: Text.rich(
@@ -69,9 +58,7 @@ class StoryMonthRecapTile extends StatelessWidget {
                 TextSpan(text: stats.activeDaysLabel),
                 TextSpan(
                   text: " · ${stats.labels.join(" · ")}",
-                  style: TextStyle(
-                    color: colorScheme.onSurface.withValues(alpha: 0.6),
-                  ),
+                  style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.6)),
                 ),
               ],
             ),

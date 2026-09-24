@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:ui';
+
 import 'package:animations/animations.dart';
-import 'package:easy_localization/easy_localization.dart'
-    show tr, BuildContextEasyLocalizationExtension;
+import 'package:easy_localization/easy_localization.dart' show tr, BuildContextEasyLocalizationExtension;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:storypad/app_theme.dart';
@@ -68,16 +68,12 @@ class HomeRoute extends BaseRoute {
 }
 
 class HomeView extends StatelessWidget {
-  const HomeView({
-    super.key,
-  });
+  const HomeView({super.key});
 
   static BuildContext? _homeContext;
   static BuildContext? get homeContext => _homeContext;
 
-  static Future<void> reload({
-    required String debugSource,
-  }) async {
+  static Future<void> reload({required String debugSource}) async {
     return _homeContext?.read<HomeViewModel>().reload(debugSource: debugSource);
   }
 

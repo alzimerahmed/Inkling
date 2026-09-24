@@ -14,12 +14,7 @@ class BackupObject {
   // they serve different purpose.
   static const int currentVersion = 1;
 
-  BackupObject({
-    required this.tables,
-    required this.fileInfo,
-    this.version = currentVersion,
-    this.year,
-  });
+  BackupObject({required this.tables, required this.fileInfo, this.version = currentVersion, this.year});
 
   static BackupObject fromContents(Map<String, dynamic> contents) {
     return BackupObject(
@@ -28,10 +23,7 @@ class BackupObject {
       year: contents['year'] != null ? int.tryParse(contents['year'].toString()) : null,
       fileInfo: BackupFileObject(
         createdAt: DateTime.parse(contents['meta_data']['created_at']),
-        device: DeviceInfoObject(
-          model: contents['meta_data']['device_model'],
-          id: contents['meta_data']['device_id'],
-        ),
+        device: DeviceInfoObject(model: contents['meta_data']['device_model'], id: contents['meta_data']['device_id']),
         year: contents['year'] != null ? int.tryParse(contents['year'].toString()) : null,
         hasCompression: false,
       ),

@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,11 +30,7 @@ class SpShareStoryBottomSheet extends BaseBottomSheet {
   final StoryContentDbModel draftContent;
   final StoryPagesManagerInfo pagesManager;
 
-  SpShareStoryBottomSheet({
-    required this.story,
-    required this.draftContent,
-    required this.pagesManager,
-  });
+  SpShareStoryBottomSheet({required this.story, required this.draftContent, required this.pagesManager});
 
   @override
   Widget build(BuildContext context, double bottomPadding) {
@@ -45,9 +42,7 @@ class SpShareStoryBottomSheet extends BaseBottomSheet {
         bottomPadding: bottomPadding,
       );
     } else {
-      double maxChildSize =
-          1 -
-          View.of(context).viewPadding.top / MediaQuery.of(context).size.height;
+      double maxChildSize = 1 - View.of(context).viewPadding.top / MediaQuery.of(context).size.height;
       return DraggableScrollableSheet(
         expand: false,
         maxChildSize: maxChildSize,
@@ -85,15 +80,10 @@ class _ShareStoryBottomSheet extends StatefulWidget {
   State<_ShareStoryBottomSheet> createState() => _ShareStoryBottomSheetState();
 }
 
-enum _ShareOption {
-  txt,
-  markdown,
-}
+enum _ShareOption { txt, markdown }
 
 class _ShareStoryBottomSheetState extends State<_ShareStoryBottomSheet> {
-  late final TextEditingController controller = TextEditingController(
-    text: getShareText(context),
-  );
+  late final TextEditingController controller = TextEditingController(text: getShareText(context));
 
   _ShareOption option = _ShareOption.txt;
   List<XFile> files = [];
@@ -106,18 +96,9 @@ class _ShareStoryBottomSheetState extends State<_ShareStoryBottomSheet> {
   }
 
   Future<void> loadAssets() async {
-    final assetIds = StoryExtractAssetsFromPagesService.call(
-      widget.draftContent.richPages,
-    );
-    final assets = assetIds.isNotEmpty
-        ? await AssetDbModel.db.where(filters: {'ids': assetIds.toList()})
-        : null;
-    files =
-        assets?.items
-            .where((a) => a.localFile != null)
-            .map((a) => XFile(a.localFilePath))
-            .toList() ??
-        [];
+    final assetIds = StoryExtractAssetsFromPagesService.call(widget.draftContent.richPages);
+    final assets = assetIds.isNotEmpty ? await AssetDbModel.db.where(filters: {'ids': assetIds.toList()}) : null;
+    files = assets?.items.where((a) => a.localFile != null).map((a) => XFile(a.localFilePath)).toList() ?? [];
     setState(() {});
   }
 
@@ -133,21 +114,16 @@ class _ShareStoryBottomSheetState extends State<_ShareStoryBottomSheet> {
       return context.read<TagsProvider>().emojiById[tagId];
     }).whereType<String>();
 
-    List<StoryPageObject> pages = List.generate(
-      widget.draftContent.richPages?.length ?? 0,
-      (index) {
-        final page = widget.draftContent.richPages![index];
-        return widget.pagesManager.pagesMap[page.id];
-      },
-    ).toList().whereType<StoryPageObject>().toList();
+    List<StoryPageObject> pages = List.generate(widget.draftContent.richPages?.length ?? 0, (index) {
+      final page = widget.draftContent.richPages![index];
+      return widget.pagesManager.pagesMap[page.id];
+    }).toList().whereType<StoryPageObject>().toList();
 
     return StoryPlainTextExporter(
       pages: pages,
       displayPathDate: widget.story.displayPathDate,
       tags: tags ?? [],
-      timeFormat: context.read<DevicePreferencesProvider>().timeFormatOf(
-        context,
-      ),
+      timeFormat: context.read<DevicePreferencesProvider>().timeFormatOf(context),
       locale: context.locale,
       emojis: emojis?.isNotEmpty == true ? emojis!.toList() : [],
       markdown: option == _ShareOption.markdown,
@@ -166,9 +142,7 @@ class _ShareStoryBottomSheetState extends State<_ShareStoryBottomSheet> {
       appBar: AppBar(
         toolbarHeight: CupertinoSheetRoute.hasParentSheet(context) ? 72 : null,
         centerTitle: true,
-        leading: CupertinoSheetRoute.hasParentSheet(context)
-            ? const SizedBox.shrink()
-            : null,
+        leading: CupertinoSheetRoute.hasParentSheet(context) ? const SizedBox.shrink() : null,
         automaticallyImplyLeading: false,
         actions: [
           if (CupertinoSheetRoute.hasParentSheet(context))
@@ -179,10 +153,7 @@ class _ShareStoryBottomSheetState extends State<_ShareStoryBottomSheet> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(
-          bottom:
-              MediaQuery.of(context).padding.bottom +
-              MediaQuery.of(context).viewInsets.bottom +
-              12,
+          bottom: MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom + 12,
           left: 16.0,
           right: 16.0,
         ),
@@ -244,44 +215,19 @@ class _ShareStoryBottomSheetState extends State<_ShareStoryBottomSheet> {
                     ),
                     child: Builder(
                       builder: (context) {
-                        if (file.path.contains(
-                          AssetType.image.subDirectory.relativePath,
-                        )) {
+                        if (file.path.contains(AssetType.image.subDirectory.relativePath)) {
                           return Image.file(File(file.path), fit: BoxFit.cover);
-                        } else if (file.path.contains(
-                          AssetType.video.subDirectory.relativePath,
-                        )) {
+                        } else if (file.path.contains(AssetType.video.subDirectory.relativePath)) {
                           return _AttachmentVideoThumb(file: File(file.path));
-                        } else if (file.path.contains(
-                          AssetType.audio.subDirectory.relativePath,
-                        )) {
-                          return Icon(
-                            SpIcons.voice,
-                            size: 24.0,
-                            color: Theme.of(
-                              context,
-                            ).textTheme.bodyMedium?.color,
-                          );
+                        } else if (file.path.contains(AssetType.audio.subDirectory.relativePath)) {
+                          return Icon(SpIcons.voice, size: 24.0, color: Theme.of(context).textTheme.bodyMedium?.color);
                         } else {
-                          return Icon(
-                            SpIcons.file,
-                            size: 24.0,
-                            color: Theme.of(
-                              context,
-                            ).textTheme.bodyMedium?.color,
-                          );
+                          return Icon(SpIcons.file, size: 24.0, color: Theme.of(context).textTheme.bodyMedium?.color);
                         }
                       },
                     ),
                   ),
-                  const Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Icon(
-                      SpIcons.clear,
-                      size: 16.0,
-                    ),
-                  ),
+                  const Positioned(bottom: 0, right: 0, child: Icon(SpIcons.clear, size: 16.0)),
                 ],
               ),
             );
@@ -337,9 +283,7 @@ class _ShareStoryBottomSheetState extends State<_ShareStoryBottomSheet> {
 
         // iPad requires sharePositionOrigin for proper share sheet positioning
         // Ensure passing correct button context to have proper positioning.
-        sharePositionOrigin: box != null
-            ? box.localToGlobal(Offset.zero) & box.size
-            : null,
+        sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
       ),
     );
   }
@@ -401,13 +345,7 @@ class _AttachmentVideoThumbState extends State<_AttachmentVideoThumb> {
               child: VideoPlayer(controller),
             ),
           ),
-        Center(
-          child: Icon(
-            SpIcons.playCircle,
-            size: 20.0,
-            color: Theme.of(context).textTheme.bodyMedium?.color,
-          ),
-        ),
+        Center(child: Icon(SpIcons.playCircle, size: 20.0, color: Theme.of(context).textTheme.bodyMedium?.color)),
       ],
     );
   }

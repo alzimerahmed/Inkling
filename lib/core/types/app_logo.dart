@@ -20,9 +20,7 @@ enum AppLogo {
 
   bool get free => this == AppLogo.storypad_1_0 || this == AppLogo.storypad_2_0;
 
-  const AppLogo({
-    required this.logoName,
-  });
+  const AppLogo({required this.logoName});
 
   AssetGenImage get asset {
     switch (this) {

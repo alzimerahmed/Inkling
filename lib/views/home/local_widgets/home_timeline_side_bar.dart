@@ -1,11 +1,7 @@
 part of '../home_view.dart';
 
 class _HomeTimelineSideBar extends StatefulWidget {
-  const _HomeTimelineSideBar({
-    required this.screenPadding,
-    required this.backgroundColor,
-    required this.viewModel,
-  });
+  const _HomeTimelineSideBar({required this.screenPadding, required this.backgroundColor, required this.viewModel});
 
   final EdgeInsets screenPadding;
   final Color backgroundColor;
@@ -17,8 +13,7 @@ class _HomeTimelineSideBar extends StatefulWidget {
 
 class _HomeTimelineSideBarState extends State<_HomeTimelineSideBar> {
   ValueNotifier<bool> showProBadgeNotifier = ValueNotifier<bool>(true);
-  late final DevicePreferencesProvider devicePreferencesProvider = context
-      .read<DevicePreferencesProvider>();
+  late final DevicePreferencesProvider devicePreferencesProvider = context.read<DevicePreferencesProvider>();
 
   @override
   void initState() {
@@ -42,10 +37,7 @@ class _HomeTimelineSideBarState extends State<_HomeTimelineSideBar> {
     return Stack(
       fit: StackFit.passthrough,
       clipBehavior: Clip.none,
-      children: [
-        buildBackgrounds(context),
-        buildButtons(context),
-      ],
+      children: [buildBackgrounds(context), buildButtons(context)],
     );
   }
 
@@ -58,32 +50,20 @@ class _HomeTimelineSideBarState extends State<_HomeTimelineSideBar> {
           homeViewModel: widget.viewModel,
           iapProvider: provider,
           showBadgeNotifer: showProBadgeNotifier,
-          enableRelaxSounds: context
-              .read<DevicePreferencesProvider>()
-              .enableRelaxSounds,
+          enableRelaxSounds: context.read<DevicePreferencesProvider>().enableRelaxSounds,
         );
 
         return Container(
           margin: EdgeInsets.only(
             top: 8.0,
-            left: AppTheme.getDirectionValue(
-              context,
-              0.0,
-              widget.screenPadding.left + baseSideMargin,
-            )!,
-            right: AppTheme.getDirectionValue(
-              context,
-              widget.screenPadding.right + baseSideMargin,
-              0.0,
-            )!,
+            left: AppTheme.getDirectionValue(context, 0.0, widget.screenPadding.left + baseSideMargin)!,
+            right: AppTheme.getDirectionValue(context, widget.screenPadding.right + baseSideMargin, 0.0)!,
             bottom: widget.screenPadding.bottom + 16.0,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             spacing: Platform.isMacOS ? 8.0 : 0.0,
-            children: items
-                .map((item) => _buildTimelineButton(context, item))
-                .toList(),
+            children: items.map((item) => _buildTimelineButton(context, item)).toList(),
           ),
         );
       },
@@ -95,9 +75,7 @@ class _HomeTimelineSideBarState extends State<_HomeTimelineSideBar> {
       tooltip: item.tooltip,
       style: IconButton.styleFrom(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        shape: CircleBorder(
-          side: BorderSide(color: Theme.of(context).dividerColor),
-        ),
+        shape: CircleBorder(side: BorderSide(color: Theme.of(context).dividerColor)),
       ),
       icon: Icon(item.icon),
       onPressed: () => item.onTap(context),
@@ -136,16 +114,8 @@ class _HomeTimelineSideBarState extends State<_HomeTimelineSideBar> {
 
   Widget buildBackgrounds(BuildContext context) {
     return Positioned(
-      left: AppTheme.getDirectionValue(
-        context,
-        4.0,
-        widget.screenPadding.left + 12.0,
-      )!,
-      right: AppTheme.getDirectionValue(
-        context,
-        widget.screenPadding.right + 12.0,
-        4.0,
-      )!,
+      left: AppTheme.getDirectionValue(context, 4.0, widget.screenPadding.left + 12.0)!,
+      right: AppTheme.getDirectionValue(context, widget.screenPadding.right + 12.0, 4.0)!,
       bottom: 0,
       top: 0,
       child: Stack(
@@ -169,12 +139,7 @@ class _HomeTimelineSideBarState extends State<_HomeTimelineSideBar> {
               ),
             ),
           ),
-          Positioned.fill(
-            top: 32,
-            child: Container(
-              color: widget.backgroundColor,
-            ),
-          ),
+          Positioned.fill(top: 32, child: Container(color: widget.backgroundColor)),
         ],
       ),
     );

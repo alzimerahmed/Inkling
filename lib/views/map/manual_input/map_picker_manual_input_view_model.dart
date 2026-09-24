@@ -6,15 +6,13 @@ import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
 import 'package:storypad/core/objects/sp_latlng.dart';
 import 'package:storypad/core/services/geocoding/sp_coordinate_parser_service.dart';
 import 'package:storypad/core/services/geocoding/sp_geocoding_service.dart';
+
 import 'map_picker_manual_input_view.dart';
 
-class MapPickerManualInputViewModel extends ChangeNotifier
-    with DisposeAwareMixin {
+class MapPickerManualInputViewModel extends ChangeNotifier with DisposeAwareMixin {
   final MapPickerManualInputRoute params;
 
-  MapPickerManualInputViewModel({
-    required this.params,
-  }) {
+  MapPickerManualInputViewModel({required this.params}) {
     coordinateController = TextEditingController();
     coordinateController.addListener(_onTextChanged);
   }
@@ -56,10 +54,7 @@ class MapPickerManualInputViewModel extends ChangeNotifier
     notifyListeners();
 
     try {
-      final SpLatLng? latLng = await SpCoordinateParserService.parse(
-        text,
-        fallbackReference: params.referenceLatLng,
-      );
+      final SpLatLng? latLng = await SpCoordinateParserService.parse(text, fallbackReference: params.referenceLatLng);
       if (version != _resolveVersion || disposed) return;
 
       if (latLng == null) {
@@ -68,13 +63,10 @@ class MapPickerManualInputViewModel extends ChangeNotifier
         return;
       }
 
-      final PlaceDbModel? result = await SpGeocodingService.systemInstance
-          .reverseGeocode(latLng);
+      final PlaceDbModel? result = await SpGeocodingService.systemInstance.reverseGeocode(latLng);
       if (version != _resolveVersion || disposed) return;
 
-      _resolvedPlace =
-          result ??
-          PlaceDbModel(latitude: latLng.latitude, longitude: latLng.longitude);
+      _resolvedPlace = result ?? PlaceDbModel(latitude: latLng.latitude, longitude: latLng.longitude);
     } catch (_) {
       if (version == _resolveVersion) {
         _resolvedPlace = null;

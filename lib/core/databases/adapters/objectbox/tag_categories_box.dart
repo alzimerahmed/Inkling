@@ -24,14 +24,10 @@ class TagCategoriesBox extends BaseBox<TagCategoryObjectBox, TagCategoryDbModel>
   QueryDateProperty<TagCategoryObjectBox> get permanentlyDeletedAtProperty =>
       TagCategoryObjectBox_.permanentlyDeletedAt;
 
-  Future<Map<TagCategoryDbModel, List<TagDbModel>>> getSuggestTagsByCategory({
-    Set<int>? selectedTagIds,
-  }) async {
+  Future<Map<TagCategoryDbModel, List<TagDbModel>>> getSuggestTagsByCategory({Set<int>? selectedTagIds}) async {
     List<TagCategoryDbModel> categories = TagCategoryDbModel.systemCategories;
 
-    Future<List<TagDbModel>> getTagsForCategory(
-      TagCategoryDbModel category,
-    ) async {
+    Future<List<TagDbModel>> getTagsForCategory(TagCategoryDbModel category) async {
       final existing = await TagDbModel.db
           .where(filters: {'category_id': category.id})
           .then((e) => e?.items ?? <TagDbModel>[]);
@@ -68,29 +64,18 @@ class TagCategoriesBox extends BaseBox<TagCategoryObjectBox, TagCategoryDbModel>
         return emoji == null || !suggestedEmojiSet.contains(emoji);
       });
 
-      return [
-        ...orderedSuggested,
-        ...selectedExtras,
-      ];
+      return [...orderedSuggested, ...selectedExtras];
     }
 
-    return {
-      for (var category in categories) category: await getTagsForCategory(category),
-    };
+    return {for (var category in categories) category: await getTagsForCategory(category)};
   }
 
   @override
-  QueryBuilder<TagCategoryObjectBox> buildQuery({
-    Map<String, dynamic>? filters,
-    bool returnDeleted = false,
-  }) {
+  QueryBuilder<TagCategoryObjectBox> buildQuery({Map<String, dynamic>? filters, bool returnDeleted = false}) {
     int? order = filters?["order"];
 
     Condition<TagCategoryObjectBox> conditions = TagCategoryObjectBox_.id.notNull();
-    if (!returnDeleted)
-      conditions = conditions.and(
-        TagCategoryObjectBox_.permanentlyDeletedAt.isNull(),
-      );
+    if (!returnDeleted) conditions = conditions.and(TagCategoryObjectBox_.permanentlyDeletedAt.isNull());
 
     QueryBuilder<TagCategoryObjectBox> queryBuilder = box.query(conditions);
 
@@ -113,26 +98,17 @@ class TagCategoriesBox extends BaseBox<TagCategoryObjectBox, TagCategoryDbModel>
   }
 
   @override
-  Future<List<TagCategoryObjectBox>> modelsToObjects(
-    List<TagCategoryDbModel> models, [
-    Map<String, dynamic>? options,
-  ]) {
+  Future<List<TagCategoryObjectBox>> modelsToObjects(List<TagCategoryDbModel> models, [Map<String, dynamic>? options]) {
     return compute(_modelsToObjects, {'models': models, 'options': options});
   }
 
   @override
-  Future<TagCategoryObjectBox> modelToObject(
-    TagCategoryDbModel model, [
-    Map<String, dynamic>? options,
-  ]) {
+  Future<TagCategoryObjectBox> modelToObject(TagCategoryDbModel model, [Map<String, dynamic>? options]) {
     return compute(_modelToObject, {'model': model, 'options': options});
   }
 
   @override
-  Future<TagCategoryDbModel> objectToModel(
-    TagCategoryObjectBox object, [
-    Map<String, dynamic>? options,
-  ]) {
+  Future<TagCategoryDbModel> objectToModel(TagCategoryObjectBox object, [Map<String, dynamic>? options]) {
     return compute(_objectToModel, {'object': object, 'options': options});
   }
 }

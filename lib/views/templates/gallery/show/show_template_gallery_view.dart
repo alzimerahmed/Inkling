@@ -18,29 +18,21 @@ import 'show_template_gallery_view_model.dart';
 part 'show_template_gallery_content.dart';
 
 class ShowTemplateGalleryRoute extends BaseRoute {
-  ShowTemplateGalleryRoute({
-    required this.galleryTemplate,
-  });
+  ShowTemplateGalleryRoute({required this.galleryTemplate});
 
   final GalleryTemplateObject galleryTemplate;
 
   @override
   Map<String, String?>? get analyticsParameters {
-    return {
-      'templateId': galleryTemplate.id,
-    };
+    return {'templateId': galleryTemplate.id};
   }
 
   @override
-  Widget buildPage(BuildContext context) =>
-      ShowTemplateGalleryView(params: this);
+  Widget buildPage(BuildContext context) => ShowTemplateGalleryView(params: this);
 }
 
 class ShowTemplateGalleryView extends StatelessWidget {
-  const ShowTemplateGalleryView({
-    super.key,
-    required this.params,
-  });
+  const ShowTemplateGalleryView({super.key, required this.params});
 
   final ShowTemplateGalleryRoute params;
 

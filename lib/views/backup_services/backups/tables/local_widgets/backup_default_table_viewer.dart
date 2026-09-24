@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BackupDefaultTableViewer extends StatelessWidget {
-  const BackupDefaultTableViewer({
-    super.key,
-    required this.tableContents,
-  });
+  const BackupDefaultTableViewer({super.key, required this.tableContents});
 
   final List<Map<String, dynamic>> tableContents;
 
@@ -14,9 +11,7 @@ class BackupDefaultTableViewer extends StatelessWidget {
       itemCount: tableContents.length,
       itemBuilder: (context, index) {
         Map<dynamic, dynamic> content = tableContents[index];
-        return ListTile(
-          title: Text(content['id'].toString()),
-        );
+        return ListTile(title: Text(content['id'].toString()));
       },
     );
   }

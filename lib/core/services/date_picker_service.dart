@@ -9,15 +9,11 @@ class DatePickerService {
   final BuildContext context;
   final DateTime currentDate;
 
-  DatePickerService({
-    required this.context,
-    required this.currentDate,
-  });
+  DatePickerService({required this.context, required this.currentDate});
 
   Future<DateTime?> show() async {
     DateTime? date;
-    final bool hasMousePointer =
-        RendererBinding.instance.mouseTracker.mouseIsConnected;
+    final bool hasMousePointer = RendererBinding.instance.mouseTracker.mouseIsConnected;
 
     if (kIsCupertino && !hasMousePointer) {
       date = await _showCupertinoDatePicker();
@@ -31,14 +27,7 @@ class DatePickerService {
     }
 
     if (date == null) return null;
-    return DateTime(
-      date.year,
-      date.month,
-      date.day,
-      currentDate.hour,
-      currentDate.minute,
-      currentDate.second,
-    );
+    return DateTime(date.year, date.month, date.day, currentDate.hour, currentDate.minute, currentDate.second);
   }
 
   Future<DateTime?> _showCupertinoDatePicker() async {
@@ -54,9 +43,7 @@ class DatePickerService {
                 left: MediaQuery.of(context).padding.left,
                 right: MediaQuery.of(context).padding.right,
               ),
-              margin: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
               color: CupertinoColors.systemBackground.resolveFrom(context),
               child: MediaQuery.removePadding(
                 context: context,
@@ -84,21 +71,12 @@ class DatePickerService {
     );
   }
 
-  Widget _buildCupertinoNavigator(
-    BuildContext context,
-    CmValueNotifier<DateTime?> notifier,
-  ) {
+  Widget _buildCupertinoNavigator(BuildContext context, CmValueNotifier<DateTime?> notifier) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CupertinoButton(
-          onPressed: () => Navigator.pop(context, null),
-          child: Text(tr("button.cancel")),
-        ),
-        CupertinoButton(
-          child: Text(tr("button.done")),
-          onPressed: () => Navigator.pop(context, notifier.value),
-        ),
+        CupertinoButton(onPressed: () => Navigator.pop(context, null), child: Text(tr("button.cancel"))),
+        CupertinoButton(child: Text(tr("button.done")), onPressed: () => Navigator.pop(context, notifier.value)),
       ],
     );
   }

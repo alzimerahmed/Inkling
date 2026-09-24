@@ -69,10 +69,7 @@ class GoogleUserObject extends CloudServiceUser {
   }
 
   Map<String, String> get authHeaders {
-    return <String, String>{
-      'Authorization': 'Bearer $accessToken',
-      'X-Goog-AuthUser': '0',
-    };
+    return <String, String>{'Authorization': 'Bearer $accessToken', 'X-Goog-AuthUser': '0'};
   }
 
   Map<String, dynamic> toJson() => _$GoogleUserObjectToJson(this);

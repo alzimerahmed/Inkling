@@ -18,10 +18,7 @@ class BackupImportHistoryStorage extends MapStorage {
   static const int maxHistorySize = 30;
 
   /// Get import/upload history (last 30 timestamps) for a specific year and service
-  Future<List<DateTime>> getImportHistoryByYear(
-    BackupServiceType serviceType,
-    int year,
-  ) async {
+  Future<List<DateTime>> getImportHistoryByYear(BackupServiceType serviceType, int year) async {
     final data = await readMap();
     if (data == null) return [];
 
@@ -34,11 +31,7 @@ class BackupImportHistoryStorage extends MapStorage {
     return yearHistory.whereType<String>().map((ts) => DateTime.tryParse(ts)).whereType<DateTime>().toList();
   }
 
-  Future<void> markAsImported(
-    BackupServiceType serviceType,
-    int year,
-    DateTime timestamp,
-  ) async {
+  Future<void> markAsImported(BackupServiceType serviceType, int year, DateTime timestamp) async {
     final data = await readMap() ?? {};
 
     final serviceData = (data[serviceType.name] as Map<String, dynamic>?) ?? {};
@@ -53,10 +46,7 @@ class BackupImportHistoryStorage extends MapStorage {
     }
 
     // Add new timestamp at the beginning (most recent first)
-    final updatedHistory = <String>[
-      timestampString,
-      ...existingHistory.take(maxHistorySize - 1),
-    ];
+    final updatedHistory = <String>[timestampString, ...existingHistory.take(maxHistorySize - 1)];
 
     serviceData[year.toString()] = updatedHistory;
     data[serviceType.name] = serviceData;

@@ -19,10 +19,7 @@ class ExportAssetsRoute extends BaseRoute {
 }
 
 class ExportAssetsView extends StatelessWidget {
-  const ExportAssetsView({
-    super.key,
-    required this.params,
-  });
+  const ExportAssetsView({super.key, required this.params});
 
   final ExportAssetsRoute params;
 

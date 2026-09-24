@@ -9,10 +9,7 @@ class _CommunityCard extends StatelessWidget {
       if (RemoteConfigService.redditUrl.get().isNotEmpty)
         IconButton.filled(
           icon: const Icon(SpIcons.reddit),
-          onPressed: () => UrlOpenerService.openInCustomTab(
-            context,
-            RemoteConfigService.redditUrl.get(),
-          ),
+          onPressed: () => UrlOpenerService.openInCustomTab(context, RemoteConfigService.redditUrl.get()),
         ),
       if (RemoteConfigService.tiktokUsername.get().isNotEmpty)
         IconButton.filledTonal(
@@ -25,18 +22,12 @@ class _CommunityCard extends StatelessWidget {
       if (RemoteConfigService.twitterUrl.get().isNotEmpty)
         IconButton.filledTonal(
           icon: const Icon(SpIcons.twitter),
-          onPressed: () => UrlOpenerService.openInCustomTab(
-            context,
-            RemoteConfigService.twitterUrl.get(),
-          ),
+          onPressed: () => UrlOpenerService.openInCustomTab(context, RemoteConfigService.twitterUrl.get()),
         ),
       if (RemoteConfigService.bugReportUrl.get().isNotEmpty)
         IconButton.filledTonal(
           icon: const Icon(SpIcons.bug),
-          onPressed: () => UrlOpenerService.openInCustomTab(
-            context,
-            RemoteConfigService.bugReportUrl.get(),
-          ),
+          onPressed: () => UrlOpenerService.openInCustomTab(context, RemoteConfigService.bugReportUrl.get()),
         ),
     ];
 

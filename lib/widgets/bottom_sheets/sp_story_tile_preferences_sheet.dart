@@ -37,10 +37,7 @@ class SpStoryTilePreferencesSheet extends BaseBottomSheet {
   bool get fullScreen => true;
 
   @override
-  Future<T?> show<T>({
-    required BuildContext context,
-    bool useRootNavigator = false,
-  }) async {
+  Future<T?> show<T>({required BuildContext context, bool useRootNavigator = false}) async {
     await _StoryTilePreferencesSheetContentState._ensureDemoFeelingTag();
     if (!context.mounted) return null;
     return super.show(context: context, useRootNavigator: useRootNavigator);
@@ -56,62 +53,42 @@ class SpStoryTilePreferencesSheet extends BaseBottomSheet {
         initialChildSize: 0.9,
         maxChildSize: 0.9,
         builder: (context, controller) {
-          return PrimaryScrollController(
-            controller: controller,
-            child: buildView(context, bottomPadding),
-          );
+          return PrimaryScrollController(controller: controller, child: buildView(context, bottomPadding));
         },
       );
     }
   }
 
   Widget buildView(BuildContext context, double bottomPadding) {
-    return _StoryTilePreferencesSheetContent(
-      bottomPadding: bottomPadding,
-      onChanged: onChanged,
-    );
+    return _StoryTilePreferencesSheetContent(bottomPadding: bottomPadding, onChanged: onChanged);
   }
 }
 
 class _StoryTilePreferencesSheetContent extends StatefulWidget {
-  const _StoryTilePreferencesSheetContent({
-    required this.bottomPadding,
-    this.onChanged,
-  });
+  const _StoryTilePreferencesSheetContent({required this.bottomPadding, this.onChanged});
 
   final double bottomPadding;
   final void Function(StoryTilePreferencesObject? preferences)? onChanged;
 
   @override
-  State<_StoryTilePreferencesSheetContent> createState() =>
-      _StoryTilePreferencesSheetContentState();
+  State<_StoryTilePreferencesSheetContent> createState() => _StoryTilePreferencesSheetContentState();
 }
 
-class _StoryTilePreferencesSheetContentState
-    extends State<_StoryTilePreferencesSheetContent> {
-  late var storyTilePreferences = context
-      .read<DevicePreferencesProvider>()
-      .preferences
-      .storyTilePreferences;
+class _StoryTilePreferencesSheetContentState extends State<_StoryTilePreferencesSheetContent> {
+  late var storyTilePreferences = context.read<DevicePreferencesProvider>().preferences.storyTilePreferences;
   late var defaultStoryTilePreferences = StoryTilePreferencesObject();
   late var initialStoryTilePreferences = storyTilePreferences;
 
   // Ensure a demo feeling emoji tag exists. ID is deterministic so we can use it
   // immediately without waiting for the DB write.
-  static TagDbModel get _demoFeeling1Tag =>
-      TagCategoryDbModel.feeling().suggestTags()[8];
-  static TagDbModel get _demoFeeling2Tag =>
-      TagCategoryDbModel.feeling().suggestTags()[7];
-  static TagDbModel get _demoActivityTag =>
-      TagCategoryDbModel.activity().suggestTags()[1];
+  static TagDbModel get _demoFeeling1Tag => TagCategoryDbModel.feeling().suggestTags()[8];
+  static TagDbModel get _demoFeeling2Tag => TagCategoryDbModel.feeling().suggestTags()[7];
+  static TagDbModel get _demoActivityTag => TagCategoryDbModel.activity().suggestTags()[1];
 
   static Future<void> _ensureDemoFeelingTag() async {
-    if (!TagDbModel.db.exist(_demoFeeling1Tag.id))
-      await TagDbModel.db.set(_demoFeeling1Tag);
-    if (!TagDbModel.db.exist(_demoFeeling2Tag.id))
-      await TagDbModel.db.set(_demoFeeling2Tag);
-    if (!TagDbModel.db.exist(_demoActivityTag.id))
-      await TagDbModel.db.set(_demoActivityTag);
+    if (!TagDbModel.db.exist(_demoFeeling1Tag.id)) await TagDbModel.db.set(_demoFeeling1Tag);
+    if (!TagDbModel.db.exist(_demoFeeling2Tag.id)) await TagDbModel.db.set(_demoFeeling2Tag);
+    if (!TagDbModel.db.exist(_demoActivityTag.id)) await TagDbModel.db.set(_demoActivityTag);
   }
 
   late StoryDbModel story = _buildMockStory();
@@ -123,12 +100,8 @@ class _StoryTilePreferencesSheetContentState
   // photo collage. Empty when the user has no images yet.
   List<String> _previewImagePaths = [];
 
-  bool get changed =>
-      jsonEncode(storyTilePreferences.toJson()) !=
-      jsonEncode(initialStoryTilePreferences.toJson());
-  bool get resettable =>
-      jsonEncode(storyTilePreferences.toJson()) !=
-      jsonEncode(defaultStoryTilePreferences.toJson());
+  bool get changed => jsonEncode(storyTilePreferences.toJson()) != jsonEncode(initialStoryTilePreferences.toJson());
+  bool get resettable => jsonEncode(storyTilePreferences.toJson()) != jsonEncode(defaultStoryTilePreferences.toJson());
 
   void _apply(StoryTilePreferencesObject next) {
     setState(() => storyTilePreferences = next);
@@ -156,9 +129,7 @@ class _StoryTilePreferencesSheetContentState
       },
     );
 
-    final images = collection?.items
-        .map((e) => e.relativeLocalFilePath)
-        .toList();
+    final images = collection?.items.map((e) => e.relativeLocalFilePath).toList();
     if (images == null || images.isEmpty || !mounted) return;
 
     setState(() {
@@ -194,13 +165,7 @@ class _StoryTilePreferencesSheetContentState
     return story.copyWith(
       tags: [
         ?context.read<TagsProvider>().tags?.items.firstOrNull?.id.toString(),
-        ?context
-            .read<TagsProvider>()
-            .peopleTags
-            ?.items
-            .firstOrNull
-            ?.id
-            .toString(),
+        ?context.read<TagsProvider>().peopleTags?.items.firstOrNull?.id.toString(),
         _demoFeeling2Tag.id.toString(),
       ],
       feeling: null,
@@ -239,10 +204,7 @@ class _StoryTilePreferencesSheetContentState
     const body = "Grateful for a quiet morning.";
     final now = DateTime.now();
     final story = StoryDbModel.fromDate(now);
-    final tags = [
-      _demoFeeling1Tag.id.toString(),
-      _demoActivityTag.id.toString(),
-    ];
+    final tags = [_demoFeeling1Tag.id.toString(), _demoActivityTag.id.toString()];
 
     return story.copyWith(
       tags: tags,
@@ -279,26 +241,15 @@ class _StoryTilePreferencesSheetContentState
               icon: Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  Icon(
-                    SpIcons.save,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const Positioned(
-                    top: -2,
-                    right: -8,
-                    child: Icon(SpIcons.lock, size: 12.0),
-                  ),
+                  Icon(SpIcons.save, color: Theme.of(context).colorScheme.primary),
+                  const Positioned(top: -2, right: -8, child: Icon(SpIcons.lock, size: 12.0)),
                 ],
               ),
-              onPressed: () => const PaywallRoute(
-                initialFocus: .customizations,
-              ).push(context),
+              onPressed: () => const PaywallRoute(initialFocus: .customizations).push(context),
             ),
           IconButton(
             icon: const Icon(SpIcons.refresh),
-            onPressed: resettable
-                ? () => _apply(defaultStoryTilePreferences)
-                : null,
+            onPressed: resettable ? () => _apply(defaultStoryTilePreferences) : null,
           ),
           if (CupertinoSheetRoute.hasParentSheet(context))
             CloseButton(onPressed: () => CupertinoSheetRoute.popSheet(context)),
@@ -325,117 +276,57 @@ class _StoryTilePreferencesSheetContentState
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   children: [
                     SwitchListTile.adaptive(
-                      secondary: const SpSettingIconBadge(
-                        weekday: 7,
-                        icon: SpIcons.photo,
-                      ),
-                      contentPadding: const EdgeInsets.only(
-                        left: 16.0,
-                        right: 14.0,
-                      ),
+                      secondary: const SpSettingIconBadge(weekday: 7, icon: SpIcons.photo),
+                      contentPadding: const EdgeInsets.only(left: 16.0, right: 14.0),
                       title: Text(tr("list_tile.photo_collage.title")),
                       value: storyTilePreferences.photoCollage,
-                      onChanged: (value) => _apply(
-                        storyTilePreferences.copyWith(photoCollage: value),
-                      ),
+                      onChanged: (value) => _apply(storyTilePreferences.copyWith(photoCollage: value)),
                     ),
                     SwitchListTile.adaptive(
-                      secondary: const SpSettingIconBadge(
-                        weekday: 1,
-                        icon: SpIcons.timer,
-                      ),
-                      contentPadding: const EdgeInsets.only(
-                        left: 16.0,
-                        right: 14.0,
-                      ),
+                      secondary: const SpSettingIconBadge(weekday: 1, icon: SpIcons.timer),
+                      contentPadding: const EdgeInsets.only(left: 16.0, right: 14.0),
                       title: Text(tr("list_tile.show_time.title")),
                       value: storyTilePreferences.showTime,
-                      onChanged: (value) => _apply(
-                        storyTilePreferences.copyWith(showTime: value),
-                      ),
+                      onChanged: (value) => _apply(storyTilePreferences.copyWith(showTime: value)),
                     ),
                     SwitchListTile.adaptive(
-                      secondary: const SpSettingIconBadge(
-                        weekday: 2,
-                        icon: SpIcons.voice,
-                      ),
-                      contentPadding: const EdgeInsets.only(
-                        left: 16.0,
-                        right: 14.0,
-                      ),
+                      secondary: const SpSettingIconBadge(weekday: 2, icon: SpIcons.voice),
+                      contentPadding: const EdgeInsets.only(left: 16.0, right: 14.0),
                       title: Text(tr("list_tile.show_voice_count.title")),
                       value: storyTilePreferences.showVoiceCount,
-                      onChanged: (value) => _apply(
-                        storyTilePreferences.copyWith(showVoiceCount: value),
-                      ),
+                      onChanged: (value) => _apply(storyTilePreferences.copyWith(showVoiceCount: value)),
                     ),
                     SwitchListTile.adaptive(
-                      secondary: const SpSettingIconBadge(
-                        weekday: 3,
-                        icon: SpIcons.tag,
-                      ),
-                      contentPadding: const EdgeInsets.only(
-                        left: 16.0,
-                        right: 14.0,
-                      ),
+                      secondary: const SpSettingIconBadge(weekday: 3, icon: SpIcons.tag),
+                      contentPadding: const EdgeInsets.only(left: 16.0, right: 14.0),
                       title: Text(tr("list_tile.show_tag_labels.title")),
                       value: storyTilePreferences.showTagLabels,
-                      onChanged: (value) => _apply(
-                        storyTilePreferences.copyWith(showTagLabels: value),
-                      ),
+                      onChanged: (value) => _apply(storyTilePreferences.copyWith(showTagLabels: value)),
                     ),
                     SwitchListTile.adaptive(
-                      secondary: const SpSettingIconBadge(
-                        weekday: 4,
-                        icon: SpIcons.alternateEmail,
-                      ),
-                      contentPadding: const EdgeInsets.only(
-                        left: 16.0,
-                        right: 14.0,
-                      ),
+                      secondary: const SpSettingIconBadge(weekday: 4, icon: SpIcons.alternateEmail),
+                      contentPadding: const EdgeInsets.only(left: 16.0, right: 14.0),
                       title: Text(tr("list_tile.show_people_labels.title")),
                       value: storyTilePreferences.showPeopleLabels,
-                      onChanged: (value) => _apply(
-                        storyTilePreferences.copyWith(showPeopleLabels: value),
-                      ),
+                      onChanged: (value) => _apply(storyTilePreferences.copyWith(showPeopleLabels: value)),
                     ),
                     SwitchListTile.adaptive(
-                      secondary: const SpSettingIconBadge(
-                        weekday: 5,
-                        icon: SpIcons.managingPage,
-                      ),
-                      contentPadding: const EdgeInsets.only(
-                        left: 16.0,
-                        right: 14.0,
-                      ),
+                      secondary: const SpSettingIconBadge(weekday: 5, icon: SpIcons.managingPage),
+                      contentPadding: const EdgeInsets.only(left: 16.0, right: 14.0),
                       title: Text(tr("list_tile.show_page_count.title")),
                       value: storyTilePreferences.showPageCount,
-                      onChanged: (value) => _apply(
-                        storyTilePreferences.copyWith(showPageCount: value),
-                      ),
+                      onChanged: (value) => _apply(storyTilePreferences.copyWith(showPageCount: value)),
                     ),
                     SwitchListTile.adaptive(
-                      secondary: const SpSettingIconBadge(
-                        weekday: 6,
-                        icon: SpIcons.map,
-                      ),
-                      contentPadding: const EdgeInsets.only(
-                        left: 16.0,
-                        right: 14.0,
-                      ),
+                      secondary: const SpSettingIconBadge(weekday: 6, icon: SpIcons.map),
+                      contentPadding: const EdgeInsets.only(left: 16.0, right: 14.0),
                       title: Text(tr("list_tile.show_location.title")),
                       value: storyTilePreferences.showLocation,
-                      onChanged: (value) => _apply(
-                        storyTilePreferences.copyWith(showLocation: value),
-                      ),
+                      onChanged: (value) => _apply(storyTilePreferences.copyWith(showLocation: value)),
                     ),
                     _CharacterCountSlider(
                       preferences: storyTilePreferences,
-                      onChanged: (value) => _apply(
-                        storyTilePreferences.copyWith(
-                          displayCharacterCount: value,
-                        ),
-                      ),
+                      onChanged: (value) => _apply(storyTilePreferences.copyWith(displayCharacterCount: value)),
                     ),
                   ],
                 ),
@@ -449,12 +340,7 @@ class _StoryTilePreferencesSheetContentState
               children: [
                 Stack(
                   children: [
-                    const Positioned(
-                      left: 32.0,
-                      top: 0,
-                      bottom: 0,
-                      child: VerticalDivider(width: 1, indent: 32),
-                    ),
+                    const Positioned(left: 32.0, top: 0, bottom: 0, child: VerticalDivider(width: 1, indent: 32)),
                     SpStoryTile(
                       story: story,
                       preferences: storyTilePreferences,
@@ -467,12 +353,7 @@ class _StoryTilePreferencesSheetContentState
                 ),
                 Stack(
                   children: [
-                    const Positioned(
-                      left: 32.0,
-                      top: 0,
-                      height: 16.0,
-                      child: VerticalDivider(width: 1),
-                    ),
+                    const Positioned(left: 32.0, top: 0, height: 16.0, child: VerticalDivider(width: 1)),
                     SpStoryTile(
                       story: simpleStory,
                       preferences: storyTilePreferences,
@@ -494,10 +375,7 @@ class _StoryTilePreferencesSheetContentState
 }
 
 class _CharacterCountSlider extends StatefulWidget {
-  const _CharacterCountSlider({
-    required this.preferences,
-    required this.onChanged,
-  });
+  const _CharacterCountSlider({required this.preferences, required this.onChanged});
 
   final StoryTilePreferencesObject preferences;
   final void Function(int value) onChanged;
@@ -512,8 +390,7 @@ class _CharacterCountSliderState extends State<_CharacterCountSlider> {
   @override
   void didUpdateWidget(_CharacterCountSlider oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.preferences.displayCharacterCount !=
-        widget.preferences.displayCharacterCount) {
+    if (oldWidget.preferences.displayCharacterCount != widget.preferences.displayCharacterCount) {
       _localValue = widget.preferences.displayCharacterCount;
     }
   }
@@ -529,9 +406,7 @@ class _CharacterCountSliderState extends State<_CharacterCountSlider> {
           title: Text(tr("list_tile.preview_char_count.title")),
           trailing: Text(
             _localValue.toString(),
-            style: TextTheme.of(context).bodyMedium?.copyWith(
-              color: ColorScheme.of(context).primary,
-            ),
+            style: TextTheme.of(context).bodyMedium?.copyWith(color: ColorScheme.of(context).primary),
           ),
         ),
         Container(

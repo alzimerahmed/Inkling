@@ -42,27 +42,17 @@ void main() {
     });
 
     test('scheduleSlots returns sorted unique weekdays', () {
-      final reminder = ReminderObject(
-        id: 1,
-        type: ReminderType.daily,
-        weekdays: [5, 1, 1, 3],
-      );
+      final reminder = ReminderObject(id: 1, type: ReminderType.daily, weekdays: [5, 1, 1, 3]);
       expect(reminder.isEveryDay, false);
       expect(reminder.scheduleSlots, [1, 3, 5]);
     });
 
-    test(
-      'normalizeWeekdays collapses both "all 7 selected" and "none selected" to every-day',
-      () {
-        expect(ReminderObject.normalizeWeekdays([]), []);
-        expect(
-          ReminderObject.normalizeWeekdays(ReminderObject.allWeekdays),
-          [],
-        );
-        expect(ReminderObject.normalizeWeekdays([1, 2, 3, 4, 5, 6, 7, 7]), []);
-        expect(ReminderObject.normalizeWeekdays([5, 1, 1, 3]), [1, 3, 5]);
-      },
-    );
+    test('normalizeWeekdays collapses both "all 7 selected" and "none selected" to every-day', () {
+      expect(ReminderObject.normalizeWeekdays([]), []);
+      expect(ReminderObject.normalizeWeekdays(ReminderObject.allWeekdays), []);
+      expect(ReminderObject.normalizeWeekdays([1, 2, 3, 4, 5, 6, 7, 7]), []);
+      expect(ReminderObject.normalizeWeekdays([5, 1, 1, 3]), [1, 3, 5]);
+    });
 
     test('builtin factory uses type-based id and disabled default', () {
       final daily = ReminderObject.builtin(ReminderType.daily);

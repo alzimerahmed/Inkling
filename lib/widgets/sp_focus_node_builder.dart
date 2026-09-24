@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 
 class SpFocusNodeBuilder extends StatefulWidget {
-  const SpFocusNodeBuilder({
-    super.key,
-    required this.focusNode,
-    required this.builder,
-    this.child,
-  });
+  const SpFocusNodeBuilder({super.key, required this.focusNode, required this.builder, this.child});
 
   final Widget? child;
   final FocusNode focusNode;
-  final Widget Function(BuildContext context, bool focused, Widget? child)
-  builder;
+  final Widget Function(BuildContext context, bool focused, Widget? child) builder;
 
   @override
   State<SpFocusNodeBuilder> createState() => SpFocusNodeBuilderState();

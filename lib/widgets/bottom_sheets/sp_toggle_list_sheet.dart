@@ -41,10 +41,7 @@ class SpToggleListSheet<T> extends BaseBottomSheet {
 
   @override
   Widget build(BuildContext context, double bottomPadding) {
-    return ListenableBuilder(
-      listenable: listenable,
-      builder: (context, _) => _buildContent(context, bottomPadding),
-    );
+    return ListenableBuilder(listenable: listenable, builder: (context, _) => _buildContent(context, bottomPadding));
   }
 
   Widget _buildContent(BuildContext context, double bottomPadding) {
@@ -63,10 +60,7 @@ class SpToggleListSheet<T> extends BaseBottomSheet {
             ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: OutlinedButton(
-              onPressed: onReset,
-              child: Text(tr('button.reset')),
-            ),
+            child: OutlinedButton(onPressed: onReset, child: Text(tr('button.reset'))),
           ),
           SizedBox(height: bottomPadding),
         ],

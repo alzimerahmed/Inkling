@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:storypad/core/storages/search_filter_storage.dart';
@@ -8,6 +9,7 @@ import 'package:storypad/core/databases/models/tag_category_db_model.dart';
 import 'package:storypad/core/databases/models/tag_db_model.dart';
 import 'package:storypad/core/objects/search_filter_object.dart';
 import 'package:storypad/providers/tags_provider.dart';
+
 import 'search_filter_view.dart';
 
 class SearchFilterViewModel extends ChangeNotifier with DisposeAwareMixin {
@@ -16,10 +18,7 @@ class SearchFilterViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   late SearchFilterObject searchFilter;
 
-  SearchFilterViewModel({
-    required this.params,
-    required BuildContext context,
-  }) {
+  SearchFilterViewModel({required this.params, required BuildContext context}) {
     tagsProvider = context.read<TagsProvider>();
     searchFilter = params.initialTune;
     load();
@@ -30,17 +29,12 @@ class SearchFilterViewModel extends ChangeNotifier with DisposeAwareMixin {
   // null key = non-emoji tags (no category); non-null key = emoji category
   Map<TagCategoryDbModel?, List<TagDbModel>>? tagsByCategory;
 
-  bool get filtered =>
-      jsonEncode(searchFilter.toDatabaseFilter()) !=
-      jsonEncode(params.resetTune.toDatabaseFilter());
+  bool get filtered => jsonEncode(searchFilter.toDatabaseFilter()) != jsonEncode(params.resetTune.toDatabaseFilter());
 
   Future<void> load() async {
     if (params.filterTagModifiable) {
       years = await StoryDbModel.db.getStoryCountsByYear(
-        filters: {
-          if (searchFilter.types.isNotEmpty)
-            'types': searchFilter.types.map((e) => e.name).toList(),
-        },
+        filters: {if (searchFilter.types.isNotEmpty) 'types': searchFilter.types.map((e) => e.name).toList()},
       );
 
       final allItems = tagsProvider.allTags?.items ?? <TagDbModel>[];
@@ -52,14 +46,10 @@ class SearchFilterViewModel extends ChangeNotifier with DisposeAwareMixin {
 
         // People is a text-based category, not part of systemCategories (the emoji list),
         // so it must be grouped explicitly or its tags would be dropped from the filter.
-        TagCategoryDbModel.people(): allItems
-            .where((tag) => tag.categoryId == TagCategoryDbModel.peopleId)
-            .toList(),
+        TagCategoryDbModel.people(): allItems.where((tag) => tag.categoryId == TagCategoryDbModel.peopleId).toList(),
 
         for (final category in TagCategoryDbModel.systemCategories)
-          category: allItems
-              .where((tag) => tag.categoryId == category.id)
-              .toList(),
+          category: allItems.where((tag) => tag.categoryId == category.id).toList(),
       };
 
       tagsByCategory = grouped;
@@ -67,20 +57,14 @@ class SearchFilterViewModel extends ChangeNotifier with DisposeAwareMixin {
 
       tagsByCategory = {
         for (final entry in grouped.entries)
-          entry.key:
-              entry.value
-                  .where(
-                    (tag) => tag.storiesCount != null && tag.storiesCount! > 0,
-                  )
-                  .toList()
-                ..sort((a, b) => b.storiesCount!.compareTo(a.storiesCount!)),
+          entry.key: entry.value.where((tag) => tag.storiesCount != null && tag.storiesCount! > 0).toList()
+            ..sort((a, b) => b.storiesCount!.compareTo(a.storiesCount!)),
       };
     } else {
       years = await StoryDbModel.db.getStoryCountsByYear(
         filters: {
           'tags': searchFilter.tagIds.toList(),
-          if (searchFilter.types.isNotEmpty)
-            'types': searchFilter.types.map((e) => e.name).toList(),
+          if (searchFilter.types.isNotEmpty) 'types': searchFilter.types.map((e) => e.name).toList(),
         },
       );
     }
@@ -148,15 +132,12 @@ class SearchFilterViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   Future<void> _resetTagsCount() async {
-    final allTags =
-        tagsByCategory?.values.expand((list) => list).toList() ?? [];
+    final allTags = tagsByCategory?.values.expand((list) => list).toList() ?? [];
 
     var result = StoryDbModel.db.getStoryCountByTags(
       tagIds: allTags.map((e) => e.id).toList(),
       years: searchFilter.years.toList(),
-      types: searchFilter.types.isNotEmpty
-          ? searchFilter.types.map((e) => e.name).toList()
-          : null,
+      types: searchFilter.types.isNotEmpty ? searchFilter.types.map((e) => e.name).toList() : null,
     );
 
     for (TagDbModel tag in allTags) {

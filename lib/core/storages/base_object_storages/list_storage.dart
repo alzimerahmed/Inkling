@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:storypad/core/storages/preference_storages/default_storage.dart';
 
 class ListStorage<T> extends DefaultStorage<String> {
@@ -9,10 +10,7 @@ class ListStorage<T> extends DefaultStorage<String> {
 
   Future<void> writeList(List<T>? value) async {
     if (value?.isNotEmpty == true) validation(value!.first);
-    return (await adapter).write(
-      key: key,
-      value: jsonEncode(value),
-    );
+    return (await adapter).write(key: key, value: jsonEncode(value));
   }
 
   Future<List<T>?> readList() async {

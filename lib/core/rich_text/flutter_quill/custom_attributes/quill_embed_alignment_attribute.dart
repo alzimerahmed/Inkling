@@ -32,21 +32,11 @@ class _EmbedAlignmentAttribute extends quill.Attribute<String?> {
       node.applyAttribute(this);
     }
 
-    controller.replaceText(
-      node.documentOffset,
-      node.length,
-      node.toDelta(),
-      controller.selection,
-    );
+    controller.replaceText(node.documentOffset, node.length, node.toDelta(), controller.selection);
   }
 
   void apply(quill.QuillController controller, quill.Embed node) {
     node.applyAttribute(this);
-    controller.replaceText(
-      node.documentOffset,
-      node.length,
-      node.toDelta(),
-      controller.selection,
-    );
+    controller.replaceText(node.documentOffset, node.length, node.toDelta(), controller.selection);
   }
 }

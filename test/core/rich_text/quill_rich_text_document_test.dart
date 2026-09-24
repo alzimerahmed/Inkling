@@ -84,10 +84,7 @@ void main() {
         final document = QuillRichTextDocument.empty();
 
         expect(document, isA<RichTextDocument>());
-        expect(
-          document.length,
-          equals(1),
-        ); // Quill documents always have at least \n
+        expect(document.length, equals(1)); // Quill documents always have at least \n
         expect(document.toPlainText(), equals('\n'));
       });
 
@@ -221,12 +218,7 @@ void main() {
         final originalJson = [
           {
             'insert': 'Formatted',
-            'attributes': {
-              'bold': true,
-              'italic': true,
-              'underline': true,
-              'color': '#FF0000',
-            },
+            'attributes': {'bold': true, 'italic': true, 'underline': true, 'color': '#FF0000'},
           },
           {'insert': '\n'},
         ];

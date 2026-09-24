@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:storypad/core/databases/adapters/objectbox/base_box.dart';
 import 'package:storypad/core/databases/adapters/objectbox/entities.dart';
@@ -25,15 +26,9 @@ class RelaxSoundMixesBox extends BaseBox<RelaxSoundMixBox, RelaxSoundMixModel> {
   QueryDateProperty<RelaxSoundMixBox> get permanentlyDeletedAtProperty => RelaxSoundMixBox_.permanentlyDeletedAt;
 
   @override
-  QueryBuilder<RelaxSoundMixBox> buildQuery({
-    Map<String, dynamic>? filters,
-    bool returnDeleted = false,
-  }) {
+  QueryBuilder<RelaxSoundMixBox> buildQuery({Map<String, dynamic>? filters, bool returnDeleted = false}) {
     Condition<RelaxSoundMixBox> conditions = RelaxSoundMixBox_.id.notNull();
-    if (!returnDeleted)
-      conditions = conditions.and(
-        RelaxSoundMixBox_.permanentlyDeletedAt.isNull(),
-      );
+    if (!returnDeleted) conditions = conditions.and(RelaxSoundMixBox_.permanentlyDeletedAt.isNull());
 
     QueryBuilder<RelaxSoundMixBox> queryBuilder = box.query(conditions);
     queryBuilder.order(RelaxSoundMixBox_.index);
@@ -47,34 +42,22 @@ class RelaxSoundMixesBox extends BaseBox<RelaxSoundMixBox, RelaxSoundMixModel> {
   }
 
   @override
-  Future<List<RelaxSoundMixModel>> objectsToModels(
-    List<RelaxSoundMixBox> objects, [
-    Map<String, dynamic>? options,
-  ]) {
+  Future<List<RelaxSoundMixModel>> objectsToModels(List<RelaxSoundMixBox> objects, [Map<String, dynamic>? options]) {
     return compute(_objectsToModels, {'objects': objects, 'options': options});
   }
 
   @override
-  Future<List<RelaxSoundMixBox>> modelsToObjects(
-    List<RelaxSoundMixModel> models, [
-    Map<String, dynamic>? options,
-  ]) {
+  Future<List<RelaxSoundMixBox>> modelsToObjects(List<RelaxSoundMixModel> models, [Map<String, dynamic>? options]) {
     return compute(_modelsToObjects, {'models': models, 'options': options});
   }
 
   @override
-  Future<RelaxSoundMixBox> modelToObject(
-    RelaxSoundMixModel model, [
-    Map<String, dynamic>? options,
-  ]) {
+  Future<RelaxSoundMixBox> modelToObject(RelaxSoundMixModel model, [Map<String, dynamic>? options]) {
     return compute(_modelToObject, {'model': model, 'options': options});
   }
 
   @override
-  Future<RelaxSoundMixModel> objectToModel(
-    RelaxSoundMixBox object, [
-    Map<String, dynamic>? options,
-  ]) {
+  Future<RelaxSoundMixModel> objectToModel(RelaxSoundMixBox object, [Map<String, dynamic>? options]) {
     return compute(_objectToModel, {'object': object, 'options': options});
   }
 }

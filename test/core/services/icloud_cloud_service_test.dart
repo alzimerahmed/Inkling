@@ -10,9 +10,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   const nativeChannel = MethodChannel('default_platform_channel');
-  const secureStorageChannel = MethodChannel(
-    'plugins.it_nomads.com/flutter_secure_storage',
-  );
+  const secureStorageChannel = MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
   final messenger = TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
 
   // In-memory stand-in for the keychain — ICloudUserStorage's key is the
@@ -79,64 +77,44 @@ void main() {
       expect(ICloudCloudService().serviceType, BackupServiceType.icloud);
     });
 
-    test(
-      'fresh connect: native reports available + an accountId creates and persists a user',
-      () async {
-        mockNative(available: true, accountId: 'record-a');
-        final service = ICloudCloudService();
+    test('fresh connect: native reports available + an accountId creates and persists a user', () async {
+      mockNative(available: true, accountId: 'record-a');
+      final service = ICloudCloudService();
 
-        final signedIn = await service.signIn();
+      final signedIn = await service.signIn();
 
-        expect(signedIn, isTrue);
-        expect(service.isSignedIn, isTrue);
-        expect(service.currentUser?.accountId, 'record-a');
-        // Persisted, not just in-memory — a fresh ICloudCloudService reading
-        // storage should see the same account.
-        final reloaded = ICloudCloudService();
-        await reloaded.initialize();
-        expect(reloaded.currentUser?.accountId, 'record-a');
-      },
-    );
+      expect(signedIn, isTrue);
+      expect(service.isSignedIn, isTrue);
+      expect(service.currentUser?.accountId, 'record-a');
+      // Persisted, not just in-memory — a fresh ICloudCloudService reading
+      // storage should see the same account.
+      final reloaded = ICloudCloudService();
+      await reloaded.initialize();
+      expect(reloaded.currentUser?.accountId, 'record-a');
+    });
 
-    test(
-      'not available: currentUser is cleared, signIn reports false',
-      () async {
-        mockNative(available: false);
-        final service = ICloudCloudService();
+    test('not available: currentUser is cleared, signIn reports false', () async {
+      mockNative(available: false);
+      final service = ICloudCloudService();
 
-        final signedIn = await service.signIn();
+      final signedIn = await service.signIn();
 
-        expect(signedIn, isFalse);
-        expect(service.isSignedIn, isFalse);
-        expect(service.currentUser, isNull);
-      },
-    );
+      expect(signedIn, isFalse);
+      expect(service.isSignedIn, isFalse);
+      expect(service.currentUser, isNull);
+    });
 
-    test(
-      'transient network failure with a cached user keeps it and reports signed in',
-      () async {
-        mockNative(available: true, accountId: 'record-a');
-        final service = ICloudCloudService();
-        await service.signIn();
+    test('transient network failure with a cached user keeps it and reports signed in', () async {
+      mockNative(available: true, accountId: 'record-a');
+      final service = ICloudCloudService();
+      await service.signIn();
 
-        mockNative(
-          available: true,
-          accountIdError: PlatformException(code: 'NETWORK'),
-        );
-        final signedIn = await service.signIn();
+      mockNative(available: true, accountIdError: PlatformException(code: 'NETWORK'));
+      final signedIn = await service.signIn();
 
-        expect(
-          signedIn,
-          isTrue,
-          reason: 'a network blip must not be treated as signed out',
-        );
-        expect(
-          service.currentUser?.accountId,
-          'record-a',
-          reason: 'cached account must survive a transient failure',
-        );
-      },
-    );
+      expect(signedIn, isTrue, reason: 'a network blip must not be treated as signed out');
+      expect(service.currentUser?.accountId, 'record-a', reason: 'cached account must survive a transient failure');
+    });
 
     // Regression test for the account-switch race Copilot flagged on PR
     // #725: a cached account can't prove the *current* ubiquity container
@@ -145,39 +123,32 @@ void main() {
     // trusted — otherwise the old account's bookkeeping/RevenueCat identity
     // could keep being used while files are actually written to the new
     // account's container.
-    test(
-      'transient network failure where the local identity changed does not trust the cache',
-      () async {
-        mockNative(
-          available: true,
-          accountId: 'record-a',
-          fingerprint: 'token-a',
-        );
-        final service = ICloudCloudService();
-        await service.signIn();
-        expect(service.currentUser?.identityTokenFingerprint, 'token-a');
+    test('transient network failure where the local identity changed does not trust the cache', () async {
+      mockNative(available: true, accountId: 'record-a', fingerprint: 'token-a');
+      final service = ICloudCloudService();
+      await service.signIn();
+      expect(service.currentUser?.identityTokenFingerprint, 'token-a');
 
-        // Simulate an account switch (A -> B) landing at the exact moment
-        // the CloudKit identity fetch fails transiently: the local token has
-        // already changed, but fetchAccountId can't confirm the new account.
-        mockNative(
-          available: true,
-          accountIdError: PlatformException(code: 'NETWORK'),
-          fingerprint: 'token-b',
-        );
+      // Simulate an account switch (A -> B) landing at the exact moment
+      // the CloudKit identity fetch fails transiently: the local token has
+      // already changed, but fetchAccountId can't confirm the new account.
+      mockNative(
+        available: true,
+        accountIdError: PlatformException(code: 'NETWORK'),
+        fingerprint: 'token-b',
+      );
 
-        await expectLater(
-          service.signIn(),
-          throwsA(isA<NetworkException>()),
-          reason: 'a changed local identity must not fall back to the old cached account',
-        );
-        expect(
-          service.currentUser,
-          isNull,
-          reason: 'must not keep exposing account A as signed in once the local identity no longer matches it',
-        );
-      },
-    );
+      await expectLater(
+        service.signIn(),
+        throwsA(isA<NetworkException>()),
+        reason: 'a changed local identity must not fall back to the old cached account',
+      );
+      expect(
+        service.currentUser,
+        isNull,
+        reason: 'must not keep exposing account A as signed in once the local identity no longer matches it',
+      );
+    });
 
     // Same guard, but verified across a fresh app launch rather than within
     // one running service instance — the fingerprint has to be persisted
@@ -185,20 +156,14 @@ void main() {
     test(
       'transient network failure on a fresh launch with a persisted user but no recorded fingerprint does not trust it',
       () async {
-        mockNative(
-          available: true,
-          accountId: 'record-a',
-          fingerprint: 'token-a',
-        );
+        mockNative(available: true, accountId: 'record-a', fingerprint: 'token-a');
         final service = ICloudCloudService();
         await service.signIn();
 
         // A record from before this fingerprint existed (or one that just
         // never got a successful confirmation yet).
         final stored = await ICloudUserStorage().readObject();
-        await ICloudUserStorage().writeObject(
-          stored!.copyWith(identityTokenFingerprint: null),
-        );
+        await ICloudUserStorage().writeObject(stored!.copyWith(identityTokenFingerprint: null));
 
         final freshLaunch = ICloudCloudService();
         mockNative(
@@ -223,10 +188,7 @@ void main() {
     test(
       'signIn throws NetworkException on a transient failure with no cached user, without wiping anything',
       () async {
-        mockNative(
-          available: true,
-          accountIdError: PlatformException(code: 'NETWORK'),
-        );
+        mockNative(available: true, accountIdError: PlatformException(code: 'NETWORK'));
         final service = ICloudCloudService();
 
         await expectLater(service.signIn(), throwsA(isA<NetworkException>()));
@@ -234,53 +196,41 @@ void main() {
       },
     );
 
-    test(
-      'reauthenticateIfNeeded throws NetworkException on a transient failure with no cached user',
-      () async {
-        mockNative(
-          available: true,
-          accountIdError: PlatformException(code: 'NETWORK'),
-        );
-        final service = ICloudCloudService();
+    test('reauthenticateIfNeeded throws NetworkException on a transient failure with no cached user', () async {
+      mockNative(available: true, accountIdError: PlatformException(code: 'NETWORK'));
+      final service = ICloudCloudService();
 
-        await expectLater(
-          service.reauthenticateIfNeeded(),
-          throwsA(isA<NetworkException>()),
-        );
-      },
-    );
+      await expectLater(service.reauthenticateIfNeeded(), throwsA(isA<NetworkException>()));
+    });
 
     // Regression test for the bug where re-enabling iCloud after it was
     // toggled off in Settings silently reset autoBackupEnabled to true,
     // because _currentUser (in-memory) gets nulled on every "unavailable"
     // check and was the only thing consulted to decide "is this the same
     // account" — the persisted record must be consulted too.
-    test(
-      'same-account re-enable preserves autoBackupEnabled after it was turned off',
-      () async {
-        mockNative(available: true, accountId: 'record-a');
-        final service = ICloudCloudService();
-        await service.signIn();
-        service.setAutoBackupEnabled(false);
-        expect(service.currentUser?.autoBackupEnabled, isFalse);
+    test('same-account re-enable preserves autoBackupEnabled after it was turned off', () async {
+      mockNative(available: true, accountId: 'record-a');
+      final service = ICloudCloudService();
+      await service.signIn();
+      service.setAutoBackupEnabled(false);
+      expect(service.currentUser?.autoBackupEnabled, isFalse);
 
-        // Simulate the OS toggle being turned off, then back on for the same
-        // account — the in-memory _currentUser is nulled in between.
-        mockNative(available: false);
-        await service.signIn();
-        expect(service.currentUser, isNull);
+      // Simulate the OS toggle being turned off, then back on for the same
+      // account — the in-memory _currentUser is nulled in between.
+      mockNative(available: false);
+      await service.signIn();
+      expect(service.currentUser, isNull);
 
-        mockNative(available: true, accountId: 'record-a');
-        await service.signIn();
+      mockNative(available: true, accountId: 'record-a');
+      await service.signIn();
 
-        expect(service.currentUser?.accountId, 'record-a');
-        expect(
-          service.currentUser?.autoBackupEnabled,
-          isFalse,
-          reason: 'reconnecting the same account must not silently re-enable automatic backup',
-        );
-      },
-    );
+      expect(service.currentUser?.accountId, 'record-a');
+      expect(
+        service.currentUser?.autoBackupEnabled,
+        isFalse,
+        reason: 'reconnecting the same account must not silently re-enable automatic backup',
+      );
+    });
 
     test('account switch replaces the stored user with a fresh one', () async {
       mockNative(available: true, accountId: 'record-a');

@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
-    as exp;
+
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
 
 /// Configuration for retry behavior
 class RetryPolicy {
@@ -16,10 +16,7 @@ class RetryPolicy {
     this.initialDelay = const Duration(seconds: 1),
     this.maxDelay = const Duration(seconds: 30),
     this.backoffMultiplier = 2.0,
-    this.retryableExceptions = const {
-      exp.NetworkException,
-      exp.FileOperationException,
-    },
+    this.retryableExceptions = const {exp.NetworkException, exp.FileOperationException},
     this.timeout,
   });
 
@@ -58,8 +55,7 @@ class RetryPolicy {
     if (currentAttempt >= maxAttempts) return false;
 
     if (exception is exp.BackupException) {
-      return exception.isRetryable &&
-          retryableExceptions.contains(exception.runtimeType);
+      return exception.isRetryable && retryableExceptions.contains(exception.runtimeType);
     }
 
     return false;
@@ -99,12 +95,7 @@ class RateLimitAwareRetryPolicy extends RetryPolicy {
   Duration calculateDelayWithRateLimit(int attempt, String? retryAfterHeader) {
     final retryAfterDelay = parseRetryAfterHeader?.call(retryAfterHeader);
     if (retryAfterDelay != null) {
-      return Duration(
-        milliseconds: retryAfterDelay.inMilliseconds.clamp(
-          0,
-          maxDelay.inMilliseconds,
-        ),
-      );
+      return Duration(milliseconds: retryAfterDelay.inMilliseconds.clamp(0, maxDelay.inMilliseconds));
     }
 
     return calculateDelay(attempt);

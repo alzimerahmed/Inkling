@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:storypad/core/databases/adapters/objectbox/stories_box.dart';
@@ -32,10 +33,7 @@ class MapRoute extends BaseRoute {
 }
 
 class MapView extends StatelessWidget {
-  const MapView({
-    super.key,
-    required this.params,
-  });
+  const MapView({super.key, required this.params});
 
   final MapRoute params;
 
@@ -46,10 +44,7 @@ class MapView extends StatelessWidget {
       builder: (context, child) {
         final viewModel = Provider.of<MapViewModel>(context);
 
-        return SpMapOverlayTheme(
-          brightness: viewModel.mapStyle.overlayBrightness,
-          child: _MapContent(viewModel),
-        );
+        return SpMapOverlayTheme(brightness: viewModel.mapStyle.overlayBrightness, child: _MapContent(viewModel));
       },
     );
   }

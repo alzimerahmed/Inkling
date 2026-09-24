@@ -50,11 +50,7 @@ class SpAssetStoryCountOverlay extends StatelessWidget {
                   const TextSpan(text: ' '),
                   WidgetSpan(
                     alignment: PlaceholderAlignment.middle,
-                    child: Icon(
-                      SpIcons.archive,
-                      size: 12.0,
-                      color: ColorScheme.of(context).error,
-                    ),
+                    child: Icon(SpIcons.archive, size: 12.0, color: ColorScheme.of(context).error),
                   ),
                 ],
               ],

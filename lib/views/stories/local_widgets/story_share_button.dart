@@ -5,10 +5,7 @@ import 'package:storypad/widgets/bottom_sheets/sp_share_story_bottom_sheet.dart'
 import 'package:storypad/widgets/sp_icons.dart';
 
 class StoryShareButton extends StatelessWidget {
-  const StoryShareButton({
-    super.key,
-    required this.viewModel,
-  });
+  const StoryShareButton({super.key, required this.viewModel});
 
   final BaseStoryViewModel viewModel;
 

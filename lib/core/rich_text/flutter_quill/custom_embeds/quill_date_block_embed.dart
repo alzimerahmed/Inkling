@@ -18,23 +18,15 @@ class _QuillDateBlockEmbed extends quill.EmbedBuilder {
           children: [
             Text(
               date.day.toString().padLeft(2, '0'),
-              style: TextTheme.of(
-                context,
-              ).headlineLarge?.copyWith(color: ColorScheme.of(context).primary),
+              style: TextTheme.of(context).headlineLarge?.copyWith(color: ColorScheme.of(context).primary),
             ),
             const SizedBox(height: 4.0),
             Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  DateFormatHelper.MMM(date, context.locale),
-                  style: TextTheme.of(context).labelMedium,
-                ),
-                Text(
-                  DateFormatHelper.y(date, context.locale),
-                  style: TextTheme.of(context).labelMedium,
-                ),
+                Text(DateFormatHelper.MMM(date, context.locale), style: TextTheme.of(context).labelMedium),
+                Text(DateFormatHelper.y(date, context.locale), style: TextTheme.of(context).labelMedium),
               ],
             ),
           ],

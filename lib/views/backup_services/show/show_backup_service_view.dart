@@ -22,27 +22,21 @@ part 'show_backup_service_content.dart';
 class ShowBackupServiceRoute extends BaseRoute {
   final BackupCloudService service;
 
-  const ShowBackupServiceRoute({
-    required this.service,
-  });
+  const ShowBackupServiceRoute({required this.service});
 
   @override
   Widget buildPage(BuildContext context) => ShowBackupServiceView(params: this);
 }
 
 class ShowBackupServiceView extends StatelessWidget {
-  const ShowBackupServiceView({
-    super.key,
-    required this.params,
-  });
+  const ShowBackupServiceView({super.key, required this.params});
 
   final ShowBackupServiceRoute params;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ShowBackupServiceViewModel>(
-      create: (context) =>
-          ShowBackupServiceViewModel(params: params, context: context),
+      create: (context) => ShowBackupServiceViewModel(params: params, context: context),
       builder: (context, child) {
         return _ShowBackupServiceContent(Provider.of(context));
       },

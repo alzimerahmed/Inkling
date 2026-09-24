@@ -14,9 +14,7 @@ import 'package:storypad/providers/device_preferences_provider.dart';
 import 'package:storypad/views/root/root_view.dart';
 
 class App extends StatelessWidget {
-  const App({
-    super.key,
-  });
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,15 +48,10 @@ class App extends StatelessWidget {
 
           return MediaQuery(
             data: mediaQuery.copyWith(
-              padding: mediaQuery.padding.copyWith(
-                top: mediaQuery.padding.top + topMainMenuPadding,
-              ),
+              padding: mediaQuery.padding.copyWith(top: mediaQuery.padding.top + topMainMenuPadding),
               textScaler: textScaler,
               alwaysUse24HourFormat:
-                  context.read<DevicePreferencesProvider>().timeFormatOf(
-                    context,
-                  ) ==
-                  TimeFormatOption.h24,
+                  context.read<DevicePreferencesProvider>().timeFormatOf(context) == TimeFormatOption.h24,
             ),
             child: MaterialApp(
               debugShowCheckedModeBanner: false,

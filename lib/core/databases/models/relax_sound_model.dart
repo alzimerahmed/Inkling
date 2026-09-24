@@ -9,10 +9,7 @@ class RelaxSoundModel {
   final String soundUrlPath;
   final double volume;
 
-  RelaxSoundModel({
-    required this.soundUrlPath,
-    required this.volume,
-  });
+  RelaxSoundModel({required this.soundUrlPath, required this.volume});
 
   Map<String, dynamic> toJson() => _$RelaxSoundModelToJson(this);
   factory RelaxSoundModel.fromJson(Map<String, dynamic> json) => _$RelaxSoundModelFromJson(json);

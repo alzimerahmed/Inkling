@@ -6,11 +6,8 @@ class _EditStoryContent extends StatelessWidget {
   final EditStoryViewModel viewModel;
 
   List<StoryPageObject> constructPages() {
-    if (viewModel.pagesManager.pagesMap.keys.isEmpty)
-      return <StoryPageObject>[];
-    return List.generate(viewModel.draftContent?.richPages?.length ?? 0, (
-      index,
-    ) {
+    if (viewModel.pagesManager.pagesMap.keys.isEmpty) return <StoryPageObject>[];
+    return List.generate(viewModel.draftContent?.richPages?.length ?? 0, (index) {
       final page = viewModel.draftContent!.richPages![index];
       return viewModel.pagesManager.pagesMap[page.id];
     }).toList().whereType<StoryPageObject>().toList();
@@ -31,8 +28,7 @@ class _EditStoryContent extends StatelessWidget {
               pages: pages,
               backgroundColor: ColorScheme.of(context).readOnly.surface1,
               preferences: viewModel.story!.preferences,
-              onThemeChanged: (preferences) =>
-                  viewModel.changePreferences(preferences),
+              onThemeChanged: (preferences) => viewModel.changePreferences(preferences),
             ),
     );
   }
@@ -58,11 +54,7 @@ class _EditStoryContent extends StatelessWidget {
   Widget buildPageEditors(BuildContext context, List<StoryPageObject> pages) {
     return StoryPagesBuilder(
       viewInsets: MediaQuery.viewInsetsOf(context),
-      headerBuilder: (page) => StoryHeader.fromEditStory(
-        page: page,
-        viewModel: viewModel,
-        context: context,
-      ),
+      headerBuilder: (page) => StoryHeader.fromEditStory(page: page, viewModel: viewModel, context: context),
       pageScrollController: viewModel.pagesManager.pageScrollController,
       padding: MediaQuery.paddingOf(context).copyWith(top: 0.0),
       pages: pages,
@@ -77,8 +69,7 @@ class _EditStoryContent extends StatelessWidget {
   StoryPageBuilderAction getPageActions(BuildContext context) {
     return StoryPageBuilderAction(
       onAddPage: () => viewModel.addNewPage(),
-      onSwapPages: (oldIndex, newIndex) =>
-          viewModel.reorderPages(oldIndex: oldIndex, newIndex: newIndex),
+      onSwapPages: (oldIndex, newIndex) => viewModel.reorderPages(oldIndex: oldIndex, newIndex: newIndex),
       onDelete: (page) => viewModel.deleteAPage(context, page.page),
       canDeletePage: viewModel.pagesManager.canDeletePage,
       onFocusChange: (pageIndex, page, titleFocused, bodyFocused) {
@@ -103,21 +94,15 @@ class _EditStoryContent extends StatelessWidget {
           : PreferredSize(
               preferredSize: const Size.fromHeight(1),
               child: ValueListenableBuilder(
-                valueListenable:
-                    viewModel.pagesManager.pageScrollOffsetNotifier,
+                valueListenable: viewModel.pagesManager.pageScrollOffsetNotifier,
                 builder: (BuildContext context, double offset, Widget? child) {
-                  return Opacity(
-                    opacity: offset.clamp(0.0, 8.0) / 8.0,
-                    child: const Divider(height: 1),
-                  );
+                  return Opacity(opacity: offset.clamp(0.0, 8.0) / 8.0, child: const Divider(height: 1));
                 },
               ),
             ),
       leading: SpAnimatedIcons.fadeScale(
         showFirst: viewModel.pagesManager.managingPage,
-        firstChild: CloseButton(
-          onPressed: () => viewModel.pagesManager.toggleManagingPage(),
-        ),
+        firstChild: CloseButton(onPressed: () => viewModel.pagesManager.toggleManagingPage()),
         secondChild: Hero(
           tag: 'back-button',
           child: BackButton(
@@ -130,10 +115,7 @@ class _EditStoryContent extends StatelessWidget {
         if (!viewModel.pagesManager.managingPage) ...[
           _DoneButton(viewModel: viewModel),
           const SizedBox(width: 8.0),
-          if (viewModel.canShare) ...[
-            StoryShareButton(viewModel: viewModel),
-            const SizedBox(width: 8.0),
-          ],
+          if (viewModel.canShare) ...[StoryShareButton(viewModel: viewModel), const SizedBox(width: 8.0)],
           StoryThemeButton(viewModel: viewModel),
         ],
         const SizedBox(width: 8.0),

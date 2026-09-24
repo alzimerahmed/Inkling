@@ -29,9 +29,7 @@ part 'local_widgets/term_privacy_texts.dart';
 part 'local_widgets/paywall_gradient_bg_overlay.dart';
 
 class PaywallRoute extends BaseRoute {
-  const PaywallRoute({
-    this.initialFocus,
-  });
+  const PaywallRoute({this.initialFocus});
 
   final PaywallFeature? initialFocus;
 
@@ -40,10 +38,7 @@ class PaywallRoute extends BaseRoute {
 }
 
 class PaywallView extends StatelessWidget {
-  const PaywallView({
-    super.key,
-    required this.params,
-  });
+  const PaywallView({super.key, required this.params});
 
   final PaywallRoute params;
 

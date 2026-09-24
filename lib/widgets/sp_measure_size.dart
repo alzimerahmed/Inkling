@@ -8,10 +8,7 @@ class _SpMeasureSizeRenderObject extends RenderProxyBox {
   final OnWidgetSizeChange? onChange;
   final void Function(Size)? onPerformLayout;
 
-  _SpMeasureSizeRenderObject(
-    this.onChange,
-    this.onPerformLayout,
-  );
+  _SpMeasureSizeRenderObject(this.onChange, this.onPerformLayout);
 
   @override
   void performLayout() {
@@ -32,12 +29,7 @@ class SpMeasureSize extends SingleChildRenderObjectWidget {
   final OnWidgetSizeChange? onChange;
   final void Function(Size)? onPerformLayout;
 
-  const SpMeasureSize({
-    super.key,
-    this.onChange,
-    this.onPerformLayout,
-    required Widget super.child,
-  });
+  const SpMeasureSize({super.key, this.onChange, this.onPerformLayout, required Widget super.child});
 
   @override
   RenderObject createRenderObject(BuildContext context) {

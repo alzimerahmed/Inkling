@@ -1,9 +1,7 @@
 part of '../story_pages_builder.dart';
 
 class _GridLayout extends StatelessWidget {
-  const _GridLayout({
-    required this.builder,
-  });
+  const _GridLayout({required this.builder});
 
   final StoryPagesBuilder builder;
 
@@ -15,8 +13,7 @@ class _GridLayout extends StatelessWidget {
       controller: builder.pageScrollController,
       padding: builder.padding,
       children: [
-        if (builder.headerBuilder != null)
-          builder.headerBuilder!(builder.pages[0]),
+        if (builder.headerBuilder != null) builder.headerBuilder!(builder.pages[0]),
         Padding(
           padding: EdgeInsets.all(builder.spacing),
           child: StaggeredGrid.count(
@@ -27,11 +24,7 @@ class _GridLayout extends StatelessWidget {
               for (int i = 0; i < itemCount; i++)
                 StaggeredGridTile.fit(
                   crossAxisCellCount: 1,
-                  child: builder.buildPage(
-                    builder.pages[i],
-                    context,
-                    smallPage: true,
-                  ),
+                  child: builder.buildPage(builder.pages[i], context, smallPage: true),
                 ),
             ],
           ),

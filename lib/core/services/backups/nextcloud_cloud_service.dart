@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:dio/dio.dart';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
-    as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
 import 'package:storypad/core/objects/cloud_file_object.dart';
 import 'package:storypad/core/objects/cloud_storage_quota_object.dart';
 import 'package:storypad/core/objects/nextcloud_user_object.dart';
@@ -29,8 +28,7 @@ class NextcloudCloudService extends BackupCloudService {
   /// The account's configured storage location, e.g. `Journals/MyDiary` —
   /// falls back to [NextcloudUserObject.defaultFolderName] for accounts
   /// connected before this was customizable (or that left it blank).
-  String get _rootFolder =>
-      _currentUser?.folderName ?? NextcloudUserObject.defaultFolderName;
+  String get _rootFolder => _currentUser?.folderName ?? NextcloudUserObject.defaultFolderName;
   String get _trashFolder => '$_rootFolder/.trash';
 
   /// Trims slashes, drops empty/`.`/`..` segments (defensive — this is the
@@ -43,9 +41,7 @@ class NextcloudCloudService extends BackupCloudService {
     final segments = input
         .split('/')
         .map((segment) => segment.trim())
-        .where(
-          (segment) => segment.isNotEmpty && segment != '.' && segment != '..',
-        );
+        .where((segment) => segment.isNotEmpty && segment != '.' && segment != '..');
 
     final cleaned = segments.join('/');
     return cleaned.isEmpty ? null : cleaned;
@@ -141,11 +137,7 @@ class NextcloudCloudService extends BackupCloudService {
   @override
   Future<bool> reauthenticateIfNeeded() async {
     if (_currentUser == null || _client == null) {
-      throw exp.AuthException(
-        'No stored user found',
-        exp.AuthExceptionType.signInRequired,
-        serviceType: serviceType,
-      );
+      throw exp.AuthException('No stored user found', exp.AuthExceptionType.signInRequired, serviceType: serviceType);
     }
 
     try {
@@ -170,14 +162,11 @@ class NextcloudCloudService extends BackupCloudService {
 
   String get _appRootPath => '/$_rootFolder';
 
-  String _folderPath(String? folderName) =>
-      folderName != null ? '$_appRootPath/$folderName' : _appRootPath;
+  String _folderPath(String? folderName) => folderName != null ? '$_appRootPath/$folderName' : _appRootPath;
 
   String _trashPathFor(String originalPath) {
     final relative = originalPath.startsWith(_appRootPath)
-        ? originalPath
-              .substring(_appRootPath.length)
-              .replaceFirst(RegExp(r'^/+'), '')
+        ? originalPath.substring(_appRootPath.length).replaceFirst(RegExp(r'^/+'), '')
         : originalPath.replaceFirst(RegExp(r'^/+'), '');
     return '/$_trashFolder/$relative';
   }
@@ -202,20 +191,14 @@ class NextcloudCloudService extends BackupCloudService {
         for (final file in files) {
           if (file.isDir == true || file.name == null) continue;
 
-          final cloudFile = CloudFileObject.fromNextcloud(
-            file,
-            remotePath: '$backupsPath/${file.name}',
-          );
+          final cloudFile = CloudFileObject.fromNextcloud(file, remotePath: '$backupsPath/${file.name}');
           final year = cloudFile.year;
           if (year == null) continue;
 
           final existing = yearlyBackups[year];
           final existingTs = existing?.lastUpdatedAt;
           final newTs = cloudFile.lastUpdatedAt;
-          final isNewer =
-              existing == null ||
-              (newTs != null &&
-                  (existingTs == null || newTs.isAfter(existingTs)));
+          final isNewer = existing == null || (newTs != null && (existingTs == null || newTs.isAfter(existingTs)));
           if (isNewer) yearlyBackups[year] = cloudFile;
         }
 
@@ -261,11 +244,7 @@ class NextcloudCloudService extends BackupCloudService {
     );
   }
 
-  Future<List<int>?> _readBytes(
-    webdav.Client client,
-    String fileId, {
-    bool swallow404 = true,
-  }) async {
+  Future<List<int>?> _readBytes(webdav.Client client, String fileId, {bool swallow404 = true}) async {
     try {
       return await client.read(fileId);
     } on DioException catch (e) {
@@ -305,11 +284,7 @@ class NextcloudCloudService extends BackupCloudService {
       operation: () async {
         try {
           final file = await client.readProps(trashPath);
-          return CloudFileObject.fromNextcloud(
-            file,
-            remotePath: trashPath,
-            trashed: true,
-          );
+          return CloudFileObject.fromNextcloud(file, remotePath: trashPath, trashed: true);
         } on DioException catch (e) {
           if (e.response?.statusCode == 404) return null;
           rethrow;
@@ -362,19 +337,13 @@ class NextcloudCloudService extends BackupCloudService {
   }
 
   String _parentOf(String path) {
-    final trimmed = path.endsWith('/')
-        ? path.substring(0, path.length - 1)
-        : path;
+    final trimmed = path.endsWith('/') ? path.substring(0, path.length - 1) : path;
     final index = trimmed.lastIndexOf('/');
     return index <= 0 ? '/' : trimmed.substring(0, index);
   }
 
   @override
-  Future<CloudFileObject?> uploadFile(
-    String fileName,
-    io.File file, {
-    String? folderName,
-  }) async {
+  Future<CloudFileObject?> uploadFile(String fileName, io.File file, {String? folderName}) async {
     final client = _getAuthenticatedClient();
     final folderPath = _folderPath(folderName);
     final remotePath = '$folderPath/$fileName';
@@ -401,11 +370,7 @@ class NextcloudCloudService extends BackupCloudService {
   }
 
   @override
-  Future<CloudFileObject?> updateFile({
-    required String fileId,
-    required String fileName,
-    required io.File file,
-  }) async {
+  Future<CloudFileObject?> updateFile({required String fileId, required String fileName, required io.File file}) async {
     final client = _getAuthenticatedClient();
     final folderPath = _parentOf(fileId);
     final remotePath = '$folderPath/$fileName';
@@ -431,9 +396,7 @@ class NextcloudCloudService extends BackupCloudService {
           try {
             await client.remove(fileId);
           } catch (e) {
-            AppLogger.d(
-              'NextcloudCloudService#updateFile: failed to remove old file $fileId: $e',
-            );
+            AppLogger.d('NextcloudCloudService#updateFile: failed to remove old file $fileId: $e');
           }
         }
 
@@ -461,12 +424,7 @@ class NextcloudCloudService extends BackupCloudService {
 
         return files
             .where((file) => file.isDir != true && file.name != null)
-            .map(
-              (file) => CloudFileObject.fromNextcloud(
-                file,
-                remotePath: '$folderPath/${file.name}',
-              ),
-            )
+            .map((file) => CloudFileObject.fromNextcloud(file, remotePath: '$folderPath/${file.name}'))
             .toList();
       },
     );
@@ -486,10 +444,7 @@ class NextcloudCloudService extends BackupCloudService {
         limitInBytes: accountQuota?.$2,
       );
     } catch (e, s) {
-      AppLogger.error(
-        'NextcloudCloudService#fetchStorageQuota failed: $e',
-        stackTrace: s,
-      );
+      AppLogger.error('NextcloudCloudService#fetchStorageQuota failed: $e', stackTrace: s);
       return null;
     }
   }
@@ -527,16 +482,8 @@ class NextcloudCloudService extends BackupCloudService {
     if (user == null) return null;
 
     try {
-      final uri = Uri.parse(
-        '${user.serverUrl}/ocs/v1.php/cloud/users/${user.username}',
-      );
-      final response = await http.get(
-        uri,
-        headers: {
-          ...user.authHeaders,
-          'OCS-APIRequest': 'true',
-        },
-      );
+      final uri = Uri.parse('${user.serverUrl}/ocs/v1.php/cloud/users/${user.username}');
+      final response = await http.get(uri, headers: {...user.authHeaders, 'OCS-APIRequest': 'true'});
 
       if (response.statusCode != 200) return null;
 
@@ -545,10 +492,7 @@ class NextcloudCloudService extends BackupCloudService {
       final total = _extractXmlTagValue(body, 'total');
       if (used == null) return null;
 
-      return (
-        int.tryParse(used) ?? 0,
-        total != null ? int.tryParse(total) : null,
-      );
+      return (int.tryParse(used) ?? 0, total != null ? int.tryParse(total) : null);
     } catch (e) {
       AppLogger.d('NextcloudCloudService#_fetchAccountQuota failed: $e');
       return null;
@@ -560,10 +504,7 @@ class NextcloudCloudService extends BackupCloudService {
     return match?.group(1);
   }
 
-  Future<T> _executeWithRetry<T>({
-    required String methodName,
-    required Future<T> Function() operation,
-  }) async {
+  Future<T> _executeWithRetry<T>({required String methodName, required Future<T> Function() operation}) async {
     try {
       return await operation();
     } catch (e) {

@@ -1,22 +1,17 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:storypad/core/constants/app_constants.dart';
 import 'package:storypad/core/services/app_logo_service.dart';
 
 class SpSplashScreenWrapper extends StatefulWidget {
-  const SpSplashScreenWrapper({
-    super.key,
-    required this.onLoad,
-    required this.app,
-  });
+  const SpSplashScreenWrapper({super.key, required this.onLoad, required this.app});
 
   final Future<void> Function() onLoad;
   final Widget app;
 
   static void markAsLoaded(BuildContext context) {
-    context
-        .findAncestorStateOfType<_SpSplashScreenWrapperState>()
-        ?.markAsLoaded();
+    context.findAncestorStateOfType<_SpSplashScreenWrapperState>()?.markAsLoaded();
   }
 
   static Future<void> ensureInitialized() async {
@@ -27,8 +22,7 @@ class SpSplashScreenWrapper extends StatefulWidget {
   State<SpSplashScreenWrapper> createState() => _SpSplashScreenWrapperState();
 }
 
-class _SpSplashScreenWrapperState extends State<SpSplashScreenWrapper>
-    with SingleTickerProviderStateMixin {
+class _SpSplashScreenWrapperState extends State<SpSplashScreenWrapper> with SingleTickerProviderStateMixin {
   bool initialized = false;
   bool loaded = false;
 
@@ -37,9 +31,7 @@ class _SpSplashScreenWrapperState extends State<SpSplashScreenWrapper>
   // Ensure initialization is fully complete before mark as loaded and reverse splash and hide it.
   final Completer initializeCompleter = Completer();
 
-  bool get isDarkMode =>
-      WidgetsBinding.instance.platformDispatcher.platformBrightness ==
-      Brightness.dark;
+  bool get isDarkMode => WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
 
   @override
   void initState() {
@@ -55,10 +47,7 @@ class _SpSplashScreenWrapperState extends State<SpSplashScreenWrapper>
   }
 
   Future<void> load() async {
-    await Future.wait([
-      animationController.forward(),
-      widget.onLoad(),
-    ]);
+    await Future.wait([animationController.forward(), widget.onLoad()]);
 
     initializeCompleter.complete(true);
     setState(() => initialized = true);
@@ -98,10 +87,7 @@ class _SpSplashScreenWrapperState extends State<SpSplashScreenWrapper>
       logoBackgroundColor = Colors.black.withValues(alpha: 0.05);
     }
 
-    final animation = CurvedAnimation(
-      parent: animationController,
-      curve: Curves.ease,
-    );
+    final animation = CurvedAnimation(parent: animationController, curve: Curves.ease);
 
     return Container(
       color: initialized ? null : backgroundColor,
@@ -116,10 +102,7 @@ class _SpSplashScreenWrapperState extends State<SpSplashScreenWrapper>
             decoration: BoxDecoration(
               color: logoBackgroundColor,
               shape: BoxShape.circle,
-              image: DecorationImage(
-                image: kAppLogo!.asset.provider(),
-                fit: BoxFit.cover,
-              ),
+              image: DecorationImage(image: kAppLogo!.asset.provider(), fit: BoxFit.cover),
             ),
           ),
         ),

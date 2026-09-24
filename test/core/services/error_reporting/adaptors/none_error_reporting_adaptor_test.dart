@@ -9,27 +9,15 @@ void main() {
 
   group('NoneErrorReportingAdaptor', () {
     test('recordError completes without throwing', () async {
-      await expectLater(
-        adaptor.recordError(Exception('boom'), StackTrace.current),
-        completes,
-      );
+      await expectLater(adaptor.recordError(Exception('boom'), StackTrace.current), completes);
     });
 
     test('recordError with fatal: true completes without throwing', () async {
-      await expectLater(
-        adaptor.recordError(
-          Exception('fatal'),
-          StackTrace.current,
-          fatal: true,
-        ),
-        completes,
-      );
+      await expectLater(adaptor.recordError(Exception('fatal'), StackTrace.current, fatal: true), completes);
     });
 
     test('recordFlutterFatalError completes without throwing', () async {
-      final details = FlutterErrorDetails(
-        exception: Exception('flutter error'),
-      );
+      final details = FlutterErrorDetails(exception: Exception('flutter error'));
       await expectLater(adaptor.recordFlutterFatalError(details), completes);
     });
   });

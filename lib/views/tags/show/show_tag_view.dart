@@ -19,10 +19,7 @@ class ShowTagRoute extends BaseRoute {
   @override
   String get routeName => 'tags/${tag.id}';
 
-  ShowTagRoute({
-    required this.tag,
-    required this.storyViewOnly,
-  });
+  ShowTagRoute({required this.tag, required this.storyViewOnly});
 
   final TagDbModel tag;
   final bool storyViewOnly;
@@ -32,10 +29,7 @@ class ShowTagRoute extends BaseRoute {
 }
 
 class ShowTagView extends StatelessWidget {
-  const ShowTagView({
-    super.key,
-    required this.params,
-  });
+  const ShowTagView({super.key, required this.params});
 
   final ShowTagRoute params;
 

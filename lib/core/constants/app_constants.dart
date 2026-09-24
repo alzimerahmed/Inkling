@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -11,24 +12,12 @@ import 'package:storypad/core/services/remote_config/adaptors/base_remote_config
 import 'package:storypad/core/types/app_logo.dart';
 
 const String kAppName = String.fromEnvironment('APP_NAME');
-const String kRevenueCatAndroidApiKey = String.fromEnvironment(
-  'REVENUE_CAT_ANDROID_API_KEY',
-);
-const String kRevenueCatIosApiKey = String.fromEnvironment(
-  'REVENUE_CAT_IOS_API_KEY',
-);
-const String kEmailHasherSecreyKey = String.fromEnvironment(
-  'EMAIL_HASHER_SECRET_KEY',
-);
-const String kGoogleMapsAndroidApiKey = String.fromEnvironment(
-  'GOOGLE_MAPS_ANDROID_API_KEY',
-);
-const String kGoogleMapsIosApiKey = String.fromEnvironment(
-  'GOOGLE_MAPS_IOS_API_KEY',
-);
-const String kMapTileProxySecret = String.fromEnvironment(
-  'MAP_TILE_PROXY_SECRET',
-);
+const String kRevenueCatAndroidApiKey = String.fromEnvironment('REVENUE_CAT_ANDROID_API_KEY');
+const String kRevenueCatIosApiKey = String.fromEnvironment('REVENUE_CAT_IOS_API_KEY');
+const String kEmailHasherSecreyKey = String.fromEnvironment('EMAIL_HASHER_SECRET_KEY');
+const String kGoogleMapsAndroidApiKey = String.fromEnvironment('GOOGLE_MAPS_ANDROID_API_KEY');
+const String kGoogleMapsIosApiKey = String.fromEnvironment('GOOGLE_MAPS_IOS_API_KEY');
+const String kMapTileProxySecret = String.fromEnvironment('MAP_TILE_PROXY_SECRET');
 
 /// Dropbox OAuth2 "App key" (client ID) — not a secret (Dropbox's PKCE flow
 /// for public/native clients needs no client secret).
@@ -36,10 +25,7 @@ const String kDropboxAppKey = String.fromEnvironment('DROPBOX_APP_KEY');
 
 /// Base URL for static.storypad.me — serves remote config, cloud-stored assets,
 /// and the MapTiler tile proxy.
-const String kCdnBaseUrl = String.fromEnvironment(
-  'CDN_BASE_URL',
-  defaultValue: 'https://static.storypad.me',
-);
+const String kCdnBaseUrl = String.fromEnvironment('CDN_BASE_URL', defaultValue: 'https://static.storypad.me');
 
 const bool kIsCupertino = String.fromEnvironment('CUPERTINO') == 'yes';
 
@@ -128,6 +114,4 @@ const Map<int, String> kDefaultColorNamesByDay = <int, String>{
 };
 
 /// Swatches shown in the color picker, derived from [kMaterialColorsByName] to avoid duplication.
-final List<ColorSwatch> kMaterialColors = List<ColorSwatch>.from(
-  kMaterialColorsByName.values,
-);
+final List<ColorSwatch> kMaterialColors = List<ColorSwatch>.from(kMaterialColorsByName.values);

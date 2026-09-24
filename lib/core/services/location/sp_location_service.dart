@@ -5,25 +5,15 @@ import 'package:geolocator/geolocator.dart';
 import 'package:storypad/core/objects/sp_latlng.dart';
 import 'package:storypad/core/services/geocoding/sp_geocoding_service.dart';
 
-enum SpLocationFetchStatus {
-  success,
-  denied,
-  deniedForever,
-  serviceDisabled,
-  failed,
-}
+enum SpLocationFetchStatus { success, denied, deniedForever, serviceDisabled, failed }
 
 class SpLocationFetchResult {
-  const SpLocationFetchResult({
-    required this.status,
-    this.place,
-  });
+  const SpLocationFetchResult({required this.status, this.place});
 
   final SpLocationFetchStatus status;
   final PlaceDbModel? place;
 
-  bool get isSuccess =>
-      status == SpLocationFetchStatus.success && place != null;
+  bool get isSuccess => status == SpLocationFetchStatus.success && place != null;
 }
 
 /// Core location service (no app UI concerns).
@@ -70,9 +60,7 @@ class SpLocationService {
   }) async {
     try {
       if (!await Geolocator.isLocationServiceEnabled()) {
-        return const SpLocationFetchResult(
-          status: SpLocationFetchStatus.serviceDisabled,
-        );
+        return const SpLocationFetchResult(status: SpLocationFetchStatus.serviceDisabled);
       }
 
       LocationPermission permission = await Geolocator.checkPermission();
@@ -81,15 +69,11 @@ class SpLocationService {
       }
 
       if (permission == LocationPermission.deniedForever) {
-        return const SpLocationFetchResult(
-          status: SpLocationFetchStatus.deniedForever,
-        );
+        return const SpLocationFetchResult(status: SpLocationFetchStatus.deniedForever);
       }
 
       if (permission == LocationPermission.denied) {
-        return const SpLocationFetchResult(
-          status: SpLocationFetchStatus.denied,
-        );
+        return const SpLocationFetchResult(status: SpLocationFetchStatus.denied);
       }
 
       // Prefer a fresh fix, but don't hang on low signal: fall back to the
@@ -97,18 +81,14 @@ class SpLocationService {
       Position? position;
       try {
         position = await Geolocator.getCurrentPosition(
-          locationSettings: const LocationSettings(
-            accuracy: LocationAccuracy.high,
-          ),
+          locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
         ).timeout(gpsTimeout);
       } on TimeoutException {
         position = await Geolocator.getLastKnownPosition();
       }
 
       if (position == null) {
-        return const SpLocationFetchResult(
-          status: SpLocationFetchStatus.failed,
-        );
+        return const SpLocationFetchResult(status: SpLocationFetchStatus.failed);
       }
 
       final latLng = SpLatLng(position.latitude, position.longitude);
@@ -123,24 +103,16 @@ class SpLocationService {
         // only, and the label can be filled later from the map editor.
         if (place == null) {
           try {
-            place = await SpGeocodingService.systemInstance
-                .reverseGeocode(latLng)
-                .timeout(geocodeTimeout);
+            place = await SpGeocodingService.systemInstance.reverseGeocode(latLng).timeout(geocodeTimeout);
           } catch (_) {
             place = null;
           }
         }
       }
 
-      place ??= PlaceDbModel(
-        latitude: position.latitude,
-        longitude: position.longitude,
-      );
+      place ??= PlaceDbModel(latitude: position.latitude, longitude: position.longitude);
 
-      return SpLocationFetchResult(
-        status: SpLocationFetchStatus.success,
-        place: place,
-      );
+      return SpLocationFetchResult(status: SpLocationFetchStatus.success, place: place);
     } catch (_) {
       return const SpLocationFetchResult(status: SpLocationFetchStatus.failed);
     }
@@ -152,8 +124,7 @@ class SpLocationService {
   static Future<SpLatLng?> fetchLastKnownLocation() async {
     try {
       final LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever) {
+      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
         return null;
       }
 

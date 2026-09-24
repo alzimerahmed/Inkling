@@ -12,17 +12,11 @@ void main() {
     });
 
     test('logEvent with parameters completes without throwing', () async {
-      await expectLater(
-        adaptor.logEvent('test_event', parameters: {'key': 'value'}),
-        completes,
-      );
+      await expectLater(adaptor.logEvent('test_event', parameters: {'key': 'value'}), completes);
     });
 
     test('logScreenView completes without throwing', () async {
-      await expectLater(
-        adaptor.logScreenView(screenClass: 'HomeView', screenName: 'Home'),
-        completes,
-      );
+      await expectLater(adaptor.logScreenView(screenClass: 'HomeView', screenName: 'Home'), completes);
     });
 
     test('logLogin completes without throwing', () async {

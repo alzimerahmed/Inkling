@@ -5,19 +5,10 @@ import 'package:storypad/core/storages/new_badge_storage.dart';
 import 'package:storypad/core/types/new_badge.dart';
 
 class SpNewBadgeBuilder extends StatefulWidget {
-  const SpNewBadgeBuilder({
-    super.key,
-    required this.badgeKey,
-    required this.builder,
-  });
+  const SpNewBadgeBuilder({super.key, required this.badgeKey, required this.builder});
 
   final String badgeKey;
-  final Widget Function(
-    BuildContext context,
-    Widget? newBadge,
-    void Function() hideBadge,
-  )
-  builder;
+  final Widget Function(BuildContext context, Widget? newBadge, void Function() hideBadge) builder;
 
   @override
   State<SpNewBadgeBuilder> createState() => _SpNewBadgeBuilderState();
@@ -54,9 +45,7 @@ class _SpNewBadgeBuilderState extends State<SpNewBadgeBuilder> {
     return Material(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4.0),
-        side: BorderSide(
-          color: ColorScheme.of(context).bootstrap.info.color,
-        ),
+        side: BorderSide(color: ColorScheme.of(context).bootstrap.info.color),
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -65,9 +54,7 @@ class _SpNewBadgeBuilderState extends State<SpNewBadgeBuilder> {
         ),
         child: Text(
           tr('general.new'),
-          style: TextTheme.of(
-            context,
-          ).labelMedium?.copyWith(color: ColorScheme.of(context).onSurface),
+          style: TextTheme.of(context).labelMedium?.copyWith(color: ColorScheme.of(context).onSurface),
         ),
       ),
     );

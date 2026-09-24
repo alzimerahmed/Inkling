@@ -11,10 +11,7 @@ import 'package:storypad/widgets/side_items/side_items.dart';
 import 'package:storypad/widgets/sp_fade_in.dart';
 
 class RootSideBar extends StatefulWidget {
-  const RootSideBar({
-    super.key,
-    required this.rootProvider,
-  });
+  const RootSideBar({super.key, required this.rootProvider});
 
   final RootProvider rootProvider;
 
@@ -23,8 +20,7 @@ class RootSideBar extends StatefulWidget {
 }
 
 class _RootSideBarState extends State<RootSideBar> {
-  late final DevicePreferencesProvider devicePreferencesProvider = context
-      .read<DevicePreferencesProvider>();
+  late final DevicePreferencesProvider devicePreferencesProvider = context.read<DevicePreferencesProvider>();
 
   @override
   void initState() {
@@ -51,8 +47,7 @@ class _RootSideBarState extends State<RootSideBar> {
     bool bigScreen = WindowedDetectorService.isBigWindow(context);
 
     final sideBarInfo = widget.rootProvider.sideBarInfoNotifier.value;
-    final selectedRouteName =
-        widget.rootProvider.selectedRootRouteNameNotifier.value;
+    final selectedRouteName = widget.rootProvider.selectedRootRouteNameNotifier.value;
 
     bool visible = bigScreen == true;
     if (sideBarInfo.temporaryHidden == true) visible = false;
@@ -71,11 +66,7 @@ class _RootSideBarState extends State<RootSideBar> {
             mainAxisAlignment: .center,
             spacing: 12.0,
             children: sideItems.map((item) {
-              return _SideBarItem(
-                item: item,
-                selectedRouteName: selectedRouteName,
-                sideBarInfo: sideBarInfo,
-              );
+              return _SideBarItem(item: item, selectedRouteName: selectedRouteName, sideBarInfo: sideBarInfo);
             }).toList(),
           ),
         ),
@@ -85,11 +76,7 @@ class _RootSideBarState extends State<RootSideBar> {
 }
 
 class _SideBarItem extends StatelessWidget {
-  const _SideBarItem({
-    required this.item,
-    required this.selectedRouteName,
-    required this.sideBarInfo,
-  });
+  const _SideBarItem({required this.item, required this.selectedRouteName, required this.sideBarInfo});
 
   final IconButtonSideItem item;
   final String selectedRouteName;
@@ -104,27 +91,18 @@ class _SideBarItem extends StatelessWidget {
 
     if (sideBarInfo?.colorScheme != null) {
       backgroundColor = Colors.transparent;
-      foregroundColor = isSelected
-          ? sideBarInfo!.colorScheme?.primary
-          : sideBarInfo!.colorScheme?.onSurface;
+      foregroundColor = isSelected ? sideBarInfo!.colorScheme?.primary : sideBarInfo!.colorScheme?.onSurface;
     } else {
-      backgroundColor = isSelected
-          ? ColorScheme.of(context).readOnly.surface2
-          : Colors.transparent;
+      backgroundColor = isSelected ? ColorScheme.of(context).readOnly.surface2 : Colors.transparent;
       foregroundColor = isSelected
           ? ColorScheme.of(context).primary
           : ColorScheme.of(context).onSurface.withValues(alpha: 0.7);
     }
 
     Widget child = IconButton(
-      style: IconButton.styleFrom(
-        backgroundColor: backgroundColor,
-        foregroundColor: foregroundColor,
-      ),
+      style: IconButton.styleFrom(backgroundColor: backgroundColor, foregroundColor: foregroundColor),
       isSelected: isSelected,
-      onPressed: item.onTap != null
-          ? () => item.onTap!(context, item.route)
-          : null,
+      onPressed: item.onTap != null ? () => item.onTap!(context, item.route) : null,
       tooltip: item.title,
       icon: Icon(item.iconData),
       selectedIcon: Icon(item.selectedIconData),

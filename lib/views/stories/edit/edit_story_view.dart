@@ -96,10 +96,7 @@ class EditStoryRoute extends BaseRoute {
 }
 
 class EditStoryView extends StatelessWidget {
-  const EditStoryView({
-    super.key,
-    required this.params,
-  });
+  const EditStoryView({super.key, required this.params});
 
   final EditStoryRoute params;
 
@@ -112,8 +109,7 @@ class EditStoryView extends StatelessWidget {
 
         return PopScope(
           canPop: false,
-          onPopInvokedWithResult: (didPop, result) =>
-              viewModel.onPopInvokedWithResult(didPop, result, context),
+          onPopInvokedWithResult: (didPop, result) => viewModel.onPopInvokedWithResult(didPop, result, context),
           child: SpKeyboardListener(
             onKeyEvent: (event) => viewModel.handleKeyEvent(event, context),
             child: SpStoryPreferenceTheme(

@@ -12,10 +12,7 @@ import 'package:storypad/core/services/assets/asset_file_type_service.dart';
 /// describes the file that actually gets stored, and so inserting is left with
 /// nothing but the insert itself.
 class PickedMediaObject {
-  const PickedMediaObject({
-    required this.file,
-    required this.size,
-  });
+  const PickedMediaObject({required this.file, required this.size});
 
   final XFile file;
   final ui.Size? size;
@@ -39,10 +36,7 @@ class PickedMediaObject {
     try {
       codec = await ui.instantiateImageCodec(await file.readAsBytes());
       final frame = await codec.getNextFrame();
-      final size = ui.Size(
-        frame.image.width.toDouble(),
-        frame.image.height.toDouble(),
-      );
+      final size = ui.Size(frame.image.width.toDouble(), frame.image.height.toDouble());
       frame.image.dispose();
       return size;
     } catch (_) {

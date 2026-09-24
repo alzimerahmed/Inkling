@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storypad/core/databases/models/story_content_db_model.dart';
 import 'package:storypad/core/databases/models/story_db_model.dart';
@@ -6,12 +7,7 @@ import 'package:storypad/core/databases/models/story_page_db_model.dart';
 import 'package:storypad/core/services/export/export_stories_to_pdf_service.dart';
 import 'package:storypad/core/types/path_type.dart';
 
-StoryDbModel _story({
-  required int id,
-  String? title,
-  String? body,
-  DateTime? date,
-}) {
+StoryDbModel _story({required int id, String? title, String? body, DateTime? date}) {
   final entryDate = date ?? DateTime(2023, 5, 1, 9, 30);
   final content = StoryContentDbModel.create(createdAt: entryDate).copyWith(
     title: title,

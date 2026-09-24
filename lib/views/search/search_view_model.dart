@@ -15,19 +15,16 @@ import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
 import 'package:storypad/core/mixins/debounched_callback.dart';
 import 'package:storypad/core/objects/search_filter_object.dart';
 import 'package:storypad/core/services/analytics/analytics_service.dart';
+
 import 'search_view.dart';
 
-class SearchViewModel extends ChangeNotifier
-    with DisposeAwareMixin, DebounchedCallback {
+class SearchViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
   final SearchRoute params;
   final TextEditingController queryController = TextEditingController();
   final tagsChipsKey = GlobalKey<SpScrollableChoiceChipsState<TagDbModel>>();
   late final TagsProvider tagsProvider;
 
-  SearchViewModel({
-    required this.params,
-    required BuildContext context,
-  }) {
+  SearchViewModel({required this.params, required BuildContext context}) {
     tagsProvider = context.read<TagsProvider>();
     StoryDbModel.db.reindexSearchMetadata().then((_) {
       load();
@@ -36,20 +33,13 @@ class SearchViewModel extends ChangeNotifier
 
   SearchFilterObject? searchFilter;
   late final SearchFilterObject initialFilter =
-      params.initialFilter ??
-      SearchFilterObject(
-        years: {},
-        types: {PathType.docs},
-        assetId: null,
-        limit: 100,
-      );
+      params.initialFilter ?? SearchFilterObject(years: {}, types: {PathType.docs}, assetId: null, limit: 100);
 
   List<TagDbModel>? _tags;
   List<TagDbModel>? get tags => _tags;
 
   CollectionDbModel<StoryDbModel>? _stories;
-  CollectionDbModel<StoryDbModel> get stories =>
-      _stories ?? CollectionDbModel(items: []);
+  CollectionDbModel<StoryDbModel> get stories => _stories ?? CollectionDbModel(items: []);
 
   bool get hasQuery => searchFilter?.query != null;
 
@@ -59,14 +49,11 @@ class SearchViewModel extends ChangeNotifier
     // hidden in the UI and restoring them can be confusing.
     // Tags are visibly selectable, so restoring just tagIds keeps the UX clear.
     searchFilter = initialFilter.tagIds.isEmpty
-        ? await SearchFilterStorage().readObject().then(
-            (value) => initialFilter.copyWith(tagIds: value?.tagIds ?? {}),
-          )
+        ? await SearchFilterStorage().readObject().then((value) => initialFilter.copyWith(tagIds: value?.tagIds ?? {}))
         : initialFilter;
 
     _tags = [...tagsProvider.tags?.items ?? []];
-    if (_tags?.isNotEmpty == true)
-      _tags?.insert(0, TagDbModel.fromIDTitle(0, tr('general.all')));
+    if (_tags?.isNotEmpty == true) _tags?.insert(0, TagDbModel.fromIDTitle(0, tr('general.all')));
 
     await _resetTagsCount();
     notifyListeners();
@@ -79,18 +66,14 @@ class SearchViewModel extends ChangeNotifier
       String? newQuery = query.trim().isNotEmpty ? query.trim() : null;
       if (newQuery == searchFilter!.query) return;
 
-      searchFilter = searchFilter!.copyWith(
-        query: query.trim().isNotEmpty ? query.trim() : null,
-      );
+      searchFilter = searchFilter!.copyWith(query: query.trim().isNotEmpty ? query.trim() : null);
 
       await _resetTagsCount();
       notifyListeners();
 
       // query does not need to be remembered.
       SearchFilterStorage().writeObject(searchFilter!.copyWith(query: null));
-      AnalyticsService.instance.logSearch(
-        searchTerm: query.trim(),
-      );
+      AnalyticsService.instance.logSearch(searchTerm: query.trim());
     });
   }
 
@@ -128,31 +111,23 @@ class SearchViewModel extends ChangeNotifier
   // search. They compose with the query — only starred/pinned/year change.
   bool get presetStarredActive => searchFilter?.starred == true;
   bool get presetPinnedActive => searchFilter?.pinned == true;
-  bool get presetThisYearActive =>
-      searchFilter?.years.length == 1 &&
-      searchFilter!.years.first == DateTime.now().year;
+  bool get presetThisYearActive => searchFilter?.years.length == 1 && searchFilter!.years.first == DateTime.now().year;
 
   void togglePresetStarred() {
     if (searchFilter == null) return;
-    searchFilter = searchFilter!.copyWith(
-      starred: presetStarredActive ? null : true,
-    );
+    searchFilter = searchFilter!.copyWith(starred: presetStarredActive ? null : true);
     _afterPresetChange();
   }
 
   void togglePresetPinned() {
     if (searchFilter == null) return;
-    searchFilter = searchFilter!.copyWith(
-      pinned: presetPinnedActive ? null : true,
-    );
+    searchFilter = searchFilter!.copyWith(pinned: presetPinnedActive ? null : true);
     _afterPresetChange();
   }
 
   void togglePresetThisYear() {
     if (searchFilter == null) return;
-    searchFilter = searchFilter!.copyWith(
-      years: presetThisYearActive ? {} : {DateTime.now().year},
-    );
+    searchFilter = searchFilter!.copyWith(years: presetThisYearActive ? {} : {DateTime.now().year});
     _afterPresetChange();
   }
 
@@ -162,17 +137,12 @@ class SearchViewModel extends ChangeNotifier
   }
 
   bool tagSelected(TagDbModel tag) =>
-      searchFilter?.tagIds.contains(tag.id) == true ||
-      (tag.id == 0 && searchFilter?.tagIds.isEmpty == true);
+      searchFilter?.tagIds.contains(tag.id) == true || (tag.id == 0 && searchFilter?.tagIds.isEmpty == true);
 
   void toggleTag(TagDbModel tag, BuildContext context) async {
     if (searchFilter == null) return;
 
-    searchFilter = searchFilter!.copyWith(
-      tagIds: tag.id == 0 || searchFilter!.tagIds.contains(tag.id)
-          ? {}
-          : {tag.id},
-    );
+    searchFilter = searchFilter!.copyWith(tagIds: tag.id == 0 || searchFilter!.tagIds.contains(tag.id) ? {} : {tag.id});
 
     notifyListeners();
 
@@ -189,9 +159,7 @@ class SearchViewModel extends ChangeNotifier
       query: searchFilter!.query,
       tagIds: tags?.map((e) => e.id).toList() ?? [],
       years: searchFilter!.years.toList(),
-      types: searchFilter!.types.isNotEmpty
-          ? searchFilter!.types.map((e) => e.name).toList()
-          : null,
+      types: searchFilter!.types.isNotEmpty ? searchFilter!.types.map((e) => e.name).toList() : null,
     );
 
     for (TagDbModel tag in tags ?? []) {
@@ -220,11 +188,7 @@ class SearchViewModel extends ChangeNotifier
     }
   }
 
-  Future<void> onPopInvokedWithResult(
-    bool didPop,
-    dynamic result,
-    BuildContext context,
-  ) async {
+  Future<void> onPopInvokedWithResult(bool didPop, dynamic result, BuildContext context) async {
     if (didPop) return;
 
     bool shouldPop = true;
@@ -239,10 +203,7 @@ class SearchViewModel extends ChangeNotifier
       shouldPop = result == OkCancelResult.ok;
     }
 
-    if (shouldPop &&
-        context.mounted &&
-        ModalRoute.of(context)?.isCurrent == true)
-      Navigator.of(context).pop(result);
+    if (shouldPop && context.mounted && ModalRoute.of(context)?.isCurrent == true) Navigator.of(context).pop(result);
   }
 
   @override

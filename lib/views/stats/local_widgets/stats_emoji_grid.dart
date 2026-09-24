@@ -22,40 +22,26 @@ class _StatsEmojiGrid extends StatelessWidget {
     return SpSingleStateWidget<bool>.listen(
       initialValue: false,
       builder: (context, expanded, notifier) {
-        final List<EmojiStatItem> visible = expanded || !canExpand
-            ? items
-            : items.take(_kStatsTopVisible).toList();
+        final List<EmojiStatItem> visible = expanded || !canExpand ? items : items.take(_kStatsTopVisible).toList();
 
         return LayoutBuilder(
           builder: (context, constraints) {
-            final int crossAxisCount =
-                ((constraints.maxWidth + _spacing) /
-                        (_targetCellWidth + _spacing))
-                    .floor()
-                    .clamp(1, 99);
-            final double cellWidth =
-                (constraints.maxWidth - _spacing * (crossAxisCount - 1)) /
-                crossAxisCount;
+            final int crossAxisCount = ((constraints.maxWidth + _spacing) / (_targetCellWidth + _spacing))
+                .floor()
+                .clamp(1, 99);
+            final double cellWidth = (constraints.maxWidth - _spacing * (crossAxisCount - 1)) / crossAxisCount;
 
             return Wrap(
               spacing: _spacing,
               runSpacing: _spacing,
               children: [
                 for (final item in visible)
-                  SizedBox(
-                    width: cellWidth,
-                    height: cellWidth,
-                    child: _buildCell(context, item),
-                  ),
+                  SizedBox(width: cellWidth, height: cellWidth, child: _buildCell(context, item)),
                 if (canExpand)
                   SizedBox(
                     width: cellWidth,
                     height: cellWidth,
-                    child: _buildExpandCell(
-                      context,
-                      expanded: expanded,
-                      onTap: () => notifier.value = !expanded,
-                    ),
+                    child: _buildExpandCell(context, expanded: expanded, onTap: () => notifier.value = !expanded),
                   ),
               ],
             );
@@ -67,32 +53,20 @@ class _StatsEmojiGrid extends StatelessWidget {
 
   /// Trailing cell that toggles between the collapsed top-5 view and the full set,
   /// styled to sit flush with the emoji cells in the grid.
-  Widget _buildExpandCell(
-    BuildContext context, {
-    required bool expanded,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildExpandCell(BuildContext context, {required bool expanded, required VoidCallback onTap}) {
     final ColorScheme colorScheme = ColorScheme.of(context);
 
     return SpTapEffect(
       onTap: onTap,
       child: Container(
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: colorScheme.readOnly.surface3,
-          borderRadius: BorderRadius.circular(12.0),
-        ),
+        decoration: BoxDecoration(color: colorScheme.readOnly.surface3, borderRadius: BorderRadius.circular(12.0)),
         child: expanded
-            ? Icon(
-                SpIcons.expandLess,
-                color: colorScheme.onSurface.withValues(alpha: 0.6),
-              )
+            ? Icon(SpIcons.expandLess, color: colorScheme.onSurface.withValues(alpha: 0.6))
             : Text(
                 '+${items.length - _kStatsTopVisible}',
-                style: TextTheme.of(context).bodyLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
+                style: TextTheme.of(context).bodyLarge
+                    ?.copyWith(fontWeight: FontWeight.bold, color: colorScheme.onSurface.withValues(alpha: 0.6)),
               ),
       ),
     );
@@ -104,18 +78,10 @@ class _StatsEmojiGrid extends StatelessWidget {
     return SpTapEffect(
       onTap: () => onTap(item.tagId),
       child: Container(
-        decoration: BoxDecoration(
-          color: colorScheme.readOnly.surface3,
-          borderRadius: BorderRadius.circular(12.0),
-        ),
+        decoration: BoxDecoration(color: colorScheme.readOnly.surface3, borderRadius: BorderRadius.circular(12.0)),
         child: Stack(
           children: [
-            Center(
-              child: Text(
-                item.emoji,
-                style: TextTheme.of(context).headlineSmall,
-              ),
-            ),
+            Center(child: Text(item.emoji, style: TextTheme.of(context).headlineSmall)),
             Positioned(
               right: 0.0,
               bottom: 0.0,
@@ -130,11 +96,7 @@ class _StatsEmojiGrid extends StatelessWidget {
                     bottomRight: Radius.circular(12.0),
                   ),
                 ),
-                child: Text(
-                  '${item.count}',
-                  textAlign: .center,
-                  style: TextTheme.of(context).bodyMedium,
-                ),
+                child: Text('${item.count}', textAlign: .center, style: TextTheme.of(context).bodyMedium),
               ),
             ),
           ],

@@ -2,10 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:storypad/core/storages/base_object_storages/enum_storage.dart';
 
-enum FakeEnum {
-  car,
-  motor,
-}
+enum FakeEnum { car, motor }
 
 class FakeEnumStorage extends EnumStorage<FakeEnum> {
   @override

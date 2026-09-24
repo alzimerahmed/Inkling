@@ -16,10 +16,7 @@ void main() {
 
     test('is deterministic for the same verifier', () {
       const verifier = 'some-random-code-verifier-value-1234567890';
-      expect(
-        DropboxOAuthService.codeChallengeFor(verifier),
-        DropboxOAuthService.codeChallengeFor(verifier),
-      );
+      expect(DropboxOAuthService.codeChallengeFor(verifier), DropboxOAuthService.codeChallengeFor(verifier));
     });
 
     test('differs for different verifiers', () {
@@ -30,9 +27,7 @@ void main() {
     });
 
     test('never contains base64 padding or non-URL-safe characters', () {
-      final challenge = DropboxOAuthService.codeChallengeFor(
-        'any-verifier-value',
-      );
+      final challenge = DropboxOAuthService.codeChallengeFor('any-verifier-value');
       expect(challenge, isNot(contains('=')));
       expect(challenge, isNot(contains('+')));
       expect(challenge, isNot(contains('/')));

@@ -1,11 +1,7 @@
 part of '../paywall_view.dart';
 
 class _FeatureTile extends StatelessWidget {
-  const _FeatureTile({
-    required this.viewModel,
-    required this.feature,
-    super.key,
-  });
+  const _FeatureTile({required this.viewModel, required this.feature, super.key});
 
   final PaywallViewModel viewModel;
   final PaywallFeatureObject feature;
@@ -29,28 +25,18 @@ class _FeatureTile extends StatelessWidget {
           ),
         ),
         ListTile(
-          leading: SpSettingIconBadge(
-            weekday: feature.weekdayColor,
-            icon: feature.iconData,
-          ),
+          leading: SpSettingIconBadge(weekday: feature.weekdayColor, icon: feature.iconData),
           title: Text(feature.title),
           subtitle: Text(feature.subtitle),
           trailing: const Icon(SpIcons.keyboardRight),
           contentPadding: const EdgeInsets.symmetric(horizontal: 16.0).add(
-            EdgeInsets.only(
-              left: MediaQuery.of(context).padding.left,
-              right: MediaQuery.of(context).padding.right,
-            ),
+            EdgeInsets.only(left: MediaQuery.of(context).padding.left, right: MediaQuery.of(context).padding.right),
           ),
           onTap: () async {
             final nextAction = await SpPaywallFeaturesSheet(
               params: PaywallFeaturesRoute(
                 features: viewModel.features ?? [],
-                initialPage:
-                    viewModel.features?.indexWhere(
-                      (element) => element.type == feature.type,
-                    ) ??
-                    0,
+                initialPage: viewModel.features?.indexWhere((element) => element.type == feature.type) ?? 0,
               ),
             ).show(context: context);
 
@@ -72,8 +58,5 @@ class PaywallFeatureNextAction {
   final Future<void> Function(BuildContext) action;
   final PaywallFeatureObject? focusFeature;
 
-  PaywallFeatureNextAction({
-    required this.action,
-    required this.focusFeature,
-  });
+  PaywallFeatureNextAction({required this.action, required this.focusFeature});
 }

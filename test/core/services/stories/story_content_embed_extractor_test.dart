@@ -28,9 +28,7 @@ void main() {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
-              'insert': {
-                'media': 'images/12345.jpg',
-              },
+              'insert': {'media': 'images/12345.jpg'},
             },
           ]),
         ]);
@@ -44,14 +42,10 @@ void main() {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
-              'insert': {
-                'media': 'images/111.jpg',
-              },
+              'insert': {'media': 'images/111.jpg'},
             },
             {
-              'insert': {
-                'media': 'images/222.png',
-              },
+              'insert': {'media': 'images/222.png'},
             },
           ]),
         ]);
@@ -65,16 +59,12 @@ void main() {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
-              'insert': {
-                'media': 'images/100.jpg',
-              },
+              'insert': {'media': 'images/100.jpg'},
             },
           ]),
           _createPageWithBody([
             {
-              'insert': {
-                'media': 'images/200.jpg',
-              },
+              'insert': {'media': 'images/200.jpg'},
             },
           ]),
         ]);
@@ -88,19 +78,13 @@ void main() {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
-              'insert': {
-                'media': 'images/111.jpg',
-              },
+              'insert': {'media': 'images/111.jpg'},
             },
             {
-              'insert': {
-                'audio': 'audio/222.m4a',
-              },
+              'insert': {'audio': 'audio/222.m4a'},
             },
             {
-              'insert': {
-                'media': 'images/333.jpg',
-              },
+              'insert': {'media': 'images/333.jpg'},
             },
           ]),
         ]);
@@ -115,14 +99,10 @@ void main() {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
-              'insert': {
-                'media': 'https://example.com/image.jpg',
-              },
+              'insert': {'media': 'https://example.com/image.jpg'},
             },
             {
-              'insert': {
-                'media': 'images/123.jpg',
-              },
+              'insert': {'media': 'images/123.jpg'},
             },
           ]),
         ]);
@@ -141,9 +121,7 @@ void main() {
               },
             },
             {
-              'insert': {
-                'media': 'images/456.jpg',
-              },
+              'insert': {'media': 'images/456.jpg'},
             },
           ]),
         ]);
@@ -158,9 +136,7 @@ void main() {
           _createPageWithBody([
             {'text': 'just text'},
             {
-              'insert': {
-                'media': 'images/123.jpg',
-              },
+              'insert': {'media': 'images/123.jpg'},
             },
           ]),
         ]);
@@ -173,13 +149,9 @@ void main() {
       test('ignores nodes with insert that is not a map', () {
         final content = _createContentWithPages([
           _createPageWithBody([
+            {'insert': 'just a string'},
             {
-              'insert': 'just a string',
-            },
-            {
-              'insert': {
-                'media': 'images/456.jpg',
-              },
+              'insert': {'media': 'images/456.jpg'},
             },
           ]),
         ]);
@@ -194,9 +166,7 @@ void main() {
           _createPageWithBody([
             'just a string',
             {
-              'insert': {
-                'media': 'images/789.jpg',
-              },
+              'insert': {'media': 'images/789.jpg'},
             },
           ]),
         ]);
@@ -207,11 +177,7 @@ void main() {
       });
 
       test('handles page with null body', () {
-        final page = StoryPageDbModel(
-          id: 1,
-          title: 'page1',
-          body: null,
-        );
+        final page = StoryPageDbModel(id: 1, title: 'page1', body: null);
 
         final content = StoryContentDbModel(
           id: 1,
@@ -234,61 +200,15 @@ void main() {
         expect(result, isEmpty);
       });
 
-      test(
-        'handles multiple embed types in single insert (only extracts images)',
-        () {
-          final content = _createContentWithPages([
-            _createPageWithBody([
-              {
-                'insert': {
-                  'text': 'Some text',
-                  'media': 'images/111.jpg',
-                  'audio': 'audio/222.m4a',
-                  'attributes': {'bold': true},
-                },
-              },
-            ]),
-          ]);
-
-          final result = StoryContentEmbedExtractor.media(content);
-
-          expect(result, ['images/111.jpg']);
-        },
-      );
-
-      test('handles complex mixed content', () {
+      test('handles multiple embed types in single insert (only extracts images)', () {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
               'insert': {
-                'text': 'Introduction text',
-              },
-            },
-            {
-              'insert': {
-                'media': 'images/100.jpg',
-              },
-            },
-            {
-              'insert': {
-                'audio': 'audio/200.m4a',
-              },
-            },
-            {
-              'insert': {
-                'media': 'images/300.jpg',
-              },
-            },
-          ]),
-          _createPageWithBody([
-            {
-              'insert': {
-                'media': 'https://external.com/img.png',
-              },
-            },
-            {
-              'insert': {
-                'media': 'images/400.jpg',
+                'text': 'Some text',
+                'media': 'images/111.jpg',
+                'audio': 'audio/222.m4a',
+                'attributes': {'bold': true},
               },
             },
           ]),
@@ -296,55 +216,68 @@ void main() {
 
         final result = StoryContentEmbedExtractor.media(content);
 
-        expect(result, [
-          'images/100.jpg',
-          'images/300.jpg',
-          'https://external.com/img.png',
-          'images/400.jpg',
+        expect(result, ['images/111.jpg']);
+      });
+
+      test('handles complex mixed content', () {
+        final content = _createContentWithPages([
+          _createPageWithBody([
+            {
+              'insert': {'text': 'Introduction text'},
+            },
+            {
+              'insert': {'media': 'images/100.jpg'},
+            },
+            {
+              'insert': {'audio': 'audio/200.m4a'},
+            },
+            {
+              'insert': {'media': 'images/300.jpg'},
+            },
+          ]),
+          _createPageWithBody([
+            {
+              'insert': {'media': 'https://external.com/img.png'},
+            },
+            {
+              'insert': {'media': 'images/400.jpg'},
+            },
+          ]),
         ]);
+
+        final result = StoryContentEmbedExtractor.media(content);
+
+        expect(result, ['images/100.jpg', 'images/300.jpg', 'https://external.com/img.png', 'images/400.jpg']);
       });
 
       test('preserves order of extracted images', () {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
-              'insert': {
-                'media': 'images/999.jpg',
-              },
+              'insert': {'media': 'images/999.jpg'},
             },
             {
-              'insert': {
-                'media': 'images/111.jpg',
-              },
+              'insert': {'media': 'images/111.jpg'},
             },
             {
-              'insert': {
-                'media': 'images/222.jpg',
-              },
+              'insert': {'media': 'images/222.jpg'},
             },
           ]),
         ]);
 
         final result = StoryContentEmbedExtractor.media(content);
 
-        expect(
-          result,
-          orderedEquals(['images/999.jpg', 'images/111.jpg', 'images/222.jpg']),
-        );
+        expect(result, orderedEquals(['images/999.jpg', 'images/111.jpg', 'images/222.jpg']));
       });
 
       test('filters out empty string embed values', () {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
-              'insert': {
-                'media': '',
-              },
+              'insert': {'media': ''},
             },
             {
-              'insert': {
-                'media': 'images/123.jpg',
-              },
+              'insert': {'media': 'images/123.jpg'},
             },
           ]),
         ]);
@@ -358,9 +291,7 @@ void main() {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
-              'insert': {
-                'image': 'images/legacy.jpg',
-              },
+              'insert': {'image': 'images/legacy.jpg'},
             },
           ]),
         ]);
@@ -370,39 +301,27 @@ void main() {
         expect(result, ['images/legacy.jpg']);
       });
 
-      test(
-        'preserves order across mixed legacy `image` and current `media` embeds on one page',
-        () {
-          // A page can genuinely mix both keys: an untouched legacy embed next
-          // to one that was edited (and so upgraded to `media`).
-          final content = _createContentWithPages([
-            _createPageWithBody([
-              {
-                'insert': {
-                  'image': 'images/1.jpg',
-                },
-              },
-              {
-                'insert': {
-                  'media': 'images/2.jpg',
-                },
-              },
-              {
-                'insert': {
-                  'image': 'videos/3.mp4',
-                },
-              },
-            ]),
-          ]);
+      test('preserves order across mixed legacy `image` and current `media` embeds on one page', () {
+        // A page can genuinely mix both keys: an untouched legacy embed next
+        // to one that was edited (and so upgraded to `media`).
+        final content = _createContentWithPages([
+          _createPageWithBody([
+            {
+              'insert': {'image': 'images/1.jpg'},
+            },
+            {
+              'insert': {'media': 'images/2.jpg'},
+            },
+            {
+              'insert': {'image': 'videos/3.mp4'},
+            },
+          ]),
+        ]);
 
-          final result = StoryContentEmbedExtractor.media(content);
+        final result = StoryContentEmbedExtractor.media(content);
 
-          expect(
-            result,
-            orderedEquals(['images/1.jpg', 'images/2.jpg', 'videos/3.mp4']),
-          );
-        },
-      );
+        expect(result, orderedEquals(['images/1.jpg', 'images/2.jpg', 'videos/3.mp4']));
+      });
     });
 
     group('audio()', () {
@@ -428,9 +347,7 @@ void main() {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
-              'insert': {
-                'audio': 'audio/12345.m4a',
-              },
+              'insert': {'audio': 'audio/12345.m4a'},
             },
           ]),
         ]);
@@ -444,14 +361,10 @@ void main() {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
-              'insert': {
-                'audio': 'audio/111.m4a',
-              },
+              'insert': {'audio': 'audio/111.m4a'},
             },
             {
-              'insert': {
-                'audio': 'audio/222.m4a',
-              },
+              'insert': {'audio': 'audio/222.m4a'},
             },
           ]),
         ]);
@@ -465,19 +378,13 @@ void main() {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
-              'insert': {
-                'audio': 'audio/111.m4a',
-              },
+              'insert': {'audio': 'audio/111.m4a'},
             },
             {
-              'insert': {
-                'media': 'images/222.jpg',
-              },
+              'insert': {'media': 'images/222.jpg'},
             },
             {
-              'insert': {
-                'audio': 'audio/333.m4a',
-              },
+              'insert': {'audio': 'audio/333.m4a'},
             },
           ]),
         ]);
@@ -499,74 +406,49 @@ void main() {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
-              'insert': {
-                'media': 'images/100.jpg',
-              },
+              'insert': {'media': 'images/100.jpg'},
             },
             {
-              'insert': {
-                'media': 'videos/200.mp4',
-              },
+              'insert': {'media': 'videos/200.mp4'},
             },
             {
-              'insert': {
-                'media': 'images/300.jpg',
-              },
+              'insert': {'media': 'images/300.jpg'},
             },
             {
-              'insert': {
-                'media': 'videos/400.mp4',
-              },
+              'insert': {'media': 'videos/400.mp4'},
             },
           ]),
         ]);
 
-        expect(StoryContentEmbedExtractor.photos(content), [
-          'images/100.jpg',
-          'images/300.jpg',
-        ]);
-        expect(StoryContentEmbedExtractor.videos(content), [
-          'videos/200.mp4',
-          'videos/400.mp4',
-        ]);
+        expect(StoryContentEmbedExtractor.photos(content), ['images/100.jpg', 'images/300.jpg']);
+        expect(StoryContentEmbedExtractor.videos(content), ['videos/200.mp4', 'videos/400.mp4']);
       });
 
       test('media() still returns the union (photos and videos together)', () {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
-              'insert': {
-                'media': 'images/1.jpg',
-              },
+              'insert': {'media': 'images/1.jpg'},
             },
             {
-              'insert': {
-                'media': 'videos/2.mp4',
-              },
+              'insert': {'media': 'videos/2.mp4'},
             },
           ]),
         ]);
 
-        expect(StoryContentEmbedExtractor.media(content), [
-          'images/1.jpg',
-          'videos/2.mp4',
-        ]);
+        expect(StoryContentEmbedExtractor.media(content), ['images/1.jpg', 'videos/2.mp4']);
       });
 
       test('external URLs are treated as photos, not videos', () {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
-              'insert': {
-                'media': 'https://example.com/image.jpg',
-              },
+              'insert': {'media': 'https://example.com/image.jpg'},
             },
           ]),
         ]);
 
-        expect(StoryContentEmbedExtractor.photos(content), [
-          'https://example.com/image.jpg',
-        ]);
+        expect(StoryContentEmbedExtractor.photos(content), ['https://example.com/image.jpg']);
         expect(StoryContentEmbedExtractor.videos(content), isEmpty);
       });
     });
@@ -581,42 +463,26 @@ void main() {
         final content = _createContentWithPages([
           _createPageWithBody([
             {
-              'insert': {
-                'media': 'images/100.jpg',
-              },
+              'insert': {'media': 'images/100.jpg'},
             },
             {
-              'insert': {
-                'audio': 'audio/200.m4a',
-              },
+              'insert': {'audio': 'audio/200.m4a'},
             },
             {
-              'insert': {
-                'media': 'videos/250.mp4',
-              },
+              'insert': {'media': 'videos/250.mp4'},
             },
             {
-              'insert': {
-                'media': 'images/300.jpg',
-              },
+              'insert': {'media': 'images/300.jpg'},
             },
             {
-              'insert': {
-                'audio': 'audio/400.m4a',
-              },
+              'insert': {'audio': 'audio/400.m4a'},
             },
           ]),
         ]);
 
         final result = StoryContentEmbedExtractor.all(content);
 
-        expect(result, [
-          'images/100.jpg',
-          'images/300.jpg',
-          'videos/250.mp4',
-          'audio/200.m4a',
-          'audio/400.m4a',
-        ]);
+        expect(result, ['images/100.jpg', 'images/300.jpg', 'videos/250.mp4', 'audio/200.m4a', 'audio/400.m4a']);
       });
     });
   });
@@ -636,9 +502,5 @@ StoryContentDbModel _createContentWithPages(List<StoryPageDbModel> pages) {
 
 /// Helper to create a StoryPageDbModel with body content
 StoryPageDbModel _createPageWithBody(List<dynamic> body) {
-  return StoryPageDbModel(
-    id: DateTime.now().millisecondsSinceEpoch,
-    title: 'page-test',
-    body: body,
-  );
+  return StoryPageDbModel(id: DateTime.now().millisecondsSinceEpoch, title: 'page-test', body: body);
 }

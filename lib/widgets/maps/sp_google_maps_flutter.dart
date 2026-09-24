@@ -8,12 +8,11 @@ import 'package:storypad/core/objects/sp_latlng_bounds.dart';
 import 'package:storypad/widgets/maps/map_types.dart';
 import 'package:storypad/widgets/maps/sp_map_controller.dart';
 
-typedef SpGoogleMapMarkerIconBuilder<T> =
-    Future<BitmapDescriptor> Function(
-      BuildContext context,
-      SpMapMarker<T> marker,
-      double pixelRatio,
-    );
+typedef SpGoogleMapMarkerIconBuilder<T> = Future<BitmapDescriptor> Function(
+  BuildContext context,
+  SpMapMarker<T> marker,
+  double pixelRatio,
+);
 
 class SpGoogleMap<T> extends StatefulWidget {
   const SpGoogleMap({
@@ -51,12 +50,9 @@ class SpGoogleMap<T> extends StatefulWidget {
   State<SpGoogleMap<T>> createState() => _SpGoogleMapState<T>();
 }
 
-class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
-    with DebounchedCallback {
+class _SpGoogleMapState<T> extends State<SpGoogleMap<T>> with DebounchedCallback {
   // Cluster only show when there are at least 4 markers.
-  static const ClusterManagerId _clusterManagerId = ClusterManagerId(
-    'sp_map_markers',
-  );
+  static const ClusterManagerId _clusterManagerId = ClusterManagerId('sp_map_markers');
 
   /// How many freshly drawn icons to accumulate before pushing them to the
   /// map, trading a few extra rebuilds for pins that appear progressively.
@@ -78,16 +74,14 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
   /// Drawn icons keyed by [SpMapMarker.iconCacheKey] — by appearance, not by
   /// marker, so panning back over a pin reuses its bitmap and identical
   /// placeholder pins share one.
-  final Map<String, BitmapDescriptor> _iconByCacheKey =
-      <String, BitmapDescriptor>{};
+  final Map<String, BitmapDescriptor> _iconByCacheKey = <String, BitmapDescriptor>{};
 
   /// What each pin is showing *right now*, keyed by marker. Answers a
   /// different question from [_iconByCacheKey]: when a pin's appearance
   /// changes (its photo finished loading) the new bitmap isn't drawn yet, and
   /// without something to fall back on the pin would blink off the map until
   /// it is. Holding the old one keeps the swap to a single visible change.
-  final Map<String, BitmapDescriptor> _displayedIconByMarkerId =
-      <String, BitmapDescriptor>{};
+  final Map<String, BitmapDescriptor> _displayedIconByMarkerId = <String, BitmapDescriptor>{};
 
   @override
   void initState() {
@@ -97,10 +91,7 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
     _currentZoom = widget.initialCamera.zoom;
 
     _clusterManagers = <ClusterManagerId, ClusterManager>{
-      _clusterManagerId: ClusterManager(
-        clusterManagerId: _clusterManagerId,
-        onClusterTap: _handleClusterTap,
-      ),
+      _clusterManagerId: ClusterManager(clusterManagerId: _clusterManagerId, onClusterTap: _handleClusterTap),
     };
     _attachMapController();
   }
@@ -114,8 +105,7 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
       _attachMapController();
     }
     final bool markerIconBuilderModeChanged =
-        (oldWidget.markerIconBuilder == null) !=
-        (widget.markerIconBuilder == null);
+        (oldWidget.markerIconBuilder == null) != (widget.markerIconBuilder == null);
     if (oldWidget.markers != widget.markers || markerIconBuilderModeChanged) {
       _prepareMarkerIconsIfNeeded(force: markerIconBuilderModeChanged);
     }
@@ -163,9 +153,7 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
       onCameraIdle: widget.onCameraIdle == null
           ? null
           : () {
-              widget.onCameraIdle!(
-                SpLatLng(_currentCenter.latitude, _currentCenter.longitude),
-              );
+              widget.onCameraIdle!(SpLatLng(_currentCenter.latitude, _currentCenter.longitude));
             },
       onCameraMove: (CameraPosition position) {
         _currentCenter = position.target;
@@ -206,19 +194,13 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
   }
 
   void _attachMapController() {
-    widget.mapController.attach(
-      zoomBy: _zoomBy,
-      animateTo: _animateTo,
-      resetRotation: _resetRotation,
-    );
+    widget.mapController.attach(zoomBy: _zoomBy, animateTo: _animateTo, resetRotation: _resetRotation);
   }
 
   void _prepareMarkerIconsIfNeeded({bool force = false}) {
     final double pixelRatio = MediaQuery.devicePixelRatioOf(context);
     final String markerSignature = _buildMarkerSignature();
-    if (!force &&
-        _preparedPixelRatio == pixelRatio &&
-        _preparedMarkerSignature == markerSignature) {
+    if (!force && _preparedPixelRatio == pixelRatio && _preparedMarkerSignature == markerSignature) {
       return;
     }
 
@@ -239,8 +221,7 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
     // first async gap.
     _emitMarkers();
 
-    final SpGoogleMapMarkerIconBuilder<T>? markerIconBuilder =
-        widget.markerIconBuilder;
+    final SpGoogleMapMarkerIconBuilder<T>? markerIconBuilder = widget.markerIconBuilder;
     if (markerIconBuilder == null) return;
 
     unawaited(
@@ -271,11 +252,7 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
       final String cacheKey = marker.iconCacheKey ?? marker.id;
       if (_iconByCacheKey.containsKey(cacheKey)) continue;
 
-      final BitmapDescriptor icon = await markerIconBuilder(
-        context,
-        marker,
-        pixelRatio,
-      );
+      final BitmapDescriptor icon = await markerIconBuilder(context, marker, pixelRatio);
       if (!mounted) return;
 
       _iconByCacheKey[cacheKey] = icon;
@@ -303,8 +280,7 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
     if (_iconByCacheKey.length <= _maxCachedIcons) return;
 
     final Set<String> inUse = <String>{
-      for (final SpMapMarker<T> marker in widget.markers)
-        marker.iconCacheKey ?? marker.id,
+      for (final SpMapMarker<T> marker in widget.markers) marker.iconCacheKey ?? marker.id,
     };
 
     for (final String key in _iconByCacheKey.keys.toList()) {
@@ -318,9 +294,7 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
     if (!mounted) return;
 
     final Map<MarkerId, Marker> markers = _buildGoogleMarkers();
-    _displayedIconByMarkerId.removeWhere(
-      (markerId, _) => !markers.containsKey(MarkerId(markerId)),
-    );
+    _displayedIconByMarkerId.removeWhere((markerId, _) => !markers.containsKey(MarkerId(markerId)));
     setState(() {
       _markers
         ..clear()
@@ -342,8 +316,7 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
       // Falling back to whatever this pin already shows covers the gap while
       // its next appearance is still being drawn.
       final BitmapDescriptor? icon =
-          _iconByCacheKey[marker.iconCacheKey ?? marker.id] ??
-          _displayedIconByMarkerId[marker.id];
+          _iconByCacheKey[marker.iconCacheKey ?? marker.id] ?? _displayedIconByMarkerId[marker.id];
 
       // Never drawn at all: leave it off the map rather than flashing Google's
       // default red pin where a photo is about to land. Pins appear as their
@@ -358,10 +331,7 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
         icon: icon ?? BitmapDescriptor.defaultMarker,
         anchor: marker.anchor,
         consumeTapEvents: widget.onMarkerTap != null,
-        infoWindow: InfoWindow(
-          title: marker.title,
-          snippet: marker.snippet,
-        ),
+        infoWindow: InfoWindow(title: marker.title, snippet: marker.snippet),
         onTap: () => widget.onMarkerTap?.call(marker),
       );
     }
@@ -392,8 +362,7 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
   }
 
   Future<void> _handleClusterTap(Cluster cluster) async {
-    final ValueChanged<List<SpMapMarker<T>>>? onClusterTap =
-        widget.onClusterTap;
+    final ValueChanged<List<SpMapMarker<T>>>? onClusterTap = widget.onClusterTap;
     if (onClusterTap != null) {
       final List<SpMapMarker<T>> clusterMarkers = widget.markers
           .where((marker) => _latLngWithinBounds(cluster.bounds, marker.point))
@@ -408,15 +377,11 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
     if (controller == null) return;
 
     try {
-      await controller.animateCamera(
-        CameraUpdate.newLatLngBounds(cluster.bounds, 84.0),
-      );
+      await controller.animateCamera(CameraUpdate.newLatLngBounds(cluster.bounds, 84.0));
       return;
     } catch (_) {
       final double nextZoom = (_currentZoom + 2.0).clamp(3.0, 19.0).toDouble();
-      await controller.animateCamera(
-        CameraUpdate.newLatLngZoom(cluster.position, nextZoom),
-      );
+      await controller.animateCamera(CameraUpdate.newLatLngZoom(cluster.position, nextZoom));
     }
   }
 
@@ -428,12 +393,7 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
     await controller.animateCamera(CameraUpdate.zoomTo(nextZoom));
   }
 
-  Future<void> _animateTo(
-    double latitude,
-    double longitude, {
-    double? zoom,
-    double? bearing,
-  }) async {
+  Future<void> _animateTo(double latitude, double longitude, {double? zoom, double? bearing}) async {
     final GoogleMapController? controller = _googleMapController;
     if (controller == null) return;
 
@@ -455,13 +415,7 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
     if (controller == null) return;
 
     await controller.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: _currentCenter,
-          zoom: _currentZoom,
-          bearing: 0.0,
-        ),
-      ),
+      CameraUpdate.newCameraPosition(CameraPosition(target: _currentCenter, zoom: _currentZoom, bearing: 0.0)),
     );
   }
 
@@ -481,9 +435,7 @@ class _SpGoogleMapState<T> extends State<SpGoogleMap<T>>
   bool _latLngWithinBounds(LatLngBounds bounds, SpLatLng point) {
     final double latitude = point.latitude;
     final double longitude = point.longitude;
-    final bool latitudeWithin =
-        latitude >= bounds.southwest.latitude &&
-        latitude <= bounds.northeast.latitude;
+    final bool latitudeWithin = latitude >= bounds.southwest.latitude && latitude <= bounds.northeast.latitude;
 
     final double west = bounds.southwest.longitude;
     final double east = bounds.northeast.longitude;

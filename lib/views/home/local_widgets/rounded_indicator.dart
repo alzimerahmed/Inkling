@@ -6,11 +6,9 @@ class _RoundedIndicator extends Decoration {
     this.insets = EdgeInsets.zero,
   });
 
-  _RoundedIndicator.simple({
-    double height = 40,
-    Color color = Colors.white,
-  }) : borderSide = BorderSide(width: height, color: color),
-       insets = const EdgeInsets.all(1);
+  _RoundedIndicator.simple({double height = 40, Color color = Colors.white})
+    : borderSide = BorderSide(width: height, color: color),
+      insets = const EdgeInsets.all(1);
 
   final BorderSide borderSide;
   final EdgeInsetsGeometry insets;
@@ -44,12 +42,7 @@ class _RoundedIndicator extends Decoration {
 
   Rect _indicatorRectFor(Rect rect, TextDirection textDirection) {
     final Rect indicator = insets.resolve(textDirection).deflateRect(rect);
-    return Rect.fromLTWH(
-      indicator.left,
-      indicator.bottom - borderSide.width,
-      indicator.width,
-      borderSide.width,
-    );
+    return Rect.fromLTWH(indicator.left, indicator.bottom - borderSide.width, indicator.width, borderSide.width);
   }
 
   @override
@@ -59,10 +52,7 @@ class _RoundedIndicator extends Decoration {
 }
 
 class _RoundedPainter extends BoxPainter {
-  _RoundedPainter(
-    this.decoration,
-    super.onChanged,
-  );
+  _RoundedPainter(this.decoration, super.onChanged);
 
   final _RoundedIndicator decoration;
 
@@ -75,9 +65,7 @@ class _RoundedPainter extends BoxPainter {
     final Paint paint;
 
     paint = decoration.borderSide.toPaint()..strokeCap = StrokeCap.round;
-    final Rect indicator = decoration
-        ._indicatorRectFor(rect, textDirection)
-        .deflate(decoration.borderSide.width / 2.0);
+    final Rect indicator = decoration._indicatorRectFor(rect, textDirection).deflate(decoration.borderSide.width / 2.0);
 
     canvas.drawLine(indicator.bottomLeft, indicator.bottomRight, paint);
   }

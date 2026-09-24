@@ -18,9 +18,7 @@ class FirebaseInitializer {
       kFirebaseAvailable = true;
     } catch (error) {
       kFirebaseAvailable = false;
-      debugPrint(
-        'FirebaseInitializer: Firebase.initializeApp() failed or timed out: $error',
-      );
+      debugPrint('FirebaseInitializer: Firebase.initializeApp() failed or timed out: $error');
     }
   }
 }

@@ -8,15 +8,10 @@ class _AppLocksContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AppLockProvider>(context);
-    final biometricTile = buildBiometricTile(
-      context: context,
-      provider: provider,
-    );
+    final biometricTile = buildBiometricTile(context: context, provider: provider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(tr("page.app_lock.title")),
-      ),
+      appBar: AppBar(title: Text(tr("page.app_lock.title"))),
       body: ListView(
         children: [
           const SizedBox(height: 8.0),
@@ -24,12 +19,7 @@ class _AppLocksContent extends StatelessWidget {
             secondary: const Icon(SpIcons.lock),
             title: Text(tr('general.pin')),
             subtitle: provider.appLock.pin != null
-                ? Text(
-                    List.generate(
-                      provider.appLock.pin!.length,
-                      (e) => "*",
-                    ).join(),
-                  )
+                ? Text(List.generate(provider.appLock.pin!.length, (e) => "*").join())
                 : null,
             value: provider.appLock.pin != null,
             onChanged: (value) => provider.togglePIN(context),
@@ -49,10 +39,7 @@ class _AppLocksContent extends StatelessWidget {
     );
   }
 
-  Widget? buildBiometricTile({
-    required BuildContext context,
-    required AppLockProvider provider,
-  }) {
+  Widget? buildBiometricTile({required BuildContext context, required AppLockProvider provider}) {
     if (provider.localAuth.enrolledBothFingerprintAndFace) {
       return SwitchListTile.adaptive(
         secondary: const Icon(SpIcons.biometrics),

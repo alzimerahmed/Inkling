@@ -14,11 +14,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 /// it's the corrective action for the state this very setting produces, and it
 /// only exists while there's something to correct.
 class MediaSyncTile extends StatefulWidget {
-  const MediaSyncTile({
-    super.key,
-    required this.currentMediaSync,
-    required this.onChanged,
-  });
+  const MediaSyncTile({super.key, required this.currentMediaSync, required this.onChanged});
 
   final MediaSyncOption currentMediaSync;
   final void Function(MediaSyncOption mediaSync) onChanged;
@@ -65,10 +61,7 @@ class _MediaSyncTileState extends State<MediaSyncTile> {
           subtitle: Text(_buildSubtitle(context, provider)),
           trailing: hasPending ? _buildSyncNowButton(context, provider) : null,
           onTap: () {
-            SpMediaSyncSheet(
-              mediaSync: widget.currentMediaSync,
-              onChanged: widget.onChanged,
-            ).show(context: context);
+            SpMediaSyncSheet(mediaSync: widget.currentMediaSync, onChanged: widget.onChanged).show(context: context);
           },
         );
       },

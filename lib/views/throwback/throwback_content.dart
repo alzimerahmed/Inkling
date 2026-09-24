@@ -15,11 +15,7 @@ class _ThrowbackContent extends StatelessWidget {
         child: const Icon(SpIcons.newStory),
         onPressed: () => viewModel.goToNewPage(context),
       ),
-      body: SpStoryList.withQuery(
-        disableMultiEdit: true,
-        watch: viewModel,
-        filter: viewModel.filter,
-      ),
+      body: SpStoryList.withQuery(disableMultiEdit: true, watch: viewModel, filter: viewModel.filter),
     );
   }
 
@@ -38,12 +34,7 @@ class _ThrowbackContent extends StatelessWidget {
             spacing: 8.0,
             children: [
               const Icon(SpIcons.question),
-              Expanded(
-                child: Text(
-                  tr('page.throwback.question'),
-                  style: TextTheme.of(context).bodyMedium,
-                ),
-              ),
+              Expanded(child: Text(tr('page.throwback.question'), style: TextTheme.of(context).bodyMedium)),
             ],
           ),
         ),
@@ -57,12 +48,7 @@ class _ThrowbackContent extends StatelessWidget {
         TextSpan(
           text: "${tr('general.throwback')} ",
           style: TextTheme.of(context).titleLarge,
-          children: [
-            const WidgetSpan(
-              child: Icon(Icons.history_outlined),
-              alignment: PlaceholderAlignment.middle,
-            ),
-          ],
+          children: [const WidgetSpan(child: Icon(Icons.history_outlined), alignment: PlaceholderAlignment.middle)],
         ),
       ),
     );

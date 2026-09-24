@@ -5,9 +5,7 @@ class RelaxSoundsTimerService {
 
   bool get ended => _stopIn == null || _stopIn?.inSeconds == 0;
 
-  RelaxSoundsTimerService({
-    required this.onEnded,
-  });
+  RelaxSoundsTimerService({required this.onEnded});
 
   Timer? _stopTimer;
   Duration? _stopIn;

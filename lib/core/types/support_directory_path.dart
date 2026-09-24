@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'dart:io';
+
 import 'package:storypad/core/constants/app_constants.dart';
 
 enum SupportDirectoryPath {
@@ -12,8 +13,7 @@ enum SupportDirectoryPath {
   backups,
   export_assets,
   downloaded_from_firestore,
-  map_markers,
-  ;
+  map_markers;
 
   String get relativePath {
     switch (this) {

@@ -14,9 +14,7 @@ import 'package:storypad/widgets/sp_voice_player.dart';
 /// await SpVoicePlaybackSheet(asset: voiceAsset).show(context);
 /// ```
 class SpVoicePlaybackSheet extends BaseBottomSheet {
-  const SpVoicePlaybackSheet({
-    required this.asset,
-  });
+  const SpVoicePlaybackSheet({required this.asset});
 
   final AssetDbModel asset;
 
@@ -28,18 +26,12 @@ class SpVoicePlaybackSheet extends BaseBottomSheet {
 
   @override
   Widget build(BuildContext context, double bottomPadding) {
-    return _VoicePlaybackContent(
-      asset: asset,
-      bottomPadding: bottomPadding,
-    );
+    return _VoicePlaybackContent(asset: asset, bottomPadding: bottomPadding);
   }
 }
 
 class _VoicePlaybackContent extends StatelessWidget {
-  const _VoicePlaybackContent({
-    required this.asset,
-    required this.bottomPadding,
-  });
+  const _VoicePlaybackContent({required this.asset, required this.bottomPadding});
 
   final AssetDbModel asset;
   final double bottomPadding;
@@ -48,27 +40,17 @@ class _VoicePlaybackContent extends StatelessWidget {
     final signedInServices = context.read<BackupProvider>().signedInServices;
     final downloader = BackupAssetDownloaderService();
 
-    return downloader.downloadAsset(
-      asset: asset,
-      signedInServices: signedInServices,
-    );
+    return downloader.downloadAsset(asset: asset, signedInServices: signedInServices);
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(
-        left: 16.0,
-        right: 16.0,
-        top: 16.0,
-        bottom: bottomPadding + 16.0,
-      ),
+      padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: bottomPadding + 16.0),
       child: SpVoicePlayer.network(
         autoplay: true,
         onDownloadRequested: () => _downloadAudio(context),
-        initialDuration: asset.durationInMs != null
-            ? Duration(milliseconds: asset.durationInMs!)
-            : null,
+        initialDuration: asset.durationInMs != null ? Duration(milliseconds: asset.durationInMs!) : null,
       ),
     );
   }

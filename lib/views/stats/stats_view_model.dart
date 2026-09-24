@@ -7,8 +7,7 @@ import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
 import 'package:storypad/core/objects/search_filter_object.dart';
 import 'package:storypad/core/objects/sp_latlng.dart';
 import 'package:storypad/core/objects/stats/stats_range.dart';
-import 'package:storypad/core/objects/stats/story_stats_object.dart'
-    show LabelStatItem, StoryStatsObject;
+import 'package:storypad/core/objects/stats/story_stats_object.dart' show LabelStatItem, StoryStatsObject;
 import 'package:storypad/core/services/stories/story_stats_service.dart';
 import 'package:storypad/core/services/stories/writing_goal_service.dart';
 import 'package:storypad/core/types/path_type.dart';
@@ -70,20 +69,16 @@ class StatsViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   /// Returns cached stats for [tabIndex] in the current year, or null while it is
   /// still loading (or not yet requested).
-  StoryStatsObject? statsFor(int tabIndex) =>
-      _statsCache[_key(_selectedYear, tabIndex)];
+  StoryStatsObject? statsFor(int tabIndex) => _statsCache[_key(_selectedYear, tabIndex)];
 
   /// Derives the date range for a tab: 0 = full year, 1–12 = that month.
-  StatsRange rangeForTab(int tabIndex) => tabIndex == 0
-      ? StatsRange.year(DateTime(_selectedYear))
-      : StatsRange.month(DateTime(_selectedYear, tabIndex));
+  StatsRange rangeForTab(int tabIndex) =>
+      tabIndex == 0 ? StatsRange.year(DateTime(_selectedYear)) : StatsRange.month(DateTime(_selectedYear, tabIndex));
 
   // Sections the user has hidden (e.g. to declutter a screenshot). Global across
   // tabs/years and in-memory only — resets when the screen is closed. Countries
   // is hidden by default since most users only ever have one.
-  static const Set<StatsSection> _defaultHiddenSections = {
-    StatsSection.countries,
-  };
+  static const Set<StatsSection> _defaultHiddenSections = {StatsSection.countries};
 
   // Seeded from the persisted preference on first read, falling back to the
   // defaults when the user has never customized the filter.
@@ -97,8 +92,7 @@ class StatsViewModel extends ChangeNotifier with DisposeAwareMixin {
     return stored.map((name) => byName[name]).whereType<StatsSection>().toSet();
   }
 
-  bool isSectionVisible(StatsSection section) =>
-      !_hiddenSections.contains(section);
+  bool isSectionVisible(StatsSection section) => !_hiddenSections.contains(section);
 
   void toggleSection(StatsSection section) {
     if (!_hiddenSections.remove(section)) _hiddenSections.add(section);
@@ -115,14 +109,11 @@ class StatsViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   void _persistHiddenSections() {
-    devicePreferencesProvider.setHiddenStatsSections(
-      _hiddenSections.map((section) => section.name).toList(),
-    );
+    devicePreferencesProvider.setHiddenStatsSections(_hiddenSections.map((section) => section.name).toList());
   }
 
   /// Sections of the visible tab, listed in the section filter sheet.
-  List<StatsSection> sectionsForCurrentTab() =>
-      sectionsForTab(_tabController.index);
+  List<StatsSection> sectionsForCurrentTab() => sectionsForTab(_tabController.index);
 
   void _onTabChanged() {
     if (_tabController.indexIsChanging) return; // wait until the tab settles
@@ -147,18 +138,10 @@ class StatsViewModel extends ChangeNotifier with DisposeAwareMixin {
   Future<void> _loadTab(int tabIndex) {
     final key = _key(_selectedYear, tabIndex);
     if (_statsCache.containsKey(key)) return Future.value();
-    return _loadingByKey[key] ??= _fetchTab(
-      key: key,
-      year: _selectedYear,
-      range: rangeForTab(tabIndex),
-    );
+    return _loadingByKey[key] ??= _fetchTab(key: key, year: _selectedYear, range: rangeForTab(tabIndex));
   }
 
-  Future<void> _fetchTab({
-    required String key,
-    required int year,
-    required StatsRange range,
-  }) async {
+  Future<void> _fetchTab({required String key, required int year, required StatsRange range}) async {
     try {
       final stories = await StoryDbModel.db.where(
         filters: SearchFilterObject(
@@ -202,17 +185,11 @@ class StatsViewModel extends ChangeNotifier with DisposeAwareMixin {
     ).show(context: context);
   }
 
-  void openStoriesForPlace(
-    BuildContext context,
-    LabelStatItem place,
-    int tabIndex,
-  ) async {
+  void openStoriesForPlace(BuildContext context, LabelStatItem place, int tabIndex) async {
     if (place.storyIds == null || place.storyIds!.isEmpty) return;
     final range = rangeForTab(tabIndex);
 
-    SpLatLng? storyLocation = await StoryDbModel.db
-        .find(place.storyIds!.first)
-        .then((story) => story?.place?.latLng);
+    SpLatLng? storyLocation = await StoryDbModel.db.find(place.storyIds!.first).then((story) => story?.place?.latLng);
     if (!context.mounted) return;
 
     SpStoriesBottomSheet(
@@ -232,22 +209,13 @@ class StatsViewModel extends ChangeNotifier with DisposeAwareMixin {
     final range = rangeForTab(tabIndex);
     SpStoriesBottomSheet(
       storyLocation: null,
-      filter: SearchFilterObject(
-        years: range.years,
-        month: range.month,
-        types: {PathType.docs},
-        assetId: null,
-      ),
+      filter: SearchFilterObject(years: range.years, month: range.month, types: {PathType.docs}, assetId: null),
     ).show(context: context);
   }
 
   /// Opens the given stories within the tab's range (overview photo/voice/place
   /// chips, which carry the matching ids). No-op when [storyIds] is empty.
-  void openStoriesForIds(
-    BuildContext context,
-    Set<int> storyIds,
-    int tabIndex,
-  ) {
+  void openStoriesForIds(BuildContext context, Set<int> storyIds, int tabIndex) {
     if (storyIds.isEmpty) return;
     final range = rangeForTab(tabIndex);
     SpStoriesBottomSheet(
@@ -278,11 +246,7 @@ class StatsViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   Future<void> loadAvailableYears() async {
     final counts = await StoryDbModel.db.getStoryCountsByYear(
-      filters: SearchFilterObject(
-        years: {},
-        types: {PathType.docs},
-        assetId: null,
-      ).toDatabaseFilter(),
+      filters: SearchFilterObject(years: {}, types: {PathType.docs}, assetId: null).toDatabaseFilter(),
     );
     if (disposed) return;
     _availableYears = counts.keys.toList();

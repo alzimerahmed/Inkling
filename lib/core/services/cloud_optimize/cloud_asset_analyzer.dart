@@ -30,11 +30,7 @@ class CloudAssetAnalysisResult {
   final List<CloudFileObject> stale;
   final List<CloudFileObject> clean;
 
-  const CloudAssetAnalysisResult({
-    required this.detached,
-    required this.stale,
-    required this.clean,
-  });
+  const CloudAssetAnalysisResult({required this.detached, required this.stale, required this.clean});
 }
 
 /// Pure analysis service — no DB or network I/O.
@@ -69,8 +65,7 @@ class CloudAssetAnalyzer {
     if (!fileCreatedAt.isBefore(cutoff)) return false;
 
     final fileNameCreatedAt = _createdAtFromFileName(file.fileName);
-    if (fileNameCreatedAt != null && !fileNameCreatedAt.isBefore(cutoff))
-      return false;
+    if (fileNameCreatedAt != null && !fileNameCreatedAt.isBefore(cutoff)) return false;
 
     if (tombstone != null) {
       final deletedAt = tombstone.permanentlyDeletedAt?.toUtc();
@@ -89,11 +84,8 @@ class CloudAssetAnalyzer {
 
     final now = DateTime.now().toUtc();
     final plausibleLowerBound = DateTime(2000).toUtc().millisecondsSinceEpoch;
-    final plausibleUpperBound = now
-        .add(const Duration(days: 365))
-        .millisecondsSinceEpoch;
-    if (assetId < plausibleLowerBound || assetId > plausibleUpperBound)
-      return null;
+    final plausibleUpperBound = now.add(const Duration(days: 365)).millisecondsSinceEpoch;
+    if (assetId < plausibleLowerBound || assetId > plausibleUpperBound) return null;
 
     return DateTime.fromMillisecondsSinceEpoch(assetId, isUtc: true);
   }
@@ -147,8 +139,7 @@ class CloudAssetAnalyzer {
           true;
 
       for (final file in group) {
-        final isAttached =
-            destinations?.values.any((d) => d['file_id'] == file.id) == true;
+        final isAttached = destinations?.values.any((d) => d['file_id'] == file.id) == true;
 
         if (isAttached) {
           clean.add(file);
@@ -161,10 +152,6 @@ class CloudAssetAnalyzer {
       }
     }
 
-    return CloudAssetAnalysisResult(
-      detached: detached,
-      stale: stale,
-      clean: clean,
-    );
+    return CloudAssetAnalysisResult(detached: detached, stale: stale, clean: clean);
   }
 }

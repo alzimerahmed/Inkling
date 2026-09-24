@@ -5,12 +5,7 @@ import 'package:storypad/core/helpers/date_format_helper.dart';
 import 'package:storypad/widgets/story_list/sp_story_tile.dart';
 
 class StoryMonthHeader extends StatelessWidget {
-  const StoryMonthHeader({
-    super.key,
-    required this.isFirstOfRun,
-    required this.story,
-    required this.showYear,
-  });
+  const StoryMonthHeader({super.key, required this.isFirstOfRun, required this.story, required this.showYear});
 
   final bool isFirstOfRun;
   final StoryDbModel story;
@@ -39,14 +34,8 @@ class StoryMonthHeader extends StatelessWidget {
             const SizedBox(width: 7.0),
             Text(
               story.year.toString(),
-              style:
-                  TextTheme.of(
-                    context,
-                  ).labelSmall?.copyWith(
-                    color: ColorScheme.of(
-                      context,
-                    ).onSurface.withValues(alpha: 0.5),
-                  ),
+              style: TextTheme.of(context).labelSmall
+                  ?.copyWith(color: ColorScheme.of(context).onSurface.withValues(alpha: 0.5)),
             ),
           ],
         ],
@@ -56,9 +45,7 @@ class StoryMonthHeader extends StatelessWidget {
 }
 
 class _MonthChip extends StatelessWidget {
-  const _MonthChip({
-    required this.story,
-  });
+  const _MonthChip({required this.story});
 
   final StoryDbModel story;
 
@@ -113,12 +100,7 @@ class _MonthChipBoxPainter extends CustomPainter {
     double extraPadding = 4;
 
     final RRect rrect = RRect.fromRectAndRadius(
-      Rect.fromLTWH(
-        -extraPadding,
-        0,
-        size.width + extraPadding * 2,
-        size.height,
-      ),
+      Rect.fromLTWH(-extraPadding, 0, size.width + extraPadding * 2, size.height),
       Radius.circular(borderRadius),
     );
 

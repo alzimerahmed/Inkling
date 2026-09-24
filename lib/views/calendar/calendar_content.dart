@@ -7,10 +7,7 @@ class _CalendarContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildAppBar(context),
-      body: buildBody(),
-    );
+    return Scaffold(appBar: buildAppBar(context), body: buildBody());
   }
 
   Widget buildBody() {
@@ -20,18 +17,14 @@ class _CalendarContent extends StatelessWidget {
         monthYearNotifier: viewModel.monthYearNotifier,
         initialSelectedDay: viewModel.params.initialDay,
       ),
-      CalendarSegmentId.period => PeriodCalendarView(
-        monthYearNotifier: viewModel.monthYearNotifier,
-      ),
+      CalendarSegmentId.period => PeriodCalendarView(monthYearNotifier: viewModel.monthYearNotifier),
     };
   }
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      bottom: viewModel.segments.length > 1
-          ? buildSegmentButtons(context)
-          : null,
+      bottom: viewModel.segments.length > 1 ? buildSegmentButtons(context) : null,
       title: ValueListenableBuilder(
         valueListenable: viewModel.monthYearNotifier,
         builder: (context, monthYear, child) {
@@ -47,10 +40,7 @@ class _CalendarContent extends StatelessWidget {
               }
             },
             child: Text(
-              DateFormatHelper.yMMMM(
-                DateTime(monthYear.year, monthYear.month, 1),
-                context.locale,
-              ),
+              DateFormatHelper.yMMMM(DateTime(monthYear.year, monthYear.month, 1), context.locale),
               key: ValueKey("${monthYear.month}-${monthYear.year}"),
               style: Theme.of(context).appBarTheme.titleTextStyle,
             ),
@@ -102,10 +92,7 @@ class _CalendarContent extends StatelessWidget {
             viewModel.onSegmentChanged(segment);
           }
         },
-        children: {
-          for (final segment in viewModel.segments)
-            segment: Text(segment.translatedName(context)),
-        },
+        children: {for (final segment in viewModel.segments) segment: Text(segment.translatedName(context))},
       );
     } else {
       segmentButton = SegmentedButton<CalendarSegmentId>(
@@ -119,10 +106,7 @@ class _CalendarContent extends StatelessWidget {
         showSelectedIcon: false,
         segments: [
           for (final segment in viewModel.segments)
-            ButtonSegment<CalendarSegmentId>(
-              value: segment,
-              label: Text(segment.translatedName(context)),
-            ),
+            ButtonSegment<CalendarSegmentId>(value: segment, label: Text(segment.translatedName(context))),
         ],
       );
     }

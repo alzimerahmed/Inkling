@@ -22,24 +22,15 @@ class ThemeObject {
 
   bool get colorSeedCustomized => colorSeed != null;
 
-  ThemeObject({
-    String? fontFamily,
-    this.fontWeightIndex,
-    ThemeMode? themeMode,
-    this.colorSeedValue,
-  }) : _fontFamily = fontFamily,
-       _themeMode = themeMode;
+  ThemeObject({String? fontFamily, this.fontWeightIndex, ThemeMode? themeMode, this.colorSeedValue})
+    : _fontFamily = fontFamily,
+      _themeMode = themeMode;
 
   factory ThemeObject.initial() {
     return ThemeObject();
   }
 
-  ThemeObject copyWith({
-    String? fontFamily,
-    FontWeight? fontWeight,
-    ThemeMode? themeMode,
-    Color? colorSeed,
-  }) {
+  ThemeObject copyWith({String? fontFamily, FontWeight? fontWeight, ThemeMode? themeMode, Color? colorSeed}) {
     return ThemeObject(
       fontFamily: fontFamily ?? this.fontFamily,
       fontWeightIndex: fontWeight?.weightIndex ?? fontWeightIndex,
@@ -48,10 +39,7 @@ class ThemeObject {
     );
   }
 
-  ThemeObject copyWithNewColor(
-    Color colorSeed, {
-    bool removeIfSame = true,
-  }) {
+  ThemeObject copyWithNewColor(Color colorSeed, {bool removeIfSame = true}) {
     Color? newColorSeed = colorSeed;
     if (removeIfSame) newColorSeed = colorSeed.toARGB32() != colorSeedValue ? colorSeed : null;
     return ThemeObject(

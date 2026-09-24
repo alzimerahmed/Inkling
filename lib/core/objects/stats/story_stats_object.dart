@@ -6,11 +6,7 @@ class EmojiStatItem {
   final int tagId;
   final String emoji;
   final int count;
-  const EmojiStatItem({
-    required this.tagId,
-    required this.emoji,
-    required this.count,
-  });
+  const EmojiStatItem({required this.tagId, required this.emoji, required this.count});
 }
 
 /// A named bucket (tag, person, place, country) and its story count. [tagId] is
@@ -22,12 +18,7 @@ class LabelStatItem {
   final int count;
   final int? tagId;
   final Set<int>? storyIds;
-  const LabelStatItem({
-    required this.label,
-    required this.count,
-    this.tagId,
-    this.storyIds,
-  });
+  const LabelStatItem({required this.label, required this.count, this.tagId, this.storyIds});
 }
 
 /// Fully-aggregated stats for one [StatsRange]. Pure data: holds raw counts and
@@ -124,8 +115,6 @@ class StoryStatsObject {
   bool get isEmpty => entryCount == 0;
 
   /// "12 of 30 days" coverage headline, reusing the recap key.
-  String get activeDaysLabel => tr(
-    'page.home.story_recap.active_days',
-    namedArgs: {'SP_ACTIVE': '$activeDays', 'SP_TOTAL': '$totalDays'},
-  );
+  String get activeDaysLabel =>
+      tr('page.home.story_recap.active_days', namedArgs: {'SP_ACTIVE': '$activeDays', 'SP_TOTAL': '$totalDays'});
 }

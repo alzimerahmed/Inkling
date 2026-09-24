@@ -15,10 +15,7 @@ class _ShowBackupServiceContent extends StatelessWidget {
             style: TextTheme.of(context).titleLarge,
             children: [
               TextSpan(text: "${viewModel.serviceType.displayName} "),
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: Icon(viewModel.serviceType.icon, size: 20),
-              ),
+              WidgetSpan(alignment: PlaceholderAlignment.middle, child: Icon(viewModel.serviceType.icon, size: 20)),
             ],
           ),
         ),
@@ -34,9 +31,7 @@ class _ShowBackupServiceContent extends StatelessWidget {
                 if (viewModel.serviceType == BackupServiceType.icloud) {
                   return [
                     SpPopMenuItem(
-                      titleStyle: TextStyle(
-                        color: ColorScheme.of(context).error,
-                      ),
+                      titleStyle: TextStyle(color: ColorScheme.of(context).error),
                       leadingIconData: SpIcons.setting,
                       title: tr('button.disable'),
                       onPressed: () => viewModel.disableICloud(context),
@@ -68,10 +63,7 @@ class _ShowBackupServiceContent extends StatelessWidget {
           // ),
         ],
       ),
-      body: RefreshIndicator.adaptive(
-        onRefresh: () => viewModel.load(),
-        child: buildBody(context),
-      ),
+      body: RefreshIndicator.adaptive(onRefresh: () => viewModel.load(), child: buildBody(context)),
     );
   }
 
@@ -79,9 +71,7 @@ class _ShowBackupServiceContent extends StatelessWidget {
     String? lastSyncAt = viewModel.getLastSyncAt(context);
 
     if (viewModel.yearlyBackups == null) {
-      return const Center(
-        child: CircularProgressIndicator.adaptive(),
-      );
+      return const Center(child: CircularProgressIndicator.adaptive());
     }
 
     return ListView(
@@ -91,10 +81,7 @@ class _ShowBackupServiceContent extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: _SyncButton(viewModel: viewModel),
         ),
-        if (viewModel.serviceType.googleDrive) ...[
-          const SizedBox(height: 4.0),
-          buildGoogleDriveStorageInfo(context),
-        ],
+        if (viewModel.serviceType.googleDrive) ...[const SizedBox(height: 4.0), buildGoogleDriveStorageInfo(context)],
         if (viewModel.params.service.currentUser != null)
           SwitchListTile.adaptive(
             value: viewModel.params.service.autoBackupEnabled,
@@ -104,8 +91,7 @@ class _ShowBackupServiceContent extends StatelessWidget {
             },
           ),
         const SizedBox(height: 4),
-        if ((viewModel.params.service.currentUser?.configuration ?? const [])
-            .isNotEmpty) ...[
+        if ((viewModel.params.service.currentUser?.configuration ?? const []).isNotEmpty) ...[
           const Divider(height: 1),
           ..._buildConfigurationSection(context),
         ],
@@ -118,23 +104,17 @@ class _ShowBackupServiceContent extends StatelessWidget {
               left: MediaQuery.paddingOf(context).left,
               right: MediaQuery.paddingOf(context).left,
             ),
-            child: Text(
-              tr('general.no_backup_found'),
-              textAlign: TextAlign.center,
-            ),
+            child: Text(tr('general.no_backup_found'), textAlign: TextAlign.center),
           ),
-        if (viewModel.yearlyBackups!.isNotEmpty)
-          SpSectionTitle(title: tr('list_tile.backup.title')),
-        for (MapEntry<int, CloudFileObject> entry
-            in viewModel.getSortedYearlyBackups())
+        if (viewModel.yearlyBackups!.isNotEmpty) SpSectionTitle(title: tr('list_tile.backup.title')),
+        for (MapEntry<int, CloudFileObject> entry in viewModel.getSortedYearlyBackups())
           SpPopupMenuButton(
             items: (context) {
               return [
                 SpPopMenuItem(
                   title: tr("button.view"),
                   leadingIconData: SpIcons.info,
-                  onPressed: () =>
-                      viewModel.openCloudFile(context, entry.value),
+                  onPressed: () => viewModel.openCloudFile(context, entry.value),
                 ),
                 SpPopMenuItem(
                   title: tr("button.delete"),
@@ -143,9 +123,7 @@ class _ShowBackupServiceContent extends StatelessWidget {
                   onPressed: () async {
                     OkCancelResult userResponse = await showOkCancelAlertDialog(
                       context: context,
-                      title: tr(
-                        "dialog.are_you_sure_to_delete_this_backup.title",
-                      ),
+                      title: tr("dialog.are_you_sure_to_delete_this_backup.title"),
                       message: tr("dialog.are_you_sure.you_cant_undo_message"),
                       isDestructiveAction: true,
                       okLabel: tr("button.delete"),
@@ -177,10 +155,7 @@ class _ShowBackupServiceContent extends StatelessWidget {
                           tr("general.unknown"),
                     ),
                     Text(
-                      DateFormatHelper.yMEd_jmNullable(
-                            entry.value.getFileInfo()?.createdAt,
-                            context.locale,
-                          ) ??
+                      DateFormatHelper.yMEd_jmNullable(entry.value.getFileInfo()?.createdAt, context.locale) ??
                           tr("general.na"),
                     ),
                   ],
@@ -242,31 +217,21 @@ class _ShowBackupServiceContent extends StatelessWidget {
     return ListTile(
       leading: viewModel.params.service.currentUser?.photoUrl != null
           ? CircleAvatar(
-              backgroundImage: CachedNetworkImageProvider(
-                viewModel.params.service.currentUser!.photoUrl!,
-              ),
+              backgroundImage: CachedNetworkImageProvider(viewModel.params.service.currentUser!.photoUrl!),
               onBackgroundImageError: (_, _) {},
             )
           : const Icon(SpIcons.profile),
-      title: Text(
-        viewModel.params.service.currentUser?.identifier ??
-            tr('list_tile.backup.unsignin_subtitle'),
-      ),
+      title: Text(viewModel.params.service.currentUser?.identifier ?? tr('list_tile.backup.unsignin_subtitle')),
       subtitle: lastSyncAt != null ? Text(lastSyncAt) : null,
     );
   }
 
   List<Widget> _buildConfigurationSection(BuildContext context) {
-    final configuration =
-        viewModel.params.service.currentUser?.configuration ?? const [];
+    final configuration = viewModel.params.service.currentUser?.configuration ?? const [];
 
     return [
       for (final entry in configuration)
-        ListTile(
-          leading: const Icon(SpIcons.info),
-          title: Text(entry.label),
-          subtitle: Text(entry.value),
-        ),
+        ListTile(leading: const Icon(SpIcons.info), title: Text(entry.label), subtitle: Text(entry.value)),
     ];
   }
 
@@ -279,11 +244,7 @@ class _ShowBackupServiceContent extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            Icon(
-              SpIcons.warning,
-              size: 48,
-              color: ColorScheme.of(context).error,
-            ),
+            Icon(SpIcons.warning, size: 48, color: ColorScheme.of(context).error),
             const SizedBox(height: 16),
             Text(
               error.userFriendlyMessage,
@@ -318,9 +279,7 @@ class _ShowBackupServiceContent extends StatelessWidget {
 }
 
 class _SyncButton extends StatefulWidget {
-  const _SyncButton({
-    required this.viewModel,
-  });
+  const _SyncButton({required this.viewModel});
 
   final ShowBackupServiceViewModel viewModel;
 
@@ -336,10 +295,7 @@ class _SyncButtonState extends State<_SyncButton> {
     return FilledButton.icon(
       label: Text(tr('button.sync')),
       icon: syncing
-          ? const SizedBox.square(
-              dimension: 16,
-              child: CircularProgressIndicator.adaptive(),
-            )
+          ? const SizedBox.square(dimension: 16, child: CircularProgressIndicator.adaptive())
           : const Icon(SpIcons.refresh),
       onPressed: syncing
           ? null

@@ -3,9 +3,7 @@ part of 'sp_story_list_multi_edit_wrapper.dart';
 class SpStoryListMultiEditWrapperState extends ChangeNotifier {
   final bool disabled;
 
-  SpStoryListMultiEditWrapperState({
-    required this.disabled,
-  });
+  SpStoryListMultiEditWrapperState({required this.disabled});
 
   bool editing = false;
   Set<int> selectedStories = {};
@@ -20,18 +18,14 @@ class SpStoryListMultiEditWrapperState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void turnOnEditing({
-    int? initialId,
-  }) {
+  void turnOnEditing({int? initialId}) {
     editing = true;
     selectedStories.clear();
     if (initialId != null) selectedStories.add(initialId);
     notifyListeners();
   }
 
-  void turnOffEditing({
-    int? initialId,
-  }) {
+  void turnOffEditing({int? initialId}) {
     editing = false;
     selectedStories.clear();
     notifyListeners();
@@ -66,9 +60,7 @@ class SpStoryListMultiEditWrapperState extends ChangeNotifier {
         },
       );
 
-      await AnalyticsService.instance.logPutBackAllStories(
-        count: selectedStories.length,
-      );
+      await AnalyticsService.instance.logPutBackAllStories(count: selectedStories.length);
       turnOffEditing();
       return true;
     }
@@ -97,9 +89,7 @@ class SpStoryListMultiEditWrapperState extends ChangeNotifier {
         },
       );
 
-      await AnalyticsService.instance.logMoveAllStoriesToBin(
-        count: selectedStories.length,
-      );
+      await AnalyticsService.instance.logMoveAllStoriesToBin(count: selectedStories.length);
       turnOffEditing();
       return true;
     }
@@ -117,9 +107,7 @@ class SpStoryListMultiEditWrapperState extends ChangeNotifier {
       await record?.setPinned(false);
     }
 
-    await AnalyticsService.instance.logUnpinAllStories(
-      count: selectedStories.length,
-    );
+    await AnalyticsService.instance.logUnpinAllStories(count: selectedStories.length);
     turnOffEditing();
     return true;
   }
@@ -134,9 +122,7 @@ class SpStoryListMultiEditWrapperState extends ChangeNotifier {
       await record?.setPinned(true);
     }
 
-    await AnalyticsService.instance.logPinAllStories(
-      count: selectedStories.length,
-    );
+    await AnalyticsService.instance.logPinAllStories(count: selectedStories.length);
     turnOffEditing();
     return true;
   }
@@ -161,9 +147,7 @@ class SpStoryListMultiEditWrapperState extends ChangeNotifier {
         },
       );
 
-      await AnalyticsService.instance.logArchiveAllStories(
-        count: selectedStories.length,
-      );
+      await AnalyticsService.instance.logArchiveAllStories(count: selectedStories.length);
       turnOffEditing();
       return true;
     }
@@ -193,9 +177,7 @@ class SpStoryListMultiEditWrapperState extends ChangeNotifier {
         },
       );
 
-      await AnalyticsService.instance.logPermanentDeleteAllStories(
-        count: state.selectedStories.length,
-      );
+      await AnalyticsService.instance.logPermanentDeleteAllStories(count: state.selectedStories.length);
       turnOffEditing();
       return true;
     }

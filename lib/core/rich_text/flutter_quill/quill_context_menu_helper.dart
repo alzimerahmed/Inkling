@@ -10,9 +10,7 @@ class _QuillContextMenuHelper {
     required bool editable,
     void Function()? onEdit,
   }) {
-    final text = rawEditorState.textEditingValue.selection.textInside(
-      rawEditorState.textEditingValue.text,
-    );
+    final text = rawEditorState.textEditingValue.selection.textInside(rawEditorState.textEditingValue.text);
 
     List<ContextMenuButtonItem> buttonItems = EditableText.getEditableButtonItems(
       clipboardStatus: ClipboardStatus.pasteable,
@@ -20,17 +18,11 @@ class _QuillContextMenuHelper {
       onCut: editable ? () => rawEditorState.cutSelection(SelectionChangedCause.toolbar) : null,
       onPaste: editable ? () => rawEditorState.pasteText(SelectionChangedCause.toolbar) : null,
       onSelectAll: () => rawEditorState.selectAll(SelectionChangedCause.toolbar),
-      onSearchWeb: Platform.isIOS
-          ? () => rawEditorState.searchWebForSelection(
-              SelectionChangedCause.toolbar,
-            )
-          : null,
+      onSearchWeb: Platform.isIOS ? () => rawEditorState.searchWebForSelection(SelectionChangedCause.toolbar) : null,
       onShare: () => rawEditorState.shareSelection(SelectionChangedCause.toolbar),
       onLiveTextInput: null,
       onLookUp: defaultTargetPlatform == TargetPlatform.iOS
-          ? () => rawEditorState.lookUpSelection(
-              SelectionChangedCause.toolbar,
-            )
+          ? () => rawEditorState.lookUpSelection(SelectionChangedCause.toolbar)
           : null,
     );
 
@@ -61,9 +53,7 @@ class _QuillContextMenuHelper {
 
                 SchedulerBinding.instance.addPostFrameCallback((_) {
                   if (rawEditorState.mounted) {
-                    rawEditorState.bringIntoView(
-                      rawEditorState.textEditingValue.selection.extent,
-                    );
+                    rawEditorState.bringIntoView(rawEditorState.textEditingValue.selection.extent);
                   }
                 }, debugLabel: 'EditableText.bringSelectionIntoView');
               }
@@ -76,13 +66,7 @@ class _QuillContextMenuHelper {
     }
 
     if (!editable) {
-      buttonItems.insert(
-        0,
-        ContextMenuButtonItem(
-          label: rawEditorState.context.loc.edit,
-          onPressed: onEdit,
-        ),
-      );
+      buttonItems.insert(0, ContextMenuButtonItem(label: rawEditorState.context.loc.edit, onPressed: onEdit));
     }
 
     if (editable) {

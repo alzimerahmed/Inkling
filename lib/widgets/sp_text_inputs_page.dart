@@ -78,10 +78,7 @@ class _SpTextInputsPageState extends State<SpTextInputsPage> {
             return buildContent(context);
           }
 
-          return Scaffold(
-            appBar: widget.appBar,
-            body: buildContent(context),
-          );
+          return Scaffold(appBar: widget.appBar, body: buildContent(context));
         },
       ),
     );
@@ -90,23 +87,11 @@ class _SpTextInputsPageState extends State<SpTextInputsPage> {
   Widget buildContent(BuildContext context) {
     final screenPadding = MediaQuery.paddingOf(context);
     return ListView(
-      padding:
-          const EdgeInsets.all(
-            16.0,
-          ).add(
-            EdgeInsets.only(
-              left: screenPadding.left,
-              right: screenPadding.right,
-              bottom: screenPadding.bottom,
-            ),
-          ),
+      padding: const EdgeInsets.all(16.0)
+          .add(EdgeInsets.only(left: screenPadding.left, right: screenPadding.right, bottom: screenPadding.bottom)),
       children: [
-        if (widget.header != null) ...[
-          widget.header!,
-          const SizedBox(height: 16.0),
-        ],
-        for (int index = 0; index < controllers.length; index++)
-          buildTextField(index, context),
+        if (widget.header != null) ...[widget.header!, const SizedBox(height: 16.0)],
+        for (int index = 0; index < controllers.length; index++) buildTextField(index, context),
         const SizedBox(height: 16.0),
         buildSaveButton(context),
       ],
@@ -144,9 +129,7 @@ class _SpTextInputsPageState extends State<SpTextInputsPage> {
               CupertinoTextField(
                 autofocus: index == 0,
                 maxLines: widget.fields[index].maxLines,
-                textInputAction: lastIndex
-                    ? TextInputAction.done
-                    : TextInputAction.next,
+                textInputAction: lastIndex ? TextInputAction.done : TextInputAction.next,
                 controller: controllers[index],
                 keyboardType: widget.fields[index].keyboardType,
                 placeholder: widget.fields[index].hintText,
@@ -158,9 +141,7 @@ class _SpTextInputsPageState extends State<SpTextInputsPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   child: Text(
                     state.errorText!,
-                    style: TextTheme.of(context).bodyMedium?.copyWith(
-                      color: ColorScheme.of(context).error,
-                    ),
+                    style: TextTheme.of(context).bodyMedium?.copyWith(color: ColorScheme.of(context).error),
                   ),
                 ),
             ],
@@ -170,24 +151,16 @@ class _SpTextInputsPageState extends State<SpTextInputsPage> {
     } else {
       textField = TextFormField(
         autofocus: index == 0,
-        textInputAction: lastIndex
-            ? TextInputAction.done
-            : TextInputAction.next,
+        textInputAction: lastIndex ? TextInputAction.done : TextInputAction.next,
         controller: controllers[index],
         keyboardType: widget.fields[index].keyboardType,
-        decoration: InputDecoration(
-          hintText: widget.fields[index].hintText,
-          labelText: widget.fields[index].labelText,
-        ),
+        decoration: InputDecoration(hintText: widget.fields[index].hintText, labelText: widget.fields[index].labelText),
         validator: widget.fields[index].validator,
         onFieldSubmitted: (text) => submit(context),
       );
     }
 
-    return Container(
-      margin: lastIndex ? null : const EdgeInsets.only(bottom: 16.0),
-      child: textField,
-    );
+    return Container(margin: lastIndex ? null : const EdgeInsets.only(bottom: 16.0), child: textField);
   }
 
   void submit(BuildContext context) {

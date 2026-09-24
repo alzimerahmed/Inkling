@@ -70,67 +70,45 @@ class _ContentState extends State<_Content> {
   }
 
   Future<void> _takePhoto(BuildContext context) async {
-    final compression = context
-        .read<DevicePreferencesProvider>()
-        .preferences
-        .assetCompression;
+    final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
     final photo = await SpAppLockWrapper.disableAppLockIfHas(
       context,
-      callback: () => AppFilePickerService.pickImage(
-        source: ImageSource.camera,
-        compression: compression,
-      ),
+      callback: () => AppFilePickerService.pickImage(source: ImageSource.camera, compression: compression),
     );
 
     if (photo == null) return;
 
-    final AssetDbModel? tookAsset = await InsertFileToDbService.insertImage(
-      photo.file,
-      size: photo.size,
-    );
+    final AssetDbModel? tookAsset = await InsertFileToDbService.insertImage(photo.file, size: photo.size);
     if (tookAsset == null) return;
 
     _addPaths([tookAsset.relativeLocalFilePath]);
   }
 
   Future<void> _recordVideo(BuildContext context) async {
-    final compression = context
-        .read<DevicePreferencesProvider>()
-        .preferences
-        .assetCompression;
+    final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
     final video = await SpAppLockWrapper.disableAppLockIfHas(
       context,
-      callback: () => AppFilePickerService.pickVideo(
-        context: context,
-        source: ImageSource.camera,
-        compression: compression,
-      ),
+      callback: () =>
+          AppFilePickerService.pickVideo(context: context, source: ImageSource.camera, compression: compression),
     );
 
     if (video == null) return;
 
-    final AssetDbModel? tookAsset = await InsertFileToDbService.insertVideo(
-      video.file,
-      size: video.size,
-    );
+    final AssetDbModel? tookAsset = await InsertFileToDbService.insertVideo(video.file, size: video.size);
     if (tookAsset == null) return;
 
     _addPaths([tookAsset.relativeLocalFilePath]);
   }
 
   Future<void> _pickFromLibrary(BuildContext context) async {
-    final picked = await SpImagePickerBottomSheet.showAlbumPicker(
-      context: context,
-    );
+    final picked = await SpImagePickerBottomSheet.showAlbumPicker(context: context);
     if (picked != null && picked.isNotEmpty) {
       _addPaths(picked.map((a) => a.relativeLocalFilePath));
     }
   }
 
   Future<void> _pickFromNativePhotos(BuildContext context) async {
-    final picked = await SpImagePickerBottomSheet.pickFromNativeLibrary(
-      context: context,
-    );
+    final picked = await SpImagePickerBottomSheet.pickFromNativeLibrary(context: context);
     if (picked.isNotEmpty) {
       _addPaths(picked.map((a) => a.relativeLocalFilePath));
     }
@@ -139,10 +117,7 @@ class _ContentState extends State<_Content> {
   Future<void> _handleAddMedia(BuildContext context) async {
     // Voice notes have nowhere to go in an album -- hide that option rather
     // than showing an action this sheet can't handle.
-    final action = await SpAddMediaActionSheet.pick(
-      context: context,
-      showRecordVoiceNote: false,
-    );
+    final action = await SpAddMediaActionSheet.pick(context: context, showRecordVoiceNote: false);
     if (!context.mounted || action == null) return;
 
     switch (action) {
@@ -162,19 +137,13 @@ class _ContentState extends State<_Content> {
   void _viewAssetAt(BuildContext context, int index) {
     Feedback.forTap(context);
 
-    SpMediaViewer.fromString(
-      images: _paths,
-      initialIndex: index,
-      context: context,
-    ).show(context);
+    SpMediaViewer.fromString(images: _paths, initialIndex: index, context: context).show(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: CloseButton(onPressed: () => Navigator.maybePop(context)),
-      ),
+      appBar: AppBar(leading: CloseButton(onPressed: () => Navigator.maybePop(context))),
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -191,16 +160,12 @@ class _ContentState extends State<_Content> {
               spacing: 8.0,
               children: [
                 IconButton.outlined(
-                  icon: Icon(
-                    SpIcons.add,
-                    color: ColorScheme.of(context).primary,
-                  ),
+                  icon: Icon(SpIcons.add, color: ColorScheme.of(context).primary),
                   onPressed: () => _handleAddMedia(context),
                 ),
                 IconButton.filled(
                   icon: const Icon(SpIcons.save),
-                  onPressed: () =>
-                      Navigator.pop(context, _paths.toSet().toList()),
+                  onPressed: () => Navigator.pop(context, _paths.toSet().toList()),
                 ),
               ],
             ),
@@ -237,34 +202,21 @@ class _ContentState extends State<_Content> {
 
           return ListTile(
             key: ValueKey("$runtimeType-$path"),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 4,
-            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(6),
               child: SpMediaTile(link: path, width: 56, height: 56),
             ),
-            title: Text(
-              path.split('/').last,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+            title: Text(path.split('/').last, maxLines: 1, overflow: TextOverflow.ellipsis),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (_paths.length > 1)
                   IconButton(
-                    icon: Icon(
-                      SpIcons.delete,
-                      color: ColorScheme.of(context).error,
-                    ),
+                    icon: Icon(SpIcons.delete, color: ColorScheme.of(context).error),
                     onPressed: () => setState(() => _paths.removeAt(index)),
                   ),
-                ReorderableDragStartListener(
-                  index: index,
-                  child: const Icon(SpIcons.dragIndicator),
-                ),
+                ReorderableDragStartListener(index: index, child: const Icon(SpIcons.dragIndicator)),
               ],
             ),
           );

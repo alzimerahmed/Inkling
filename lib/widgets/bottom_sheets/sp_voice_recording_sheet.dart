@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,10 +42,7 @@ class SpVoiceRecordingSheet extends BaseBottomSheet {
   @override
   double get cupertinoPaddingTop => 0.0; // we have custom padding here instead.
 
-  static Future<void> showQuillRecorder({
-    required BuildContext context,
-    required RichTextController controller,
-  }) async {
+  static Future<void> showQuillRecorder({required BuildContext context, required RichTextController controller}) async {
     final result = await const SpVoiceRecordingSheet().show(context: context);
 
     if (result is VoiceRecordingResult && context.mounted) {
@@ -57,22 +55,15 @@ class SpVoiceRecordingSheet extends BaseBottomSheet {
       );
 
       // Copy file to app storage & clean up temp file
-      final storagePath = asset.type.getStoragePath(
-        id: asset.id,
-        extension: extension(result.filePath),
-      );
+      final storagePath = asset.type.getStoragePath(id: asset.id, extension: extension(result.filePath));
       final newFile = File(storagePath)..createSync(recursive: true);
       await newFile.writeAsBytes(File(result.filePath).readAsBytesSync());
-      if (File(result.filePath).existsSync())
-        File(result.filePath).deleteSync(recursive: true);
+      if (File(result.filePath).existsSync()) File(result.filePath).deleteSync(recursive: true);
 
       final savedAsset = await asset.save();
 
       if (savedAsset != null && context.mounted) {
-        editorAdapter.insertAudio(
-          controller: controller,
-          audioPath: savedAsset.relativeLocalFilePath,
-        );
+        editorAdapter.insertAudio(controller: controller, audioPath: savedAsset.relativeLocalFilePath);
       }
     }
   }
@@ -84,9 +75,7 @@ class SpVoiceRecordingSheet extends BaseBottomSheet {
 }
 
 class _VoiceRecordingContent extends StatefulWidget {
-  const _VoiceRecordingContent({
-    required this.bottomPadding,
-  });
+  const _VoiceRecordingContent({required this.bottomPadding});
 
   final double bottomPadding;
 
@@ -119,10 +108,7 @@ class _VoiceRecordingContentState extends State<_VoiceRecordingContent> {
       // `record`'s hasPermission() check can surface a native mic-permission prompt (or send
       // the user to Settings if previously denied), which must not be mistaken for the app
       // backgrounding and trigger the app-lock screen.
-      final success = await SpAppLockWrapper.disableAppLockIfHas(
-        context,
-        callback: () => recorder.startRecording(),
-      );
+      final success = await SpAppLockWrapper.disableAppLockIfHas(context, callback: () => recorder.startRecording());
 
       if (success && mounted) {
         setState(() {
@@ -138,8 +124,7 @@ class _VoiceRecordingContentState extends State<_VoiceRecordingContent> {
         }
       }
     } catch (e) {
-      if (mounted)
-        MessengerService.of(context).showSnackBar(e.toString(), success: false);
+      if (mounted) MessengerService.of(context).showSnackBar(e.toString(), success: false);
     }
   }
 
@@ -154,8 +139,7 @@ class _VoiceRecordingContentState extends State<_VoiceRecordingContent> {
         });
       }
     } catch (e) {
-      if (mounted)
-        MessengerService.of(context).showSnackBar(e.toString(), success: false);
+      if (mounted) MessengerService.of(context).showSnackBar(e.toString(), success: false);
     }
   }
 
@@ -184,19 +168,10 @@ class _VoiceRecordingContentState extends State<_VoiceRecordingContent> {
     return Stack(
       children: [
         Container(
-          padding: EdgeInsets.only(
-            left: 16.0,
-            right: 16.0,
-            top: 36.0,
-            bottom: widget.bottomPadding + 16.0,
-          ),
+          padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 36.0, bottom: widget.bottomPadding + 16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              hasRecording
-                  ? buildPlaybackUI(context)
-                  : buildRecordingUI(context),
-            ],
+            children: [hasRecording ? buildPlaybackUI(context) : buildRecordingUI(context)],
           ),
         ),
         if (!hasRecording)
@@ -238,10 +213,7 @@ class _VoiceRecordingContentState extends State<_VoiceRecordingContent> {
         const SizedBox(height: 12.0),
         buildRecordingStatus(context),
         const SizedBox(height: 24.0),
-        SizedBox(
-          width: double.infinity,
-          child: buildRecordingAction(context),
-        ),
+        SizedBox(width: double.infinity, child: buildRecordingAction(context)),
       ],
     );
   }
@@ -290,16 +262,12 @@ class _VoiceRecordingContentState extends State<_VoiceRecordingContent> {
           Expanded(
             child: kIsCupertino
                 ? CupertinoButton.filled(
-                    onPressed: recordingResult != null
-                        ? () => Navigator.of(context).pop(recordingResult)
-                        : null,
+                    onPressed: recordingResult != null ? () => Navigator.of(context).pop(recordingResult) : null,
                     child: Text(tr('button.done')),
                   )
                 : FilledButton.icon(
                     icon: const Icon(SpIcons.save),
-                    onPressed: recordingResult != null
-                        ? () => Navigator.of(context).pop(recordingResult)
-                        : null,
+                    onPressed: recordingResult != null ? () => Navigator.of(context).pop(recordingResult) : null,
                     label: Text(tr('button.done')),
                   ),
           ),
@@ -317,18 +285,14 @@ class _VoiceRecordingContentState extends State<_VoiceRecordingContent> {
           width: 6,
           height: 6,
           decoration: BoxDecoration(
-            color: !recording
-                ? Colors.transparent
-                : Theme.of(context).colorScheme.error,
+            color: !recording ? Colors.transparent : Theme.of(context).colorScheme.error,
             shape: BoxShape.circle,
           ),
         ),
         const SizedBox(width: 8.0),
         Text(
           recording ? tr('general.recording') : '',
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: Theme.of(context).colorScheme.error,
-          ),
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Theme.of(context).colorScheme.error),
         ),
       ],
     );

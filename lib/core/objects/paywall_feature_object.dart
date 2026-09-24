@@ -2,14 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-enum PaywallFeature {
-  backgrounds,
-  templates,
-  customizations,
-  markdown_export,
-  stats,
-  multi_cloud_sync,
-}
+enum PaywallFeature { backgrounds, templates, customizations, markdown_export, stats, multi_cloud_sync }
 
 class PaywallFeatureObject {
   final PaywallFeature type;

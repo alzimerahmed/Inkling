@@ -43,12 +43,7 @@ class SpCalendar extends StatefulWidget {
   final SpCalendarController? controller;
 
   /// Optional custom cell builder. If null, uses default feeling-based cell.
-  final Widget Function(
-    BuildContext context,
-    DateTime date,
-    bool isDisplayMonth,
-  )
-  cellBuilder;
+  final Widget Function(BuildContext context, DateTime date, bool isDisplayMonth) cellBuilder;
 
   @override
   State<SpCalendar> createState() => _SpCalendarState();
@@ -193,8 +188,7 @@ class _SpCalendarState extends State<SpCalendar> {
                 DateFormatHelper.E(_dateFromWeekday(weekday), context.locale),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color:
-                      weekday == DateTime.saturday || weekday == DateTime.sunday
+                  color: weekday == DateTime.saturday || weekday == DateTime.sunday
                       ? Theme.of(context).colorScheme.error
                       : null,
                 ),
@@ -214,17 +208,12 @@ class _SpCalendarState extends State<SpCalendar> {
       firstDayOfWeek: widget.firstDayOfWeek,
     );
     final rows = (visibleDays.length / DateTime.daysPerWeek).ceil();
-    return rows *
-        constraints.maxWidth /
-        DateTime.daysPerWeek; // 56 is the minimum height per row
+    return rows * constraints.maxWidth / DateTime.daysPerWeek; // 56 is the minimum height per row
   }
 
   List<int> _orderedWeekdays(FirstDayOfWeekOption firstDayOfWeek) {
     final start = firstDayOfWeek.value;
-    return List.generate(
-      DateTime.daysPerWeek,
-      (index) => ((start + index - 1) % DateTime.daysPerWeek) + 1,
-    );
+    return List.generate(DateTime.daysPerWeek, (index) => ((start + index - 1) % DateTime.daysPerWeek) + 1);
   }
 
   DateTime _dateFromWeekday(int weekday) {

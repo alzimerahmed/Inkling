@@ -5,12 +5,7 @@ import 'package:storypad/core/databases/models/story_page_db_model.dart';
 import 'package:storypad/core/services/search/search_ranking_service.dart';
 import 'package:storypad/core/types/path_type.dart';
 
-StoryDbModel _story({
-  required int id,
-  required DateTime date,
-  String? title,
-  String? plainText,
-}) {
+StoryDbModel _story({required int id, required DateTime date, String? title, String? plainText}) {
   final content = StoryContentDbModel.create(createdAt: date).copyWith(
     title: title,
     plainText: plainText,
@@ -54,12 +49,7 @@ StoryDbModel _story({
 void main() {
   group('SearchRankingService.rank', () {
     test('title matches rank above body matches', () {
-      final bodyMatch = _story(
-        id: 1,
-        date: DateTime(2024, 1, 1),
-        title: 'Other',
-        plainText: 'garden visit',
-      );
+      final bodyMatch = _story(id: 1, date: DateTime(2024, 1, 1), title: 'Other', plainText: 'garden visit');
       final titleMatch = _story(
         id: 2,
         date: DateTime(2023, 1, 1),

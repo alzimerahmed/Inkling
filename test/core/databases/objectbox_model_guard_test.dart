@@ -18,15 +18,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('ObjectBox model UIDs are stable (no destructive schema drift)', () {
     final File modelFile = File('lib/objectbox-model.json');
-    expect(
-      modelFile.existsSync(),
-      isTrue,
-      reason: 'objectbox-model.json must stay checked in',
-    );
+    expect(modelFile.existsSync(), isTrue, reason: 'objectbox-model.json must stay checked in');
 
-    final List<dynamic> entities = jsonDecode(
-      modelFile.readAsStringSync(),
-    )['entities'];
+    final List<dynamic> entities = jsonDecode(modelFile.readAsStringSync())['entities'];
 
     String snapshotOf(Map<String, dynamic> entity) {
       final List<String> properties =

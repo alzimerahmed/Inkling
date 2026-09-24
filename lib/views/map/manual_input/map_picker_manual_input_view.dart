@@ -24,15 +24,11 @@ class MapPickerManualInputRoute extends BaseRoute {
   final SpLatLng? referenceLatLng;
 
   @override
-  Widget buildPage(BuildContext context) =>
-      MapPickerManualInputView(params: this);
+  Widget buildPage(BuildContext context) => MapPickerManualInputView(params: this);
 }
 
 class MapPickerManualInputView extends StatelessWidget {
-  const MapPickerManualInputView({
-    super.key,
-    required this.params,
-  });
+  const MapPickerManualInputView({super.key, required this.params});
 
   final MapPickerManualInputRoute params;
 

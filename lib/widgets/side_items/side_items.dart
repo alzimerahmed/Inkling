@@ -33,9 +33,7 @@ part 'side_item.dart';
 const double _leadingPaddedSize = 12.0;
 
 class SideItems {
-  static List<IconButtonSideItem> getSideMenuItems({
-    required bool enableRelaxSounds,
-  }) {
+  static List<IconButtonSideItem> getSideMenuItems({required bool enableRelaxSounds}) {
     return [
       IconButtonSideItem(
         route: const HomeRoute(),
@@ -82,27 +80,17 @@ class SideItems {
           title: tr('general.sounds'),
           iconData: SpIcons.musicNote,
           selectedIconData: SpIcons.musicNote,
-          onTap: (context, route) =>
-              context.read<RootProvider>().navigate(route),
+          onTap: (context, route) => context.read<RootProvider>().navigate(route),
         ),
     ];
   }
 
-  static List<BaseSideItem> getEndDrawerItems(
-    BuildContext context,
-    HomeViewModel homeViewModel,
-  ) {
-    bool showProBanner =
-        kIAPEnabled && !context.read<InAppPurchaseProvider>().isProUser;
+  static List<BaseSideItem> getEndDrawerItems(BuildContext context, HomeViewModel homeViewModel) {
+    bool showProBanner = kIAPEnabled && !context.read<InAppPurchaseProvider>().isProUser;
 
     return [
-      CustomSideItem.custom(
-        builder: (context) => SurveyBanner(homeViewModel: homeViewModel),
-      ),
-      CustomSideItem.custom(
-        builder: (context) =>
-            HomeYearSwitcherHeader(homeViewModel: homeViewModel),
-      ),
+      CustomSideItem.custom(builder: (context) => SurveyBanner(homeViewModel: homeViewModel)),
+      CustomSideItem.custom(builder: (context) => HomeYearSwitcherHeader(homeViewModel: homeViewModel)),
       if (showProBanner) ...[
         CustomSideItem.custom(
           builder: (context) {
@@ -149,9 +137,7 @@ class SideItems {
       CustomSideItem.divider(),
       CustomSideItem.custom(
         builder: (context) {
-          return BackupTile(
-            onNavigate: (BaseRoute route) => route.push(context),
-          );
+          return BackupTile(onNavigate: (BaseRoute route) => route.push(context));
         },
       ),
       CustomSideItem.divider(),
@@ -201,9 +187,7 @@ class SideItems {
           icon: SpIcons.musicNote,
           tooltip: tr('paywall_features.relax_sounds.title'),
           wrap: (context, child) {
-            return SpFadeIn.bound(
-              child: SpFloatingMusicNote.wrapIfPlaying(child: child),
-            );
+            return SpFadeIn.bound(child: SpFloatingMusicNote.wrapIfPlaying(child: child));
           },
           onTap: (context) => const RelaxSoundsRoute().push(context),
         ),
@@ -223,11 +207,7 @@ class SideItems {
         icon: SpIcons.calendar,
         tooltip: tr('page.calendar.title'),
         onTap: (context) {
-          CalendarRoute(
-            initialMonth: null,
-            initialYear: homeViewModel.year,
-            initialSegment: .mood,
-          ).push(context);
+          CalendarRoute(initialMonth: null, initialYear: homeViewModel.year, initialSegment: .mood).push(context);
         },
       ),
     ];

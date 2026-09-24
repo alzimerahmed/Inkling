@@ -1,12 +1,6 @@
 typedef SpMapZoomBy = Future<void> Function(double delta);
 
-typedef SpMapAnimateTo =
-    Future<void> Function(
-      double latitude,
-      double longitude, {
-      double? zoom,
-      double? bearing,
-    });
+typedef SpMapAnimateTo = Future<void> Function(double latitude, double longitude, {double? zoom, double? bearing});
 
 typedef SpMapResetRotation = Future<void> Function();
 
@@ -35,12 +29,7 @@ class SpMapController {
     await _zoomBy?.call(delta);
   }
 
-  Future<void> animateTo(
-    double latitude,
-    double longitude, {
-    double? zoom,
-    double? bearing,
-  }) async {
+  Future<void> animateTo(double latitude, double longitude, {double? zoom, double? bearing}) async {
     await _animateTo?.call(latitude, longitude, zoom: zoom, bearing: bearing);
   }
 

@@ -26,21 +26,18 @@ void main() {
       expect(stats[5]!.storyCount, 1);
     });
 
-    test(
-      'counts distinct active days, ignoring multiple stories on the same day',
-      () {
-        final stats = MonthlyStoryStatsService.getByMonth(
-          stories: [
-            _story(id: 1, year: 2024, month: 3, day: 4),
-            _story(id: 2, year: 2024, month: 3, day: 4),
-            _story(id: 3, year: 2024, month: 3, day: 9),
-          ],
-          now: DateTime(2024, 12, 31),
-        );
+    test('counts distinct active days, ignoring multiple stories on the same day', () {
+      final stats = MonthlyStoryStatsService.getByMonth(
+        stories: [
+          _story(id: 1, year: 2024, month: 3, day: 4),
+          _story(id: 2, year: 2024, month: 3, day: 4),
+          _story(id: 3, year: 2024, month: 3, day: 9),
+        ],
+        now: DateTime(2024, 12, 31),
+      );
 
-        expect(stats[3]!.activeDays, 2);
-      },
-    );
+      expect(stats[3]!.activeDays, 2);
+    });
 
     test('sums embedded photos and voices across the month', () {
       final stats = MonthlyStoryStatsService.getByMonth(
@@ -137,9 +134,7 @@ StoryDbModel _story({
       title: null,
       plainText: "Entry",
       createdAt: now,
-      richPages: [
-        StoryPageDbModel(id: id + 2, title: null, body: body),
-      ],
+      richPages: [StoryPageDbModel(id: id + 2, title: null, body: body)],
     ),
     draftContent: null,
     createdAt: now,

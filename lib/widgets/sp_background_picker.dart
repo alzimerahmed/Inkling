@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,12 +23,7 @@ import 'package:storypad/widgets/sp_story_preference_theme.dart';
 const double _backgroundCardHeight = 123;
 const double _backgroundCardAspectRatio = 2 / 2.5;
 
-typedef OnBackgroundThemeChanged =
-    void Function({
-      int? colorSeedValue,
-      int? colorTone,
-      String? backgroundImagePath,
-    });
+typedef OnBackgroundThemeChanged = void Function({int? colorSeedValue, int? colorTone, String? backgroundImagePath});
 
 class SpBackgroundPicker extends StatefulWidget {
   const SpBackgroundPicker({
@@ -49,8 +45,7 @@ class SpBackgroundPicker extends StatefulWidget {
   State<SpBackgroundPicker> createState() => _SpBackgroundPickerState();
 }
 
-class _SpBackgroundPickerState extends State<SpBackgroundPicker>
-    with DebounchedCallback {
+class _SpBackgroundPickerState extends State<SpBackgroundPicker> with DebounchedCallback {
   int? get colorSeedValue => widget.colorSeedValue;
   int? get colorTone => widget.colorTone;
   String? get backgroundImagePath => widget.backgroundImagePath;
@@ -82,22 +77,15 @@ class _SpBackgroundPickerState extends State<SpBackgroundPicker>
           .where((group) => StoryBackgrounds.all.containsKey(group))
           .firstOrNull;
 
-      this.selectedGroup =
-          selectedGroup != null && allGroups.containsKey(selectedGroup)
+      this.selectedGroup = selectedGroup != null && allGroups.containsKey(selectedGroup)
           ? selectedGroup
           : allGroups.keys.elementAt(1); // default to cute
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final key = groupLabelKeys[selectedGroup];
-      if (selectedGroup != allGroups.keys.first &&
-          key?.currentContext != null) {
-        Scrollable.ensureVisible(
-          key!.currentContext!,
-          curve: Curves.ease,
-          duration: Durations.medium1,
-          alignment: 0.5,
-        );
+      if (selectedGroup != allGroups.keys.first && key?.currentContext != null) {
+        Scrollable.ensureVisible(key!.currentContext!, curve: Curves.ease, duration: Durations.medium1, alignment: 0.5);
       }
     });
   }
@@ -177,10 +165,7 @@ class _SpBackgroundPickerState extends State<SpBackgroundPicker>
                     ],
                   ),
                 ),
-                child: IconButton(
-                  icon: const Icon(SpIcons.info),
-                  onPressed: () => showLicenseDialog(context),
-                ),
+                child: IconButton(icon: const Icon(SpIcons.info), onPressed: () => showLicenseDialog(context)),
               ),
             ),
           ),
@@ -197,35 +182,22 @@ class _SpBackgroundPickerState extends State<SpBackgroundPicker>
           content: Container(
             padding: const EdgeInsets.only(top: 8.0),
             child: MarkdownBody(
-              listItemCrossAxisAlignment:
-                  MarkdownListItemCrossAxisAlignment.start,
+              listItemCrossAxisAlignment: MarkdownListItemCrossAxisAlignment.start,
               styleSheet: MarkdownStyleSheet(
-                p: TextTheme.of(context).bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                p: TextTheme.of(context).bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
                 a: TextTheme.of(context).bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
-                  decorationColor: Theme.of(
-                    context,
-                  ).colorScheme.onSurface.withValues(alpha: 0.5),
+                  decorationColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
                   decoration: TextDecoration.underline,
                 ),
               ),
               data: tr(
                 "general.story_background_credits",
                 context: context,
-                namedArgs: {
-                  'BACKGROUND_LINK': "[Freepik](https://freepik.com)",
-                  'APP_NAME': kAppName,
-                },
+                namedArgs: {'BACKGROUND_LINK': "[Freepik](https://freepik.com)", 'APP_NAME': kAppName},
               ),
               onTapLink: (text, href, title) =>
-                  UrlOpenerService.openForMarkdown(
-                    context: context,
-                    text: text,
-                    href: href,
-                    title: title,
-                  ),
+                  UrlOpenerService.openForMarkdown(context: context, text: text, href: href, title: title),
             ),
           ),
         );
@@ -253,8 +225,7 @@ class _ImageBackgroundCarousel extends StatefulWidget {
   final OnBackgroundThemeChanged onThemeChanged;
 
   @override
-  State<_ImageBackgroundCarousel> createState() =>
-      _ImageBackgroundCarouselState();
+  State<_ImageBackgroundCarousel> createState() => _ImageBackgroundCarouselState();
 }
 
 class _ImageBackgroundCarouselState extends State<_ImageBackgroundCarousel> {
@@ -279,9 +250,7 @@ class _ImageBackgroundCarouselState extends State<_ImageBackgroundCarousel> {
         controller.jumpTo(
           min(
             controller.position.maxScrollExtent,
-            _backgroundCardHeight *
-                _backgroundCardAspectRatio *
-                lastSelectedIndex,
+            _backgroundCardHeight * _backgroundCardAspectRatio * lastSelectedIndex,
           ),
         );
       }
@@ -310,9 +279,7 @@ class _ImageBackgroundCarouselState extends State<_ImageBackgroundCarousel> {
       height: _backgroundCardHeight,
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
       clipBehavior: .hardEdge,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(9.0),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(9.0)),
       child: CarouselView(
         controller: controller,
         itemExtent: itemExtent,
@@ -330,8 +297,7 @@ class _ImageBackgroundCarouselState extends State<_ImageBackgroundCarousel> {
           }
 
           final background = widget.backgrounds[index];
-          bool selected =
-              widget.backgroundImagePath == basename(background.path);
+          bool selected = widget.backgroundImagePath == basename(background.path);
 
           widget.onThemeChanged(
             colorTone: null,
@@ -353,12 +319,7 @@ class _ImageBackgroundCarouselState extends State<_ImageBackgroundCarousel> {
 }
 
 class _ImageItem extends StatelessWidget {
-  const _ImageItem({
-    required this.background,
-    required this.locked,
-    required this.selected,
-    required this.itemWidth,
-  });
+  const _ImageItem({required this.background, required this.locked, required this.selected, required this.itemWidth});
 
   final StoryBackground background;
   final bool locked;
@@ -375,10 +336,7 @@ class _ImageItem extends StatelessWidget {
           Positioned.fill(
             child: Container(
               color: Colors.black.withValues(alpha: 0.5),
-              child: const Icon(
-                SpIcons.lock,
-                color: Colors.white,
-              ),
+              child: const Icon(SpIcons.lock, color: Colors.white),
             ),
           ),
         ],
@@ -408,9 +366,7 @@ class _ImageItem extends StatelessWidget {
               // Each background card is ~86.4px wide (or itemWidth), but BoxFit.cover crops the image based on alignment (left/center/right),
               // so only a portion of the original image is visible. We multiply by 3 to ensure the displayed area is rendered sharply.
               // Using cacheWidth improves performance by decoding only the necessary resolution.
-              cacheWidth:
-                  (itemWidth * 3 * MediaQuery.of(context).devicePixelRatio)
-                      .round(),
+              cacheWidth: (itemWidth * 3 * MediaQuery.of(context).devicePixelRatio).round(),
             );
           },
         ),
@@ -428,12 +384,7 @@ class _ImageItem extends StatelessWidget {
       key: ValueKey('$foregroundColor'),
       top: 8,
       right: 8,
-      child: SpFadeIn.fromBottom(
-        child: Icon(
-          SpIcons.checkCircle,
-          color: foregroundColor,
-        ),
-      ),
+      child: SpFadeIn.fromBottom(child: Icon(SpIcons.checkCircle, color: foregroundColor)),
     );
   }
 }
@@ -452,18 +403,14 @@ class _ColorBackgroundsCarousel extends StatefulWidget {
   final OnBackgroundThemeChanged onThemeChanged;
 
   @override
-  State<_ColorBackgroundsCarousel> createState() =>
-      _ColorBackgroundsCarouselState();
+  State<_ColorBackgroundsCarousel> createState() => _ColorBackgroundsCarouselState();
 }
 
 class _ColorBackgroundsCarouselState extends State<_ColorBackgroundsCarousel> {
   late final CarouselController controller;
 
   final backgroundColors = [
-    ColorSwatch(Colors.black.toARGB32(), {
-      200: Colors.white,
-      700: Colors.black,
-    }),
+    ColorSwatch(Colors.black.toARGB32(), {200: Colors.white, 700: Colors.black}),
     ...kMaterialColors,
   ];
 
@@ -484,9 +431,7 @@ class _ColorBackgroundsCarouselState extends State<_ColorBackgroundsCarousel> {
         controller.jumpTo(
           min(
             controller.position.maxScrollExtent,
-            _backgroundCardHeight *
-                _backgroundCardAspectRatio *
-                lastSelectedIndex,
+            _backgroundCardHeight * _backgroundCardAspectRatio * lastSelectedIndex,
           ),
         );
       }
@@ -528,56 +473,39 @@ class _ColorBackgroundsCarouselState extends State<_ColorBackgroundsCarousel> {
       height: _backgroundCardHeight,
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
       clipBehavior: .hardEdge,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(9.0),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(9.0)),
       child: CarouselView(
         controller: controller,
         scrollDirection: .horizontal,
         itemExtent: _backgroundCardHeight * _backgroundCardAspectRatio,
         padding: const EdgeInsets.symmetric(horizontal: 6.0),
         shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: Theme.of(context).dividerColor,
-            width: 1.0,
-          ),
+          side: BorderSide(color: Theme.of(context).dividerColor, width: 1.0),
           borderRadius: BorderRadius.circular(8.0),
         ),
         onTap: (index) => onTap(backgroundColors, index),
         children: List.generate(backgroundColors.length, (index) {
-          return SpFadeIn(
-            child: buildColorItem(backgroundColors[index], context),
-          );
+          return SpFadeIn(child: buildColorItem(backgroundColors[index], context));
         }),
       ),
     );
   }
 
-  Widget buildColorItem(
-    ColorSwatch<dynamic> backgroundColor,
-    BuildContext context,
-  ) {
+  Widget buildColorItem(ColorSwatch<dynamic> backgroundColor, BuildContext context) {
     bool selected = widget.colorSeedValue == backgroundColor.toARGB32();
 
     ColorScheme colorScheme = AppTheme.isDarkMode(context)
-        ? SpStoryPreferenceThemeConstructor.getDarkColorScheme(
-            backgroundColor,
-            DynamicSchemeVariant.tonalSpot,
-          )
-        : SpStoryPreferenceThemeConstructor.getLightColorScheme(
-            backgroundColor,
-            DynamicSchemeVariant.tonalSpot,
-          );
+        ? SpStoryPreferenceThemeConstructor.getDarkColorScheme(backgroundColor, DynamicSchemeVariant.tonalSpot)
+        : SpStoryPreferenceThemeConstructor.getLightColorScheme(backgroundColor, DynamicSchemeVariant.tonalSpot);
 
-    Color? scaffoldBackgroundColor =
-        SpStoryPreferenceThemeConstructor.getScaffoldBackgroundColor(
-          colorScheme: colorScheme,
-          preferences: StoryPreferencesDbModel.create().copyWith(
-            backgroundImagePath: null,
-            colorSeedValue: backgroundColor.toARGB32(),
-            colorTone: selected ? widget.colorTone : 0,
-          ),
-        );
+    Color? scaffoldBackgroundColor = SpStoryPreferenceThemeConstructor.getScaffoldBackgroundColor(
+      colorScheme: colorScheme,
+      preferences: StoryPreferencesDbModel.create().copyWith(
+        backgroundImagePath: null,
+        colorSeedValue: backgroundColor.toARGB32(),
+        colorTone: selected ? widget.colorTone : 0,
+      ),
+    );
 
     return Column(
       children: [
@@ -612,11 +540,7 @@ class _ColorBackgroundsCarouselState extends State<_ColorBackgroundsCarousel> {
             duration: Durations.long1,
             curve: Curves.easeInOutQuart,
             builder: (context, value, _) {
-              return CircularProgressIndicator(
-                value: value / 100,
-                strokeCap: StrokeCap.round,
-                strokeWidth: 3,
-              );
+              return CircularProgressIndicator(value: value / 100, strokeCap: StrokeCap.round, strokeWidth: 3);
             },
           ),
         ),

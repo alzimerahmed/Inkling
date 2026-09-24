@@ -16,12 +16,7 @@ import 'show_template_view_model.dart';
 part 'show_template_content.dart';
 
 class ShowTemplateRoute extends BaseRoute {
-  ShowTemplateRoute({
-    required this.template,
-    this.initialYear,
-    this.initialMonth,
-    this.initialDay,
-  });
+  ShowTemplateRoute({required this.template, this.initialYear, this.initialMonth, this.initialDay});
 
   final int? initialYear;
   final int? initialMonth;
@@ -34,10 +29,7 @@ class ShowTemplateRoute extends BaseRoute {
 }
 
 class ShowTemplateView extends StatelessWidget {
-  const ShowTemplateView({
-    super.key,
-    required this.params,
-  });
+  const ShowTemplateView({super.key, required this.params});
 
   final ShowTemplateRoute params;
 

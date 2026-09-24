@@ -1,10 +1,7 @@
 part of 'library_view.dart';
 
 class _LibraryContent extends StatelessWidget {
-  const _LibraryContent(
-    this.viewModel, {
-    required this.constraints,
-  });
+  const _LibraryContent(this.viewModel, {required this.constraints});
 
   final LibraryViewModel viewModel;
   final BoxConstraints constraints;

@@ -8,9 +8,7 @@ class ShowChangeViewModel extends ChangeNotifier with DisposeAwareMixin {
   final ShowChangeRoute params;
   final PageController pageController = PageController();
 
-  ShowChangeViewModel({
-    required this.params,
-  }) {
+  ShowChangeViewModel({required this.params}) {
     if (content.richPages == null || content.richPages?.isEmpty == true) {
       content = content.addRichPage();
     }
@@ -22,10 +20,7 @@ class ShowChangeViewModel extends ChangeNotifier with DisposeAwareMixin {
   StoryPageObjectsMap? pagesMap;
 
   Future<void> load() async {
-    pagesMap = await StoryPageObjectsMap.fromContent(
-      content: content,
-      readOnly: true,
-    );
+    pagesMap = await StoryPageObjectsMap.fromContent(content: content, readOnly: true);
 
     notifyListeners();
   }

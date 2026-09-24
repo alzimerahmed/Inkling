@@ -18,8 +18,7 @@ import 'render.dart';
 ///  -1.0 >= value >= 0.0: past stuck
 /// ```
 ///
-typedef StickyHeaderWidgetBuilder =
-    Widget Function(BuildContext context, double stuckAmount);
+typedef StickyHeaderWidgetBuilder = Widget Function(BuildContext context, double stuckAmount);
 
 /// Stick Header Widget
 ///
@@ -37,9 +36,7 @@ class StickyHeader extends MultiChildRenderObjectWidget {
     this.overlapHeaders = false,
     this.controller,
     this.callback,
-  }) : super(
-         children: [content, header],
-       );
+  }) : super(children: [content, header]);
 
   /// Header to be shown at the top of the parent [Scrollable] content.
   final Widget header;
@@ -59,22 +56,13 @@ class StickyHeader extends MultiChildRenderObjectWidget {
 
   @override
   RenderStickyHeader createRenderObject(BuildContext context) {
-    final scrollPosition =
-        controller?.position ?? Scrollable.of(context).position;
-    return RenderStickyHeader(
-      scrollPosition: scrollPosition,
-      callback: callback,
-      overlapHeaders: overlapHeaders,
-    );
+    final scrollPosition = controller?.position ?? Scrollable.of(context).position;
+    return RenderStickyHeader(scrollPosition: scrollPosition, callback: callback, overlapHeaders: overlapHeaders);
   }
 
   @override
-  void updateRenderObject(
-    BuildContext context,
-    RenderStickyHeader renderObject,
-  ) {
-    final scrollPosition =
-        controller?.position ?? Scrollable.of(context).position;
+  void updateRenderObject(BuildContext context, RenderStickyHeader renderObject) {
+    final scrollPosition = controller?.position ?? Scrollable.of(context).position;
     renderObject
       ..scrollPosition = scrollPosition
       ..callback = callback
@@ -123,9 +111,7 @@ class _StickyHeaderBuilderState extends State<StickyHeaderBuilder> {
   Widget build(BuildContext context) {
     return StickyHeader(
       overlapHeaders: widget.overlapHeaders,
-      header: LayoutBuilder(
-        builder: (context, _) => widget.builder(context, _stuckAmount ?? 0.0),
-      ),
+      header: LayoutBuilder(builder: (context, _) => widget.builder(context, _stuckAmount ?? 0.0)),
       content: widget.content,
       controller: widget.controller,
       callback: (double stuckAmount) {

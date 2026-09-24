@@ -1,4 +1,1 @@
-enum HomeEndDrawerState {
-  showYearsView,
-  showSettings,
-}
+enum HomeEndDrawerState { showYearsView, showSettings }

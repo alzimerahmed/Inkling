@@ -1,10 +1,7 @@
 part of 'templates_tab.dart';
 
 class _TemplateTile extends StatelessWidget {
-  const _TemplateTile({
-    required this.onTap,
-    required this.template,
-  });
+  const _TemplateTile({required this.onTap, required this.template});
 
   final void Function() onTap;
   final TemplateDbModel template;
@@ -12,9 +9,7 @@ class _TemplateTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? body = template.content?.richPages
-        ?.map(
-          (e) => e.title?.trim().isNotEmpty == true ? e.title!.trim() : null,
-        )
+        ?.map((e) => e.title?.trim().isNotEmpty == true ? e.title!.trim() : null)
         .whereType<String>()
         .join(" · ");
 
@@ -25,15 +20,10 @@ class _TemplateTile extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: 6.0,
-        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
         onTap: onTap,
         title: Text(
-          hasName
-              ? template.name!.trim()
-              : (hasBody ? body! : tr('general.na')),
+          hasName ? template.name!.trim() : (hasBody ? body! : tr('general.na')),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -42,25 +32,13 @@ class _TemplateTile extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (hasName && hasBody)
-                    Text(
-                      body!,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  if (hasTags) ...[
-                    const SizedBox(height: 8.0),
-                    TemplateTagLabels(template: template),
-                  ],
+                  if (hasName && hasBody) Text(body!, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  if (hasTags) ...[const SizedBox(height: 8.0), TemplateTagLabels(template: template)],
                 ],
               )
             : null,
         trailing:
-            [
-              TargetPlatform.linux,
-              TargetPlatform.windows,
-              TargetPlatform.macOS,
-            ].contains(Theme.of(context).platform)
+            [TargetPlatform.linux, TargetPlatform.windows, TargetPlatform.macOS].contains(Theme.of(context).platform)
             ? null
             : const Icon(SpIcons.dragIndicator),
       ),

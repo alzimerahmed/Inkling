@@ -6,10 +6,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/sp_single_state_widget.dart';
 
 class SpMapProviderSheet extends BaseBottomSheet {
-  const SpMapProviderSheet({
-    required this.mapRenderer,
-    required this.onChanged,
-  });
+  const SpMapProviderSheet({required this.mapRenderer, required this.onChanged});
 
   final SpMapRenderer mapRenderer;
   final void Function(SpMapRenderer mapRenderer) onChanged;
@@ -36,10 +33,7 @@ class SpMapProviderSheet extends BaseBottomSheet {
                   trailing: Visibility(
                     visible: mapRenderer == selectedMapRenderer,
                     child: SpFadeIn.fromBottom(
-                      child: Icon(
-                        SpIcons.checkCircle,
-                        color: ColorScheme.of(context).primary,
-                      ),
+                      child: Icon(SpIcons.checkCircle, color: ColorScheme.of(context).primary),
                     ),
                   ),
                   onTap: () {

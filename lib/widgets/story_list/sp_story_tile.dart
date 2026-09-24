@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:storypad/app_theme.dart';
@@ -64,74 +65,50 @@ class SpStoryTile extends StatelessWidget {
   List<SpPopMenuItem> buildPopUpMenus(BuildContext context) {
     return [
       if ((story.inArchives || story.inBins) && onTap != null)
-        SpPopMenuItem(
-          title: tr('button.open'),
-          leadingIconData: SpIcons.book,
-          onPressed: onTap,
-        ),
+        SpPopMenuItem(title: tr('button.open'), leadingIconData: SpIcons.book, onPressed: onTap),
       if (story.putBackAble)
         SpPopMenuItem(
           title: tr('button.put_back'),
           leadingIconData: SpIcons.putBack,
-          onPressed: () => StoryTileActions(
-            story: story,
-            storyListReloaderContext: listContext,
-          ).putBack(context),
+          onPressed: () => StoryTileActions(story: story, storyListReloaderContext: listContext).putBack(context),
         ),
       if (story.archivable)
         SpPopMenuItem(
           title: tr('button.archive'),
           leadingIconData: SpIcons.archive,
-          onPressed: () => StoryTileActions(
-            story: story,
-            storyListReloaderContext: listContext,
-          ).archive(context),
+          onPressed: () => StoryTileActions(story: story, storyListReloaderContext: listContext).archive(context),
         ),
       if (story.canMoveToBin)
         SpPopMenuItem(
           title: tr('button.move_to_bin'),
           leadingIconData: SpIcons.delete,
           titleStyle: TextStyle(color: ColorScheme.of(context).error),
-          onPressed: () => StoryTileActions(
-            story: story,
-            storyListReloaderContext: listContext,
-          ).moveToBin(context),
+          onPressed: () => StoryTileActions(story: story, storyListReloaderContext: listContext).moveToBin(context),
         ),
       if (story.hardDeletable)
         SpPopMenuItem(
           title: tr('button.permanent_delete'),
           leadingIconData: SpIcons.deleteForever,
           titleStyle: TextStyle(color: ColorScheme.of(context).error),
-          onPressed: () => StoryTileActions(
-            story: story,
-            storyListReloaderContext: listContext,
-          ).hardDelete(context),
+          onPressed: () => StoryTileActions(story: story, storyListReloaderContext: listContext).hardDelete(context),
         ),
       if (story.cloudViewing)
         SpPopMenuItem(
           title: tr('button.import'),
           leadingIconData: SpIcons.import,
           titleStyle: TextStyle(color: ColorScheme.of(context).primary),
-          onPressed: () => StoryTileActions(
-            story: story,
-            storyListReloaderContext: listContext,
-          ).importIndividualStory(context),
+          onPressed: () =>
+              StoryTileActions(story: story, storyListReloaderContext: listContext).importIndividualStory(context),
         ),
       SpPopMenuItem(
         title: tr('button.info'),
         leadingIconData: SpIcons.info,
-        onPressed: () => SpStoryInfoSheet(
-          story: story,
-          persisted: true,
-        ).show(context: context),
+        onPressed: () => SpStoryInfoSheet(story: story, persisted: true).show(context: context),
       ),
       SpPopMenuItem(
         title: tr('button.export_pdf'),
         leadingIconData: SpIcons.pdf,
-        onPressed: () => StoryTileActions(
-          story: story,
-          storyListReloaderContext: listContext,
-        ).exportPdf(context),
+        onPressed: () => StoryTileActions(story: story, storyListReloaderContext: listContext).exportPdf(context),
       ),
     ];
   }
@@ -147,18 +124,12 @@ class SpStoryTile extends StatelessWidget {
     );
   }
 
-  Widget buildStoryTile(
-    BuildContext context, [
-    SpStoryListMultiEditWrapperState? multiEditState,
-  ]) {
+  Widget buildStoryTile(BuildContext context, [SpStoryListMultiEditWrapperState? multiEditState]) {
     StoryContentDbModel? content = story.draftContent ?? story.latestContent;
-    String? displayShortBody = content?.displayShortBody(
-      maxCharacterCount: preferences.displayCharacterCount,
-    );
+    String? displayShortBody = content?.displayShortBody(maxCharacterCount: preferences.displayCharacterCount);
 
     bool hasTitle = content?.title?.trim().isNotEmpty == true;
-    bool hasBody =
-        displayShortBody != null && displayShortBody.trim().isNotEmpty == true;
+    bool hasBody = displayShortBody != null && displayShortBody.trim().isNotEmpty == true;
     List<SpPopMenuItem> menus = buildPopUpMenus(context);
 
     return SpPopupMenuButton(
@@ -175,12 +146,10 @@ class SpStoryTile extends StatelessWidget {
             onLongPress = null;
           } else if (story.inArchives || story.inBins) {
             onTap = () => openPopUpMenu.call();
-            onLongPress = () =>
-                multiEditState.turnOnEditing(initialId: story.id);
+            onLongPress = () => multiEditState.turnOnEditing(initialId: story.id);
           } else {
             onTap = this.onTap;
-            onLongPress = () =>
-                multiEditState.turnOnEditing(initialId: story.id);
+            onLongPress = () => multiEditState.turnOnEditing(initialId: story.id);
           }
         } else {
           onTap = this.onTap;
@@ -193,12 +162,7 @@ class SpStoryTile extends StatelessWidget {
           onLongPressed: onLongPress,
           child: Container(
             // color: story.day.isEven ? Colors.red : Colors.blue,
-            padding: const EdgeInsets.only(
-              left: 16.0,
-              right: 16.0,
-              top: 12.0,
-              bottom: 12.0,
-            ),
+            padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 12.0, bottom: 12.0),
             child: Stack(
               clipBehavior: Clip.none,
               children: [
@@ -206,11 +170,7 @@ class SpStoryTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 16.0,
                   children: [
-                    _StoryTileMonogram(
-                      showMonogram: showMonogram,
-                      monogramSize: monogramSize,
-                      story: story,
-                    ),
+                    _StoryTileMonogram(showMonogram: showMonogram, monogramSize: monogramSize, story: story),
                     _StoryTileContents(
                       story: story,
                       viewOnly: viewOnly,

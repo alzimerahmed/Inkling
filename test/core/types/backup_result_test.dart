@@ -43,10 +43,7 @@ void main() {
     test('creates partial success result', () {
       final error1 = BackupError.network('Error 1');
       final error2 = BackupError.fileOperation('Error 2');
-      final result = BackupResult.partialSuccess('partial data', [
-        error1,
-        error2,
-      ]);
+      final result = BackupResult.partialSuccess('partial data', [error1, error2]);
 
       expect(result.isSuccess, isFalse);
       expect(result.isFailure, isFalse);
@@ -87,9 +84,7 @@ void main() {
 
     test('flatMaps success result', () {
       const result = BackupResult.success(5);
-      final flatMapped = result.flatMap(
-        (value) => BackupResult.success(value * 2),
-      );
+      final flatMapped = result.flatMap((value) => BackupResult.success(value * 2));
 
       expect(flatMapped.isSuccess, isTrue);
       expect(flatMapped.data, equals(10));
@@ -99,9 +94,7 @@ void main() {
       final error1 = BackupError.network('Error 1');
       final error2 = BackupError.fileOperation('Error 2');
       final result = BackupResult.partialSuccess(5, [error1]);
-      final flatMapped = result.flatMap(
-        (value) => BackupResult.partialSuccess(value * 2, [error2]),
-      );
+      final flatMapped = result.flatMap((value) => BackupResult.partialSuccess(value * 2, [error2]));
 
       expect(flatMapped.isPartialSuccess, isTrue);
       expect(flatMapped.data, equals(10));
@@ -139,10 +132,7 @@ void main() {
     });
 
     test('creates from AuthException with metadata', () {
-      const exception = AuthException(
-        'Auth failed',
-        AuthExceptionType.tokenExpired,
-      );
+      const exception = AuthException('Auth failed', AuthExceptionType.tokenExpired);
       final error = BackupError.fromException(exception);
 
       expect(error.type, equals(BackupErrorType.authentication));
@@ -185,14 +175,8 @@ void main() {
     });
 
     test('has proper string representation', () {
-      final error = BackupError.network(
-        'Network error',
-        context: 'test_operation',
-      );
-      expect(
-        error.toString(),
-        equals('BackupError(network: Network error (test_operation))'),
-      );
+      final error = BackupError.network('Network error', context: 'test_operation');
+      expect(error.toString(), equals('BackupError(network: Network error (test_operation))'));
     });
   });
 }

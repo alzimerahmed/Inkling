@@ -10,10 +10,7 @@ part of '../stats_view.dart';
 /// J  F  M  A  M  J  J  A  S  O  N  D
 /// ```
 class _StatsTrend extends StatelessWidget {
-  const _StatsTrend({
-    required this.stats,
-    required this.range,
-  });
+  const _StatsTrend({required this.stats, required this.range});
 
   static const double _barAreaHeight = 96.0;
 
@@ -29,20 +26,11 @@ class _StatsTrend extends StatelessWidget {
     stats.dailyCounts.forEach((day, count) {
       if (day.year == range.anchor.year) totals[day.month - 1] += count;
     });
-    final int maxCount = totals.fold(
-      0,
-      (max, count) => count > max ? count : max,
-    );
+    final int maxCount = totals.fold(0, (max, count) => count > max ? count : max);
 
     final List<({String label, int count})> bars = [
       for (int month = 1; month <= 12; month++)
-        (
-          label: DateFormatHelper.MMM(
-            DateTime(range.anchor.year, month),
-            context.locale,
-          ),
-          count: totals[month - 1],
-        ),
+        (label: DateFormatHelper.MMM(DateTime(range.anchor.year, month), context.locale), count: totals[month - 1]),
     ];
 
     return Center(
@@ -60,23 +48,18 @@ class _StatsTrend extends StatelessWidget {
                   children: [
                     Text(
                       bar.count > 0 ? '${bar.count}' : '',
-                      style: textTheme.labelSmall?.copyWith(
-                        color: colorScheme.onSurface.withValues(alpha: 0.6),
-                      ),
+                      style: textTheme.labelSmall?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.6)),
                     ),
                     SizedBox(
                       height: _barAreaHeight,
                       child: FractionallySizedBox(
                         alignment: Alignment.bottomCenter,
-                        heightFactor: maxCount == 0
-                            ? 0.02
-                            : (bar.count / maxCount).clamp(0.02, 1.0),
+                        heightFactor: maxCount == 0 ? 0.02 : (bar.count / maxCount).clamp(0.02, 1.0),
                         child: Container(
                           decoration: BoxDecoration(
                             color: bar.count > 0
                                 ? colorScheme.primary
-                                : colorScheme.surfaceContainerHighest
-                                      .withValues(alpha: 0.6),
+                                : colorScheme.surfaceContainerHighest.withValues(alpha: 0.6),
                             borderRadius: BorderRadius.circular(4.0),
                           ),
                         ),
@@ -86,9 +69,7 @@ class _StatsTrend extends StatelessWidget {
                       bar.label,
                       maxLines: 1,
                       overflow: .clip,
-                      style: textTheme.labelSmall?.copyWith(
-                        color: colorScheme.onSurface.withValues(alpha: 0.5),
-                      ),
+                      style: textTheme.labelSmall?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.5)),
                     ),
                   ],
                 ),

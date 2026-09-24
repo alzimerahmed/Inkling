@@ -25,9 +25,7 @@ import 'settings_view_model.dart';
 part 'settings_content.dart';
 
 class SettingsRoute extends BaseRoute {
-  SettingsRoute({
-    this.fromOnboarding = false,
-  });
+  SettingsRoute({this.fromOnboarding = false});
 
   final bool fromOnboarding;
 
@@ -44,10 +42,7 @@ class SettingsRoute extends BaseRoute {
 }
 
 class SettingsView extends StatelessWidget {
-  const SettingsView({
-    super.key,
-    required this.params,
-  });
+  const SettingsView({super.key, required this.params});
 
   final SettingsRoute params;
 

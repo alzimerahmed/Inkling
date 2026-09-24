@@ -83,10 +83,7 @@ class StorypadLegacyStoryModel {
     };
   }
 
-  static DateTime? dateTimeFromIntMap({
-    Map<dynamic, dynamic>? json,
-    String? key,
-  }) {
+  static DateTime? dateTimeFromIntMap({Map<dynamic, dynamic>? json, String? key}) {
     if (key == null) return null;
     if (json == null) return null;
 
@@ -97,10 +94,7 @@ class StorypadLegacyStoryModel {
     }
   }
 
-  static bool boolFromIntMap({
-    Map<dynamic, dynamic>? json,
-    String? key,
-  }) {
+  static bool boolFromIntMap({Map<dynamic, dynamic>? json, String? key}) {
     if (key == null) return false;
     if (json == null) return false;
 

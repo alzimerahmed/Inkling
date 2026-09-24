@@ -11,23 +11,20 @@ import 'package:storypad/widgets/sp_fab_location.dart';
 import 'package:storypad/widgets/sp_fade_in.dart';
 import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/story_list/sp_story_list.dart';
+
 import 'period_calendar_view_model.dart';
 
 part 'period_calendar_content.dart';
 
 class PeriodCalendarView extends StatelessWidget {
-  const PeriodCalendarView({
-    super.key,
-    required this.monthYearNotifier,
-  });
+  const PeriodCalendarView({super.key, required this.monthYearNotifier});
 
   final ValueNotifier<({int year, int month})> monthYearNotifier;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<PeriodCalendarViewModel>(
-      create: (context) =>
-          PeriodCalendarViewModel(params: this, context: context),
+      create: (context) => PeriodCalendarViewModel(params: this, context: context),
       builder: (context, child) {
         return _PeriodCalendarContent(Provider.of(context));
       },

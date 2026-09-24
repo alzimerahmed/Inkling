@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 
 // Nested navigation inside same parent. Eg. navigations in dialog.
 class SpNestedNavigation extends StatefulWidget {
-  const SpNestedNavigation({
-    super.key,
-    this.navigatorKey,
-    required this.initialScreen,
-  });
+  const SpNestedNavigation({super.key, this.navigatorKey, required this.initialScreen});
 
   final GlobalKey<NavigatorState>? navigatorKey;
   final Widget initialScreen;
@@ -20,8 +16,7 @@ class SpNestedNavigation extends StatefulWidget {
 }
 
 class SpNestedNavigationState extends State<SpNestedNavigation> {
-  final HeroController heroController =
-      MaterialApp.createMaterialHeroController();
+  final HeroController heroController = MaterialApp.createMaterialHeroController();
 
   @override
   void dispose() {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:archive/archive.dart';
 import 'package:storypad/core/objects/imported_story_draft.dart';
 
@@ -19,12 +20,7 @@ import 'package:storypad/core/objects/imported_story_draft.dart';
 /// parsing (this whole parser runs off the main isolate) so the importer can
 /// copy them into asset storage later.
 class DayOneImportParser {
-  static const List<String> _jsonEntryNames = [
-    'Journal.json',
-    'Export.json',
-    'journal.json',
-    'export.json',
-  ];
+  static const List<String> _jsonEntryNames = ['Journal.json', 'Export.json', 'journal.json', 'export.json'];
 
   /// Parses a `.json` Day One export. Photos are referenced by name but no
   /// photo bytes exist in a bare JSON export — the importer records them as
@@ -47,8 +43,7 @@ class DayOneImportParser {
       entries = decoded['entries'] as List<dynamic>?;
     }
 
-    if (entries == null)
-      return const ImportedParseResult(drafts: [], skippedCount: 1);
+    if (entries == null) return const ImportedParseResult(drafts: [], skippedCount: 1);
 
     for (final entry in entries) {
       if (entry is! Map) {
@@ -68,10 +63,7 @@ class DayOneImportParser {
 
   /// Parses a `.zip` Day One export: extracts the JSON + photo files into
   /// [tempPhotoDir] (created by the caller), then parses the JSON.
-  static Future<ImportedParseResult> parseZip({
-    required List<int> zipBytes,
-    required Directory tempPhotoDir,
-  }) async {
+  static Future<ImportedParseResult> parseZip({required List<int> zipBytes, required Directory tempPhotoDir}) async {
     final Archive archive;
     try {
       archive = ZipDecoder().decodeBytes(zipBytes);
@@ -91,17 +83,8 @@ class DayOneImportParser {
         jsonContent = utf8.decode(file.content as List<int>);
         continue;
       }
-      final ext = name.contains('.')
-          ? name.substring(name.lastIndexOf('.'))
-          : '';
-      if ([
-        '.jpg',
-        '.jpeg',
-        '.png',
-        '.gif',
-        '.heic',
-        '.webp',
-      ].contains(ext.toLowerCase())) {
+      final ext = name.contains('.') ? name.substring(name.lastIndexOf('.')) : '';
+      if (['.jpg', '.jpeg', '.png', '.gif', '.heic', '.webp'].contains(ext.toLowerCase())) {
         final tempFile = File('${tempPhotoDir.path}/$name');
         await tempFile.writeAsBytes(file.content as List<int>);
         photoFiles[name.toLowerCase()] = tempFile.path;
@@ -109,19 +92,11 @@ class DayOneImportParser {
     }
 
     if (jsonContent == null) {
-      return ImportedParseResult(
-        drafts: const [],
-        skippedCount: 1,
-        photoFiles: photoFiles,
-      );
+      return ImportedParseResult(drafts: const [], skippedCount: 1, photoFiles: photoFiles);
     }
 
     final result = parseJson(jsonContent);
-    return ImportedParseResult(
-      drafts: result.drafts,
-      skippedCount: result.skippedCount,
-      photoFiles: photoFiles,
-    );
+    return ImportedParseResult(drafts: result.drafts, skippedCount: result.skippedCount, photoFiles: photoFiles);
   }
 
   static ImportedStoryDraft? _draftFromEntry(Map<dynamic, dynamic> entry) {
@@ -134,9 +109,7 @@ class DayOneImportParser {
     final tags = <String>[];
     final rawTags = entry['tags'];
     if (rawTags is List) {
-      tags.addAll(
-        rawTags.whereType<String>().where((t) => t.trim().isNotEmpty),
-      );
+      tags.addAll(rawTags.whereType<String>().where((t) => t.trim().isNotEmpty));
     }
 
     final photos = <String>[];
@@ -144,10 +117,8 @@ class DayOneImportParser {
     if (rawPhotos is List) {
       for (final photo in rawPhotos) {
         if (photo is! Map) continue;
-        final fileName =
-            photo['fileName']?.toString() ?? photo['identifier']?.toString();
-        if (fileName != null && fileName.trim().isNotEmpty)
-          photos.add(fileName);
+        final fileName = photo['fileName']?.toString() ?? photo['identifier']?.toString();
+        if (fileName != null && fileName.trim().isNotEmpty) photos.add(fileName);
       }
     }
 
@@ -160,6 +131,5 @@ class DayOneImportParser {
     );
   }
 
-  static String? _nonEmpty(String? value) =>
-      (value == null || value.trim().isEmpty) ? null : value.trim();
+  static String? _nonEmpty(String? value) => (value == null || value.trim().isEmpty) ? null : value.trim();
 }

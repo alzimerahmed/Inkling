@@ -12,12 +12,7 @@ class _CloudOptimizeContent extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          tr(
-            'page.cloud_optimize.title',
-            namedArgs: {'SERVICE_NAME': viewModel.serviceType.displayName},
-          ),
-        ),
+        title: Text(tr('page.cloud_optimize.title', namedArgs: {'SERVICE_NAME': viewModel.serviceType.displayName})),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -60,10 +55,7 @@ class _CloudOptimizeContent extends StatelessWidget {
               OptimizeStep.done,
               OptimizeStep.error,
             },
-            doneSubtitle: plural(
-              'page.cloud_optimize.step.fetch.done',
-              viewModel.fetchedFilesCount,
-            ),
+            doneSubtitle: plural('page.cloud_optimize.step.fetch.done', viewModel.fetchedFilesCount),
             activeSubtitle: tr('page.cloud_optimize.step.fetch.active'),
             doneColor: isAllDone ? green : null,
           ),
@@ -95,36 +87,29 @@ class _CloudOptimizeContent extends StatelessWidget {
             title: tr('page.cloud_optimize.step.cleanup.title'),
             currentStep: viewModel.currentStep,
             activeStep: OptimizeStep.cleaningUp,
-            doneSteps: const {
-              OptimizeStep.done,
-              OptimizeStep.error,
-            },
+            doneSteps: const {OptimizeStep.done, OptimizeStep.error},
             skipped: isAllDone && !viewModel.hasFilesToClean,
             doneSubtitle: _cleanupSummary(viewModel),
             activeSubtitle: viewModel.totalToClean > 0
                 ? tr(
                     'page.cloud_optimize.step.cleanup.active_with_count',
                     namedArgs: {
-                      'CURRENT_COUNT':
-                          '${viewModel.deletedCount + viewModel.failedCount}',
+                      'CURRENT_COUNT': '${viewModel.deletedCount + viewModel.failedCount}',
                       'TOTAL_COUNT': '${viewModel.totalToClean}',
                     },
                   )
                 : tr('page.cloud_optimize.step.cleanup.active'),
             doneColor: isAllDone ? green : null,
           ),
-          if (viewModel.currentStep == OptimizeStep.awaitingConfirmation)
-            _buildConfirmation(context, viewModel),
-          if (viewModel.currentStep == OptimizeStep.error)
-            _buildError(context, viewModel),
+          if (viewModel.currentStep == OptimizeStep.awaitingConfirmation) _buildConfirmation(context, viewModel),
+          if (viewModel.currentStep == OptimizeStep.error) _buildError(context, viewModel),
         ],
       ),
     );
   }
 
   String _analysisSummary(CloudOptimizeViewModel vm) {
-    if (!vm.hasFindings)
-      return tr('page.cloud_optimize.step.analyze.nothing_to_clean');
+    if (!vm.hasFindings) return tr('page.cloud_optimize.step.analyze.nothing_to_clean');
     final parts = <String>[];
     if (vm.detachedCandidates.isNotEmpty) {
       parts.add(
@@ -153,66 +138,41 @@ class _CloudOptimizeContent extends StatelessWidget {
             );
       parts.add(part);
     }
-    return tr(
-      'page.cloud_optimize.step.analyze.summary_found',
-      namedArgs: {'ARG_SUMMARY': parts.join(', ')},
-    );
+    return tr('page.cloud_optimize.step.analyze.summary_found', namedArgs: {'ARG_SUMMARY': parts.join(', ')});
   }
 
   String _cleanupSummary(CloudOptimizeViewModel vm) {
-    if (vm.deletedCount == 0 && vm.failedCount == 0)
-      return tr('page.cloud_optimize.step.cleanup.no_files');
+    if (vm.deletedCount == 0 && vm.failedCount == 0) return tr('page.cloud_optimize.step.cleanup.no_files');
     final parts = <String>[];
 
     if (vm.deletedCount > 0) {
       parts.add(
-        tr(
-          'page.cloud_optimize.step.cleanup.moved_to_trash',
-          namedArgs: {'DELETED_COUNT': '${vm.deletedCount}'},
-        ),
+        tr('page.cloud_optimize.step.cleanup.moved_to_trash', namedArgs: {'DELETED_COUNT': '${vm.deletedCount}'}),
       );
     }
     if (vm.failedCount > 0) {
-      parts.add(
-        tr(
-          'page.cloud_optimize.step.cleanup.failed',
-          namedArgs: {'FAILED_COUNT': '${vm.failedCount}'},
-        ),
-      );
+      parts.add(tr('page.cloud_optimize.step.cleanup.failed', namedArgs: {'FAILED_COUNT': '${vm.failedCount}'}));
     }
 
     return parts.join(', ');
   }
 
-  Widget _buildConfirmation(
-    BuildContext context,
-    CloudOptimizeViewModel viewModel,
-  ) {
+  Widget _buildConfirmation(BuildContext context, CloudOptimizeViewModel viewModel) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = TextTheme.of(context);
     final bytesToClean = viewModel.totalBytesToClean;
 
     final rows = <(String, String)>[
       if (viewModel.detachedCandidates.isNotEmpty)
-        (
-          tr('page.cloud_optimize.confirmation.detached_eligible'),
-          '${viewModel.detachedCandidates.length}',
-        ),
+        (tr('page.cloud_optimize.confirmation.detached_eligible'), '${viewModel.detachedCandidates.length}'),
       if (viewModel.detachedFiles.length > viewModel.detachedCandidates.length)
         (
           tr('page.cloud_optimize.confirmation.detached_too_recent'),
           '${viewModel.detachedFiles.length - viewModel.detachedCandidates.length}',
         ),
       if (viewModel.staleDuplicates.isNotEmpty)
-        (
-          tr('page.cloud_optimize.confirmation.stale_duplicates'),
-          '${viewModel.staleDuplicates.length}',
-        ),
-      if (bytesToClean > 0)
-        (
-          tr('page.cloud_optimize.confirmation.space_to_free'),
-          _formatBytes(bytesToClean),
-        ),
+        (tr('page.cloud_optimize.confirmation.stale_duplicates'), '${viewModel.staleDuplicates.length}'),
+      if (bytesToClean > 0) (tr('page.cloud_optimize.confirmation.space_to_free'), _formatBytes(bytesToClean)),
     ];
 
     return Padding(
@@ -223,10 +183,7 @@ class _CloudOptimizeContent extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: colorScheme.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(12),
-            ),
+            decoration: BoxDecoration(color: colorScheme.surfaceContainerLow, borderRadius: BorderRadius.circular(12)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -235,12 +192,7 @@ class _CloudOptimizeContent extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(row.$1, style: textTheme.bodySmall),
-                      Text(
-                        row.$2,
-                        style: textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      Text(row.$2, style: textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600)),
                     ],
                   ),
                   if (row != rows.last) const SizedBox(height: 4),
@@ -257,12 +209,8 @@ class _CloudOptimizeContent extends StatelessWidget {
                 child: Text(
                   viewModel.hasFilesToClean
                       ? tr('page.cloud_optimize.confirmation.footer')
-                      : tr(
-                          'page.cloud_optimize.confirmation.no_eligible_files',
-                        ),
-                  style: textTheme.bodySmall?.copyWith(
-                    color: colorScheme.outline,
-                  ),
+                      : tr('page.cloud_optimize.confirmation.no_eligible_files'),
+                  style: textTheme.bodySmall?.copyWith(color: colorScheme.outline),
                 ),
               ),
             ],
@@ -271,14 +219,8 @@ class _CloudOptimizeContent extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: FilledButton(
-              onPressed: viewModel.hasFilesToClean
-                  ? () => viewModel.startCleanup()
-                  : () => Navigator.of(context).pop(),
-              child: Text(
-                viewModel.hasFilesToClean
-                    ? tr('button.move_to_trash')
-                    : tr('button.done'),
-              ),
+              onPressed: viewModel.hasFilesToClean ? () => viewModel.startCleanup() : () => Navigator.of(context).pop(),
+              child: Text(viewModel.hasFilesToClean ? tr('button.move_to_trash') : tr('button.done')),
             ),
           ),
         ],
@@ -305,9 +247,7 @@ class _CloudOptimizeContent extends StatelessWidget {
         children: [
           Text(
             viewModel.errorMessage ?? 'An unexpected error occurred.',
-            style: TextTheme.of(context).bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.error,
-            ),
+            style: TextTheme.of(context).bodySmall?.copyWith(color: Theme.of(context).colorScheme.error),
           ),
           const SizedBox(height: 8),
           TextButton.icon(
@@ -359,9 +299,7 @@ class _StepCard extends StatelessWidget {
         ? colorScheme.primary
         : colorScheme.outlineVariant;
 
-    final badgeTextColor = _isDone || _isActive
-        ? colorScheme.onPrimary
-        : colorScheme.outline;
+    final badgeTextColor = _isDone || _isActive ? colorScheme.onPrimary : colorScheme.outline;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -383,19 +321,13 @@ class _StepCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 if (_isActive) ...[
-                  LinearProgressIndicator(
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+                  LinearProgressIndicator(borderRadius: BorderRadius.circular(2)),
                   const SizedBox(height: 4),
                   Text(activeSubtitle, style: textTheme.bodySmall),
                 ] else if (_isDone) ...[
                   Text(
-                    skipped
-                        ? tr('page.cloud_optimize.step.skipped')
-                        : doneSubtitle,
-                    style: textTheme.bodySmall?.copyWith(
-                      color: doneColor?.withValues(alpha: 0.85),
-                    ),
+                    skipped ? tr('page.cloud_optimize.step.skipped') : doneSubtitle,
+                    style: textTheme.bodySmall?.copyWith(color: doneColor?.withValues(alpha: 0.85)),
                   ),
                 ],
               ],
@@ -406,11 +338,7 @@ class _StepCard extends StatelessWidget {
     );
   }
 
-  Widget _buildBadge(
-    Color badgeColor,
-    Color textColor,
-    ColorScheme colorScheme,
-  ) {
+  Widget _buildBadge(Color badgeColor, Color textColor, ColorScheme colorScheme) {
     if (_isDone) {
       return Container(
         width: 24,
@@ -426,9 +354,7 @@ class _StepCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: _isPending ? Colors.transparent : badgeColor,
         shape: BoxShape.circle,
-        border: _isPending
-            ? Border.all(color: colorScheme.outlineVariant)
-            : null,
+        border: _isPending ? Border.all(color: colorScheme.outlineVariant) : null,
       ),
       alignment: Alignment.center,
       child: Text(

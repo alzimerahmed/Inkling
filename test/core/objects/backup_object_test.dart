@@ -7,11 +7,7 @@ void main() {
   group('BackupObject Tests', () {
     final testDateTime = DateTime.now();
     final testDeviceInfo = DeviceInfoObject(model: 'Test Model', id: 'Test ID');
-    final testFileInfo = BackupFileObject(
-      createdAt: testDateTime,
-      device: testDeviceInfo,
-      hasCompression: false,
-    );
+    final testFileInfo = BackupFileObject(createdAt: testDateTime, device: testDeviceInfo, hasCompression: false);
 
     final testTables = {
       'users': [
@@ -23,11 +19,7 @@ void main() {
     };
 
     test('Constructor should create an object with correct properties', () {
-      final backupObject = BackupObject(
-        tables: testTables,
-        fileInfo: testFileInfo,
-        version: 2,
-      );
+      final backupObject = BackupObject(tables: testTables, fileInfo: testFileInfo, version: 2);
 
       expect(backupObject.version, 2);
       expect(backupObject.tables, testTables);
@@ -35,20 +27,13 @@ void main() {
     });
 
     test('Constructor should use currentVersion as default version', () {
-      final backupObject = BackupObject(
-        tables: testTables,
-        fileInfo: testFileInfo,
-      );
+      final backupObject = BackupObject(tables: testTables, fileInfo: testFileInfo);
 
       expect(backupObject.version, BackupObject.currentVersion);
     });
 
     test('toContents() should serialize the object to a valid map', () {
-      final backupObject = BackupObject(
-        tables: testTables,
-        fileInfo: testFileInfo,
-        version: 1,
-      );
+      final backupObject = BackupObject(tables: testTables, fileInfo: testFileInfo, version: 1);
 
       final contents = backupObject.toContents();
 
@@ -83,45 +68,35 @@ void main() {
       expect(backupObject.fileInfo.device.model, 'Test Model');
       expect(backupObject.fileInfo.device.id, 'Test ID');
 
-      expect(
-        backupObject.fileInfo.createdAt.toIso8601String(),
-        testDateTime.toIso8601String(),
-      );
+      expect(backupObject.fileInfo.createdAt.toIso8601String(), testDateTime.toIso8601String());
     });
 
-    test(
-      'fromContents() should use currentVersion if version is missing or invalid in map',
-      () {
-        final contentMapWithNullVersion = {
-          'version': null,
-          'tables': testTables,
-          'meta_data': {
-            'device_model': 'Test Model',
-            'device_id': 'Test ID',
-            'created_at': testDateTime.toIso8601String(),
-          },
-        };
+    test('fromContents() should use currentVersion if version is missing or invalid in map', () {
+      final contentMapWithNullVersion = {
+        'version': null,
+        'tables': testTables,
+        'meta_data': {
+          'device_model': 'Test Model',
+          'device_id': 'Test ID',
+          'created_at': testDateTime.toIso8601String(),
+        },
+      };
 
-        final contentMapWithInvalidVersion = {
-          'version': 'not-a-number',
-          'tables': testTables,
-          'meta_data': {
-            'device_model': 'Test Model',
-            'device_id': 'Test ID',
-            'created_at': testDateTime.toIso8601String(),
-          },
-        };
+      final contentMapWithInvalidVersion = {
+        'version': 'not-a-number',
+        'tables': testTables,
+        'meta_data': {
+          'device_model': 'Test Model',
+          'device_id': 'Test ID',
+          'created_at': testDateTime.toIso8601String(),
+        },
+      };
 
-        final backupObject1 = BackupObject.fromContents(
-          contentMapWithNullVersion,
-        );
-        final backupObject2 = BackupObject.fromContents(
-          contentMapWithInvalidVersion,
-        );
+      final backupObject1 = BackupObject.fromContents(contentMapWithNullVersion);
+      final backupObject2 = BackupObject.fromContents(contentMapWithInvalidVersion);
 
-        expect(backupObject1.version, BackupObject.currentVersion);
-        expect(backupObject2.version, BackupObject.currentVersion);
-      },
-    );
+      expect(backupObject1.version, BackupObject.currentVersion);
+      expect(backupObject2.version, BackupObject.currentVersion);
+    });
   });
 }

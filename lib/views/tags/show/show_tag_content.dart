@@ -12,24 +12,18 @@ class _ShowTagContent extends StatelessWidget {
     return DefaultTabController(
       length: years?.length ?? 1,
       child: SpStoryListMultiEditWrapper.withListener(
-        builder:
-            (BuildContext context, SpStoryListMultiEditWrapperState state) {
-              return PopScope(
-                canPop: !state.editing,
-                onPopInvokedWithResult: (didPop, result) =>
-                    viewModel.onPopInvokedWithResult(didPop, result, context),
-                child: buildScaffold(context, state, years),
-              );
-            },
+        builder: (BuildContext context, SpStoryListMultiEditWrapperState state) {
+          return PopScope(
+            canPop: !state.editing,
+            onPopInvokedWithResult: (didPop, result) => viewModel.onPopInvokedWithResult(didPop, result, context),
+            child: buildScaffold(context, state, years),
+          );
+        },
       ),
     );
   }
 
-  Widget buildScaffold(
-    BuildContext context,
-    SpStoryListMultiEditWrapperState state,
-    List<int>? years,
-  ) {
+  Widget buildScaffold(BuildContext context, SpStoryListMultiEditWrapperState state, List<int>? years) {
     return Scaffold(
       appBar: AppBar(
         title: buildTitle(context),
@@ -88,11 +82,7 @@ class _ShowTagContent extends StatelessWidget {
           children: [
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
-              child: Icon(
-                SpIcons.edit,
-                size: 20.0,
-                color: ColorScheme.of(context).primary,
-              ),
+              child: Icon(SpIcons.edit, size: 20.0, color: ColorScheme.of(context).primary),
             ),
           ],
         ),
@@ -100,30 +90,21 @@ class _ShowTagContent extends StatelessWidget {
     );
   }
 
-  Widget buildBottomNavigationBar(
-    BuildContext context,
-    SpStoryListMultiEditWrapperState state,
-  ) {
+  Widget buildBottomNavigationBar(BuildContext context, SpStoryListMultiEditWrapperState state) {
     return SpMultiEditBottomNavBar(
       editing: state.editing,
       onCancel: () => state.turnOffEditing(),
       buttons: [
         OutlinedButton(
-          child: Text(
-            "${tr("button.archive")} (${state.selectedStories.length})",
-          ),
+          child: Text("${tr("button.archive")} (${state.selectedStories.length})"),
           onPressed: () async {
             await state.archiveAll(context);
             viewModel.refreshList();
           },
         ),
         FilledButton(
-          style: FilledButton.styleFrom(
-            backgroundColor: ColorScheme.of(context).error,
-          ),
-          child: Text(
-            "${tr("button.move_to_bin")} (${state.selectedStories.length})",
-          ),
+          style: FilledButton.styleFrom(backgroundColor: ColorScheme.of(context).error),
+          child: Text("${tr("button.move_to_bin")} (${state.selectedStories.length})"),
           onPressed: () async {
             await state.moveToBinAll(context);
             viewModel.refreshList();

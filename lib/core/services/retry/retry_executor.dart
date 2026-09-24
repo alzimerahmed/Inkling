@@ -1,5 +1,4 @@
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
-    as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
 import 'package:storypad/core/services/retry/retry_policy.dart';
 import 'package:storypad/core/types/backup_result.dart';
 
@@ -51,21 +50,12 @@ class RetryExecutor {
     String? operationName,
   }) async {
     try {
-      final result = await execute(
-        operation,
-        policy: policy,
-        operationName: operationName,
-      );
+      final result = await execute(operation, policy: policy, operationName: operationName);
       return BackupResult.success(result);
     } on exp.BackupException catch (e) {
       return BackupResult.failure(BackupError.fromException(e));
     } on Exception catch (e) {
-      return BackupResult.failure(
-        BackupError.unknown(
-          e.toString(),
-          context: operationName,
-        ),
-      );
+      return BackupResult.failure(BackupError.unknown(e.toString(), context: operationName));
     }
   }
 }

@@ -12,18 +12,13 @@ import 'package:storypad/views/templates/templates_view.dart';
 import 'package:storypad/widgets/bottom_sheets/sp_tags_picker_sheet.dart';
 import 'package:storypad/widgets/bottom_sheets/sp_templates_picker_sheet.dart';
 
-class EditCustomReminderViewModel extends ChangeNotifier
-    with DisposeAwareMixin {
-  EditCustomReminderViewModel({
-    required this.reminder,
-    required this.isNew,
-  }) : messageController = TextEditingController(text: reminder.message ?? '') {
+class EditCustomReminderViewModel extends ChangeNotifier with DisposeAwareMixin {
+  EditCustomReminderViewModel({required this.reminder, required this.isNew})
+    : messageController = TextEditingController(text: reminder.message ?? '') {
     time = reminder.timeOfDay;
     // Every day is stored as an empty set — show it as all 7 chips checked
     // so the user can see the current schedule before pruning it down.
-    weekdays = reminder.weekdays.isEmpty
-        ? ReminderObject.allWeekdays.toSet()
-        : reminder.weekdays.toSet();
+    weekdays = reminder.weekdays.isEmpty ? ReminderObject.allWeekdays.toSet() : reminder.weekdays.toSet();
     templateId = reminder.templateId;
     galleryTemplateId = reminder.galleryTemplateId;
     tagIds = List<int>.from(reminder.tagIds ?? const []);
@@ -70,8 +65,7 @@ class EditCustomReminderViewModel extends ChangeNotifier
   }
 
   Future<void> chooseTemplate(BuildContext context) async {
-    final result = await const SpTemplatesPickerSheet()
-        .show<TemplatePickResult>(context: context);
+    final result = await const SpTemplatesPickerSheet().show<TemplatePickResult>(context: context);
     if (result == null) return;
 
     switch (result.type) {
@@ -114,9 +108,7 @@ class EditCustomReminderViewModel extends ChangeNotifier
   }
 
   Future<void> chooseTags(BuildContext context) async {
-    final result = await SpTagsPickerSheet(
-      selectedTagIds: tagIds,
-    ).show<List<TagDbModel>>(context: context);
+    final result = await SpTagsPickerSheet(selectedTagIds: tagIds).show<List<TagDbModel>>(context: context);
     if (result == null) return;
 
     tagIds = result.map((e) => e.id).toList();
@@ -130,10 +122,7 @@ class EditCustomReminderViewModel extends ChangeNotifier
 
   String tagLabels(BuildContext context) {
     final allTags = context.read<TagsProvider>().allTags?.items ?? [];
-    final titles = tagIds
-        .map((id) => allTags.where((t) => t.id == id).firstOrNull?.title)
-        .whereType<String>()
-        .toList();
+    final titles = tagIds.map((id) => allTags.where((t) => t.id == id).firstOrNull?.title).whereType<String>().toList();
     return titles.join(', ');
   }
 

@@ -19,9 +19,7 @@ void main() {
         final pages = [
           _createPageWithBody([
             {
-              'insert': {
-                'image': 'images/12345.jpg',
-              },
+              'insert': {'image': 'images/12345.jpg'},
             },
           ]),
         ];
@@ -35,9 +33,7 @@ void main() {
         final pages = [
           _createPageWithBody([
             {
-              'insert': {
-                'audio': 'audio/67890.m4a',
-              },
+              'insert': {'audio': 'audio/67890.m4a'},
             },
           ]),
         ];
@@ -51,19 +47,13 @@ void main() {
         final pages = [
           _createPageWithBody([
             {
-              'insert': {
-                'image': 'images/111.jpg',
-              },
+              'insert': {'image': 'images/111.jpg'},
             },
             {
-              'insert': {
-                'audio': 'audio/222.m4a',
-              },
+              'insert': {'audio': 'audio/222.m4a'},
             },
             {
-              'insert': {
-                'video': 'images/333.mp4',
-              },
+              'insert': {'video': 'images/333.mp4'},
             },
           ]),
         ];
@@ -77,16 +67,12 @@ void main() {
         final pages = [
           _createPageWithBody([
             {
-              'insert': {
-                'image': 'images/100.jpg',
-              },
+              'insert': {'image': 'images/100.jpg'},
             },
           ]),
           _createPageWithBody([
             {
-              'insert': {
-                'audio': 'audio/200.m4a',
-              },
+              'insert': {'audio': 'audio/200.m4a'},
             },
           ]),
         ];
@@ -100,14 +86,10 @@ void main() {
         final pages = [
           _createPageWithBody([
             {
-              'insert': {
-                'image': 'images/999.jpg',
-              },
+              'insert': {'image': 'images/999.jpg'},
             },
             {
-              'insert': {
-                'audio': 'audio/999.m4a',
-              },
+              'insert': {'audio': 'audio/999.m4a'},
             },
           ]),
         ];
@@ -122,14 +104,10 @@ void main() {
         final pages = [
           _createPageWithBody([
             {
-              'insert': {
-                'image': 'https://example.com/image.jpg',
-              },
+              'insert': {'image': 'https://example.com/image.jpg'},
             },
             {
-              'insert': {
-                'audio': 'audio/123.m4a',
-              },
+              'insert': {'audio': 'audio/123.m4a'},
             },
           ]),
         ];
@@ -143,24 +121,16 @@ void main() {
         final pages = [
           _createPageWithBody([
             {
-              'insert': {
-                'image': 'images/111.jpg',
-              },
+              'insert': {'image': 'images/111.jpg'},
             },
             {
-              'insert': {
-                'audio': 'audio/222.m4a',
-              },
+              'insert': {'audio': 'audio/222.m4a'},
             },
             {
-              'insert': {
-                'image': 'images/333.jpg',
-              },
+              'insert': {'image': 'images/333.jpg'},
             },
             {
-              'insert': {
-                'audio': 'audio/444.m4a',
-              },
+              'insert': {'audio': 'audio/444.m4a'},
             },
           ]),
         ];
@@ -179,9 +149,7 @@ void main() {
               },
             },
             {
-              'insert': {
-                'audio': 'audio/456.m4a',
-              },
+              'insert': {'audio': 'audio/456.m4a'},
             },
           ]),
         ];
@@ -195,14 +163,10 @@ void main() {
         final pages = [
           _createPageWithBody([
             {
-              'insert': {
-                'image': 'images/abc.jpg',
-              },
+              'insert': {'image': 'images/abc.jpg'},
             },
             {
-              'insert': {
-                'audio': 'audio/123.m4a',
-              },
+              'insert': {'audio': 'audio/123.m4a'},
             },
           ]),
         ];
@@ -217,9 +181,7 @@ void main() {
           _createPageWithBody([
             {'text': 'just text'},
             {
-              'insert': {
-                'image': 'images/123.jpg',
-              },
+              'insert': {'image': 'images/123.jpg'},
             },
           ]),
         ];
@@ -232,13 +194,9 @@ void main() {
       test('ignores nodes with insert that is not a map', () {
         final pages = [
           _createPageWithBody([
+            {'insert': 'just a string'},
             {
-              'insert': 'just a string',
-            },
-            {
-              'insert': {
-                'audio': 'audio/456.m4a',
-              },
+              'insert': {'audio': 'audio/456.m4a'},
             },
           ]),
         ];
@@ -253,9 +211,7 @@ void main() {
           _createPageWithBody([
             'just a string',
             {
-              'insert': {
-                'image': 'images/789.jpg',
-              },
+              'insert': {'image': 'images/789.jpg'},
             },
           ]),
         ];
@@ -266,11 +222,7 @@ void main() {
       });
 
       test('handles page with null body', () {
-        final page = StoryPageDbModel(
-          id: 1,
-          title: 'page1',
-          body: null,
-        );
+        final page = StoryPageDbModel(id: 1, title: 'page1', body: null);
 
         final result = StoryExtractAssetsFromPagesService.call([page]);
 
@@ -290,9 +242,7 @@ void main() {
         final pages = [
           _createPageWithBody([
             {
-              'insert': {
-                'image': 'images/$largeId.jpg',
-              },
+              'insert': {'image': 'images/$largeId.jpg'},
             },
           ]),
         ];
@@ -326,33 +276,22 @@ void main() {
             {
               'insert': {
                 'text': 'Some text',
-                'attributes': {
-                  'bold': true,
-                  'italic': false,
-                },
+                'attributes': {'bold': true, 'italic': false},
               },
             },
             {
-              'insert': {
-                'image': 'images/100.jpg',
-              },
+              'insert': {'image': 'images/100.jpg'},
             },
             {
-              'insert': {
-                'audio': 'images/200.jpg',
-              },
+              'insert': {'audio': 'images/200.jpg'},
             },
             {
-              'insert': {
-                'text': 'More text',
-              },
+              'insert': {'text': 'More text'},
             },
           ]),
           _createPageWithBody([
             {
-              'insert': {
-                'video': 'images/300.mp4',
-              },
+              'insert': {'video': 'images/300.mp4'},
             },
           ]),
         ];
@@ -367,9 +306,5 @@ void main() {
 
 /// Helper to create a StoryPageDbModel with body content
 StoryPageDbModel _createPageWithBody(List<dynamic> body) {
-  return StoryPageDbModel(
-    id: DateTime.now().millisecondsSinceEpoch,
-    title: 'page-test',
-    body: body,
-  );
+  return StoryPageDbModel(id: DateTime.now().millisecondsSinceEpoch, title: 'page-test', body: body);
 }

@@ -6,10 +6,7 @@ import 'package:storypad/core/helpers/date_format_helper.dart';
 import 'package:storypad/widgets/sp_icons.dart';
 
 class BackupEventsTableViewer extends StatelessWidget {
-  const BackupEventsTableViewer({
-    super.key,
-    required this.events,
-  });
+  const BackupEventsTableViewer({super.key, required this.events});
 
   final List<EventDbModel> events;
 
@@ -32,19 +29,12 @@ class BackupEventsTableViewer extends StatelessWidget {
                 if (event.permanentlyDeletedAt != null)
                   WidgetSpan(
                     alignment: PlaceholderAlignment.middle,
-                    child: Icon(
-                      SpIcons.deleteForever,
-                      color: ColorScheme.of(context).error,
-                      size: 12,
-                    ),
+                    child: Icon(SpIcons.deleteForever, color: ColorScheme.of(context).error, size: 12),
                   ),
               ],
             ),
           ),
-          subtitle: Text(
-            DateFormatHelper.yMEd_jmNullable(event.date, context.locale) ??
-                tr("general.na"),
-          ),
+          subtitle: Text(DateFormatHelper.yMEd_jmNullable(event.date, context.locale) ?? tr("general.na")),
         );
       },
     );

@@ -6,11 +6,8 @@ class _ShowTemplateContent extends StatelessWidget {
   final ShowTemplateViewModel viewModel;
 
   List<StoryPageObject> constructPages() {
-    if (viewModel.pagesManager.pagesMap.keys.isEmpty)
-      return <StoryPageObject>[];
-    return List.generate(viewModel.draftContent?.richPages?.length ?? 0, (
-      index,
-    ) {
+    if (viewModel.pagesManager.pagesMap.keys.isEmpty) return <StoryPageObject>[];
+    return List.generate(viewModel.draftContent?.richPages?.length ?? 0, (index) {
       final page = viewModel.draftContent!.richPages![index];
       return viewModel.pagesManager.pagesMap[page.id];
     }).toList().whereType<StoryPageObject>().toList();
@@ -24,9 +21,7 @@ class _ShowTemplateContent extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         automaticallyImplyLeading: !CupertinoSheetRoute.hasParentSheet(context),
-        title: viewModel.template.name != null
-            ? Text(viewModel.template.name!)
-            : null,
+        title: viewModel.template.name != null ? Text(viewModel.template.name!) : null,
         actions: [
           if (!viewModel.template.archived)
             IconButton(
@@ -119,9 +114,6 @@ class _ShowTemplateContent extends StatelessWidget {
   }
 
   Widget buildPageHeader(BuildContext context) {
-    return TemplateTagLabels(
-      template: viewModel.template,
-      margin: const EdgeInsets.symmetric(horizontal: 12.0),
-    );
+    return TemplateTagLabels(template: viewModel.template, margin: const EdgeInsets.symmetric(horizontal: 12.0));
   }
 }

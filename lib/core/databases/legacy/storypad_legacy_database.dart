@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:html_character_entities/html_character_entities.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,10 +26,7 @@ class StorypadLegacyDatabase {
 
   Future<String?> _getDatabasePath() async {
     String newPath = join(await sqlite.getDatabasesPath(), "write_story.db");
-    String oldPath = join(
-      await getApplicationDocumentsDirectory().then((e) => e.path),
-      "write_story.db",
-    );
+    String oldPath = join(await getApplicationDocumentsDirectory().then((e) => e.path), "write_story.db");
 
     if (File(newPath).existsSync()) return newPath;
     if (File(oldPath).existsSync()) return oldPath;
@@ -41,11 +39,7 @@ class StorypadLegacyDatabase {
     if (databasePath == null) return null;
 
     try {
-      return await sqlite.openDatabase(
-        databasePath,
-        onOpen: (_) {},
-        version: 3,
-      );
+      return await sqlite.openDatabase(databasePath, onOpen: (_) {}, version: 3);
     } catch (e) {
       debugPrint("🐛 Open database dailed: $e");
     }
@@ -69,21 +63,15 @@ class StorypadLegacyDatabase {
     if (!exist) return (true, 'Could not open database $databasePath');
 
     List<Map<dynamic, dynamic>>? storyRows = await _database?.query('story');
-    List<Map<dynamic, dynamic>>? userInfoRows = await _database?.query(
-      'user_info',
-    );
+    List<Map<dynamic, dynamic>>? userInfoRows = await _database?.query('user_info');
     if (storyRows == null || storyRows.isEmpty) return (true, 'Database empty!');
 
     try {
       List<StorypadLegacyStoryModel> storypadStories = storyRows.map((json) {
-        StorypadLegacyStoryModel story = StorypadLegacyStoryModel.fromJson(
-          json,
-        );
+        StorypadLegacyStoryModel story = StorypadLegacyStoryModel.fromJson(json);
         if (story.paragraph != null) {
           String? paragraph = story.paragraph != null ? HtmlCharacterEntities.decode(story.paragraph!) : null;
-          return story.copyWith(
-            paragraph: paragraph?.replaceAll(singleQuote, "'"),
-          );
+          return story.copyWith(paragraph: paragraph?.replaceAll(singleQuote, "'"));
         } else {
           return story;
         }
@@ -98,24 +86,17 @@ class StorypadLegacyDatabase {
           document = Document.fromJson(quill);
         }
 
-        final content =
-            StoryContentDbModel.create(
-              createdAt: storypadStory.createOn,
-            ).copyWith(
+        final content = StoryContentDbModel.create(createdAt: storypadStory.createOn).copyWith(
+          title: storypadStory.title,
+          plainText: document != null ? QuillDeltaToPlainTextService.call(document.root.toDelta().toJson()) : null,
+          richPages: [
+            StoryPageDbModel(
+              id: DateTime.now().millisecondsSinceEpoch,
               title: storypadStory.title,
-              plainText: document != null
-                  ? QuillDeltaToPlainTextService.call(
-                      document.root.toDelta().toJson(),
-                    )
-                  : null,
-              richPages: [
-                StoryPageDbModel(
-                  id: DateTime.now().millisecondsSinceEpoch,
-                  title: storypadStory.title,
-                  body: document?.toDelta().toJson(),
-                ),
-              ],
-            );
+              body: document?.toDelta().toJson(),
+            ),
+          ],
+        );
 
         stories.add(
           StoryDbModel(
@@ -156,10 +137,7 @@ class StorypadLegacyDatabase {
       }
 
       await sharedPreferences.setBool(sharePreferenceKey, true);
-      return (
-        true,
-        'DB: ${storyRows.length}, StoryPad: ${storypadStories.length}, StoryPad v2: ${stories.length}',
-      );
+      return (true, 'DB: ${storyRows.length}, StoryPad: ${storypadStories.length}, StoryPad v2: ${stories.length}');
     } catch (e) {
       return (false, e.toString());
     }

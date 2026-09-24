@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -7,8 +8,7 @@ class WelcomeMessageService {
   static int? _index;
 
   static String get(BuildContext context) {
-    if (context.locale.languageCode != 'en')
-      return tr('page.home.app_bar.messages.what_in_ur_mind');
+    if (context.locale.languageCode != 'en') return tr('page.home.app_bar.messages.what_in_ur_mind');
 
     final messages = {
       "Let your adventure unfold with every word you write.",

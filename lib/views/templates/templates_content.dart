@@ -9,9 +9,7 @@ class _TemplatesContent extends StatelessWidget {
   Widget build(BuildContext context) {
     if (viewModel.params.viewingArchives) {
       return Scaffold(
-        appBar: AppBar(
-          title: Text(tr('general.path_type.archives')),
-        ),
+        appBar: AppBar(title: Text(tr('general.path_type.archives'))),
         body: TemplatesTab(params: viewModel.params),
       );
     }
@@ -25,10 +23,7 @@ class _TemplatesContent extends StatelessWidget {
       initialIndex: viewModel.initialTabIndex,
       child: Builder(
         builder: (context) {
-          return Scaffold(
-            appBar: buildAppBar(context),
-            body: buildBody(context),
-          );
+          return Scaffold(appBar: buildAppBar(context), body: buildBody(context));
         },
       ),
     );
@@ -36,11 +31,7 @@ class _TemplatesContent extends StatelessWidget {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      title: Text(
-        viewModel.params.pickMode
-            ? tr("button.choose_template")
-            : tr("paywall_features.templates.title"),
-      ),
+      title: Text(viewModel.params.pickMode ? tr("button.choose_template") : tr("paywall_features.templates.title")),
       bottom: TabBar(
         onTap: (index) {
           if (index == 0 && !context.read<InAppPurchaseProvider>().isProUser) {
@@ -60,13 +51,7 @@ class _TemplatesContent extends StatelessWidget {
                     text: "${tr('general.my_templates')} ",
                     children: [
                       if (!iapProvider.isProUser)
-                        const WidgetSpan(
-                          alignment: PlaceholderAlignment.middle,
-                          child: Icon(
-                            SpIcons.lock,
-                            size: 16.0,
-                          ),
-                        ),
+                        const WidgetSpan(alignment: PlaceholderAlignment.middle, child: Icon(SpIcons.lock, size: 16.0)),
                     ],
                   ),
                 );
@@ -81,9 +66,7 @@ class _TemplatesContent extends StatelessWidget {
 
   Widget buildBody(BuildContext context) {
     return TabBarView(
-      physics: context.read<InAppPurchaseProvider>().isProUser
-          ? null
-          : const NeverScrollableScrollPhysics(),
+      physics: context.read<InAppPurchaseProvider>().isProUser ? null : const NeverScrollableScrollPhysics(),
       children: [
         TemplatesTab(params: viewModel.params),
         GalleryTab(params: viewModel.params),

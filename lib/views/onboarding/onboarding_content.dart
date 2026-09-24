@@ -16,10 +16,7 @@ class _OnboardingContent extends StatelessWidget {
             IconButton(
               tooltip: tr("page.language.title"),
               icon: const Icon(SpIcons.globe),
-              onPressed: () => LanguagesRoute(
-                showBetaBanner: false,
-                fromOnboarding: true,
-              ).push(context),
+              onPressed: () => LanguagesRoute(showBetaBanner: false, fromOnboarding: true).push(context),
             ),
           ],
         ),
@@ -27,10 +24,7 @@ class _OnboardingContent extends StatelessWidget {
           reverse: true,
           padding: const EdgeInsets.all(16.0),
           child: Center(
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: buildContents(context),
-            ),
+            child: Container(constraints: const BoxConstraints(maxWidth: 400), child: buildContents(context)),
           ),
         ),
       ),

@@ -5,10 +5,7 @@ import 'package:storypad/core/constants/app_constants.dart';
 import 'package:storypad/widgets/sp_icons.dart';
 
 class SpConnectGoogleDriveButton extends StatelessWidget {
-  const SpConnectGoogleDriveButton({
-    super.key,
-    required this.onPressed,
-  });
+  const SpConnectGoogleDriveButton({super.key, required this.onPressed});
 
   final void Function() onPressed;
 
@@ -36,10 +33,7 @@ class SpConnectGoogleDriveButton extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         spacing: 8.0,
-        children: [
-          const Icon(SpIcons.googleDrive),
-          Text(tr("button.connect")),
-        ],
+        children: [const Icon(SpIcons.googleDrive), Text(tr("button.connect"))],
       ),
     );
   }

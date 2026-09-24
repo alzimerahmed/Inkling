@@ -14,10 +14,7 @@ import 'package:storypad/views/templates/templates_view.dart';
 import 'package:storypad/widgets/sp_icons.dart';
 
 class HomeQuickActionItem {
-  const HomeQuickActionItem({
-    required this.object,
-    required this.icon,
-  });
+  const HomeQuickActionItem({required this.object, required this.icon});
 
   final AppQuickActionObject object;
   final IconData icon;
@@ -28,17 +25,10 @@ class HomeQuickActionItem {
 }
 
 class HomeQuickActionsViewModel extends ChangeNotifier with DisposeAwareMixin {
-  HomeQuickActionsViewModel({
-    required this.params,
-    required BuildContext context,
-  }) {
+  HomeQuickActionsViewModel({required this.params, required BuildContext context}) {
     devicePreferencesProvider = context.read<DevicePreferencesProvider>();
-    enabledActions = _actionsFromObjects(
-      devicePreferencesProvider.preferences.homeQuickActions,
-    );
-    availableItems.addAll(
-      defaultActions.where((action) => !isEnabled(action.key)),
-    );
+    enabledActions = _actionsFromObjects(devicePreferencesProvider.preferences.homeQuickActions);
+    availableItems.addAll(defaultActions.where((action) => !isEnabled(action.key)));
   }
 
   final HomeQuickActionsRoute params;
@@ -87,26 +77,21 @@ class HomeQuickActionsViewModel extends ChangeNotifier with DisposeAwareMixin {
     ),
   ];
 
-  final GlobalKey<AnimatedListState> availableActionsListKey =
-      GlobalKey<AnimatedListState>();
+  final GlobalKey<AnimatedListState> availableActionsListKey = GlobalKey<AnimatedListState>();
 
   // Tracks the default items currently visible in the AnimatedList.
   final List<HomeQuickActionItem> availableItems = [];
   final Set<String> _activatingIds = <String>{};
   final Map<String, Timer> _syncTimers = <String, Timer>{};
 
-  Widget Function(HomeQuickActionItem, Animation<double>)?
-  _availableTileBuilder;
-  void setAvailableTileBuilder(
-    Widget Function(HomeQuickActionItem, Animation<double>) builder,
-  ) {
+  Widget Function(HomeQuickActionItem, Animation<double>)? _availableTileBuilder;
+  void setAvailableTileBuilder(Widget Function(HomeQuickActionItem, Animation<double>) builder) {
     _availableTileBuilder = builder;
   }
 
   bool isActivating(String actionId) => _activatingIds.contains(actionId);
 
-  List<HomeQuickActionItem> get visibleEnabledActions =>
-      enabledActions ?? const [];
+  List<HomeQuickActionItem> get visibleEnabledActions => enabledActions ?? const [];
   bool get limitReached => enabledCount >= actionLimit;
   int get enabledCount => enabledActions?.length ?? 0;
   double get capacity => enabledCount / actionLimit;
@@ -131,15 +116,11 @@ class HomeQuickActionsViewModel extends ChangeNotifier with DisposeAwareMixin {
       final removed = availableItems.removeAt(idx);
       availableActionsListKey.currentState?.removeItem(
         idx,
-        (ctx, anim) =>
-            _availableTileBuilder?.call(removed, anim) ??
-            const SizedBox.shrink(),
+        (ctx, anim) => _availableTileBuilder?.call(removed, anim) ?? const SizedBox.shrink(),
       );
     }
     actions.add(action);
-    AnalyticsService.instance.logQuickActionAdded(
-      type: action.object.type.name,
-    );
+    AnalyticsService.instance.logQuickActionAdded(type: action.object.type.name);
     _saveActions();
     _markActionAsSyncing(action.key);
     notifyListeners();
@@ -157,10 +138,7 @@ class HomeQuickActionsViewModel extends ChangeNotifier with DisposeAwareMixin {
           label: result.label,
           type: AppQuickActionType.template,
           nativeIcon: AppQuickActionObject.templateNativeIcon,
-          templateReference: AppQuickActionTemplateReference(
-            type: templateType,
-            id: result.id,
-          ),
+          templateReference: AppQuickActionTemplateReference(type: templateType, id: result.id),
         ),
         icon: SpIcons.file,
       ),
@@ -187,9 +165,7 @@ class HomeQuickActionsViewModel extends ChangeNotifier with DisposeAwareMixin {
     _activatingIds.remove(action.key);
 
     // Re-insert the item into availableItems at its original position.
-    final freshAvailable = defaultActions
-        .where((a) => !isEnabled(a.key))
-        .toList();
+    final freshAvailable = defaultActions.where((a) => !isEnabled(a.key)).toList();
 
     for (int i = 0; i < freshAvailable.length; i++) {
       if (!availableItems.any((a) => a.key == freshAvailable[i].key)) {
@@ -213,28 +189,18 @@ class HomeQuickActionsViewModel extends ChangeNotifier with DisposeAwareMixin {
     notifyListeners();
   }
 
-  List<HomeQuickActionItem>? _actionsFromObjects(
-    List<AppQuickActionObject>? objects,
-  ) {
+  List<HomeQuickActionItem>? _actionsFromObjects(List<AppQuickActionObject>? objects) {
     if (objects == null) return null;
     return objects
         .where((object) => object.key.isNotEmpty)
-        .map(
-          (object) =>
-              HomeQuickActionItem(object: object, icon: _iconFor(object)),
-        )
+        .map((object) => HomeQuickActionItem(object: object, icon: _iconFor(object)))
         .toList();
   }
 
   IconData _iconFor(AppQuickActionObject object) {
     return switch (object.type) {
       AppQuickActionType.defaultAction =>
-        defaultActions
-                .where(
-                  (a) => a.object.defaultActionType == object.defaultActionType,
-                )
-                .firstOrNull
-                ?.icon ??
+        defaultActions.where((a) => a.object.defaultActionType == object.defaultActionType).firstOrNull?.icon ??
             SpIcons.question,
       AppQuickActionType.template => SpIcons.file,
       AppQuickActionType.tag => SpIcons.tag,
@@ -242,9 +208,7 @@ class HomeQuickActionsViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   void _saveActions() {
-    devicePreferencesProvider.setHomeQuickActions(
-      visibleEnabledActions.map((action) => action.object).toList(),
-    );
+    devicePreferencesProvider.setHomeQuickActions(visibleEnabledActions.map((action) => action.object).toList());
   }
 
   void _markActionAsSyncing(String actionId) {

@@ -9,31 +9,22 @@ import 'enter_security_question_view_model.dart';
 part 'enter_security_question_content.dart';
 
 class EnterSecurityQuestionRoute extends BaseRoute {
-  EnterSecurityQuestionRoute({
-    required this.question,
-    required this.answer,
-  });
+  EnterSecurityQuestionRoute({required this.question, required this.answer});
 
   final AppLockQuestion question;
   final String? answer;
 
   @override
   Map<String, String?>? get analyticsParameters {
-    return {
-      'question': question.translatedQuestion,
-    };
+    return {'question': question.translatedQuestion};
   }
 
   @override
-  Widget buildPage(BuildContext context) =>
-      EnterSecurityQuestionView(params: this);
+  Widget buildPage(BuildContext context) => EnterSecurityQuestionView(params: this);
 }
 
 class EnterSecurityQuestionView extends StatelessWidget {
-  const EnterSecurityQuestionView({
-    super.key,
-    required this.params,
-  });
+  const EnterSecurityQuestionView({super.key, required this.params});
 
   final EnterSecurityQuestionRoute params;
 

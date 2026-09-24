@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:storypad/core/databases/models/story_db_model.dart';
@@ -19,10 +21,7 @@ class StoryTileActions {
   final StoryDbModel story;
   final BuildContext? storyListReloaderContext;
 
-  StoryTileActions({
-    required this.story,
-    required this.storyListReloaderContext,
-  });
+  StoryTileActions({required this.story, required this.storyListReloaderContext});
 
   Future<bool> hardDelete(BuildContext context) async {
     OkCancelResult result = await showOkCancelAlertDialog(
@@ -37,9 +36,7 @@ class StoryTileActions {
       StoryDbModel originalStory = story.copyWith();
       await originalStory.delete();
 
-      AnalyticsService.instance.logHardDeleteStory(
-        story: originalStory,
-      );
+      AnalyticsService.instance.logHardDeleteStory(story: originalStory);
 
       if (!context.mounted) return true;
 
@@ -49,16 +46,11 @@ class StoryTileActions {
 
         /// In all case, delete button only show inside [SpStoryListWithQuery],
         /// So after undo, we should reload the list.
-        if (storyListReloaderContext != null &&
-            storyListReloaderContext!.mounted) {
-          SpStoryListWithQuery.of(
-            storyListReloaderContext!,
-          )?.load(debugSource: '$runtimeType#undoHardDelete');
+        if (storyListReloaderContext != null && storyListReloaderContext!.mounted) {
+          SpStoryListWithQuery.of(storyListReloaderContext!)?.load(debugSource: '$runtimeType#undoHardDelete');
         }
 
-        AnalyticsService.instance.logUndoHardDeleteStory(
-          story: updatedStory,
-        );
+        AnalyticsService.instance.logUndoHardDeleteStory(story: updatedStory);
       }
 
       MessengerService.of(context).showSnackBar(
@@ -84,14 +76,10 @@ class StoryTileActions {
     StoryDbModel? updatedStory = await StoryDbModel.db.set(originalStory);
     if (updatedStory == null) return;
 
-    AnalyticsService.instance.logImportIndividualStory(
-      story: updatedStory,
-    );
+    AnalyticsService.instance.logImportIndividualStory(story: updatedStory);
 
     if (!context.mounted) return;
-    MessengerService.of(
-      context,
-    ).showSnackBar(tr("snack_bar.restore_individual_success"));
+    MessengerService.of(context).showSnackBar(tr("snack_bar.restore_individual_success"));
   }
 
   Future<bool> moveToBin(BuildContext context) async {
@@ -99,24 +87,17 @@ class StoryTileActions {
     StoryDbModel? updatedStory = await originalStory.moveToBin();
     if (updatedStory == null) return false;
 
-    AnalyticsService.instance.logMoveStoryToBin(
-      story: updatedStory,
-    );
+    AnalyticsService.instance.logMoveStoryToBin(story: updatedStory);
 
     Future<void> undoMoveToBin(StoryDbModel originalStory) async {
       StoryDbModel? updatedStory = await StoryDbModel.db.set(originalStory);
       if (updatedStory == null) return;
 
-      AnalyticsService.instance.logUndoMoveStoryToBin(
-        story: updatedStory,
-      );
+      AnalyticsService.instance.logUndoMoveStoryToBin(story: updatedStory);
 
       // sometime, it move to bin from archive page, so need to reload story list which in archives view as well.
-      if (storyListReloaderContext != null &&
-          storyListReloaderContext!.mounted) {
-        await SpStoryListWithQuery.of(
-          storyListReloaderContext!,
-        )?.load(debugSource: '$runtimeType#undoMoveToBin');
+      if (storyListReloaderContext != null && storyListReloaderContext!.mounted) {
+        await SpStoryListWithQuery.of(storyListReloaderContext!)?.load(debugSource: '$runtimeType#undoMoveToBin');
       }
 
       HomeView.applyStoryReloaded(updatedStory);
@@ -144,9 +125,7 @@ class StoryTileActions {
     StoryDbModel? updatedStory = await originalStory.archive();
     if (updatedStory == null) return false;
 
-    AnalyticsService.instance.logArchiveStory(
-      story: updatedStory,
-    );
+    AnalyticsService.instance.logArchiveStory(story: updatedStory);
 
     if (context.mounted) {
       MessengerService.of(context).showSnackBar(
@@ -157,14 +136,10 @@ class StoryTileActions {
             label: tr("button.undo"),
             textColor: foreground,
             onPressed: () async {
-              StoryDbModel? updatedStory = await StoryDbModel.db.set(
-                originalStory,
-              );
+              StoryDbModel? updatedStory = await StoryDbModel.db.set(originalStory);
               if (updatedStory == null) return;
 
-              AnalyticsService.instance.logUndoArchiveStory(
-                story: updatedStory,
-              );
+              AnalyticsService.instance.logUndoArchiveStory(story: updatedStory);
 
               HomeView.applyStoryReloaded(updatedStory);
             },
@@ -183,24 +158,17 @@ class StoryTileActions {
 
     HomeView.applyStoryReloaded(updatedStory);
 
-    AnalyticsService.instance.logPutStoryBack(
-      story: updatedStory,
-    );
+    AnalyticsService.instance.logPutStoryBack(story: updatedStory);
 
     if (storyListReloaderContext != null && storyListReloaderContext!.mounted) {
       Future<void> undoPutBack(StoryDbModel originalStory) async {
         StoryDbModel? updatedStory = await StoryDbModel.db.set(originalStory);
         if (updatedStory == null) return;
 
-        AnalyticsService.instance.logUndoPutBack(
-          story: updatedStory,
-        );
+        AnalyticsService.instance.logUndoPutBack(story: updatedStory);
 
-        if (storyListReloaderContext != null &&
-            storyListReloaderContext!.mounted) {
-          await SpStoryListWithQuery.of(
-            storyListReloaderContext!,
-          )?.load(debugSource: '$runtimeType#undoPutBack');
+        if (storyListReloaderContext != null && storyListReloaderContext!.mounted) {
+          await SpStoryListWithQuery.of(storyListReloaderContext!)?.load(debugSource: '$runtimeType#undoPutBack');
         }
 
         HomeView.applyStoryReloaded(updatedStory);
@@ -238,15 +206,11 @@ class StoryTileActions {
 
     AnalyticsService.instance.logDuplicateStory(story: story);
 
-    final addedStory = await EditStoryRoute(
-      story: duplicatedStory,
-    ).push(context);
+    final addedStory = await EditStoryRoute(story: duplicatedStory).push(context);
     if (addedStory is! StoryDbModel) return;
 
     if (storyListReloaderContext != null && storyListReloaderContext!.mounted) {
-      await SpStoryListWithQuery.of(
-        storyListReloaderContext!,
-      )?.load(debugSource: '$runtimeType#duplicate');
+      await SpStoryListWithQuery.of(storyListReloaderContext!)?.load(debugSource: '$runtimeType#duplicate');
     }
 
     await reloadHome('$runtimeType#duplicate');
@@ -256,23 +220,17 @@ class StoryTileActions {
     StoryDbModel? updatedStory = await story.toggleStarred();
     if (updatedStory == null) return;
 
-    AnalyticsService.instance.logToggleStoryStarred(
-      story: updatedStory,
-    );
+    AnalyticsService.instance.logToggleStoryStarred(story: updatedStory);
   }
 
   Future<void> toggleShowDayCount() async {
     StoryDbModel? updatedStory = await story.updatePreferences(
-      preferences: story.preferences.copyWith(
-        showDayCount: !story.preferredShowDayCount,
-      ),
+      preferences: story.preferences.copyWith(showDayCount: !story.preferredShowDayCount),
     );
 
     if (updatedStory == null) return;
 
-    AnalyticsService.instance.logToggleShowDayCount(
-      story: updatedStory,
-    );
+    AnalyticsService.instance.logToggleShowDayCount(story: updatedStory);
   }
 
   Future<void> changeDate(DateTime newDateTime) async {
@@ -287,9 +245,7 @@ class StoryTileActions {
 
     await StoryDbModel.db.set(updatedStory);
 
-    AnalyticsService.instance.logChangeStoryDate(
-      story: updatedStory,
-    );
+    AnalyticsService.instance.logChangeStoryDate(story: updatedStory);
   }
 
   Future<void> reloadHome(String debugSource) async {
@@ -323,15 +279,11 @@ class StoryTileActions {
         bytes: Uint8List.fromList(bytes),
       );
     } else {
-      RenderBox? box = context.mounted
-          ? context.findRenderObject() as RenderBox?
-          : null;
+      RenderBox? box = context.mounted ? context.findRenderObject() as RenderBox? : null;
       await SharePlus.instance.share(
         ShareParams(
           title: fileName,
-          sharePositionOrigin: box != null
-              ? box.localToGlobal(Offset.zero) & box.size
-              : null,
+          sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
           files: [XFile(file.path)],
         ),
       );

@@ -4,9 +4,7 @@ import 'package:storypad/core/services/logger/app_logger.dart';
 class CollectionDbModel<T extends BaseDbModel> {
   final List<T> items;
 
-  CollectionDbModel({
-    required this.items,
-  });
+  CollectionDbModel({required this.items});
 
   CollectionDbModel<T> replaceElement(T item) {
     if (!items.map((e) => e.id).contains(item.id)) return this;
@@ -15,18 +13,14 @@ class CollectionDbModel<T extends BaseDbModel> {
     int index = newItems.indexWhere((e) => e.id == item.id);
     newItems[index] = item;
 
-    return CollectionDbModel(
-      items: newItems,
-    );
+    return CollectionDbModel(items: newItems);
   }
 
   CollectionDbModel<T> addElement(T item, int index) {
     List<T> newItems = items.toList();
     newItems.insert(index, item);
 
-    return CollectionDbModel(
-      items: newItems,
-    );
+    return CollectionDbModel(items: newItems);
   }
 
   T? find(int id) => items.where((e) => e.id == id).firstOrNull;
@@ -41,10 +35,7 @@ class CollectionDbModel<T extends BaseDbModel> {
 
   // [newIndex] is expected to already account for the removed item at [oldIndex],
   // matching ReorderableListView's `onReorderItem` semantics.
-  CollectionDbModel<T>? reorder({
-    required int oldIndex,
-    required int newIndex,
-  }) {
+  CollectionDbModel<T>? reorder({required int oldIndex, required int newIndex}) {
     if (newIndex > items.length - 1) return this;
     if (oldIndex > items.length - 1) return this;
 
@@ -70,9 +61,7 @@ class CollectionDbModel<T extends BaseDbModel> {
     final seenIds = <int>{};
     final uniqueItems = items.where((item) {
       if (seenIds.contains(item.id)) {
-        AppLogger.debug(
-          'Deduplicate: Skipping duplicate ${item.runtimeType}:${item.id}',
-        );
+        AppLogger.debug('Deduplicate: Skipping duplicate ${item.runtimeType}:${item.id}');
         onDuplicateFound?.call(item.id);
         return false;
       }

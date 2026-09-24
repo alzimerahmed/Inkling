@@ -1,9 +1,7 @@
 part of '../edit_story_view.dart';
 
 class _DoneButton extends StatelessWidget {
-  const _DoneButton({
-    required this.viewModel,
-  });
+  const _DoneButton({required this.viewModel});
 
   final EditStoryViewModel viewModel;
 
@@ -15,8 +13,7 @@ class _DoneButton extends StatelessWidget {
         bool disabled = lastSavedAt == null;
         return Visibility(
           visible:
-              (viewModel.flowType == EditingFlowType.create &&
-                  lastSavedAt != null) ||
+              (viewModel.flowType == EditingFlowType.create && lastSavedAt != null) ||
               (viewModel.flowType == EditingFlowType.update),
           child: SpFadeIn.bound(
             child: FilledButton.tonalIcon(

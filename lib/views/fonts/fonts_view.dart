@@ -34,10 +34,7 @@ class FontsRoute extends BaseRoute {
 }
 
 class FontsView extends StatelessWidget {
-  const FontsView({
-    super.key,
-    required this.params,
-  });
+  const FontsView({super.key, required this.params});
 
   final FontsRoute params;
 
@@ -55,9 +52,7 @@ class FontsView extends StatelessWidget {
                 fontWeight: viewModel.currentFontWeight,
               ).copyWith(
                 appBarTheme: AppBarTheme.of(context),
-                scaffoldBackgroundColor: Theme.of(
-                  context,
-                ).scaffoldBackgroundColor,
+                scaffoldBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
               ),
           child: _FontsContent(viewModel),
         );

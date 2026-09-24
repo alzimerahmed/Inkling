@@ -12,11 +12,7 @@ import 'package:flutter/material.dart';
 /// - Use it for tasks that must run after platform channels are ready and
 ///   where a brief delay or non-blocking initialization is acceptable.
 class SpAppInitializer extends StatefulWidget {
-  const SpAppInitializer({
-    super.key,
-    required this.child,
-    required this.onPlatformInitialized,
-  });
+  const SpAppInitializer({super.key, required this.child, required this.onPlatformInitialized});
 
   final Future<void> Function() onPlatformInitialized;
   final Widget child;

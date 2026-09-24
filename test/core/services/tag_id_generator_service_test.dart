@@ -75,18 +75,8 @@ void main() {
       });
 
       test('isEmoji and isTime are mutually exclusive', () {
-        for (final id in [
-          0,
-          1000,
-          cutoff - 1,
-          cutoff,
-          cutoff + 1,
-          cutoff + 999999,
-        ]) {
-          expect(
-            TagIdGeneratorService.isEmoji(id) == TagIdGeneratorService.isTime(id),
-            isFalse,
-          );
+        for (final id in [0, 1000, cutoff - 1, cutoff, cutoff + 1, cutoff + 999999]) {
+          expect(TagIdGeneratorService.isEmoji(id) == TagIdGeneratorService.isTime(id), isFalse);
         }
       });
     });

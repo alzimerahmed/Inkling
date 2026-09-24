@@ -5,7 +5,5 @@ Future<void> main() async {
   await community.loadLibrary();
   await source.loadLibrary();
 
-  return source.main(
-    firebaseOptions: community.DefaultFirebaseOptions.currentPlatform,
-  );
+  return source.main(firebaseOptions: community.DefaultFirebaseOptions.currentPlatform);
 }

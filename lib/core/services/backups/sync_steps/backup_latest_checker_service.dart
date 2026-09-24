@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
-    as exp;
+
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
 import 'package:storypad/core/objects/backup_object.dart';
 import 'package:storypad/core/objects/cloud_file_object.dart';
 import 'package:storypad/core/services/backups/sync_steps/backup_sync_messenger.dart';
@@ -13,27 +13,18 @@ import 'package:storypad/core/storages/backup_import_history_storage.dart';
 
 class BackupLatestCheckerResponse {
   final bool hasError;
-  final Map<int, CloudFileObject>?
-  backupCloudFileByYear; // v3: map of year -> CloudFileObject
-  final Map<int, BackupObject>?
-  backupContentsByYear; // v3: map of year -> BackupObject
+  final Map<int, CloudFileObject>? backupCloudFileByYear; // v3: map of year -> CloudFileObject
+  final Map<int, BackupObject>? backupContentsByYear; // v3: map of year -> BackupObject
 
   Map<int, DateTime?>? get lastSyncedAtByYear {
-    return backupCloudFileByYear?.map(
-      (year, file) => MapEntry(year, file.lastUpdatedAt),
-    );
+    return backupCloudFileByYear?.map((year, file) => MapEntry(year, file.lastUpdatedAt));
   }
 
-  BackupLatestCheckerResponse({
-    required this.hasError,
-    this.backupCloudFileByYear,
-    this.backupContentsByYear,
-  });
+  BackupLatestCheckerResponse({required this.hasError, this.backupCloudFileByYear, this.backupContentsByYear});
 }
 
 class BackupLatestCheckerService {
-  BackupLatestCheckerService({required BackupSyncMessenger messenger})
-    : _messenger = messenger;
+  BackupLatestCheckerService({required BackupSyncMessenger messenger}) : _messenger = messenger;
 
   final BackupSyncMessenger _messenger;
 
@@ -45,11 +36,7 @@ class BackupLatestCheckerService {
     AppLogger.d('🚧 $runtimeType#start ...');
 
     try {
-      return await _start(
-        cloudService,
-        importHistoryStorage,
-        lastDbUpdatedAtByYear,
-      );
+      return await _start(cloudService, importHistoryStorage, lastDbUpdatedAtByYear);
     } on exp.AuthException catch (e) {
       _messenger.report(
         serviceType: cloudService.serviceType,
@@ -67,9 +54,7 @@ class BackupLatestCheckerService {
         success: false,
         message: e.userFriendlyMessage,
       );
-      return BackupLatestCheckerResponse(
-        hasError: true,
-      );
+      return BackupLatestCheckerResponse(hasError: true);
     } catch (e, stackTrace) {
       AppLogger.d('$runtimeType#start unexpected error: $e $stackTrace');
       _messenger.report(
@@ -79,9 +64,7 @@ class BackupLatestCheckerService {
         success: false,
         message: 'Failed to check backup due to unexpected error.',
       );
-      return BackupLatestCheckerResponse(
-        hasError: true,
-      );
+      return BackupLatestCheckerResponse(hasError: true);
     }
   }
 
@@ -118,9 +101,7 @@ class BackupLatestCheckerService {
     );
 
     if (remoteYearlyBackupFiles.isEmpty) {
-      AppLogger.d(
-        'No backups found in ${cloudService.serviceType.displayName}',
-      );
+      AppLogger.d('No backups found in ${cloudService.serviceType.displayName}');
       _messenger.report(
         serviceType: cloudService.serviceType,
         step: SyncStep.checkLatest,
@@ -129,11 +110,7 @@ class BackupLatestCheckerService {
         message: 'No backups found',
       );
 
-      return BackupLatestCheckerResponse(
-        hasError: false,
-        backupCloudFileByYear: {},
-        backupContentsByYear: {},
-      );
+      return BackupLatestCheckerResponse(hasError: false, backupCloudFileByYear: {}, backupContentsByYear: {});
     }
 
     backupCloudFileByYear.addAll(remoteYearlyBackupFiles);
@@ -145,14 +122,10 @@ class BackupLatestCheckerService {
       final remoteFile = entry.value;
       final remoteTimestamp = remoteFile.lastUpdatedAt;
       final localTimestamp = lastDbUpdatedAtByYear?[year];
-      AppLogger.d(
-        'BackupLatestChecker: Year $year - Remote: $remoteTimestamp, Local: $localTimestamp',
-      );
+      AppLogger.d('BackupLatestChecker: Year $year - Remote: $remoteTimestamp, Local: $localTimestamp');
 
-      final importedHistoryDates = await importHistoryStorage
-          .getImportHistoryByYear(cloudService.serviceType, year);
-      if (localTimestamp == null ||
-          !importedHistoryDates.contains(remoteTimestamp)) {
+      final importedHistoryDates = await importHistoryStorage.getImportHistoryByYear(cloudService.serviceType, year);
+      if (localTimestamp == null || !importedHistoryDates.contains(remoteTimestamp)) {
         yearsToDownload[year] = remoteFile;
       }
     }
@@ -200,9 +173,7 @@ class BackupLatestCheckerService {
         backupContent = BackupObject.fromContents(decodedContents);
         backupContentsByYear[year] = backupContent;
       } catch (e) {
-        AppLogger.d(
-          '$runtimeType#_start cannot parse backup for year $year: $e',
-        );
+        AppLogger.d('$runtimeType#_start cannot parse backup for year $year: $e');
         // Continue with other years instead of throwing
         continue;
       }

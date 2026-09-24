@@ -39,18 +39,14 @@ class CalendarRoute extends BaseRoute {
 }
 
 class CalendarView extends StatelessWidget {
-  const CalendarView({
-    super.key,
-    required this.params,
-  });
+  const CalendarView({super.key, required this.params});
 
   final CalendarRoute params;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<CalendarViewModel>(
-      create: (context) =>
-          CalendarViewModel(params: params, viewContext: context),
+      create: (context) => CalendarViewModel(params: params, viewContext: context),
       builder: (context, child) {
         return _CalendarContent(Provider.of(context));
       },

@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -50,12 +51,7 @@ class OnboardingTemplate extends StatelessWidget {
 
     double pageHeight = MediaQuery.of(context).size.height;
     double contentHeight =
-        pageHeight -
-        (staturBarHeight +
-            bottomBarHeight +
-            dividerHeight +
-            spacingBetweenSection +
-            demoHeight);
+        pageHeight - (staturBarHeight + bottomBarHeight + dividerHeight + spacingBetweenSection + demoHeight);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -69,19 +65,13 @@ class OnboardingTemplate extends StatelessWidget {
           if (onSkip != null)
             Hero(
               tag: 'onboarding-skip-button',
-              child: TextButton(
-                onPressed: onSkip,
-                child: Text(tr("button.skip")),
-              ),
+              child: TextButton(onPressed: onSkip, child: Text(tr("button.skip"))),
             ),
         ],
       ),
       body: SingleChildScrollView(
         reverse: true,
-        padding: EdgeInsets.only(
-          top: staturBarHeight,
-          bottom: bottomBarHeight,
-        ),
+        padding: EdgeInsets.only(top: staturBarHeight, bottom: bottomBarHeight),
         child: Column(
           children: [
             Container(
@@ -89,10 +79,7 @@ class OnboardingTemplate extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               clipBehavior: Clip.hardEdge,
               decoration: const BoxDecoration(),
-              child: GestureDetector(
-                onTap: () => HapticFeedback.selectionClick(),
-                child: demo,
-              ),
+              child: GestureDetector(onTap: () => HapticFeedback.selectionClick(), child: demo),
             ),
             if (demo != null)
               Hero(
@@ -107,10 +94,7 @@ class OnboardingTemplate extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  buildTextPresentation(context),
-                  buildFooter(context),
-                ],
+                children: [buildTextPresentation(context), buildFooter(context)],
               ),
             ),
           ],
@@ -120,36 +104,23 @@ class OnboardingTemplate extends StatelessWidget {
   }
 
   Widget buildTextPresentation(BuildContext context) {
-    Widget titleText = Text(
-      title,
-      style: TextTheme.of(context).titleLarge,
-      textAlign: TextAlign.center,
-    );
+    Widget titleText = Text(title, style: TextTheme.of(context).titleLarge, textAlign: TextAlign.center);
 
     Widget descriptionText = Container(
       constraints: const BoxConstraints(maxWidth: 250),
-      child: Text(
-        description,
-        style: TextTheme.of(context).bodyLarge,
-        textAlign: TextAlign.center,
-      ),
+      child: Text(description, style: TextTheme.of(context).bodyLarge, textAlign: TextAlign.center),
     );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
-      children:
-          [
-            titleText,
-            const SizedBox(height: 8),
-            descriptionText,
-          ].asMap().entries.map((entry) {
-            return SpFadeIn.fromTop(
-              delay: Durations.medium4 + Durations.medium1 * entry.key,
-              duration: Durations.long3,
-              child: entry.value,
-            );
-          }).toList(),
+      children: [titleText, const SizedBox(height: 8), descriptionText].asMap().entries.map((entry) {
+        return SpFadeIn.fromTop(
+          delay: Durations.medium4 + Durations.medium1 * entry.key,
+          duration: Durations.long3,
+          child: entry.value,
+        );
+      }).toList(),
     );
   }
 
@@ -158,14 +129,8 @@ class OnboardingTemplate extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (currentStep != maxStep) ...[
-          Text("$currentStep / $maxStep"),
-          const SizedBox(height: 24.0),
-        ],
-        if (currentStep == maxStep) ...[
-          _PrivacyPolicyText(context: context),
-          const SizedBox(height: 24.0),
-        ],
+        if (currentStep != maxStep) ...[Text("$currentStep / $maxStep"), const SizedBox(height: 24.0)],
+        if (currentStep == maxStep) ...[_PrivacyPolicyText(context: context), const SizedBox(height: 24.0)],
         actionButton,
       ],
     );

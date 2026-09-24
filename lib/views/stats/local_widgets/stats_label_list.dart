@@ -20,9 +20,7 @@ class _StatsLabelList extends StatelessWidget {
     return SpSingleStateWidget<bool>.listen(
       initialValue: false,
       builder: (context, expanded, notifier) {
-        final List<LabelStatItem> visible = expanded || !canExpand
-            ? items
-            : items.take(_kStatsTopVisible).toList();
+        final List<LabelStatItem> visible = expanded || !canExpand ? items : items.take(_kStatsTopVisible).toList();
 
         return Column(
           children: [
@@ -39,9 +37,7 @@ class _StatsLabelList extends StatelessWidget {
               _buildRowVisual(
                 context,
                 icon: expanded ? SpIcons.expandLess : SpIcons.expandMore,
-                label: expanded
-                    ? tr('button.show_less')
-                    : tr('button.show_more'),
+                label: expanded ? tr('button.show_less') : tr('button.show_more'),
                 trailing: '${items.length - _kStatsTopVisible}',
                 fraction: 0.0,
                 onTap: () => notifier.value = !expanded,
@@ -81,25 +77,12 @@ class _StatsLabelList extends StatelessWidget {
                 ),
               ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12.0,
-                vertical: 8.0,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
               child: Row(
                 spacing: 8.0,
                 children: [
-                  Icon(
-                    icon,
-                    size: 16.0,
-                    color: colorScheme.onSurface.withValues(alpha: 0.6),
-                  ),
-                  Expanded(
-                    child: Text(
-                      label,
-                      maxLines: 1,
-                      overflow: .ellipsis,
-                    ),
-                  ),
+                  Icon(icon, size: 16.0, color: colorScheme.onSurface.withValues(alpha: 0.6)),
+                  Expanded(child: Text(label, maxLines: 1, overflow: .ellipsis)),
                   Text(
                     trailing,
                     style: textTheme.bodyMedium?.copyWith(

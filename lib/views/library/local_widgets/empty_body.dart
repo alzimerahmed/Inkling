@@ -1,9 +1,7 @@
 part of '../library_view.dart';
 
 class _EmptyBody extends StatelessWidget {
-  const _EmptyBody({
-    required this.context,
-  });
+  const _EmptyBody({required this.context});
 
   final BuildContext context;
 

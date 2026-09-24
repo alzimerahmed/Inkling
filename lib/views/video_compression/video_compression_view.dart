@@ -24,9 +24,7 @@ part 'video_compression_content.dart';
 /// [buildRoute] and is pushed by hand rather than through [BaseRoute.push] --
 /// see the notes on each below before reaching for the inherited helpers.
 class VideoCompressionRoute extends BaseRoute {
-  const VideoCompressionRoute({
-    required this.progress,
-  });
+  const VideoCompressionRoute({required this.progress});
 
   /// Created by [run] *before* the route, because the pick loop writes to it
   /// too -- it belongs to the compression pipeline, not to this screen.
@@ -60,9 +58,7 @@ class VideoCompressionRoute extends BaseRoute {
   }) async {
     final navigator = Navigator.of(context, rootNavigator: true);
     final progress = VideoCompressionProgress(total: totalVideos);
-    final pageRoute = VideoCompressionRoute(
-      progress: progress,
-    ).buildRoute<void>(context);
+    final pageRoute = VideoCompressionRoute(progress: progress).buildRoute<void>(context);
 
     T? value;
     Object? error;
@@ -101,10 +97,7 @@ class VideoCompressionRoute extends BaseRoute {
     progress.dispose();
 
     if (error != null) {
-      AppLogger.error(
-        'VideoCompressionRoute#run error: $error',
-        stackTrace: stackTrace,
-      );
+      AppLogger.error('VideoCompressionRoute#run error: $error', stackTrace: stackTrace);
       return null;
     }
 
@@ -124,8 +117,7 @@ class VideoCompressionRoute extends BaseRoute {
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return FadeTransition(opacity: animation, child: child);
       },
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          buildPage(context),
+      pageBuilder: (context, animation, secondaryAnimation) => buildPage(context),
     );
   }
 
@@ -134,10 +126,7 @@ class VideoCompressionRoute extends BaseRoute {
 }
 
 class VideoCompressionView extends StatelessWidget {
-  const VideoCompressionView({
-    super.key,
-    required this.params,
-  });
+  const VideoCompressionView({super.key, required this.params});
 
   final VideoCompressionRoute params;
 
@@ -145,8 +134,7 @@ class VideoCompressionView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<VideoCompressionViewModel>(
       create: (context) => VideoCompressionViewModel(params: params),
-      builder: (context, child) =>
-          _VideoCompressionContent(context.watch<VideoCompressionViewModel>()),
+      builder: (context, child) => _VideoCompressionContent(context.watch<VideoCompressionViewModel>()),
     );
   }
 }

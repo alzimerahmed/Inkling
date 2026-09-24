@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:storypad/core/databases/adapters/objectbox/preferences_box.dart';
 import 'package:storypad/core/types/asset_type.dart';
 import 'package:storypad/core/databases/adapters/objectbox/base_box.dart';
@@ -20,10 +21,7 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
   QueryDateProperty<AssetObjectBox> get permanentlyDeletedAtProperty => AssetObjectBox_.permanentlyDeletedAt;
 
   @override
-  QueryBuilder<AssetObjectBox> buildQuery({
-    Map<String, dynamic>? filters,
-    bool returnDeleted = false,
-  }) {
+  QueryBuilder<AssetObjectBox> buildQuery({Map<String, dynamic>? filters, bool returnDeleted = false}) {
     int? createdYear = filters?["created_year"];
     AssetType? type = filters?["type"];
     List<AssetType>? types = filters?["types"]?.cast<AssetType>();
@@ -33,31 +31,22 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
 
     Condition<AssetObjectBox> conditions = AssetObjectBox_.id.notNull();
 
-    if (!returnDeleted)
-      conditions = conditions.and(
-        AssetObjectBox_.permanentlyDeletedAt.isNull(),
-      );
+    if (!returnDeleted) conditions = conditions.and(AssetObjectBox_.permanentlyDeletedAt.isNull());
     if (types != null && types.isNotEmpty) {
       // Legacy rows saved before `type` existed have a null type and were always images.
-      Condition<AssetObjectBox> typeCondition = AssetObjectBox_.type.oneOf(
-        types.map((t) => t.name).toList(),
-      );
+      Condition<AssetObjectBox> typeCondition = AssetObjectBox_.type.oneOf(types.map((t) => t.name).toList());
       if (types.contains(AssetType.image)) {
         typeCondition = typeCondition.or(AssetObjectBox_.type.isNull());
       }
       conditions = conditions.and(typeCondition);
     } else if (type == AssetType.image) {
-      conditions = conditions.and(
-        AssetObjectBox_.type.equals(AssetType.image.name).or(AssetObjectBox_.type.isNull()),
-      );
+      conditions = conditions.and(AssetObjectBox_.type.equals(AssetType.image.name).or(AssetObjectBox_.type.isNull()));
     } else if (type != null) {
       conditions = conditions.and(AssetObjectBox_.type.equals(type.name));
     }
 
     if (version == 1) {
-      conditions = conditions.and(
-        AssetObjectBox_.version.equals(1).or(AssetObjectBox_.version.isNull()),
-      );
+      conditions = conditions.and(AssetObjectBox_.version.equals(1).or(AssetObjectBox_.version.isNull()));
     }
 
     if (tag != null) {
@@ -70,18 +59,12 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
 
     if (createdYear != null) {
       conditions = conditions.and(
-        AssetObjectBox_.createdAt.betweenDate(
-          DateTime(createdYear, 1, 1),
-          DateTime(createdYear, 12, 31, 23, 59, 59),
-        ),
+        AssetObjectBox_.createdAt.betweenDate(DateTime(createdYear, 1, 1), DateTime(createdYear, 12, 31, 23, 59, 59)),
       );
     }
 
     QueryBuilder<AssetObjectBox> queryBuilder = box.query(conditions);
-    queryBuilder = queryBuilder.order(
-      AssetObjectBox_.id,
-      flags: Order.descending,
-    );
+    queryBuilder = queryBuilder.order(AssetObjectBox_.id, flags: Order.descending);
 
     return queryBuilder;
   }
@@ -90,10 +73,7 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
   AssetDbModel modelFromJson(Map<String, dynamic> json) => AssetDbModel.fromJson(json);
 
   @override
-  Future<AssetObjectBox> modelToObject(
-    AssetDbModel model, [
-    Map<String, dynamic>? options,
-  ]) async {
+  Future<AssetObjectBox> modelToObject(AssetDbModel model, [Map<String, dynamic>? options]) async {
     return AssetObjectBox(
       id: model.id,
       originalSource: model.originalSource,
@@ -111,10 +91,7 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
   }
 
   @override
-  Future<List<AssetObjectBox>> modelsToObjects(
-    List<AssetDbModel> models, [
-    Map<String, dynamic>? options,
-  ]) async {
+  Future<List<AssetObjectBox>> modelsToObjects(List<AssetDbModel> models, [Map<String, dynamic>? options]) async {
     return models.map((model) {
       return AssetObjectBox(
         id: model.id,
@@ -134,10 +111,7 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
   }
 
   @override
-  Future<AssetDbModel> objectToModel(
-    AssetObjectBox object, [
-    Map<String, dynamic>? options,
-  ]) async {
+  Future<AssetDbModel> objectToModel(AssetObjectBox object, [Map<String, dynamic>? options]) async {
     return AssetDbModel(
       id: object.id,
       originalSource: object.originalSource,
@@ -155,9 +129,7 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
     );
   }
 
-  Map<String, Map<String, Map<String, String>>> decodeCloudDestinations(
-    AssetObjectBox object,
-  ) {
+  Map<String, Map<String, Map<String, String>>> decodeCloudDestinations(AssetObjectBox object) {
     dynamic result = jsonDecode(object.cloudDestinations);
 
     Map<String, Map<String, Map<String, String>>> decodeData = {};
@@ -181,10 +153,7 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
   }
 
   @override
-  Future<List<AssetDbModel>> objectsToModels(
-    List<AssetObjectBox> objects, [
-    Map<String, dynamic>? options,
-  ]) async {
+  Future<List<AssetDbModel>> objectsToModels(List<AssetObjectBox> objects, [Map<String, dynamic>? options]) async {
     return objects.map((object) {
       return AssetDbModel(
         id: object.id,

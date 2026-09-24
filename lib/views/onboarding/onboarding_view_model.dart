@@ -4,18 +4,15 @@ import 'package:storypad/core/databases/models/preference_db_model.dart';
 import 'package:storypad/providers/nickname_provider.dart';
 import 'package:storypad/views/onboarding/steps/onboarding_hello_view.dart';
 import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
+
 import 'onboarding_view.dart';
 
 class OnboardingViewModel extends ChangeNotifier with DisposeAwareMixin {
   final OnboardingRoute params;
 
-  OnboardingViewModel({
-    required this.params,
-  });
+  OnboardingViewModel({required this.params});
 
-  final TextEditingController controller = TextEditingController(
-    text: PreferenceDbModel.db.nickname.get(),
-  );
+  final TextEditingController controller = TextEditingController(text: PreferenceDbModel.db.nickname.get());
 
   void next(BuildContext context) {
     if (Form.of(context).validate()) {

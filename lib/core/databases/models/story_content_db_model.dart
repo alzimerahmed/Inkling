@@ -19,9 +19,7 @@ List<StoryPageDbModel>? _richPagesFromJson(dynamic richPages) {
 
       // generate default ID for previous record if not exist.
       if (page['id'] == null) {
-        AppLogger.d(
-          'StoryContentDbModel._richPagesFromJson generating page ID 🚧🚧🚧🚧🚧',
-        );
+        AppLogger.d('StoryContentDbModel._richPagesFromJson generating page ID 🚧🚧🚧🚧🚧');
         page['id'] = now + index;
       }
 
@@ -46,12 +44,7 @@ class StoryContentDbModel extends BaseDbModel with Comparable {
 
   @override
   List<String> get excludeCompareKeys {
-    return [
-      'id',
-      'plain_text',
-      'created_at',
-      'metadata',
-    ];
+    return ['id', 'plain_text', 'created_at', 'metadata'];
   }
 
   @override
@@ -65,18 +58,10 @@ class StoryContentDbModel extends BaseDbModel with Comparable {
   final List<StoryPageDbModel>? richPages;
 
   int get wordCount =>
-      richPages?.fold<int>(
-        0,
-        (previousValue, element) => previousValue + (element.wordCount ?? 0),
-      ) ??
-      0;
+      richPages?.fold<int>(0, (previousValue, element) => previousValue + (element.wordCount ?? 0)) ?? 0;
 
   int get characterCount =>
-      richPages?.fold<int>(
-        0,
-        (previousValue, element) => previousValue + (element.characterCount ?? 0),
-      ) ??
-      0;
+      richPages?.fold<int>(0, (previousValue, element) => previousValue + (element.characterCount ?? 0)) ?? 0;
 
   StoryContentDbModel({
     required this.id,
@@ -87,13 +72,9 @@ class StoryContentDbModel extends BaseDbModel with Comparable {
     this.pages,
   });
 
-  StoryContentDbModel reorder({
-    required int oldIndex,
-    required int newIndex,
-  }) {
-    List<StoryPageDbModel> newRichPages = [
-      ...richPages ?? <StoryPageDbModel>[],
-    ].reorder(oldIndex: oldIndex, newIndex: newIndex);
+  StoryContentDbModel reorder({required int oldIndex, required int newIndex}) {
+    List<StoryPageDbModel> newRichPages = [...richPages ?? <StoryPageDbModel>[]]
+        .reorder(oldIndex: oldIndex, newIndex: newIndex);
 
     final plainTextResult = GenerateBodyPlainTextService.call(newRichPages);
 
@@ -108,19 +89,13 @@ class StoryContentDbModel extends BaseDbModel with Comparable {
     return copyWith(
       richPages: [
         ...richPages ?? [],
-        StoryPageDbModel(
-          id: DateTime.now().millisecondsSinceEpoch,
-          title: null,
-          body: null,
-        ),
+        StoryPageDbModel(id: DateTime.now().millisecondsSinceEpoch, title: null, body: null),
       ],
     );
   }
 
   StoryContentDbModel removeRichPage(int pageId) {
-    List<StoryPageDbModel> newRichPages = [
-      ...richPages ?? [],
-    ]..removeWhere((e) => e.id == pageId);
+    List<StoryPageDbModel> newRichPages = [...richPages ?? []]..removeWhere((e) => e.id == pageId);
 
     final plainTextResult = GenerateBodyPlainTextService.call(newRichPages);
 
@@ -147,25 +122,16 @@ class StoryContentDbModel extends BaseDbModel with Comparable {
 
   String? displayShortBody({int maxCharacterCount = 200}) {
     return plainText != null
-        ? MarkdownBodyShortenerService.call(
-            plainText!,
-            maxCharacterCount: maxCharacterCount,
-          )
+        ? MarkdownBodyShortenerService.call(plainText!, maxCharacterCount: maxCharacterCount)
         : null;
   }
 
   factory StoryContentDbModel.dublicate(StoryContentDbModel oldContent) {
     DateTime now = DateTime.now();
-    return oldContent.copyWith(
-      id: now.millisecondsSinceEpoch,
-      createdAt: now,
-      plainText: oldContent.plainText,
-    );
+    return oldContent.copyWith(id: now.millisecondsSinceEpoch, createdAt: now, plainText: oldContent.plainText);
   }
 
-  factory StoryContentDbModel.create({
-    DateTime? createdAt,
-  }) {
+  factory StoryContentDbModel.create({DateTime? createdAt}) {
     return StoryContentDbModel(
       id: createdAt?.millisecondsSinceEpoch ?? DateTime.now().millisecondsSinceEpoch,
       title: null,

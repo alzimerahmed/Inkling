@@ -41,20 +41,12 @@ class _VideoCompressionContent extends StatelessWidget {
     return CircleAvatar(
       radius: 48,
       backgroundColor: ColorScheme.of(context).readOnly.surface3,
-      child: Icon(
-        SpIcons.videoCamera,
-        size: 48,
-        color: ColorScheme.of(context).primary,
-      ),
+      child: Icon(SpIcons.videoCamera, size: 48, color: ColorScheme.of(context).primary),
     );
   }
 
   Widget _buildTitle(BuildContext context) {
-    return Text(
-      tr('page.video_compression.title'),
-      textAlign: .center,
-      style: TextTheme.of(context).titleMedium,
-    );
+    return Text(tr('page.video_compression.title'), textAlign: .center, style: TextTheme.of(context).titleMedium);
   }
 
   Widget _buildMessage(BuildContext context) {
@@ -63,9 +55,7 @@ class _VideoCompressionContent extends StatelessWidget {
       child: Text(
         viewModel.message,
         textAlign: .center,
-        style: TextTheme.of(context).bodyMedium?.copyWith(
-          color: ColorScheme.of(context).onSurfaceVariant,
-        ),
+        style: TextTheme.of(context).bodyMedium?.copyWith(color: ColorScheme.of(context).onSurfaceVariant),
       ),
     );
   }
@@ -78,16 +68,11 @@ class _VideoCompressionContent extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
-            child: LinearProgressIndicator(
-              value: viewModel.started ? viewModel.value : null,
-              minHeight: 8.0,
-            ),
+            child: LinearProgressIndicator(value: viewModel.started ? viewModel.value : null, minHeight: 8.0),
           ),
           Text(
             viewModel.statusLabel,
-            style: TextTheme.of(context).labelMedium?.copyWith(
-              color: ColorScheme.of(context).onSurfaceVariant,
-            ),
+            style: TextTheme.of(context).labelMedium?.copyWith(color: ColorScheme.of(context).onSurfaceVariant),
           ),
         ],
       ),

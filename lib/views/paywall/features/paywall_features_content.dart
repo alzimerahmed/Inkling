@@ -14,11 +14,7 @@ class _PaywallFeaturesContent extends StatelessWidget {
       appBar: CupertinoSheetRoute.hasParentSheet(context)
           ? AppBar(
               automaticallyImplyLeading: false,
-              actions: [
-                CloseButton(
-                  onPressed: () => CupertinoSheetRoute.popSheet(context),
-                ),
-              ],
+              actions: [CloseButton(onPressed: () => CupertinoSheetRoute.popSheet(context))],
             )
           : null,
       floatingActionButtonLocation: .centerFloat,
@@ -30,13 +26,9 @@ class _PaywallFeaturesContent extends StatelessWidget {
                 mainAxisSize: .min,
                 children: [
                   if (!iapProvider.isProUser &&
-                      (activeDeal.badgeLabel != null ||
-                          activeDeal.displayComparePrice != null)) ...[
+                      (activeDeal.badgeLabel != null || activeDeal.displayComparePrice != null)) ...[
                     if (activeDeal.badgeLabel != null) ...[
-                      Text(
-                        activeDeal.badgeLabel!,
-                        style: TextTheme.of(context).bodyMedium,
-                      ),
+                      Text(activeDeal.badgeLabel!, style: TextTheme.of(context).bodyMedium),
                     ],
                     if (activeDeal.displayComparePrice != null) ...[
                       Text(
@@ -59,12 +51,7 @@ class _PaywallFeaturesContent extends StatelessWidget {
                       foregroundColor: ColorScheme.of(context).onPrimary,
                       shape: const StadiumBorder(),
                       label: Text(
-                        tr(
-                          'button.purchase_for_args',
-                          namedArgs: {
-                            'PRICE': activeDeal.displayPrice ?? 'N/A',
-                          },
-                        ),
+                        tr('button.purchase_for_args', namedArgs: {'PRICE': activeDeal.displayPrice ?? 'N/A'}),
                       ),
                       icon: const Icon(SpIcons.star),
                       onPressed: () => iapProvider.purchase(context),
@@ -76,9 +63,7 @@ class _PaywallFeaturesContent extends StatelessWidget {
                     pageCount: viewModel.params.features.length,
                     maxVisiblePages: 4,
                     activeColor: ColorScheme.of(context).primary,
-                    inactiveColor: ColorScheme.of(
-                      context,
-                    ).primary.withValues(alpha: 0.5),
+                    inactiveColor: ColorScheme.of(context).primary.withValues(alpha: 0.5),
                   ),
                   SizedBox(height: MediaQuery.paddingOf(context).bottom),
                 ],
@@ -95,9 +80,7 @@ class _PaywallFeaturesContent extends StatelessWidget {
             child: _Page(
               viewModel: viewModel,
               feature: feature,
-              topPadding: CupertinoSheetRoute.hasParentSheet(context)
-                  ? 0.0
-                  : 8.0,
+              topPadding: CupertinoSheetRoute.hasParentSheet(context) ? 0.0 : 8.0,
             ),
           );
         },
@@ -107,11 +90,7 @@ class _PaywallFeaturesContent extends StatelessWidget {
 }
 
 class _Page extends StatelessWidget {
-  const _Page({
-    required this.viewModel,
-    required this.feature,
-    required this.topPadding,
-  });
+  const _Page({required this.viewModel, required this.feature, required this.topPadding});
 
   final PaywallFeaturesViewModel viewModel;
   final PaywallFeatureObject feature;
@@ -149,18 +128,13 @@ class _Page extends StatelessWidget {
     );
   }
 
-  Widget buildHeaderContents(
-    BuildContext context,
-    InAppPurchaseProvider iapProvider,
-  ) {
+  Widget buildHeaderContents(BuildContext context, InAppPurchaseProvider iapProvider) {
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
       child: Column(
         children: [
           CircleAvatar(
-            backgroundColor: ColorFromDayService(
-              context: context,
-            ).get(feature.weekdayColor),
+            backgroundColor: ColorFromDayService(context: context).get(feature.weekdayColor),
             foregroundColor: ColorScheme.of(context).onPrimary,
             child: Icon(feature.iconData),
           ),
@@ -179,11 +153,7 @@ class _Page extends StatelessWidget {
               ],
             ),
           ),
-          Text(
-            feature.subtitle,
-            style: TextTheme.of(context).bodyMedium,
-            textAlign: TextAlign.center,
-          ),
+          Text(feature.subtitle, style: TextTheme.of(context).bodyMedium, textAlign: TextAlign.center),
           if (iapProvider.isProUser && feature.onOpen != null) ...[
             const SizedBox(height: 16.0),
             Container(
@@ -196,8 +166,7 @@ class _Page extends StatelessWidget {
                     context,
                     PaywallFeatureNextAction(
                       focusFeature: feature,
-                      action: (BuildContext context) =>
-                          feature.onOpen!(context),
+                      action: (BuildContext context) => feature.onOpen!(context),
                     ),
                   );
                 },

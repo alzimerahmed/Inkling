@@ -5,10 +5,7 @@ import 'package:storypad/views/home/local_widgets/end_drawer/home_end_drawer_sta
 import 'package:storypad/widgets/sp_icons.dart';
 
 class HomeYearSwitcherHeader extends StatelessWidget {
-  const HomeYearSwitcherHeader({
-    super.key,
-    required this.homeViewModel,
-  });
+  const HomeYearSwitcherHeader({super.key, required this.homeViewModel});
 
   final HomeViewModel homeViewModel;
 
@@ -27,19 +24,14 @@ class HomeYearSwitcherHeader extends StatelessWidget {
           children: [
             Text(
               homeViewModel.year.toString(),
-              style: TextTheme.of(
-                context,
-              ).displayMedium?.copyWith(color: ColorScheme.of(context).primary),
+              style: TextTheme.of(context).displayMedium?.copyWith(color: ColorScheme.of(context).primary),
             ),
             Text.rich(
               TextSpan(
                 text: "${tr("button.switch")} ",
                 style: TextTheme.of(context).labelLarge,
                 children: const [
-                  WidgetSpan(
-                    child: Icon(SpIcons.keyboardDown, size: 16.0),
-                    alignment: PlaceholderAlignment.middle,
-                  ),
+                  WidgetSpan(child: Icon(SpIcons.keyboardDown, size: 16.0), alignment: PlaceholderAlignment.middle),
                 ],
               ),
             ),

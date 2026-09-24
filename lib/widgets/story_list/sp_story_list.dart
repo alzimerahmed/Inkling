@@ -60,14 +60,10 @@ class SpStoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (stories?.items == null)
-      return const Center(child: CircularProgressIndicator.adaptive());
+    if (stories?.items == null) return const Center(child: CircularProgressIndicator.adaptive());
 
     if (onRefresh != null) {
-      return RefreshIndicator.adaptive(
-        onRefresh: onRefresh!,
-        child: buildList(context),
-      );
+      return RefreshIndicator.adaptive(onRefresh: onRefresh!, child: buildList(context));
     } else {
       return buildList(context);
     }
@@ -88,10 +84,7 @@ class SpStoryList extends StatelessWidget {
       itemCount: itemsCount,
       itemBuilder: (context, itemIndex) {
         if (hasThrowback && itemIndex == 0) {
-          return SpThrowbackTile(
-            listHasStories: stories?.items.isNotEmpty == true,
-            throwbackDates: throwbackDates,
-          );
+          return SpThrowbackTile(listHasStories: stories?.items.isNotEmpty == true, throwbackDates: throwbackDates);
         }
 
         int storyIndex = itemIndex;
@@ -116,10 +109,7 @@ class SpStoryList extends StatelessWidget {
               highlightQuery: highlightQuery,
               onTap: () {
                 if (viewOnly) {
-                  ShowChangeRoute(
-                    content: story.latestContent!,
-                    preferences: story.preferences,
-                  ).push(context);
+                  ShowChangeRoute(content: story.latestContent!, preferences: story.preferences).push(context);
                 } else {
                   ShowStoryRoute(id: story.id, story: story).push(context);
                 }

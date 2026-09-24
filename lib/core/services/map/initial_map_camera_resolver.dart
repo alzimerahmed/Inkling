@@ -8,18 +8,10 @@ typedef DeviceLocationLoader = Future<SpLatLng?> Function();
 /// Returns an ordered list of recent story locations (most recent first).
 typedef StoryLocationsLoader = Future<List<SpLatLng>> Function();
 
-enum InitialMapCameraSource {
-  selectedPlace,
-  devicePlace,
-  storyLocation,
-  fallback,
-}
+enum InitialMapCameraSource { selectedPlace, devicePlace, storyLocation, fallback }
 
 class InitialMapCameraResult {
-  const InitialMapCameraResult({
-    required this.camera,
-    required this.source,
-  });
+  const InitialMapCameraResult({required this.camera, required this.source});
 
   final SpMapCamera camera;
   final InitialMapCameraSource source;
@@ -54,10 +46,7 @@ class InitialMapCameraResolver {
     this.closeZoomBoost = 0.0,
   });
 
-  static const SpMapCamera fallbackCamera = SpMapCamera(
-    target: SpLatLng(0.0, 0.0),
-    zoom: 2.0,
-  );
+  static const SpMapCamera fallbackCamera = SpMapCamera(target: SpLatLng(0.0, 0.0), zoom: 2.0);
 
   final DeviceLocationLoader fetchDeviceLocation;
   final StoryLocationsLoader fetchStoryLocations;
@@ -72,17 +61,13 @@ class InitialMapCameraResolver {
   Future<InitialMapCameraResult> resolve({PlaceDbModel? selectedPlace}) async {
     if (selectedPlace != null && _isValidPoint(selectedPlace.latLng)) {
       return InitialMapCameraResult(
-        camera: SpMapCamera(
-          target: selectedPlace.latLng,
-          zoom: 15.0 + closeZoomBoost,
-        ),
+        camera: SpMapCamera(target: selectedPlace.latLng, zoom: 15.0 + closeZoomBoost),
         source: InitialMapCameraSource.selectedPlace,
       );
     }
 
     final Future<InitialMapCameraResult?> deviceFuture = _resolveDevicePlace();
-    final Future<InitialMapCameraResult?> storyFuture =
-        _resolveStoryLocations();
+    final Future<InitialMapCameraResult?> storyFuture = _resolveStoryLocations();
 
     final InitialMapCameraResult? deviceResult = await deviceFuture;
     final InitialMapCameraResult? storyResult = await storyFuture;
@@ -95,10 +80,7 @@ class InitialMapCameraResolver {
       if (deviceResult != null) return deviceResult;
     }
 
-    return const InitialMapCameraResult(
-      camera: fallbackCamera,
-      source: InitialMapCameraSource.fallback,
-    );
+    return const InitialMapCameraResult(camera: fallbackCamera, source: InitialMapCameraSource.fallback);
   }
 
   Future<InitialMapCameraResult?> _resolveDevicePlace() async {
@@ -112,15 +94,10 @@ class InitialMapCameraResolver {
   }
 
   Future<InitialMapCameraResult?> _resolveStoryLocations() async {
-    final List<SpLatLng> locations = (await fetchStoryLocations())
-        .where(_isValidPoint)
-        .toList();
+    final List<SpLatLng> locations = (await fetchStoryLocations()).where(_isValidPoint).toList();
     if (locations.isEmpty) return null;
 
-    return InitialMapCameraResult(
-      camera: _storyCameraFor(locations),
-      source: InitialMapCameraSource.storyLocation,
-    );
+    return InitialMapCameraResult(camera: _storyCameraFor(locations), source: InitialMapCameraSource.storyLocation);
   }
 
   /// Picks a camera that best frames the given story [locations] (most recent first).
@@ -136,10 +113,7 @@ class InitialMapCameraResolver {
     final SpLatLng anchor = locations.first;
     final List<SpLatLng> recentCluster = locations
         .take(20)
-        .where(
-          (location) =>
-              _isNear(location, anchor, latitudeSpan: 0.8, longitudeSpan: 0.8),
-        )
+        .where((location) => _isNear(location, anchor, latitudeSpan: 0.8, longitudeSpan: 0.8))
         .toList();
 
     if (recentCluster.length < 2) {
@@ -147,20 +121,11 @@ class InitialMapCameraResolver {
     }
 
     final SpLatLng center = _average(recentCluster);
-    final double latitudeSpan = _span(
-      recentCluster.map((location) => location.latitude),
-    );
-    final double longitudeSpan = _span(
-      recentCluster.map((location) => location.longitude),
-    );
-    final double maxSpan = latitudeSpan > longitudeSpan
-        ? latitudeSpan
-        : longitudeSpan;
+    final double latitudeSpan = _span(recentCluster.map((location) => location.latitude));
+    final double longitudeSpan = _span(recentCluster.map((location) => location.longitude));
+    final double maxSpan = latitudeSpan > longitudeSpan ? latitudeSpan : longitudeSpan;
 
-    return SpMapCamera(
-      target: center,
-      zoom: _zoomForSpan(maxSpan) + closeZoomBoost,
-    );
+    return SpMapCamera(target: center, zoom: _zoomForSpan(maxSpan) + closeZoomBoost);
   }
 
   static SpLatLng _average(List<SpLatLng> locations) {

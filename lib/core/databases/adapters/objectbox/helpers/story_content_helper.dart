@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:html_character_entities/html_character_entities.dart';
 import 'package:storypad/core/databases/models/story_content_db_model.dart';
@@ -22,9 +23,7 @@ class StoryContentHelper {
 
   // TODO: remove this method when ready.
   // This is a low level method to make sure view get rich pages instead of pages when using.
-  static StoryContentDbModel convertPagesToRichPages(
-    StoryContentDbModel content,
-  ) {
+  static StoryContentDbModel convertPagesToRichPages(StoryContentDbModel content) {
     // ignore: deprecated_member_use_from_same_package
     if (content.pages != null) {
       final now = DateTime.now().millisecondsSinceEpoch;
@@ -51,9 +50,7 @@ class StoryContentHelper {
 
     if (preferences != null) {
       try {
-        decodedDreferences = StoryPreferencesDbModel.fromJson(
-          jsonDecode(preferences),
-        );
+        decodedDreferences = StoryPreferencesDbModel.fromJson(jsonDecode(preferences));
       } catch (e) {
         debugPrint(".decodePreferences error: $e");
       }

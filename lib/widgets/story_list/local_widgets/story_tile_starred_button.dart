@@ -32,10 +32,7 @@ class _StoryTileStarredButton extends StatelessWidget {
           story: story,
           toggleStarred: viewOnly
               ? null
-              : StoryTileActions(
-                  story: story,
-                  storyListReloaderContext: listContext,
-                ).toggleStarred,
+              : StoryTileActions(story: story, storyListReloaderContext: listContext).toggleStarred,
           multiEditState: multiEditState,
         ),
       ),

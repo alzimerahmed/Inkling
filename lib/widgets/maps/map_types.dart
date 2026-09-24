@@ -19,8 +19,7 @@ enum SpMapRenderer {
   /// Platform capability, not user taste — the fallback when the user hasn't
   /// picked a provider. Read `DevicePreferencesProvider.mapRenderer` instead
   /// of this directly.
-  static SpMapRenderer get defaultRenderer =>
-      googleMapSupported ? googleMap : flutterMap;
+  static SpMapRenderer get defaultRenderer => googleMapSupported ? googleMap : flutterMap;
 
   /// IANA timezones covering mainland China, where Google Maps tiles don't
   /// load at all.
@@ -45,8 +44,7 @@ enum SpMapRenderer {
   /// English has the same blank map, and is the person most likely to go
   /// looking for this setting.
   static bool googleMapsUnavailableIn(String? timezone) {
-    return timezone != null &&
-        _googleMapsUnavailableTimezones.contains(timezone);
+    return timezone != null && _googleMapsUnavailableTimezones.contains(timezone);
   }
 
   /// Whether to offer the provider choice at all. Desktop has only one working
@@ -110,21 +108,14 @@ extension SpMapStyleExtension on SpMapStyle {
 }
 
 class SpMapCamera {
-  const SpMapCamera({
-    required this.target,
-    required this.zoom,
-  });
+  const SpMapCamera({required this.target, required this.zoom});
 
   final SpLatLng target;
   final double zoom;
 }
 
 class SpMapViewport {
-  const SpMapViewport({
-    required this.bounds,
-    required this.center,
-    required this.zoom,
-  });
+  const SpMapViewport({required this.bounds, required this.center, required this.zoom});
 
   final SpLatLngBounds bounds;
   final SpLatLng center;

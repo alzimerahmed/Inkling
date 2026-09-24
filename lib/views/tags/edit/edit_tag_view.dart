@@ -22,11 +22,7 @@ class EditTagResult {
 }
 
 class EditTagRoute extends BaseRoute {
-  EditTagRoute({
-    required this.tag,
-    required this.tags,
-    this.categoryId,
-  });
+  EditTagRoute({required this.tag, required this.tags, this.categoryId});
 
   final TagDbModel? tag;
   final List<TagDbModel> tags;
@@ -42,10 +38,7 @@ class EditTagRoute extends BaseRoute {
 }
 
 class EditTagView extends StatelessWidget {
-  const EditTagView({
-    super.key,
-    required this.params,
-  });
+  const EditTagView({super.key, required this.params});
 
   final EditTagRoute params;
 

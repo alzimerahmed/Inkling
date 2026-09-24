@@ -12,10 +12,7 @@ class SpAssetInfoSheet extends BaseBottomSheet {
   // for just remove embed or link from story, not remove asset itself.
   final void Function()? onRemoveAssetEmbed;
 
-  SpAssetInfoSheet({
-    required this.asset,
-    this.onRemoveAssetEmbed,
-  });
+  SpAssetInfoSheet({required this.asset, this.onRemoveAssetEmbed});
 
   @override
   bool get fullScreen => false;
@@ -23,9 +20,7 @@ class SpAssetInfoSheet extends BaseBottomSheet {
   @override
   Widget build(BuildContext context, double bottomPadding) {
     final fileSize = _getFileSizeString();
-    final timeFormat = context.read<DevicePreferencesProvider>().timeFormatOf(
-      context,
-    );
+    final timeFormat = context.read<DevicePreferencesProvider>().timeFormatOf(context);
 
     return Stack(
       children: [
@@ -37,22 +32,12 @@ class SpAssetInfoSheet extends BaseBottomSheet {
             ListTile(
               leading: const Icon(SpIcons.calendar),
               title: Text(tr("list_tile.updated_at.title")),
-              subtitle: Text(
-                timeFormat.formatDateTime(
-                  asset.updatedAt,
-                  context.locale,
-                ),
-              ),
+              subtitle: Text(timeFormat.formatDateTime(asset.updatedAt, context.locale)),
             ),
             ListTile(
               leading: const Icon(SpIcons.info),
               title: Text(tr("list_tile.created_at.title")),
-              subtitle: Text(
-                timeFormat.formatDateTime(
-                  asset.createdAt,
-                  context.locale,
-                ),
-              ),
+              subtitle: Text(timeFormat.formatDateTime(asset.createdAt, context.locale)),
             ),
             if (fileSize != null)
               ListTile(

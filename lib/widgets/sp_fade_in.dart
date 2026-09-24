@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:storypad/core/extensions/matrix_4_extension.dart';
@@ -24,12 +25,7 @@ class SpFadeIn extends StatelessWidget {
   final Duration duration;
   final void Function()? onFadeIn;
   final void Function(AnimationController controller)? onCustomControllerLoaded;
-  final Widget Function(
-    BuildContext context,
-    Animation<double> animation,
-    Widget child,
-  )?
-  builder;
+  final Widget Function(BuildContext context, Animation<double> animation, Widget child)? builder;
 
   factory SpFadeIn.fromLeft({
     required Widget child,
@@ -49,8 +45,7 @@ class SpFadeIn extends StatelessWidget {
             child: child,
             builder: (context, child) {
               return Transform(
-                transform: Matrix4.identity()
-                  ..spTranslate(lerpDouble(-4.0, 0, animation.value)!, 0.0),
+                transform: Matrix4.identity()..spTranslate(lerpDouble(-4.0, 0, animation.value)!, 0.0),
                 child: child,
               );
             },
@@ -79,8 +74,7 @@ class SpFadeIn extends StatelessWidget {
             child: child,
             builder: (context, child) {
               return Transform(
-                transform: Matrix4.identity()
-                  ..spTranslate(lerpDouble(4.0, 0, animation.value)!, 0.0),
+                transform: Matrix4.identity()..spTranslate(lerpDouble(4.0, 0, animation.value)!, 0.0),
                 child: child,
               );
             },
@@ -109,8 +103,7 @@ class SpFadeIn extends StatelessWidget {
             child: child,
             builder: (context, child) {
               return Transform(
-                transform: Matrix4.identity()
-                  ..spTranslate(0.0, lerpDouble(-4.0, 0, animation.value)!),
+                transform: Matrix4.identity()..spTranslate(0.0, lerpDouble(-4.0, 0, animation.value)!),
                 child: child,
               );
             },
@@ -141,8 +134,7 @@ class SpFadeIn extends StatelessWidget {
             child: child,
             builder: (context, child) {
               return Transform(
-                transform: Matrix4.identity()
-                  ..spTranslate(0.0, lerpDouble(4.0, 0, animation.value)!),
+                transform: Matrix4.identity()..spTranslate(0.0, lerpDouble(4.0, 0, animation.value)!),
                 child: child,
               );
             },
@@ -172,8 +164,7 @@ class SpFadeIn extends StatelessWidget {
             builder: (context, child) {
               return AnimatedContainer(
                 duration: Durations.medium1,
-                transform: Matrix4.identity()
-                  ..spScale(animation.value > 0.2 ? 1.0 : 0.9),
+                transform: Matrix4.identity()..spScale(animation.value > 0.2 ? 1.0 : 0.9),
                 transformAlignment: Alignment.center,
                 curve: Curves.ease,
                 child: child,
@@ -202,9 +193,7 @@ class SpFadeIn extends StatelessWidget {
           child: child,
           builder: (context, child) {
             return Transform(
-              transform: Matrix4.rotationY(
-                lerpDouble(-math.pi, 0, animation.value)!,
-              ),
+              transform: Matrix4.rotationY(lerpDouble(-math.pi, 0, animation.value)!),
               alignment: Alignment.center,
               child: child,
             );
@@ -233,9 +222,7 @@ class SpFadeIn extends StatelessWidget {
             child: child,
             builder: (context, child) {
               return Transform(
-                transform: Matrix4.rotationZ(
-                  lerpDouble(-1, 0, animation.value)!,
-                ),
+                transform: Matrix4.rotationZ(lerpDouble(-1, 0, animation.value)!),
                 alignment: Alignment.center,
                 child: child,
               );
@@ -254,10 +241,7 @@ class SpFadeIn extends StatelessWidget {
       return FutureBuilder<int>(
         future: Future.delayed(delay!).then((value) => 1),
         builder: (context, snapshot) {
-          return Visibility(
-            visible: snapshot.data == 1,
-            child: buildAnimatedChild(),
-          );
+          return Visibility(visible: snapshot.data == 1, child: buildAnimatedChild());
         },
       );
     } else {
@@ -273,12 +257,7 @@ class SpFadeIn extends StatelessWidget {
       onFadeIn: onFadeIn,
       onCustomControllerLoaded: onCustomControllerLoaded,
       builder: (context, animation) {
-        return builder != null
-            ? builder!(context, animation, child)
-            : FadeTransition(
-                opacity: animation,
-                child: child,
-              );
+        return builder != null ? builder!(context, animation, child) : FadeTransition(opacity: animation, child: child);
       },
     );
   }
@@ -298,8 +277,7 @@ class _AnimationState extends StatefulWidget {
   final Duration duration;
   final Curve curve;
   final void Function()? onFadeIn;
-  final Widget Function(BuildContext context, Animation<double> animation)
-  builder;
+  final Widget Function(BuildContext context, Animation<double> animation) builder;
 
   // manully controll the animation
   final void Function(AnimationController controller)? onCustomControllerLoaded;
@@ -308,8 +286,7 @@ class _AnimationState extends StatefulWidget {
   State<_AnimationState> createState() => __AnimationStateState();
 }
 
-class __AnimationStateState extends State<_AnimationState>
-    with SingleTickerProviderStateMixin {
+class __AnimationStateState extends State<_AnimationState> with SingleTickerProviderStateMixin {
   late final AnimationController controller;
 
   String? debugCurveName;
@@ -402,21 +379,12 @@ class __AnimationStateState extends State<_AnimationState>
     if (widget.testCurves) {
       return Stack(
         children: [
-          widget.builder(
-            context,
-            controller.drive(CurveTween(curve: curve)),
-          ),
-          Text(
-            debugCurveName ?? 'N/A',
-            style: TextTheme.of(context).bodyMedium,
-          ),
+          widget.builder(context, controller.drive(CurveTween(curve: curve))),
+          Text(debugCurveName ?? 'N/A', style: TextTheme.of(context).bodyMedium),
         ],
       );
     } else {
-      return widget.builder(
-        context,
-        controller.drive(CurveTween(curve: curve)),
-      );
+      return widget.builder(context, controller.drive(CurveTween(curve: curve)));
     }
   }
 }

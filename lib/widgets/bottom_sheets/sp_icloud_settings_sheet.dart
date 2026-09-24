@@ -20,10 +20,7 @@ import 'package:storypad/widgets/bottom_sheets/sp_demo_images_sheet.dart';
 class SpICloudSettingsSheet {
   const SpICloudSettingsSheet._();
 
-  static Future<void> show(
-    BuildContext context, {
-    required ICloudCloudService service,
-  }) {
+  static Future<void> show(BuildContext context, {required ICloudCloudService service}) {
     return SpDemoImagesSheet(
       demoImages: SpDemoImagesSheet.icloudSettingsDemoImages,
       bottom: _ICloudSettingsButton(service: service),
@@ -53,10 +50,7 @@ class _ICloudSettingsButton extends StatelessWidget {
           // primary visual guidance, so a new per-platform translation
           // wasn't worth it.
           Text(
-            tr(
-              'dialog.icloud_settings.navigation_steps',
-              namedArgs: {'SP_APP_NAME': kAppName},
-            ),
+            tr('dialog.icloud_settings.navigation_steps', namedArgs: {'SP_APP_NAME': kAppName}),
             textAlign: TextAlign.center,
             style: TextTheme.of(context).bodySmall,
           ),

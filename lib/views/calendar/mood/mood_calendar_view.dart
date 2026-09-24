@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,10 +34,7 @@ class MoodCalendarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<MoodCalendarViewModel>(
-      create: (context) => MoodCalendarViewModel(
-        params: this,
-        context: context,
-      ),
+      create: (context) => MoodCalendarViewModel(params: this, context: context),
       builder: (context, child) {
         return _CalendarStoriesContent(Provider.of(context));
       },

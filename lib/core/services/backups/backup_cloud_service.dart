@@ -1,4 +1,5 @@
 import 'dart:io' as io;
+
 import 'package:storypad/core/objects/cloud_file_object.dart';
 import 'package:storypad/core/objects/cloud_service_user.dart';
 import 'package:storypad/core/objects/cloud_storage_quota_object.dart';
@@ -54,15 +55,8 @@ abstract class BackupCloudService {
   Future<List<int>?> downloadFileBytes(String fileId);
 
   /// Upload a new yearly backup file to the backups/ folder
-  Future<CloudFileObject?> uploadYearlyBackup({
-    required String fileName,
-    required io.File file,
-  }) async {
-    return uploadFile(
-      fileName,
-      file,
-      folderName: 'backups',
-    );
+  Future<CloudFileObject?> uploadYearlyBackup({required String fileName, required io.File file}) async {
+    return uploadFile(fileName, file, folderName: 'backups');
   }
 
   /// Update an existing yearly backup file (atomic)
@@ -72,11 +66,7 @@ abstract class BackupCloudService {
     required String fileName,
     required io.File file,
   }) {
-    return updateFile(
-      fileId: fileId,
-      fileName: fileName,
-      file: file,
-    );
+    return updateFile(fileId: fileId, fileName: fileName, file: file);
   }
 
   /// Find a file by ID in cloud storage
@@ -96,18 +86,10 @@ abstract class BackupCloudService {
 
   /// Upload a file (asset) to cloud storage
   /// Returns: CloudFileObject metadata if successful
-  Future<CloudFileObject?> uploadFile(
-    String fileName,
-    io.File file, {
-    String? folderName,
-  });
+  Future<CloudFileObject?> uploadFile(String fileName, io.File file, {String? folderName});
 
   // Update an existing file in cloud storage
-  Future<CloudFileObject?> updateFile({
-    required String fileId,
-    required String fileName,
-    required io.File file,
-  });
+  Future<CloudFileObject?> updateFile({required String fileId, required String fileName, required io.File file});
 
   /// Fetch cloud storage quota for the signed-in user.
   /// Returns null if not signed in or unsupported by this service.

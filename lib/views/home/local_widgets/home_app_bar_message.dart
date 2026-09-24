@@ -26,10 +26,7 @@ class _HomeAppBarMessage extends StatelessWidget {
       title = "${tr("page.home.app_bar.messages.we_syncing_ur_data")} ";
       trailing = Container(
         margin: const EdgeInsets.symmetric(horizontal: 4.0),
-        child: const SizedBox.square(
-          dimension: 12.0,
-          child: CircularProgressIndicator.adaptive(),
-        ),
+        child: const SizedBox.square(dimension: 12.0, child: CircularProgressIndicator.adaptive()),
       );
     } else {
       showWelcomeMessage = true;
@@ -49,14 +46,7 @@ class _HomeAppBarMessage extends StatelessWidget {
         TextSpan(
           style: TextTheme.of(context).bodyLarge,
           text: title,
-          children: trailing == null
-              ? null
-              : [
-                  WidgetSpan(
-                    alignment: PlaceholderAlignment.middle,
-                    child: trailing,
-                  ),
-                ],
+          children: trailing == null ? null : [WidgetSpan(alignment: PlaceholderAlignment.middle, child: trailing)],
         ),
       ),
     );

@@ -4,9 +4,7 @@ import 'package:objectbox/objectbox.dart';
 import 'package:storypad/core/constants/app_constants.dart';
 
 abstract class BaseObjectBox<T> {
-  void toPermanentlyDeleted({
-    DateTime? deletedAt,
-  });
+  void toPermanentlyDeleted({DateTime? deletedAt});
 
   void setDeviceId() {
     lastSavedDeviceId = kDeviceInfo.id;
@@ -134,9 +132,7 @@ class StoryObjectBox extends BaseObjectBox {
   });
 
   @override
-  void toPermanentlyDeleted({
-    DateTime? deletedAt,
-  }) {
+  void toPermanentlyDeleted({DateTime? deletedAt}) {
     updatedAt = DateTime.now();
     permanentlyDeletedAt = deletedAt ?? DateTime.now();
   }
@@ -188,9 +184,7 @@ class TagCategoryObjectBox extends BaseObjectBox {
   });
 
   @override
-  void toPermanentlyDeleted({
-    DateTime? deletedAt,
-  }) {
+  void toPermanentlyDeleted({DateTime? deletedAt}) {
     updatedAt = DateTime.now();
     permanentlyDeletedAt = deletedAt ?? DateTime.now();
   }
@@ -242,9 +236,7 @@ class TagObjectBox extends BaseObjectBox {
   });
 
   @override
-  void toPermanentlyDeleted({
-    DateTime? deletedAt,
-  }) {
+  void toPermanentlyDeleted({DateTime? deletedAt}) {
     updatedAt = DateTime.now();
     permanentlyDeletedAt = deletedAt ?? DateTime.now();
   }
@@ -311,9 +303,7 @@ class AssetObjectBox extends BaseObjectBox {
   });
 
   @override
-  void toPermanentlyDeleted({
-    DateTime? deletedAt,
-  }) {
+  void toPermanentlyDeleted({DateTime? deletedAt}) {
     updatedAt = DateTime.now();
     permanentlyDeletedAt = deletedAt ?? DateTime.now();
   }
@@ -367,9 +357,7 @@ class EventObjectBox extends BaseObjectBox {
   });
 
   @override
-  void toPermanentlyDeleted({
-    DateTime? deletedAt,
-  }) {
+  void toPermanentlyDeleted({DateTime? deletedAt}) {
     updatedAt = DateTime.now();
     permanentlyDeletedAt = deletedAt ?? DateTime.now();
   }
@@ -413,9 +401,7 @@ class PreferenceObjectBox extends BaseObjectBox {
   });
 
   @override
-  void toPermanentlyDeleted({
-    DateTime? deletedAt,
-  }) {
+  void toPermanentlyDeleted({DateTime? deletedAt}) {
     updatedAt = DateTime.now();
     permanentlyDeletedAt = deletedAt ?? DateTime.now();
   }
@@ -476,9 +462,7 @@ class TemplateObjectBox extends BaseObjectBox {
   });
 
   @override
-  void toPermanentlyDeleted({
-    DateTime? deletedAt,
-  }) {
+  void toPermanentlyDeleted({DateTime? deletedAt}) {
     updatedAt = DateTime.now();
     permanentlyDeletedAt = deletedAt ?? DateTime.now();
   }
@@ -525,9 +509,7 @@ class RelaxSoundMixBox extends BaseObjectBox {
   });
 
   @override
-  void toPermanentlyDeleted({
-    DateTime? deletedAt,
-  }) {
+  void toPermanentlyDeleted({DateTime? deletedAt}) {
     updatedAt = DateTime.now();
     permanentlyDeletedAt = deletedAt ?? DateTime.now();
   }

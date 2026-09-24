@@ -7,16 +7,9 @@ void main() {
   group('CalendarDaysGenerator.generate', () {
     test('it generates correct day counts when week starts on monday', () {
       const firstDayOfWeek = FirstDayOfWeekOption.monday;
-      final result = CalendarDaysGenerator.generate(
-        year: 2024,
-        month: 2,
-        firstDayOfWeek: firstDayOfWeek,
-      );
+      final result = CalendarDaysGenerator.generate(year: 2024, month: 2, firstDayOfWeek: firstDayOfWeek);
 
-      final expectedCurrentMonthDayCount = DaysCountInMonthService.get(
-        year: 2024,
-        month: 2,
-      );
+      final expectedCurrentMonthDayCount = DaysCountInMonthService.get(year: 2024, month: 2);
       const expectedTotalDays = 42;
       final firstDayWeekday = DateTime(2024, 2, 1).weekday;
       final expectedPreviousMonthDayCount =
@@ -36,16 +29,9 @@ void main() {
 
     test('it generates correct day counts when week starts on sunday', () {
       const firstDayOfWeek = FirstDayOfWeekOption.sunday;
-      final result = CalendarDaysGenerator.generate(
-        year: 2024,
-        month: 2,
-        firstDayOfWeek: firstDayOfWeek,
-      );
+      final result = CalendarDaysGenerator.generate(year: 2024, month: 2, firstDayOfWeek: firstDayOfWeek);
 
-      final expectedCurrentMonthDayCount = DaysCountInMonthService.get(
-        year: 2024,
-        month: 2,
-      );
+      final expectedCurrentMonthDayCount = DaysCountInMonthService.get(year: 2024, month: 2);
       const expectedTotalDays = 42;
       final firstDayWeekday = DateTime(2024, 2, 1).weekday;
       final expectedPreviousMonthDayCount =

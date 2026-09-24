@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:storypad/core/services/backups/backup_cloud_service.dart';
@@ -122,10 +123,7 @@ class AssetDbModel extends BaseDbModel {
   /// - Image: `/support/dir/images/1762500783746.jpg`
   /// - Audio: `/support/dir/audio/1762500783746.m4a`
   String get localFilePath {
-    return type.getStoragePath(
-      id: id,
-      extension: extension(originalSource),
-    );
+    return type.getStoragePath(id: id, extension: extension(originalSource));
   }
 
   /// Get the relative storage path for this asset.
@@ -134,10 +132,7 @@ class AssetDbModel extends BaseDbModel {
   /// - Image: `images/1762500783746.jpg`
   /// - Audio: `audio/1762500783746.m4a`
   String get relativeLocalFilePath {
-    return type.getRelativeStoragePath(
-      id: id,
-      extension: extension(originalSource),
-    );
+    return type.getRelativeStoragePath(id: id, extension: extension(originalSource));
   }
 
   factory AssetDbModel.fromLocalPath({
@@ -178,10 +173,7 @@ class AssetDbModel extends BaseDbModel {
     final newMetadata = {...(metadata ?? {})};
     newMetadata[DURATION_KEY] = durationInMs;
 
-    return copyWith(
-      metadata: newMetadata,
-      updatedAt: DateTime.now(),
-    );
+    return copyWith(metadata: newMetadata, updatedAt: DateTime.now());
   }
 
   bool isGoogleDriveUploadedFor(String? email) {
@@ -207,10 +199,7 @@ class AssetDbModel extends BaseDbModel {
   /// Generic counterpart to [getGoogleDriveIdForEmail] — usable for any
   /// connected service, e.g. to check whether another already-signed-in
   /// service has this asset before it's ever been downloaded to this device.
-  String? cloudFileIdFor({
-    required BackupServiceType serviceType,
-    required String identifier,
-  }) {
+  String? cloudFileIdFor({required BackupServiceType serviceType, required String identifier}) {
     return cloudDestinations[serviceType.id]?[identifier]?['file_id'];
   }
 
@@ -230,11 +219,7 @@ class AssetDbModel extends BaseDbModel {
       for (final entry in forService.entries) {
         final fileId = entry.value['file_id'];
         if (fileId != null) {
-          destinations.add((
-            serviceType: serviceType,
-            identifier: entry.key,
-            fileId: fileId,
-          ));
+          destinations.add((serviceType: serviceType, identifier: entry.key, fileId: fileId));
         }
       }
     }
@@ -271,25 +256,16 @@ class AssetDbModel extends BaseDbModel {
     return matchingCloudDestinationsFor(signedInServices).firstOrNull;
   }
 
-  Future<AssetDbModel?> save({
-    bool runCallbacks = true,
-  }) async => db.set(this, runCallbacks: runCallbacks);
+  Future<AssetDbModel?> save({bool runCallbacks = true}) async => db.set(this, runCallbacks: runCallbacks);
 
-  Future<void> delete({
-    bool runCallbacks = true,
-  }) async => db.delete(
-    id,
-    runCallbacks: runCallbacks,
-  );
+  Future<void> delete({bool runCallbacks = true}) async => db.delete(id, runCallbacks: runCallbacks);
 
   /// Find an asset by its relative file path
   ///
   /// Supports relative paths for both image and audio:
   /// - images/{id}.jpg
   /// - audio/{id}.m4a
-  static Future<AssetDbModel?> findBy({
-    required String relativePath,
-  }) async {
+  static Future<AssetDbModel?> findBy({required String relativePath}) async {
     final id = AssetType.parseAssetId(relativePath);
     return id != null ? AssetDbModel.db.find(id) : null;
   }
@@ -299,43 +275,27 @@ class AssetDbModel extends BaseDbModel {
     required CloudFileObject cloudFile,
     required String email,
   }) {
-    Map<String, Map<String, Map<String, String>>> newCloudDestinations = {
-      ...cloudDestinations,
-    };
+    Map<String, Map<String, Map<String, String>>> newCloudDestinations = {...cloudDestinations};
 
     newCloudDestinations[serviceType.id] ??= {};
-    newCloudDestinations[serviceType.id]![email] = {
-      'file_id': cloudFile.id,
-      'file_name': cloudFile.fileName!,
-    };
+    newCloudDestinations[serviceType.id]![email] = {'file_id': cloudFile.id, 'file_name': cloudFile.fileName!};
 
-    return copyWith(
-      cloudDestinations: newCloudDestinations,
-      updatedAt: DateTime.now(),
-    );
+    return copyWith(cloudDestinations: newCloudDestinations, updatedAt: DateTime.now());
   }
 
   /// Removal counterpart to [copyWithCloudFile] — drops a single stale
   /// destination (e.g. once a download 404 confirms the remote copy is
   /// actually gone), so [pendingAssets]-style lookups stop treating this
   /// service+identifier as a valid source/destination for this asset.
-  AssetDbModel copyWithoutCloudFile({
-    required BackupServiceType serviceType,
-    required String identifier,
-  }) {
-    Map<String, Map<String, Map<String, String>>> newCloudDestinations = {
-      ...cloudDestinations,
-    };
+  AssetDbModel copyWithoutCloudFile({required BackupServiceType serviceType, required String identifier}) {
+    Map<String, Map<String, Map<String, String>>> newCloudDestinations = {...cloudDestinations};
 
     final forService = newCloudDestinations[serviceType.id];
     if (forService != null && forService.containsKey(identifier)) {
       newCloudDestinations[serviceType.id] = {...forService}..remove(identifier);
     }
 
-    return copyWith(
-      cloudDestinations: newCloudDestinations,
-      updatedAt: DateTime.now(),
-    );
+    return copyWith(cloudDestinations: newCloudDestinations, updatedAt: DateTime.now());
   }
 
   factory AssetDbModel.fromJson(Map<String, dynamic> json) => _$AssetDbModelFromJson(json);

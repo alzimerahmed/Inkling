@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,9 +28,7 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
   bool isActive(String productIdentifier) =>
       !kIAPEnabled ? false : _customerInfo?.entitlements.all[productIdentifier]?.isActive == true;
 
-  bool get hasAnyLegacyPurchases => AppLegacyProduct.values.any(
-    (product) => isActive(product.productIdentifier),
-  );
+  bool get hasAnyLegacyPurchases => AppLegacyProduct.values.any((product) => isActive(product.productIdentifier));
   bool get periodCalendar => isActive(AppLegacyProduct.period_calendar.productIdentifier);
 
   bool get isProUser => isActive(AppProduct.storypad_pro_lifetime.productIdentifier) || hasAnyLegacyPurchases;
@@ -58,10 +57,7 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
   final _purchaseGuard = AvoidDublicatedCallService<bool>();
 
   InAppPurchaseProvider() {
-    _initialize().then((_) => _initializerCompleter.complete()).catchError((
-      Object error,
-      StackTrace stackTrace,
-    ) {
+    _initialize().then((_) => _initializerCompleter.complete()).catchError((Object error, StackTrace stackTrace) {
       _initializerCompleter.completeError(error, stackTrace);
     });
   }
@@ -96,10 +92,7 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
       try {
         _customerInfo = await Purchases.getCustomerInfo();
       } catch (e, s) {
-        AppLogger.error(
-          '$runtimeType#_initialize error Purchases.getCustomerInfo: $e',
-          stackTrace: s,
-        );
+        AppLogger.error('$runtimeType#_initialize error Purchases.getCustomerInfo: $e', stackTrace: s);
       }
 
       // Load previously persisted provider selection.
@@ -130,20 +123,16 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
       });
 
       // Keep RevenueCat identity in sync whenever cloud service users change.
-      _userChangesSubscription = BackupProvider.repoInstance.userChanges.listen(
-        (type) {
-          _syncCloudUserLogins(changeType: type);
-        },
-      );
+      _userChangesSubscription = BackupProvider.repoInstance.userChanges.listen((type) {
+        _syncCloudUserLogins(changeType: type);
+      });
     } finally {
       _initialized = true;
       notifyListeners();
     }
   }
 
-  Future<void> _syncCloudUserLogins({
-    UserChangeType? changeType,
-  }) async {
+  Future<void> _syncCloudUserLogins({UserChangeType? changeType}) async {
     final services = BackupProvider.repoInstance.services;
     // Must actually have a usable global ID right now, not just be signed in
     // to a service *type* that's capable of one — a signed-out service
@@ -172,14 +161,9 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
       if (appUserId != null && !appUserId.startsWith('\$RCAnonymousID:')) {
         try {
           _customerInfo = await Purchases.logOut();
-          AppLogger.d(
-            '$runtimeType#_syncCloudUserLogins logged out, switched to anonymous',
-          );
+          AppLogger.d('$runtimeType#_syncCloudUserLogins logged out, switched to anonymous');
         } catch (e, s) {
-          AppLogger.error(
-            '$runtimeType#_syncCloudUserLogins logOut error: $e',
-            stackTrace: s,
-          );
+          AppLogger.error('$runtimeType#_syncCloudUserLogins logOut error: $e', stackTrace: s);
         }
       }
 
@@ -199,14 +183,9 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
           final result = await Purchases.logIn(appUserId);
           _customerInfo = result.customerInfo;
 
-          AppLogger.d(
-            '$runtimeType#_syncCloudUserLogins logged in as "$appUserId" (new RC user: ${result.created})',
-          );
+          AppLogger.d('$runtimeType#_syncCloudUserLogins logged in as "$appUserId" (new RC user: ${result.created})');
         } catch (e, s) {
-          AppLogger.error(
-            '$runtimeType#_syncCloudUserLogins logIn("$appUserId") error: $e',
-            stackTrace: s,
-          );
+          AppLogger.error('$runtimeType#_syncCloudUserLogins logIn("$appUserId") error: $e', stackTrace: s);
         }
       }
 
@@ -234,19 +213,14 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
       AppLogger.d('$runtimeType#_migrateLegacyUser migration complete');
       return true;
     } catch (e, s) {
-      AppLogger.error(
-        '$runtimeType#_migrateLegacyUser error: $e',
-        stackTrace: s,
-      );
+      AppLogger.error('$runtimeType#_migrateLegacyUser error: $e', stackTrace: s);
       return false;
     }
   }
 
   /// Updates the selected backup provider used to drive RevenueCat identity and persists the choice.
   /// Pass null to clear the selection (falls back to default on next sync).
-  Future<void> setSelectedPurchaseSyncProvider(
-    BackupServiceType? serviceType,
-  ) async {
+  Future<void> setSelectedPurchaseSyncProvider(BackupServiceType? serviceType) async {
     _selectedSyncProvider = serviceType;
 
     if (serviceType != null) {
@@ -283,9 +257,7 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
     );
   }
 
-  Future<List<StoreProduct>?> fetchAndCacheProducts({
-    required String debugSource,
-  }) async {
+  Future<List<StoreProduct>?> fetchAndCacheProducts({required String debugSource}) async {
     if (!kIAPEnabled) return null;
 
     try {
@@ -301,10 +273,7 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
         stackTrace: s,
       );
     } catch (e, s) {
-      AppLogger.error(
-        '$runtimeType#fetchProducts($debugSource) error: ${e.toString()}',
-        stackTrace: s,
-      );
+      AppLogger.error('$runtimeType#fetchProducts($debugSource) error: ${e.toString()}', stackTrace: s);
     }
 
     return storeProducts;
@@ -329,17 +298,14 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
           // Use cached product if available, otherwise fetch.
           StoreProduct? storeProduct = getProduct(productToPurchase);
 
-          storeProduct ??= await Purchases.getProducts(
-            [productToPurchase],
-            productCategory: ProductCategory.nonSubscription,
-          ).then((e) => e.firstOrNull);
+          storeProduct ??= await Purchases.getProducts([
+            productToPurchase,
+          ], productCategory: ProductCategory.nonSubscription).then((e) => e.firstOrNull);
 
           if (storeProduct == null) return;
 
           try {
-            PurchaseResult result = await Purchases.purchase(
-              PurchaseParams.storeProduct(storeProduct),
-            );
+            PurchaseResult result = await Purchases.purchase(PurchaseParams.storeProduct(storeProduct));
             _customerInfo = result.customerInfo;
             if (isActive(productToPurchase)) success = true;
             notifyListeners();
@@ -347,10 +313,7 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
             PurchasesErrorCode errorCode = PurchasesErrorHelper.getErrorCode(e);
 
             if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
-              AppLogger.error(
-                '$runtimeType#purchase error: $errorCode',
-                stackTrace: s,
-              );
+              AppLogger.error('$runtimeType#purchase error: $errorCode', stackTrace: s);
               if (context.mounted) await MessengerService.of(context).showError();
             }
           }
@@ -389,10 +352,7 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
             errorMessage = 'Error restoring purchases: $errorCode';
           }
 
-          AppLogger.error(
-            '$runtimeType#restorePurchase error: $e',
-            stackTrace: s,
-          );
+          AppLogger.error('$runtimeType#restorePurchase error: $e', stackTrace: s);
           if (context.mounted) await MessengerService.of(context).showError(errorMessage);
         }
       },

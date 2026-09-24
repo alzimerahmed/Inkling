@@ -17,10 +17,7 @@ class LegacyStoryPadInitializer {
     bool success = result.$1;
     String message = result.$2;
 
-    return _LegacyStorypadMigrationResponse(
-      success: success,
-      message: message,
-    );
+    return _LegacyStorypadMigrationResponse(success: success, message: message);
   }
 }
 
@@ -42,8 +39,5 @@ class _LegacyStorypadMigrationResponse {
   final bool success;
   final String message;
 
-  _LegacyStorypadMigrationResponse({
-    required this.success,
-    required this.message,
-  });
+  _LegacyStorypadMigrationResponse({required this.success, required this.message});
 }

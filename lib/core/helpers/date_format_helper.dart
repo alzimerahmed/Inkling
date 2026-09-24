@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, depend_on_referenced_packages
 
 import 'dart:ui';
+
 import 'package:intl/intl.dart';
 
 class DateFormatHelper {
@@ -25,34 +26,34 @@ class DateFormatHelper {
   }
 
   static String yMEd_jms(DateTime date, Locale locale) {
-    return DateFormat.yMEd(
-      locale.toLanguageTag(),
-    ).addPattern("- ${DateFormat.jms(locale.toLanguageTag()).pattern!}").format(date);
+    return DateFormat.yMEd(locale.toLanguageTag())
+        .addPattern("- ${DateFormat.jms(locale.toLanguageTag()).pattern!}")
+        .format(date);
   }
 
   static String yMEd_jm(DateTime date, Locale locale) {
-    return DateFormat.yMEd(
-      locale.toLanguageTag(),
-    ).addPattern("- ${DateFormat.jm(locale.toLanguageTag()).pattern!}").format(date);
+    return DateFormat.yMEd(locale.toLanguageTag())
+        .addPattern("- ${DateFormat.jm(locale.toLanguageTag()).pattern!}")
+        .format(date);
   }
 
   static String yMEd_Hms(DateTime date, Locale locale) {
-    return DateFormat.yMEd(
-      locale.toLanguageTag(),
-    ).addPattern("- ${DateFormat.Hms(locale.toLanguageTag()).pattern!}").format(date);
+    return DateFormat.yMEd(locale.toLanguageTag())
+        .addPattern("- ${DateFormat.Hms(locale.toLanguageTag()).pattern!}")
+        .format(date);
   }
 
   static String yMEd_Hm(DateTime date, Locale locale) {
-    return DateFormat.yMEd(
-      locale.toLanguageTag(),
-    ).addPattern("- ${DateFormat.Hm(locale.toLanguageTag()).pattern!}").format(date);
+    return DateFormat.yMEd(locale.toLanguageTag())
+        .addPattern("- ${DateFormat.Hm(locale.toLanguageTag()).pattern!}")
+        .format(date);
   }
 
   static String? yMEd_jmNullable(DateTime? date, Locale locale) {
     if (date == null) return null;
-    return DateFormat.yMEd(
-      locale.toLanguageTag(),
-    ).addPattern("- ${DateFormat.jm(locale.toLanguageTag()).pattern!}").format(date);
+    return DateFormat.yMEd(locale.toLanguageTag())
+        .addPattern("- ${DateFormat.jm(locale.toLanguageTag()).pattern!}")
+        .format(date);
   }
 
   static String? yMEdNullable(DateTime? date, Locale locale) {

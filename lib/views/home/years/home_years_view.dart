@@ -11,9 +11,7 @@ import 'home_years_view_model.dart';
 part 'home_years_content.dart';
 
 class HomeYearsRoute extends BaseRoute {
-  HomeYearsRoute({
-    required this.viewModel,
-  });
+  HomeYearsRoute({required this.viewModel});
 
   final HomeViewModel viewModel;
 
@@ -22,10 +20,7 @@ class HomeYearsRoute extends BaseRoute {
 }
 
 class HomeYearsView extends StatelessWidget {
-  const HomeYearsView({
-    super.key,
-    required this.params,
-  });
+  const HomeYearsView({super.key, required this.params});
 
   final HomeYearsRoute params;
 

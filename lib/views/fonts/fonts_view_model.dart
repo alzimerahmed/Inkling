@@ -1,4 +1,5 @@
 import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:storypad/core/constants/app_constants.dart';
@@ -6,26 +7,21 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
 import 'package:storypad/core/storages/recently_selected_fonts_storage.dart';
 import 'package:storypad/views/paywall/paywall_view.dart';
+
 import 'fonts_view.dart';
 
 class FontGroup {
   final String label;
   final List<String> fontFamilies;
 
-  FontGroup({
-    required this.label,
-    required this.fontFamilies,
-  });
+  FontGroup({required this.label, required this.fontFamilies});
 }
 
 class FontsViewModel extends ChangeNotifier with DisposeAwareMixin {
   final FontsRoute params;
   final BuildContext context;
 
-  FontsViewModel({
-    required this.params,
-    required this.context,
-  }) {
+  FontsViewModel({required this.params, required this.context}) {
     currentFontFamily = params.currentFontFamily;
     currentFontWeight = params.currentFontWeight;
 
@@ -50,9 +46,7 @@ class FontsViewModel extends ChangeNotifier with DisposeAwareMixin {
 
     freeGlobalFonts = {kDefaultFontFamily};
     fontGroups?.forEach((group) {
-      freeGlobalFonts.addAll(
-        group.fontFamilies.where((font) => fonts.contains(font)).take(5),
-      );
+      freeGlobalFonts.addAll(group.fontFamilies.where((font) => fonts.contains(font)).take(5));
     });
 
     notifyListeners();
@@ -92,15 +86,8 @@ class FontsViewModel extends ChangeNotifier with DisposeAwareMixin {
     }).toList();
 
     return [
-      FontGroup(
-        label: tr("general.defaults"),
-        fontFamilies: [kDefaultFontFamily],
-      ),
-      if (recentlySelectedFonts != null)
-        FontGroup(
-          label: tr("general.recently"),
-          fontFamilies: recentlySelectedFonts!,
-        ),
+      FontGroup(label: tr("general.defaults"), fontFamilies: [kDefaultFontFamily]),
+      if (recentlySelectedFonts != null) FontGroup(label: tr("general.recently"), fontFamilies: recentlySelectedFonts!),
       ...alphabeticalGroups,
     ];
   }

@@ -4,10 +4,7 @@ class _RootRouteObserver extends NavigatorObserver {
   final void Function(Route route, Route? previousRoute)? onPush;
   final void Function(Route route, Route? previousRoute)? onPop;
 
-  _RootRouteObserver({
-    required this.onPush,
-    required this.onPop,
-  });
+  _RootRouteObserver({required this.onPush, required this.onPop});
 
   @override
   void didPop(Route route, Route? previousRoute) {

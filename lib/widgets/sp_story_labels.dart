@@ -87,23 +87,14 @@ class SpStoryLabels extends StatelessWidget {
     final action = await showModalActionSheet(
       context: context,
       actions: [
-        SheetAction(
-          label: tr("button.save"),
-          icon: SpIcons.save,
-          key: "save",
-          isDefaultAction: true,
-        ),
+        SheetAction(label: tr("button.save"), icon: SpIcons.save, key: "save", isDefaultAction: true),
         SheetAction(
           label: tr("button.continue_editing"),
           icon: SpIcons.edit,
           key: "continue_editing",
           isDefaultAction: true,
         ),
-        SheetAction(
-          label: tr("button.view_previous"),
-          icon: SpIcons.compare,
-          key: "view_previous",
-        ),
+        SheetAction(label: tr("button.view_previous"), icon: SpIcons.compare, key: "view_previous"),
         SheetAction(
           label: tr("button.discard_draft"),
           icon: SpIcons.clear,
@@ -147,9 +138,7 @@ class SpStoryLabels extends StatelessWidget {
           builder: (context, provider, child) {
             return buildPin(
               context: context,
-              title: provider
-                  .timeFormatOf(context)
-                  .formatTime(story.displayPathDate, context.locale),
+              title: provider.timeFormatOf(context).formatTime(story.displayPathDate, context.locale),
               onTap: () => showTimePicker(context),
             );
           },
@@ -169,10 +158,7 @@ class SpStoryLabels extends StatelessWidget {
       );
     }
 
-    int pageCount =
-        currentPagesCount ??
-        (story.draftContent ?? story.latestContent)?.richPages?.length ??
-        0;
+    int pageCount = currentPagesCount ?? (story.draftContent ?? story.latestContent)?.richPages?.length ?? 0;
     bool showPageCount = preferences.showPageCount || !fromStoryTile;
     if (pageCount > 1 && showPageCount) {
       children.add(
@@ -191,28 +177,22 @@ class SpStoryLabels extends StatelessWidget {
       children.add(
         buildPin(
           context: context,
-          title:
-              "📌 ${plural("plural.day_ago", story.dateDifferentCount.inDays)}",
-          onTap: () => SpDaysCountBottomSheet(
-            story: story,
-            onToggleShowDayCount: onToggleShowDayCount,
-          ).show(context: context),
+          title: "📌 ${plural("plural.day_ago", story.dateDifferentCount.inDays)}",
+          onTap: () =>
+              SpDaysCountBottomSheet(story: story, onToggleShowDayCount: onToggleShowDayCount).show(context: context),
         ),
       );
     }
 
     bool showDraft = false;
-    if (story.draftContent != null)
-      showDraft = fromStoryTile || draftActions != null;
+    if (story.draftContent != null) showDraft = fromStoryTile || draftActions != null;
     if (showDraft) {
       children.add(
         buildPin(
           leadingIconData: SpIcons.draftEdit,
           context: context,
           title: tr("general.draft"),
-          onTap: draftActions != null
-              ? () => showDraftActionSheet(context)
-              : null,
+          onTap: draftActions != null ? () => showDraftActionSheet(context) : null,
         ),
       );
     }
@@ -260,9 +240,7 @@ class SpStoryLabels extends StatelessWidget {
           leadingIconData: SpIcons.map,
           onTap: onSetPlace != null
               ? () async {
-                  final result = await MapPickerRoute(
-                    initialSelectedPlace: story.place,
-                  ).push(context);
+                  final result = await MapPickerRoute(initialSelectedPlace: story.place).push(context);
 
                   if (result is MapPickerResult) {
                     switch (result.action) {
@@ -300,25 +278,16 @@ class SpStoryLabels extends StatelessWidget {
           bottomToTop: false,
           dyGetter: (dy) => dy + 24,
           pathBuilder: PathBuilders.slideDown,
-          floatingBuilder: (close) => SpFloatingTagPicker(
-            initialTags: story.validTags ?? [],
-            onUpdated: onToggleTags!,
-            close: close,
-          ),
-          builder: (open) => _buildIconButton(
-            context: context,
-            icon: SpIcons.tag,
-            tooltip: tr('page.tags.title'),
-            onTap: open,
-          ),
+          floatingBuilder: (close) =>
+              SpFloatingTagPicker(initialTags: story.validTags ?? [], onUpdated: onToggleTags!, close: close),
+          builder: (open) =>
+              _buildIconButton(context: context, icon: SpIcons.tag, tooltip: tr('page.tags.title'), onTap: open),
         ),
       );
     }
 
     // Emoji labels including its add button
-    final emojis =
-        (story.validTags?.map((tag) => tagProvider.getEmojiTag(tag)) ?? [])
-            .whereType<String>();
+    final emojis = (story.validTags?.map((tag) => tagProvider.getEmojiTag(tag)) ?? []).whereType<String>();
     final emojiRow = Row(
       mainAxisSize: .min,
       children: emojis.map((emoji) {
@@ -333,11 +302,7 @@ class SpStoryLabels extends StatelessWidget {
               textAlign: .center,
               softWrap: true,
               style: const TextStyle(fontSize: 40, height: 1.0),
-              strutStyle: const StrutStyle(
-                forceStrutHeight: true,
-                fontSize: 40,
-                height: 1.0,
-              ),
+              strutStyle: const StrutStyle(forceStrutHeight: true, fontSize: 40, height: 1.0),
             ),
           ),
         );
@@ -351,11 +316,8 @@ class SpStoryLabels extends StatelessWidget {
           bottomToTop: false,
           dyGetter: (dy) => dy + 24,
           pathBuilder: PathBuilders.slideDown,
-          floatingBuilder: (close) => SpEmojiTagPicker(
-            initialTags: story.validTags ?? [],
-            onUpdated: onToggleTags!,
-            close: close,
-          ),
+          floatingBuilder: (close) =>
+              SpEmojiTagPicker(initialTags: story.validTags ?? [], onUpdated: onToggleTags!, close: close),
           builder: (open) => _buildIconButton(
             context: context,
             icon: SpIcons.addFeeling,
@@ -373,11 +335,8 @@ class SpStoryLabels extends StatelessWidget {
           bottomToTop: false,
           dyGetter: (dy) => dy + 24,
           pathBuilder: PathBuilders.slideDown,
-          floatingBuilder: (close) => SpEmojiTagPicker(
-            initialTags: story.validTags ?? [],
-            onUpdated: onToggleTags!,
-            close: close,
-          ),
+          floatingBuilder: (close) =>
+              SpEmojiTagPicker(initialTags: story.validTags ?? [], onUpdated: onToggleTags!, close: close),
           builder: (open) => SpTapEffect(
             duration: Durations.medium3,
             curve: Curves.easeInOutCubicEmphasized,
@@ -457,58 +416,29 @@ class SpStoryLabels extends StatelessWidget {
   }
 
   Future<void> showTimePicker(BuildContext context) async {
-    final newTime = await StoryTimePickerService(
-      context: context,
-      story: story,
-    ).showPicker();
+    final newTime = await StoryTimePickerService(context: context, story: story).showPicker();
 
     if (newTime != null) {
-      await onChangeDate?.call(
-        story
-            .copyWith(hour: newTime.hour, minute: newTime.minute)
-            .displayPathDate,
-      );
+      await onChangeDate?.call(story.copyWith(hour: newTime.hour, minute: newTime.minute).displayPathDate);
     }
   }
 
-  List<Widget> buildTags(
-    TagsProvider tagProvider,
-    BuildContext context, {
-    required bool people,
-  }) {
+  List<Widget> buildTags(TagsProvider tagProvider, BuildContext context, {required bool people}) {
     if (people) {
       final peopleTags =
-          tagProvider.peopleTags?.items
-              .where((e) => story.validTags?.contains(e.id) == true)
-              .toList() ??
-          [];
-      return [
-        for (final person in peopleTags)
-          buildTag(context, tagProvider, person, prefix: "@"),
-      ];
+          tagProvider.peopleTags?.items.where((e) => story.validTags?.contains(e.id) == true).toList() ?? [];
+      return [for (final person in peopleTags) buildTag(context, tagProvider, person, prefix: "@")];
     }
 
     final tags =
         tagProvider.tags?.items
-            .where(
-              (e) =>
-                  e.categoryId == null &&
-                  e.emoji == null &&
-                  story.validTags?.contains(e.id) == true,
-            )
+            .where((e) => e.categoryId == null && e.emoji == null && story.validTags?.contains(e.id) == true)
             .toList() ??
         [];
-    return [
-      for (final tag in tags) buildTag(context, tagProvider, tag, prefix: "#"),
-    ];
+    return [for (final tag in tags) buildTag(context, tagProvider, tag, prefix: "#")];
   }
 
-  Widget buildTag(
-    BuildContext context,
-    TagsProvider provider,
-    TagDbModel tag, {
-    required String prefix,
-  }) {
+  Widget buildTag(BuildContext context, TagsProvider provider, TagDbModel tag, {required String prefix}) {
     final title = "$prefix ${tag.title.sanitizeUtf16}";
 
     if (onToggleTags != null) {
@@ -523,19 +453,14 @@ class SpStoryLabels extends StatelessWidget {
           close: close,
           initialPeopleMode: tag.isPerson,
         ),
-        builder: (open) => buildPin(
-          context: context,
-          title: title,
-          onTap: open,
-        ),
+        builder: (open) => buildPin(context: context, title: title, onTap: open),
       );
     }
 
     return buildPin(
       context: context,
       title: title,
-      onTap: () =>
-          provider.viewTag(context: context, tag: tag, storyViewOnly: false),
+      onTap: () => provider.viewTag(context: context, tag: tag, storyViewOnly: false),
     );
   }
 
@@ -551,11 +476,8 @@ class SpStoryLabels extends StatelessWidget {
         return Tooltip(
           message: tooltip,
           child: Material(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4.0),
-            ),
-            color: (AppTheme.isDarkMode(context) ? Colors.white : Colors.black)
-                .withValues(alpha: 0.06),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+            color: (AppTheme.isDarkMode(context) ? Colors.white : Colors.black).withValues(alpha: 0.06),
             child: InkWell(
               borderRadius: BorderRadius.circular(4.0),
               onTap: onTap is Future<void> Function()
@@ -567,28 +489,20 @@ class SpStoryLabels extends StatelessWidget {
                   : onTap,
               child: loading
                   ? Container(
-                      padding: EdgeInsets.all(
-                        MediaQuery.textScalerOf(context).scale(4),
-                      ),
+                      padding: EdgeInsets.all(MediaQuery.textScalerOf(context).scale(4)),
                       height: MediaQuery.textScalerOf(context).scale(20),
                       width: MediaQuery.textScalerOf(context).scale(20),
                       child: CircularProgressIndicator.adaptive(
-                        strokeWidth: MediaQuery.textScalerOf(
-                          context,
-                        ).scale(3.0),
+                        strokeWidth: MediaQuery.textScalerOf(context).scale(3.0),
                       ),
                     )
                   : Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.textScalerOf(context).scale(8.0),
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: MediaQuery.textScalerOf(context).scale(8.0)),
                       height: MediaQuery.textScalerOf(context).scale(20),
                       child: Icon(
                         icon,
                         size: MediaQuery.textScalerOf(context).scale(14.0),
-                        color: ColorScheme.of(
-                          context,
-                        ).onSurface.withValues(alpha: 0.6),
+                        color: ColorScheme.of(context).onSurface.withValues(alpha: 0.6),
                       ),
                     ),
             ),
@@ -622,36 +536,23 @@ class SpStoryLabels extends StatelessWidget {
         ),
       );
     } else if (title != null) {
-      text = Text(
-        title,
-        style: TextTheme.of(context).labelMedium,
-      );
+      text = Text(title, style: TextTheme.of(context).labelMedium);
     }
 
     final child = Material(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-      color: (AppTheme.isDarkMode(context) ? Colors.white : Colors.black)
-          .withValues(alpha: 0.06),
+      color: (AppTheme.isDarkMode(context) ? Colors.white : Colors.black).withValues(alpha: 0.06),
       child: InkWell(
         borderRadius: BorderRadius.circular(4.0),
         onTap: onTap,
         child: Container(
           height: MediaQuery.textScalerOf(context).scale(20),
-          padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.textScalerOf(context).scale(7),
-          ),
-          child: Align(
-            alignment: .center,
-            widthFactor: 1.0,
-            child: text,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: MediaQuery.textScalerOf(context).scale(7)),
+          child: Align(alignment: .center, widthFactor: 1.0, child: text),
         ),
       ),
     );
 
-    return Tooltip(
-      message: tooltip ?? title,
-      child: child,
-    );
+    return Tooltip(message: tooltip ?? title, child: child);
   }
 }

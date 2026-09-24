@@ -28,10 +28,7 @@ class _OnboardingStep4Content extends StatelessWidget {
         onPressed: () => viewModel.getStarted(context),
       );
     } else {
-      return OutlinedButton(
-        child: Text(tr("button.get_started")),
-        onPressed: () => viewModel.getStarted(context),
-      );
+      return OutlinedButton(child: Text(tr("button.get_started")), onPressed: () => viewModel.getStarted(context));
     }
   }
 }

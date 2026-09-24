@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:storypad/widgets/sp_icons.dart';
 
 class StoryEndDrawerButton extends StatelessWidget {
-  const StoryEndDrawerButton({
-    super.key,
-  });
+  const StoryEndDrawerButton({super.key});
 
   @override
   Widget build(BuildContext context) {

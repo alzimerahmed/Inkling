@@ -18,10 +18,7 @@ class _TemplateStoriesContent extends StatelessWidget {
   Widget buildScaffold(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: SpStoryList.withQuery(
-        viewOnly: true,
-        filter: viewModel.filter,
-      ),
+      body: SpStoryList.withQuery(viewOnly: true, filter: viewModel.filter),
     );
   }
 }

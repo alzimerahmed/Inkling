@@ -12,12 +12,8 @@ class _ImportMediaOverviewContent extends StatelessWidget {
     // Photos and videos share one tab, same as everywhere else media is
     // browsed (Library, the image picker's "types" filter) — see
     // docs/app/features/media.md ("Video is merged into the images tab").
-    final imageEntries =
-        entries?.where((e) => e.scanEntry.type != AssetType.audio).toList() ??
-        const [];
-    final audioEntries =
-        entries?.where((e) => e.scanEntry.type == AssetType.audio).toList() ??
-        const [];
+    final imageEntries = entries?.where((e) => e.scanEntry.type != AssetType.audio).toList() ?? const [];
+    final audioEntries = entries?.where((e) => e.scanEntry.type == AssetType.audio).toList() ?? const [];
     final hasImages = imageEntries.isNotEmpty;
     final hasAudio = audioEntries.isNotEmpty;
 
@@ -25,22 +21,12 @@ class _ImportMediaOverviewContent extends StatelessWidget {
     final tabViews = <Widget>[];
 
     if (hasImages) {
-      tabs.add(
-        Tab(
-          icon: const Icon(SpIcons.photo),
-          text: plural('plural.row', imageEntries.length),
-        ),
-      );
+      tabs.add(Tab(icon: const Icon(SpIcons.photo), text: plural('plural.row', imageEntries.length)));
       tabViews.add(_ImagesImportTab(entries: imageEntries));
     }
 
     if (hasAudio) {
-      tabs.add(
-        Tab(
-          icon: const Icon(SpIcons.voice),
-          text: plural('plural.row', audioEntries.length),
-        ),
-      );
+      tabs.add(Tab(icon: const Icon(SpIcons.voice), text: plural('plural.row', audioEntries.length)));
       tabViews.add(_AudioImportTab(entries: audioEntries));
     }
 
@@ -56,18 +42,12 @@ class _ImportMediaOverviewContent extends StatelessWidget {
               : null,
         ),
         body: buildBody(entries, tabs, tabViews),
-        bottomNavigationBar: entries == null
-            ? null
-            : buildBottomBar(context, entries),
+        bottomNavigationBar: entries == null ? null : buildBottomBar(context, entries),
       ),
     );
   }
 
-  Widget buildBody(
-    List<ImportMediaEntry>? entries,
-    List<Tab> tabs,
-    List<Widget> tabViews,
-  ) {
+  Widget buildBody(List<ImportMediaEntry>? entries, List<Tab> tabs, List<Widget> tabViews) {
     if (entries == null) {
       return const Center(child: CircularProgressIndicator.adaptive());
     }
@@ -80,15 +60,9 @@ class _ImportMediaOverviewContent extends StatelessWidget {
     return TabBarView(children: tabViews);
   }
 
-  Widget buildDefaultTabController({
-    required Widget child,
-    required int length,
-  }) {
+  Widget buildDefaultTabController({required Widget child, required int length}) {
     if (length >= 2) {
-      return DefaultTabController(
-        length: length,
-        child: child,
-      );
+      return DefaultTabController(length: length, child: child);
     }
     return child;
   }
@@ -104,12 +78,8 @@ class _ImportMediaOverviewContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             FilledButton(
-              onPressed: toImport == 0
-                  ? null
-                  : () => viewModel.performImport(context),
-              child: Text(
-                "${tr('button.import')} (${plural('plural.row', toImport)})",
-              ),
+              onPressed: toImport == 0 ? null : () => viewModel.performImport(context),
+              child: Text("${tr('button.import')} (${plural('plural.row', toImport)})"),
             ),
           ],
         ),
@@ -119,9 +89,7 @@ class _ImportMediaOverviewContent extends StatelessWidget {
 }
 
 class _ImagesImportTab extends StatelessWidget {
-  const _ImagesImportTab({
-    required this.entries,
-  });
+  const _ImagesImportTab({required this.entries});
 
   final List<ImportMediaEntry> entries;
 
@@ -151,9 +119,8 @@ class _ImagesImportTab extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
                     child: Text(
                       dayLabel,
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
+                      style: Theme.of(context).textTheme.titleSmall
+                          ?.copyWith(color: Theme.of(context).colorScheme.outline),
                     ),
                   ),
                   MasonryGridView.builder(
@@ -164,10 +131,9 @@ class _ImagesImportTab extends StatelessWidget {
                     mainAxisSpacing: 8.0,
                     crossAxisSpacing: 8.0,
                     padding: EdgeInsets.zero,
-                    gridDelegate:
-                        SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: max(1, constraints.maxWidth ~/ 120),
-                        ),
+                    gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: max(1, constraints.maxWidth ~/ 120),
+                    ),
                     itemBuilder: (context, index) {
                       return _ImageImportTile(entry: dayAssets[index]);
                     },
@@ -183,9 +149,7 @@ class _ImagesImportTab extends StatelessWidget {
 }
 
 class _ImageImportTile extends StatelessWidget {
-  const _ImageImportTile({
-    required this.entry,
-  });
+  const _ImageImportTile({required this.entry});
 
   final ImportMediaEntry entry;
 
@@ -208,11 +172,7 @@ class _ImageImportTile extends StatelessWidget {
                       side: BorderSide(color: Theme.of(context).dividerColor),
                     ),
                     child: entry.scanEntry.type == AssetType.video
-                        ? _VideoImportPreview(
-                            file: entry.previewFile,
-                            width: constraints.maxWidth,
-                            height: 120,
-                          )
+                        ? _VideoImportPreview(file: entry.previewFile, width: constraints.maxWidth, height: 120)
                         : Image.file(
                             entry.previewFile,
                             width: constraints.maxWidth,
@@ -222,16 +182,9 @@ class _ImageImportTile extends StatelessWidget {
                               return Container(
                                 width: constraints.maxWidth,
                                 height: 120,
-                                color: ColorScheme.of(
-                                  context,
-                                ).surfaceContainerHighest,
+                                color: ColorScheme.of(context).surfaceContainerHighest,
                                 child: Center(
-                                  child: Icon(
-                                    SpIcons.photo,
-                                    color: ColorScheme.of(
-                                      context,
-                                    ).onSurfaceVariant,
-                                  ),
+                                  child: Icon(SpIcons.photo, color: ColorScheme.of(context).onSurfaceVariant),
                                 ),
                               );
                             },
@@ -244,10 +197,7 @@ class _ImageImportTile extends StatelessWidget {
                 foregroundColor: _badgeForegroundColor(context, entry),
                 icon: _badgeIcon(entry),
               ),
-              SpAssetStoryCountOverlay(
-                storyCount: entry.storyCount,
-                showArchiveIconWhenZero: true,
-              ),
+              SpAssetStoryCountOverlay(storyCount: entry.storyCount, showArchiveIconWhenZero: true),
             ],
           ),
         ],
@@ -262,11 +212,7 @@ class _ImageImportTile extends StatelessWidget {
 /// (the import hasn't happened) so `SpMediaTile`'s asset-loader path doesn't
 /// apply here.
 class _VideoImportPreview extends StatefulWidget {
-  const _VideoImportPreview({
-    required this.file,
-    required this.width,
-    required this.height,
-  });
+  const _VideoImportPreview({required this.file, required this.width, required this.height});
 
   final File file;
   final double width;
@@ -338,10 +284,7 @@ class _VideoImportPreviewState extends State<_VideoImportPreview> {
                 ),
               ),
             ),
-          if (!_failed)
-            const Center(
-              child: Icon(SpIcons.playCircle, color: Colors.white, size: 32.0),
-            ),
+          if (!_failed) const Center(child: Icon(SpIcons.playCircle, color: Colors.white, size: 32.0)),
         ],
       ),
     );
@@ -349,9 +292,7 @@ class _VideoImportPreviewState extends State<_VideoImportPreview> {
 }
 
 class _AudioImportTab extends StatelessWidget {
-  const _AudioImportTab({
-    required this.entries,
-  });
+  const _AudioImportTab({required this.entries});
 
   final List<ImportMediaEntry> entries;
 
@@ -381,9 +322,7 @@ class _AudioImportTab extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                 child: Text(
                   dayLabel,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.outline),
                 ),
               ),
               ...dayAssets.map((entry) => _AudioImportTile(entry: entry)),
@@ -396,9 +335,7 @@ class _AudioImportTab extends StatelessWidget {
 }
 
 class _AudioImportTile extends StatelessWidget {
-  const _AudioImportTile({
-    required this.entry,
-  });
+  const _AudioImportTile({required this.entry});
 
   final ImportMediaEntry entry;
 
@@ -421,10 +358,7 @@ class _AudioImportTile extends StatelessWidget {
                 radius: 10.0,
                 backgroundColor: _badgeBackgroundColor(context, entry),
                 foregroundColor: _badgeForegroundColor(context, entry),
-                child: Icon(
-                  _badgeIcon(entry),
-                  size: 14.0,
-                ),
+                child: Icon(_badgeIcon(entry), size: 14.0),
               ),
             ),
           ],
@@ -433,20 +367,14 @@ class _AudioImportTile extends StatelessWidget {
       subtitle: Text.rich(
         TextSpan(
           children: [
-            TextSpan(
-              text: entry.scanEntry.ext.replaceFirst('.', '').toUpperCase(),
-            ),
+            TextSpan(text: entry.scanEntry.ext.replaceFirst('.', '').toUpperCase()),
             const TextSpan(text: ' • '),
             TextSpan(text: plural('plural.entry', entry.storyCount)),
             if (entry.storyCount == 0) ...[
               const TextSpan(text: ' '),
               WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
-                child: Icon(
-                  SpIcons.archive,
-                  size: 12.0,
-                  color: ColorScheme.of(context).error,
-                ),
+                child: Icon(SpIcons.archive, size: 12.0, color: ColorScheme.of(context).error),
               ),
             ],
           ],
@@ -458,8 +386,7 @@ class _AudioImportTile extends StatelessWidget {
 }
 
 List<Map<String, dynamic>> _groupEntriesByDay(List<ImportMediaEntry> source) {
-  final sorted = [...source]
-    ..sort((a, b) => _entryDate(b).compareTo(_entryDate(a)));
+  final sorted = [...source]..sort((a, b) => _entryDate(b).compareTo(_entryDate(a)));
   final groupedMap = <String, List<ImportMediaEntry>>{};
 
   for (final entry in sorted) {
@@ -474,14 +401,11 @@ List<Map<String, dynamic>> _groupEntriesByDay(List<ImportMediaEntry> source) {
       return dateB.compareTo(dateA);
     });
 
-  return sortedKeys
-      .map((key) => {'label': key, 'entries': groupedMap[key]!})
-      .toList();
+  return sortedKeys.map((key) => {'label': key, 'entries': groupedMap[key]!}).toList();
 }
 
 DateTime _entryDate(ImportMediaEntry entry) {
-  return entry.existingAsset?.createdAt ??
-      DateTime.fromMillisecondsSinceEpoch(entry.scanEntry.id);
+  return entry.existingAsset?.createdAt ?? DateTime.fromMillisecondsSinceEpoch(entry.scanEntry.id);
 }
 
 String _dayKey(DateTime dateTime) {

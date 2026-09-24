@@ -43,10 +43,7 @@ class ShowTableRoute extends BaseRoute {
 }
 
 class ShowTableView extends StatelessWidget {
-  const ShowTableView({
-    super.key,
-    required this.params,
-  });
+  const ShowTableView({super.key, required this.params});
 
   final ShowTableRoute params;
 

@@ -81,18 +81,11 @@ class RelaxSoundsProvider extends ChangeNotifier with DebounchedCallback {
     );
   }
 
-  Future<void> toggleSound(
-    RelaxSoundObject sound, {
-    required BuildContext context,
-    double? initialVolume,
-  }) async {
+  Future<void> toggleSound(RelaxSoundObject sound, {required BuildContext context, double? initialVolume}) async {
     if (isSoundSelected(sound)) {
       await audioPlayersService.removeAnAudio(sound.soundUrlPath);
     } else {
-      await audioPlayersService.playAnAudio(
-        sound.soundUrlPath,
-        initialVolume: initialVolume,
-      );
+      await audioPlayersService.playAnAudio(sound.soundUrlPath, initialVolume: initialVolume);
       audioPlayersService.playAll();
     }
 
@@ -101,16 +94,11 @@ class RelaxSoundsProvider extends ChangeNotifier with DebounchedCallback {
     refreshCanSaveMix();
   }
 
-  Future<void> playAll({
-    required Map<RelaxSoundObject, double?> soundWithInitialVolume,
-  }) async {
+  Future<void> playAll({required Map<RelaxSoundObject, double?> soundWithInitialVolume}) async {
     audioPlayersService.removeAllAudios();
 
     for (var entry in soundWithInitialVolume.entries) {
-      await audioPlayersService.playAnAudio(
-        entry.key.soundUrlPath,
-        initialVolume: entry.value,
-      );
+      await audioPlayersService.playAnAudio(entry.key.soundUrlPath, initialVolume: entry.value);
     }
 
     notifyListeners();
@@ -139,15 +127,11 @@ class RelaxSoundsProvider extends ChangeNotifier with DebounchedCallback {
     notifyListeners();
   }
 
-  Future<RelaxSoundMixModel?> findExistingMix({
-    required bool ignoreVolume,
-  }) async {
+  Future<RelaxSoundMixModel?> findExistingMix({required bool ignoreVolume}) async {
     final saved = await RelaxSoundMixModel.db.where().then((e) => e?.items) ?? [];
 
     final playing = selectedRelaxSounds
-        .map(
-          (s) => "${s.soundUrlPath}:${ignoreVolume ? 1 : getVolume(relaxSounds[s.soundUrlPath]!)}",
-        )
+        .map((s) => "${s.soundUrlPath}:${ignoreVolume ? 1 : getVolume(relaxSounds[s.soundUrlPath]!)}")
         .toSet();
 
     return saved.where((mix) {

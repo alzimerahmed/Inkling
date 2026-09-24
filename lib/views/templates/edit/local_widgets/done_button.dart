@@ -1,9 +1,7 @@
 part of '../edit_template_view.dart';
 
 class _DoneButton extends StatelessWidget {
-  const _DoneButton({
-    required this.viewModel,
-  });
+  const _DoneButton({required this.viewModel});
 
   final EditTemplateViewModel viewModel;
 

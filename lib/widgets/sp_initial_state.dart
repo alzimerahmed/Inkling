@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SpInitialState extends StatefulWidget {
-  const SpInitialState({
-    super.key,
-    required this.child,
-    required this.onInitialized,
-  });
+  const SpInitialState({super.key, required this.child, required this.onInitialized});
 
   final Widget child;
   final void Function() onInitialized;

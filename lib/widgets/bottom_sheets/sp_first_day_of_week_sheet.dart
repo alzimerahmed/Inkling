@@ -7,10 +7,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/sp_single_state_widget.dart';
 
 class SpFirstDayOfWeekSheet extends BaseBottomSheet {
-  const SpFirstDayOfWeekSheet({
-    required this.firstDayOfWeek,
-    required this.onChanged,
-  });
+  const SpFirstDayOfWeekSheet({required this.firstDayOfWeek, required this.onChanged});
 
   final FirstDayOfWeekOption firstDayOfWeek;
   final void Function(FirstDayOfWeekOption value) onChanged;
@@ -36,10 +33,7 @@ class SpFirstDayOfWeekSheet extends BaseBottomSheet {
                   trailing: Visibility(
                     visible: option == selectedValue,
                     child: SpFadeIn.fromBottom(
-                      child: Icon(
-                        SpIcons.checkCircle,
-                        color: ColorScheme.of(context).primary,
-                      ),
+                      child: Icon(SpIcons.checkCircle, color: ColorScheme.of(context).primary),
                     ),
                   ),
                   onTap: () {
@@ -59,12 +53,8 @@ class SpFirstDayOfWeekSheet extends BaseBottomSheet {
   String _label(BuildContext context, FirstDayOfWeekOption value) {
     final localeName = context.locale.toLanguageTag();
     final baseLabel = switch (value) {
-      FirstDayOfWeekOption.monday => DateFormat.EEEE(
-        localeName,
-      ).format(DateTime(2024, 1, 1)),
-      FirstDayOfWeekOption.sunday => DateFormat.EEEE(
-        localeName,
-      ).format(DateTime(2024, 1, 7)),
+      FirstDayOfWeekOption.monday => DateFormat.EEEE(localeName).format(DateTime(2024, 1, 1)),
+      FirstDayOfWeekOption.sunday => DateFormat.EEEE(localeName).format(DateTime(2024, 1, 7)),
     };
 
     if (value == FirstDayOfWeekOption.defaultValue) {

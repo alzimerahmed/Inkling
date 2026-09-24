@@ -14,40 +14,24 @@ class _PaywallHeader extends StatelessWidget {
       ),
       alignment: .center,
       child: Container(
-        constraints: const BoxConstraints(
-          maxWidth: 300,
-        ),
+        constraints: const BoxConstraints(maxWidth: 300),
         child: Column(
           children: [
             SpFirestoreStorageDownloaderBuilder(
               filePath: '/icons/hand_drawn/hand_drawn_diary_56x56.png',
               builder: (context, file, failed) {
                 if (file == null) {
-                  return SizedBox(
-                    width: 56,
-                    height: 56,
-                    child: Center(
-                      child: failed ? const Icon(Icons.error) : null,
-                    ),
-                  );
+                  return SizedBox(width: 56, height: 56, child: Center(child: failed ? const Icon(Icons.error) : null));
                 }
                 return SizedBox(
                   width: 56,
                   height: 56,
-                  child: Image.file(
-                    file,
-                    cacheWidth: (56 * MediaQuery.of(context).devicePixelRatio)
-                        .round(),
-                  ),
+                  child: Image.file(file, cacheWidth: (56 * MediaQuery.of(context).devicePixelRatio).round()),
                 );
               },
             ),
             const SizedBox(height: 16),
-            Text(
-              tr("page.paywall.title"),
-              style: TextTheme.of(context).titleLarge,
-              textAlign: .center,
-            ),
+            Text(tr("page.paywall.title"), style: TextTheme.of(context).titleLarge, textAlign: .center),
             const SizedBox(height: 4),
             Text(
               iapProvider.isProUser
@@ -56,10 +40,7 @@ class _PaywallHeader extends StatelessWidget {
               style: TextTheme.of(context).bodyMedium,
               textAlign: .center,
             ),
-            if (iapProvider.isProUser) ...[
-              const SizedBox(height: 8),
-              const SpProBadge(),
-            ],
+            if (iapProvider.isProUser) ...[const SizedBox(height: 8), const SpProBadge()],
           ],
         ),
       ),

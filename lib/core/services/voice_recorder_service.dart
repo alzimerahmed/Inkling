@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:record/record.dart';
 import 'package:storypad/core/types/support_directory_path.dart';
 
@@ -41,11 +42,7 @@ class VoiceRecorderService {
 
       await _recorder.start(
         path: outputPath,
-        const RecordConfig(
-          encoder: AudioEncoder.aacLc,
-          sampleRate: 44100,
-          numChannels: 1,
-        ),
+        const RecordConfig(encoder: AudioEncoder.aacLc, sampleRate: 44100, numChannels: 1),
       );
 
       _recordingPath = outputPath;
@@ -64,9 +61,7 @@ class VoiceRecorderService {
     if (!_isRecording) return null;
 
     try {
-      final duration = _recordingStartTime != null
-          ? DateTime.now().difference(_recordingStartTime!).inMilliseconds
-          : 0;
+      final duration = _recordingStartTime != null ? DateTime.now().difference(_recordingStartTime!).inMilliseconds : 0;
 
       await _recorder.stop();
       _isRecording = false;
@@ -119,11 +114,7 @@ class VoiceRecordingResult {
   final int durationInMs;
   final DateTime recordedAt;
 
-  VoiceRecordingResult({
-    required this.filePath,
-    required this.durationInMs,
-    required this.recordedAt,
-  });
+  VoiceRecordingResult({required this.filePath, required this.durationInMs, required this.recordedAt});
 
   String get formattedDuration {
     final seconds = (durationInMs ~/ 1000) % 60;
@@ -132,6 +123,5 @@ class VoiceRecordingResult {
   }
 
   @override
-  String toString() =>
-      'VoiceRecordingResult(path: $filePath, duration: $formattedDuration, recordedAt: $recordedAt)';
+  String toString() => 'VoiceRecordingResult(path: $filePath, duration: $formattedDuration, recordedAt: $recordedAt)';
 }

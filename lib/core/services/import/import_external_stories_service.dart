@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:storypad/core/databases/models/asset_db_model.dart';
 import 'package:storypad/core/databases/models/story_db_model.dart';
 import 'package:storypad/core/databases/models/tag_category_db_model.dart';
@@ -9,12 +10,7 @@ import 'package:storypad/core/services/tag_id_generator_service.dart';
 import 'package:storypad/core/types/asset_type.dart';
 
 /// Result of a confirmed external import.
-typedef ImportExternalResult = ({
-  int imported,
-  int tagsCreated,
-  int photosImported,
-  int photosSkipped,
-});
+typedef ImportExternalResult = ({int imported, int tagsCreated, int photosImported, int photosSkipped});
 
 /// Writes parsed external drafts into Inkling's ObjectBox stores.
 ///
@@ -40,25 +36,16 @@ class ImportExternalStoriesService {
         final existing = await _findTagByTitle(key);
         tagIdsByTitle[key] =
             existing?.id.toString() ??
-            await (mapMoodsToFeelingTags
-                ? _createFeelingTag(title.trim())
-                : _createTag(title.trim()));
+            await (mapMoodsToFeelingTags ? _createFeelingTag(title.trim()) : _createTag(title.trim()));
       }
     }
 
     for (final draft in drafts) {
-      final tagIds = draft.tags
-          .map((t) => tagIdsByTitle[t.trim().toLowerCase()])
-          .whereType<String>()
-          .toList();
+      final tagIds = draft.tags.map((t) => tagIdsByTitle[t.trim().toLowerCase()]).whereType<String>().toList();
 
-      final resolvedPhotos = await _resolvePhotos(
-        draft.photoFileNames,
-        photoFiles,
-      );
+      final resolvedPhotos = await _resolvePhotos(draft.photoFileNames, photoFiles);
       photosImported += resolvedPhotos.imported.length;
-      photosSkipped +=
-          draft.photoFileNames.length - resolvedPhotos.imported.length;
+      photosSkipped += draft.photoFileNames.length - resolvedPhotos.imported.length;
 
       final story = ImportStoryMapper.toStory(
         draft: draft,
@@ -76,12 +63,7 @@ class ImportExternalStoriesService {
           shiftedId += 1;
         } while (await StoryDbModel.db.find(shiftedId) != null);
         await StoryDbModel.db.set(
-          ImportStoryMapper.toStory(
-            draft: draft,
-            id: shiftedId,
-            tagIds: tagIds,
-            bodyLines: resolvedPhotos.embedLines,
-          ),
+          ImportStoryMapper.toStory(draft: draft, id: shiftedId, tagIds: tagIds, bodyLines: resolvedPhotos.embedLines),
           runCallbacks: false,
         );
       } else {
@@ -92,9 +74,7 @@ class ImportExternalStoriesService {
 
     return (
       imported: imported,
-      tagsCreated: tagIdsByTitle.values
-          .where((id) => int.tryParse(id) != null)
-          .length,
+      tagsCreated: tagIdsByTitle.values.where((id) => int.tryParse(id) != null).length,
       photosImported: photosImported,
       photosSkipped: photosSkipped,
     );
@@ -145,8 +125,7 @@ class ImportExternalStoriesService {
 
   /// Copies matched photo temp files into asset storage, creates
   /// [AssetDbModel]s and returns markdown embed lines for the story body.
-  static Future<({List<String> imported, List<String> embedLines})>
-  _resolvePhotos(
+  static Future<({List<String> imported, List<String> embedLines})> _resolvePhotos(
     List<String> photoFileNames,
     Map<String, String> photoFiles,
   ) async {
@@ -160,18 +139,10 @@ class ImportExternalStoriesService {
       final source = File(tempPath);
       if (!await source.exists()) continue;
 
-      final ext = name.contains('.')
-          ? name.substring(name.lastIndexOf('.'))
-          : '.jpg';
+      final ext = name.contains('.') ? name.substring(name.lastIndexOf('.')) : '.jpg';
       final id = DateTime.now().millisecondsSinceEpoch + imported.length;
-      final relativePath = AssetType.image.getRelativeStoragePath(
-        id: id,
-        extension: ext,
-      );
-      final storagePath = AssetType.image.getStoragePath(
-        id: id,
-        extension: ext,
-      );
+      final relativePath = AssetType.image.getRelativeStoragePath(id: id, extension: ext);
+      final storagePath = AssetType.image.getStoragePath(id: id, extension: ext);
 
       final target = File(storagePath);
       await target.parent.create(recursive: true);

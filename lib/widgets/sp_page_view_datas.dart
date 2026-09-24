@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class SpPageViewDatas {
@@ -6,11 +7,7 @@ class SpPageViewDatas {
   final double translateX2;
   final double opacity;
 
-  SpPageViewDatas(
-    this.translateX1,
-    this.translateX2,
-    this.opacity,
-  );
+  SpPageViewDatas(this.translateX1, this.translateX2, this.opacity);
 
   factory SpPageViewDatas.fromOffset({
     required int itemIndex,

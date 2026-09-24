@@ -1,5 +1,1 @@
-enum ResponseCodeType {
-  success,
-  noChange,
-  fail,
-}
+enum ResponseCodeType { success, noChange, fail }

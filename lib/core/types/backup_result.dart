@@ -180,59 +180,23 @@ class BackupError {
   }
 
   /// Create convenience constructors for common error types
-  factory BackupError.network(
-    String message, {
-    String? context,
-    bool isRetryable = true,
-  }) => BackupError(
-    type: BackupErrorType.network,
-    message: message,
-    context: context,
-    isRetryable: isRetryable,
-  );
+  factory BackupError.network(String message, {String? context, bool isRetryable = true}) =>
+      BackupError(type: BackupErrorType.network, message: message, context: context, isRetryable: isRetryable);
 
-  factory BackupError.authentication(String message, {String? context}) => BackupError(
-    type: BackupErrorType.authentication,
-    message: message,
-    context: context,
-    isRetryable: false,
-  );
+  factory BackupError.authentication(String message, {String? context}) =>
+      BackupError(type: BackupErrorType.authentication, message: message, context: context, isRetryable: false);
 
-  factory BackupError.quota(String message, {String? context}) => BackupError(
-    type: BackupErrorType.quota,
-    message: message,
-    context: context,
-    isRetryable: false,
-  );
+  factory BackupError.quota(String message, {String? context}) =>
+      BackupError(type: BackupErrorType.quota, message: message, context: context, isRetryable: false);
 
-  factory BackupError.fileOperation(
-    String message, {
-    String? context,
-    bool isRetryable = true,
-  }) => BackupError(
-    type: BackupErrorType.fileOperation,
-    message: message,
-    context: context,
-    isRetryable: isRetryable,
-  );
+  factory BackupError.fileOperation(String message, {String? context, bool isRetryable = true}) =>
+      BackupError(type: BackupErrorType.fileOperation, message: message, context: context, isRetryable: isRetryable);
 
-  factory BackupError.service(String message, {String? context}) => BackupError(
-    type: BackupErrorType.service,
-    message: message,
-    context: context,
-    isRetryable: false,
-  );
+  factory BackupError.service(String message, {String? context}) =>
+      BackupError(type: BackupErrorType.service, message: message, context: context, isRetryable: false);
 
-  factory BackupError.unknown(
-    String message, {
-    String? context,
-    bool isRetryable = true,
-  }) => BackupError(
-    type: BackupErrorType.unknown,
-    message: message,
-    context: context,
-    isRetryable: isRetryable,
-  );
+  factory BackupError.unknown(String message, {String? context, bool isRetryable = true}) =>
+      BackupError(type: BackupErrorType.unknown, message: message, context: context, isRetryable: isRetryable);
 
   @override
   String toString() => 'BackupError(${type.name}: $message${context != null ? ' ($context)' : ''})';
@@ -251,12 +215,4 @@ class BackupError {
 }
 
 /// Types of backup errors for categorization
-enum BackupErrorType {
-  network,
-  authentication,
-  quota,
-  fileOperation,
-  service,
-  configuration,
-  unknown,
-}
+enum BackupErrorType { network, authentication, quota, fileOperation, service, configuration, unknown }

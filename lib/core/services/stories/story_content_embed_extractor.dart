@@ -35,27 +35,19 @@ class StoryContentEmbedExtractor {
   ///
   /// Use [photos]/[videos] when you mean one kind specifically (counts,
   /// labels, filters).
-  static List<String> media(StoryContentDbModel? content) =>
-      _extractEmbedSources(content, {'media', 'image'});
+  static List<String> media(StoryContentDbModel? content) => _extractEmbedSources(content, {'media', 'image'});
 
-  static List<String> audio(StoryContentDbModel? content) =>
-      _extractEmbedSources(content, {'audio'});
+  static List<String> audio(StoryContentDbModel? content) => _extractEmbedSources(content, {'audio'});
 
   /// Photos only — [media] minus anything stored under `videos/`.
-  static List<String> photos(StoryContentDbModel? content) => media(content)
-      .where((link) => AssetType.getTypeFromLink(link) != AssetType.video)
-      .toList();
+  static List<String> photos(StoryContentDbModel? content) =>
+      media(content).where((link) => AssetType.getTypeFromLink(link) != AssetType.video).toList();
 
   /// Videos only — the complement of [photos] within [media].
-  static List<String> videos(StoryContentDbModel? content) => media(content)
-      .where((link) => AssetType.getTypeFromLink(link) == AssetType.video)
-      .toList();
+  static List<String> videos(StoryContentDbModel? content) =>
+      media(content).where((link) => AssetType.getTypeFromLink(link) == AssetType.video).toList();
 
-  static List<String> all(StoryContentDbModel? content) => [
-    ...photos(content),
-    ...videos(content),
-    ...audio(content),
-  ];
+  static List<String> all(StoryContentDbModel? content) => [...photos(content), ...videos(content), ...audio(content)];
 
   /// All asset ids referenced anywhere in the content (any embed type),
   /// e.g. to bulk-preload their aspect ratios before rendering (see
@@ -84,18 +76,13 @@ class StoryContentEmbedExtractor {
     AssetDbModel.db.preloadAspectRatios(ids);
   }
 
-  static List<String> _extractEmbedSources(
-    StoryContentDbModel? content,
-    Set<String> embedTypes,
-  ) {
+  static List<String> _extractEmbedSources(StoryContentDbModel? content, Set<String> embedTypes) {
     final links = <String>[];
     final pages = content?.richPages ?? [];
 
     for (final page in pages) {
       if (page.body == null || page.body!.isEmpty) continue;
-      links.addAll(
-        AssetLinkParser.extractEmbedSourcesAny(page.body, embedTypes),
-      );
+      links.addAll(AssetLinkParser.extractEmbedSourcesAny(page.body, embedTypes));
     }
 
     return links;

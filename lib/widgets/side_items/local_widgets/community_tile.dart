@@ -6,9 +6,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/sp_new_badge_builder.dart';
 
 class CommunityTile extends StatelessWidget {
-  const CommunityTile({
-    super.key,
-  });
+  const CommunityTile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +19,7 @@ class CommunityTile extends StatelessWidget {
             TextSpan(
               style: Theme.of(context).textTheme.bodyLarge,
               text: "${tr("page.community.title")} ",
-              children: [
-                if (newBadge != null) WidgetSpan(child: newBadge),
-              ],
+              children: [if (newBadge != null) WidgetSpan(child: newBadge)],
             ),
           ),
           contentPadding: const EdgeInsets.only(left: 16.0, right: 8.0),

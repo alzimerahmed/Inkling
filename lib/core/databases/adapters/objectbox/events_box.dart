@@ -1,4 +1,5 @@
 import 'dart:isolate';
+
 import 'package:storypad/core/constants/app_constants.dart';
 import 'package:storypad/core/databases/adapters/objectbox/base_box.dart';
 import 'package:storypad/core/databases/adapters/objectbox/entities.dart';
@@ -19,10 +20,7 @@ class EventsBox extends BaseBox<EventObjectBox, EventDbModel> {
   QueryDateProperty<EventObjectBox> get permanentlyDeletedAtProperty => EventObjectBox_.permanentlyDeletedAt;
 
   @override
-  QueryBuilder<EventObjectBox> buildQuery({
-    Map<String, dynamic>? filters,
-    bool returnDeleted = false,
-  }) {
+  QueryBuilder<EventObjectBox> buildQuery({Map<String, dynamic>? filters, bool returnDeleted = false}) {
     int? createdYear = filters?["created_year"];
     int? order = filters?["order"];
     int? month = filters?["month"];
@@ -32,20 +30,14 @@ class EventsBox extends BaseBox<EventObjectBox, EventDbModel> {
 
     Condition<EventObjectBox>? conditions = EventObjectBox_.id.notNull();
 
-    if (!returnDeleted)
-      conditions = conditions.and(
-        EventObjectBox_.permanentlyDeletedAt.isNull(),
-      );
+    if (!returnDeleted) conditions = conditions.and(EventObjectBox_.permanentlyDeletedAt.isNull());
     if (year != null) conditions = conditions.and(EventObjectBox_.year.equals(year));
     if (month != null) conditions = conditions.and(EventObjectBox_.month.equals(month));
     if (day != null) conditions = conditions.and(EventObjectBox_.day.equals(day));
     if (eventType != null) conditions = conditions.and(EventObjectBox_.eventType.equals(eventType));
     if (createdYear != null) {
       conditions = conditions.and(
-        EventObjectBox_.createdAt.betweenDate(
-          DateTime(createdYear, 1, 1),
-          DateTime(createdYear, 12, 31, 23, 59, 59),
-        ),
+        EventObjectBox_.createdAt.betweenDate(DateTime(createdYear, 1, 1), DateTime(createdYear, 12, 31, 23, 59, 59)),
       );
     }
 
@@ -63,39 +55,23 @@ class EventsBox extends BaseBox<EventObjectBox, EventDbModel> {
   }
 
   @override
-  Future<EventObjectBox> modelToObject(
-    EventDbModel model, [
-    Map<String, dynamic>? options,
-  ]) async {
+  Future<EventObjectBox> modelToObject(EventDbModel model, [Map<String, dynamic>? options]) async {
     return _modelToObject(model, options);
   }
 
   @override
-  Future<EventDbModel> objectToModel(
-    EventObjectBox object, [
-    Map<String, dynamic>? options,
-  ]) async {
+  Future<EventDbModel> objectToModel(EventObjectBox object, [Map<String, dynamic>? options]) async {
     return _objectToModel(object, options);
   }
 
   @override
-  Future<List<EventObjectBox>> modelsToObjects(
-    List<EventDbModel> models, [
-    Map<String, dynamic>? options,
-  ]) async {
-    return Isolate.run(
-      () => models.map((model) => _modelToObject(model, options)).toList(),
-    );
+  Future<List<EventObjectBox>> modelsToObjects(List<EventDbModel> models, [Map<String, dynamic>? options]) async {
+    return Isolate.run(() => models.map((model) => _modelToObject(model, options)).toList());
   }
 
   @override
-  Future<List<EventDbModel>> objectsToModels(
-    List<EventObjectBox> objects, [
-    Map<String, dynamic>? options,
-  ]) async {
-    return Isolate.run(
-      () => objects.map((object) => _objectToModel(object, options)).toList(),
-    );
+  Future<List<EventDbModel>> objectsToModels(List<EventObjectBox> objects, [Map<String, dynamic>? options]) async {
+    return Isolate.run(() => objects.map((object) => _objectToModel(object, options)).toList());
   }
 
   @override
@@ -104,10 +80,7 @@ class EventsBox extends BaseBox<EventObjectBox, EventDbModel> {
   }
 }
 
-EventObjectBox _modelToObject(
-  EventDbModel model, [
-  Map<String, dynamic>? options,
-]) {
+EventObjectBox _modelToObject(EventDbModel model, [Map<String, dynamic>? options]) {
   return EventObjectBox(
     id: model.id,
     year: model.year,
@@ -121,10 +94,7 @@ EventObjectBox _modelToObject(
   );
 }
 
-EventDbModel _objectToModel(
-  EventObjectBox object, [
-  Map<String, dynamic>? options,
-]) {
+EventDbModel _objectToModel(EventObjectBox object, [Map<String, dynamic>? options]) {
   return EventDbModel(
     id: object.id,
     year: object.year,

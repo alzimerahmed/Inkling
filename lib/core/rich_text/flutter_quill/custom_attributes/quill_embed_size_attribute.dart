@@ -23,11 +23,6 @@ class _EmbedSizeAttribute extends quill.Attribute<String> {
         break;
     }
 
-    controller.replaceText(
-      node.documentOffset,
-      node.length,
-      node.toDelta(),
-      controller.selection,
-    );
+    controller.replaceText(node.documentOffset, node.length, node.toDelta(), controller.selection);
   }
 }

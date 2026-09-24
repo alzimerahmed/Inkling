@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +12,7 @@ import 'package:storypad/widgets/sp_icons.dart';
 class MessengerService {
   final BuildContext context;
 
-  MessengerService._({
-    required this.context,
-  });
+  MessengerService._({required this.context});
 
   static MessengerService of(BuildContext context) {
     return MessengerService._(context: context);
@@ -23,8 +22,7 @@ class MessengerService {
     return ScaffoldMessenger.maybeOf(context);
   }
 
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason>?
-  scaffoldFeatureController;
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? scaffoldFeatureController;
 
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? showSnackBar(
     String message, {
@@ -89,8 +87,7 @@ class MessengerService {
       context: context,
       builder: (context) {
         Future.delayed(const Duration(seconds: 1)).then((value) {
-          if (context.mounted && Navigator.canPop(context))
-            Navigator.of(context).pop();
+          if (context.mounted && Navigator.canPop(context)) Navigator.of(context).pop();
         });
 
         return Center(
@@ -102,11 +99,7 @@ class MessengerService {
                   radius: 48,
                   backgroundColor: ColorScheme.of(context).readOnly.surface3,
                   child: SpFadeIn.bound(
-                    child: Icon(
-                      SpIcons.errorCircle,
-                      size: 56,
-                      color: ColorScheme.of(context).bootstrap.danger.color,
-                    ),
+                    child: Icon(SpIcons.errorCircle, size: 56, color: ColorScheme.of(context).bootstrap.danger.color),
                   ),
                 ),
               ),
@@ -117,9 +110,7 @@ class MessengerService {
                   child: Text(
                     errorMessage,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.white,
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -136,8 +127,7 @@ class MessengerService {
       context: context,
       builder: (context) {
         Future.delayed(const Duration(seconds: 1)).then((value) {
-          if (context.mounted && Navigator.canPop(context))
-            Navigator.of(context).pop();
+          if (context.mounted && Navigator.canPop(context)) Navigator.of(context).pop();
         });
 
         return Center(
@@ -147,11 +137,7 @@ class MessengerService {
               backgroundColor: ColorScheme.of(context).readOnly.surface3,
               child: SpFadeIn.bound(
                 duration: Durations.long1,
-                child: Icon(
-                  SpIcons.checkCircle,
-                  size: 56,
-                  color: ColorScheme.of(context).bootstrap.success.color,
-                ),
+                child: Icon(SpIcons.checkCircle, size: 56, color: ColorScheme.of(context).bootstrap.success.color),
               ),
             ),
           ),
@@ -160,10 +146,7 @@ class MessengerService {
     );
   }
 
-  Future<T?> showLoading<T>({
-    required Future<T?> Function() future,
-    required String? debugSource,
-  }) async {
+  Future<T?> showLoading<T>({required Future<T?> Function() future, required String? debugSource}) async {
     if (debugSource != null) AppLogger.info("LOADING... $debugSource");
 
     Completer<T?> completer = Completer();
@@ -172,38 +155,29 @@ class MessengerService {
     if (!kIsWeb && Platform.isIOS) {
       return showCupertinoDialog<T>(
         context: context,
-        builder: (context) =>
-            _loadingBuilder<T>(context, completer, debugSource),
+        builder: (context) => _loadingBuilder<T>(context, completer, debugSource),
         barrierDismissible: false,
       );
     } else {
       return showDialog<T>(
         context: context,
-        builder: (context) =>
-            _loadingBuilder<T>(context, completer, debugSource),
+        builder: (context) => _loadingBuilder<T>(context, completer, debugSource),
         barrierDismissible: false,
       );
     }
   }
 
-  Widget _loadingBuilder<T>(
-    BuildContext context,
-    Completer<T?> future,
-    String? debugSource,
-  ) {
+  Widget _loadingBuilder<T>(BuildContext context, Completer<T?> future, String? debugSource) {
     return FutureBuilder<T?>(
       future: future.future.then((value) {
-        if (debugSource != null)
-          AppLogger.info("LOADED $debugSource with $value");
+        if (debugSource != null) AppLogger.info("LOADED $debugSource with $value");
         if (context.mounted) {
           Navigator.of(context).pop(value);
         }
         return value;
       }),
       builder: (context, snapshot) {
-        return const Center(
-          child: CircularProgressIndicator.adaptive(),
-        );
+        return const Center(child: CircularProgressIndicator.adaptive());
       },
     );
   }

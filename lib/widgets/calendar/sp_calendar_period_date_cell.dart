@@ -48,11 +48,7 @@ class SpCalendarPeriodDateCell extends StatelessWidget {
                     alignment: .center,
                     transformAlignment: .center,
                     transform: Matrix4.identity()..spScale(1.2),
-                    child: Icon(
-                      SpIcons.waterDrop,
-                      size: 32,
-                      color: lastMonthDropColor,
-                    ),
+                    child: Icon(SpIcons.waterDrop, size: 32, color: lastMonthDropColor),
                   ),
                 ),
               if (isPeriodDate)
@@ -62,11 +58,7 @@ class SpCalendarPeriodDateCell extends StatelessWidget {
                   curve: Curves.bounceOut,
                   duration: Durations.medium3,
                   transform: Matrix4.identity()..spScale(selected ? 1.3 : 1.2),
-                  child: Icon(
-                    SpIcons.waterDrop,
-                    size: 32,
-                    color: dropColor,
-                  ),
+                  child: Icon(SpIcons.waterDrop, size: 32, color: dropColor),
                 ),
               Positioned.fill(
                 child: Center(
@@ -74,12 +66,8 @@ class SpCalendarPeriodDateCell extends StatelessWidget {
                     DateFormatHelper.d(date, context.locale),
                     textAlign: .center,
                     style: TextStyle(
-                      fontWeight: isPeriodDate
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      color: isDisplayMonth
-                          ? (isPeriodDate ? colorScheme.onError : null)
-                          : theme.disabledColor,
+                      fontWeight: isPeriodDate ? FontWeight.bold : FontWeight.normal,
+                      color: isDisplayMonth ? (isPeriodDate ? colorScheme.onError : null) : theme.disabledColor,
                     ),
                   ),
                 ),

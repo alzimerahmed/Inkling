@@ -34,53 +34,37 @@ class SpDefaultStoryPreferencesSheet extends BaseBottomSheet {
         initialChildSize: 0.9,
         maxChildSize: 0.9,
         builder: (context, controller) {
-          return PrimaryScrollController(
-            controller: controller,
-            child: buildView(context, bottomPadding),
-          );
+          return PrimaryScrollController(controller: controller, child: buildView(context, bottomPadding));
         },
       );
     }
   }
 
   Widget buildView(BuildContext context, double bottomPadding) {
-    return _StoryEditingPreferencesSheetContent(
-      bottomPadding: bottomPadding,
-      onChanged: onChanged,
-    );
+    return _StoryEditingPreferencesSheetContent(bottomPadding: bottomPadding, onChanged: onChanged);
   }
 }
 
 class _StoryEditingPreferencesSheetContent extends StatefulWidget {
-  const _StoryEditingPreferencesSheetContent({
-    required this.bottomPadding,
-    this.onChanged,
-  });
+  const _StoryEditingPreferencesSheetContent({required this.bottomPadding, this.onChanged});
 
   final double bottomPadding;
   final void Function(DefaultStoryPreferencesObject? preferences)? onChanged;
 
   @override
-  State<_StoryEditingPreferencesSheetContent> createState() =>
-      _StoryEditingPreferencesSheetContentState();
+  State<_StoryEditingPreferencesSheetContent> createState() => _StoryEditingPreferencesSheetContentState();
 }
 
-class _StoryEditingPreferencesSheetContentState
-    extends State<_StoryEditingPreferencesSheetContent> {
-  late var defaultStoryPreferences = context
-      .read<DevicePreferencesProvider>()
-      .preferences
-      .defaultStoryPreferences;
+class _StoryEditingPreferencesSheetContentState extends State<_StoryEditingPreferencesSheetContent> {
+  late var defaultStoryPreferences = context.read<DevicePreferencesProvider>().preferences.defaultStoryPreferences;
   late var defaultStoryPreferencesDefault = DefaultStoryPreferencesObject();
   late var initialStoryEditingPreferences = defaultStoryPreferences;
 
   bool get changed =>
-      jsonEncode(defaultStoryPreferences.toJson()) !=
-      jsonEncode(initialStoryEditingPreferences.toJson());
+      jsonEncode(defaultStoryPreferences.toJson()) != jsonEncode(initialStoryEditingPreferences.toJson());
 
   bool get resettable =>
-      jsonEncode(defaultStoryPreferences.toJson()) !=
-      jsonEncode(defaultStoryPreferencesDefault.toJson());
+      jsonEncode(defaultStoryPreferences.toJson()) != jsonEncode(defaultStoryPreferencesDefault.toJson());
 
   void _apply(DefaultStoryPreferencesObject next) {
     setState(() => defaultStoryPreferences = next);
@@ -104,26 +88,15 @@ class _StoryEditingPreferencesSheetContentState
               icon: Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  Icon(
-                    SpIcons.save,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const Positioned(
-                    top: -2,
-                    right: -8,
-                    child: Icon(SpIcons.lock, size: 12.0),
-                  ),
+                  Icon(SpIcons.save, color: Theme.of(context).colorScheme.primary),
+                  const Positioned(top: -2, right: -8, child: Icon(SpIcons.lock, size: 12.0)),
                 ],
               ),
-              onPressed: () => const PaywallRoute(
-                initialFocus: .customizations,
-              ).push(context),
+              onPressed: () => const PaywallRoute(initialFocus: .customizations).push(context),
             ),
           IconButton(
             icon: const Icon(SpIcons.refresh),
-            onPressed: resettable
-                ? () => _apply(defaultStoryPreferencesDefault)
-                : null,
+            onPressed: resettable ? () => _apply(defaultStoryPreferencesDefault) : null,
           ),
           if (CupertinoSheetRoute.hasParentSheet(context))
             CloseButton(onPressed: () => CupertinoSheetRoute.popSheet(context)),
@@ -137,8 +110,7 @@ class _StoryEditingPreferencesSheetContentState
             backgroundColor: ColorScheme.of(context).surfaceContainerLow,
             colorSeedValue: defaultStoryPreferences.defaultColorSeedValue,
             colorTone: defaultStoryPreferences.defaultColorTone,
-            backgroundImagePath:
-                defaultStoryPreferences.defaultBackgroundImagePath,
+            backgroundImagePath: defaultStoryPreferences.defaultBackgroundImagePath,
             onThemeChanged: ({colorSeedValue, colorTone, backgroundImagePath}) {
               _apply(
                 defaultStoryPreferences.copyWith(
@@ -153,9 +125,7 @@ class _StoryEditingPreferencesSheetContentState
           SpLayoutTypeSection(
             selected: defaultStoryPreferences.defaultLayoutType,
             onThemeChanged: (layoutType) {
-              _apply(
-                defaultStoryPreferences.copyWith(defaultLayoutType: layoutType),
-              );
+              _apply(defaultStoryPreferences.copyWith(defaultLayoutType: layoutType));
             },
           ),
           SizedBox(height: widget.bottomPadding),

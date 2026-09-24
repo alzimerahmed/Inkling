@@ -87,8 +87,7 @@ class RenderStickyHeader extends RenderBox
 
   RenderBox get _contentBox => firstChild!;
 
-  double get devicePixelRatio =>
-      ui.PlatformDispatcher.instance.displays.first.devicePixelRatio;
+  double get devicePixelRatio => ui.PlatformDispatcher.instance.displays.first.devicePixelRatio;
 
   double roundToNearestPixel(double offset) {
     return (offset * devicePixelRatio).roundToDouble() / devicePixelRatio;
@@ -105,48 +104,33 @@ class RenderStickyHeader extends RenderBox
     final contentHeight = roundToNearestPixel(_contentBox.size.height);
 
     // determine size of ourselves based on content widget
-    final width = constraints.constrainWidth(
-      max(constraints.minWidth, _contentBox.size.width),
-    );
+    final width = constraints.constrainWidth(max(constraints.minWidth, _contentBox.size.width));
     final height = constraints.constrainHeight(
-      max(
-        constraints.minHeight,
-        _overlapHeaders ? contentHeight : headerHeight + contentHeight,
-      ),
+      max(constraints.minHeight, _overlapHeaders ? contentHeight : headerHeight + contentHeight),
     );
     size = Size(width, height);
 
     // place content underneath header
-    final contentParentData =
-        _contentBox.parentData as MultiChildLayoutParentData;
-    contentParentData.offset = Offset(
-      0.0,
-      _overlapHeaders ? 0.0 : headerHeight,
-    );
+    final contentParentData = _contentBox.parentData as MultiChildLayoutParentData;
+    contentParentData.offset = Offset(0.0, _overlapHeaders ? 0.0 : headerHeight);
 
     // determine by how much the header should be stuck to the top
     final double stuckOffset = roundToNearestPixel(determineStuckOffset());
 
     // place header over content relative to scroll offset
     final double maxOffset = height - headerHeight;
-    final headerParentData =
-        _headerBox.parentData as MultiChildLayoutParentData;
-    headerParentData.offset = Offset(
-      0.0,
-      max(0.0, min(-stuckOffset, maxOffset)),
-    );
+    final headerParentData = _headerBox.parentData as MultiChildLayoutParentData;
+    headerParentData.offset = Offset(0.0, max(0.0, min(-stuckOffset, maxOffset)));
 
     // report to widget how much the header is stuck.
     if (_callback != null) {
-      final stuckAmount =
-          max(min(headerHeight, stuckOffset), -headerHeight) / headerHeight;
+      final stuckAmount = max(min(headerHeight, stuckOffset), -headerHeight) / headerHeight;
       _callback!(stuckAmount);
     }
   }
 
   double determineStuckOffset() {
-    final scrollBox = _scrollPosition.context.notificationContext!
-        .findRenderObject();
+    final scrollBox = _scrollPosition.context.notificationContext!.findRenderObject();
     if (scrollBox?.attached ?? false) {
       try {
         return localToGlobal(Offset.zero, ancestor: scrollBox).dy;
@@ -179,16 +163,14 @@ class RenderStickyHeader extends RenderBox
   double computeMinIntrinsicHeight(double width) {
     return _overlapHeaders
         ? _contentBox.getMinIntrinsicHeight(width)
-        : (_headerBox.getMinIntrinsicHeight(width) +
-              _contentBox.getMinIntrinsicHeight(width));
+        : (_headerBox.getMinIntrinsicHeight(width) + _contentBox.getMinIntrinsicHeight(width));
   }
 
   @override
   double computeMaxIntrinsicHeight(double width) {
     return _overlapHeaders
         ? _contentBox.getMaxIntrinsicHeight(width)
-        : (_headerBox.getMaxIntrinsicHeight(width) +
-              _contentBox.getMaxIntrinsicHeight(width));
+        : (_headerBox.getMaxIntrinsicHeight(width) + _contentBox.getMaxIntrinsicHeight(width));
   }
 
   @override
@@ -198,10 +180,7 @@ class RenderStickyHeader extends RenderBox
 
   @override
   bool hitTestChildren(HitTestResult result, {required Offset position}) {
-    return defaultHitTestChildren(
-      result as BoxHitTestResult,
-      position: position,
-    );
+    return defaultHitTestChildren(result as BoxHitTestResult, position: position);
   }
 
   @override

@@ -4,13 +4,7 @@ import 'package:storypad/core/constants/app_constants.dart';
 import 'package:storypad/widgets/bottom_sheets/base_bottom_sheet.dart';
 import 'package:storypad/widgets/sp_icons.dart';
 
-enum SpAddMediaAction {
-  selectFromLibrary,
-  selectFromPhotos,
-  takePhoto,
-  recordVideo,
-  recordVoiceNote,
-}
+enum SpAddMediaAction { selectFromLibrary, selectFromPhotos, takePhoto, recordVideo, recordVoiceNote }
 
 /// Single entry point for adding any media to an entry: picks between the
 /// in-app asset library, the native OS photo/video picker, camera capture
@@ -18,9 +12,7 @@ enum SpAddMediaAction {
 /// if dismissed) for the caller to act on -- this sheet doesn't know about
 /// the rich text editor itself, it's just a menu.
 class SpAddMediaActionSheet extends BaseBottomSheet {
-  const SpAddMediaActionSheet({
-    this.showRecordVoiceNote = true,
-  });
+  const SpAddMediaActionSheet({this.showRecordVoiceNote = true});
 
   // Callers that only collect image/video (e.g. SpAlbumManagementSheet) have
   // nowhere to put a voice note, so they hide this tile rather than showing
@@ -33,13 +25,8 @@ class SpAddMediaActionSheet extends BaseBottomSheet {
   @override
   bool get includeKeyboardPadding => false;
 
-  static Future<SpAddMediaAction?> pick({
-    required BuildContext context,
-    bool showRecordVoiceNote = true,
-  }) {
-    return SpAddMediaActionSheet(
-      showRecordVoiceNote: showRecordVoiceNote,
-    ).show<SpAddMediaAction>(context: context);
+  static Future<SpAddMediaAction?> pick({required BuildContext context, bool showRecordVoiceNote = true}) {
+    return SpAddMediaActionSheet(showRecordVoiceNote: showRecordVoiceNote).show<SpAddMediaAction>(context: context);
   }
 
   @override
@@ -49,12 +36,7 @@ class SpAddMediaActionSheet extends BaseBottomSheet {
         mainAxisSize: .min,
         crossAxisAlignment: .start,
         children: [
-          _buildTile(
-            context,
-            icon: SpIcons.photo,
-            label: tr('button.select_from_library'),
-            action: .selectFromLibrary,
-          ),
+          _buildTile(context, icon: SpIcons.photo, label: tr('button.select_from_library'), action: .selectFromLibrary),
           _buildTile(
             context,
             icon: SpIcons.addPhoto,
@@ -62,26 +44,11 @@ class SpAddMediaActionSheet extends BaseBottomSheet {
             action: .selectFromPhotos,
           ),
           if (kSupportCamera)
-            _buildTile(
-              context,
-              icon: SpIcons.camera,
-              label: tr('button.take_photo'),
-              action: .takePhoto,
-            ),
+            _buildTile(context, icon: SpIcons.camera, label: tr('button.take_photo'), action: .takePhoto),
           if (kSupportCamera)
-            _buildTile(
-              context,
-              icon: SpIcons.videoCamera,
-              label: tr('button.record_video'),
-              action: .recordVideo,
-            ),
+            _buildTile(context, icon: SpIcons.videoCamera, label: tr('button.record_video'), action: .recordVideo),
           if (showRecordVoiceNote)
-            _buildTile(
-              context,
-              icon: SpIcons.voice,
-              label: tr('button.record_voice'),
-              action: .recordVoiceNote,
-            ),
+            _buildTile(context, icon: SpIcons.voice, label: tr('button.record_voice'), action: .recordVoiceNote),
           SizedBox(height: bottomPadding + 24.0),
         ],
       ),
@@ -94,10 +61,6 @@ class SpAddMediaActionSheet extends BaseBottomSheet {
     required String label,
     required SpAddMediaAction action,
   }) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(label),
-      onTap: () => Navigator.maybeOf(context)?.pop(action),
-    );
+    return ListTile(leading: Icon(icon), title: Text(label), onTap: () => Navigator.maybeOf(context)?.pop(action));
   }
 }

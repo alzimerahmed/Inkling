@@ -18,19 +18,14 @@ class DaylioImportParser {
 
     final List<List<dynamic>> rows;
     try {
-      rows = const CsvDecoder(
-        dynamicTyping: false,
-      ).convert(content);
+      rows = const CsvDecoder(dynamicTyping: false).convert(content);
     } catch (_) {
       return const ImportedParseResult(drafts: [], skippedCount: 1);
     }
 
-    if (rows.isEmpty)
-      return const ImportedParseResult(drafts: [], skippedCount: 1);
+    if (rows.isEmpty) return const ImportedParseResult(drafts: [], skippedCount: 1);
 
-    final header = rows.first
-        .map((e) => e?.toString().trim().toLowerCase() ?? '')
-        .toList();
+    final header = rows.first.map((e) => e?.toString().trim().toLowerCase() ?? '').toList();
     int indexOf(String column) => header.indexOf(column);
 
     final dateTimeIdx = indexOf('date_time');
@@ -46,12 +41,9 @@ class DaylioImportParser {
     }
 
     for (final row in rows.skip(1)) {
-      String cell(int index) => (index >= 0 && index < row.length)
-          ? row[index]?.toString().trim() ?? ''
-          : '';
+      String cell(int index) => (index >= 0 && index < row.length) ? row[index]?.toString().trim() ?? '' : '';
 
-      final date =
-          _parseDate(cell(dateTimeIdx)) ?? _parseDate(cell(fullDateIdx));
+      final date = _parseDate(cell(dateTimeIdx)) ?? _parseDate(cell(fullDateIdx));
       final noteTitle = cell(noteTitleIdx);
       final note = cell(noteIdx);
 
@@ -66,10 +58,7 @@ class DaylioImportParser {
           .where((e) => e.isNotEmpty)
           .toList();
 
-      final body = [
-        if (noteTitle.isNotEmpty) noteTitle,
-        if (note.isNotEmpty) note,
-      ].join('\n\n');
+      final body = [if (noteTitle.isNotEmpty) noteTitle, if (note.isNotEmpty) note].join('\n\n');
 
       drafts.add(
         ImportedStoryDraft(
@@ -89,9 +78,7 @@ class DaylioImportParser {
   static DateTime? _parseDate(String value) {
     if (value.isEmpty) return null;
 
-    final match = RegExp(
-      r'^(\d{1,4})[/\-.](\d{1,2})[/\-.](\d{1,4})(?:\s+(\d{1,2}):(\d{2}))?$',
-    ).firstMatch(value);
+    final match = RegExp(r'^(\d{1,4})[/\-.](\d{1,2})[/\-.](\d{1,4})(?:\s+(\d{1,2}):(\d{2}))?$').firstMatch(value);
     if (match == null) return DateTime.tryParse(value);
 
     final a = int.parse(match.group(1)!);

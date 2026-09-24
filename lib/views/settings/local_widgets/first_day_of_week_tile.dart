@@ -38,10 +38,7 @@ class FirstDayOfWeekTile extends StatelessWidget {
       title: Text(context.tr('list_tile.first_day_of_week.title')),
       subtitle: Text(_label(context, currentFirstDayOfWeek)),
       onTap: () {
-        SpFirstDayOfWeekSheet(
-          firstDayOfWeek: currentFirstDayOfWeek,
-          onChanged: onChanged,
-        ).show(context: context);
+        SpFirstDayOfWeekSheet(firstDayOfWeek: currentFirstDayOfWeek, onChanged: onChanged).show(context: context);
       },
     );
   }

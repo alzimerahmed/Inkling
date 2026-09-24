@@ -46,17 +46,11 @@ class MonthRecapStatsObject {
   bool get shouldShowRecap => storyCount >= 5;
 
   /// Headline coverage label, e.g. "12 of 31 days".
-  String get activeDaysLabel => tr(
-    'page.home.story_recap.active_days',
-    namedArgs: {'SP_ACTIVE': '$activeDays', 'SP_TOTAL': '$totalDays'},
-  );
+  String get activeDaysLabel =>
+      tr('page.home.story_recap.active_days', namedArgs: {'SP_ACTIVE': '$activeDays', 'SP_TOTAL': '$totalDays'});
 
-  String titleLabel(Locale locale) => tr(
-    'page.home.story_recap.title',
-    namedArgs: {
-      'SP_MONTH': DateFormatHelper.MMMM(DateTime(2000, month), locale),
-    },
-  );
+  String titleLabel(Locale locale) =>
+      tr('page.home.story_recap.title', namedArgs: {'SP_MONTH': DateFormatHelper.MMMM(DateTime(2000, month), locale)});
 
   /// Localized, pluralized stat strings to be joined by the UI (e.g. with " · ").
   /// Zero-valued media stats are skipped so the tile never shows "0 photos".

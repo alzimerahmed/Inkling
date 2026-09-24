@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -26,8 +27,7 @@ import 'package:storypad/views/templates/edit/edit_template_view.dart';
 
 part 'story_pages_manager_info.dart';
 
-abstract class BaseStoryViewModel extends ChangeNotifier
-    with DisposeAwareMixin, DebounchedCallback {
+abstract class BaseStoryViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
   StoryDbModel? story;
   StoryContentDbModel? draftContent;
 
@@ -37,10 +37,7 @@ abstract class BaseStoryViewModel extends ChangeNotifier
   final ValueNotifier<DateTime?> lastSavedAtNotifier = ValueNotifier(null);
   late final StoryPagesManagerInfo pagesManager;
 
-  BaseStoryViewModel({
-    int? initialPageIndex,
-    double initialPageScrollOffet = 0.0,
-  }) {
+  BaseStoryViewModel({int? initialPageIndex, double initialPageScrollOffet = 0.0}) {
     pagesManager = StoryPagesManagerInfo(
       initialPageIndex: initialPageIndex,
       initialScrollOffset: initialPageScrollOffet,
@@ -54,8 +51,7 @@ abstract class BaseStoryViewModel extends ChangeNotifier
   bool get readOnly;
 
   bool get hasDataWritten =>
-      flowType == EditingFlowType.update ||
-      StoryHasDataWrittenService.callByContent(draftContent!);
+      flowType == EditingFlowType.update || StoryHasDataWrittenService.callByContent(draftContent!);
 
   bool get hasChange {
     if (draftContent == null) return false;
@@ -64,19 +60,14 @@ abstract class BaseStoryViewModel extends ChangeNotifier
     if (latestContent == null) return false;
 
     // when not ignore empty & no data written, consider not changed.
-    if (flowType == EditingFlowType.create &&
-        !StoryHasDataWrittenService.callByContent(draftContent!))
-      return false;
+    if (flowType == EditingFlowType.create && !StoryHasDataWrittenService.callByContent(draftContent!)) return false;
     return draftContent!.hasChanges(latestContent);
   }
 
   Future<bool> setTags(List<int> tags, BuildContext context) async {
     final provider = context.read<TagsProvider>();
     final orderedTags = await _cleanTags(tags, context);
-    story = story!.copyWith(
-      updatedAt: DateTime.now(),
-      tags: orderedTags.map((e) => e.toString()).toList(),
-    );
+    story = story!.copyWith(updatedAt: DateTime.now(), tags: orderedTags.map((e) => e.toString()).toList());
     notifyListeners();
 
     if (hasDataWritten) {
@@ -121,40 +112,21 @@ abstract class BaseStoryViewModel extends ChangeNotifier
       }
     }
 
-    emojiTagIds.sort(
-      (a, b) => (emojiTagMap[a]?.categoryId ?? 0).compareTo(
-        emojiTagMap[b]?.categoryId ?? 0,
-      ),
-    );
+    emojiTagIds.sort((a, b) => (emojiTagMap[a]?.categoryId ?? 0).compareTo(emojiTagMap[b]?.categoryId ?? 0));
     final allTagIds = [...emojiTagIds, ...nonEmojiTagIds];
 
-    return allTagIds
-        .where(
-          context
-              .read<TagsProvider>()
-              .allTags!
-              .items
-              .map((t) => t.id)
-              .toSet()
-              .contains,
-        )
-        .toList();
+    return allTagIds.where(context.read<TagsProvider>().allTags!.items.map((t) => t.id).toSet().contains).toList();
   }
 
   Future<void> changePreferences(StoryPreferencesDbModel preferences) async {
     if (preferences.layoutType != story?.preferences.layoutType) {
       pagesManager.currentPageIndexNotifier.value = null;
 
-      if (pagesManager.pageController.hasClients)
-        pagesManager.pageController.jumpToPage(0);
-      if (pagesManager.pageScrollController.hasClients)
-        pagesManager.pageScrollController.jumpTo(0);
+      if (pagesManager.pageController.hasClients) pagesManager.pageController.jumpToPage(0);
+      if (pagesManager.pageScrollController.hasClients) pagesManager.pageScrollController.jumpTo(0);
     }
 
-    story = story!.copyWith(
-      updatedAt: DateTime.now(),
-      preferencesOrNull: preferences,
-    );
+    story = story!.copyWith(updatedAt: DateTime.now(), preferencesOrNull: preferences);
     notifyListeners();
 
     if (hasDataWritten) {
@@ -162,9 +134,7 @@ abstract class BaseStoryViewModel extends ChangeNotifier
       lastSavedAtNotifier.value = story?.updatedAt;
     }
 
-    AnalyticsService.instance.logUpdateStoryPreferences(
-      story: story!,
-    );
+    AnalyticsService.instance.logUpdateStoryPreferences(story: story!);
   }
 
   Future<void> setFeeling(String? feeling) async {
@@ -176,9 +146,7 @@ abstract class BaseStoryViewModel extends ChangeNotifier
       lastSavedAtNotifier.value = story?.updatedAt;
     }
 
-    AnalyticsService.instance.logSetStoryFeeling(
-      story: story!,
-    );
+    AnalyticsService.instance.logSetStoryFeeling(story: story!);
   }
 
   Future<void> setPlace(PlaceDbModel? place) async {
@@ -200,9 +168,7 @@ abstract class BaseStoryViewModel extends ChangeNotifier
     if (story == null) return;
 
     story = story!.copyWith(
-      preferencesOrNull: story!.preferences.copyWith(
-        showDayCount: !story!.preferredShowDayCount,
-      ),
+      preferencesOrNull: story!.preferences.copyWith(showDayCount: !story!.preferredShowDayCount),
       updatedAt: DateTime.now(),
     );
 
@@ -213,18 +179,13 @@ abstract class BaseStoryViewModel extends ChangeNotifier
       lastSavedAtNotifier.value = story?.updatedAt;
     }
 
-    AnalyticsService.instance.logToggleShowDayCount(
-      story: story!,
-    );
+    AnalyticsService.instance.logToggleShowDayCount(story: story!);
   }
 
   Future<void> togglePinned() async {
     if (story == null) return;
 
-    story = story!.copyWith(
-      pinned: !(story!.pinned == true),
-      updatedAt: DateTime.now(),
-    );
+    story = story!.copyWith(pinned: !(story!.pinned == true), updatedAt: DateTime.now());
 
     notifyListeners();
 
@@ -233,9 +194,7 @@ abstract class BaseStoryViewModel extends ChangeNotifier
       lastSavedAtNotifier.value = story?.updatedAt;
     }
 
-    AnalyticsService.instance.logToggleStoryPinned(
-      story: story!,
-    );
+    AnalyticsService.instance.logToggleStoryPinned(story: story!);
   }
 
   Future<void> changeDate(DateTime date) async {
@@ -256,9 +215,7 @@ abstract class BaseStoryViewModel extends ChangeNotifier
       lastSavedAtNotifier.value = story?.updatedAt;
     }
 
-    AnalyticsService.instance.logChangeStoryDate(
-      story: story!,
-    );
+    AnalyticsService.instance.logChangeStoryDate(story: story!);
   }
 
   Future<void> saveAsTemplate(BuildContext context) async {
@@ -288,10 +245,7 @@ abstract class BaseStoryViewModel extends ChangeNotifier
         lastSavedAtNotifier.value = story?.updatedAt;
       }
 
-      AnalyticsService.instance.logSaveStoryAsTemplate(
-        story: story!,
-        template: result,
-      );
+      AnalyticsService.instance.logSaveStoryAsTemplate(story: story!, template: result);
     }
   }
 
@@ -299,10 +253,7 @@ abstract class BaseStoryViewModel extends ChangeNotifier
     HapticFeedback.selectionClick();
 
     draftContent = draftContent!.addRichPage();
-    pagesManager.pagesMap.add(
-      richPage: draftContent!.richPages!.last,
-      readOnly: false,
-    );
+    pagesManager.pagesMap.add(richPage: draftContent!.richPages!.last, readOnly: false);
     await saveDraft(debugSource: '$runtimeType#addNewPage');
     notifyListeners();
 
@@ -316,15 +267,10 @@ abstract class BaseStoryViewModel extends ChangeNotifier
       );
     }
 
-    AnalyticsService.instance.logAddStoryPage(
-      story: story!,
-    );
+    AnalyticsService.instance.logAddStoryPage(story: story!);
   }
 
-  Future<void> deleteAPage(
-    BuildContext context,
-    StoryPageDbModel richPage,
-  ) async {
+  Future<void> deleteAPage(BuildContext context, StoryPageDbModel richPage) async {
     if (!pagesManager.canDeletePage) return;
 
     final result = await showOkCancelAlertDialog(
@@ -340,27 +286,17 @@ abstract class BaseStoryViewModel extends ChangeNotifier
       await saveDraft(debugSource: '$runtimeType#deleteAPage');
       notifyListeners();
 
-      AnalyticsService.instance.logDeleteStoryPage(
-        story: story!,
-      );
+      AnalyticsService.instance.logDeleteStoryPage(story: story!);
     }
   }
 
-  Future<void> reorderPages({
-    required int oldIndex,
-    required int newIndex,
-  }) async {
-    draftContent = draftContent?.reorder(
-      oldIndex: oldIndex,
-      newIndex: newIndex,
-    );
+  Future<void> reorderPages({required int oldIndex, required int newIndex}) async {
+    draftContent = draftContent?.reorder(oldIndex: oldIndex, newIndex: newIndex);
 
     await saveDraft(debugSource: '$runtimeType#reorderPages');
     notifyListeners();
 
-    AnalyticsService.instance.logReorderStoryPages(
-      story: story!,
-    );
+    AnalyticsService.instance.logReorderStoryPages(story: story!);
 
     if (!pagesManager.managingPage) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -380,9 +316,7 @@ abstract class BaseStoryViewModel extends ChangeNotifier
     });
   }
 
-  Future<void> saveDraft({
-    required String debugSource,
-  }) async {
+  Future<void> saveDraft({required String debugSource}) async {
     if (hasChange) {
       if (kDebugMode) print('$runtimeType#saveDraft called from $debugSource');
       story = buildStory(draft: true);
@@ -391,13 +325,8 @@ abstract class BaseStoryViewModel extends ChangeNotifier
     }
   }
 
-  StoryDbModel buildStory({
-    bool draft = true,
-    DateTime? updatedAt,
-  }) {
-    final assets = StoryExtractAssetsFromPagesService.call(
-      draftContent?.richPages,
-    );
+  StoryDbModel buildStory({bool draft = true, DateTime? updatedAt}) {
+    final assets = StoryExtractAssetsFromPagesService.call(draftContent?.richPages);
 
     debugPrint("Found assets: $assets in ${story?.id}");
     if (draft) {

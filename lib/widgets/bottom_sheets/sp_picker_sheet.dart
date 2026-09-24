@@ -10,11 +10,7 @@ typedef SpPickerOption = ({int value, String label});
 /// Single-select list sheet: a column of options with a check on the selected
 /// one. Closes on pick. Mirrors `SpFontWeightSheet`'s pattern.
 class SpPickerSheet extends BaseBottomSheet {
-  const SpPickerSheet({
-    required this.options,
-    required this.selectedValue,
-    required this.onChanged,
-  });
+  const SpPickerSheet({required this.options, required this.selectedValue, required this.onChanged});
 
   final List<SpPickerOption> options;
   final int selectedValue;
@@ -26,9 +22,7 @@ class SpPickerSheet extends BaseBottomSheet {
   @override
   Widget build(BuildContext context, double bottomPadding) {
     return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.sizeOf(context).height * 0.5,
-      ),
+      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.5),
       child: SpSingleStateWidget.listen(
         initialValue: selectedValue,
         builder: (context, selected, notifier) {
@@ -47,10 +41,7 @@ class SpPickerSheet extends BaseBottomSheet {
                       trailing: Visibility(
                         visible: option.value == selected,
                         child: SpFadeIn.fromBottom(
-                          child: Icon(
-                            SpIcons.checkCircle,
-                            color: ColorScheme.of(context).primary,
-                          ),
+                          child: Icon(SpIcons.checkCircle, color: ColorScheme.of(context).primary),
                         ),
                       ),
                       onTap: () {

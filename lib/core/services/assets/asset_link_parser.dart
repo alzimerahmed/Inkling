@@ -79,10 +79,7 @@ class AssetLinkParser {
   /// );
   /// // imageSources == ['images/1762500783746.jpg', 'https://example.com/image.jpg']
   /// ```
-  static List<String> extractEmbedSources(
-    List<dynamic>? body,
-    String embedType,
-  ) {
+  static List<String> extractEmbedSources(List<dynamic>? body, String embedType) {
     return extractEmbedSourcesAny(body, {embedType});
   }
 
@@ -93,10 +90,7 @@ class AssetLinkParser {
   /// mix both keys (an untouched legacy embed next to a freshly-edited one),
   /// so this has to check node-by-node rather than concatenating two
   /// single-type scans, which would scramble the original order.
-  static List<String> extractEmbedSourcesAny(
-    List<dynamic>? body,
-    Set<String> embedTypes,
-  ) {
+  static List<String> extractEmbedSourcesAny(List<dynamic>? body, Set<String> embedTypes) {
     final links = <String>[];
     if (body == null || body.isEmpty) return links;
 

@@ -23,10 +23,7 @@ class ShowBackupsRoute extends BaseRoute {
 }
 
 class ShowBackupView extends StatelessWidget {
-  const ShowBackupView({
-    super.key,
-    required this.params,
-  });
+  const ShowBackupView({super.key, required this.params});
 
   final ShowBackupsRoute params;
 

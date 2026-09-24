@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 mixin DebounchedCallback {
@@ -10,11 +11,7 @@ mixin DebounchedCallback {
     return _singleTimer;
   }
 
-  void debouncedCallback(
-    VoidCallback callback, {
-    Duration duration = const Duration(milliseconds: 300),
-    String? key,
-  }) {
+  void debouncedCallback(VoidCallback callback, {Duration duration = const Duration(milliseconds: 300), String? key}) {
     cancelTimer(key);
     _singleTimer = Timer(duration, () async {
       callback();

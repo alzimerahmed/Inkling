@@ -88,9 +88,7 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
       restoreService: RestoreBackupService(),
       messenger: messenger,
       step1ImagesUploader: BackupImagesUploaderService(messenger: messenger),
-      step2LatestBackupChecker: BackupLatestCheckerService(
-        messenger: messenger,
-      ),
+      step2LatestBackupChecker: BackupLatestCheckerService(messenger: messenger),
       step3LatestBackupImporter: BackupImporterService(messenger: messenger),
       step4NewBackupUploader: BackupUploaderService(messenger: messenger),
       internetChecker: InternetCheckerService(),
@@ -219,21 +217,12 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     }
 
     if (connectionResult.error != null) {
-      AppLogger.d(
-        'Connection check failed: ${connectionResult.error!.message}',
-      );
+      AppLogger.d('Connection check failed: ${connectionResult.error!.message}');
     }
   }
 
-  Future<void> autoSync({
-    bool setupConnection = true,
-    required BuildContext context,
-  }) async {
-    await recheckAndSync(
-      setupConnection: setupConnection,
-      services: autoBackupServices,
-      context: context,
-    );
+  Future<void> autoSync({bool setupConnection = true, required BuildContext context}) async {
+    await recheckAndSync(setupConnection: setupConnection, services: autoBackupServices, context: context);
   }
 
   /// [forceMediaUpload] bypasses the Wi-Fi-only media gate for an explicit
@@ -262,19 +251,13 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     // guaranteed retry once initialization finishes.
     await iapProvider.ensureInitialized();
     if (!iapProvider.isProUser) {
-      services = services
-          .where(
-            (service) => service.serviceType == BackupServiceType.google_drive,
-          )
-          .toList();
+      services = services.where((service) => service.serviceType == BackupServiceType.google_drive).toList();
       if (services.isEmpty) return false;
     }
 
     _syncing = true;
     _reachedDeepSyncStep = false;
-    _syncState.onSyncQueueStarted(
-      services.map((service) => service.serviceType).toList(),
-    );
+    _syncState.onSyncQueueStarted(services.map((service) => service.serviceType).toList());
     notifyListeners();
 
     try {
@@ -296,10 +279,7 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     }
   }
 
-  Future<void> signIn(
-    BuildContext context,
-    BackupServiceType serviceType,
-  ) async {
+  Future<void> signIn(BuildContext context, BackupServiceType serviceType) async {
     // Nextcloud's auth is a server/username/app-password form, not a
     // no-argument OAuth flow — route through its connect sheet (which calls
     // connectNextcloud and updates state itself) instead of the generic
@@ -321,16 +301,12 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     // snackbar instead of the Settings sheet.
     if (serviceType == BackupServiceType.icloud) {
       if (result.data == true) {
-        _syncState.onConnectionChecked({
-          serviceType: BackupConnectionStatus.readyToSync,
-        });
+        _syncState.onConnectionChecked({serviceType: BackupConnectionStatus.readyToSync});
         _lastSyncedAtByYear = null;
         _lastDbUpdatedAtByYear = null;
       } else if (result.error?.type == BackupErrorType.network) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(result.error!.message)),
-          );
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result.error!.message)));
         }
       } else if (context.mounted) {
         final service = repository.getService(serviceType);
@@ -349,17 +325,13 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     if (serviceType == BackupServiceType.dropbox) {
       if (result.isSuccess == true) {
         AnalyticsService.instance.logLogin(loginMethod: 'dropbox');
-        _syncState.onConnectionChecked({
-          serviceType: BackupConnectionStatus.readyToSync,
-        });
+        _syncState.onConnectionChecked({serviceType: BackupConnectionStatus.readyToSync});
         _lastSyncedAtByYear = null;
         _lastDbUpdatedAtByYear = null;
       } else if (result.error != null) {
         AppLogger.d('Dropbox sign-in failed: ${result.error!.message}');
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(result.error!.message)),
-          );
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result.error!.message)));
         }
       }
       notifyListeners();
@@ -369,18 +341,14 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     if (result.isSuccess == true) {
       AnalyticsService.instance.logSignInWithGoogle();
 
-      _syncState.onConnectionChecked({
-        serviceType: BackupConnectionStatus.readyToSync,
-      });
+      _syncState.onConnectionChecked({serviceType: BackupConnectionStatus.readyToSync});
       _lastSyncedAtByYear = null;
       _lastDbUpdatedAtByYear = null;
     } else if (result.error != null) {
       // Handle sign-in error - could show user-friendly message
       AppLogger.d('Sign-in failed: ${result.error!.message}');
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(result.error!.message)),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result.error!.message)));
       }
     }
 
@@ -402,17 +370,13 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     );
 
     if (result.isSuccess == true) {
-      _syncState.onConnectionChecked({
-        BackupServiceType.nextcloud: BackupConnectionStatus.readyToSync,
-      });
+      _syncState.onConnectionChecked({BackupServiceType.nextcloud: BackupConnectionStatus.readyToSync});
       _lastSyncedAtByYear = null;
       _lastDbUpdatedAtByYear = null;
     } else if (result.error != null) {
       AppLogger.d('Nextcloud connect failed: ${result.error!.message}');
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(result.error!.message)),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result.error!.message)));
       }
     }
 
@@ -420,10 +384,7 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     return result.isSuccess == true;
   }
 
-  Future<void> requestScope(
-    BuildContext context,
-    BackupServiceType serviceType,
-  ) async {
+  Future<void> requestScope(BuildContext context, BackupServiceType serviceType) async {
     final result = await MessengerService.of(context).showLoading<BackupResult<bool>>(
       debugSource: '$runtimeType#requestScope',
       future: () => repository.requestScope(),
@@ -434,24 +395,16 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     } else if (result?.error != null) {
       AppLogger.d('Request scope failed: ${result!.error!.message}');
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(result.error!.message)),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result.error!.message)));
       }
     }
 
     notifyListeners();
     if (!context.mounted) return;
-    await recheckAndSync(
-      services: [repository.getService(serviceType)],
-      context: context,
-    );
+    await recheckAndSync(services: [repository.getService(serviceType)], context: context);
   }
 
-  Future<void> signOut(
-    BuildContext context,
-    BackupServiceType serviceType,
-  ) async {
+  Future<void> signOut(BuildContext context, BackupServiceType serviceType) async {
     final result = await MessengerService.of(context).showLoading<BackupResult<void>>(
       debugSource: '$runtimeType#signOut',
       future: () => repository.signOut(serviceType),
@@ -519,9 +472,7 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
     // Process each service individually
     for (final service in services) {
       if (!service.isSignedIn) {
-        AppLogger.d(
-          'Skipping service ${service.serviceType.displayName}: not signed in',
-        );
+        AppLogger.d('Skipping service ${service.serviceType.displayName}: not signed in');
         continue;
       }
 
@@ -530,15 +481,9 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
 
       _syncState.onServiceSyncStarted(service.serviceType);
 
-      kErrorReportingService.log(
-        '$runtimeType#_syncBackupAcrossDevices[$serviceId]: started',
-      );
+      kErrorReportingService.log('$runtimeType#_syncBackupAcrossDevices[$serviceId]: started');
 
-      final result = await repository.sync(
-        service,
-        uploadAssets: uploadAssets,
-        notifyImportCallbacks: false,
-      );
+      final result = await repository.sync(service, uploadAssets: uploadAssets, notifyImportCallbacks: false);
 
       if (!result.isSuccess) {
         allSyncsSucceeded = false;
@@ -549,9 +494,7 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
           final connectionResult = await repository.checkConnection();
           if (connectionResult.data != null) {
             _hasInternet = connectionResult.data!.hasInternet;
-            _syncState.onConnectionChecked(
-              connectionResult.data!.statusByService,
-            );
+            _syncState.onConnectionChecked(connectionResult.data!.statusByService);
           }
         } else {
           // onServiceSyncFinished alone leaves connectionStatus untouched —
@@ -570,9 +513,7 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
         continue;
       }
 
-      kErrorReportingService.log(
-        '$runtimeType#_syncBackupAcrossDevices[$serviceId]: succeeded',
-      );
+      kErrorReportingService.log('$runtimeType#_syncBackupAcrossDevices[$serviceId]: succeeded');
 
       if (result.data?.didImport == true) didImportAny = true;
 
@@ -598,10 +539,7 @@ class BackupProvider extends ChangeNotifier with DebounchedCallback {
         null,
         (latest, current) => latest == null || current.isAfter(latest) ? current : latest,
       );
-      _syncState.onServiceSyncFinished(
-        service.serviceType,
-        lastSyncedAt: serviceLastSyncedAt,
-      );
+      _syncState.onServiceSyncFinished(service.serviceType, lastSyncedAt: serviceLastSyncedAt);
 
       // Update global sync status using "Latest Wins" strategy:
       // - Compare timestamps across all services per year

@@ -1,9 +1,7 @@
 part of '../sp_story_tile.dart';
 
 class _StoryTileAssets extends StatelessWidget {
-  const _StoryTileAssets({
-    required this.assetPaths,
-  });
+  const _StoryTileAssets({required this.assetPaths});
 
   // Relative paths to assets embedded in the story
   // eg. ['images/1762500783746.jpg', 'images/1762500985286.jpg']
@@ -35,11 +33,7 @@ class _StoryTileAssets extends StatelessWidget {
 
 /// Displays a single asset tile from a relative path (image, video, or audio)
 class _AssetTile extends StatelessWidget {
-  const _AssetTile({
-    required this.assetPath,
-    required this.displayMoreButton,
-    required this.allAssetPaths,
-  });
+  const _AssetTile({required this.assetPath, required this.displayMoreButton, required this.allAssetPaths});
 
   final String assetPath;
   final bool displayMoreButton;
@@ -70,13 +64,8 @@ class _AssetTile extends StatelessWidget {
               return Container(
                 height: 72,
                 width: 72,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                ),
-                child: Icon(
-                  SpIcons.imageNotSupported,
-                  color: Theme.of(context).disabledColor,
-                ),
+                decoration: BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
+                child: Icon(SpIcons.imageNotSupported, color: Theme.of(context).disabledColor),
               );
             },
           ),
@@ -92,12 +81,7 @@ class _AssetTile extends StatelessWidget {
               onLongPress: () => _viewImages(context),
               onTap: () => _viewImages(context),
               child: displayMoreButton
-                  ? Center(
-                      child: Text(
-                        '+${allAssetPaths.length - 4}',
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ),
-                    )
+                  ? Center(child: Text('+${allAssetPaths.length - 4}', style: Theme.of(context).textTheme.labelSmall))
                   : null,
             ),
           ),
@@ -120,13 +104,7 @@ class _AssetTile extends StatelessWidget {
           color: Theme.of(context).colorScheme.primaryContainer,
           borderRadius: BorderRadius.circular(8.0),
         ),
-        child: Center(
-          child: Icon(
-            SpIcons.voice,
-            color: Theme.of(context).colorScheme.primary,
-            size: 24,
-          ),
-        ),
+        child: Center(child: Icon(SpIcons.voice, color: Theme.of(context).colorScheme.primary, size: 24)),
       ),
     );
   }

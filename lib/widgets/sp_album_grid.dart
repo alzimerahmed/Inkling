@@ -4,11 +4,7 @@ import 'package:storypad/core/types/asset_type.dart';
 import 'package:storypad/widgets/sp_media_tile.dart';
 
 class SpAlbumGrid extends StatelessWidget {
-  const SpAlbumGrid({
-    super.key,
-    required this.paths,
-    this.onTap,
-  });
+  const SpAlbumGrid({super.key, required this.paths, this.onTap});
 
   final List<String> paths;
 
@@ -31,12 +27,7 @@ class SpAlbumGrid extends StatelessWidget {
           context,
           path: paths[0],
           index: 0,
-          edges: const _TileEdges(
-            top: true,
-            right: true,
-            bottom: true,
-            left: true,
-          ),
+          edges: const _TileEdges(top: true, right: true, bottom: true, left: true),
         ),
       );
     }
@@ -60,14 +51,7 @@ class SpAlbumGrid extends StatelessWidget {
           final leftHeight = leftWidth;
           final smallCellHeight = (leftHeight - gap) / 2;
 
-          return build3Tiles(
-            leftHeight,
-            leftWidth,
-            context,
-            display,
-            rightWidth,
-            smallCellHeight,
-          );
+          return build3Tiles(leftHeight, leftWidth, context, display, rightWidth, smallCellHeight);
         }
 
         if (display.length == 4) {
@@ -85,12 +69,7 @@ class SpAlbumGrid extends StatelessWidget {
     );
   }
 
-  Widget build6Tiles(
-    double cell3Size,
-    BuildContext context,
-    List<String> display,
-    int extraCount,
-  ) {
+  Widget build6Tiles(double cell3Size, BuildContext context, List<String> display, int extraCount) {
     return SizedBox(
       height: cell3Size * 2 + gap,
       child: Column(
@@ -103,12 +82,7 @@ class SpAlbumGrid extends StatelessWidget {
                     context,
                     path: display[0],
                     index: 0,
-                    edges: const _TileEdges(
-                      top: true,
-                      right: false,
-                      bottom: false,
-                      left: true,
-                    ),
+                    edges: const _TileEdges(top: true, right: false, bottom: false, left: true),
                   ),
                 ),
                 SizedBox(width: gap),
@@ -117,12 +91,7 @@ class SpAlbumGrid extends StatelessWidget {
                     context,
                     path: display[1],
                     index: 1,
-                    edges: const _TileEdges(
-                      top: true,
-                      right: false,
-                      bottom: false,
-                      left: false,
-                    ),
+                    edges: const _TileEdges(top: true, right: false, bottom: false, left: false),
                   ),
                 ),
                 SizedBox(width: gap),
@@ -131,12 +100,7 @@ class SpAlbumGrid extends StatelessWidget {
                     context,
                     path: display[2],
                     index: 2,
-                    edges: const _TileEdges(
-                      top: true,
-                      right: true,
-                      bottom: false,
-                      left: false,
-                    ),
+                    edges: const _TileEdges(top: true, right: true, bottom: false, left: false),
                   ),
                 ),
               ],
@@ -151,12 +115,7 @@ class SpAlbumGrid extends StatelessWidget {
                     context,
                     path: display[3],
                     index: 3,
-                    edges: const _TileEdges(
-                      top: false,
-                      right: false,
-                      bottom: true,
-                      left: true,
-                    ),
+                    edges: const _TileEdges(top: false, right: false, bottom: true, left: true),
                   ),
                 ),
                 SizedBox(width: gap),
@@ -165,12 +124,7 @@ class SpAlbumGrid extends StatelessWidget {
                     context,
                     path: display[4],
                     index: 4,
-                    edges: const _TileEdges(
-                      top: false,
-                      right: false,
-                      bottom: true,
-                      left: false,
-                    ),
+                    edges: const _TileEdges(top: false, right: false, bottom: true, left: false),
                   ),
                 ),
                 SizedBox(width: gap),
@@ -179,20 +133,14 @@ class SpAlbumGrid extends StatelessWidget {
                     context,
                     path: display[5],
                     index: 5,
-                    edges: const _TileEdges(
-                      top: false,
-                      right: true,
-                      bottom: true,
-                      left: false,
-                    ),
+                    edges: const _TileEdges(top: false, right: true, bottom: true, left: false),
                     overlay: extraCount > 0
                         ? ColoredBox(
                             color: Colors.black.withValues(alpha: 0.45),
                             child: Center(
                               child: Text(
                                 '+$extraCount',
-                                style: Theme.of(context).textTheme.titleLarge
-                                    ?.copyWith(color: Colors.white),
+                                style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white),
                               ),
                             ),
                           )
@@ -207,11 +155,7 @@ class SpAlbumGrid extends StatelessWidget {
     );
   }
 
-  Widget build5Tiles(
-    double totalWidth,
-    BuildContext context,
-    List<String> display,
-  ) {
+  Widget build5Tiles(double totalWidth, BuildContext context, List<String> display) {
     final leftWidth = (totalWidth - gap) / 2;
     final rightWidth = (totalWidth - gap) / 2;
     final totalHeight = rightWidth; // make the right 2x2 square cells
@@ -228,12 +172,7 @@ class SpAlbumGrid extends StatelessWidget {
               context,
               path: display[0],
               index: 0,
-              edges: const _TileEdges(
-                top: true,
-                right: false,
-                bottom: true,
-                left: true,
-              ),
+              edges: const _TileEdges(top: true, right: false, bottom: true, left: true),
             ),
           ),
           SizedBox(width: gap),
@@ -250,12 +189,7 @@ class SpAlbumGrid extends StatelessWidget {
                           context,
                           path: display[1],
                           index: 1,
-                          edges: const _TileEdges(
-                            top: true,
-                            right: false,
-                            bottom: false,
-                            left: false,
-                          ),
+                          edges: const _TileEdges(top: true, right: false, bottom: false, left: false),
                         ),
                       ),
                       SizedBox(width: gap),
@@ -264,12 +198,7 @@ class SpAlbumGrid extends StatelessWidget {
                           context,
                           path: display[2],
                           index: 2,
-                          edges: const _TileEdges(
-                            top: true,
-                            right: true,
-                            bottom: false,
-                            left: false,
-                          ),
+                          edges: const _TileEdges(top: true, right: true, bottom: false, left: false),
                         ),
                       ),
                     ],
@@ -285,12 +214,7 @@ class SpAlbumGrid extends StatelessWidget {
                           context,
                           path: display[3],
                           index: 3,
-                          edges: const _TileEdges(
-                            top: false,
-                            right: false,
-                            bottom: true,
-                            left: false,
-                          ),
+                          edges: const _TileEdges(top: false, right: false, bottom: true, left: false),
                         ),
                       ),
                       SizedBox(width: gap),
@@ -299,12 +223,7 @@ class SpAlbumGrid extends StatelessWidget {
                           context,
                           path: display[4],
                           index: 4,
-                          edges: const _TileEdges(
-                            top: false,
-                            right: true,
-                            bottom: true,
-                            left: false,
-                          ),
+                          edges: const _TileEdges(top: false, right: true, bottom: true, left: false),
                         ),
                       ),
                     ],
@@ -318,11 +237,7 @@ class SpAlbumGrid extends StatelessWidget {
     );
   }
 
-  Widget build4Tiles(
-    double cell2Size,
-    BuildContext context,
-    List<String> display,
-  ) {
+  Widget build4Tiles(double cell2Size, BuildContext context, List<String> display) {
     return SizedBox(
       height: cell2Size * 2 + gap,
       child: Column(
@@ -335,12 +250,7 @@ class SpAlbumGrid extends StatelessWidget {
                     context,
                     path: display[0],
                     index: 0,
-                    edges: const _TileEdges(
-                      top: true,
-                      right: false,
-                      bottom: false,
-                      left: true,
-                    ),
+                    edges: const _TileEdges(top: true, right: false, bottom: false, left: true),
                   ),
                 ),
                 SizedBox(width: gap),
@@ -349,12 +259,7 @@ class SpAlbumGrid extends StatelessWidget {
                     context,
                     path: display[1],
                     index: 1,
-                    edges: const _TileEdges(
-                      top: true,
-                      right: true,
-                      bottom: false,
-                      left: false,
-                    ),
+                    edges: const _TileEdges(top: true, right: true, bottom: false, left: false),
                   ),
                 ),
               ],
@@ -369,12 +274,7 @@ class SpAlbumGrid extends StatelessWidget {
                     context,
                     path: display[2],
                     index: 2,
-                    edges: const _TileEdges(
-                      top: false,
-                      right: false,
-                      bottom: true,
-                      left: true,
-                    ),
+                    edges: const _TileEdges(top: false, right: false, bottom: true, left: true),
                   ),
                 ),
                 SizedBox(width: gap),
@@ -383,12 +283,7 @@ class SpAlbumGrid extends StatelessWidget {
                     context,
                     path: display[3],
                     index: 3,
-                    edges: const _TileEdges(
-                      top: false,
-                      right: true,
-                      bottom: true,
-                      left: false,
-                    ),
+                    edges: const _TileEdges(top: false, right: true, bottom: true, left: false),
                   ),
                 ),
               ],
@@ -418,12 +313,7 @@ class SpAlbumGrid extends StatelessWidget {
               context,
               path: display[0],
               index: 0,
-              edges: const _TileEdges(
-                top: true,
-                right: false,
-                bottom: true,
-                left: true,
-              ),
+              edges: const _TileEdges(top: true, right: false, bottom: true, left: true),
             ),
           ),
           SizedBox(width: gap),
@@ -437,12 +327,7 @@ class SpAlbumGrid extends StatelessWidget {
                     context,
                     path: display[1],
                     index: 1,
-                    edges: const _TileEdges(
-                      top: true,
-                      right: true,
-                      bottom: false,
-                      left: false,
-                    ),
+                    edges: const _TileEdges(top: true, right: true, bottom: false, left: false),
                   ),
                 ),
                 SizedBox(height: gap),
@@ -452,12 +337,7 @@ class SpAlbumGrid extends StatelessWidget {
                     context,
                     path: display[2],
                     index: 2,
-                    edges: const _TileEdges(
-                      top: false,
-                      right: true,
-                      bottom: true,
-                      left: false,
-                    ),
+                    edges: const _TileEdges(top: false, right: true, bottom: true, left: false),
                   ),
                 ),
               ],
@@ -468,11 +348,7 @@ class SpAlbumGrid extends StatelessWidget {
     );
   }
 
-  Widget build2Tiles(
-    double cell2Size,
-    BuildContext context,
-    List<String> display,
-  ) {
+  Widget build2Tiles(double cell2Size, BuildContext context, List<String> display) {
     return SizedBox(
       height: cell2Size,
       child: Row(
@@ -482,12 +358,7 @@ class SpAlbumGrid extends StatelessWidget {
               context,
               path: display[0],
               index: 0,
-              edges: const _TileEdges(
-                top: true,
-                right: false,
-                bottom: true,
-                left: true,
-              ),
+              edges: const _TileEdges(top: true, right: false, bottom: true, left: true),
             ),
           ),
           SizedBox(width: gap),
@@ -496,12 +367,7 @@ class SpAlbumGrid extends StatelessWidget {
               context,
               path: display[1],
               index: 1,
-              edges: const _TileEdges(
-                top: true,
-                right: true,
-                bottom: true,
-                left: false,
-              ),
+              edges: const _TileEdges(top: true, right: true, bottom: true, left: false),
             ),
           ),
         ],
@@ -520,18 +386,10 @@ class SpAlbumGrid extends StatelessWidget {
 
   BorderRadius _radiusFor(_TileEdges edges) {
     return BorderRadius.only(
-      topLeft: Radius.circular(
-        edges.top && edges.left ? outerRadius : innerRadius,
-      ),
-      topRight: Radius.circular(
-        edges.top && edges.right ? outerRadius : innerRadius,
-      ),
-      bottomRight: Radius.circular(
-        edges.bottom && edges.right ? outerRadius : innerRadius,
-      ),
-      bottomLeft: Radius.circular(
-        edges.bottom && edges.left ? outerRadius : innerRadius,
-      ),
+      topLeft: Radius.circular(edges.top && edges.left ? outerRadius : innerRadius),
+      topRight: Radius.circular(edges.top && edges.right ? outerRadius : innerRadius),
+      bottomRight: Radius.circular(edges.bottom && edges.right ? outerRadius : innerRadius),
+      bottomLeft: Radius.circular(edges.bottom && edges.left ? outerRadius : innerRadius),
     );
   }
 
@@ -553,11 +411,7 @@ class SpAlbumGrid extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            SpMediaTile(
-              link: path,
-              width: double.infinity,
-              height: double.infinity,
-            ),
+            SpMediaTile(link: path, width: double.infinity, height: double.infinity),
             ?overlay,
           ],
         ),
@@ -567,12 +421,7 @@ class SpAlbumGrid extends StatelessWidget {
 }
 
 class _TileEdges {
-  const _TileEdges({
-    required this.top,
-    required this.right,
-    required this.bottom,
-    required this.left,
-  });
+  const _TileEdges({required this.top, required this.right, required this.bottom, required this.left});
 
   final bool top;
   final bool right;

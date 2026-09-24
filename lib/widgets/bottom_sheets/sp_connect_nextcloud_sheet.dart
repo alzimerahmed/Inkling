@@ -10,11 +10,7 @@ import 'package:storypad/widgets/bottom_sheets/base_bottom_sheet.dart';
 import 'package:storypad/widgets/sp_icons.dart';
 
 class SpConnectNextcloudSheet extends BaseBottomSheet {
-  const SpConnectNextcloudSheet({
-    this.initialServerUrl,
-    this.initialUsername,
-    this.initialFolderName,
-  });
+  const SpConnectNextcloudSheet({this.initialServerUrl, this.initialUsername, this.initialFolderName});
 
   /// When set (a reconnect after the stored app password stopped working),
   /// the server URL and username are pre-filled and read-only-flavored copy
@@ -66,12 +62,8 @@ class _ConnectNextcloudForm extends StatefulWidget {
 
 class _ConnectNextcloudFormState extends State<_ConnectNextcloudForm> {
   final _formKey = GlobalKey<FormState>();
-  late final _serverUrlController = TextEditingController(
-    text: widget.initialServerUrl,
-  );
-  late final _usernameController = TextEditingController(
-    text: widget.initialUsername,
-  );
+  late final _serverUrlController = TextEditingController(text: widget.initialServerUrl);
+  late final _usernameController = TextEditingController(text: widget.initialUsername);
   final _appPasswordController = TextEditingController();
   late final _folderNameController = TextEditingController(
     text: widget.initialFolderName ?? NextcloudUserObject.defaultFolderName,
@@ -107,9 +99,7 @@ class _ConnectNextcloudFormState extends State<_ConnectNextcloudForm> {
       serverUrl: _serverUrlController.text.trim(),
       username: _usernameController.text.trim(),
       appPassword: _appPasswordController.text,
-      folderName: widget.isReconnect
-          ? widget.initialFolderName
-          : _folderNameController.text.trim(),
+      folderName: widget.isReconnect ? widget.initialFolderName : _folderNameController.text.trim(),
     );
 
     if (!mounted) return;
@@ -136,20 +126,12 @@ class _ConnectNextcloudFormState extends State<_ConnectNextcloudForm> {
           spacing: 12.0,
           children: [
             Text(
-              tr(
-                widget.isReconnect
-                    ? "dialog.connect_nextcloud.reconnect_title"
-                    : "dialog.connect_nextcloud.title",
-              ),
-              style: TextTheme.of(
-                context,
-              ).titleLarge?.copyWith(color: ColorScheme.of(context).primary),
+              tr(widget.isReconnect ? "dialog.connect_nextcloud.reconnect_title" : "dialog.connect_nextcloud.title"),
+              style: TextTheme.of(context).titleLarge?.copyWith(color: ColorScheme.of(context).primary),
             ),
             Text(
               tr(
-                widget.isReconnect
-                    ? "dialog.connect_nextcloud.reconnect_message"
-                    : "dialog.connect_nextcloud.message",
+                widget.isReconnect ? "dialog.connect_nextcloud.reconnect_message" : "dialog.connect_nextcloud.message",
               ),
               style: TextTheme.of(context).bodyLarge,
             ),
@@ -181,15 +163,10 @@ class _ConnectNextcloudFormState extends State<_ConnectNextcloudForm> {
             if (_errorMessage != null)
               Text(
                 _errorMessage!,
-                style: TextTheme.of(
-                  context,
-                ).bodySmall?.copyWith(color: ColorScheme.of(context).error),
+                style: TextTheme.of(context).bodySmall?.copyWith(color: ColorScheme.of(context).error),
               ),
             const SizedBox(height: 4.0),
-            SizedBox(
-              width: double.infinity,
-              child: _buildConnectButton(context),
-            ),
+            SizedBox(width: double.infinity, child: _buildConnectButton(context)),
             SizedBox(height: widget.bottomPadding),
           ],
         ),
@@ -213,11 +190,7 @@ class _ConnectNextcloudFormState extends State<_ConnectNextcloudForm> {
         final helperText = validationError == null
             ? tr(
                 "input.nextcloud_folder_name.helper",
-                namedArgs: {
-                  'SP_PATH': trimmed.isEmpty
-                      ? NextcloudUserObject.defaultFolderName
-                      : trimmed,
-                },
+                namedArgs: {'SP_PATH': trimmed.isEmpty ? NextcloudUserObject.defaultFolderName : trimmed},
               )
             : _folderNameErrorMessage(validationError);
 
@@ -242,9 +215,7 @@ class _ConnectNextcloudFormState extends State<_ConnectNextcloudForm> {
                 child: Text(
                   helperText,
                   style: TextTheme.of(context).bodySmall?.copyWith(
-                    color: validationError == null
-                        ? ColorScheme.of(context).outline
-                        : ColorScheme.of(context).error,
+                    color: validationError == null ? ColorScheme.of(context).outline : ColorScheme.of(context).error,
                   ),
                 ),
               ),
@@ -258,11 +229,7 @@ class _ConnectNextcloudFormState extends State<_ConnectNextcloudForm> {
           autocorrect: false,
           validator: _folderNameValidator,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          decoration: InputDecoration(
-            hintText: hint,
-            helperText: helperText,
-            helperMaxLines: 2,
-          ),
+          decoration: InputDecoration(hintText: hint, helperText: helperText, helperMaxLines: 2),
         );
       },
     );
@@ -322,9 +289,7 @@ class _ConnectNextcloudFormState extends State<_ConnectNextcloudForm> {
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   child: Text(
                     state.errorText!,
-                    style: TextTheme.of(
-                      context,
-                    ).bodySmall?.copyWith(color: ColorScheme.of(context).error),
+                    style: TextTheme.of(context).bodySmall?.copyWith(color: ColorScheme.of(context).error),
                   ),
                 ),
             ],
@@ -358,13 +323,7 @@ class _ConnectNextcloudFormState extends State<_ConnectNextcloudForm> {
                 spacing: 8.0,
                 children: [
                   const Icon(SpIcons.nextcloud),
-                  Text(
-                    tr(
-                      widget.isReconnect
-                          ? "button.reconnect"
-                          : "button.connect",
-                    ),
-                  ),
+                  Text(tr(widget.isReconnect ? "button.reconnect" : "button.connect")),
                 ],
               ),
       );
@@ -372,14 +331,9 @@ class _ConnectNextcloudFormState extends State<_ConnectNextcloudForm> {
 
     return FilledButton.icon(
       icon: _connecting
-          ? const SizedBox.square(
-              dimension: 16.0,
-              child: CircularProgressIndicator.adaptive(),
-            )
+          ? const SizedBox.square(dimension: 16.0, child: CircularProgressIndicator.adaptive())
           : const Icon(SpIcons.nextcloud),
-      label: Text(
-        tr(widget.isReconnect ? "button.reconnect" : "button.connect"),
-      ),
+      label: Text(tr(widget.isReconnect ? "button.reconnect" : "button.connect")),
       onPressed: _connecting ? null : _connect,
     );
   }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -15,11 +16,7 @@ class MultiAudioNotificationService {
 
   _PlatformPlaybackListener? _audioHandler;
 
-  MultiAudioNotificationService({
-    required this.onPlayed,
-    required this.onPaused,
-    required this.onClosed,
-  });
+  MultiAudioNotificationService({required this.onPlayed, required this.onPaused, required this.onClosed});
 
   Completer<bool>? _completer;
   Future<bool> initialIfNeed() async {
@@ -30,10 +27,8 @@ class MultiAudioNotificationService {
       builder: () => _PlatformPlaybackListener(this),
       config: AudioServiceConfig(
         androidNotificationIcon: 'drawable/ic_music_note',
-        androidNotificationChannelId:
-            NotificationChannel.relaxingSound.channelID,
-        androidNotificationChannelName:
-            NotificationChannel.relaxingSound.channelName,
+        androidNotificationChannelId: NotificationChannel.relaxingSound.channelID,
+        androidNotificationChannelName: NotificationChannel.relaxingSound.channelName,
         androidShowNotificationBadge: true,
         preloadArtwork: true,
       ),
@@ -65,31 +60,17 @@ class MultiAudioNotificationService {
     );
 
     if (backgroundUrlPath != null) {
-      CloudStorageService.instance.downloadFile(backgroundUrlPath).then((
-        result,
-      ) {
+      CloudStorageService.instance.downloadFile(backgroundUrlPath).then((result) {
         if (result.file == null) return;
-        _audioHandler?.mediaItem.add(
-          _audioHandler?.mediaItem.value?.copyWith(
-            artUri: Uri.file(result.file!.path),
-          ),
-        );
+        _audioHandler?.mediaItem.add(_audioHandler?.mediaItem.value?.copyWith(artUri: Uri.file(result.file!.path)));
       });
     }
 
     _audioHandler?.playbackState.add(
       PlaybackState(
-        controls: [
-          MediaControl(
-            androidIcon: 'drawable/ic_stop',
-            label: tr("button.stop"),
-            action: MediaAction.stop,
-          ),
-        ],
+        controls: [MediaControl(androidIcon: 'drawable/ic_stop', label: tr("button.stop"), action: MediaAction.stop)],
         systemActions: const {MediaAction.playPause},
-        processingState: ready
-            ? AudioProcessingState.ready
-            : AudioProcessingState.buffering,
+        processingState: ready ? AudioProcessingState.ready : AudioProcessingState.buffering,
         repeatMode: AudioServiceRepeatMode.all,
         playing: true,
         speed: 1.0,
@@ -110,17 +91,9 @@ class MultiAudioNotificationService {
 
     _audioHandler?.playbackState.add(
       PlaybackState(
-        controls: [
-          MediaControl(
-            androidIcon: 'drawable/ic_stop',
-            label: tr("button.stop"),
-            action: MediaAction.stop,
-          ),
-        ],
+        controls: [MediaControl(androidIcon: 'drawable/ic_stop', label: tr("button.stop"), action: MediaAction.stop)],
         systemActions: const {MediaAction.playPause},
-        processingState: ready
-            ? AudioProcessingState.ready
-            : AudioProcessingState.buffering,
+        processingState: ready ? AudioProcessingState.ready : AudioProcessingState.buffering,
         repeatMode: AudioServiceRepeatMode.all,
         playing: false,
         speed: 1.0,
@@ -141,14 +114,10 @@ class MultiAudioNotificationService {
     required Duration? stopIn,
     required String? backgroundUrlPath,
   }) {
-    bool? anyPlaying = playingStates.values.isEmpty
-        ? null
-        : playingStates.values.any((e) => e.playing);
+    bool? anyPlaying = playingStates.values.isEmpty ? null : playingStates.values.any((e) => e.playing);
     bool? anyReady = playingStates.values.isEmpty
         ? null
-        : playingStates.values.any(
-            (e) => e.processingState == ProcessingState.ready,
-          );
+        : playingStates.values.any((e) => e.processingState == ProcessingState.ready);
 
     if (anyPlaying == true) {
       showPlaying(
