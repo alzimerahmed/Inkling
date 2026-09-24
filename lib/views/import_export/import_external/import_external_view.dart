@@ -66,9 +66,13 @@ class ImportExternalViewModel extends ChangeNotifier with DisposeAwareMixin {
   Future<void> parse(BuildContext context) async {
     final source = params.source;
 
+    // File picking uses platform channels — must happen on the main isolate.
+    final List<String> paths = await _pickFiles(source);
+    if (paths.isEmpty || !context.mounted) return;
+
     final result = await MessengerService.of(context).showLoading(
       debugSource: '$runtimeType#parse',
-      future: () => Isolate.run(() => _parseInIsolate(source)),
+      future: () => Isolate.run(() => _parseInIsolate(source, paths)),
     );
 
     if (result == null) {
@@ -90,17 +94,35 @@ class ImportExternalViewModel extends ChangeNotifier with DisposeAwareMixin {
     notifyListeners();
   }
 
+  /// File picking (platform channels) — main isolate only.
+  Future<List<String>> _pickFiles(ExternalImportSource source) async {
+    switch (source) {
+      case ExternalImportSource.dayOne:
+        final file = await AppFilePickerService.pickDayOneFile();
+        return file == null ? [] : [file.path];
+      case ExternalImportSource.daylio:
+        final file = await AppFilePickerService.pickCsvFile();
+        return file == null ? [] : [file.path];
+      case ExternalImportSource.keep:
+        return (await AppFilePickerService.pickMultipleJsonFiles())
+            .map((e) => e.path)
+            .toList();
+      case ExternalImportSource.evernote:
+        final file = await AppFilePickerService.pickEnexFile();
+        return file == null ? [] : [file.path];
+    }
+  }
+
   /// Runs in a background isolate — file I/O + parsing only, no DB access
   /// (ObjectBox stores are per-isolate).
   static Future<ImportedParseResult?> _parseInIsolate(
     ExternalImportSource source,
+    List<String> paths,
   ) async {
     switch (source) {
       case ExternalImportSource.dayOne:
-        final jsonFile = await AppFilePickerService.pickDayOneFile();
-        if (jsonFile == null) return null;
-        final bytes = await jsonFile.readAsBytes();
-        if (jsonFile.path.toLowerCase().endsWith('.zip')) {
+        final bytes = await File(paths.first).readAsBytes();
+        if (paths.first.toLowerCase().endsWith('.zip')) {
           final tempDir = Directory(
             '${SupportDirectoryPath.tmp.directoryPath}/day_one_import_${DateTime.now().millisecondsSinceEpoch}',
           );
@@ -111,16 +133,12 @@ class ImportExternalViewModel extends ChangeNotifier with DisposeAwareMixin {
         }
         return DayOneImportParser.parseJson(utf8.decode(bytes));
       case ExternalImportSource.daylio:
-        final file = await AppFilePickerService.pickCsvFile();
-        if (file == null) return null;
-        return DaylioImportParser.parse(await file.readAsString());
+        return DaylioImportParser.parse(await File(paths.first).readAsString());
       case ExternalImportSource.keep:
-        final files = await AppFilePickerService.pickMultipleJsonFiles();
-        if (files.isEmpty) return null;
         final drafts = <ImportedStoryDraft>[];
         int skipped = 0;
-        for (final file in files) {
-          final draft = KeepImportParser.parse(await file.readAsString());
+        for (final path in paths) {
+          final draft = KeepImportParser.parse(await File(path).readAsString());
           if (draft == null) {
             skipped++;
           } else {
@@ -129,9 +147,9 @@ class ImportExternalViewModel extends ChangeNotifier with DisposeAwareMixin {
         }
         return ImportedParseResult(drafts: drafts, skippedCount: skipped);
       case ExternalImportSource.evernote:
-        final file = await AppFilePickerService.pickEnexFile();
-        if (file == null) return null;
-        return EvernoteEnexImportParser.parse(await file.readAsString());
+        return EvernoteEnexImportParser.parse(
+          await File(paths.first).readAsString(),
+        );
     }
   }
 
