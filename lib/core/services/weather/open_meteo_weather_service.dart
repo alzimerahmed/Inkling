@@ -34,44 +34,44 @@ class WeatherInfoObject {
     return WeatherInfoObject(temperatureCelsius: temperature, weatherCode: code, isDay: isDay != 0);
   }
 
-  /// WMO weather interpretation codes (WW) mapped to an emoji + translation
-  /// key suffix under `weather.condition.`, grouped the way Open-Meteo
-  /// documents them.
+  /// WMO weather interpretation codes (WW) mapped to an emoji + full
+  /// translation key (literal strings, so the unused-translations test can
+  /// trace them).
   static const Map<int, (String, String)> _codeInfo = {
-    0: ('☀️', 'clear_sky'),
-    1: ('🌤️', 'mainly_clear'),
-    2: ('⛅', 'partly_cloudy'),
-    3: ('☁️', 'overcast'),
-    45: ('🌫️', 'fog'),
-    48: ('🌫️', 'depositing_rime_fog'),
-    51: ('🌦️', 'light_drizzle'),
-    53: ('🌦️', 'moderate_drizzle'),
-    55: ('🌦️', 'dense_drizzle'),
-    56: ('🌧️', 'light_freezing_drizzle'),
-    57: ('🌧️', 'dense_freezing_drizzle'),
-    61: ('🌧️', 'slight_rain'),
-    63: ('🌧️', 'moderate_rain'),
-    65: ('🌧️', 'heavy_rain'),
-    66: ('🌧️', 'light_freezing_rain'),
-    67: ('🌧️', 'heavy_freezing_rain'),
-    71: ('🌨️', 'slight_snowfall'),
-    73: ('🌨️', 'moderate_snowfall'),
-    75: ('❄️', 'heavy_snowfall'),
-    77: ('🌨️', 'snow_grains'),
-    80: ('🌦️', 'slight_rain_showers'),
-    81: ('🌦️', 'moderate_rain_showers'),
-    82: ('⛈️', 'violent_rain_showers'),
-    85: ('🌨️', 'slight_snow_showers'),
-    86: ('❄️', 'heavy_snow_showers'),
-    95: ('⛈️', 'thunderstorm'),
-    96: ('⛈️', 'thunderstorm_with_slight_hail'),
-    99: ('⛈️', 'thunderstorm_with_heavy_hail'),
+    0: ('☀️', 'weather.condition.clear_sky'),
+    1: ('🌤️', 'weather.condition.mainly_clear'),
+    2: ('⛅', 'weather.condition.partly_cloudy'),
+    3: ('☁️', 'weather.condition.overcast'),
+    45: ('🌫️', 'weather.condition.fog'),
+    48: ('🌫️', 'weather.condition.depositing_rime_fog'),
+    51: ('🌦️', 'weather.condition.light_drizzle'),
+    53: ('🌦️', 'weather.condition.moderate_drizzle'),
+    55: ('🌦️', 'weather.condition.dense_drizzle'),
+    56: ('🌧️', 'weather.condition.light_freezing_drizzle'),
+    57: ('🌧️', 'weather.condition.dense_freezing_drizzle'),
+    61: ('🌧️', 'weather.condition.slight_rain'),
+    63: ('🌧️', 'weather.condition.moderate_rain'),
+    65: ('🌧️', 'weather.condition.heavy_rain'),
+    66: ('🌧️', 'weather.condition.light_freezing_rain'),
+    67: ('🌧️', 'weather.condition.heavy_freezing_rain'),
+    71: ('🌨️', 'weather.condition.slight_snowfall'),
+    73: ('🌨️', 'weather.condition.moderate_snowfall'),
+    75: ('❄️', 'weather.condition.heavy_snowfall'),
+    77: ('🌨️', 'weather.condition.snow_grains'),
+    80: ('🌦️', 'weather.condition.slight_rain_showers'),
+    81: ('🌦️', 'weather.condition.moderate_rain_showers'),
+    82: ('⛈️', 'weather.condition.violent_rain_showers'),
+    85: ('🌨️', 'weather.condition.slight_snow_showers'),
+    86: ('❄️', 'weather.condition.heavy_snow_showers'),
+    95: ('⛈️', 'weather.condition.thunderstorm'),
+    96: ('⛈️', 'weather.condition.thunderstorm_with_slight_hail'),
+    99: ('⛈️', 'weather.condition.thunderstorm_with_heavy_hail'),
   };
 
   String get emoji => _codeInfo[weatherCode]?.$1 ?? '🌡️';
 
-  /// Translation key suffix under `weather.condition.`, or null for codes
-  /// outside the WMO table (should not happen; defensive).
+  /// Full translation key for the condition (e.g.
+  /// `weather.condition.clear_sky`), or null for codes outside the WMO table.
   String? get conditionKeyOrNull => _codeInfo[weatherCode]?.$2;
 
   /// One-line, human-readable summary suitable for prepending to an entry,

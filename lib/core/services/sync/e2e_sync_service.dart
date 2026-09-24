@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io' as io;
 import 'dart:typed_data';
-import 'dart:math';
 
 import 'package:storypad/core/objects/backup_object.dart';
 import 'package:storypad/core/objects/cloud_file_object.dart';
@@ -23,7 +22,11 @@ abstract interface class E2eSyncTransport {
     required String appPassword,
   });
 
-  Future<CloudFileObject?> uploadFile(String fileName, io.File file, {String? folderName});
+  Future<CloudFileObject?> uploadFile(
+    String fileName,
+    io.File file, {
+    String? folderName,
+  });
 
   Future<List<int>?> downloadFileBytes(String fileId);
 }
@@ -48,12 +51,12 @@ class E2eSyncResult {
 /// v1 is manual-trigger only ("Sync now"); no background scheduling.
 class E2eSyncService {
   E2eSyncService({
-E2eSyncTransport? transport,
+    E2eSyncTransport? transport,
     E2eEncryptionService? encryptionService,
     E2eSyncConfigStorage? configStorage,
-  })  : _transport = transport ?? _DefaultTransport(),
-        _encryption = encryptionService ?? E2eEncryptionService(),
-        _storage = configStorage ?? E2eSyncConfigStorage();
+  }) : _transport = transport ?? _DefaultTransport(),
+       _encryption = encryptionService ?? E2eEncryptionService(),
+       _storage = configStorage ?? E2eSyncConfigStorage();
 
   final E2eSyncTransport _transport;
   final E2eEncryptionService _encryption;
@@ -63,27 +66,35 @@ E2eSyncTransport? transport,
 
   Future<E2eSyncConfigObject?> readConfig() => _storage.readObject();
 
-  Future<void> writeConfig(E2eSyncConfigObject config) => _storage.writeObject(config);
+  Future<void> writeConfig(E2eSyncConfigObject config) =>
+      _storage.writeObject(config);
 
   DateTime? lastSyncedAt(E2eSyncConfigObject? config) => config?.lastSyncedAt;
-
-  /// PBKDF2 salt for a fresh configuration (base64, 16 random bytes).
-  static String generateSaltB64() {
-    final Random secure = Random.secure();
-    return base64Encode(List<int>.generate(E2eEncryptionService.saltLengthBytes, (_) => secure.nextInt(256)));
-  }
 
   /// Encrypts [backupFile] (a standard backup artifact — gzip JSON, same
   /// format cloud backup uploads) and uploads the ciphertext to WebDAV.
   /// Updates the last-sync timestamp on success.
+  ///
+  /// Hard-fails on an empty [passphrase]: encrypting with one would produce a
+  /// remote blob that is trivially decryptable by anyone holding the file.
   Future<E2eSyncResult> syncNow({
     required io.File backupFile,
     required String passphrase,
     E2eSyncConfigObject? config,
   }) async {
-    final E2eSyncConfigObject? effectiveConfig = config ?? await _storage.readObject();
+    final E2eSyncConfigObject? effectiveConfig =
+        config ?? await _storage.readObject();
     if (effectiveConfig == null || !effectiveConfig.enabled) {
-      return E2eSyncResult(success: false, error: StateError('E2E sync is not enabled'));
+      return E2eSyncResult(
+        success: false,
+        error: StateError('E2E sync is not enabled'),
+      );
+    }
+    if (passphrase.isEmpty) {
+      return E2eSyncResult(
+        success: false,
+        error: StateError('Passphrase is required for E2E sync'),
+      );
     }
 
     io.Directory? tempDir;
@@ -96,20 +107,31 @@ E2eSyncTransport? transport,
       if (!connected) throw StateError('Could not connect to the sync server');
 
       final List<int> archiveBytes = await backupFile.readAsBytes();
-      final Uint8List encrypted = await _encryption.encrypt(plaintext: archiveBytes, passphrase: passphrase);
+      final Uint8List encrypted = await _encryption.encrypt(
+        plaintext: archiveBytes,
+        passphrase: passphrase,
+      );
 
       tempDir = await io.Directory.systemTemp.createTemp('inkling_e2e_sync');
-      final io.File tempFile = io.File('${tempDir.path}/$defaultRemoteFileName');
+      final io.File tempFile = io.File(
+        '${tempDir.path}/$defaultRemoteFileName',
+      );
       await tempFile.writeAsBytes(encrypted);
 
       final CloudFileObject? uploaded = await _transport.uploadFile(
         defaultRemoteFileName,
         tempFile,
-        folderName: effectiveConfig.folderName ?? E2eSyncConfigObject.defaultFolderName,
+        folderName:
+            effectiveConfig.folderName ?? E2eSyncConfigObject.defaultFolderName,
       );
-      if (uploaded == null) throw StateError('Upload failed: no file object returned');
+      if (uploaded == null)
+        throw StateError('Upload failed: no file object returned');
 
-      await _storage.writeObject(effectiveConfig.copyWith(lastSyncedAtIso: DateTime.now().toIso8601String()));
+      await _storage.writeObject(
+        effectiveConfig.copyWith(
+          lastSyncedAtIso: DateTime.now().toIso8601String(),
+        ),
+      );
       return E2eSyncResult(success: true, remoteFileId: uploaded.id);
     } catch (e) {
       return E2eSyncResult(success: false, error: e);
@@ -127,7 +149,8 @@ E2eSyncTransport? transport,
     required String passphrase,
     E2eSyncConfigObject? config,
   }) async {
-    final E2eSyncConfigObject? effectiveConfig = config ?? await _storage.readObject();
+    final E2eSyncConfigObject? effectiveConfig =
+        config ?? await _storage.readObject();
     if (effectiveConfig == null || !effectiveConfig.enabled) {
       throw StateError('E2E sync is not enabled');
     }
@@ -135,11 +158,17 @@ E2eSyncTransport? transport,
     final String remotePath =
         '${effectiveConfig.folderName ?? E2eSyncConfigObject.defaultFolderName}/$defaultRemoteFileName';
     final List<int>? encrypted = await _transport.downloadFileBytes(remotePath);
-    if (encrypted == null) throw StateError('No remote sync payload found at $remotePath');
+    if (encrypted == null)
+      throw StateError('No remote sync payload found at $remotePath');
 
-    final Uint8List archiveBytes = await _encryption.decrypt(encrypted: encrypted, passphrase: passphrase);
+    final Uint8List archiveBytes = await _encryption.decrypt(
+      encrypted: encrypted,
+      passphrase: passphrase,
+    );
     final String json = GzipService.decompressToString(archiveBytes);
-    final BackupObject backup = BackupObject.fromContents(jsonDecode(json) as Map<String, dynamic>);
+    final BackupObject backup = BackupObject.fromContents(
+      jsonDecode(json) as Map<String, dynamic>,
+    );
 
     final RestoreBackupService restoreService = RestoreBackupService();
     return restoreService.restoreOnlyNewData(backup: backup);
@@ -152,14 +181,26 @@ class _DefaultTransport implements E2eSyncTransport {
   final NextcloudCloudService _nextcloud = NextcloudCloudService();
 
   @override
-  Future<bool> connect({required String serverUrl, required String username, required String appPassword}) {
-    return _nextcloud.connect(serverUrl: serverUrl, username: username, appPassword: appPassword);
+  Future<bool> connect({
+    required String serverUrl,
+    required String username,
+    required String appPassword,
+  }) {
+    return _nextcloud.connect(
+      serverUrl: serverUrl,
+      username: username,
+      appPassword: appPassword,
+    );
   }
 
   @override
-  Future<List<int>?> downloadFileBytes(String fileId) => _nextcloud.downloadFileBytes(fileId);
+  Future<List<int>?> downloadFileBytes(String fileId) =>
+      _nextcloud.downloadFileBytes(fileId);
 
   @override
-  Future<CloudFileObject?> uploadFile(String fileName, io.File file, {String? folderName}) =>
-      _nextcloud.uploadFile(fileName, file, folderName: folderName);
+  Future<CloudFileObject?> uploadFile(
+    String fileName,
+    io.File file, {
+    String? folderName,
+  }) => _nextcloud.uploadFile(fileName, file, folderName: folderName);
 }

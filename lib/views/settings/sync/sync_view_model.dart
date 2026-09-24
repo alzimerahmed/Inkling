@@ -33,6 +33,10 @@ class SyncViewModel extends ChangeNotifier {
   String? lastSyncedAtIso;
   String? statusMessage;
 
+  /// Number of changes restored by the last successful sync (for the
+  /// "synced with changes" message), null when not applicable.
+  int? lastSyncedChanges;
+
   bool get busySyncing => busy;
 
   Future<void> _load() async {
@@ -41,32 +45,41 @@ class SyncViewModel extends ChangeNotifier {
       serverUrlController.text = config.serverUrl;
       usernameController.text = config.username;
       appPasswordController.text = config.appPassword;
+      passphraseController.text = config.passphrase;
       enabled = config.enabled;
       lastSyncedAtIso = config.lastSyncedAtIso;
     }
     notifyListeners();
   }
 
-  /// Persists the form. Generates the PBKDF2 salt on first save.
+  /// Persists the form. Returns false when required fields are missing or
+  /// invalid (non-https URL, too-short passphrase).
   Future<bool> save() async {
-    final String serverUrl = serverUrlController.text.trim().replaceAll(RegExp(r'/+$'), '');
+    final String serverUrl = normalizeServerUrl(serverUrlController.text);
     final String username = usernameController.text.trim();
     final String passphrase = passphraseController.text;
 
-    if (serverUrl.isEmpty || username.isEmpty || passphrase.isEmpty) return false;
+    if (serverUrl.isEmpty || username.isEmpty || passphrase.isEmpty)
+      return false;
+    if (!isServerUrlSecure(serverUrl)) return false;
+    if (!isPassphraseAcceptable(passphrase)) return false;
 
     final E2eSyncConfigObject? existing = await _storage.readObject();
-    final E2eSyncConfigObject config = (existing ?? E2eSyncConfigObject(
-      serverUrl: serverUrl,
-      username: username,
-      appPassword: appPasswordController.text,
-      saltB64: E2eSyncService.generateSaltB64(),
-    )).copyWith(
-      serverUrl: serverUrl,
-      username: username,
-      appPassword: appPasswordController.text,
-      enabled: enabled,
-    );
+    final E2eSyncConfigObject config =
+        (existing ??
+                E2eSyncConfigObject(
+                  serverUrl: serverUrl,
+                  username: username,
+                  appPassword: appPasswordController.text,
+                  passphrase: passphrase,
+                ))
+            .copyWith(
+              serverUrl: serverUrl,
+              username: username,
+              appPassword: appPasswordController.text,
+              passphrase: passphrase,
+              enabled: enabled,
+            );
 
     await _storage.writeObject(config);
     return true;
@@ -75,7 +88,17 @@ class SyncViewModel extends ChangeNotifier {
   Future<void> setEnabled(bool value) async {
     enabled = value;
     notifyListeners();
-    if (value) await save();
+
+    // Persist in both directions: turning sync off must survive restarts
+    // even when the form is incomplete (save() would bail on validation).
+    if (value) {
+      await save();
+    } else {
+      final E2eSyncConfigObject? existing = await _storage.readObject();
+      if (existing != null) {
+        await _storage.writeObject(existing.copyWith(enabled: false));
+      }
+    }
   }
 
   /// Manual "Sync now": build backup artifact → encrypt → upload → record
@@ -85,11 +108,16 @@ class SyncViewModel extends ChangeNotifier {
     if (busy) return;
     busy = true;
     statusMessage = null;
+    lastSyncedChanges = null;
     notifyListeners();
 
     try {
       final bool saved = await save();
       if (!saved) {
+        statusMessage = 'page.sync.error_missing_fields';
+        return;
+      }
+      if (passphraseController.text.isEmpty) {
         statusMessage = 'page.sync.error_missing_fields';
         return;
       }
@@ -100,23 +128,37 @@ class SyncViewModel extends ChangeNotifier {
         lastUpdatedAt: now,
         hasCompression: true,
       );
-      final List<int> archiveBytes = GzipService.compress(jsonEncode(backup.toContents()));
+      final List<int> archiveBytes = GzipService.compress(
+        jsonEncode(backup.toContents()),
+      );
 
-      final io.Directory tempDir = await io.Directory.systemTemp.createTemp('inkling_e2e_sync');
-      final io.File tempFile = io.File('${tempDir.path}/inkling-backup-${now.toIso8601String().replaceAll(':', '.')}.json.gz');
+      final io.Directory tempDir = await io.Directory.systemTemp.createTemp(
+        'inkling_e2e_sync',
+      );
+      final io.File tempFile = io.File(
+        '${tempDir.path}/inkling-backup-${now.toIso8601String().replaceAll(':', '.')}.json.gz',
+      );
       await tempFile.writeAsBytes(archiveBytes);
 
       try {
-        final result = await _syncService.syncNow(backupFile: tempFile, passphrase: passphraseController.text);
+        final result = await _syncService.syncNow(
+          backupFile: tempFile,
+          passphrase: passphraseController.text,
+        );
         if (!result.success) {
           AppLogger.d('E2eSyncService#syncNow upload failed: ${result.error}');
           statusMessage = 'page.sync.error_sync_failed';
           return;
         }
 
-        final int changes = await _syncService.downloadDecryptAndRestore(passphrase: passphraseController.text);
+        final int changes = await _syncService.downloadDecryptAndRestore(
+          passphrase: passphraseController.text,
+        );
         lastSyncedAtIso = DateTime.now().toIso8601String();
-        statusMessage = changes > 0 ? 'page.sync.synced_with_changes' : 'page.sync.synced_up_to_date';
+        lastSyncedChanges = changes;
+        statusMessage = changes > 0
+            ? 'page.sync.synced_with_changes'
+            : 'page.sync.synced_up_to_date';
       } finally {
         try {
           if (tempFile.existsSync()) tempFile.deleteSync();
@@ -131,6 +173,28 @@ class SyncViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  /// Strips trailing slashes and surrounding whitespace from a server URL.
+  static String normalizeServerUrl(String raw) =>
+      raw.trim().replaceAll(RegExp(r'/+$'), '');
+
+  /// Only https is accepted: WebDAV uses Basic auth, so plaintext HTTP would
+  /// send the app password (and, more importantly, the encrypted journal is
+  /// still metadata-leaking) in the clear.
+  static bool isServerUrlSecure(String url) {
+    final Uri? uri = Uri.tryParse(url);
+    return uri != null &&
+        (uri.scheme == 'https' ||
+            uri.scheme == 'http' && _isLocalLoopback(uri));
+  }
+
+  static bool _isLocalLoopback(Uri uri) {
+    final String host = uri.host;
+    return host == 'localhost' || host == '127.0.0.1' || host == '::1';
+  }
+
+  static bool isPassphraseAcceptable(String passphrase) =>
+      passphrase.length >= 8;
 
   @override
   void dispose() {

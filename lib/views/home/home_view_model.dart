@@ -426,7 +426,9 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
               id: now.millisecondsSinceEpoch + 1,
               title: null,
               body: [
-                {'insert': {'audio': asset.relativeLocalFilePath}},
+                {
+                  'insert': {'audio': asset.relativeLocalFilePath},
+                },
               ],
               characterCount: null,
               wordCount: null,

@@ -69,10 +69,16 @@ class _SyncContent extends StatelessWidget {
             ),
             ListTile(
               leading: viewModel.busy
-                  ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2))
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
                   : const Icon(Icons.sync_outlined),
               title: Text(tr("page.sync.sync_now")),
-              subtitle: viewModel.statusMessage == null ? null : Text(tr(viewModel.statusMessage!)),
+              subtitle: viewModel.statusMessage == null
+                  ? null
+                  : Text(_statusText(viewModel)),
               onTap: viewModel.busy ? null : () => viewModel.syncNow(),
             ),
           ],
@@ -83,9 +89,21 @@ class _SyncContent extends StatelessWidget {
   }
 
   String _lastSyncText(BuildContext context, SyncViewModel viewModel) {
-    final DateTime? lastSyncedAt = viewModel.lastSyncedAtIso == null ? null : DateTime.tryParse(viewModel.lastSyncedAtIso!);
+    final DateTime? lastSyncedAt = viewModel.lastSyncedAtIso == null
+        ? null
+        : DateTime.tryParse(viewModel.lastSyncedAtIso!);
     if (lastSyncedAt == null) return tr("page.sync.never_synced");
     return MaterialLocalizations.of(context).formatFullDate(lastSyncedAt);
+  }
+
+  String _statusText(SyncViewModel viewModel) {
+    if (viewModel.statusMessage == 'page.sync.synced_with_changes') {
+      return tr(
+        "page.sync.synced_with_changes",
+        args: [(viewModel.lastSyncedChanges ?? 0).toString()],
+      );
+    }
+    return tr(viewModel.statusMessage!);
   }
 
   void _showServerSheet(BuildContext context, SyncViewModel viewModel) {
@@ -117,10 +135,18 @@ class _SyncServerSheetState extends State<_SyncServerSheet> {
   @override
   void initState() {
     super.initState();
-    _serverUrl = TextEditingController(text: widget.viewModel.serverUrlController.text);
-    _username = TextEditingController(text: widget.viewModel.usernameController.text);
-    _appPassword = TextEditingController(text: widget.viewModel.appPasswordController.text);
-    _passphrase = TextEditingController(text: widget.viewModel.passphraseController.text);
+    _serverUrl = TextEditingController(
+      text: widget.viewModel.serverUrlController.text,
+    );
+    _username = TextEditingController(
+      text: widget.viewModel.usernameController.text,
+    );
+    _appPassword = TextEditingController(
+      text: widget.viewModel.appPasswordController.text,
+    );
+    _passphrase = TextEditingController(
+      text: widget.viewModel.passphraseController.text,
+    );
   }
 
   @override
@@ -148,20 +174,35 @@ class _SyncServerSheetState extends State<_SyncServerSheet> {
           children: [
             TextFormField(
               controller: _serverUrl,
-              decoration: InputDecoration(labelText: tr("page.sync.server_url")),
-              validator: (value) => (value == null || value.trim().isEmpty) ? tr("page.sync.error_missing_field") : null,
+              keyboardType: TextInputType.url,
+              decoration: InputDecoration(
+                labelText: tr("page.sync.server_url"),
+              ),
+              validator: (value) {
+                final String url = SyncViewModel.normalizeServerUrl(
+                  value ?? '',
+                );
+                if (url.isEmpty) return tr("page.sync.error_missing_field");
+                if (!SyncViewModel.isServerUrlSecure(url))
+                  return tr("page.sync.error_https_required");
+                return null;
+              },
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _username,
               decoration: InputDecoration(labelText: tr("page.sync.username")),
-              validator: (value) => (value == null || value.trim().isEmpty) ? tr("page.sync.error_missing_field") : null,
+              validator: (value) => (value == null || value.trim().isEmpty)
+                  ? tr("page.sync.error_missing_field")
+                  : null,
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _appPassword,
               obscureText: true,
-              decoration: InputDecoration(labelText: tr("page.sync.app_password")),
+              decoration: InputDecoration(
+                labelText: tr("page.sync.app_password"),
+              ),
             ),
             const SizedBox(height: 12),
             TextFormField(
@@ -171,7 +212,13 @@ class _SyncServerSheetState extends State<_SyncServerSheet> {
                 labelText: tr("page.sync.passphrase"),
                 helperText: tr("page.sync.passphrase_hint"),
               ),
-              validator: (value) => (value == null || value.isEmpty) ? tr("page.sync.error_missing_field") : null,
+              validator: (value) {
+                if (value == null || value.isEmpty)
+                  return tr("page.sync.error_missing_field");
+                if (!SyncViewModel.isPassphraseAcceptable(value))
+                  return tr("page.sync.error_weak_passphrase");
+                return null;
+              },
             ),
             const SizedBox(height: 16),
             FilledButton(

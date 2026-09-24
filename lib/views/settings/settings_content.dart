@@ -80,9 +80,7 @@ class _SettingsContent extends StatelessWidget {
         return ListTile(
           leading: SpSettingIconBadge(weekday: weekday, icon: SpIcons.lock),
           title: Text(context.tr("page.app_lock.title")),
-          subtitle: appLockProvider.hasAppLock
-              ? Text(context.tr("general.enabled"))
-              : null,
+          subtitle: appLockProvider.hasAppLock ? Text(context.tr("general.enabled")) : null,
           onTap: () => AppLocksRoute().push(context),
         );
       },
