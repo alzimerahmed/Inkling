@@ -4,7 +4,7 @@
 
 - **Domain:** Flutter journal/diary app (privacy-first, FOSS, Android primary; iOS/macOS secondary)
 - **Tech stack:** Flutter 3.29 / Dart 3.11, Provider + ChangeNotifier (MVVM), ObjectBox, flutter_quill, easy_localization
-- **Current phase:** Phase 2 — Foundation
+- **Current phase:** Phase 6 — Differentiators (E2E sync, web/desktop companion, wearable, on-device AI)
 
 ## How to Use This File
 

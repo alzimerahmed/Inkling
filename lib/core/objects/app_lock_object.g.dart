@@ -38,14 +38,14 @@ class _$AppLockObjectCWProxyImpl implements _$AppLockObjectCWProxy {
   AppLockObject pin(String? pin) => call(pin: pin);
 
   @override
-  AppLockObject enabledBiometric(bool? enabledBiometric) => call(enabledBiometric: enabledBiometric);
+  AppLockObject enabledBiometric(bool? enabledBiometric) =>
+      call(enabledBiometric: enabledBiometric);
 
   @override
   AppLockObject securityAnswers(
     Map<AppLockQuestion, String>? securityAnswers,
   ) => call(securityAnswers: securityAnswers);
 
-  @override
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AppLockObject(...).copyWith.fieldName(value)`.
   ///
@@ -53,6 +53,7 @@ class _$AppLockObjectCWProxyImpl implements _$AppLockObjectCWProxy {
   /// ```dart
   /// AppLockObject(...).copyWith(id: 12, name: "My name")
   /// ```
+  @override
   AppLockObject call({
     Object? pin = const $CopyWithPlaceholder(),
     Object? enabledBiometric = const $CopyWithPlaceholder(),
@@ -86,21 +87,24 @@ extension $AppLockObjectCopyWith on AppLockObject {
 // JsonSerializableGenerator
 // **************************************************************************
 
-AppLockObject _$AppLockObjectFromJson(Map<String, dynamic> json) => AppLockObject(
-  pin: json['pin'] as String?,
-  enabledBiometric: json['enabled_biometric'] as bool?,
-  securityAnswers: (json['security_answers'] as Map<String, dynamic>?)?.map(
-    (k, e) => MapEntry($enumDecode(_$AppLockQuestionEnumMap, k), e as String),
-  ),
-);
+AppLockObject _$AppLockObjectFromJson(Map<String, dynamic> json) =>
+    AppLockObject(
+      pin: json['pin'] as String?,
+      enabledBiometric: json['enabled_biometric'] as bool?,
+      securityAnswers: (json['security_answers'] as Map<String, dynamic>?)?.map(
+        (k, e) =>
+            MapEntry($enumDecode(_$AppLockQuestionEnumMap, k), e as String),
+      ),
+    );
 
-Map<String, dynamic> _$AppLockObjectToJson(AppLockObject instance) => <String, dynamic>{
-  'pin': instance.pin,
-  'enabled_biometric': instance.enabledBiometric,
-  'security_answers': instance.securityAnswers?.map(
-    (k, e) => MapEntry(_$AppLockQuestionEnumMap[k]!, e),
-  ),
-};
+Map<String, dynamic> _$AppLockObjectToJson(AppLockObject instance) =>
+    <String, dynamic>{
+      'pin': instance.pin,
+      'enabled_biometric': instance.enabledBiometric,
+      'security_answers': instance.securityAnswers?.map(
+        (k, e) => MapEntry(_$AppLockQuestionEnumMap[k]!, e),
+      ),
+    };
 
 const _$AppLockQuestionEnumMap = {
   AppLockQuestion.name_of_your_first_pet: 'name_of_your_first_pet',

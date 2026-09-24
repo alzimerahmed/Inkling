@@ -13,4 +13,10 @@ class GzipService {
 
     return compressed;
   }
+
+  /// Inverse of [compress] — used by E2E sync to restore a downloaded,
+  /// decrypted backup archive. See ADR-009.
+  static String decompressToString(List<int> compressed) {
+    return utf8.decode(gzip.decode(compressed));
+  }
 }

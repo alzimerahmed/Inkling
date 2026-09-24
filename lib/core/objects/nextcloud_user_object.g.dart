@@ -47,15 +47,17 @@ class _$NextcloudUserObjectCWProxyImpl implements _$NextcloudUserObjectCWProxy {
   NextcloudUserObject username(String username) => call(username: username);
 
   @override
-  NextcloudUserObject appPassword(String appPassword) => call(appPassword: appPassword);
+  NextcloudUserObject appPassword(String appPassword) =>
+      call(appPassword: appPassword);
 
   @override
-  NextcloudUserObject autoBackupEnabled(bool? autoBackupEnabled) => call(autoBackupEnabled: autoBackupEnabled);
+  NextcloudUserObject autoBackupEnabled(bool? autoBackupEnabled) =>
+      call(autoBackupEnabled: autoBackupEnabled);
 
   @override
-  NextcloudUserObject folderName(String? folderName) => call(folderName: folderName);
+  NextcloudUserObject folderName(String? folderName) =>
+      call(folderName: folderName);
 
-  @override
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `NextcloudUserObject(...).copyWith.fieldName(value)`.
   ///
@@ -63,6 +65,7 @@ class _$NextcloudUserObjectCWProxyImpl implements _$NextcloudUserObjectCWProxy {
   /// ```dart
   /// NextcloudUserObject(...).copyWith(id: 12, name: "My name")
   /// ```
+  @override
   NextcloudUserObject call({
     Object? serverUrl = const $CopyWithPlaceholder(),
     Object? username = const $CopyWithPlaceholder(),
@@ -79,7 +82,8 @@ class _$NextcloudUserObjectCWProxyImpl implements _$NextcloudUserObjectCWProxy {
           ? _value.username
           // ignore: cast_nullable_to_non_nullable
           : username as String,
-      appPassword: appPassword == const $CopyWithPlaceholder() || appPassword == null
+      appPassword:
+          appPassword == const $CopyWithPlaceholder() || appPassword == null
           ? _value.appPassword
           // ignore: cast_nullable_to_non_nullable
           : appPassword as String,
@@ -99,20 +103,22 @@ extension $NextcloudUserObjectCopyWith on NextcloudUserObject {
   /// Returns a callable class used to build a new instance with modified fields.
   /// Example: `instanceOfNextcloudUserObject.copyWith(...)` or `instanceOfNextcloudUserObject.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$NextcloudUserObjectCWProxy get copyWith => _$NextcloudUserObjectCWProxyImpl(this);
+  _$NextcloudUserObjectCWProxy get copyWith =>
+      _$NextcloudUserObjectCWProxyImpl(this);
 }
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-NextcloudUserObject _$NextcloudUserObjectFromJson(Map<String, dynamic> json) => NextcloudUserObject(
-  serverUrl: json['server_url'] as String,
-  username: json['username'] as String,
-  appPassword: json['app_password'] as String,
-  autoBackupEnabled: json['auto_backup_enabled'] as bool?,
-  folderName: json['folder_name'] as String?,
-);
+NextcloudUserObject _$NextcloudUserObjectFromJson(Map<String, dynamic> json) =>
+    NextcloudUserObject(
+      serverUrl: json['server_url'] as String,
+      username: json['username'] as String,
+      appPassword: json['app_password'] as String,
+      autoBackupEnabled: json['auto_backup_enabled'] as bool?,
+      folderName: json['folder_name'] as String?,
+    );
 
 Map<String, dynamic> _$NextcloudUserObjectToJson(
   NextcloudUserObject instance,

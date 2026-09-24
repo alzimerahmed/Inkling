@@ -53,9 +53,9 @@ class _$StoryPageDbModelCWProxyImpl implements _$StoryPageDbModelCWProxy {
   StoryPageDbModel wordCount(int? wordCount) => call(wordCount: wordCount);
 
   @override
-  StoryPageDbModel characterCount(int? characterCount) => call(characterCount: characterCount);
+  StoryPageDbModel characterCount(int? characterCount) =>
+      call(characterCount: characterCount);
 
-  @override
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `StoryPageDbModel(...).copyWith.fieldName(value)`.
   ///
@@ -63,6 +63,7 @@ class _$StoryPageDbModelCWProxyImpl implements _$StoryPageDbModelCWProxy {
   /// ```dart
   /// StoryPageDbModel(...).copyWith(id: 12, name: "My name")
   /// ```
+  @override
   StoryPageDbModel call({
     Object? id = const $CopyWithPlaceholder(),
     Object? title = const $CopyWithPlaceholder(),
@@ -106,18 +107,20 @@ extension $StoryPageDbModelCopyWith on StoryPageDbModel {
 // JsonSerializableGenerator
 // **************************************************************************
 
-StoryPageDbModel _$StoryPageDbModelFromJson(Map<String, dynamic> json) => StoryPageDbModel(
-  id: _idFromJson(json['id']),
-  title: json['title'] as String?,
-  body: json['body'] as List<dynamic>?,
-  wordCount: (json['word_count'] as num?)?.toInt(),
-  characterCount: (json['character_count'] as num?)?.toInt(),
-);
+StoryPageDbModel _$StoryPageDbModelFromJson(Map<String, dynamic> json) =>
+    StoryPageDbModel(
+      id: _idFromJson(json['id']),
+      title: json['title'] as String?,
+      body: json['body'] as List<dynamic>?,
+      wordCount: (json['word_count'] as num?)?.toInt(),
+      characterCount: (json['character_count'] as num?)?.toInt(),
+    );
 
-Map<String, dynamic> _$StoryPageDbModelToJson(StoryPageDbModel instance) => <String, dynamic>{
-  'id': instance.id,
-  'title': instance.title,
-  'word_count': instance.wordCount,
-  'character_count': instance.characterCount,
-  'body': instance.body,
-};
+Map<String, dynamic> _$StoryPageDbModelToJson(StoryPageDbModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'title': instance.title,
+      'word_count': instance.wordCount,
+      'character_count': instance.characterCount,
+      'body': instance.body,
+    };

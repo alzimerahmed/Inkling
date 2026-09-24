@@ -13,12 +13,13 @@ ThemeObject _$ThemeObjectFromJson(Map<String, dynamic> json) => ThemeObject(
   colorSeedValue: (json['color_seed_value'] as num?)?.toInt(),
 );
 
-Map<String, dynamic> _$ThemeObjectToJson(ThemeObject instance) => <String, dynamic>{
-  'font_weight_index': instance.fontWeightIndex,
-  'color_seed_value': instance.colorSeedValue,
-  'font_family': instance.fontFamily,
-  'theme_mode': _$ThemeModeEnumMap[instance.themeMode]!,
-};
+Map<String, dynamic> _$ThemeObjectToJson(ThemeObject instance) =>
+    <String, dynamic>{
+      'font_weight_index': instance.fontWeightIndex,
+      'color_seed_value': instance.colorSeedValue,
+      'font_family': instance.fontFamily,
+      'theme_mode': _$ThemeModeEnumMap[instance.themeMode]!,
+    };
 
 const _$ThemeModeEnumMap = {
   ThemeMode.system: 'system',

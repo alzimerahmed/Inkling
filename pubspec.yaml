@@ -97,6 +97,11 @@ dependencies:
   pdf: ^3.12.0
   # Phase 4: Day One .zip export unpacking (Apache-2.0, pure Dart).
   archive: 4.0.7
+  # Gap #12: E2E-encrypted sync — AES-GCM + PBKDF2 for client-side encryption
+  # of backup archives before WebDAV upload. Apache-2.0, pure Dart fallback,
+  # no native/GMS deps → F-Droid compatible. See ADR-009.
+  cryptography: ^2.9.0
+  # Phase 4: Evernote ENEX parsing
   # Phase 4: Evernote ENEX parsing — self-contained regex-based parser (no xml
   # package: webdav_client pins xml ^6 while pdf needs ^7, so avoid the conflict).
 

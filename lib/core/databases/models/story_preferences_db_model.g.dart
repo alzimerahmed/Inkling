@@ -53,47 +53,56 @@ abstract class _$StoryPreferencesDbModelCWProxy {
 
 /// Callable proxy for `copyWith` functionality.
 /// Use as `instanceOfStoryPreferencesDbModel.copyWith(...)` or call `instanceOfStoryPreferencesDbModel.copyWith.fieldName(value)` for a single field.
-class _$StoryPreferencesDbModelCWProxyImpl implements _$StoryPreferencesDbModelCWProxy {
+class _$StoryPreferencesDbModelCWProxyImpl
+    implements _$StoryPreferencesDbModelCWProxy {
   const _$StoryPreferencesDbModelCWProxyImpl(this._value);
 
   final StoryPreferencesDbModel _value;
 
   @override
-  StoryPreferencesDbModel showDayCount(bool? showDayCount) => call(showDayCount: showDayCount);
+  StoryPreferencesDbModel showDayCount(bool? showDayCount) =>
+      call(showDayCount: showDayCount);
 
   @override
-  StoryPreferencesDbModel colorSeedValue(int? colorSeedValue) => call(colorSeedValue: colorSeedValue);
+  StoryPreferencesDbModel colorSeedValue(int? colorSeedValue) =>
+      call(colorSeedValue: colorSeedValue);
 
   @override
-  StoryPreferencesDbModel colorTone(int? colorTone) => call(colorTone: colorTone);
+  StoryPreferencesDbModel colorTone(int? colorTone) =>
+      call(colorTone: colorTone);
 
   @override
   StoryPreferencesDbModel backgroundImagePath(String? backgroundImagePath) =>
       call(backgroundImagePath: backgroundImagePath);
 
   @override
-  StoryPreferencesDbModel fontFamily(String? fontFamily) => call(fontFamily: fontFamily);
+  StoryPreferencesDbModel fontFamily(String? fontFamily) =>
+      call(fontFamily: fontFamily);
 
   @override
-  StoryPreferencesDbModel fontSize(FontSizeOption? fontSize) => call(fontSize: fontSize);
+  StoryPreferencesDbModel fontSize(FontSizeOption? fontSize) =>
+      call(fontSize: fontSize);
 
   @override
-  StoryPreferencesDbModel fontWeightIndex(int? fontWeightIndex) => call(fontWeightIndex: fontWeightIndex);
+  StoryPreferencesDbModel fontWeightIndex(int? fontWeightIndex) =>
+      call(fontWeightIndex: fontWeightIndex);
 
   @override
-  StoryPreferencesDbModel titleFontFamily(String? titleFontFamily) => call(titleFontFamily: titleFontFamily);
+  StoryPreferencesDbModel titleFontFamily(String? titleFontFamily) =>
+      call(titleFontFamily: titleFontFamily);
 
   @override
   StoryPreferencesDbModel titleFontWeightIndex(int? titleFontWeightIndex) =>
       call(titleFontWeightIndex: titleFontWeightIndex);
 
   @override
-  StoryPreferencesDbModel titleExpanded(bool? titleExpanded) => call(titleExpanded: titleExpanded);
+  StoryPreferencesDbModel titleExpanded(bool? titleExpanded) =>
+      call(titleExpanded: titleExpanded);
 
   @override
-  StoryPreferencesDbModel layoutType(PageLayoutType layoutType) => call(layoutType: layoutType);
+  StoryPreferencesDbModel layoutType(PageLayoutType layoutType) =>
+      call(layoutType: layoutType);
 
-  @override
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `StoryPreferencesDbModel(...).copyWith.fieldName(value)`.
   ///
@@ -101,6 +110,7 @@ class _$StoryPreferencesDbModelCWProxyImpl implements _$StoryPreferencesDbModelC
   /// ```dart
   /// StoryPreferencesDbModel(...).copyWith(id: 12, name: "My name")
   /// ```
+  @override
   StoryPreferencesDbModel call({
     Object? showDayCount = const $CopyWithPlaceholder(),
     Object? colorSeedValue = const $CopyWithPlaceholder(),
@@ -155,7 +165,8 @@ class _$StoryPreferencesDbModelCWProxyImpl implements _$StoryPreferencesDbModelC
           ? _value.titleExpanded
           // ignore: cast_nullable_to_non_nullable
           : titleExpanded as bool?,
-      layoutType: layoutType == const $CopyWithPlaceholder() || layoutType == null
+      layoutType:
+          layoutType == const $CopyWithPlaceholder() || layoutType == null
           ? _value.layoutType
           // ignore: cast_nullable_to_non_nullable
           : layoutType as PageLayoutType,
@@ -167,7 +178,8 @@ extension $StoryPreferencesDbModelCopyWith on StoryPreferencesDbModel {
   /// Returns a callable class used to build a new instance with modified fields.
   /// Example: `instanceOfStoryPreferencesDbModel.copyWith(...)` or `instanceOfStoryPreferencesDbModel.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$StoryPreferencesDbModelCWProxy get copyWith => _$StoryPreferencesDbModelCWProxyImpl(this);
+  _$StoryPreferencesDbModelCWProxy get copyWith =>
+      _$StoryPreferencesDbModelCWProxyImpl(this);
 }
 
 // **************************************************************************
