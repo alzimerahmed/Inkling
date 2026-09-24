@@ -121,7 +121,15 @@ android {
         }
 
         release {
-            signingConfig = signingConfigs.getByName("release")
+            // Fall back to debug signing when no release keystore is provided
+            // (CI community builds, external contributors). Real releases set
+            // RELEASE_KEYSTORE_PATH and friends.
+            val hasReleaseKeystore = System.getenv("RELEASE_KEYSTORE_PATH") != null
+            signingConfig = if (hasReleaseKeystore) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
 }
