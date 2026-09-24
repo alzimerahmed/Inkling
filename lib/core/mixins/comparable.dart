@@ -3,8 +3,7 @@ import 'package:storypad/core/databases/models/base_db_model.dart';
 
 mixin Comparable<T extends BaseDbModel> on BaseDbModel {
   bool hasChanges(T other) {
-    return keepComparableKeys(toJson()).hashCode !=
-        keepComparableKeys(other.toJson()).hashCode;
+    return keepComparableKeys(toJson()).hashCode != keepComparableKeys(other.toJson()).hashCode;
   }
 
   String keepComparableKeys(Map<String, dynamic> json) {

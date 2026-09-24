@@ -74,12 +74,10 @@ class _$EventDbModelCWProxyImpl implements _$EventDbModelCWProxy {
   EventDbModel updatedAt(DateTime? updatedAt) => call(updatedAt: updatedAt);
 
   @override
-  EventDbModel permanentlyDeletedAt(DateTime? permanentlyDeletedAt) =>
-      call(permanentlyDeletedAt: permanentlyDeletedAt);
+  EventDbModel permanentlyDeletedAt(DateTime? permanentlyDeletedAt) => call(permanentlyDeletedAt: permanentlyDeletedAt);
 
   @override
-  EventDbModel lastSavedDeviceId(String? lastSavedDeviceId) =>
-      call(lastSavedDeviceId: lastSavedDeviceId);
+  EventDbModel lastSavedDeviceId(String? lastSavedDeviceId) => call(lastSavedDeviceId: lastSavedDeviceId);
 
   @override
   /// Creates a new instance with the provided field values.
@@ -158,12 +156,8 @@ EventDbModel _$EventDbModelFromJson(Map<String, dynamic> json) => EventDbModel(
   month: (json['month'] as num).toInt(),
   day: (json['day'] as num).toInt(),
   eventType: json['event_type'] as String,
-  createdAt: json['created_at'] == null
-      ? null
-      : DateTime.parse(json['created_at'] as String),
-  updatedAt: json['updated_at'] == null
-      ? null
-      : DateTime.parse(json['updated_at'] as String),
+  createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at'] as String),
+  updatedAt: json['updated_at'] == null ? null : DateTime.parse(json['updated_at'] as String),
   permanentlyDeletedAt: json['permanently_deleted_at'] == null
       ? null
       : DateTime.parse(json['permanently_deleted_at'] as String),

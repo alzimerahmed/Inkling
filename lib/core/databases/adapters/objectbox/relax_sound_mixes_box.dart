@@ -19,12 +19,10 @@ class RelaxSoundMixesBox extends BaseBox<RelaxSoundMixBox, RelaxSoundMixModel> {
   QueryIntegerProperty<RelaxSoundMixBox> get idProperty => RelaxSoundMixBox_.id;
 
   @override
-  QueryStringProperty<RelaxSoundMixBox> get lastSavedDeviceIdProperty =>
-      RelaxSoundMixBox_.lastSavedDeviceId;
+  QueryStringProperty<RelaxSoundMixBox> get lastSavedDeviceIdProperty => RelaxSoundMixBox_.lastSavedDeviceId;
 
   @override
-  QueryDateProperty<RelaxSoundMixBox> get permanentlyDeletedAtProperty =>
-      RelaxSoundMixBox_.permanentlyDeletedAt;
+  QueryDateProperty<RelaxSoundMixBox> get permanentlyDeletedAtProperty => RelaxSoundMixBox_.permanentlyDeletedAt;
 
   @override
   QueryBuilder<RelaxSoundMixBox> buildQuery({

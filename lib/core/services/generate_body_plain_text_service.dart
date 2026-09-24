@@ -62,10 +62,7 @@ class GenerateBodyPlainTextService {
 
           return newRichPages[i].copyWith(
             characterCount: filteredTitle.length + filteredBody.length,
-            wordCount: filteredCombined
-                .split(RegExp(r'\s+'))
-                .where((element) => element.isNotEmpty)
-                .length,
+            wordCount: filteredCombined.split(RegExp(r'\s+')).where((element) => element.isNotEmpty).length,
           );
         }(),
     ];

@@ -10,8 +10,7 @@ class SpFocusNodeBuilder extends StatefulWidget {
 
   final Widget? child;
   final FocusNode focusNode;
-  final Widget Function(BuildContext context, bool focused, Widget? child)
-  builder;
+  final Widget Function(BuildContext context, bool focused, Widget? child) builder;
 
   @override
   State<SpFocusNodeBuilder> createState() => SpFocusNodeBuilderState();

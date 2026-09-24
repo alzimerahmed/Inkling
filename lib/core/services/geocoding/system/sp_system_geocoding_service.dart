@@ -31,13 +31,9 @@ class SpSystemGeocodingService implements SpGeocodingService {
         latitude: latLng.latitude,
         longitude: latLng.longitude,
         placeName: p.name?.isNotEmpty == true ? p.name : null,
-        locality: p.locality?.isNotEmpty == true
-            ? p.locality
-            : p.subAdministrativeArea,
+        locality: p.locality?.isNotEmpty == true ? p.locality : p.subAdministrativeArea,
         country: p.country?.isNotEmpty == true ? p.country : null,
-        isoCountryCode: p.isoCountryCode?.isNotEmpty == true
-            ? p.isoCountryCode
-            : null,
+        isoCountryCode: p.isoCountryCode?.isNotEmpty == true ? p.isoCountryCode : null,
         address: addressParts.isNotEmpty ? addressParts.join(', ') : null,
       );
     } catch (e) {

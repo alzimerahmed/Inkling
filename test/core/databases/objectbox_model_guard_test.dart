@@ -30,10 +30,7 @@ void main() {
 
     String snapshotOf(Map<String, dynamic> entity) {
       final List<String> properties =
-          (entity['properties'] as List)
-              .map((property) => '${property['name']}=${property['id']}')
-              .toList()
-            ..sort();
+          (entity['properties'] as List).map((property) => '${property['name']}=${property['id']}').toList()..sort();
       return ['${entity['name']}=${entity['id']}', ...properties].join('|');
     }
 
@@ -154,9 +151,7 @@ void main() {
           '|version=6:5615958948791855505',
     ];
 
-    final Set<String> current = entities
-        .map((entity) => snapshotOf(entity as Map<String, dynamic>))
-        .toSet();
+    final Set<String> current = entities.map((entity) => snapshotOf(entity as Map<String, dynamic>)).toSet();
     final Set<String> expected = expectedSnapshots.toSet();
 
     final Set<String> removed = expected.difference(current);

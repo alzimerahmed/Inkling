@@ -45,8 +45,7 @@ class GoogleUserObject extends CloudServiceUser {
   /// Used as a RevenueCat identity alias prefix. Returns null for local/dev services
   /// where IDs are not globally unique across users.
   @override
-  String? get globalId =>
-      serviceType.hasGlobalUserId ? "${serviceType.id}_$id" : null;
+  String? get globalId => serviceType.hasGlobalUserId ? "${serviceType.id}_$id" : null;
 
   String? get bigImageUrl => _maximizeImage(photoUrl);
 
@@ -77,6 +76,5 @@ class GoogleUserObject extends CloudServiceUser {
   }
 
   Map<String, dynamic> toJson() => _$GoogleUserObjectToJson(this);
-  factory GoogleUserObject.fromJson(Map<String, dynamic> json) =>
-      _$GoogleUserObjectFromJson(json);
+  factory GoogleUserObject.fromJson(Map<String, dynamic> json) => _$GoogleUserObjectFromJson(json);
 }

@@ -20,9 +20,7 @@ class _DayColorTile extends StatelessWidget {
       floatingBuilder: (close, openAbove) {
         return SpColorPicker(
           isDarkMode: AppTheme.isDarkMode(context),
-          position: openAbove
-              ? SpColorPickerPosition.bottom
-              : SpColorPickerPosition.top,
+          position: openAbove ? SpColorPickerPosition.bottom : SpColorPickerPosition.top,
           // Highlight the active swatch by passing one of its shades.
           currentColor: _highlightColor(context, currentName),
           level: SpColorPickerLevel.one,
@@ -51,9 +49,7 @@ class _DayColorTile extends StatelessWidget {
       },
       builder: (void Function() open) {
         return ListTile(
-          contentPadding: locked
-              ? null
-              : const EdgeInsets.only(left: 16, right: 8),
+          contentPadding: locked ? null : const EdgeInsets.only(left: 16, right: 8),
           title: Text(_weekdayLabel(context)),
           subtitle: Text(
             customized ? tr("general.custom") : tr("general.default"),
@@ -104,9 +100,7 @@ class _DayColorTile extends StatelessWidget {
   Color? _highlightColor(BuildContext context, String? currentName) {
     if (currentName == null) return null;
     if (currentName == kBlackWhiteColorName) {
-      return Theme.of(context).brightness == Brightness.dark
-          ? Colors.white
-          : Colors.black;
+      return Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black;
     }
     return kMaterialColorsByName[currentName]?[500];
   }
@@ -115,13 +109,11 @@ class _DayColorTile extends StatelessWidget {
   String? _nameFromColor(Color color) {
     // The picker's monochrome swatch resolves to pure black (light) or white (dark).
     // ignore: deprecated_member_use
-    if (color.value == 0xFF000000 || color.value == 0xFFFFFFFF)
-      return kBlackWhiteColorName;
+    if (color.value == 0xFF000000 || color.value == 0xFFFFFFFF) return kBlackWhiteColorName;
 
     for (final entry in kMaterialColorsByName.entries) {
       // ignore: deprecated_member_use
-      if (entry.value == color || entry.value.value == color.value)
-        return entry.key;
+      if (entry.value == color || entry.value.value == color.value) return entry.key;
     }
     return null;
   }

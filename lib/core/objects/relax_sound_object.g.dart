@@ -47,20 +47,16 @@ class _$RelaxSoundObjectCWProxyImpl implements _$RelaxSoundObjectCWProxy {
   RelaxSoundObject artist(String artist) => call(artist: artist);
 
   @override
-  RelaxSoundObject translationKey(String translationKey) =>
-      call(translationKey: translationKey);
+  RelaxSoundObject translationKey(String translationKey) => call(translationKey: translationKey);
 
   @override
-  RelaxSoundObject svgIconUrlPath(String svgIconUrlPath) =>
-      call(svgIconUrlPath: svgIconUrlPath);
+  RelaxSoundObject svgIconUrlPath(String svgIconUrlPath) => call(svgIconUrlPath: svgIconUrlPath);
 
   @override
-  RelaxSoundObject background(RelaxSoundBackground background) =>
-      call(background: background);
+  RelaxSoundObject background(RelaxSoundBackground background) => call(background: background);
 
   @override
-  RelaxSoundObject soundUrlPath(String soundUrlPath) =>
-      call(soundUrlPath: soundUrlPath);
+  RelaxSoundObject soundUrlPath(String soundUrlPath) => call(soundUrlPath: soundUrlPath);
 
   @override
   RelaxSoundObject dayColor(int dayColor) => call(dayColor: dayColor);
@@ -86,25 +82,19 @@ class _$RelaxSoundObjectCWProxyImpl implements _$RelaxSoundObjectCWProxy {
           ? _value.artist
           // ignore: cast_nullable_to_non_nullable
           : artist as String,
-      translationKey:
-          translationKey == const $CopyWithPlaceholder() ||
-              translationKey == null
+      translationKey: translationKey == const $CopyWithPlaceholder() || translationKey == null
           ? _value.translationKey
           // ignore: cast_nullable_to_non_nullable
           : translationKey as String,
-      svgIconUrlPath:
-          svgIconUrlPath == const $CopyWithPlaceholder() ||
-              svgIconUrlPath == null
+      svgIconUrlPath: svgIconUrlPath == const $CopyWithPlaceholder() || svgIconUrlPath == null
           ? _value.svgIconUrlPath
           // ignore: cast_nullable_to_non_nullable
           : svgIconUrlPath as String,
-      background:
-          background == const $CopyWithPlaceholder() || background == null
+      background: background == const $CopyWithPlaceholder() || background == null
           ? _value.background
           // ignore: cast_nullable_to_non_nullable
           : background as RelaxSoundBackground,
-      soundUrlPath:
-          soundUrlPath == const $CopyWithPlaceholder() || soundUrlPath == null
+      soundUrlPath: soundUrlPath == const $CopyWithPlaceholder() || soundUrlPath == null
           ? _value.soundUrlPath
           // ignore: cast_nullable_to_non_nullable
           : soundUrlPath as String,
@@ -127,44 +117,37 @@ extension $RelaxSoundObjectCopyWith on RelaxSoundObject {
 // JsonSerializableGenerator
 // **************************************************************************
 
-RelaxSoundObject _$RelaxSoundObjectFromJson(Map<String, dynamic> json) =>
-    RelaxSoundObject(
-      artist: json['artist'] as String,
-      translationKey: json['translation_key'] as String,
-      svgIconUrlPath: json['svg_icon_url_path'] as String,
-      background: $enumDecode(
-        _$RelaxSoundBackgroundEnumMap,
-        json['background'],
-      ),
-      soundUrlPath: json['sound_url_path'] as String,
-      dayColor: (json['day_color'] as num?)?.toInt() ?? 3,
-    );
+RelaxSoundObject _$RelaxSoundObjectFromJson(Map<String, dynamic> json) => RelaxSoundObject(
+  artist: json['artist'] as String,
+  translationKey: json['translation_key'] as String,
+  svgIconUrlPath: json['svg_icon_url_path'] as String,
+  background: $enumDecode(
+    _$RelaxSoundBackgroundEnumMap,
+    json['background'],
+  ),
+  soundUrlPath: json['sound_url_path'] as String,
+  dayColor: (json['day_color'] as num?)?.toInt() ?? 3,
+);
 
-Map<String, dynamic> _$RelaxSoundObjectToJson(RelaxSoundObject instance) =>
-    <String, dynamic>{
-      'translation_key': instance.translationKey,
-      'artist': instance.artist,
-      'svg_icon_url_path': instance.svgIconUrlPath,
-      'background': _$RelaxSoundBackgroundEnumMap[instance.background]!,
-      'sound_url_path': instance.soundUrlPath,
-      'day_color': instance.dayColor,
-    };
+Map<String, dynamic> _$RelaxSoundObjectToJson(RelaxSoundObject instance) => <String, dynamic>{
+  'translation_key': instance.translationKey,
+  'artist': instance.artist,
+  'svg_icon_url_path': instance.svgIconUrlPath,
+  'background': _$RelaxSoundBackgroundEnumMap[instance.background]!,
+  'sound_url_path': instance.soundUrlPath,
+  'day_color': instance.dayColor,
+};
 
 const _$RelaxSoundBackgroundEnumMap = {
   RelaxSoundBackground.abstract_water_drops_on_turquoise_glass_background:
       'abstract_water_drops_on_turquoise_glass_background',
-  RelaxSoundBackground.color_beautiful_sky_vintage_forest:
-      'color_beautiful_sky_vintage_forest',
+  RelaxSoundBackground.color_beautiful_sky_vintage_forest: 'color_beautiful_sky_vintage_forest',
   RelaxSoundBackground.cups_and_pot_near_fire: 'cups_and_pot_near_fire',
   RelaxSoundBackground.designer_at_work_in_office: 'designer_at_work_in_office',
-  RelaxSoundBackground.fall_leaves_hanging_on_blurry_surface:
-      'fall_leaves_hanging_on_blurry_surface',
-  RelaxSoundBackground.forest_full_of_high_rise_trees:
-      'forest_full_of_high_rise_trees',
-  RelaxSoundBackground.music_notes_on_heart_shaped_paper:
-      'music_notes_on_heart_shaped_paper',
+  RelaxSoundBackground.fall_leaves_hanging_on_blurry_surface: 'fall_leaves_hanging_on_blurry_surface',
+  RelaxSoundBackground.forest_full_of_high_rise_trees: 'forest_full_of_high_rise_trees',
+  RelaxSoundBackground.music_notes_on_heart_shaped_paper: 'music_notes_on_heart_shaped_paper',
   RelaxSoundBackground.textured_green_and_black_liquefy_abstract_background:
       'textured_green_and_black_liquefy_abstract_background',
-  RelaxSoundBackground.two_cloudy_tags_on_color_background:
-      'two_cloudy_tags_on_color_background',
+  RelaxSoundBackground.two_cloudy_tags_on_color_background: 'two_cloudy_tags_on_color_background',
 };

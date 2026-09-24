@@ -88,9 +88,7 @@ class _EditCustomReminderContent extends StatelessWidget {
                 left: 16.0,
                 right: viewModel.hasTemplate ? 8.0 : 16.0,
               ),
-              subtitle: viewModel.hasTemplate && viewModel.templateName != null
-                  ? Text(viewModel.templateName!)
-                  : null,
+              subtitle: viewModel.hasTemplate && viewModel.templateName != null ? Text(viewModel.templateName!) : null,
               trailing: viewModel.hasTemplate
                   ? IconButton(
                       icon: const Icon(SpIcons.clear),
@@ -106,9 +104,7 @@ class _EditCustomReminderContent extends StatelessWidget {
                 left: 16.0,
                 right: viewModel.tagIds.isNotEmpty ? 8.0 : 16.0,
               ),
-              subtitle: viewModel.tagIds.isNotEmpty
-                  ? Text(viewModel.tagLabels(context))
-                  : null,
+              subtitle: viewModel.tagIds.isNotEmpty ? Text(viewModel.tagLabels(context)) : null,
               trailing: viewModel.tagIds.isNotEmpty
                   ? IconButton(
                       icon: const Icon(SpIcons.clear),
@@ -160,9 +156,7 @@ class _EditCustomReminderContent extends StatelessWidget {
     return FormField<String>(
       initialValue: viewModel.messageController.text,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (value) => value?.trim().isNotEmpty == true
-          ? null
-          : tr('input.message.required'),
+      validator: (value) => value?.trim().isNotEmpty == true ? null : tr('input.message.required'),
       builder: (state) {
         if (kIsCupertino) {
           return _buildCupertinoMessageField(context, state);
@@ -204,9 +198,7 @@ class _EditCustomReminderContent extends StatelessWidget {
           maxLines: 2,
           decoration: BoxDecoration(
             border: Border.all(
-              color: state.hasError
-                  ? CupertinoColors.destructiveRed
-                  : CupertinoColors.systemGrey3.resolveFrom(context),
+              color: state.hasError ? CupertinoColors.destructiveRed : CupertinoColors.systemGrey3.resolveFrom(context),
             ),
             borderRadius: BorderRadius.circular(8.0),
           ),

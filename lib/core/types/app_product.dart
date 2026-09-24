@@ -8,8 +8,7 @@ enum AppProduct {
 
   const AppProduct();
 
-  static List<String> get productIdentifiers =>
-      values.map((e) => e.name).toList();
+  static List<String> get productIdentifiers => values.map((e) => e.name).toList();
 
   String get productIdentifier => name;
 }

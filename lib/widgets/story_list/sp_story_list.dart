@@ -55,8 +55,7 @@ class SpStoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (stories?.items == null)
-      return const Center(child: CircularProgressIndicator.adaptive());
+    if (stories?.items == null) return const Center(child: CircularProgressIndicator.adaptive());
 
     if (onRefresh != null) {
       return RefreshIndicator.adaptive(

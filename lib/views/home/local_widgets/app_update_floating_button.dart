@@ -30,9 +30,7 @@ class _AppUpdateFloatingButton extends StatelessWidget {
                           )
                         : const Icon(SpIcons.update),
                     label: Text(provider.displayStatus?.label ?? ''),
-                    onPressed: provider.displayStatus?.loading == true
-                        ? null
-                        : () => provider.update(),
+                    onPressed: provider.displayStatus?.loading == true ? null : () => provider.update(),
                   );
                 },
               ),

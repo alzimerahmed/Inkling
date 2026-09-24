@@ -24,9 +24,7 @@ class PinUnlockViewModel extends ChangeNotifier with DisposeAwareMixin {
   void handleKeyEvent(KeyEvent event) {
     if (event is KeyDownEvent) {
       final character = event.character;
-      if (character != null &&
-          character.codeUnitAt(0) >= 48 &&
-          character.codeUnitAt(0) <= 57) {
+      if (character != null && character.codeUnitAt(0) >= 48 && character.codeUnitAt(0) <= 57) {
         // Number key 0-9
         final number = int.parse(character);
         addPin(context, number);

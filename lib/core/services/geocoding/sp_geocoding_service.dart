@@ -27,8 +27,7 @@ abstract class SpGeocodingService {
   ///
   /// - iOS / Android / macOS → [SpSystemGeocodingService] (system geocoder, free)
   /// - Linux / Windows / Web → [SpNullGeocodingService] (no-op)
-  static final systemInstance =
-      (!kIsWeb && (Platform.isIOS || Platform.isAndroid || Platform.isMacOS))
+  static final systemInstance = (!kIsWeb && (Platform.isIOS || Platform.isAndroid || Platform.isMacOS))
       ? SpSystemGeocodingService()
       : const SpNullGeocodingService();
 

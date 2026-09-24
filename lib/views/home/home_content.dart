@@ -33,9 +33,7 @@ class _HomeContent extends StatelessWidget {
 
     return Drawer(
       width: bigScreen ? 400 : null,
-      child: bigScreen
-          ? const SpNestedNavigation(initialScreen: HomeEndDrawer())
-          : const HomeEndDrawer(),
+      child: bigScreen ? const SpNestedNavigation(initialScreen: HomeEndDrawer()) : const HomeEndDrawer(),
     );
   }
 
@@ -81,21 +79,15 @@ class _HomeContent extends StatelessWidget {
               viewModel: viewModel,
             ),
             IconButton.outlined(
-              tooltip:
-                  "${tr("button.archive")} (${state.selectedStories.length})",
+              tooltip: "${tr("button.archive")} (${state.selectedStories.length})",
               icon: const Icon(SpIcons.archive),
-              onPressed: stories.isEmpty
-                  ? null
-                  : () => state.archiveAll(context),
+              onPressed: stories.isEmpty ? null : () => state.archiveAll(context),
             ),
             IconButton.outlined(
               color: ColorScheme.of(context).error,
-              tooltip:
-                  "${tr("button.move_to_bin")} (${state.selectedStories.length})",
+              tooltip: "${tr("button.move_to_bin")} (${state.selectedStories.length})",
               icon: const Icon(SpIcons.delete),
-              onPressed: stories.isEmpty
-                  ? null
-                  : () => state.moveToBinAll(context),
+              onPressed: stories.isEmpty ? null : () => state.moveToBinAll(context),
             ),
           ],
         );
@@ -124,8 +116,7 @@ class _HomeContent extends StatelessWidget {
         top: 0.0,
         left: MediaQuery.of(listContext).padding.left,
         right: MediaQuery.of(listContext).padding.right,
-        bottom:
-            kToolbarHeight + 200 + MediaQuery.of(listContext).padding.bottom,
+        bottom: kToolbarHeight + 200 + MediaQuery.of(listContext).padding.bottom,
       ),
       sliver: SliverList.builder(
         itemCount: items.length,
@@ -187,8 +178,7 @@ class _HomeContent extends StatelessWidget {
         // when this is the first header of its run and there is no throwback,
         // add extra spacing at top; else no padding to make UI look nicer
         // relative to the throwback tile / previous section above it.
-        if (item.isFirstOfRun && !viewModel.hasThrowback)
-          const SizedBox(height: 12.0),
+        if (item.isFirstOfRun && !viewModel.hasThrowback) const SizedBox(height: 12.0),
 
         Stack(
           children: [
@@ -233,22 +223,18 @@ class _HomeContent extends StatelessWidget {
     return SpStoryListenerBuilder(
       key: key,
       story: story,
-      onChanged: (StoryDbModel updatedStory) =>
-          viewModel.onAStoryReloaded(updatedStory),
+      onChanged: (StoryDbModel updatedStory) => viewModel.onAStoryReloaded(updatedStory),
       onDeleted: () => viewModel.onAStoryDeleted(story),
       builder: (_) {
         return Stack(
           children: [
             Positioned.fill(
               child: ValueListenableBuilder(
-                valueListenable:
-                    viewModel.scrollInfo.scrollingToStoryIdNotifier,
+                valueListenable: viewModel.scrollInfo.scrollingToStoryIdNotifier,
                 builder: (context, storyId, child) {
                   return AnimatedContainer(
                     duration: Durations.long4,
-                    color: storyId == story.id
-                        ? ColorScheme.of(context).readOnly.surface5
-                        : Colors.transparent,
+                    color: storyId == story.id ? ColorScheme.of(context).readOnly.surface5 : Colors.transparent,
                     curve: Curves.easeInOut,
                   );
                 },

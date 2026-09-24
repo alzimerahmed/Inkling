@@ -29,8 +29,7 @@ class SpFloatingPopUpButton extends StatefulWidget {
   State<SpFloatingPopUpButton> createState() => _SpFloatingPopUpButtonState();
 }
 
-class _SpFloatingPopUpButtonState extends State<SpFloatingPopUpButton>
-    with SingleTickerProviderStateMixin {
+class _SpFloatingPopUpButtonState extends State<SpFloatingPopUpButton> with SingleTickerProviderStateMixin {
   late final AnimationController animationController;
 
   Size? actualFloatingSize;
@@ -83,8 +82,7 @@ class _SpFloatingPopUpButtonState extends State<SpFloatingPopUpButton>
     if (renderBox is! RenderBox) return null;
 
     Offset offset = renderBox.localToGlobal(Offset.zero);
-    double childWidth =
-        actualFloatingSize?.width ?? widget.estimatedFloatingWidth - 36;
+    double childWidth = actualFloatingSize?.width ?? widget.estimatedFloatingWidth - 36;
 
     return OverlayEntry(
       builder: (context) {
@@ -93,9 +91,7 @@ class _SpFloatingPopUpButtonState extends State<SpFloatingPopUpButton>
             double? left = offset.dx - childWidth / 2;
             double? right = constraints.maxWidth - left - childWidth;
 
-            double? top = widget.dyGetter != null
-                ? widget.dyGetter!(offset.dy)
-                : offset.dy;
+            double? top = widget.dyGetter != null ? widget.dyGetter!(offset.dy) : offset.dy;
             double bottom = 0;
 
             // make sure it 8 pixel inside view.
@@ -132,8 +128,7 @@ class _SpFloatingPopUpButtonState extends State<SpFloatingPopUpButton>
                           return Transform.translate(
                             offset: Offset(
                               0.0,
-                              (1 - animationController.value) *
-                                  (widget.bottomToTop ? 8 : -8),
+                              (1 - animationController.value) * (widget.bottomToTop ? 8 : -8),
                             ),
                             child: Opacity(
                               opacity: animationController.value,

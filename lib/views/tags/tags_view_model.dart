@@ -33,9 +33,7 @@ class TagsViewModel extends ChangeNotifier with DisposeAwareMixin {
     notifyListeners();
   }
 
-  bool get checkable =>
-      params.pickMode ||
-      (params.initialSelectedTags != null && params.onToggleTags != null);
+  bool get checkable => params.pickMode || (params.initialSelectedTags != null && params.onToggleTags != null);
   late List<int> selectedTags = params.initialSelectedTags ?? [];
 
   Future<void> onToggle(TagDbModel tag, bool value) async {

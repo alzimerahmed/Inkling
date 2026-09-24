@@ -28,18 +28,19 @@ class _AutoBackupTileState extends State<AutoBackupTile> {
 
   Future<void> _load() async {
     final enabled = await AutoBackupEnabledStorage().read() ?? false;
-    final interval = await AutoBackupIntervalStorage().read() ??
-        AutoBackupService.intervalOptionsInHours.first;
-    if (mounted) setState(() { _enabled = enabled; _intervalHours = interval; });
+    final interval = await AutoBackupIntervalStorage().read() ?? AutoBackupService.intervalOptionsInHours.first;
+    if (mounted)
+      setState(() {
+        _enabled = enabled;
+        _intervalHours = interval;
+      });
   }
 
   String _label(int hours) {
     if (hours >= 24 && hours % 24 == 0) {
-      return tr('page.settings.auto_backup.interval_days',
-          namedArgs: {'DAYS': '${hours ~/ 24}'});
+      return tr('page.settings.auto_backup.interval_days', namedArgs: {'DAYS': '${hours ~/ 24}'});
     }
-    return tr('page.settings.auto_backup.interval_hours',
-        namedArgs: {'HOURS': '$hours'});
+    return tr('page.settings.auto_backup.interval_hours', namedArgs: {'HOURS': '$hours'});
   }
 
   Future<void> pickInterval(BuildContext context) async {
@@ -47,13 +48,16 @@ class _AutoBackupTileState extends State<AutoBackupTile> {
     await SpPickerSheet(
       selectedValue: current,
       options: [
-        for (final hours in AutoBackupService.intervalOptionsInHours)
-          (value: hours, label: _label(hours)),
+        for (final hours in AutoBackupService.intervalOptionsInHours) (value: hours, label: _label(hours)),
       ],
       onChanged: (hours) async {
         await AutoBackupIntervalStorage().write(hours);
         await AutoBackupEnabledStorage().write(true);
-        if (mounted) setState(() { _intervalHours = hours; _enabled = true; });
+        if (mounted)
+          setState(() {
+            _intervalHours = hours;
+            _enabled = true;
+          });
       },
     ).show(context: context);
   }

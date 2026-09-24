@@ -42,14 +42,10 @@ class BackupTile extends StatelessWidget {
     // including a Retry/Refresh/Sync button that silently does nothing.
     final eligibleServices = provider.services
         .where(
-          (service) =>
-              service.isSignedIn &&
-              (isProUser || !service.serviceType.isProOnly),
+          (service) => service.isSignedIn && (isProUser || !service.serviceType.isProOnly),
         )
         .toList();
-    final aggregateStatus = eligibleServices.isNotEmpty
-        ? _aggregateConnectionStatus(eligibleServices, provider)
-        : null;
+    final aggregateStatus = eligibleServices.isNotEmpty ? _aggregateConnectionStatus(eligibleServices, provider) : null;
 
     if (!provider.isSignedIn) {
       leading = const Icon(SpIcons.cloudOff);
@@ -70,8 +66,7 @@ class BackupTile extends StatelessWidget {
       action = FilledButton.icon(
         icon: const Icon(SpIcons.starCircle),
         label: Text(tr('list_tile.upgrade_to_pro.title')),
-        onPressed: () =>
-            onNavigate(const PaywallRoute(initialFocus: .multi_cloud_sync)),
+        onPressed: () => onNavigate(const PaywallRoute(initialFocus: .multi_cloud_sync)),
       );
     } else {
       switch (aggregateStatus) {
@@ -258,8 +253,7 @@ class BackupTile extends StatelessWidget {
   }
 
   IconData _connectedServiceIcon(List<BackupCloudService> services) {
-    return _firstSignedInService(services)?.serviceType.icon ??
-        SpIcons.cloudDone;
+    return _firstSignedInService(services)?.serviceType.icon ?? SpIcons.cloudDone;
   }
 
   /// Worst-case-wins summary across every signed-in service's own connection
@@ -273,10 +267,7 @@ class BackupTile extends StatelessWidget {
     List<BackupCloudService> services,
     BackupProvider provider,
   ) {
-    final signedInTypes = services
-        .where((s) => s.isSignedIn)
-        .map((s) => s.serviceType)
-        .toList();
+    final signedInTypes = services.where((s) => s.isSignedIn).map((s) => s.serviceType).toList();
     if (signedInTypes.isEmpty) return null;
 
     const priority = [
@@ -294,9 +285,7 @@ class BackupTile extends StatelessWidget {
     }
 
     final allReady = signedInTypes.every(
-      (type) =>
-          provider.statusFor(type).connectionStatus ==
-          BackupConnectionStatus.readyToSync,
+      (type) => provider.statusFor(type).connectionStatus == BackupConnectionStatus.readyToSync,
     );
     return allReady ? BackupConnectionStatus.readyToSync : null;
   }
@@ -310,9 +299,7 @@ class BackupTile extends StatelessWidget {
     BackupConnectionStatus status,
   ) {
     for (final service in services) {
-      if (service.isSignedIn &&
-          provider.statusFor(service.serviceType).connectionStatus == status)
-        return service;
+      if (service.isSignedIn && provider.statusFor(service.serviceType).connectionStatus == status) return service;
     }
     return _firstSignedInService(services) ?? services.first;
   }
@@ -327,9 +314,7 @@ class BackupTile extends StatelessWidget {
     List<BackupCloudService> services,
     BackupProvider provider,
   ) {
-    final signedIn = provider.services
-        .where((service) => service.isSignedIn)
-        .toList();
+    final signedIn = provider.services.where((service) => service.isSignedIn).toList();
     if (signedIn.isEmpty) return null;
 
     for (var i = 0; i < signedIn.length; i++) {

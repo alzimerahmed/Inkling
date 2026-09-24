@@ -115,8 +115,7 @@ class _TitleToolbar extends StatelessWidget {
         SpFontsSheet(
           currentFontFamily: fontFamily,
           currentFontWeight: fontWeight,
-          onChanged: (fontFamily) =>
-              onThemeChanged(preferences.copyWith(titleFontFamily: fontFamily)),
+          onChanged: (fontFamily) => onThemeChanged(preferences.copyWith(titleFontFamily: fontFamily)),
         ).show(context: context);
       },
     );

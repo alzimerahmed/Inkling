@@ -74,9 +74,7 @@ class ExportStoriesToMarkdownService {
         '${date.minute.toString().padLeft(2, '0')}.'
         '${date.second.toString().padLeft(2, '0')}';
 
-    final title = content.title?.trim().isNotEmpty == true
-        ? _sanitizeFilename(content.title!)
-        : 'Untitled';
+    final title = content.title?.trim().isNotEmpty == true ? _sanitizeFilename(content.title!) : 'Untitled';
     final filename = '$dateStr $title.md';
 
     // Build YAML frontmatter
@@ -90,8 +88,7 @@ class ExportStoriesToMarkdownService {
 
     // Combine frontmatter + content
     // Format: ---\n[frontmatter]---\n[content] (no blank line after closing ---)
-    final fullContent =
-        '---\n${frontmatter.trimRight()}\n---\n$markdownContent';
+    final fullContent = '---\n${frontmatter.trimRight()}\n---\n$markdownContent';
 
     // Write file
     final file = File('${yearDir.path}/$filename');

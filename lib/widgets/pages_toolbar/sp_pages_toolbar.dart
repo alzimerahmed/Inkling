@@ -147,9 +147,7 @@ class SpPagesToolbarState extends State<SpPagesToolbar> {
                   child: Container(
                     color: widget.backgroundColor,
                     padding: EdgeInsets.only(
-                      bottom:
-                          MediaQuery.of(context).padding.bottom +
-                          MediaQuery.of(context).viewInsets.bottom,
+                      bottom: MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom,
                     ),
                     child: editorAdapter.buildToolbar(
                       context: context,
@@ -171,9 +169,7 @@ class SpPagesToolbarState extends State<SpPagesToolbar> {
       padding: EdgeInsets.only(
         left: MediaQuery.of(context).padding.left,
         right: MediaQuery.of(context).padding.right,
-        bottom:
-            MediaQuery.of(context).padding.bottom +
-            MediaQuery.of(context).viewInsets.bottom,
+        bottom: MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom,
       ),
       child: _TitleToolbar(
         preferences: widget.preferences,

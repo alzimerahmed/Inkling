@@ -77,12 +77,10 @@ class _$TagDbModelCWProxyImpl implements _$TagDbModelCWProxy {
   TagDbModel updatedAt(DateTime updatedAt) => call(updatedAt: updatedAt);
 
   @override
-  TagDbModel lastSavedDeviceId(String? lastSavedDeviceId) =>
-      call(lastSavedDeviceId: lastSavedDeviceId);
+  TagDbModel lastSavedDeviceId(String? lastSavedDeviceId) => call(lastSavedDeviceId: lastSavedDeviceId);
 
   @override
-  TagDbModel permanentlyDeletedAt(DateTime? permanentlyDeletedAt) =>
-      call(permanentlyDeletedAt: permanentlyDeletedAt);
+  TagDbModel permanentlyDeletedAt(DateTime? permanentlyDeletedAt) => call(permanentlyDeletedAt: permanentlyDeletedAt);
 
   @override
   TagDbModel index(int? index) => call(index: index);

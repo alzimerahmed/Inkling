@@ -464,8 +464,7 @@ class _FakeCloudService implements BackupCloudService {
   Future<CloudStorageQuotaObject?> fetchStorageQuota() async => null;
 
   @override
-  Future<List<CloudFileObject>> listFilesInFolder(String folderName) async =>
-      [];
+  Future<List<CloudFileObject>> listFilesInFolder(String folderName) async => [];
 
   @override
   Future<Map<int, CloudFileObject>> fetchYearlyBackups() async => {};

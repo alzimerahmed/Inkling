@@ -30,8 +30,7 @@ class GalleryTemplateObject {
     this.lazyDraftContent,
   });
 
-  factory GalleryTemplateObject.fromJson(Map<String, dynamic> json) =>
-      _$GalleryTemplateObjectFromJson(json);
+  factory GalleryTemplateObject.fromJson(Map<String, dynamic> json) => _$GalleryTemplateObjectFromJson(json);
 
   Map<String, dynamic> toJson() => _$GalleryTemplateObjectToJson(this);
 }

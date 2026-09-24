@@ -16,8 +16,7 @@ class _QuillRichTextColorButton extends StatefulWidget {
   final bool positionedOnUpper;
 
   @override
-  State<_QuillRichTextColorButton> createState() =>
-      _QuillRichTextColorButtonState();
+  State<_QuillRichTextColorButton> createState() => _QuillRichTextColorButtonState();
 }
 
 class _QuillRichTextColorButtonState extends State<_QuillRichTextColorButton> {
@@ -66,9 +65,7 @@ class _QuillRichTextColorButtonState extends State<_QuillRichTextColorButton> {
 
   Color? _getCurrentColor() {
     final style = _quillController.getSelectionStyle();
-    final colorValue = widget.isBackground
-        ? style.attributes['background']?.value
-        : style.attributes['color']?.value;
+    final colorValue = widget.isBackground ? style.attributes['background']?.value : style.attributes['color']?.value;
     if (colorValue == null) return null;
     return _stringToColor(colorValue.toString());
   }
@@ -106,8 +103,7 @@ class _QuillRichTextColorButtonState extends State<_QuillRichTextColorButton> {
 
   Color _contrastColor(Color backgroundColor) {
     // Calculate relative luminance
-    if (ThemeData.estimateBrightnessForColor(backgroundColor) ==
-        Brightness.dark) {
+    if (ThemeData.estimateBrightnessForColor(backgroundColor) == Brightness.dark) {
       return Colors.white;
     }
     return Colors.black;
@@ -118,9 +114,7 @@ class _QuillRichTextColorButtonState extends State<_QuillRichTextColorButton> {
 
     if (color == null) {
       // Remove color formatting
-      final attribute = widget.isBackground
-          ? quill.Attribute.background
-          : quill.Attribute.color;
+      final attribute = widget.isBackground ? quill.Attribute.background : quill.Attribute.color;
       _quillController.formatSelection(quill.Attribute.clone(attribute, null));
     } else {
       // Apply color formatting
@@ -138,14 +132,10 @@ class _QuillRichTextColorButtonState extends State<_QuillRichTextColorButton> {
 
     // Get current color
     final currentColor = _getCurrentColor();
-    final isToggled = widget.isBackground
-        ? _isToggledBackground
-        : _isToggledColor;
+    final isToggled = widget.isBackground ? _isToggledBackground : _isToggledColor;
 
     // Determine icon and fill colors
-    Color iconColor = isToggled && currentColor != null
-        ? currentColor
-        : (theme.iconTheme.color ?? Colors.black);
+    Color iconColor = isToggled && currentColor != null ? currentColor : (theme.iconTheme.color ?? Colors.black);
     Color? fillColor;
     Color? displayIconColor;
 
@@ -174,12 +164,8 @@ class _QuillRichTextColorButtonState extends State<_QuillRichTextColorButton> {
       displayIconColor = theme.iconTheme.color;
     }
 
-    final iconData = widget.isBackground
-        ? Icons.format_color_fill
-        : Icons.color_lens;
-    final defaultTooltip = widget.isBackground
-        ? 'Background Color'
-        : 'Font Color';
+    final iconData = widget.isBackground ? Icons.format_color_fill : Icons.color_lens;
+    final defaultTooltip = widget.isBackground ? 'Background Color' : 'Font Color';
 
     return SpFloatingPopUpButton(
       estimatedFloatingWidth: spColorPickerMinWidth,
@@ -194,9 +180,7 @@ class _QuillRichTextColorButtonState extends State<_QuillRichTextColorButton> {
       floatingBuilder: (close) {
         return SpColorPicker(
           isDarkMode: isDarkMode,
-          position: widget.positionedOnUpper
-              ? SpColorPickerPosition.top
-              : SpColorPickerPosition.bottom,
+          position: widget.positionedOnUpper ? SpColorPickerPosition.top : SpColorPickerPosition.bottom,
           currentColor: currentColor,
           level: SpColorPickerLevel.two,
           onPickedColor: (color) {
@@ -215,9 +199,7 @@ class _QuillRichTextColorButtonState extends State<_QuillRichTextColorButton> {
           tooltip: defaultTooltip,
           icon: Icon(iconData, color: displayIconColor),
           style: ButtonStyle(
-            backgroundColor: fillColor != null
-                ? WidgetStatePropertyAll(fillColor)
-                : null,
+            backgroundColor: fillColor != null ? WidgetStatePropertyAll(fillColor) : null,
           ),
           onPressed: open,
         );

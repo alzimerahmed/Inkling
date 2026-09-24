@@ -79,8 +79,7 @@ class SupportUsView extends StatelessWidget {
                 ),
               ),
               trailing: const Icon(SpIcons.keyboardRight),
-              onTap: () =>
-                  UrlOpenerService.openInCustomTab(context, productHuntUrl),
+              onTap: () => UrlOpenerService.openInCustomTab(context, productHuntUrl),
             ),
           ],
           if (alternativeToUrl.trim().isNotEmpty) ...[
@@ -93,8 +92,7 @@ class SupportUsView extends StatelessWidget {
                 ),
               ),
               trailing: const Icon(SpIcons.keyboardRight),
-              onTap: () =>
-                  UrlOpenerService.openInCustomTab(context, alternativeToUrl),
+              onTap: () => UrlOpenerService.openInCustomTab(context, alternativeToUrl),
             ),
           ],
           if (sourceCodeUrl.trim().isNotEmpty) ...[
@@ -107,8 +105,7 @@ class SupportUsView extends StatelessWidget {
                 ),
               ),
               trailing: const Icon(SpIcons.keyboardRight),
-              onTap: () =>
-                  UrlOpenerService.openInCustomTab(context, sourceCodeUrl),
+              onTap: () => UrlOpenerService.openInCustomTab(context, sourceCodeUrl),
             ),
           ],
         ],

@@ -38,8 +38,7 @@ abstract class _$DefaultStoryPreferencesObjectCWProxy {
 
 /// Callable proxy for `copyWith` functionality.
 /// Use as `instanceOfDefaultStoryPreferencesObject.copyWith(...)` or call `instanceOfDefaultStoryPreferencesObject.copyWith.fieldName(value)` for a single field.
-class _$DefaultStoryPreferencesObjectCWProxyImpl
-    implements _$DefaultStoryPreferencesObjectCWProxy {
+class _$DefaultStoryPreferencesObjectCWProxyImpl implements _$DefaultStoryPreferencesObjectCWProxy {
   const _$DefaultStoryPreferencesObjectCWProxyImpl(this._value);
 
   final DefaultStoryPreferencesObject _value;
@@ -50,8 +49,7 @@ class _$DefaultStoryPreferencesObjectCWProxyImpl
   ) => call(defaultColorSeedValue: defaultColorSeedValue);
 
   @override
-  DefaultStoryPreferencesObject defaultColorTone(int? defaultColorTone) =>
-      call(defaultColorTone: defaultColorTone);
+  DefaultStoryPreferencesObject defaultColorTone(int? defaultColorTone) => call(defaultColorTone: defaultColorTone);
 
   @override
   DefaultStoryPreferencesObject defaultBackgroundImagePath(
@@ -78,8 +76,7 @@ class _$DefaultStoryPreferencesObjectCWProxyImpl
     Object? defaultLayoutType = const $CopyWithPlaceholder(),
   }) {
     return DefaultStoryPreferencesObject(
-      defaultColorSeedValue:
-          defaultColorSeedValue == const $CopyWithPlaceholder()
+      defaultColorSeedValue: defaultColorSeedValue == const $CopyWithPlaceholder()
           ? _value.defaultColorSeedValue
           // ignore: cast_nullable_to_non_nullable
           : defaultColorSeedValue as int?,
@@ -87,8 +84,7 @@ class _$DefaultStoryPreferencesObjectCWProxyImpl
           ? _value.defaultColorTone
           // ignore: cast_nullable_to_non_nullable
           : defaultColorTone as int?,
-      defaultBackgroundImagePath:
-          defaultBackgroundImagePath == const $CopyWithPlaceholder()
+      defaultBackgroundImagePath: defaultBackgroundImagePath == const $CopyWithPlaceholder()
           ? _value.defaultBackgroundImagePath
           // ignore: cast_nullable_to_non_nullable
           : defaultBackgroundImagePath as String?,
@@ -100,13 +96,11 @@ class _$DefaultStoryPreferencesObjectCWProxyImpl
   }
 }
 
-extension $DefaultStoryPreferencesObjectCopyWith
-    on DefaultStoryPreferencesObject {
+extension $DefaultStoryPreferencesObjectCopyWith on DefaultStoryPreferencesObject {
   /// Returns a callable class used to build a new instance with modified fields.
   /// Example: `instanceOfDefaultStoryPreferencesObject.copyWith(...)` or `instanceOfDefaultStoryPreferencesObject.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$DefaultStoryPreferencesObjectCWProxy get copyWith =>
-      _$DefaultStoryPreferencesObjectCWProxyImpl(this);
+  _$DefaultStoryPreferencesObjectCWProxy get copyWith => _$DefaultStoryPreferencesObjectCWProxyImpl(this);
 }
 
 // **************************************************************************

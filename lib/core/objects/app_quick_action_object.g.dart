@@ -54,8 +54,7 @@ Map<String, dynamic> _$AppQuickActionObjectToJson(
   'label': instance.label,
   'type': _$AppQuickActionTypeEnumMap[instance.type]!,
   'native_icon': instance.nativeIcon,
-  'default_action_type':
-      _$AppDefaultQuickActionTypeEnumMap[instance.defaultActionType],
+  'default_action_type': _$AppDefaultQuickActionTypeEnumMap[instance.defaultActionType],
   'template_reference': instance.templateReference?.toJson(),
   'tag_id': instance.tagId,
 };

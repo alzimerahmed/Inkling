@@ -35,8 +35,7 @@ class InsertFileToDbService {
     await File(sourcePath).copy(storagePath);
 
     // Clean up temporary source file
-    if (File(sourcePath).existsSync())
-      File(sourcePath).deleteSync(recursive: true);
+    if (File(sourcePath).existsSync()) File(sourcePath).deleteSync(recursive: true);
 
     // Create asset model
     var asset = AssetDbModel.fromLocalPath(
@@ -89,9 +88,7 @@ class InsertFileToDbService {
     return _insertAsset(
       sourcePath: filePath,
       assetType: AssetType.audio,
-      metadata: durationInMs != null
-          ? {AssetDbModel.DURATION_KEY: durationInMs}
-          : null,
+      metadata: durationInMs != null ? {AssetDbModel.DURATION_KEY: durationInMs} : null,
     );
   }
 

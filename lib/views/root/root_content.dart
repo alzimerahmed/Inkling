@@ -23,8 +23,7 @@ class _RootContent extends StatelessWidget {
           onPopWithResult: (result) {
             if (!SpAppLockWrapper.authenticated(context)) return;
 
-            final NavigatorState? navigator =
-                rootProvider.navigatorKey.currentState;
+            final NavigatorState? navigator = rootProvider.navigatorKey.currentState;
             if (navigator?.canPop() ?? false) navigator?.maybePop(result);
           },
           child: Scaffold(
@@ -84,14 +83,12 @@ class _RootContent extends StatelessWidget {
             _RootRouteObserver(
               onPop: (route, previousRoute) {
                 if (previousRoute?.settings.name == null) return;
-                rootProvider.selectedRootRouteNameNotifier.value =
-                    previousRoute!.settings.name!;
+                rootProvider.selectedRootRouteNameNotifier.value = previousRoute!.settings.name!;
                 viewModel.autoBackupWhenNavigateToHome(previousRoute, context);
               },
               onPush: (route, previousRoute) {
                 if (route.settings.name == null) return;
-                rootProvider.selectedRootRouteNameNotifier.value =
-                    route.settings.name!;
+                rootProvider.selectedRootRouteNameNotifier.value = route.settings.name!;
                 viewModel.autoBackupWhenNavigateToHome(route, context);
               },
             ),

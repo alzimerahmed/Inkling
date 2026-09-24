@@ -45,8 +45,7 @@ void main() {
 
     // Preferences written before this setting existed have no media_sync key.
     test('falls back to the default when absent from stored json', () {
-      final json = DevicePreferencesObject.initial().toJson()
-        ..remove('media_sync');
+      final json = DevicePreferencesObject.initial().toJson()..remove('media_sync');
 
       expect(
         DevicePreferencesObject.fromJson(json).mediaSync,

@@ -17,16 +17,14 @@ class SpLoopAnimationBuilder extends StatefulWidget {
   final Widget? child;
   final Curve curve;
   final bool reverse;
-  final Widget Function(BuildContext context, double value, Widget? child)
-  builder;
+  final Widget Function(BuildContext context, double value, Widget? child) builder;
   final int? loopCount;
 
   @override
   State<SpLoopAnimationBuilder> createState() => _SpLoopAnimationBuilderState();
 }
 
-class _SpLoopAnimationBuilderState extends State<SpLoopAnimationBuilder>
-    with SingleTickerProviderStateMixin {
+class _SpLoopAnimationBuilderState extends State<SpLoopAnimationBuilder> with SingleTickerProviderStateMixin {
   late final AnimationController controller = AnimationController(
     vsync: this,
     duration: widget.duration,

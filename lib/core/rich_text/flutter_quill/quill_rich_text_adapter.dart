@@ -49,10 +49,7 @@ class QuillRichTextAdapter implements RichTextAdapter {
   /// Document.fromJson only accepts insert operations; delete/retain ops can
   /// appear in corrupted data from backups, cloud sync, or legacy migration.
   List<dynamic> _sanitizeDeltaJson(List<dynamic> json) {
-    return json
-        .whereType<Map<String, dynamic>>()
-        .where((op) => op.containsKey('insert'))
-        .toList();
+    return json.whereType<Map<String, dynamic>>().where((op) => op.containsKey('insert')).toList();
   }
 
   @override

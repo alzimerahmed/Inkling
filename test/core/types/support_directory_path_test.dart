@@ -119,9 +119,7 @@ void main() {
 
     group('all enum cases', () {
       test('have unique relative paths', () {
-        final paths = SupportDirectoryPath.values
-            .map((e) => e.relativePath)
-            .toList();
+        final paths = SupportDirectoryPath.values.map((e) => e.relativePath).toList();
         expect(paths.length, equals(paths.toSet().length));
       });
 

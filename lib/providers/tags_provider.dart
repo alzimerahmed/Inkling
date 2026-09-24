@@ -1,22 +1,16 @@
 import 'dart:async';
 
-import 'package:adaptive_dialog/adaptive_dialog.dart'
-    show OkCancelResult, showOkCancelAlertDialog;
+import 'package:adaptive_dialog/adaptive_dialog.dart' show OkCancelResult, showOkCancelAlertDialog;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' show BuildContext, ChangeNotifier;
-import 'package:storypad/core/databases/models/collection_db_model.dart'
-    show CollectionDbModel;
+import 'package:storypad/core/databases/models/collection_db_model.dart' show CollectionDbModel;
 import 'package:storypad/core/databases/models/story_db_model.dart';
-import 'package:storypad/core/databases/models/tag_category_db_model.dart'
-    show TagCategoryDbModel;
-import 'package:storypad/core/databases/models/tag_db_model.dart'
-    show $TagDbModelCopyWith, TagDbModel;
+import 'package:storypad/core/databases/models/tag_category_db_model.dart' show TagCategoryDbModel;
+import 'package:storypad/core/databases/models/tag_db_model.dart' show $TagDbModelCopyWith, TagDbModel;
 import 'package:storypad/core/mixins/debounched_callback.dart';
-import 'package:storypad/core/services/analytics/analytics_service.dart'
-    show AnalyticsService;
+import 'package:storypad/core/services/analytics/analytics_service.dart' show AnalyticsService;
 import 'package:storypad/providers/backup_provider.dart';
-import 'package:storypad/views/tags/edit/edit_tag_view.dart'
-    show EditTagResult, EditTagRoute;
+import 'package:storypad/views/tags/edit/edit_tag_view.dart' show EditTagResult, EditTagRoute;
 import 'package:storypad/views/tags/show/show_tag_view.dart' show ShowTagRoute;
 
 class TagsProvider extends ChangeNotifier with DebounchedCallback {
@@ -65,18 +59,14 @@ class TagsProvider extends ChangeNotifier with DebounchedCallback {
       items: items.where((tag) => tag.emoji == null && tag.isPerson).toList(),
     );
     _tags = CollectionDbModel(
-      items: items
-          .where((tag) => tag.emoji == null && tag.categoryId == null)
-          .toList(),
+      items: items.where((tag) => tag.emoji == null && tag.categoryId == null).toList(),
     );
 
     _emojiById = {
       for (var tag in _emojiTags?.items ?? <TagDbModel>[]) tag.id: ?tag.emoji,
     };
     _feelingEmojiById = {
-      for (var tag
-          in _emojiTags?.items.where((tag) => tag.feeling) ?? <TagDbModel>[])
-        tag.id: ?tag.emoji,
+      for (var tag in _emojiTags?.items.where((tag) => tag.feeling) ?? <TagDbModel>[]) tag.id: ?tag.emoji,
     };
     _peopleById = {
       for (var tag in _peopleTags?.items ?? <TagDbModel>[]) tag.id: tag,
@@ -205,8 +195,7 @@ class TagsProvider extends ChangeNotifier with DebounchedCallback {
     }
   }
 
-  List<String> tagTitles({int? categoryId}) =>
-      tagsOf(categoryId)?.items.map((e) => e.title).toList() ?? [];
+  List<String> tagTitles({int? categoryId}) => tagsOf(categoryId)?.items.map((e) => e.title).toList() ?? [];
 
   bool isTagExist(String title, {int? categoryId}) {
     return tagTitles(

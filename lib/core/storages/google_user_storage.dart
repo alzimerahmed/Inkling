@@ -5,12 +5,10 @@ import 'package:storypad/core/storages/storage_adapters/secure_storage_adaptor.d
 
 class GoogleUserStorage extends ObjectStorage<GoogleUserObject> {
   @override
-  Future<BaseStorageAdapter<String>> get adapter async =>
-      SecureStorageAdaptor();
+  Future<BaseStorageAdapter<String>> get adapter async => SecureStorageAdaptor();
 
   @override
-  GoogleUserObject decode(Map<String, dynamic> json) =>
-      GoogleUserObject.fromJson(json);
+  GoogleUserObject decode(Map<String, dynamic> json) => GoogleUserObject.fromJson(json);
 
   @override
   Map<String, dynamic> encode(GoogleUserObject object) => object.toJson();

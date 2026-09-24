@@ -74,12 +74,8 @@ class SpCalendarPeriodDateCell extends StatelessWidget {
                     DateFormatHelper.d(date, context.locale),
                     textAlign: .center,
                     style: TextStyle(
-                      fontWeight: isPeriodDate
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      color: isDisplayMonth
-                          ? (isPeriodDate ? colorScheme.onError : null)
-                          : theme.disabledColor,
+                      fontWeight: isPeriodDate ? FontWeight.bold : FontWeight.normal,
+                      color: isDisplayMonth ? (isPeriodDate ? colorScheme.onError : null) : theme.disabledColor,
                     ),
                   ),
                 ),

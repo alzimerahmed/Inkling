@@ -21,8 +21,7 @@ class TemplateDbModel extends BaseDbModel {
   final StoryPreferencesDbModel? preferencesOrNull;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
-  StoryPreferencesDbModel get preferences =>
-      preferencesOrNull ?? StoryPreferencesDbModel.create();
+  StoryPreferencesDbModel get preferences => preferencesOrNull ?? StoryPreferencesDbModel.create();
 
   final String? name;
   final StoryContentDbModel? content;
@@ -87,8 +86,7 @@ class TemplateDbModel extends BaseDbModel {
 
   @override
   Map<String, dynamic> toJson() => _$TemplateDbModelToJson(this);
-  factory TemplateDbModel.fromJson(Map<String, dynamic> json) =>
-      _$TemplateDbModelFromJson(json);
+  factory TemplateDbModel.fromJson(Map<String, dynamic> json) => _$TemplateDbModelFromJson(json);
 
   bool _cloudViewing = false;
   bool get cloudViewing => _cloudViewing;

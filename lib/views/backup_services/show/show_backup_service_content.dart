@@ -104,8 +104,7 @@ class _ShowBackupServiceContent extends StatelessWidget {
             },
           ),
         const SizedBox(height: 4),
-        if ((viewModel.params.service.currentUser?.configuration ?? const [])
-            .isNotEmpty) ...[
+        if ((viewModel.params.service.currentUser?.configuration ?? const []).isNotEmpty) ...[
           const Divider(height: 1),
           ..._buildConfigurationSection(context),
         ],
@@ -123,18 +122,15 @@ class _ShowBackupServiceContent extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-        if (viewModel.yearlyBackups!.isNotEmpty)
-          SpSectionTitle(title: tr('list_tile.backup.title')),
-        for (MapEntry<int, CloudFileObject> entry
-            in viewModel.getSortedYearlyBackups())
+        if (viewModel.yearlyBackups!.isNotEmpty) SpSectionTitle(title: tr('list_tile.backup.title')),
+        for (MapEntry<int, CloudFileObject> entry in viewModel.getSortedYearlyBackups())
           SpPopupMenuButton(
             items: (context) {
               return [
                 SpPopMenuItem(
                   title: tr("button.view"),
                   leadingIconData: SpIcons.info,
-                  onPressed: () =>
-                      viewModel.openCloudFile(context, entry.value),
+                  onPressed: () => viewModel.openCloudFile(context, entry.value),
                 ),
                 SpPopMenuItem(
                   title: tr("button.delete"),
@@ -249,16 +245,14 @@ class _ShowBackupServiceContent extends StatelessWidget {
             )
           : const Icon(SpIcons.profile),
       title: Text(
-        viewModel.params.service.currentUser?.identifier ??
-            tr('list_tile.backup.unsignin_subtitle'),
+        viewModel.params.service.currentUser?.identifier ?? tr('list_tile.backup.unsignin_subtitle'),
       ),
       subtitle: lastSyncAt != null ? Text(lastSyncAt) : null,
     );
   }
 
   List<Widget> _buildConfigurationSection(BuildContext context) {
-    final configuration =
-        viewModel.params.service.currentUser?.configuration ?? const [];
+    final configuration = viewModel.params.service.currentUser?.configuration ?? const [];
 
     return [
       for (final entry in configuration)

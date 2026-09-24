@@ -62,8 +62,7 @@ class _$PreferenceDbModelCWProxyImpl implements _$PreferenceDbModelCWProxy {
   PreferenceDbModel updatedAt(DateTime updatedAt) => call(updatedAt: updatedAt);
 
   @override
-  PreferenceDbModel lastSavedDeviceId(String? lastSavedDeviceId) =>
-      call(lastSavedDeviceId: lastSavedDeviceId);
+  PreferenceDbModel lastSavedDeviceId(String? lastSavedDeviceId) => call(lastSavedDeviceId: lastSavedDeviceId);
 
   @override
   PreferenceDbModel permanentlyDeletedAt(DateTime? permanentlyDeletedAt) =>
@@ -123,26 +122,24 @@ extension $PreferenceDbModelCopyWith on PreferenceDbModel {
   /// Returns a callable class used to build a new instance with modified fields.
   /// Example: `instanceOfPreferenceDbModel.copyWith(...)` or `instanceOfPreferenceDbModel.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$PreferenceDbModelCWProxy get copyWith =>
-      _$PreferenceDbModelCWProxyImpl(this);
+  _$PreferenceDbModelCWProxy get copyWith => _$PreferenceDbModelCWProxyImpl(this);
 }
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-PreferenceDbModel _$PreferenceDbModelFromJson(Map<String, dynamic> json) =>
-    PreferenceDbModel(
-      id: (json['id'] as num).toInt(),
-      key: json['key'] as String,
-      value: json['value'] as String,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
-      lastSavedDeviceId: json['last_saved_device_id'] as String?,
-      permanentlyDeletedAt: json['permanently_deleted_at'] == null
-          ? null
-          : DateTime.parse(json['permanently_deleted_at'] as String),
-    );
+PreferenceDbModel _$PreferenceDbModelFromJson(Map<String, dynamic> json) => PreferenceDbModel(
+  id: (json['id'] as num).toInt(),
+  key: json['key'] as String,
+  value: json['value'] as String,
+  createdAt: DateTime.parse(json['created_at'] as String),
+  updatedAt: DateTime.parse(json['updated_at'] as String),
+  lastSavedDeviceId: json['last_saved_device_id'] as String?,
+  permanentlyDeletedAt: json['permanently_deleted_at'] == null
+      ? null
+      : DateTime.parse(json['permanently_deleted_at'] as String),
+);
 
 Map<String, dynamic> _$PreferenceDbModelToJson(
   PreferenceDbModel instance,

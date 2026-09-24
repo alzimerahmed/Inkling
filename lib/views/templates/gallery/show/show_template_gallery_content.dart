@@ -6,8 +6,7 @@ class _ShowTemplateGalleryContent extends StatelessWidget {
   final ShowTemplateGalleryViewModel viewModel;
 
   List<StoryPageObject> constructPages() {
-    if (viewModel.pagesManager.pagesMap.keys.isEmpty)
-      return <StoryPageObject>[];
+    if (viewModel.pagesManager.pagesMap.keys.isEmpty) return <StoryPageObject>[];
     return List.generate(viewModel.draftContent?.richPages?.length ?? 0, (
       index,
     ) {
@@ -36,10 +35,7 @@ class _ShowTemplateGalleryContent extends StatelessWidget {
                 ),
                 SpPopMenuItem(
                   leadingIconData: SpIcons.save,
-                  trailingIconData:
-                      !context.read<InAppPurchaseProvider>().isProUser
-                      ? SpIcons.lock
-                      : null,
+                  trailingIconData: !context.read<InAppPurchaseProvider>().isProUser ? SpIcons.lock : null,
                   title: tr('button.save_template'),
                   titleStyle: context.read<InAppPurchaseProvider>().isProUser
                       ? null
@@ -96,9 +92,7 @@ class _ShowTemplateGalleryContent extends StatelessWidget {
       storyContent: viewModel.draftContent!,
       headerBuilder: note != null
           ? (_) => Padding(
-              padding: CupertinoSheetRoute.hasParentSheet(context)
-                  ? EdgeInsets.zero
-                  : const EdgeInsets.only(top: 12.0),
+              padding: CupertinoSheetRoute.hasParentSheet(context) ? EdgeInsets.zero : const EdgeInsets.only(top: 12.0),
               child: TemplateNote(note: note),
             )
           : null,

@@ -2,8 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:storypad/core/constants/app_constants.dart'
-    show kAppLogo, kIsCupertino, kStoryPad;
+import 'package:storypad/core/constants/app_constants.dart' show kAppLogo, kIsCupertino, kStoryPad;
 import 'package:storypad/core/services/app_logo_service.dart';
 import 'package:storypad/core/types/app_logo.dart';
 import 'package:storypad/providers/nickname_provider.dart';
@@ -30,14 +29,11 @@ class SpNicknameBottomSheet extends BaseBottomSheet {
     TextEditingController controller,
     ValueNotifier<AppLogo> appLogoNotifier,
   ) async {
-    bool logoChanged =
-        nickname == controller.text.trim() && appLogoNotifier.value != kAppLogo;
-    bool nicknameChanged =
-        nickname != controller.text.trim() && controller.text.trim().isNotEmpty;
+    bool logoChanged = nickname == controller.text.trim() && appLogoNotifier.value != kAppLogo;
+    bool nicknameChanged = nickname != controller.text.trim() && controller.text.trim().isNotEmpty;
 
     if (nicknameChanged || logoChanged) {
-      if (nicknameChanged)
-        context.read<NicknameProvider>().setNickname(controller.text.trim());
+      if (nicknameChanged) context.read<NicknameProvider>().setNickname(controller.text.trim());
       if (logoChanged) await AppLogoService().set(appLogoNotifier.value);
       if (context.mounted) Navigator.maybePop(context);
 
@@ -83,9 +79,7 @@ class SpNicknameBottomSheet extends BaseBottomSheet {
                   if (kStoryPad) ...[
                     const SizedBox(height: 4.0),
                     buildLogoSelector(context, appLogoNotifier),
-                    kIsCupertino
-                        ? const SizedBox(height: 12.0)
-                        : const SizedBox(height: 8.0),
+                    kIsCupertino ? const SizedBox(height: 12.0) : const SizedBox(height: 8.0),
                   ],
                   buildSaveButton(context, controller, appLogoNotifier),
                   buildBottomPadding(bottomPadding),
@@ -137,29 +131,19 @@ class SpNicknameBottomSheet extends BaseBottomSheet {
         valueListenable2: appLogoNotifier,
         builder: (context, nicknameValue, appLogoValue, child) {
           bool unchanged =
-              (nicknameValue.text.trim().isEmpty ||
-                  nicknameValue.text.trim() == nickname) &&
-              appLogoValue == kAppLogo;
+              (nicknameValue.text.trim().isEmpty || nicknameValue.text.trim() == nickname) && appLogoValue == kAppLogo;
 
           if (kIsCupertino) {
             return CupertinoButton.filled(
               disabledColor: Theme.of(context).disabledColor,
               sizeStyle: CupertinoButtonSize.medium,
-              onPressed: unchanged
-                  ? null
-                  : () => save(context, controller, appLogoNotifier),
-              child: nickname == null
-                  ? Text(tr("button.save"))
-                  : Text(tr("button.update")),
+              onPressed: unchanged ? null : () => save(context, controller, appLogoNotifier),
+              child: nickname == null ? Text(tr("button.save")) : Text(tr("button.update")),
             );
           } else {
             return FilledButton(
-              onPressed: unchanged
-                  ? null
-                  : () => save(context, controller, appLogoNotifier),
-              child: nickname == null
-                  ? Text(tr("button.save"))
-                  : Text(tr("button.update")),
+              onPressed: unchanged ? null : () => save(context, controller, appLogoNotifier),
+              child: nickname == null ? Text(tr("button.save")) : Text(tr("button.update")),
             );
           }
         },
@@ -174,8 +158,7 @@ class SpNicknameBottomSheet extends BaseBottomSheet {
   ) {
     return TextFormField(
       validator: (value) {
-        if (value == null || value.trim().isEmpty)
-          return tr("general.required");
+        if (value == null || value.trim().isEmpty) return tr("general.required");
         return null;
       },
       controller: controller,
@@ -196,8 +179,7 @@ class SpNicknameBottomSheet extends BaseBottomSheet {
   ) {
     return FormField<String>(
       validator: (value) {
-        if (value == null || value.trim().isEmpty)
-          return tr("general.required");
+        if (value == null || value.trim().isEmpty) return tr("general.required");
         return null;
       },
       builder: (state) {

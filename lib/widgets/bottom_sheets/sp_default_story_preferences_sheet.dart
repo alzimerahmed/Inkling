@@ -61,26 +61,19 @@ class _StoryEditingPreferencesSheetContent extends StatefulWidget {
   final void Function(DefaultStoryPreferencesObject? preferences)? onChanged;
 
   @override
-  State<_StoryEditingPreferencesSheetContent> createState() =>
-      _StoryEditingPreferencesSheetContentState();
+  State<_StoryEditingPreferencesSheetContent> createState() => _StoryEditingPreferencesSheetContentState();
 }
 
-class _StoryEditingPreferencesSheetContentState
-    extends State<_StoryEditingPreferencesSheetContent> {
-  late var defaultStoryPreferences = context
-      .read<DevicePreferencesProvider>()
-      .preferences
-      .defaultStoryPreferences;
+class _StoryEditingPreferencesSheetContentState extends State<_StoryEditingPreferencesSheetContent> {
+  late var defaultStoryPreferences = context.read<DevicePreferencesProvider>().preferences.defaultStoryPreferences;
   late var defaultStoryPreferencesDefault = DefaultStoryPreferencesObject();
   late var initialStoryEditingPreferences = defaultStoryPreferences;
 
   bool get changed =>
-      jsonEncode(defaultStoryPreferences.toJson()) !=
-      jsonEncode(initialStoryEditingPreferences.toJson());
+      jsonEncode(defaultStoryPreferences.toJson()) != jsonEncode(initialStoryEditingPreferences.toJson());
 
   bool get resettable =>
-      jsonEncode(defaultStoryPreferences.toJson()) !=
-      jsonEncode(defaultStoryPreferencesDefault.toJson());
+      jsonEncode(defaultStoryPreferences.toJson()) != jsonEncode(defaultStoryPreferencesDefault.toJson());
 
   void _apply(DefaultStoryPreferencesObject next) {
     setState(() => defaultStoryPreferences = next);
@@ -121,9 +114,7 @@ class _StoryEditingPreferencesSheetContentState
             ),
           IconButton(
             icon: const Icon(SpIcons.refresh),
-            onPressed: resettable
-                ? () => _apply(defaultStoryPreferencesDefault)
-                : null,
+            onPressed: resettable ? () => _apply(defaultStoryPreferencesDefault) : null,
           ),
           if (CupertinoSheetRoute.hasParentSheet(context))
             CloseButton(onPressed: () => CupertinoSheetRoute.popSheet(context)),
@@ -137,8 +128,7 @@ class _StoryEditingPreferencesSheetContentState
             backgroundColor: ColorScheme.of(context).surfaceContainerLow,
             colorSeedValue: defaultStoryPreferences.defaultColorSeedValue,
             colorTone: defaultStoryPreferences.defaultColorTone,
-            backgroundImagePath:
-                defaultStoryPreferences.defaultBackgroundImagePath,
+            backgroundImagePath: defaultStoryPreferences.defaultBackgroundImagePath,
             onThemeChanged: ({colorSeedValue, colorTone, backgroundImagePath}) {
               _apply(
                 defaultStoryPreferences.copyWith(

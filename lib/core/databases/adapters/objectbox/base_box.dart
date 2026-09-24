@@ -8,8 +8,7 @@ import 'package:storypad/core/services/logger/app_logger.dart';
 import 'package:storypad/core/types/support_directory_path.dart';
 import 'package:storypad/objectbox.g.dart';
 
-abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel>
-    extends BaseDbAdapter<T> {
+abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel> extends BaseDbAdapter<T> {
   @override
   String get tableName;
 
@@ -62,16 +61,13 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel>
         }
       }
 
-      return lastUpdated == null
-          ? {}
-          : {BackupFileObject.kGlobalBackupYear: lastUpdated};
+      return lastUpdated == null ? {} : {BackupFileObject.kGlobalBackupYear: lastUpdated};
     }
 
     Map<int, DateTime?> lastUpdatedByYear = {};
     for (var obj in objects) {
       int year = obj.createdAt.year;
-      if (lastUpdatedByYear[year] == null ||
-          obj.updatedAt.isAfter(lastUpdatedByYear[year]!)) {
+      if (lastUpdatedByYear[year] == null || obj.updatedAt.isAfter(lastUpdatedByYear[year]!)) {
         lastUpdatedByYear[year] = obj.updatedAt;
       }
     }
@@ -169,9 +165,7 @@ abstract class BaseBox<B extends BaseObjectBox, T extends BaseDbModel>
 
     Query<B>? query = queryBuilder.build();
 
-    int? limit = filters != null && filters.containsKey('limit')
-        ? filters['limit'] as int
-        : null;
+    int? limit = filters != null && filters.containsKey('limit') ? filters['limit'] as int : null;
     if (limit != null) query.limit = limit;
 
     objects = await query.findAsync();

@@ -21,9 +21,7 @@ class SpFloatingMusicNote extends StatefulWidget {
         bool notPlaying =
             provider.audioPlayersService.playingStates.keys.isEmpty ||
             provider.audioPlayersService.playingStates.values.every(
-              (p) =>
-                  p.processingState == ProcessingState.idle ||
-                  p.processingState == ProcessingState.loading,
+              (p) => p.processingState == ProcessingState.idle || p.processingState == ProcessingState.loading,
             );
 
         if (notPlaying) return child!;
@@ -36,8 +34,7 @@ class SpFloatingMusicNote extends StatefulWidget {
   State<SpFloatingMusicNote> createState() => _SpFloatingMusicNoteState();
 }
 
-class _SpFloatingMusicNoteState extends State<SpFloatingMusicNote>
-    with TickerProviderStateMixin {
+class _SpFloatingMusicNoteState extends State<SpFloatingMusicNote> with TickerProviderStateMixin {
   late final List<AnimationController> _controllers;
   late final List<Animation<double>> _animations;
 
@@ -119,8 +116,7 @@ class _SpFloatingMusicNoteState extends State<SpFloatingMusicNote>
               // Calculate position along the path with smooth easing
               double easedProgress = Curves.easeOut.transform(progress);
               double x = path.startX + (path.endX - path.startX) * progress;
-              double y =
-                  path.startY + (path.endY - path.startY) * easedProgress;
+              double y = path.startY + (path.endY - path.startY) * easedProgress;
 
               // Add subtle horizontal drift for natural movement
               double drift = math.sin(progress * math.pi * 2) * 3;

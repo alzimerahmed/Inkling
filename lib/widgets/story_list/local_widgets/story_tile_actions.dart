@@ -43,8 +43,7 @@ class StoryTileActions {
 
         /// In all case, delete button only show inside [SpStoryListWithQuery],
         /// So after undo, we should reload the list.
-        if (storyListReloaderContext != null &&
-            storyListReloaderContext!.mounted) {
+        if (storyListReloaderContext != null && storyListReloaderContext!.mounted) {
           SpStoryListWithQuery.of(
             storyListReloaderContext!,
           )?.load(debugSource: '$runtimeType#undoHardDelete');
@@ -106,8 +105,7 @@ class StoryTileActions {
       );
 
       // sometime, it move to bin from archive page, so need to reload story list which in archives view as well.
-      if (storyListReloaderContext != null &&
-          storyListReloaderContext!.mounted) {
+      if (storyListReloaderContext != null && storyListReloaderContext!.mounted) {
         await SpStoryListWithQuery.of(
           storyListReloaderContext!,
         )?.load(debugSource: '$runtimeType#undoMoveToBin');
@@ -190,8 +188,7 @@ class StoryTileActions {
           story: updatedStory,
         );
 
-        if (storyListReloaderContext != null &&
-            storyListReloaderContext!.mounted) {
+        if (storyListReloaderContext != null && storyListReloaderContext!.mounted) {
           await SpStoryListWithQuery.of(
             storyListReloaderContext!,
           )?.load(debugSource: '$runtimeType#undoPutBack');

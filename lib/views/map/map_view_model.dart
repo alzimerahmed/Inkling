@@ -56,8 +56,7 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
   bool _showCurrentLocation = false;
   bool get showCurrentLocation => _showCurrentLocation;
 
-  SpMapRenderer get mapRenderer =>
-      viewContext.read<DevicePreferencesProvider>().mapRenderer;
+  SpMapRenderer get mapRenderer => viewContext.read<DevicePreferencesProvider>().mapRenderer;
 
   final SpMapController mapController = SpMapController();
 
@@ -132,10 +131,7 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
     await mapController.resetRotation();
   }
 
-  late SpMapStyle _mapStyle = viewContext
-      .read<DevicePreferencesProvider>()
-      .preferences
-      .mapStyle;
+  late SpMapStyle _mapStyle = viewContext.read<DevicePreferencesProvider>().preferences.mapStyle;
   SpMapStyle get mapStyle => _mapStyle;
 
   List<MapStoryObject> _visibleStories = [];
@@ -179,8 +175,7 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
   /// onto the seven weekday bitmaps.
   String _iconCacheKeyForStory(MapStoryObject story) {
     final int? assetId = _firstImageAssetId(story);
-    if (assetId != null && _assetFileById[assetId] != null)
-      return 'img:$assetId';
+    if (assetId != null && _assetFileById[assetId] != null) return 'img:$assetId';
 
     return 'plc:${markerColorForStory(story).toARGB32()}';
   }
@@ -198,8 +193,7 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
       _viewportFetchExpansionFactor(viewport.zoom),
     );
 
-    if (_fetchedBounds?.containsBounds(viewport.bounds) != true ||
-        forceReload) {
+    if (_fetchedBounds?.containsBounds(viewport.bounds) != true || forceReload) {
       AppLogger.d(
         '$runtimeType#handleViewportChanged - fetching stories for bounds: $fetchBounds',
       );
@@ -220,8 +214,7 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
     // Same ids can still mean different pins when forced: forceReload is what
     // a story edit (place, photos) triggers, and that never changes which
     // stories are visible, only what their pins should look like.
-    if (!forceReload && _hasSameStoryIds(_visibleStories, visibleStories))
-      return;
+    if (!forceReload && _hasSameStoryIds(_visibleStories, visibleStories)) return;
 
     // Before publishing, not after: a pin drawn now and given its photo later
     // has to visibly change twice. Only new stories cost anything here, and
@@ -264,10 +257,7 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   Future<void> onClusterTap(List<SpMapMarker<MapStoryObject>> markers) async {
-    final List<int> storyIds = markers
-        .map((marker) => marker.data.id)
-        .toSet()
-        .toList();
+    final List<int> storyIds = markers.map((marker) => marker.data.id).toSet().toList();
     await _showStoriesSheet(storyIds, focusPoint: _clusterCenter(markers));
   }
 
@@ -308,12 +298,10 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
     final double latitudeSpan = viewport.bounds.north - viewport.bounds.south;
     if (!latitudeSpan.isFinite || latitudeSpan <= 0) return;
 
-    final double adjustedLatitude =
-        (point.latitude - (latitudeSpan * _storiesSheetMapFocusOffsetFactor))
-            .clamp(
-              -90.0,
-              90.0,
-            );
+    final double adjustedLatitude = (point.latitude - (latitudeSpan * _storiesSheetMapFocusOffsetFactor)).clamp(
+      -90.0,
+      90.0,
+    );
 
     await mapController.animateTo(
       adjustedLatitude,
@@ -323,8 +311,7 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   SpLatLng _clusterCenter(List<SpMapMarker<MapStoryObject>> markers) {
-    if (markers.isEmpty)
-      return _lastViewport?.center ?? initialSpMapCamera.target;
+    if (markers.isEmpty) return _lastViewport?.center ?? initialSpMapCamera.target;
 
     double minLatitude = markers.first.point.latitude;
     double maxLatitude = markers.first.point.latitude;
@@ -332,18 +319,10 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
     double maxLongitude = markers.first.point.longitude;
 
     for (final marker in markers.skip(1)) {
-      minLatitude = minLatitude < marker.point.latitude
-          ? minLatitude
-          : marker.point.latitude;
-      maxLatitude = maxLatitude > marker.point.latitude
-          ? maxLatitude
-          : marker.point.latitude;
-      minLongitude = minLongitude < marker.point.longitude
-          ? minLongitude
-          : marker.point.longitude;
-      maxLongitude = maxLongitude > marker.point.longitude
-          ? maxLongitude
-          : marker.point.longitude;
+      minLatitude = minLatitude < marker.point.latitude ? minLatitude : marker.point.latitude;
+      maxLatitude = maxLatitude > marker.point.latitude ? maxLatitude : marker.point.latitude;
+      minLongitude = minLongitude < marker.point.longitude ? minLongitude : marker.point.longitude;
+      maxLongitude = maxLongitude > marker.point.longitude ? maxLongitude : marker.point.longitude;
     }
 
     return SpLatLng(
@@ -367,9 +346,7 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
         .toList();
     if (unresolved.isEmpty) return;
 
-    final List<int> candidateIds = unresolved
-        .expand((story) => story.assets ?? const <int>[])
-        .toList();
+    final List<int> candidateIds = unresolved.expand((story) => story.assets ?? const <int>[]).toList();
 
     Map<int, AssetDbModel> imageAssetsById = const {};
     if (candidateIds.isNotEmpty) {
@@ -379,8 +356,7 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
       if (disposed) return;
 
       imageAssetsById = {
-        for (final asset in collection?.items ?? const <AssetDbModel>[])
-          asset.id: asset,
+        for (final asset in collection?.items ?? const <AssetDbModel>[]) asset.id: asset,
       };
     }
 
@@ -414,9 +390,7 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
     // Read once up front: the downloads below are awaited, and reaching back
     // into the context after that is exactly what `use_build_context_
     // synchronously` is warning about.
-    final List<BackupCloudService> signedInServices = viewContext
-        .read<BackupProvider>()
-        .signedInServices;
+    final List<BackupCloudService> signedInServices = viewContext.read<BackupProvider>().signedInServices;
     if (signedInServices.isEmpty) return;
 
     final List<int> pendingAssetIds = stories
@@ -434,16 +408,10 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
 
     // A few at a time: a hundred visible pins would otherwise open a hundred
     // connections at once.
-    for (
-      int start = 0;
-      start < pendingAssetIds.length;
-      start += _imageResolveConcurrency
-    ) {
+    for (int start = 0; start < pendingAssetIds.length; start += _imageResolveConcurrency) {
       if (disposed) return;
 
-      final Iterable<int> chunk = pendingAssetIds
-          .skip(start)
-          .take(_imageResolveConcurrency);
+      final Iterable<int> chunk = pendingAssetIds.skip(start).take(_imageResolveConcurrency);
       await Future.wait(
         chunk.map((assetId) => _resolveAssetFile(assetId, signedInServices)),
       );
@@ -490,11 +458,10 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
     if (signedInServices.isEmpty) return null;
 
     try {
-      final String localFilePath = await BackupAssetDownloaderService()
-          .downloadAsset(
-            asset: asset,
-            signedInServices: signedInServices,
-          );
+      final String localFilePath = await BackupAssetDownloaderService().downloadAsset(
+        asset: asset,
+        signedInServices: signedInServices,
+      );
       return File(localFilePath);
     } catch (e) {
       _failedAssetIds.add(assetId);
@@ -505,8 +472,7 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
     }
   }
 
-  int? _firstImageAssetId(MapStoryObject story) =>
-      _imageAssetIdByStoryId[story.id];
+  int? _firstImageAssetId(MapStoryObject story) => _imageAssetIdByStoryId[story.id];
 
   void _notifyListenersCoalesced() {
     _notifyDebounce?.cancel();
@@ -515,12 +481,9 @@ class MapViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   double _viewportFetchExpansionFactor(double zoom) {
     final double clampedZoom = zoom.clamp(_minExpansionZoom, _maxExpansionZoom);
-    final double progress =
-        (clampedZoom - _minExpansionZoom) /
-        (_maxExpansionZoom - _minExpansionZoom);
+    final double progress = (clampedZoom - _minExpansionZoom) / (_maxExpansionZoom - _minExpansionZoom);
     return _minViewportFetchExpansionFactor +
-        ((_maxViewportFetchExpansionFactor - _minViewportFetchExpansionFactor) *
-            progress);
+        ((_maxViewportFetchExpansionFactor - _minViewportFetchExpansionFactor) * progress);
   }
 
   List<MapStoryObject> _limitStoriesByDistance(

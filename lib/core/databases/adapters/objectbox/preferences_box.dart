@@ -9,8 +9,7 @@ import 'package:storypad/objectbox.g.dart';
 part './helpers/defined_preference.dart';
 
 class PreferencesBox extends BaseBox<PreferenceObjectBox, PreferenceDbModel> {
-  _DefinedPreference get nickname =>
-      _DefinedPreference<String>(id: 2, key: 'nickname');
+  _DefinedPreference get nickname => _DefinedPreference<String>(id: 2, key: 'nickname');
 
   _DefinedPreference<String> storageQuotaFor(BackupServiceType serviceType) {
     return switch (serviceType) {
@@ -72,24 +71,20 @@ class PreferencesBox extends BaseBox<PreferenceObjectBox, PreferenceDbModel> {
   bool get isYearPartitioned => false;
 
   @override
-  QueryIntegerProperty<PreferenceObjectBox> get idProperty =>
-      PreferenceObjectBox_.id;
+  QueryIntegerProperty<PreferenceObjectBox> get idProperty => PreferenceObjectBox_.id;
 
   @override
-  QueryStringProperty<PreferenceObjectBox> get lastSavedDeviceIdProperty =>
-      PreferenceObjectBox_.lastSavedDeviceId;
+  QueryStringProperty<PreferenceObjectBox> get lastSavedDeviceIdProperty => PreferenceObjectBox_.lastSavedDeviceId;
 
   @override
-  QueryDateProperty<PreferenceObjectBox> get permanentlyDeletedAtProperty =>
-      PreferenceObjectBox_.permanentlyDeletedAt;
+  QueryDateProperty<PreferenceObjectBox> get permanentlyDeletedAtProperty => PreferenceObjectBox_.permanentlyDeletedAt;
 
   @override
   QueryBuilder<PreferenceObjectBox> buildQuery({
     Map<String, dynamic>? filters,
     bool returnDeleted = false,
   }) {
-    Condition<PreferenceObjectBox> conditions = PreferenceObjectBox_.id
-        .notNull();
+    Condition<PreferenceObjectBox> conditions = PreferenceObjectBox_.id.notNull();
     if (!returnDeleted)
       conditions = conditions.and(
         PreferenceObjectBox_.permanentlyDeletedAt.isNull(),
@@ -99,8 +94,7 @@ class PreferencesBox extends BaseBox<PreferenceObjectBox, PreferenceDbModel> {
   }
 
   @override
-  PreferenceDbModel modelFromJson(Map<String, dynamic> json) =>
-      PreferenceDbModel.fromJson(json);
+  PreferenceDbModel modelFromJson(Map<String, dynamic> json) => PreferenceDbModel.fromJson(json);
 
   @override
   Future<PreferenceObjectBox> modelToObject(

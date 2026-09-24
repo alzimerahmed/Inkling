@@ -6,8 +6,7 @@ class MarkdownBodyShortenerService {
     maxCharacterCount = max(maxCharacterCount, 50);
     String body = markdown.trim();
 
-    if (body.split("\n").length > 10)
-      body = "${body.split("\n").getRange(0, 10).join("\n")}...";
+    if (body.split("\n").length > 10) body = "${body.split("\n").getRange(0, 10).join("\n")}...";
     if (body.length <= maxCharacterCount) return body.sanitizeUtf16;
 
     String extract = body.substring(
@@ -55,8 +54,6 @@ class MarkdownBodyShortenerService {
       }
     }
 
-    return bodyLength >= santitizedBodyLength
-        ? "${body.substring(0, santitizedBodyLength).trim()}..."
-        : body;
+    return bodyLength >= santitizedBodyLength ? "${body.substring(0, santitizedBodyLength).trim()}..." : body;
   }
 }

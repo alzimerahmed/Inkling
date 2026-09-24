@@ -39,8 +39,7 @@ class ServiceSyncStatus {
 class BackupSyncStateStore extends ChangeNotifier {
   final Map<BackupServiceType, ServiceSyncStatus> _statusByService = {};
 
-  ServiceSyncStatus statusFor(BackupServiceType type) =>
-      _statusByService[type] ?? ServiceSyncStatus.idle;
+  ServiceSyncStatus statusFor(BackupServiceType type) => _statusByService[type] ?? ServiceSyncStatus.idle;
 
   /// Clears everything known about a service — e.g. an explicit sign-out,
   /// where the account itself is gone, not just its sync progress.

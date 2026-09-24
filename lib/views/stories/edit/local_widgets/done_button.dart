@@ -15,8 +15,7 @@ class _DoneButton extends StatelessWidget {
         bool disabled = lastSavedAt == null;
         return Visibility(
           visible:
-              (viewModel.flowType == EditingFlowType.create &&
-                  lastSavedAt != null) ||
+              (viewModel.flowType == EditingFlowType.create && lastSavedAt != null) ||
               (viewModel.flowType == EditingFlowType.update),
           child: SpFadeIn.bound(
             child: FilledButton.tonalIcon(

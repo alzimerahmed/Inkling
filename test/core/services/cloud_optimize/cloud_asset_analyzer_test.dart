@@ -12,8 +12,7 @@ const _serviceId = 'google_drive';
 const _email = 'user@example.com';
 const _otherEmail = 'other@example.com';
 
-CloudFileObject _file(String id, String fileName) =>
-    CloudFileObject(fileName: fileName, id: id, description: null);
+CloudFileObject _file(String id, String fileName) => CloudFileObject(fileName: fileName, id: id, description: null);
 
 /// Create an [AssetDbModel] with the given [cloudDestinations].
 AssetDbModel _asset(
@@ -463,9 +462,7 @@ void main() {
       });
 
       test('old cloud file with old filename timestamp → eligible', () {
-        final oldAssetId = DateTime.now()
-            .subtract(const Duration(days: 60))
-            .millisecondsSinceEpoch;
+        final oldAssetId = DateTime.now().subtract(const Duration(days: 60)).millisecondsSinceEpoch;
         final file = fileWithAge(
           'f4c',
           '$oldAssetId.jpg',

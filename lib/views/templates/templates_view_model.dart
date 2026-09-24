@@ -15,8 +15,7 @@ class TemplatesViewModel extends ChangeNotifier with DisposeAwareMixin {
     required BuildContext context,
   }) {
     bool isProUser = context.read<InAppPurchaseProvider>().isProUser;
-    int? currentIndex =
-        PreviouslyVisitedTemplateTabIndexStorage.appInstance.currentIndex;
+    int? currentIndex = PreviouslyVisitedTemplateTabIndexStorage.appInstance.currentIndex;
     if (!isProUser) currentIndex = null;
     initialTabIndex = currentIndex ?? 1;
   }

@@ -23,9 +23,7 @@ class BackupAssetsTableViewer extends StatelessWidget {
             tr(
               'general.uploaded_to_args',
               namedArgs: {
-                'URL':
-                    asset.getGoogleDriveForEmails()?.join(", ") ??
-                    tr('general.na'),
+                'URL': asset.getGoogleDriveForEmails()?.join(", ") ?? tr('general.na'),
               },
             ),
           ),

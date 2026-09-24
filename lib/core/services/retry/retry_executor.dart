@@ -1,5 +1,4 @@
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
-    as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
 import 'package:storypad/core/services/retry/retry_policy.dart';
 import 'package:storypad/core/types/backup_result.dart';
 

@@ -13,12 +13,10 @@ class EventsBox extends BaseBox<EventObjectBox, EventDbModel> {
   QueryIntegerProperty<EventObjectBox> get idProperty => EventObjectBox_.id;
 
   @override
-  QueryStringProperty<EventObjectBox> get lastSavedDeviceIdProperty =>
-      EventObjectBox_.lastSavedDeviceId;
+  QueryStringProperty<EventObjectBox> get lastSavedDeviceIdProperty => EventObjectBox_.lastSavedDeviceId;
 
   @override
-  QueryDateProperty<EventObjectBox> get permanentlyDeletedAtProperty =>
-      EventObjectBox_.permanentlyDeletedAt;
+  QueryDateProperty<EventObjectBox> get permanentlyDeletedAtProperty => EventObjectBox_.permanentlyDeletedAt;
 
   @override
   QueryBuilder<EventObjectBox> buildQuery({
@@ -38,14 +36,10 @@ class EventsBox extends BaseBox<EventObjectBox, EventDbModel> {
       conditions = conditions.and(
         EventObjectBox_.permanentlyDeletedAt.isNull(),
       );
-    if (year != null)
-      conditions = conditions.and(EventObjectBox_.year.equals(year));
-    if (month != null)
-      conditions = conditions.and(EventObjectBox_.month.equals(month));
-    if (day != null)
-      conditions = conditions.and(EventObjectBox_.day.equals(day));
-    if (eventType != null)
-      conditions = conditions.and(EventObjectBox_.eventType.equals(eventType));
+    if (year != null) conditions = conditions.and(EventObjectBox_.year.equals(year));
+    if (month != null) conditions = conditions.and(EventObjectBox_.month.equals(month));
+    if (day != null) conditions = conditions.and(EventObjectBox_.day.equals(day));
+    if (eventType != null) conditions = conditions.and(EventObjectBox_.eventType.equals(eventType));
     if (createdYear != null) {
       conditions = conditions.and(
         EventObjectBox_.createdAt.betweenDate(

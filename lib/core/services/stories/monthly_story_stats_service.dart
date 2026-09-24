@@ -41,9 +41,7 @@ class MonthlyStoryStatsService {
       }
 
       final bool isCurrentMonth = year == today.year && month == today.month;
-      final int totalDays = isCurrentMonth
-          ? today.day
-          : DaysCountInMonthService.get(year: year, month: month);
+      final int totalDays = isCurrentMonth ? today.day : DaysCountInMonthService.get(year: year, month: month);
 
       result[month] = MonthRecapStatsObject(
         month: month,

@@ -21,13 +21,9 @@ class _PinStoryIconButton extends StatelessWidget {
           tooltip: allPinned
               ? "${tr("button.unpin_story")} (${state.selectedStories.length})"
               : "${tr("button.pin_story")} (${state.selectedStories.length})",
-          icon: allPinned
-              ? const Icon(SpIcons.pinSlash)
-              : const Icon(SpIcons.pin),
+          icon: allPinned ? const Icon(SpIcons.pinSlash) : const Icon(SpIcons.pin),
           color: allPinned ? null : ColorScheme.of(context).primary,
-          onPressed: stories.isEmpty
-              ? null
-              : () => viewModel.togglePinForStories(state, context),
+          onPressed: stories.isEmpty ? null : () => viewModel.togglePinForStories(state, context),
         ),
       ],
     );

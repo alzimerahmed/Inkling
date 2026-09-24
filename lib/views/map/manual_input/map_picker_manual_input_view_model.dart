@@ -8,8 +8,7 @@ import 'package:storypad/core/services/geocoding/sp_coordinate_parser_service.da
 import 'package:storypad/core/services/geocoding/sp_geocoding_service.dart';
 import 'map_picker_manual_input_view.dart';
 
-class MapPickerManualInputViewModel extends ChangeNotifier
-    with DisposeAwareMixin {
+class MapPickerManualInputViewModel extends ChangeNotifier with DisposeAwareMixin {
   final MapPickerManualInputRoute params;
 
   MapPickerManualInputViewModel({
@@ -68,13 +67,10 @@ class MapPickerManualInputViewModel extends ChangeNotifier
         return;
       }
 
-      final PlaceDbModel? result = await SpGeocodingService.systemInstance
-          .reverseGeocode(latLng);
+      final PlaceDbModel? result = await SpGeocodingService.systemInstance.reverseGeocode(latLng);
       if (version != _resolveVersion || disposed) return;
 
-      _resolvedPlace =
-          result ??
-          PlaceDbModel(latitude: latLng.latitude, longitude: latLng.longitude);
+      _resolvedPlace = result ?? PlaceDbModel(latitude: latLng.latitude, longitude: latLng.longitude);
     } catch (_) {
       if (version == _resolveVersion) {
         _resolvedPlace = null;

@@ -117,9 +117,7 @@ class SpShareLogsBottomSheet extends BaseBottomSheet {
 
         // iPad requires sharePositionOrigin for proper share sheet positioning
         // Ensure passing correct button context to have proper positioning.
-        sharePositionOrigin: box != null
-            ? box.localToGlobal(Offset.zero) & box.size
-            : null,
+        sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
       ),
     );
   }

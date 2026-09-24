@@ -1,8 +1,7 @@
 part of '../stories_box.dart';
 
 // Period markers are matched to stories by calendar date (decoupled from eventId).
-int periodDateKey(int year, int month, int day) =>
-    year * 10000 + month * 100 + day;
+int periodDateKey(int year, int month, int day) => year * 10000 + month * 100 + day;
 
 StoryDbModel _objectToModel(Map<String, dynamic> map) {
   StoryObjectBox object = map['object'];
@@ -11,8 +10,7 @@ StoryDbModel _objectToModel(Map<String, dynamic> map) {
   Iterable<PathType> types = PathType.values.where(
     (e) => e.name == object.type,
   );
-  Map<int, EventDbModel> eventsByDate =
-      options != null && options.containsKey('eventsByDate')
+  Map<int, EventDbModel> eventsByDate = options != null && options.containsKey('eventsByDate')
       ? options['eventsByDate']
       : {};
 
@@ -34,12 +32,8 @@ StoryDbModel _objectToModel(Map<String, dynamic> map) {
     tags: object.tags,
     assets: object.assets,
     preferencesOrNull: StoryContentHelper.decodePreferences(object.preferences),
-    latestContent: object.latestContent != null
-        ? StoryContentHelper.stringToContent(object.latestContent!)
-        : null,
-    draftContent: object.draftContent != null
-        ? StoryContentHelper.stringToContent(object.draftContent!)
-        : null,
+    latestContent: object.latestContent != null ? StoryContentHelper.stringToContent(object.latestContent!) : null,
+    draftContent: object.draftContent != null ? StoryContentHelper.stringToContent(object.draftContent!) : null,
     movedToBinAt: object.movedToBinAt,
     lastSavedDeviceId: object.lastSavedDeviceId,
     permanentlyDeletedAt: object.permanentlyDeletedAt,
@@ -47,9 +41,7 @@ StoryDbModel _objectToModel(Map<String, dynamic> map) {
     templateId: object.templateId,
     wordCount: object.wordCount,
     characterCount: object.characterCount,
-    place: object.place != null
-        ? PlaceDbModel.fromJson(jsonDecode(object.place!))
-        : null,
+    place: object.place != null ? PlaceDbModel.fromJson(jsonDecode(object.place!)) : null,
   );
 
   return story.copyWith(
@@ -118,17 +110,11 @@ StoryObjectBox _modelToObject(Map<String, dynamic> map) {
     // Set search metadata to null so that when open search view, it will be picked up for reindexing.
     searchMetadata: null,
 
-    latestContent: story.latestContent != null
-        ? StoryContentHelper.contentToString(story.latestContent!)
-        : null,
-    draftContent: story.draftContent != null
-        ? StoryContentHelper.contentToString(story.draftContent!)
-        : null,
+    latestContent: story.latestContent != null ? StoryContentHelper.contentToString(story.latestContent!) : null,
+    draftContent: story.draftContent != null ? StoryContentHelper.contentToString(story.draftContent!) : null,
     changes: [],
     wordCount: story.draftContent?.wordCount ?? story.latestContent?.wordCount,
-    characterCount:
-        story.draftContent?.characterCount ??
-        story.latestContent?.characterCount,
+    characterCount: story.draftContent?.characterCount ?? story.latestContent?.characterCount,
     permanentlyDeletedAt: story.permanentlyDeletedAt,
     preferences: jsonEncode(story.preferences.toNonNullJson()),
     latitude: story.place?.latitude,

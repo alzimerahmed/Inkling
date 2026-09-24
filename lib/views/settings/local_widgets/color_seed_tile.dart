@@ -21,9 +21,7 @@ class ColorSeedTile extends StatelessWidget {
       floatingBuilder: (close, openAbove) {
         return SpColorPicker(
           isDarkMode: AppTheme.isDarkMode(context),
-          position: openAbove
-              ? SpColorPickerPosition.bottom
-              : SpColorPickerPosition.top,
+          position: openAbove ? SpColorPickerPosition.bottom : SpColorPickerPosition.top,
           currentColor: provider.preferences.colorSeed,
           level: SpColorPickerLevel.one,
           onPickedColor: (color) async {
@@ -36,9 +34,7 @@ class ColorSeedTile extends StatelessWidget {
         return ListTile(
           title: Text(context.tr("list_tile.color_seed.title")),
           subtitle: Text(
-            provider.preferences.colorSeedCustomized
-                ? context.tr("general.custom")
-                : context.tr("general.default"),
+            provider.preferences.colorSeedCustomized ? context.tr("general.custom") : context.tr("general.default"),
           ),
           leading: Container(
             width: 40,

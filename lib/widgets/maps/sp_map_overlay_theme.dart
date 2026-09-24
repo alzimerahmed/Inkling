@@ -55,14 +55,8 @@ class _SpMapOverlayThemeState extends State<SpMapOverlayTheme> {
 
     final baseTheme = AppTheme.getTheme(
       colorScheme: colorScheme,
-      fontFamily: context
-          .read<DevicePreferencesProvider>()
-          .preferences
-          .fontFamily,
-      fontWeight: context
-          .read<DevicePreferencesProvider>()
-          .preferences
-          .fontWeight,
+      fontFamily: context.read<DevicePreferencesProvider>().preferences.fontFamily,
+      fontWeight: context.read<DevicePreferencesProvider>().preferences.fontWeight,
       scaffoldBackgroundColor: colorScheme.surface,
     );
 

@@ -6,8 +6,7 @@ class _EditStoryContent extends StatelessWidget {
   final EditStoryViewModel viewModel;
 
   List<StoryPageObject> constructPages() {
-    if (viewModel.pagesManager.pagesMap.keys.isEmpty)
-      return <StoryPageObject>[];
+    if (viewModel.pagesManager.pagesMap.keys.isEmpty) return <StoryPageObject>[];
     return List.generate(viewModel.draftContent?.richPages?.length ?? 0, (
       index,
     ) {
@@ -31,8 +30,7 @@ class _EditStoryContent extends StatelessWidget {
               pages: pages,
               backgroundColor: ColorScheme.of(context).readOnly.surface1,
               preferences: viewModel.story!.preferences,
-              onThemeChanged: (preferences) =>
-                  viewModel.changePreferences(preferences),
+              onThemeChanged: (preferences) => viewModel.changePreferences(preferences),
             ),
     );
   }
@@ -77,8 +75,7 @@ class _EditStoryContent extends StatelessWidget {
   StoryPageBuilderAction getPageActions(BuildContext context) {
     return StoryPageBuilderAction(
       onAddPage: () => viewModel.addNewPage(),
-      onSwapPages: (oldIndex, newIndex) =>
-          viewModel.reorderPages(oldIndex: oldIndex, newIndex: newIndex),
+      onSwapPages: (oldIndex, newIndex) => viewModel.reorderPages(oldIndex: oldIndex, newIndex: newIndex),
       onDelete: (page) => viewModel.deleteAPage(context, page.page),
       canDeletePage: viewModel.pagesManager.canDeletePage,
       onFocusChange: (pageIndex, page, titleFocused, bodyFocused) {
@@ -103,8 +100,7 @@ class _EditStoryContent extends StatelessWidget {
           : PreferredSize(
               preferredSize: const Size.fromHeight(1),
               child: ValueListenableBuilder(
-                valueListenable:
-                    viewModel.pagesManager.pageScrollOffsetNotifier,
+                valueListenable: viewModel.pagesManager.pageScrollOffsetNotifier,
                 builder: (BuildContext context, double offset, Widget? child) {
                   return Opacity(
                     opacity: offset.clamp(0.0, 8.0) / 8.0,

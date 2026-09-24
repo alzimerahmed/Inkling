@@ -118,8 +118,7 @@ class _PagesLayoutState extends State<_PagesLayout> {
               ),
             ),
             Transform(
-              transform: Matrix4.identity()
-                ..spTranslate(offset - pageIndex * screenWidth),
+              transform: Matrix4.identity()..spTranslate(offset - pageIndex * screenWidth),
               child: Opacity(
                 opacity: datas.opacity,
                 child: const Padding(

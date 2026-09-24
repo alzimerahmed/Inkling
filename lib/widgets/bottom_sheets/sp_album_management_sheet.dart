@@ -70,10 +70,7 @@ class _ContentState extends State<_Content> {
   }
 
   Future<void> _takePhoto(BuildContext context) async {
-    final compression = context
-        .read<DevicePreferencesProvider>()
-        .preferences
-        .assetCompression;
+    final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
     final photo = await SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () => AppFilePickerService.pickImage(
@@ -94,10 +91,7 @@ class _ContentState extends State<_Content> {
   }
 
   Future<void> _recordVideo(BuildContext context) async {
-    final compression = context
-        .read<DevicePreferencesProvider>()
-        .preferences
-        .assetCompression;
+    final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
     final video = await SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () => AppFilePickerService.pickVideo(
@@ -199,8 +193,7 @@ class _ContentState extends State<_Content> {
                 ),
                 IconButton.filled(
                   icon: const Icon(SpIcons.save),
-                  onPressed: () =>
-                      Navigator.pop(context, _paths.toSet().toList()),
+                  onPressed: () => Navigator.pop(context, _paths.toSet().toList()),
                 ),
               ],
             ),

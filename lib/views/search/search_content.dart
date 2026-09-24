@@ -11,8 +11,7 @@ class _SearchContent extends StatelessWidget {
       builder: (context, state) {
         return PopScope(
           canPop: !state.editing,
-          onPopInvokedWithResult: (didPop, result) =>
-              viewModel.onPopInvokedWithResult(didPop, result, context),
+          onPopInvokedWithResult: (didPop, result) => viewModel.onPopInvokedWithResult(didPop, result, context),
           child: buildScaffold(context, state),
         );
       },
@@ -83,10 +82,8 @@ class _SearchContent extends StatelessWidget {
                         choices: visibleTags,
                         storiesCount: (TagDbModel tag) => tag.storiesCount,
                         toLabel: (TagDbModel tag) => tag.title,
-                        selected: (TagDbModel tag) =>
-                            viewModel.tagSelected(tag),
-                        onToggle: (TagDbModel tag) =>
-                            viewModel.toggleTag(tag, context),
+                        selected: (TagDbModel tag) => viewModel.tagSelected(tag),
+                        onToggle: (TagDbModel tag) => viewModel.toggleTag(tag, context),
                       ),
                     ),
                     const SizedBox(height: 12.0),
@@ -101,8 +98,7 @@ class _SearchContent extends StatelessWidget {
   }
 
   Widget buildBody() {
-    if (viewModel.searchFilter == null)
-      return const Center(child: CircularProgressIndicator.adaptive());
+    if (viewModel.searchFilter == null) return const Center(child: CircularProgressIndicator.adaptive());
     return SpStoryList.withQuery(
       filter: viewModel.searchFilter,
     );

@@ -85,8 +85,7 @@ class ReminderObject {
 
   /// The weekday "slots" this reminder schedules against (1..7). Empty weekdays
   /// means a single every-day schedule, represented here by a single 0 slot.
-  List<int> get scheduleSlots =>
-      isEveryDay ? const [0] : (weekdays.toSet().toList()..sort());
+  List<int> get scheduleSlots => isEveryDay ? const [0] : (weekdays.toSet().toList()..sort());
 
   /// Factory for a built-in reminder with sensible defaults.
   ///
@@ -106,7 +105,6 @@ class ReminderObject {
     );
   }
 
-  factory ReminderObject.fromJson(Map<String, dynamic> json) =>
-      _$ReminderObjectFromJson(json);
+  factory ReminderObject.fromJson(Map<String, dynamic> json) => _$ReminderObjectFromJson(json);
   Map<String, dynamic> toJson() => _$ReminderObjectToJson(this);
 }

@@ -19,9 +19,7 @@ class SpPurchaseSyncProviderSheet extends BaseBottomSheet {
   Widget build(BuildContext context, double bottomPadding) {
     final backupProvider = Provider.of<BackupProvider>(context);
     final iapProvider = Provider.of<InAppPurchaseProvider>(context);
-    final eligibleServices = backupProvider.services
-        .where((s) => s.serviceType.hasGlobalUserId)
-        .toList();
+    final eligibleServices = backupProvider.services.where((s) => s.serviceType.hasGlobalUserId).toList();
 
     return Column(
       mainAxisSize: .min,
@@ -109,15 +107,9 @@ class SpPurchaseSyncProviderSheet extends BaseBottomSheet {
 
     Widget leading = CircleAvatar(
       radius: 16,
-      backgroundImage: isSignedIn && user?.photoUrl != null
-          ? CachedNetworkImageProvider(user!.photoUrl!)
-          : null,
-      onBackgroundImageError: isSignedIn && user?.photoUrl != null
-          ? (_, _) {}
-          : null,
-      child: isSignedIn && user?.photoUrl != null
-          ? null
-          : Icon(service.serviceType.icon, size: 16),
+      backgroundImage: isSignedIn && user?.photoUrl != null ? CachedNetworkImageProvider(user!.photoUrl!) : null,
+      onBackgroundImageError: isSignedIn && user?.photoUrl != null ? (_, _) {} : null,
+      child: isSignedIn && user?.photoUrl != null ? null : Icon(service.serviceType.icon, size: 16),
     );
 
     Widget? trailing = isSignedIn
@@ -135,9 +127,7 @@ class SpPurchaseSyncProviderSheet extends BaseBottomSheet {
 
               // Disable auto-backup when connecting via this sheet to avoid unintended backups.
               // Users connecting here are doing so for purchase sync, not backup.
-              backupProvider.repository
-                  .getService(service.serviceType)
-                  .setAutoBackupEnabled(false);
+              backupProvider.repository.getService(service.serviceType).setAutoBackupEnabled(false);
             },
             child: Text(tr('button.connect')),
           );
@@ -153,10 +143,7 @@ class SpPurchaseSyncProviderSheet extends BaseBottomSheet {
             )
           : null,
       trailing: trailing,
-      onTap: isSignedIn
-          ? () =>
-                iapProvider.setSelectedPurchaseSyncProvider(service.serviceType)
-          : null,
+      onTap: isSignedIn ? () => iapProvider.setSelectedPurchaseSyncProvider(service.serviceType) : null,
     );
   }
 }

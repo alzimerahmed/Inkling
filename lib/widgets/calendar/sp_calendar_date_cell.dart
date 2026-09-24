@@ -31,14 +31,10 @@ class SpCalendarDateCell extends StatelessWidget {
   final VoidCallback? onTap;
 
   bool get hasFeelings =>
-      isDisplayMonth &&
-      feelings != null &&
-      feelings!.any((feeling) => feeling != 'exist_but_not_set');
+      isDisplayMonth && feelings != null && feelings!.any((feeling) => feeling != 'exist_but_not_set');
 
   bool get hasStoriesButNoFeelings =>
-      isDisplayMonth &&
-      feelings != null &&
-      feelings!.every((feeling) => feeling == 'exist_but_not_set');
+      isDisplayMonth && feelings != null && feelings!.every((feeling) => feeling == 'exist_but_not_set');
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +69,7 @@ class SpCalendarDateCell extends StatelessWidget {
   }
 
   bool get isSelected {
-    return "${date.day}-${date.month}-${date.year}" ==
-        "$selectedDay-$selectedMonth-$selectedYear";
+    return "${date.day}-${date.month}-${date.year}" == "$selectedDay-$selectedMonth-$selectedYear";
   }
 
   bool get isToday {
@@ -83,9 +78,7 @@ class SpCalendarDateCell extends StatelessWidget {
   }
 
   Widget _buildDateContent(BuildContext context) {
-    Color? backgroundColor = isSelected
-        ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
-        : null;
+    Color? backgroundColor = isSelected ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1) : null;
     Color foregroundColor = isSelected
         ? Theme.of(context).colorScheme.primary
         : Theme.of(context).colorScheme.onSurface;
@@ -108,9 +101,7 @@ class SpCalendarDateCell extends StatelessWidget {
         padding: const EdgeInsets.all(4.0),
         child: FittedBox(
           child: buildFeelings(
-            feelings: feelings!
-                .where((feeling) => feeling != 'exist_but_not_set')
-                .toList(),
+            feelings: feelings!.where((feeling) => feeling != 'exist_but_not_set').toList(),
           ),
         ),
       );

@@ -46,18 +46,13 @@ class _SpStoryPreferenceThemeState extends State<SpStoryPreferenceTheme> {
       FontSizeOption.extraLarge => const TextScaler.linear(1.3),
     };
 
-    SpStoryPreferenceThemeConstructor themeConstructor =
-        SpStoryPreferenceThemeConstructor(
-          isDarkMode: Theme.of(context).brightness == Brightness.dark,
-          context: context,
-          fontFamily:
-              widget.preferences?.fontFamily ??
-              themeProvider.preferences.fontFamily,
-          fontWeight:
-              widget.preferences?.fontWeight ??
-              themeProvider.preferences.fontWeight,
-          preferences: widget.preferences,
-        );
+    SpStoryPreferenceThemeConstructor themeConstructor = SpStoryPreferenceThemeConstructor(
+      isDarkMode: Theme.of(context).brightness == Brightness.dark,
+      context: context,
+      fontFamily: widget.preferences?.fontFamily ?? themeProvider.preferences.fontFamily,
+      fontWeight: widget.preferences?.fontWeight ?? themeProvider.preferences.fontWeight,
+      preferences: widget.preferences,
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       rootProvider.setSideBarColorScheme(themeConstructor.colorScheme);
@@ -102,12 +97,11 @@ class _SpStoryPreferenceThemeState extends State<SpStoryPreferenceTheme> {
                 return Image.file(
                   file,
                   fit: .cover,
-                  alignment:
-                      switch (themeConstructor.selectedBackground!.align) {
-                        .left => .centerLeft,
-                        .center => .center,
-                        .right => .centerRight,
-                      },
+                  alignment: switch (themeConstructor.selectedBackground!.align) {
+                    .left => .centerLeft,
+                    .center => .center,
+                    .right => .centerRight,
+                  },
                 );
               },
             );
@@ -122,9 +116,7 @@ class _SpStoryPreferenceThemeState extends State<SpStoryPreferenceTheme> {
 
 class SpStoryPreferenceThemeConstructor {
   StoryBackground? get selectedBackground =>
-      preferences?.backgroundImagePath != null
-      ? StoryBackgrounds.byFilename[preferences!.backgroundImagePath!]
-      : null;
+      preferences?.backgroundImagePath != null ? StoryBackgrounds.byFilename[preferences!.backgroundImagePath!] : null;
 
   final bool isDarkMode;
   final BuildContext context;
@@ -152,10 +144,8 @@ class SpStoryPreferenceThemeConstructor {
   static final Map<String, ColorScheme> _cacheDarkColorSchemes = {};
   static final Map<String, ColorScheme> _cacheLightColorSchemes = {};
 
-  bool get backgroundForLightMode =>
-      selectedBackground?.textColor == StoryBackgroundTextColor.black;
-  bool get backgroundForDarkMode =>
-      selectedBackground?.textColor == StoryBackgroundTextColor.white;
+  bool get backgroundForLightMode => selectedBackground?.textColor == StoryBackgroundTextColor.black;
+  bool get backgroundForDarkMode => selectedBackground?.textColor == StoryBackgroundTextColor.white;
 
   void _construct() {
     Color? seedColor = preferences?.colorSeed;
@@ -180,16 +170,12 @@ class SpStoryPreferenceThemeConstructor {
       if (overrideForegroundColor == Colors.white) {
         colorScheme = getDarkColorScheme(
           Colors.black,
-          isMonochrome(preferences?.colorSeed)
-              ? DynamicSchemeVariant.monochrome
-              : DynamicSchemeVariant.tonalSpot,
+          isMonochrome(preferences?.colorSeed) ? DynamicSchemeVariant.monochrome : DynamicSchemeVariant.tonalSpot,
         );
       } else {
         colorScheme = getLightColorScheme(
           Colors.white,
-          isMonochrome(preferences?.colorSeed)
-              ? DynamicSchemeVariant.monochrome
-              : DynamicSchemeVariant.tonalSpot,
+          isMonochrome(preferences?.colorSeed) ? DynamicSchemeVariant.monochrome : DynamicSchemeVariant.tonalSpot,
         );
       }
 
@@ -224,16 +210,12 @@ class SpStoryPreferenceThemeConstructor {
       if (Theme.of(context).brightness == Brightness.dark) {
         colorScheme = getDarkColorScheme(
           seedColor,
-          isMonochrome(preferences?.colorSeed)
-              ? DynamicSchemeVariant.monochrome
-              : DynamicSchemeVariant.tonalSpot,
+          isMonochrome(preferences?.colorSeed) ? DynamicSchemeVariant.monochrome : DynamicSchemeVariant.tonalSpot,
         );
       } else {
         colorScheme = getLightColorScheme(
           seedColor,
-          isMonochrome(preferences?.colorSeed)
-              ? DynamicSchemeVariant.monochrome
-              : DynamicSchemeVariant.tonalSpot,
+          isMonochrome(preferences?.colorSeed) ? DynamicSchemeVariant.monochrome : DynamicSchemeVariant.tonalSpot,
         );
       }
       scaffoldBackgroundColor = getScaffoldBackgroundColor(
@@ -266,24 +248,22 @@ class SpStoryPreferenceThemeConstructor {
     Color seedColor,
     DynamicSchemeVariant dynamicSchemeVariant,
   ) {
-    return _cacheLightColorSchemes['${seedColor.toARGB32()}-${dynamicSchemeVariant.name}'] ??=
-        ColorScheme.fromSeed(
-          seedColor: seedColor,
-          brightness: Brightness.light,
-          dynamicSchemeVariant: dynamicSchemeVariant,
-        );
+    return _cacheLightColorSchemes['${seedColor.toARGB32()}-${dynamicSchemeVariant.name}'] ??= ColorScheme.fromSeed(
+      seedColor: seedColor,
+      brightness: Brightness.light,
+      dynamicSchemeVariant: dynamicSchemeVariant,
+    );
   }
 
   static ColorScheme getDarkColorScheme(
     Color seedColor,
     DynamicSchemeVariant dynamicSchemeVariant,
   ) {
-    return _cacheDarkColorSchemes['${seedColor.toARGB32()}-${dynamicSchemeVariant.name}'] ??=
-        ColorScheme.fromSeed(
-          seedColor: seedColor,
-          brightness: Brightness.dark,
-          dynamicSchemeVariant: dynamicSchemeVariant,
-        );
+    return _cacheDarkColorSchemes['${seedColor.toARGB32()}-${dynamicSchemeVariant.name}'] ??= ColorScheme.fromSeed(
+      seedColor: seedColor,
+      brightness: Brightness.dark,
+      dynamicSchemeVariant: dynamicSchemeVariant,
+    );
   }
 
   static Color? getScaffoldBackgroundColor({

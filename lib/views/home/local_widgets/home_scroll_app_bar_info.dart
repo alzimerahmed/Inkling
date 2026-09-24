@@ -21,15 +21,10 @@ class _HomeScrollAppBarInfo {
   final double indicatorHeight = 40;
   final double indicatorPaddingBottom = 8;
 
-  double getTabBarPreferredHeight() =>
-      indicatorPaddingTop + indicatorHeight + indicatorPaddingBottom;
+  double getTabBarPreferredHeight() => indicatorPaddingTop + indicatorHeight + indicatorPaddingBottom;
 
   double getExpandedHeight() =>
-      contentsMarginTop +
-      getContentsHeight() +
-      contentsMarginBottom +
-      getTabBarPreferredHeight() +
-      extraExpandedHeight;
+      contentsMarginTop + getContentsHeight() + contentsMarginBottom + getTabBarPreferredHeight() + extraExpandedHeight;
 
   Size getYearSize(BoxConstraints appBarConstraints) {
     double aspectRatio = 24 / 10;
@@ -51,14 +46,11 @@ class _HomeScrollAppBarInfo {
   double getContentsHeight() => getHelloTextHeight() + getQuestionTextHeight();
 
   Color getScaffoldBackgroundColor(BuildContext context) {
-    return kIsCupertino &&
-            AppTheme.isDarkMode(context) &&
-            AppTheme.isMonochrome(context)
+    return kIsCupertino && AppTheme.isDarkMode(context) && AppTheme.isMonochrome(context)
         ? Colors.black
         : Theme.of(context).scaffoldBackgroundColor;
   }
 
-  Color getBackgroundColor(BuildContext context) => AppTheme.isDarkMode(context)
-      ? ColorScheme.of(context).readOnly.surface1!
-      : ColorScheme.of(context).surface;
+  Color getBackgroundColor(BuildContext context) =>
+      AppTheme.isDarkMode(context) ? ColorScheme.of(context).readOnly.surface1! : ColorScheme.of(context).surface;
 }

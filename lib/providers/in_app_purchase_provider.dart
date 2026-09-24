@@ -14,8 +14,7 @@ import 'package:storypad/core/services/internet_checker_service.dart';
 import 'package:storypad/core/services/logger/app_logger.dart';
 import 'package:storypad/core/services/messenger_service.dart';
 import 'package:storypad/core/storages/selected_purchase_sync_provider_storage.dart';
-import 'package:storypad/core/repositories/backup_repository.dart'
-    show UserChangeType;
+import 'package:storypad/core/repositories/backup_repository.dart' show UserChangeType;
 import 'package:storypad/core/types/app_product.dart';
 import 'package:storypad/providers/backup_provider.dart';
 import 'package:storypad/widgets/bottom_sheets/sp_android_redemption_sheet.dart';
@@ -25,19 +24,15 @@ import 'package:storypad/widgets/bottom_sheets/sp_android_redemption_sheet.dart'
 // service account ID is used as a RevenueCat identity alias, enabling cross-platform
 // purchase sharing. Legacy email-hash users are migrated on initialization.
 class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
-  bool isActive(String productIdentifier) => !kIAPEnabled
-      ? false
-      : _customerInfo?.entitlements.all[productIdentifier]?.isActive == true;
+  bool isActive(String productIdentifier) =>
+      !kIAPEnabled ? false : _customerInfo?.entitlements.all[productIdentifier]?.isActive == true;
 
   bool get hasAnyLegacyPurchases => AppLegacyProduct.values.any(
     (product) => isActive(product.productIdentifier),
   );
-  bool get periodCalendar =>
-      isActive(AppLegacyProduct.period_calendar.productIdentifier);
+  bool get periodCalendar => isActive(AppLegacyProduct.period_calendar.productIdentifier);
 
-  bool get isProUser =>
-      isActive(AppProduct.storypad_pro_lifetime.productIdentifier) ||
-      hasAnyLegacyPurchases;
+  bool get isProUser => isActive(AppProduct.storypad_pro_lifetime.productIdentifier) || hasAnyLegacyPurchases;
 
   CustomerInfo? _customerInfo;
   List<StoreProduct>? storeProducts;
@@ -157,9 +152,7 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
     // on localhost/a bare IP has a null globalId (not globally unique) even
     // while signed in, which must fall through to the anonymous/logout path
     // below rather than being treated as a usable identity.
-    final eligibleServices = services
-        .where((s) => s.currentUser?.globalId != null)
-        .toList();
+    final eligibleServices = services.where((s) => s.currentUser?.globalId != null).toList();
 
     // Resolve the active service: prefer the user's selection, fall back to first available.
     BackupCloudService? activeService = eligibleServices
@@ -266,35 +259,27 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
   }
 
   StoreProduct? getProduct(String productIdentifier) {
-    return storeProducts
-        ?.where((storeProduct) => storeProduct.identifier == productIdentifier)
-        .firstOrNull;
+    return storeProducts?.where((storeProduct) => storeProduct.identifier == productIdentifier).firstOrNull;
   }
 
-  ({String? displayPrice, String? displayComparePrice, String? badgeLabel})
-  getActiveDeal(AppProduct product) {
+  ({String? displayPrice, String? displayComparePrice, String? badgeLabel}) getActiveDeal(AppProduct product) {
     final storeProduct = getProduct(product.productIdentifier);
-    if (storeProduct == null)
-      return (displayPrice: null, displayComparePrice: null, badgeLabel: null);
+    if (storeProduct == null) return (displayPrice: null, displayComparePrice: null, badgeLabel: null);
 
     double savingsPercent = this.savingsPercent ?? 0;
 
-    String displayPrice =
-        '${storeProduct.price.toStringAsFixed(2)} ${storeProduct.currencyCode}';
+    String displayPrice = '${storeProduct.price.toStringAsFixed(2)} ${storeProduct.currencyCode}';
     String? displayComparePrice;
 
     if (savingsPercent > 0 && savingsPercent < 100) {
       final comparePrice = storeProduct.price / (1 - savingsPercent / 100);
-      displayComparePrice =
-          '${comparePrice.toStringAsFixed(2)} ${storeProduct.currencyCode}';
+      displayComparePrice = '${comparePrice.toStringAsFixed(2)} ${storeProduct.currencyCode}';
     }
 
     return (
       displayPrice: displayPrice,
       displayComparePrice: displayComparePrice,
-      badgeLabel: displayComparePrice != null
-          ? tr('general.special_offer_for_your_region')
-          : null,
+      badgeLabel: displayComparePrice != null ? tr('general.special_offer_for_your_region') : null,
     );
   }
 
@@ -328,8 +313,7 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
   Future<bool> purchase(BuildContext context) async {
     if (!kIAPEnabled) return false;
 
-    final productToPurchase =
-        AppProduct.storypad_pro_lifetime.productIdentifier;
+    final productToPurchase = AppProduct.storypad_pro_lifetime.productIdentifier;
 
     return _purchaseGuard.run(() async {
       await _ensureInitialized();
@@ -367,8 +351,7 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
                 '$runtimeType#purchase error: $errorCode',
                 stackTrace: s,
               );
-              if (context.mounted)
-                await MessengerService.of(context).showError();
+              if (context.mounted) await MessengerService.of(context).showError();
             }
           }
         },
@@ -410,14 +393,12 @@ class InAppPurchaseProvider extends ChangeNotifier with DisposeAwareMixin {
             '$runtimeType#restorePurchase error: $e',
             stackTrace: s,
           );
-          if (context.mounted)
-            await MessengerService.of(context).showError(errorMessage);
+          if (context.mounted) await MessengerService.of(context).showError(errorMessage);
         }
       },
     );
 
-    if (restored && isProUser && context.mounted)
-      await MessengerService.of(context).showSuccess();
+    if (restored && isProUser && context.mounted) await MessengerService.of(context).showSuccess();
   }
 
   Future<void> presentCodeRedemptionSheet(BuildContext context) async {

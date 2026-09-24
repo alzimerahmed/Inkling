@@ -38,8 +38,7 @@ class _$ICloudUserObjectCWProxyImpl implements _$ICloudUserObjectCWProxy {
   ICloudUserObject accountId(String accountId) => call(accountId: accountId);
 
   @override
-  ICloudUserObject autoBackupEnabled(bool? autoBackupEnabled) =>
-      call(autoBackupEnabled: autoBackupEnabled);
+  ICloudUserObject autoBackupEnabled(bool? autoBackupEnabled) => call(autoBackupEnabled: autoBackupEnabled);
 
   @override
   ICloudUserObject identityTokenFingerprint(String? identityTokenFingerprint) =>
@@ -67,8 +66,7 @@ class _$ICloudUserObjectCWProxyImpl implements _$ICloudUserObjectCWProxy {
           ? _value.autoBackupEnabled
           // ignore: cast_nullable_to_non_nullable
           : autoBackupEnabled as bool?,
-      identityTokenFingerprint:
-          identityTokenFingerprint == const $CopyWithPlaceholder()
+      identityTokenFingerprint: identityTokenFingerprint == const $CopyWithPlaceholder()
           ? _value.identityTokenFingerprint
           // ignore: cast_nullable_to_non_nullable
           : identityTokenFingerprint as String?,
@@ -87,16 +85,14 @@ extension $ICloudUserObjectCopyWith on ICloudUserObject {
 // JsonSerializableGenerator
 // **************************************************************************
 
-ICloudUserObject _$ICloudUserObjectFromJson(Map<String, dynamic> json) =>
-    ICloudUserObject(
-      accountId: json['account_id'] as String,
-      autoBackupEnabled: json['auto_backup_enabled'] as bool?,
-      identityTokenFingerprint: json['identity_token_fingerprint'] as String?,
-    );
+ICloudUserObject _$ICloudUserObjectFromJson(Map<String, dynamic> json) => ICloudUserObject(
+  accountId: json['account_id'] as String,
+  autoBackupEnabled: json['auto_backup_enabled'] as bool?,
+  identityTokenFingerprint: json['identity_token_fingerprint'] as String?,
+);
 
-Map<String, dynamic> _$ICloudUserObjectToJson(ICloudUserObject instance) =>
-    <String, dynamic>{
-      'account_id': instance.accountId,
-      'auto_backup_enabled': instance.autoBackupEnabled,
-      'identity_token_fingerprint': instance.identityTokenFingerprint,
-    };
+Map<String, dynamic> _$ICloudUserObjectToJson(ICloudUserObject instance) => <String, dynamic>{
+  'account_id': instance.accountId,
+  'auto_backup_enabled': instance.autoBackupEnabled,
+  'identity_token_fingerprint': instance.identityTokenFingerprint,
+};

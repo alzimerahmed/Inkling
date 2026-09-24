@@ -23,8 +23,7 @@ class RootSideBar extends StatefulWidget {
 }
 
 class _RootSideBarState extends State<RootSideBar> {
-  late final DevicePreferencesProvider devicePreferencesProvider = context
-      .read<DevicePreferencesProvider>();
+  late final DevicePreferencesProvider devicePreferencesProvider = context.read<DevicePreferencesProvider>();
 
   @override
   void initState() {
@@ -51,8 +50,7 @@ class _RootSideBarState extends State<RootSideBar> {
     bool bigScreen = WindowedDetectorService.isBigWindow(context);
 
     final sideBarInfo = widget.rootProvider.sideBarInfoNotifier.value;
-    final selectedRouteName =
-        widget.rootProvider.selectedRootRouteNameNotifier.value;
+    final selectedRouteName = widget.rootProvider.selectedRootRouteNameNotifier.value;
 
     bool visible = bigScreen == true;
     if (sideBarInfo.temporaryHidden == true) visible = false;
@@ -104,13 +102,9 @@ class _SideBarItem extends StatelessWidget {
 
     if (sideBarInfo?.colorScheme != null) {
       backgroundColor = Colors.transparent;
-      foregroundColor = isSelected
-          ? sideBarInfo!.colorScheme?.primary
-          : sideBarInfo!.colorScheme?.onSurface;
+      foregroundColor = isSelected ? sideBarInfo!.colorScheme?.primary : sideBarInfo!.colorScheme?.onSurface;
     } else {
-      backgroundColor = isSelected
-          ? ColorScheme.of(context).readOnly.surface2
-          : Colors.transparent;
+      backgroundColor = isSelected ? ColorScheme.of(context).readOnly.surface2 : Colors.transparent;
       foregroundColor = isSelected
           ? ColorScheme.of(context).primary
           : ColorScheme.of(context).onSurface.withValues(alpha: 0.7);
@@ -122,9 +116,7 @@ class _SideBarItem extends StatelessWidget {
         foregroundColor: foregroundColor,
       ),
       isSelected: isSelected,
-      onPressed: item.onTap != null
-          ? () => item.onTap!(context, item.route)
-          : null,
+      onPressed: item.onTap != null ? () => item.onTap!(context, item.route) : null,
       tooltip: item.title,
       icon: Icon(item.iconData),
       selectedIcon: Icon(item.selectedIconData),

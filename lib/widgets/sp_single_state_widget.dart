@@ -30,8 +30,7 @@ class SpSingleStateWidget<T> extends StatefulWidget {
   }
 
   final T initialValue;
-  final Widget Function(BuildContext context, CmValueNotifier<T> notifier)
-  builder;
+  final Widget Function(BuildContext context, CmValueNotifier<T> notifier) builder;
 
   @override
   State<SpSingleStateWidget<T>> createState() => _SpSingleStateWidgetState<T>();

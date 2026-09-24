@@ -61,11 +61,8 @@ class DevicePreferencesObject {
   /// are per-device).
   final List<ReminderObject>? reminders;
 
-  Color? get colorSeed =>
-      colorSeedValue != null ? Color(colorSeedValue!) : null;
-  FontWeight get fontWeight => fontWeightIndex != null
-      ? FontWeight.values[fontWeightIndex!]
-      : kDefaultFontWeight;
+  Color? get colorSeed => colorSeedValue != null ? Color(colorSeedValue!) : null;
+  FontWeight get fontWeight => fontWeightIndex != null ? FontWeight.values[fontWeightIndex!] : kDefaultFontWeight;
 
   bool get colorSeedCustomized => colorSeed != null;
 
@@ -95,16 +92,13 @@ class DevicePreferencesObject {
   }) : fontFamily = fontFamily ?? kDefaultFontFamily,
        themeMode = themeMode ?? ThemeMode.system,
        firstDayOfWeek = firstDayOfWeek ?? FirstDayOfWeekOption.defaultValue,
-       assetCompression =
-           assetCompression ?? AssetCompressionOption.defaultValue,
+       assetCompression = assetCompression ?? AssetCompressionOption.defaultValue,
        mediaSync = mediaSync ?? MediaSyncOption.defaultValue,
        voicePlaybackSpeed = voicePlaybackSpeed ?? 1.0,
        videoPlaybackSpeed = videoPlaybackSpeed ?? 1.0,
        videoMuted = videoMuted ?? false,
-       storyTilePreferences =
-           storyTilePreferences ?? StoryTilePreferencesObject(),
-       defaultStoryPreferences =
-           defaultStoryPreferences ?? DefaultStoryPreferencesObject(),
+       storyTilePreferences = storyTilePreferences ?? StoryTilePreferencesObject(),
+       defaultStoryPreferences = defaultStoryPreferences ?? DefaultStoryPreferencesObject(),
        mapStyle = mapStyle ?? SpMapStyle.streets;
 
   factory DevicePreferencesObject.initial() {
@@ -112,6 +106,5 @@ class DevicePreferencesObject {
   }
 
   Map<String, dynamic> toJson() => _$DevicePreferencesObjectToJson(this);
-  factory DevicePreferencesObject.fromJson(Map<String, dynamic> json) =>
-      _$DevicePreferencesObjectFromJson(json);
+  factory DevicePreferencesObject.fromJson(Map<String, dynamic> json) => _$DevicePreferencesObjectFromJson(json);
 }

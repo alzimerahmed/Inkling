@@ -88,16 +88,14 @@ void main() {
             expect(
               kStorageHashMap.containsKey(template.iconUrlPath),
               isTrue,
-              reason:
-                  'Icon ${template.iconUrlPath} not found in kStorageHashMap for template ${template.id}',
+              reason: 'Icon ${template.iconUrlPath} not found in kStorageHashMap for template ${template.id}',
             );
 
             // Check that it ends with .png
             expect(
               template.iconUrlPath.endsWith('.png'),
               isTrue,
-              reason:
-                  'Icon ${template.iconUrlPath} does not end with .png for template ${template.id}',
+              reason: 'Icon ${template.iconUrlPath} does not end with .png for template ${template.id}',
             );
           }
         }

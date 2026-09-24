@@ -75,8 +75,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
           padding: const EdgeInsets.only(top: 12.0),
           child: SpScrollableChoiceChips<TagDbModel>(
             choices: tagsProvider.tags?.items ?? [],
-            storiesCount: (TagDbModel tag) =>
-                tag.id == selectedTagId ? assets?.items.length : null,
+            storiesCount: (TagDbModel tag) => tag.id == selectedTagId ? assets?.items.length : null,
             toLabel: (TagDbModel tag) => tag.title,
             selected: (TagDbModel tag) => selectedTagId == tag.id,
             onToggle: (TagDbModel tag) {
@@ -90,8 +89,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
   }
 
   Widget buildBody(BuildContext context, BackupProvider provider) {
-    if (groupedAssets == null)
-      return const Center(child: CircularProgressIndicator.adaptive());
+    if (groupedAssets == null) return const Center(child: CircularProgressIndicator.adaptive());
     if (groupedAssets!.isEmpty) return _EmptyBody(context: context);
 
     return KeyedSubtree(
@@ -222,9 +220,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
             leadingIconData: SpIcons.photo,
             title: tr("button.view"),
             onPressed: () {
-              final embedLinks =
-                  assets?.items.map((e) => e.relativeLocalFilePath).toList() ??
-                  [];
+              final embedLinks = assets?.items.map((e) => e.relativeLocalFilePath).toList() ?? [];
               SpMediaViewer.fromString(
                 images: embedLinks,
                 initialIndex: embedLinks.indexOf(asset.relativeLocalFilePath),
@@ -235,8 +231,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
           SpPopMenuItem(
             leadingIconData: SpIcons.info,
             title: tr("button.info"),
-            onPressed: () =>
-                SpAssetInfoSheet(asset: asset).show(context: context),
+            onPressed: () => SpAssetInfoSheet(asset: asset).show(context: context),
           ),
           if (asset.localFile?.existsSync() == true)
             SpPopMenuItem(
@@ -250,9 +245,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
                   ShareParams(
                     title: basename(asset.localFile!.path),
                     files: [XFile(asset.localFile!.path)],
-                    sharePositionOrigin: box != null
-                        ? box.localToGlobal(Offset.zero) & box.size
-                        : null,
+                    sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
                   ),
                 );
               },
@@ -326,9 +319,7 @@ class _ImagesTabContentState extends State<_ImagesTabContent> {
           : tr(
               "button.delete_from_args",
               namedArgs: {
-                'SP_SERVICES': reachableServices
-                    .map((e) => e.displayName)
-                    .join(', '),
+                'SP_SERVICES': reachableServices.map((e) => e.displayName).join(', '),
               },
             ),
       onPressed: () => _deleteAsset(context, asset, storyCount),

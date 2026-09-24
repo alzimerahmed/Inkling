@@ -49,8 +49,7 @@ class SpFadeIn extends StatelessWidget {
             child: child,
             builder: (context, child) {
               return Transform(
-                transform: Matrix4.identity()
-                  ..spTranslate(lerpDouble(-4.0, 0, animation.value)!, 0.0),
+                transform: Matrix4.identity()..spTranslate(lerpDouble(-4.0, 0, animation.value)!, 0.0),
                 child: child,
               );
             },
@@ -79,8 +78,7 @@ class SpFadeIn extends StatelessWidget {
             child: child,
             builder: (context, child) {
               return Transform(
-                transform: Matrix4.identity()
-                  ..spTranslate(lerpDouble(4.0, 0, animation.value)!, 0.0),
+                transform: Matrix4.identity()..spTranslate(lerpDouble(4.0, 0, animation.value)!, 0.0),
                 child: child,
               );
             },
@@ -109,8 +107,7 @@ class SpFadeIn extends StatelessWidget {
             child: child,
             builder: (context, child) {
               return Transform(
-                transform: Matrix4.identity()
-                  ..spTranslate(0.0, lerpDouble(-4.0, 0, animation.value)!),
+                transform: Matrix4.identity()..spTranslate(0.0, lerpDouble(-4.0, 0, animation.value)!),
                 child: child,
               );
             },
@@ -141,8 +138,7 @@ class SpFadeIn extends StatelessWidget {
             child: child,
             builder: (context, child) {
               return Transform(
-                transform: Matrix4.identity()
-                  ..spTranslate(0.0, lerpDouble(4.0, 0, animation.value)!),
+                transform: Matrix4.identity()..spTranslate(0.0, lerpDouble(4.0, 0, animation.value)!),
                 child: child,
               );
             },
@@ -172,8 +168,7 @@ class SpFadeIn extends StatelessWidget {
             builder: (context, child) {
               return AnimatedContainer(
                 duration: Durations.medium1,
-                transform: Matrix4.identity()
-                  ..spScale(animation.value > 0.2 ? 1.0 : 0.9),
+                transform: Matrix4.identity()..spScale(animation.value > 0.2 ? 1.0 : 0.9),
                 transformAlignment: Alignment.center,
                 curve: Curves.ease,
                 child: child,
@@ -298,8 +293,7 @@ class _AnimationState extends StatefulWidget {
   final Duration duration;
   final Curve curve;
   final void Function()? onFadeIn;
-  final Widget Function(BuildContext context, Animation<double> animation)
-  builder;
+  final Widget Function(BuildContext context, Animation<double> animation) builder;
 
   // manully controll the animation
   final void Function(AnimationController controller)? onCustomControllerLoaded;
@@ -308,8 +302,7 @@ class _AnimationState extends StatefulWidget {
   State<_AnimationState> createState() => __AnimationStateState();
 }
 
-class __AnimationStateState extends State<_AnimationState>
-    with SingleTickerProviderStateMixin {
+class __AnimationStateState extends State<_AnimationState> with SingleTickerProviderStateMixin {
   late final AnimationController controller;
 
   String? debugCurveName;

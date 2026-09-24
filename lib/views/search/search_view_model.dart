@@ -17,8 +17,7 @@ import 'package:storypad/core/objects/search_filter_object.dart';
 import 'package:storypad/core/services/analytics/analytics_service.dart';
 import 'search_view.dart';
 
-class SearchViewModel extends ChangeNotifier
-    with DisposeAwareMixin, DebounchedCallback {
+class SearchViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
   final SearchRoute params;
   final TextEditingController queryController = TextEditingController();
   final tagsChipsKey = GlobalKey<SpScrollableChoiceChipsState<TagDbModel>>();
@@ -48,8 +47,7 @@ class SearchViewModel extends ChangeNotifier
   List<TagDbModel>? get tags => _tags;
 
   CollectionDbModel<StoryDbModel>? _stories;
-  CollectionDbModel<StoryDbModel> get stories =>
-      _stories ?? CollectionDbModel(items: []);
+  CollectionDbModel<StoryDbModel> get stories => _stories ?? CollectionDbModel(items: []);
 
   bool get hasQuery => searchFilter?.query != null;
 
@@ -65,8 +63,7 @@ class SearchViewModel extends ChangeNotifier
         : initialFilter;
 
     _tags = [...tagsProvider.tags?.items ?? []];
-    if (_tags?.isNotEmpty == true)
-      _tags?.insert(0, TagDbModel.fromIDTitle(0, tr('general.all')));
+    if (_tags?.isNotEmpty == true) _tags?.insert(0, TagDbModel.fromIDTitle(0, tr('general.all')));
 
     await _resetTagsCount();
     notifyListeners();
@@ -124,16 +121,13 @@ class SearchViewModel extends ChangeNotifier
   bool get showTagFilterBar => (searchFilter?.tagIds.length ?? 0) <= 1;
 
   bool tagSelected(TagDbModel tag) =>
-      searchFilter?.tagIds.contains(tag.id) == true ||
-      (tag.id == 0 && searchFilter?.tagIds.isEmpty == true);
+      searchFilter?.tagIds.contains(tag.id) == true || (tag.id == 0 && searchFilter?.tagIds.isEmpty == true);
 
   void toggleTag(TagDbModel tag, BuildContext context) async {
     if (searchFilter == null) return;
 
     searchFilter = searchFilter!.copyWith(
-      tagIds: tag.id == 0 || searchFilter!.tagIds.contains(tag.id)
-          ? {}
-          : {tag.id},
+      tagIds: tag.id == 0 || searchFilter!.tagIds.contains(tag.id) ? {} : {tag.id},
     );
 
     notifyListeners();
@@ -151,9 +145,7 @@ class SearchViewModel extends ChangeNotifier
       query: searchFilter!.query,
       tagIds: tags?.map((e) => e.id).toList() ?? [],
       years: searchFilter!.years.toList(),
-      types: searchFilter!.types.isNotEmpty
-          ? searchFilter!.types.map((e) => e.name).toList()
-          : null,
+      types: searchFilter!.types.isNotEmpty ? searchFilter!.types.map((e) => e.name).toList() : null,
     );
 
     for (TagDbModel tag in tags ?? []) {
@@ -201,10 +193,7 @@ class SearchViewModel extends ChangeNotifier
       shouldPop = result == OkCancelResult.ok;
     }
 
-    if (shouldPop &&
-        context.mounted &&
-        ModalRoute.of(context)?.isCurrent == true)
-      Navigator.of(context).pop(result);
+    if (shouldPop && context.mounted && ModalRoute.of(context)?.isCurrent == true) Navigator.of(context).pop(result);
   }
 
   @override

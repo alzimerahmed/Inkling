@@ -21,9 +21,7 @@ class _TitleField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double? fontSize =
-        preferences?.titleFontSize ??
-        Theme.of(context).textTheme.titleMedium?.fontSize;
+    double? fontSize = preferences?.titleFontSize ?? Theme.of(context).textTheme.titleMedium?.fontSize;
     if (fontSize != null && largerTitle) fontSize += 2;
 
     TextStyle baseStyle = GoogleFonts.getFont(

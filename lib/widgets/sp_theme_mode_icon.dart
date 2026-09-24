@@ -21,10 +21,8 @@ class SpThemeModeIcon extends StatefulWidget {
   State<SpThemeModeIcon> createState() => _SpThemeModeIconState();
 }
 
-class _SpThemeModeIconState extends State<SpThemeModeIcon>
-    with DebounchedCallback {
-  late bool isDarkMode =
-      Theme.brightnessOf(widget.parentContext) == Brightness.dark;
+class _SpThemeModeIconState extends State<SpThemeModeIcon> with DebounchedCallback {
+  late bool isDarkMode = Theme.brightnessOf(widget.parentContext) == Brightness.dark;
 
   void setDarkMode(bool value) {
     if (value != isDarkMode) {
@@ -38,8 +36,7 @@ class _SpThemeModeIconState extends State<SpThemeModeIcon>
     return Consumer<DevicePreferencesProvider>(
       builder: (context, provider, child) {
         debouncedCallback(() {
-          if (context.mounted)
-            setDarkMode(provider.isDarkModeBaseOnThemeMode(context));
+          if (context.mounted) setDarkMode(provider.isDarkModeBaseOnThemeMode(context));
         });
 
         return SpAnimatedIcons.fadeScale(

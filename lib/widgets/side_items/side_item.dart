@@ -37,8 +37,7 @@ class CustomSideItem extends BaseSideItem {
     required this.builder,
   });
 
-  static BaseSideItem divider({double? height}) =>
-      CustomSideItem(builder: (context) => const Divider());
+  static BaseSideItem divider({double? height}) => CustomSideItem(builder: (context) => const Divider());
 
   static BaseSideItem custom({
     required Widget Function(BuildContext) builder,

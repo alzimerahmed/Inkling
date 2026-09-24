@@ -44,8 +44,7 @@ class _$ServiceSyncStatusCWProxyImpl implements _$ServiceSyncStatusCWProxy {
   ServiceSyncStatus activity(SyncActivity activity) => call(activity: activity);
 
   @override
-  ServiceSyncStatus currentStep(SyncStep? currentStep) =>
-      call(currentStep: currentStep);
+  ServiceSyncStatus currentStep(SyncStep? currentStep) => call(currentStep: currentStep);
 
   @override
   ServiceSyncStatus message(String? message) => call(message: message);
@@ -56,8 +55,7 @@ class _$ServiceSyncStatusCWProxyImpl implements _$ServiceSyncStatusCWProxy {
   ) => call(connectionStatus: connectionStatus);
 
   @override
-  ServiceSyncStatus lastSyncedAt(DateTime? lastSyncedAt) =>
-      call(lastSyncedAt: lastSyncedAt);
+  ServiceSyncStatus lastSyncedAt(DateTime? lastSyncedAt) => call(lastSyncedAt: lastSyncedAt);
 
   @override
   /// Creates a new instance with the provided field values.
@@ -103,6 +101,5 @@ extension $ServiceSyncStatusCopyWith on ServiceSyncStatus {
   /// Returns a callable class used to build a new instance with modified fields.
   /// Example: `instanceOfServiceSyncStatus.copyWith(...)` or `instanceOfServiceSyncStatus.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$ServiceSyncStatusCWProxy get copyWith =>
-      _$ServiceSyncStatusCWProxyImpl(this);
+  _$ServiceSyncStatusCWProxy get copyWith => _$ServiceSyncStatusCWProxyImpl(this);
 }

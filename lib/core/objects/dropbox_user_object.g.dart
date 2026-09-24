@@ -56,27 +56,23 @@ class _$DropboxUserObjectCWProxyImpl implements _$DropboxUserObjectCWProxy {
   DropboxUserObject email(String email) => call(email: email);
 
   @override
-  DropboxUserObject displayName(String? displayName) =>
-      call(displayName: displayName);
+  DropboxUserObject displayName(String? displayName) => call(displayName: displayName);
 
   @override
   DropboxUserObject photoUrl(String? photoUrl) => call(photoUrl: photoUrl);
 
   @override
-  DropboxUserObject accessToken(String accessToken) =>
-      call(accessToken: accessToken);
+  DropboxUserObject accessToken(String accessToken) => call(accessToken: accessToken);
 
   @override
-  DropboxUserObject refreshToken(String refreshToken) =>
-      call(refreshToken: refreshToken);
+  DropboxUserObject refreshToken(String refreshToken) => call(refreshToken: refreshToken);
 
   @override
   DropboxUserObject accessTokenExpiresAt(DateTime accessTokenExpiresAt) =>
       call(accessTokenExpiresAt: accessTokenExpiresAt);
 
   @override
-  DropboxUserObject autoBackupEnabled(bool? autoBackupEnabled) =>
-      call(autoBackupEnabled: autoBackupEnabled);
+  DropboxUserObject autoBackupEnabled(bool? autoBackupEnabled) => call(autoBackupEnabled: autoBackupEnabled);
 
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `DropboxUserObject(...).copyWith.fieldName(value)`.
@@ -113,19 +109,15 @@ class _$DropboxUserObjectCWProxyImpl implements _$DropboxUserObjectCWProxy {
           ? _value.photoUrl
           // ignore: cast_nullable_to_non_nullable
           : photoUrl as String?,
-      accessToken:
-          accessToken == const $CopyWithPlaceholder() || accessToken == null
+      accessToken: accessToken == const $CopyWithPlaceholder() || accessToken == null
           ? _value.accessToken
           // ignore: cast_nullable_to_non_nullable
           : accessToken as String,
-      refreshToken:
-          refreshToken == const $CopyWithPlaceholder() || refreshToken == null
+      refreshToken: refreshToken == const $CopyWithPlaceholder() || refreshToken == null
           ? _value.refreshToken
           // ignore: cast_nullable_to_non_nullable
           : refreshToken as String,
-      accessTokenExpiresAt:
-          accessTokenExpiresAt == const $CopyWithPlaceholder() ||
-              accessTokenExpiresAt == null
+      accessTokenExpiresAt: accessTokenExpiresAt == const $CopyWithPlaceholder() || accessTokenExpiresAt == null
           ? _value.accessTokenExpiresAt
           // ignore: cast_nullable_to_non_nullable
           : accessTokenExpiresAt as DateTime,
@@ -141,27 +133,25 @@ extension $DropboxUserObjectCopyWith on DropboxUserObject {
   /// Returns a callable class used to build a new instance with modified fields.
   /// Example: `instanceOfDropboxUserObject.copyWith(...)` or `instanceOfDropboxUserObject.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$DropboxUserObjectCWProxy get copyWith =>
-      _$DropboxUserObjectCWProxyImpl(this);
+  _$DropboxUserObjectCWProxy get copyWith => _$DropboxUserObjectCWProxyImpl(this);
 }
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-DropboxUserObject _$DropboxUserObjectFromJson(Map<String, dynamic> json) =>
-    DropboxUserObject(
-      id: json['id'] as String,
-      email: json['email'] as String,
-      displayName: json['display_name'] as String?,
-      photoUrl: json['photo_url'] as String?,
-      accessToken: json['access_token'] as String,
-      refreshToken: json['refresh_token'] as String,
-      accessTokenExpiresAt: DateTime.parse(
-        json['access_token_expires_at'] as String,
-      ),
-      autoBackupEnabled: json['auto_backup_enabled'] as bool?,
-    );
+DropboxUserObject _$DropboxUserObjectFromJson(Map<String, dynamic> json) => DropboxUserObject(
+  id: json['id'] as String,
+  email: json['email'] as String,
+  displayName: json['display_name'] as String?,
+  photoUrl: json['photo_url'] as String?,
+  accessToken: json['access_token'] as String,
+  refreshToken: json['refresh_token'] as String,
+  accessTokenExpiresAt: DateTime.parse(
+    json['access_token_expires_at'] as String,
+  ),
+  autoBackupEnabled: json['auto_backup_enabled'] as bool?,
+);
 
 Map<String, dynamic> _$DropboxUserObjectToJson(
   DropboxUserObject instance,

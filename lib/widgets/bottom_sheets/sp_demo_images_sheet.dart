@@ -42,8 +42,7 @@ class SpDemoImagesSheet extends BaseBottomSheet {
   /// for [icloudSettingsDemoImages] before its real screenshots existed.
   /// Already covered by [relaxSoundDemoImages] in [allDemoImages]'s preload,
   /// so not repeated there.
-  static const List<String> macosICloudSettingsDemoImages =
-      relaxSoundDemoImages;
+  static const List<String> macosICloudSettingsDemoImages = relaxSoundDemoImages;
 
   static const List<String> allDemoImages = [
     ...periodCalendarDemoImages,

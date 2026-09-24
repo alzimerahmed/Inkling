@@ -61,8 +61,7 @@ class PinUnlockRoute extends BaseRoute {
       title: title.translatedTitle,
       invalidPinTitle: invalidPinTitle.translatedTitle,
       validator: (pin) => correctPin == pin,
-      onValidated:
-          onValidated ?? (context, _) => Navigator.maybePop(context, true),
+      onValidated: onValidated ?? (context, _) => Navigator.maybePop(context, true),
       onConfirmWithBiometrics: onConfirmWithBiometrics,
     );
   }
@@ -77,8 +76,7 @@ class PinUnlockRoute extends BaseRoute {
       title: title.translatedTitle,
       invalidPinTitle: invalidPinTitle.translatedTitle,
       validator: (pin) => pin.length == 4 || pin.length == 4,
-      onValidated:
-          onValidated ?? (context, pin) => Navigator.maybePop(context, pin),
+      onValidated: onValidated ?? (context, pin) => Navigator.maybePop(context, pin),
     );
   }
 

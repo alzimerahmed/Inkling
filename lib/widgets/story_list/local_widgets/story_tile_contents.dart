@@ -37,9 +37,7 @@ class _StoryTileContents extends StatelessWidget {
   Widget build(BuildContext context) {
     // `media()` returns both photos and videos (they share one embed type by
     // design) -- rendering/tap-handling branches per path.
-    final assetPaths = content != null
-        ? StoryContentEmbedExtractor.media(content)
-        : null;
+    final assetPaths = content != null ? StoryContentEmbedExtractor.media(content) : null;
 
     final audioPaths = (story.draftContent ?? story.latestContent) != null
         ? StoryContentEmbedExtractor.audio(
@@ -55,9 +53,7 @@ class _StoryTileContents extends StatelessWidget {
             Consumer<DevicePreferencesProvider>(
               builder: (context, provider, child) {
                 return Text(
-                  provider
-                      .timeFormatOf(context)
-                      .formatTime(story.displayPathDate, context.locale),
+                  provider.timeFormatOf(context).formatTime(story.displayPathDate, context.locale),
                   style: TextTheme.of(context).labelMedium,
                 );
               },
@@ -128,10 +124,7 @@ class _StoryTileContents extends StatelessWidget {
                   width: double.infinity,
                   child: SpAlbumGrid(
                     paths: assetPaths!,
-                    onTap: viewOnly
-                        ? null
-                        : (index) =>
-                              _viewAssetImageAt(context, assetPaths, index),
+                    onTap: viewOnly ? null : (index) => _viewAssetImageAt(context, assetPaths, index),
                   ),
                 ),
               )

@@ -18,14 +18,12 @@ class CalendarDaysGenerator {
   }) {
     final firstDayWeekday = DateTime(year, month, 1).weekday;
     final visiblePreviousMonthDayCount =
-        (firstDayWeekday - firstDayOfWeek.value + DateTime.daysPerWeek) %
-        DateTime.daysPerWeek;
+        (firstDayWeekday - firstDayOfWeek.value + DateTime.daysPerWeek) % DateTime.daysPerWeek;
     int visibleCurrentMonthDayCount = DaysCountInMonthService.get(
       year: year,
       month: month,
     );
-    int visibleNextMonthDayCount =
-        totalCells - visibleCurrentMonthDayCount - visiblePreviousMonthDayCount;
+    int visibleNextMonthDayCount = totalCells - visibleCurrentMonthDayCount - visiblePreviousMonthDayCount;
 
     List<DateTime> visiblePreviousMonthDays = generatePreviousMonthDays(
       visiblePreviousMonthDayCount,

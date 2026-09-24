@@ -25,8 +25,7 @@ class EnterSecurityQuestionRoute extends BaseRoute {
   }
 
   @override
-  Widget buildPage(BuildContext context) =>
-      EnterSecurityQuestionView(params: this);
+  Widget buildPage(BuildContext context) => EnterSecurityQuestionView(params: this);
 }
 
 class EnterSecurityQuestionView extends StatelessWidget {

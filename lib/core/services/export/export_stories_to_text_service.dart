@@ -101,10 +101,7 @@ class ExportStoriesToTextService {
         story.validTags!.map((tagId) => tagNameGetter(tagId)),
       );
 
-      final validTagNames = tagNames
-          .whereType<String>()
-          .where((name) => name.isNotEmpty)
-          .toList();
+      final validTagNames = tagNames.whereType<String>().where((name) => name.isNotEmpty).toList();
 
       if (validTagNames.isNotEmpty) {
         buffer.writeln('Tags: ${validTagNames.join(', ')}');

@@ -2,8 +2,7 @@ import 'package:storypad/core/storages/storage_adapters/base_storage_adapter.dar
 
 abstract class BaseStorage<T> {
   int? get version => null;
-  String get key =>
-      version != null ? "$version-$runtimeType" : runtimeType.toString();
+  String get key => version != null ? "$version-$runtimeType" : runtimeType.toString();
   Future<BaseStorageAdapter<T>> get adapter;
 
   Future<T?> read() async {

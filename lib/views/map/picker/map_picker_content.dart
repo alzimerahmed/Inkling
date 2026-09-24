@@ -168,8 +168,7 @@ class _MapPickerContent extends StatelessWidget {
             leadingIconData: SpIcons.delete,
             title: tr("button.remove_selected_place"),
             titleStyle: TextStyle(color: Theme.of(context).colorScheme.error),
-            onPressed: () =>
-                Navigator.of(context).pop(MapPickerResult.remove()),
+            onPressed: () => Navigator.of(context).pop(MapPickerResult.remove()),
           ),
         if (viewModel.canReset)
           SpPopMenuItem(
@@ -182,18 +181,14 @@ class _MapPickerContent extends StatelessWidget {
           title: tr("button.manual_input"),
           onPressed: () async {
             final place = await MapPickerManualInputRoute(
-              referenceLatLng:
-                  viewModel.selectedPlace?.latLng ??
-                  viewModel.initialSpMapCamera.target,
+              referenceLatLng: viewModel.selectedPlace?.latLng ?? viewModel.initialSpMapCamera.target,
             ).push(context);
             if (!context.mounted || place is! PlaceDbModel) return;
             unawaited(viewModel.selectSearchedPlace(place));
           },
         ),
         SpPopMenuItem(
-          leadingIconData: viewModel.mapStyle == SpMapStyle.streets
-              ? SpIcons.satellite
-              : SpIcons.map,
+          leadingIconData: viewModel.mapStyle == SpMapStyle.streets ? SpIcons.satellite : SpIcons.map,
           title: tr("button.switch_map_style"),
           onPressed: () => viewModel.setMapStyle(
             viewModel.mapStyle == .streets ? .satellite : .streets,
@@ -228,11 +223,9 @@ class _MapPickerContent extends StatelessWidget {
         ? tr("general.messages.please_wait")
         : () {
             final List<String> parts = <String>[
-              if (selectedPlace.locality != null &&
-                  selectedPlace.locality!.trim().isNotEmpty)
+              if (selectedPlace.locality != null && selectedPlace.locality!.trim().isNotEmpty)
                 selectedPlace.locality!.trim(),
-              if (selectedPlace.country != null &&
-                  selectedPlace.country!.trim().isNotEmpty)
+              if (selectedPlace.country != null && selectedPlace.country!.trim().isNotEmpty)
                 selectedPlace.country!.trim(),
             ];
             if (parts.isNotEmpty) return parts.join(', ');
@@ -259,9 +252,7 @@ class _MapPickerContent extends StatelessWidget {
               )
             : Icon(SpIcons.locationPin, color: colorScheme.primary),
         title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
-        subtitle: subtitle == null
-            ? null
-            : Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
+        subtitle: subtitle == null ? null : Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
         trailing: IconButton(
           tooltip: tr("button.edit"),
           style: IconButton.styleFrom(
@@ -275,8 +266,7 @@ class _MapPickerContent extends StatelessWidget {
                   final label = await EditPlaceRoute(
                     place: selectedPlace,
                   ).push(viewModel.viewContext);
-                  if (!context.mounted || label == null || label is! String)
-                    return;
+                  if (!context.mounted || label == null || label is! String) return;
 
                   viewModel.updateSelectedPlaceDetails(
                     placeName: label,
@@ -307,8 +297,7 @@ class _CenterPinOverlay extends StatefulWidget {
   State<_CenterPinOverlay> createState() => _CenterPinOverlayState();
 }
 
-class _CenterPinOverlayState extends State<_CenterPinOverlay>
-    with SingleTickerProviderStateMixin {
+class _CenterPinOverlayState extends State<_CenterPinOverlay> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _animation;
 
@@ -353,9 +342,7 @@ class _CenterPinOverlayState extends State<_CenterPinOverlay>
         animation: _animation,
         builder: (context, child) {
           final double t = _animation.value;
-          final double shadowDiameter =
-              _kShadowRestDiameter +
-              (_kShadowLiftDiameter - _kShadowRestDiameter) * t;
+          final double shadowDiameter = _kShadowRestDiameter + (_kShadowLiftDiameter - _kShadowRestDiameter) * t;
 
           return Column(
             mainAxisSize: MainAxisSize.min,

@@ -388,8 +388,7 @@ void main() {
 
       // Assert
       final yearDir = Directory('${tempDir.path}/2025');
-      final files = yearDir.listSync().whereType<File>().toList()
-        ..sort((a, b) => a.path.compareTo(b.path));
+      final files = yearDir.listSync().whereType<File>().toList()..sort((a, b) => a.path.compareTo(b.path));
 
       final content1 = await files[0].readAsString();
       final content2 = await files[1].readAsString();

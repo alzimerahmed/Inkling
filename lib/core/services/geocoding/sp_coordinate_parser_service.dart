@@ -37,9 +37,7 @@ class SpCoordinateParserService {
     final String text = input.trim();
     if (text.isEmpty) return null;
 
-    return _tryDecimal(text) ??
-        _tryCardinal(text) ??
-        await _tryPlusCode(text, referenceResolver, fallbackReference);
+    return _tryDecimal(text) ?? _tryCardinal(text) ?? await _tryPlusCode(text, referenceResolver, fallbackReference);
   }
 
   // ---------------------------------------------------------------------------
@@ -119,12 +117,8 @@ class SpCoordinateParserService {
       delimiterIdx = commaIdx;
     }
 
-    final String codeToken = delimiterIdx == -1
-        ? text
-        : text.substring(0, delimiterIdx);
-    final String? locationHint = delimiterIdx == -1
-        ? null
-        : text.substring(delimiterIdx + 1).trim();
+    final String codeToken = delimiterIdx == -1 ? text : text.substring(0, delimiterIdx);
+    final String? locationHint = delimiterIdx == -1 ? null : text.substring(delimiterIdx + 1).trim();
 
     if (!codeToken.contains('+')) return null;
 

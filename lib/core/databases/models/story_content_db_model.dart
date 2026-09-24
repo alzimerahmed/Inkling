@@ -74,8 +74,7 @@ class StoryContentDbModel extends BaseDbModel with Comparable {
   int get characterCount =>
       richPages?.fold<int>(
         0,
-        (previousValue, element) =>
-            previousValue + (element.characterCount ?? 0),
+        (previousValue, element) => previousValue + (element.characterCount ?? 0),
       ) ??
       0;
 
@@ -168,9 +167,7 @@ class StoryContentDbModel extends BaseDbModel with Comparable {
     DateTime? createdAt,
   }) {
     return StoryContentDbModel(
-      id:
-          createdAt?.millisecondsSinceEpoch ??
-          DateTime.now().millisecondsSinceEpoch,
+      id: createdAt?.millisecondsSinceEpoch ?? DateTime.now().millisecondsSinceEpoch,
       title: null,
       plainText: null,
       createdAt: createdAt ?? DateTime.now(),
@@ -181,6 +178,5 @@ class StoryContentDbModel extends BaseDbModel with Comparable {
 
   @override
   Map<String, dynamic> toJson() => _$StoryContentDbModelToJson(this);
-  factory StoryContentDbModel.fromJson(Map<String, dynamic> json) =>
-      _$StoryContentDbModelFromJson(json);
+  factory StoryContentDbModel.fromJson(Map<String, dynamic> json) => _$StoryContentDbModelFromJson(json);
 }

@@ -16,13 +16,10 @@ class SpAppLockWrapper extends StatelessWidget {
 
   final Widget child;
 
-  static final GlobalKey<_LockedBarrierState> _globalKey =
-      GlobalKey<_LockedBarrierState>();
+  static final GlobalKey<_LockedBarrierState> _globalKey = GlobalKey<_LockedBarrierState>();
 
   static bool authenticated(BuildContext context) =>
-      context.read<AppLockProvider>().hasAppLock
-      ? _globalKey.currentState?.authenticated == true
-      : true;
+      context.read<AppLockProvider>().hasAppLock ? _globalKey.currentState?.authenticated == true : true;
 
   static Future<T> disableAppLockIfHas<T>(
     BuildContext context, {
@@ -63,8 +60,7 @@ class _LockedBarrier extends StatefulWidget {
   State<_LockedBarrier> createState() => _LockedBarrierState();
 }
 
-class _LockedBarrierState extends State<_LockedBarrier>
-    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+class _LockedBarrierState extends State<_LockedBarrier> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late final AnimationController animationController;
 
   bool authenticated = false;
@@ -153,8 +149,7 @@ class _LockedBarrierState extends State<_LockedBarrier>
           // Belt-and-suspenders: skip if an authentication attempt is already in flight
           // (e.g. the native biometric prompt itself caused a real pause/resume on some
           // platform), so we never fire a second concurrent prompt.
-          if (!context.read<AppLockProvider>().avoidDublciated.isRunning)
-            authenticate();
+          if (!context.read<AppLockProvider>().avoidDublciated.isRunning) authenticate();
         }
         break;
     }
@@ -225,8 +220,7 @@ class _LockedBarrierState extends State<_LockedBarrier>
             spacing: kIsCupertino ? 8.0 : 4.0,
             children: [
               buildUnlockButtons(),
-              if (context.read<AppLockProvider>().appLock.pin != null)
-                buildForgotPinButton(context),
+              if (context.read<AppLockProvider>().appLock.pin != null) buildForgotPinButton(context),
             ],
           ),
         ),

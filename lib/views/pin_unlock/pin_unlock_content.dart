@@ -49,9 +49,7 @@ class _PinUnlockContent extends StatelessWidget {
               top: MediaQuery.paddingOf(context).top + 16.0,
               bottom: MediaQuery.paddingOf(context).bottom + 16.0,
             ),
-            child: displayInRow
-                ? Row(children: children)
-                : Column(children: children),
+            child: displayInRow ? Row(children: children) : Column(children: children),
           ),
         );
       },
@@ -63,8 +61,7 @@ class _PinUnlockContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        (viewModel.pin.length >= 4) &&
-                !viewModel.params.validator(viewModel.pin)
+        (viewModel.pin.length >= 4) && !viewModel.params.validator(viewModel.pin)
             ? Text(
                 viewModel.params.invalidPinTitle,
                 style: TextTheme.of(context).titleLarge,
@@ -83,9 +80,7 @@ class _PinUnlockContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: pinSize,
             children: List.generate(viewModel.pin.length, (index) {
-              final bool invalid =
-                  viewModel.pin.length >= 4 &&
-                  !viewModel.params.validator(viewModel.pin);
+              final bool invalid = viewModel.pin.length >= 4 && !viewModel.params.validator(viewModel.pin);
               return Visibility(
                 visible: viewModel.pin.length > index,
                 child: SpFadeIn.bound(
@@ -93,9 +88,7 @@ class _PinUnlockContent extends StatelessWidget {
                     width: pinSize,
                     height: pinSize,
                     decoration: BoxDecoration(
-                      color: invalid
-                          ? ColorScheme.of(context).error
-                          : ColorScheme.of(context).primary,
+                      color: invalid ? ColorScheme.of(context).error : ColorScheme.of(context).primary,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -166,9 +159,7 @@ class _PinUnlockContent extends StatelessWidget {
             );
           } else if (index == 11) {
             borderColor = null;
-            onPressed = viewModel.pin.isEmpty
-                ? () {}
-                : () => viewModel.removeLastPin();
+            onPressed = viewModel.pin.isEmpty ? () {} : () => viewModel.removeLastPin();
             backgroundColor = null;
             child = Container(
               width: itemSize,
@@ -188,9 +179,7 @@ class _PinUnlockContent extends StatelessWidget {
           return Material(
             color: backgroundColor,
             shape: CircleBorder(
-              side: borderColor != null
-                  ? BorderSide(color: borderColor)
-                  : BorderSide.none,
+              side: borderColor != null ? BorderSide(color: borderColor) : BorderSide.none,
             ),
             child: InkWell(
               customBorder: const CircleBorder(),

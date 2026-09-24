@@ -30,8 +30,7 @@ class _PaywallFeaturesContent extends StatelessWidget {
                 mainAxisSize: .min,
                 children: [
                   if (!iapProvider.isProUser &&
-                      (activeDeal.badgeLabel != null ||
-                          activeDeal.displayComparePrice != null)) ...[
+                      (activeDeal.badgeLabel != null || activeDeal.displayComparePrice != null)) ...[
                     if (activeDeal.badgeLabel != null) ...[
                       Text(
                         activeDeal.badgeLabel!,
@@ -95,9 +94,7 @@ class _PaywallFeaturesContent extends StatelessWidget {
             child: _Page(
               viewModel: viewModel,
               feature: feature,
-              topPadding: CupertinoSheetRoute.hasParentSheet(context)
-                  ? 0.0
-                  : 8.0,
+              topPadding: CupertinoSheetRoute.hasParentSheet(context) ? 0.0 : 8.0,
             ),
           );
         },
@@ -196,8 +193,7 @@ class _Page extends StatelessWidget {
                     context,
                     PaywallFeatureNextAction(
                       focusFeature: feature,
-                      action: (BuildContext context) =>
-                          feature.onOpen!(context),
+                      action: (BuildContext context) => feature.onOpen!(context),
                     ),
                   );
                 },

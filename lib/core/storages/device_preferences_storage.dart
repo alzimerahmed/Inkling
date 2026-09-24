@@ -9,22 +9,20 @@ import 'package:storypad/core/storages/theme_storage.dart';
 class DevicePreferencesStorage extends ObjectStorage<DevicePreferencesObject> {
   static DevicePreferencesStorage appInstance = DevicePreferencesStorage();
 
-  DevicePreferencesObject get preferences =>
-      _preferences ?? DevicePreferencesObject.initial();
+  DevicePreferencesObject get preferences => _preferences ?? DevicePreferencesObject.initial();
   DevicePreferencesObject? _preferences;
 
   Future<void> load() async {
     final legacyData = await ThemeStorage().readObject();
     if (legacyData != null) {
       ThemeStorage().remove();
-      DevicePreferencesObject newData = DevicePreferencesObject.initial()
-          .copyWith(
-            fontFamily: legacyData.fontFamily,
-            fontWeightIndex: legacyData.fontWeight.weightIndex,
-            themeMode: legacyData.themeMode,
-            // ignore: deprecated_member_use
-            colorSeedValue: legacyData.colorSeed?.value,
-          );
+      DevicePreferencesObject newData = DevicePreferencesObject.initial().copyWith(
+        fontFamily: legacyData.fontFamily,
+        fontWeightIndex: legacyData.fontWeight.weightIndex,
+        themeMode: legacyData.themeMode,
+        // ignore: deprecated_member_use
+        colorSeedValue: legacyData.colorSeed?.value,
+      );
       await writeObject(newData);
     }
 
@@ -38,10 +36,8 @@ class DevicePreferencesStorage extends ObjectStorage<DevicePreferencesObject> {
   }
 
   @override
-  DevicePreferencesObject decode(Map<String, dynamic> json) =>
-      DevicePreferencesObject.fromJson(json);
+  DevicePreferencesObject decode(Map<String, dynamic> json) => DevicePreferencesObject.fromJson(json);
 
   @override
-  Map<String, dynamic> encode(DevicePreferencesObject object) =>
-      object.toJson();
+  Map<String, dynamic> encode(DevicePreferencesObject object) => object.toJson();
 }

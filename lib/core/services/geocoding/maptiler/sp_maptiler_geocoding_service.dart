@@ -58,15 +58,10 @@ class SpMapTilerGeocodingService implements SpGeocodingService {
       }
 
       // Determine locality based on the primary feature type or the context
-      if (placeType.contains('locality') ||
-          placeType.contains('place') ||
-          placeType.contains('city')) {
+      if (placeType.contains('locality') || placeType.contains('place') || placeType.contains('city')) {
         locality = placeName;
       } else {
-        locality =
-            extractFromContext('locality') ??
-            extractFromContext('place') ??
-            extractFromContext('city');
+        locality = extractFromContext('locality') ?? extractFromContext('place') ?? extractFromContext('city');
       }
 
       // Determine country
@@ -119,12 +114,8 @@ class SpMapTilerGeocodingService implements SpGeocodingService {
       return features.map((feature) {
         // MapTiler provides coordinates in a `center` array as [longitude, latitude]
         final center = feature['center'] as List<dynamic>?;
-        final lng = (center != null && center.isNotEmpty)
-            ? (center[0] as num).toDouble()
-            : 0.0;
-        final lat = (center != null && center.length > 1)
-            ? (center[1] as num).toDouble()
-            : 0.0;
+        final lng = (center != null && center.isNotEmpty) ? (center[0] as num).toDouble() : 0.0;
+        final lat = (center != null && center.length > 1) ? (center[1] as num).toDouble() : 0.0;
 
         return PlaceDbModel(
           latitude: lat,

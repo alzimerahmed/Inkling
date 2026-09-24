@@ -12,36 +12,32 @@ class _ArchivesContent extends StatelessWidget {
     return DefaultTabController(
       length: years?.length ?? 1,
       child: SpStoryListMultiEditWrapper.withListener(
-        builder:
-            (BuildContext context, SpStoryListMultiEditWrapperState state) {
-              return PopScope(
-                canPop: !state.editing,
-                onPopInvokedWithResult: (didPop, result) =>
-                    viewModel.onPopInvokedWithResult(didPop, result, context),
-                child: Scaffold(
-                  appBar: AppBar(
-                    title: buildTitle(context),
-                    actions: [
-                      buildEditButton(context, state),
-                      buildMoreEditingOptionsButton(context),
-                    ],
-                    bottom: years == null
-                        ? null
-                        : TabBar(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            isScrollable: true,
-                            tabAlignment: TabAlignment.start,
-                            onTap: (_) => state.turnOffEditing(),
-                            tabs: years
-                                .map((y) => Tab(text: y.toString()))
-                                .toList(),
-                          ),
-                  ),
-                  bottomNavigationBar: buildBottomNavigationBar(context),
-                  body: buildBody(years),
-                ),
-              );
-            },
+        builder: (BuildContext context, SpStoryListMultiEditWrapperState state) {
+          return PopScope(
+            canPop: !state.editing,
+            onPopInvokedWithResult: (didPop, result) => viewModel.onPopInvokedWithResult(didPop, result, context),
+            child: Scaffold(
+              appBar: AppBar(
+                title: buildTitle(context),
+                actions: [
+                  buildEditButton(context, state),
+                  buildMoreEditingOptionsButton(context),
+                ],
+                bottom: years == null
+                    ? null
+                    : TabBar(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        isScrollable: true,
+                        tabAlignment: TabAlignment.start,
+                        onTap: (_) => state.turnOffEditing(),
+                        tabs: years.map((y) => Tab(text: y.toString())).toList(),
+                      ),
+              ),
+              bottomNavigationBar: buildBottomNavigationBar(context),
+              body: buildBody(years),
+            ),
+          );
+        },
       ),
     );
   }
@@ -88,9 +84,7 @@ class _ArchivesContent extends StatelessWidget {
       viewModel.params.pathType.localized,
       style: TextTheme.of(context).titleLarge?.copyWith(
         fontWeight: FontWeight.w800,
-        color: viewModel.params.pathType.isArchives
-            ? ColorScheme.of(context).primary
-            : ColorScheme.of(context).error,
+        color: viewModel.params.pathType.isArchives ? ColorScheme.of(context).primary : ColorScheme.of(context).error,
       ),
     );
   }
@@ -146,8 +140,7 @@ class _ArchivesContent extends StatelessWidget {
                     title: state.selectedStories.length == state.stories.length
                         ? tr('button.unselect_all')
                         : tr("button.select_all"),
-                    leadingIconData:
-                        state.selectedStories.length == state.stories.length
+                    leadingIconData: state.selectedStories.length == state.stories.length
                         ? SpIcons.checkboxBlank
                         : SpIcons.checkbox,
                     onPressed: () => state.toggleSelectAll(context),
@@ -161,8 +154,7 @@ class _ArchivesContent extends StatelessWidget {
                         viewModel.refreshList();
                       },
                     ),
-                  if (viewModel.type.isArchives &&
-                      state.selectedStories.isNotEmpty)
+                  if (viewModel.type.isArchives && state.selectedStories.isNotEmpty)
                     SpPopMenuItem(
                       title: tr("button.move_to_bin_all"),
                       leadingIconData: SpIcons.delete,
@@ -172,8 +164,7 @@ class _ArchivesContent extends StatelessWidget {
                       },
                     ),
                   // for bin, "delete all" already show in bottom nav.
-                  if (viewModel.type.isArchives &&
-                      state.selectedStories.isNotEmpty)
+                  if (viewModel.type.isArchives && state.selectedStories.isNotEmpty)
                     SpPopMenuItem(
                       title: tr("button.permanent_delete_all"),
                       leadingIconData: SpIcons.deleteForever,

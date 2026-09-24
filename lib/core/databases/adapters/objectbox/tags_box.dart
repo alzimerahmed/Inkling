@@ -19,12 +19,10 @@ class TagsBox extends BaseBox<TagObjectBox, TagDbModel> {
   QueryIntegerProperty<TagObjectBox> get idProperty => TagObjectBox_.id;
 
   @override
-  QueryStringProperty<TagObjectBox> get lastSavedDeviceIdProperty =>
-      TagObjectBox_.lastSavedDeviceId;
+  QueryStringProperty<TagObjectBox> get lastSavedDeviceIdProperty => TagObjectBox_.lastSavedDeviceId;
 
   @override
-  QueryDateProperty<TagObjectBox> get permanentlyDeletedAtProperty =>
-      TagObjectBox_.permanentlyDeletedAt;
+  QueryDateProperty<TagObjectBox> get permanentlyDeletedAtProperty => TagObjectBox_.permanentlyDeletedAt;
 
   CollectionDbModel<TagDbModel>? _initialTags;
   CollectionDbModel<TagDbModel>? getInitialTagsAndClear() {
@@ -71,8 +69,7 @@ class TagsBox extends BaseBox<TagObjectBox, TagDbModel> {
     int? categoryId = filters?["category_id"];
 
     Condition<TagObjectBox> conditions = TagObjectBox_.id.notNull();
-    if (!returnDeleted)
-      conditions = conditions.and(TagObjectBox_.permanentlyDeletedAt.isNull());
+    if (!returnDeleted) conditions = conditions.and(TagObjectBox_.permanentlyDeletedAt.isNull());
 
     if (categoryId != null) {
       conditions = conditions.and(TagObjectBox_.categoryId.equals(categoryId));

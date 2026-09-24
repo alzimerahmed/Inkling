@@ -27,8 +27,7 @@ class StorageInfoService {
   /// `*.download` temp files. Derived from [AssetType] so every asset kind is
   /// covered — a missed directory means its temp files are never reclaimed,
   /// and video leftovers are the largest of them.
-  static List<SupportDirectoryPath> get assetDirectories =>
-      AssetType.values.map((type) => type.subDirectory).toList();
+  static List<SupportDirectoryPath> get assetDirectories => AssetType.values.map((type) => type.subDirectory).toList();
 
   /// Deletes all files inside [path]'s directory without removing the directory itself.
   Future<void> clearDirectory(SupportDirectoryPath path) async {

@@ -55,12 +55,9 @@ class StoryPagesManager extends StatelessWidget {
             Widget child = buildPage(context, page, index);
             return SpReorderableItem(
               index: index,
-              onAccepted: (int oldIndex) =>
-                  viewModel.reorderPages(oldIndex: oldIndex, newIndex: index),
-              onDragStarted: () =>
-                  viewModel.pagesManager.draggingNotifier.value = true,
-              onDragCompleted: () =>
-                  viewModel.pagesManager.draggingNotifier.value = false,
+              onAccepted: (int oldIndex) => viewModel.reorderPages(oldIndex: oldIndex, newIndex: index),
+              onDragStarted: () => viewModel.pagesManager.draggingNotifier.value = true,
+              onDragCompleted: () => viewModel.pagesManager.draggingNotifier.value = false,
               child: child,
             );
           },
@@ -72,8 +69,7 @@ class StoryPagesManager extends StatelessWidget {
           child: _StoryPagesBinTarget(
             mediaQueryPadding: mediaQueryPadding,
             pagesManager: viewModel.pagesManager,
-            onDeletePage: (pageIndex) =>
-                viewModel.deleteAPage(context, richPages[pageIndex]),
+            onDeletePage: (pageIndex) => viewModel.deleteAPage(context, richPages[pageIndex]),
           ),
         ),
       ],
@@ -187,9 +183,7 @@ class StoryPagesManager extends StatelessWidget {
                 vertical: 12.0,
                 horizontal: 8.0,
               ).add(
-                actions != null
-                    ? const EdgeInsetsGeometry.only(right: 8.0)
-                    : EdgeInsetsGeometry.zero,
+                actions != null ? const EdgeInsetsGeometry.only(right: 8.0) : EdgeInsetsGeometry.zero,
               ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4.0),

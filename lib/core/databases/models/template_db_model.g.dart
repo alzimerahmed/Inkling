@@ -74,12 +74,10 @@ class _$TemplateDbModelCWProxyImpl implements _$TemplateDbModelCWProxy {
   TemplateDbModel name(String? name) => call(name: name);
 
   @override
-  TemplateDbModel content(StoryContentDbModel? content) =>
-      call(content: content);
+  TemplateDbModel content(StoryContentDbModel? content) => call(content: content);
 
   @override
-  TemplateDbModel galleryTemplateId(String? galleryTemplateId) =>
-      call(galleryTemplateId: galleryTemplateId);
+  TemplateDbModel galleryTemplateId(String? galleryTemplateId) => call(galleryTemplateId: galleryTemplateId);
 
   @override
   TemplateDbModel note(String? note) => call(note: note);
@@ -96,12 +94,10 @@ class _$TemplateDbModelCWProxyImpl implements _$TemplateDbModelCWProxy {
   TemplateDbModel updatedAt(DateTime updatedAt) => call(updatedAt: updatedAt);
 
   @override
-  TemplateDbModel archivedAt(DateTime? archivedAt) =>
-      call(archivedAt: archivedAt);
+  TemplateDbModel archivedAt(DateTime? archivedAt) => call(archivedAt: archivedAt);
 
   @override
-  TemplateDbModel lastSavedDeviceId(String? lastSavedDeviceId) =>
-      call(lastSavedDeviceId: lastSavedDeviceId);
+  TemplateDbModel lastSavedDeviceId(String? lastSavedDeviceId) => call(lastSavedDeviceId: lastSavedDeviceId);
 
   @override
   TemplateDbModel permanentlyDeletedAt(DateTime? permanentlyDeletedAt) =>
@@ -201,36 +197,31 @@ extension $TemplateDbModelCopyWith on TemplateDbModel {
 // JsonSerializableGenerator
 // **************************************************************************
 
-TemplateDbModel _$TemplateDbModelFromJson(Map<String, dynamic> json) =>
-    TemplateDbModel(
-      id: (json['id'] as num).toInt(),
-      tags: (json['tags'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
-          .toList(),
-      name: json['name'] as String?,
-      content: json['content'] == null
-          ? null
-          : StoryContentDbModel.fromJson(
-              json['content'] as Map<String, dynamic>,
-            ),
-      galleryTemplateId: json['gallery_template_id'] as String?,
-      note: json['note'] as String?,
-      preferencesOrNull: json['preferences'] == null
-          ? null
-          : StoryPreferencesDbModel.fromJson(
-              json['preferences'] as Map<String, dynamic>,
-            ),
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
-      archivedAt: json['archived_at'] == null
-          ? null
-          : DateTime.parse(json['archived_at'] as String),
-      lastSavedDeviceId: json['last_saved_device_id'] as String?,
-      permanentlyDeletedAt: json['permanently_deleted_at'] == null
-          ? null
-          : DateTime.parse(json['permanently_deleted_at'] as String),
-      index: (json['index'] as num?)?.toInt(),
-    )..storiesCount = (json['stories_count'] as num?)?.toInt();
+TemplateDbModel _$TemplateDbModelFromJson(Map<String, dynamic> json) => TemplateDbModel(
+  id: (json['id'] as num).toInt(),
+  tags: (json['tags'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList(),
+  name: json['name'] as String?,
+  content: json['content'] == null
+      ? null
+      : StoryContentDbModel.fromJson(
+          json['content'] as Map<String, dynamic>,
+        ),
+  galleryTemplateId: json['gallery_template_id'] as String?,
+  note: json['note'] as String?,
+  preferencesOrNull: json['preferences'] == null
+      ? null
+      : StoryPreferencesDbModel.fromJson(
+          json['preferences'] as Map<String, dynamic>,
+        ),
+  createdAt: DateTime.parse(json['created_at'] as String),
+  updatedAt: DateTime.parse(json['updated_at'] as String),
+  archivedAt: json['archived_at'] == null ? null : DateTime.parse(json['archived_at'] as String),
+  lastSavedDeviceId: json['last_saved_device_id'] as String?,
+  permanentlyDeletedAt: json['permanently_deleted_at'] == null
+      ? null
+      : DateTime.parse(json['permanently_deleted_at'] as String),
+  index: (json['index'] as num?)?.toInt(),
+)..storiesCount = (json['stories_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$TemplateDbModelToJson(
   TemplateDbModel instance,

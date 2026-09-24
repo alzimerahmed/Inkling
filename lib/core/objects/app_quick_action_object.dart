@@ -61,14 +61,12 @@ class AppQuickActionTemplateReference {
 
   factory AppQuickActionTemplateReference.fromJson(Map<String, dynamic> json) =>
       _$AppQuickActionTemplateReferenceFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AppQuickActionTemplateReferenceToJson(this);
+  Map<String, dynamic> toJson() => _$AppQuickActionTemplateReferenceToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
 class AppQuickActionObject {
-  static String get templateNativeIcon =>
-      Platform.isIOS ? 'lightbulb' : 'outline_lightbulb_24';
+  static String get templateNativeIcon => Platform.isIOS ? 'lightbulb' : 'outline_lightbulb_24';
   static String get tagNativeIcon => Platform.isIOS ? 'tag' : 'outline_sell_24';
 
   const AppQuickActionObject({
@@ -98,16 +96,13 @@ class AppQuickActionObject {
   String get key => switch (type) {
     AppQuickActionType.defaultAction => defaultActionType?.id ?? '',
     AppQuickActionType.template =>
-      templateReference != null
-          ? 'template:${templateReference!.type.name}:${templateReference!.id}'
-          : '',
+      templateReference != null ? 'template:${templateReference!.type.name}:${templateReference!.id}' : '',
     AppQuickActionType.tag => tagId != null ? 'tag:$tagId' : '',
   };
 
   static AppQuickActionObject? tryFromId(String id) {
     try {
-      final json =
-          jsonDecode(utf8.decode(base64Url.decode(id))) as Map<String, dynamic>;
+      final json = jsonDecode(utf8.decode(base64Url.decode(id))) as Map<String, dynamic>;
       return AppQuickActionObject.fromJson(json);
     } catch (_) {
       return null;
@@ -124,7 +119,6 @@ class AppQuickActionObject {
     );
   }
 
-  factory AppQuickActionObject.fromJson(Map<String, dynamic> json) =>
-      _$AppQuickActionObjectFromJson(json);
+  factory AppQuickActionObject.fromJson(Map<String, dynamic> json) => _$AppQuickActionObjectFromJson(json);
   Map<String, dynamic> toJson() => _$AppQuickActionObjectToJson(this);
 }

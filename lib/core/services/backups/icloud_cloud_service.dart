@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:flutter/services.dart';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
-    as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
 import 'package:storypad/core/objects/cloud_file_object.dart';
 import 'package:storypad/core/objects/cloud_storage_quota_object.dart';
 import 'package:storypad/core/objects/icloud_user_object.dart';
@@ -55,8 +54,7 @@ class ICloudCloudService extends BackupCloudService {
   /// Two-tiered live check: [_isAvailable] (fast, local, offline) gates
   /// whether to attempt [_fetchAccountId] (a real CloudKit round-trip) — see
   /// [_AvailabilityStatus] for why its outcomes are handled differently.
-  Future<({_AvailabilityStatus status, bool hasCachedUser})>
-  _checkAvailability() async {
+  Future<({_AvailabilityStatus status, bool hasCachedUser})> _checkAvailability() async {
     final available = await _isAvailable();
     if (!available) {
       _currentUser = null;
@@ -205,8 +203,7 @@ class ICloudCloudService extends BackupCloudService {
     }
   }
 
-  String _joinPath(String? folder, String name) =>
-      (folder == null || folder.isEmpty) ? name : '$folder/$name';
+  String _joinPath(String? folder, String name) => (folder == null || folder.isEmpty) ? name : '$folder/$name';
 
   String _parentOf(String path) {
     final index = path.lastIndexOf('/');
@@ -228,10 +225,7 @@ class ICloudCloudService extends BackupCloudService {
         final existing = yearlyBackups[year];
         final existingTs = existing?.lastUpdatedAt;
         final newTs = file.lastUpdatedAt;
-        final isNewer =
-            existing == null ||
-            (newTs != null &&
-                (existingTs == null || newTs.isAfter(existingTs)));
+        final isNewer = existing == null || (newTs != null && (existingTs == null || newTs.isAfter(existingTs)));
         if (isNewer) yearlyBackups[year] = file;
       }
 

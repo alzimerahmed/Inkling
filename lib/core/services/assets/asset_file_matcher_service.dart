@@ -27,15 +27,13 @@ class AssetFileMatcherService {
     final Map<AssetDbModel, File> matches = {};
 
     // Sort assets by creation time
-    final sortedAssets = List<AssetDbModel>.from(assets)
-      ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    final sortedAssets = List<AssetDbModel>.from(assets)..sort((a, b) => a.createdAt.compareTo(b.createdAt));
 
     // Get file stats and sort by creation time
     final fileStats = await _getFileStats(availableFiles);
     if (fileStats.isEmpty) return {};
 
-    final sortedFiles = fileStats.entries.toList()
-      ..sort((a, b) => a.value.modified.compareTo(b.value.modified));
+    final sortedFiles = fileStats.entries.toList()..sort((a, b) => a.value.modified.compareTo(b.value.modified));
 
     // Match each asset with the next available file
     int fileIndex = 0;

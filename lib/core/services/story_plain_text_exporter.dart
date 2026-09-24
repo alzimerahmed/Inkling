@@ -36,14 +36,8 @@ class StoryPlainTextExporter {
       headerParts.add(emojis.join(' '));
     }
 
-    final header = headerParts.isNotEmpty
-        ? "${headerParts.join('\n')}\n\n"
-        : '';
-    final pagesText = pages
-        .map(_pageContent)
-        .where((content) => content.isNotEmpty)
-        .join('\n\n---\n\n')
-        .trim();
+    final header = headerParts.isNotEmpty ? "${headerParts.join('\n')}\n\n" : '';
+    final pagesText = pages.map(_pageContent).where((content) => content.isNotEmpty).join('\n\n---\n\n').trim();
 
     return "$header$pagesText\n\n#StoryPad";
   }

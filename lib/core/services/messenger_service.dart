@@ -23,8 +23,7 @@ class MessengerService {
     return ScaffoldMessenger.maybeOf(context);
   }
 
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason>?
-  scaffoldFeatureController;
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? scaffoldFeatureController;
 
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? showSnackBar(
     String message, {
@@ -89,8 +88,7 @@ class MessengerService {
       context: context,
       builder: (context) {
         Future.delayed(const Duration(seconds: 1)).then((value) {
-          if (context.mounted && Navigator.canPop(context))
-            Navigator.of(context).pop();
+          if (context.mounted && Navigator.canPop(context)) Navigator.of(context).pop();
         });
 
         return Center(
@@ -136,8 +134,7 @@ class MessengerService {
       context: context,
       builder: (context) {
         Future.delayed(const Duration(seconds: 1)).then((value) {
-          if (context.mounted && Navigator.canPop(context))
-            Navigator.of(context).pop();
+          if (context.mounted && Navigator.canPop(context)) Navigator.of(context).pop();
         });
 
         return Center(
@@ -172,15 +169,13 @@ class MessengerService {
     if (!kIsWeb && Platform.isIOS) {
       return showCupertinoDialog<T>(
         context: context,
-        builder: (context) =>
-            _loadingBuilder<T>(context, completer, debugSource),
+        builder: (context) => _loadingBuilder<T>(context, completer, debugSource),
         barrierDismissible: false,
       );
     } else {
       return showDialog<T>(
         context: context,
-        builder: (context) =>
-            _loadingBuilder<T>(context, completer, debugSource),
+        builder: (context) => _loadingBuilder<T>(context, completer, debugSource),
         barrierDismissible: false,
       );
     }
@@ -193,8 +188,7 @@ class MessengerService {
   ) {
     return FutureBuilder<T?>(
       future: future.future.then((value) {
-        if (debugSource != null)
-          AppLogger.info("LOADED $debugSource with $value");
+        if (debugSource != null) AppLogger.info("LOADED $debugSource with $value");
         if (context.mounted) {
           Navigator.of(context).pop(value);
         }

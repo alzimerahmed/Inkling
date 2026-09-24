@@ -70,8 +70,7 @@ class _$AssetDbModelCWProxyImpl implements _$AssetDbModelCWProxy {
   AssetDbModel id(int id) => call(id: id);
 
   @override
-  AssetDbModel originalSource(String originalSource) =>
-      call(originalSource: originalSource);
+  AssetDbModel originalSource(String originalSource) => call(originalSource: originalSource);
 
   @override
   AssetDbModel cloudDestinations(
@@ -85,12 +84,10 @@ class _$AssetDbModelCWProxyImpl implements _$AssetDbModelCWProxy {
   AssetDbModel updatedAt(DateTime updatedAt) => call(updatedAt: updatedAt);
 
   @override
-  AssetDbModel lastSavedDeviceId(String? lastSavedDeviceId) =>
-      call(lastSavedDeviceId: lastSavedDeviceId);
+  AssetDbModel lastSavedDeviceId(String? lastSavedDeviceId) => call(lastSavedDeviceId: lastSavedDeviceId);
 
   @override
-  AssetDbModel permanentlyDeletedAt(DateTime? permanentlyDeletedAt) =>
-      call(permanentlyDeletedAt: permanentlyDeletedAt);
+  AssetDbModel permanentlyDeletedAt(DateTime? permanentlyDeletedAt) => call(permanentlyDeletedAt: permanentlyDeletedAt);
 
   @override
   AssetDbModel type(AssetType type) => call(type: type);
@@ -102,8 +99,7 @@ class _$AssetDbModelCWProxyImpl implements _$AssetDbModelCWProxy {
   AssetDbModel version(int? version) => call(version: version);
 
   @override
-  AssetDbModel metadata(Map<String, dynamic>? metadata) =>
-      call(metadata: metadata);
+  AssetDbModel metadata(Map<String, dynamic>? metadata) => call(metadata: metadata);
 
   @override
   AssetDbModel width(double? width) => call(width: width);
@@ -139,15 +135,11 @@ class _$AssetDbModelCWProxyImpl implements _$AssetDbModelCWProxy {
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      originalSource:
-          originalSource == const $CopyWithPlaceholder() ||
-              originalSource == null
+      originalSource: originalSource == const $CopyWithPlaceholder() || originalSource == null
           ? _value.originalSource
           // ignore: cast_nullable_to_non_nullable
           : originalSource as String,
-      cloudDestinations:
-          cloudDestinations == const $CopyWithPlaceholder() ||
-              cloudDestinations == null
+      cloudDestinations: cloudDestinations == const $CopyWithPlaceholder() || cloudDestinations == null
           ? _value.cloudDestinations
           // ignore: cast_nullable_to_non_nullable
           : cloudDestinations as Map<String, Map<String, Map<String, String>>>,
@@ -224,9 +216,7 @@ AssetDbModel _$AssetDbModelFromJson(Map<String, dynamic> json) => AssetDbModel(
       ? null
       : DateTime.parse(json['permanently_deleted_at'] as String),
   type: _assetTypeFromJson(json['type'] as String?),
-  tags: (json['tags'] as List<dynamic>?)
-      ?.map((e) => (e as num).toInt())
-      .toList(),
+  tags: (json['tags'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList(),
   version: (json['version'] as num?)?.toInt() ?? 2,
   metadata: json['metadata'] as Map<String, dynamic>?,
   width: (json['width'] as num?)?.toDouble(),

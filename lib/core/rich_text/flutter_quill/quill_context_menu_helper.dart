@@ -14,33 +14,25 @@ class _QuillContextMenuHelper {
       rawEditorState.textEditingValue.text,
     );
 
-    List<ContextMenuButtonItem> buttonItems =
-        EditableText.getEditableButtonItems(
-          clipboardStatus: ClipboardStatus.pasteable,
-          onCopy: () =>
-              rawEditorState.copySelection(SelectionChangedCause.toolbar),
-          onCut: editable
-              ? () => rawEditorState.cutSelection(SelectionChangedCause.toolbar)
-              : null,
-          onPaste: editable
-              ? () => rawEditorState.pasteText(SelectionChangedCause.toolbar)
-              : null,
-          onSelectAll: () =>
-              rawEditorState.selectAll(SelectionChangedCause.toolbar),
-          onSearchWeb: Platform.isIOS
-              ? () => rawEditorState.searchWebForSelection(
-                  SelectionChangedCause.toolbar,
-                )
-              : null,
-          onShare: () =>
-              rawEditorState.shareSelection(SelectionChangedCause.toolbar),
-          onLiveTextInput: null,
-          onLookUp: defaultTargetPlatform == TargetPlatform.iOS
-              ? () => rawEditorState.lookUpSelection(
-                  SelectionChangedCause.toolbar,
-                )
-              : null,
-        );
+    List<ContextMenuButtonItem> buttonItems = EditableText.getEditableButtonItems(
+      clipboardStatus: ClipboardStatus.pasteable,
+      onCopy: () => rawEditorState.copySelection(SelectionChangedCause.toolbar),
+      onCut: editable ? () => rawEditorState.cutSelection(SelectionChangedCause.toolbar) : null,
+      onPaste: editable ? () => rawEditorState.pasteText(SelectionChangedCause.toolbar) : null,
+      onSelectAll: () => rawEditorState.selectAll(SelectionChangedCause.toolbar),
+      onSearchWeb: Platform.isIOS
+          ? () => rawEditorState.searchWebForSelection(
+              SelectionChangedCause.toolbar,
+            )
+          : null,
+      onShare: () => rawEditorState.shareSelection(SelectionChangedCause.toolbar),
+      onLiveTextInput: null,
+      onLookUp: defaultTargetPlatform == TargetPlatform.iOS
+          ? () => rawEditorState.lookUpSelection(
+              SelectionChangedCause.toolbar,
+            )
+          : null,
+    );
 
     for (final ProcessTextAction action in kProcessTextActions) {
       buttonItems.add(
@@ -48,12 +40,11 @@ class _QuillContextMenuHelper {
           label: action.label,
           onPressed: () async {
             if (text.isNotEmpty) {
-              final String? processedText = await DefaultProcessTextService()
-                  .processTextAction(
-                    action.id,
-                    text,
-                    rawEditorState.controller.readOnly,
-                  );
+              final String? processedText = await DefaultProcessTextService().processTextAction(
+                action.id,
+                text,
+                rawEditorState.controller.readOnly,
+              );
 
               // If an activity does not return a modified version, just hide the toolbar.
               // Otherwise use the result to replace the selected text.

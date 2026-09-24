@@ -14,12 +14,10 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
   QueryIntegerProperty<AssetObjectBox> get idProperty => AssetObjectBox_.id;
 
   @override
-  QueryStringProperty<AssetObjectBox> get lastSavedDeviceIdProperty =>
-      AssetObjectBox_.lastSavedDeviceId;
+  QueryStringProperty<AssetObjectBox> get lastSavedDeviceIdProperty => AssetObjectBox_.lastSavedDeviceId;
 
   @override
-  QueryDateProperty<AssetObjectBox> get permanentlyDeletedAtProperty =>
-      AssetObjectBox_.permanentlyDeletedAt;
+  QueryDateProperty<AssetObjectBox> get permanentlyDeletedAtProperty => AssetObjectBox_.permanentlyDeletedAt;
 
   @override
   QueryBuilder<AssetObjectBox> buildQuery({
@@ -50,9 +48,7 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
       conditions = conditions.and(typeCondition);
     } else if (type == AssetType.image) {
       conditions = conditions.and(
-        AssetObjectBox_.type
-            .equals(AssetType.image.name)
-            .or(AssetObjectBox_.type.isNull()),
+        AssetObjectBox_.type.equals(AssetType.image.name).or(AssetObjectBox_.type.isNull()),
       );
     } else if (type != null) {
       conditions = conditions.and(AssetObjectBox_.type.equals(type.name));
@@ -91,8 +87,7 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
   }
 
   @override
-  AssetDbModel modelFromJson(Map<String, dynamic> json) =>
-      AssetDbModel.fromJson(json);
+  AssetDbModel modelFromJson(Map<String, dynamic> json) => AssetDbModel.fromJson(json);
 
   @override
   Future<AssetObjectBox> modelToObject(
@@ -149,9 +144,7 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
       cloudDestinations: decodeCloudDestinations(object),
       type: AssetType.fromValue(object.type),
       tags: object.tags,
-      metadata: object.metadata != null
-          ? jsonDecode(object.metadata!) as Map<String, dynamic>
-          : null,
+      metadata: object.metadata != null ? jsonDecode(object.metadata!) as Map<String, dynamic> : null,
       width: object.width,
       height: object.height,
       createdAt: object.createdAt,
@@ -199,9 +192,7 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
         cloudDestinations: decodeCloudDestinations(object),
         type: AssetType.fromValue(object.type),
         tags: object.tags,
-        metadata: object.metadata != null
-            ? jsonDecode(object.metadata!) as Map<String, dynamic>
-            : null,
+        metadata: object.metadata != null ? jsonDecode(object.metadata!) as Map<String, dynamic> : null,
         width: object.width,
         height: object.height,
         createdAt: object.createdAt,
@@ -245,10 +236,7 @@ class AssetsBox extends BaseBox<AssetObjectBox, AssetDbModel> {
   /// once after loading a batch of content that will render asset tiles (a
   /// story list, a library page, etc.), before those tiles build.
   void preloadAspectRatios(Iterable<int> ids) {
-    final idsToLoad = ids
-        .where((id) => !_aspectRatioCache.containsKey(id))
-        .toSet()
-        .toList();
+    final idsToLoad = ids.where((id) => !_aspectRatioCache.containsKey(id)).toSet().toList();
     if (idsToLoad.isEmpty) return;
 
     final objects = box.getMany(idsToLoad);

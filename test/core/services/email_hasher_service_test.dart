@@ -49,29 +49,24 @@ void main() {
     });
 
     test('isValidEmailHash accepts valid 64-char hex hash', () {
-      const validHash =
-          '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
+      const validHash = '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
       expect(EmailHasherService.isValidEmailHash(validHash), isTrue);
     });
 
     test('isValidEmailHash rejects uppercase hex', () {
       // Should only accept lowercase to match SHA256 digest.toString() output
-      const invalidHash =
-          '1234567890ABCDEF1234567890abcdef1234567890abcdef1234567890abcdef';
+      const invalidHash = '1234567890ABCDEF1234567890abcdef1234567890abcdef1234567890abcdef';
       expect(EmailHasherService.isValidEmailHash(invalidHash), isFalse);
     });
 
     test('isValidEmailHash rejects non-hex characters', () {
-      const invalidHash =
-          'z234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
+      const invalidHash = 'z234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
       expect(EmailHasherService.isValidEmailHash(invalidHash), isFalse);
     });
 
     test('isValidEmailHash rejects wrong length', () {
-      const tooShort =
-          '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde';
-      const tooLong =
-          '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef00';
+      const tooShort = '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde';
+      const tooLong = '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef00';
 
       expect(EmailHasherService.isValidEmailHash(tooShort), isFalse);
       expect(EmailHasherService.isValidEmailHash(tooLong), isFalse);

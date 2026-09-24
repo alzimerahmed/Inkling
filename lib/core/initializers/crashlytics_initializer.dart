@@ -15,8 +15,7 @@ class CrashlyticsInitializer {
   /// gstatic font-fetch failure itself rather than a specific exception type.
   static bool _isIgnorable(Object error) {
     final message = error.toString();
-    return message.contains('fonts.gstatic.com') &&
-        message.contains('Failed to load font');
+    return message.contains('fonts.gstatic.com') && message.contains('Failed to load font');
   }
 
   static void _listenToErrors() {

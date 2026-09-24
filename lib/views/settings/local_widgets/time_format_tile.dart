@@ -34,10 +34,7 @@ class TimeFormatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final label = context
-        .read<DevicePreferencesProvider>()
-        .timeFormatOf(context)
-        .label;
+    final label = context.read<DevicePreferencesProvider>().timeFormatOf(context).label;
 
     return ListTile(
       leading: SpSettingIconBadge(weekday: weekday, icon: SpIcons.timer),

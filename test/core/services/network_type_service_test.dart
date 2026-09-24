@@ -6,8 +6,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   const channel = MethodChannel('dev.fluttercommunity.plus/connectivity');
-  final messenger =
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+  final messenger = TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
 
   void mockConnectivity(List<String>? Function() handler) {
     messenger.setMockMethodCallHandler(channel, (call) async => handler());

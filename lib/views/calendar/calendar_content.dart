@@ -29,9 +29,7 @@ class _CalendarContent extends StatelessWidget {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      bottom: viewModel.segments.length > 1
-          ? buildSegmentButtons(context)
-          : null,
+      bottom: viewModel.segments.length > 1 ? buildSegmentButtons(context) : null,
       title: ValueListenableBuilder(
         valueListenable: viewModel.monthYearNotifier,
         builder: (context, monthYear, child) {
@@ -103,8 +101,7 @@ class _CalendarContent extends StatelessWidget {
           }
         },
         children: {
-          for (final segment in viewModel.segments)
-            segment: Text(segment.translatedName(context)),
+          for (final segment in viewModel.segments) segment: Text(segment.translatedName(context)),
         },
       );
     } else {

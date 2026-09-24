@@ -21,8 +21,7 @@ import 'package:storypad/views/templates/stories/template_stories_view.dart';
 
 import 'show_template_gallery_view.dart';
 
-class ShowTemplateGalleryViewModel extends ChangeNotifier
-    with DisposeAwareMixin, DebounchedCallback {
+class ShowTemplateGalleryViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
   final ShowTemplateGalleryRoute params;
   final PageController pageController = PageController();
 
@@ -54,9 +53,7 @@ class ShowTemplateGalleryViewModel extends ChangeNotifier
     );
 
     draftContent = content.copyWith(
-      richPages: content.richPages
-          ?.map((e) => pagesManager.pagesMap[e.id]?.page ?? e)
-          .toList(),
+      richPages: content.richPages?.map((e) => pagesManager.pagesMap[e.id]?.page ?? e).toList(),
     );
 
     galleryTemplate = galleryTemplate.copyWith(lazyDraftContent: draftContent);

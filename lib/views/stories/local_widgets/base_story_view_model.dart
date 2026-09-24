@@ -26,8 +26,7 @@ import 'package:storypad/views/templates/edit/edit_template_view.dart';
 
 part 'story_pages_manager_info.dart';
 
-abstract class BaseStoryViewModel extends ChangeNotifier
-    with DisposeAwareMixin, DebounchedCallback {
+abstract class BaseStoryViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
   StoryDbModel? story;
   StoryContentDbModel? draftContent;
 
@@ -54,8 +53,7 @@ abstract class BaseStoryViewModel extends ChangeNotifier
   bool get readOnly;
 
   bool get hasDataWritten =>
-      flowType == EditingFlowType.update ||
-      StoryHasDataWrittenService.callByContent(draftContent!);
+      flowType == EditingFlowType.update || StoryHasDataWrittenService.callByContent(draftContent!);
 
   bool get hasChange {
     if (draftContent == null) return false;
@@ -64,9 +62,7 @@ abstract class BaseStoryViewModel extends ChangeNotifier
     if (latestContent == null) return false;
 
     // when not ignore empty & no data written, consider not changed.
-    if (flowType == EditingFlowType.create &&
-        !StoryHasDataWrittenService.callByContent(draftContent!))
-      return false;
+    if (flowType == EditingFlowType.create && !StoryHasDataWrittenService.callByContent(draftContent!)) return false;
     return draftContent!.hasChanges(latestContent);
   }
 
@@ -130,13 +126,7 @@ abstract class BaseStoryViewModel extends ChangeNotifier
 
     return allTagIds
         .where(
-          context
-              .read<TagsProvider>()
-              .allTags!
-              .items
-              .map((t) => t.id)
-              .toSet()
-              .contains,
+          context.read<TagsProvider>().allTags!.items.map((t) => t.id).toSet().contains,
         )
         .toList();
   }
@@ -145,10 +135,8 @@ abstract class BaseStoryViewModel extends ChangeNotifier
     if (preferences.layoutType != story?.preferences.layoutType) {
       pagesManager.currentPageIndexNotifier.value = null;
 
-      if (pagesManager.pageController.hasClients)
-        pagesManager.pageController.jumpToPage(0);
-      if (pagesManager.pageScrollController.hasClients)
-        pagesManager.pageScrollController.jumpTo(0);
+      if (pagesManager.pageController.hasClients) pagesManager.pageController.jumpToPage(0);
+      if (pagesManager.pageScrollController.hasClients) pagesManager.pageScrollController.jumpTo(0);
     }
 
     story = story!.copyWith(

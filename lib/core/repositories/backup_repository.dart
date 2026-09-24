@@ -8,8 +8,7 @@ import 'package:storypad/core/databases/models/story_db_model.dart';
 import 'package:storypad/core/databases/models/tag_category_db_model.dart';
 import 'package:storypad/core/databases/models/tag_db_model.dart';
 import 'package:storypad/core/databases/models/template_db_model.dart';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
-    as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
 import 'package:storypad/core/objects/backup_object.dart';
 import 'package:storypad/core/objects/cloud_file_object.dart';
 import 'package:storypad/core/objects/cloud_service_user.dart';
@@ -70,8 +69,7 @@ enum UserChangeType {
 class BackupRepository {
   /// Broadcasts whenever a cloud service user signs in or out.
   /// Consumers can re-read [services] to get the latest authenticated users.
-  final StreamController<UserChangeType> _userChangesController =
-      StreamController<UserChangeType>.broadcast();
+  final StreamController<UserChangeType> _userChangesController = StreamController<UserChangeType>.broadcast();
   Stream<UserChangeType> get userChanges => _userChangesController.stream;
 
   static final List<BaseDbAdapter> databases = [
@@ -136,11 +134,9 @@ class BackupRepository {
   }
 
   // currentUser & isSignedIn are load in initializer - before rendering UI.
-  GoogleUserObject? get currentGoogleUser =>
-      googleDriveService.currentUser as GoogleUserObject?;
+  GoogleUserObject? get currentGoogleUser => googleDriveService.currentUser as GoogleUserObject?;
   NextcloudUserObject? get currentNextcloudUser => nextcloudService.currentUser;
-  ICloudUserObject? get currentICloudUser =>
-      icloudService?.currentUser as ICloudUserObject?;
+  ICloudUserObject? get currentICloudUser => icloudService?.currentUser as ICloudUserObject?;
   DropboxUserObject? get currentDropboxUser => dropboxService.currentUser;
   bool get isSignedIn => availableUsers.isNotEmpty;
 
@@ -195,9 +191,7 @@ class BackupRepository {
   ];
 
   BackupCloudService getService(BackupServiceType serviceType) {
-    return services
-        .where((service) => service.serviceType == serviceType)
-        .first;
+    return services.where((service) => service.serviceType == serviceType).first;
   }
 
   Future<BackupResult<bool>> requestScope() async {
@@ -528,9 +522,7 @@ class BackupRepository {
   Future<BackupResult<ConnectionCheckResult>> checkConnection() async {
     final checkableServices = services
         .where(
-          (service) =>
-              service.isSignedIn ||
-              service.serviceType == BackupServiceType.icloud,
+          (service) => service.isSignedIn || service.serviceType == BackupServiceType.icloud,
         )
         .toList();
 
@@ -554,8 +546,7 @@ class BackupRepository {
       return BackupResult.success((
         hasInternet: false,
         statusByService: {
-          for (final service in checkableServices)
-            service.serviceType: BackupConnectionStatus.noInternet,
+          for (final service in checkableServices) service.serviceType: BackupConnectionStatus.noInternet,
         },
       ));
     }
@@ -566,28 +557,21 @@ class BackupRepository {
       try {
         await service.reauthenticateIfNeeded();
         await service.canAccessRequestedScopes();
-        statusByService[service.serviceType] =
-            BackupConnectionStatus.readyToSync;
+        statusByService[service.serviceType] = BackupConnectionStatus.readyToSync;
       } on exp.AuthException catch (e) {
         statusByService[service.serviceType] = switch (e.type) {
-          exp.AuthExceptionType.tokenExpired =>
-            BackupConnectionStatus.needServicePermission,
-          exp.AuthExceptionType.tokenRevoked =>
-            BackupConnectionStatus.needServicePermission,
-          exp.AuthExceptionType.insufficientScopes =>
-            BackupConnectionStatus.needServicePermission,
+          exp.AuthExceptionType.tokenExpired => BackupConnectionStatus.needServicePermission,
+          exp.AuthExceptionType.tokenRevoked => BackupConnectionStatus.needServicePermission,
+          exp.AuthExceptionType.insufficientScopes => BackupConnectionStatus.needServicePermission,
           // Still off in Settings — an expected, recoverable state for
           // iCloud specifically, not an unknown/broken one.
-          exp.AuthExceptionType.signInRequired =>
-            BackupConnectionStatus.needServicePermission,
+          exp.AuthExceptionType.signInRequired => BackupConnectionStatus.needServicePermission,
           _ => BackupConnectionStatus.unknownError,
         };
       } on exp.NetworkException {
-        statusByService[service.serviceType] =
-            BackupConnectionStatus.noInternet;
+        statusByService[service.serviceType] = BackupConnectionStatus.noInternet;
       } catch (e) {
-        statusByService[service.serviceType] =
-            BackupConnectionStatus.unknownError;
+        statusByService[service.serviceType] = BackupConnectionStatus.unknownError;
       }
     }
 

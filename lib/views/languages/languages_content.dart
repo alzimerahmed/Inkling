@@ -18,9 +18,7 @@ class _LanguagesContent extends StatelessWidget {
             ),
         ],
       ),
-      bottomNavigationBar: viewModel.params.showBetaBanner
-          ? _FeedbackBanner(context: context)
-          : null,
+      bottomNavigationBar: viewModel.params.showBetaBanner ? _FeedbackBanner(context: context) : null,
       body: ListView.builder(
         padding: const EdgeInsets.only(bottom: 16.0),
         itemCount: viewModel.supportedLocales.length,
@@ -44,9 +42,7 @@ class _LanguagesContent extends StatelessWidget {
           child: const Icon(SpIcons.check),
         ),
       ),
-      subtitle: viewModel.isSystemLocale(locale)
-          ? Text(tr('general.default'))
-          : null,
+      subtitle: viewModel.isSystemLocale(locale) ? Text(tr('general.default')) : null,
       onTap: () => viewModel.setLocale(locale, context),
     );
   }

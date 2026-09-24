@@ -65,8 +65,7 @@ class OnboardingStep2ViewModel extends ChangeNotifier with DisposeAwareMixin {
   void enableAutoscrollToolbar() {
     if (disposed) return;
     if (!toolbarScrollController.hasClients) return;
-    if (toolbarScrollController.offset != 0)
-      toolbarScrollController.jumpTo(0.0);
+    if (toolbarScrollController.offset != 0) toolbarScrollController.jumpTo(0.0);
 
     toolbarScrollController.animateTo(
       toolbarScrollController.position.maxScrollExtent,

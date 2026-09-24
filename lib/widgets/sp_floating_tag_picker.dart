@@ -50,8 +50,7 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
   void _setPeopleMode(bool peopleMode) {
     if (_peopleMode == peopleMode) return;
     setState(() => _peopleMode = peopleMode);
-    if (peopleMode)
-      AnalyticsService.instance.logTagPickerPeopleModeEntered(method: 'button');
+    if (peopleMode) AnalyticsService.instance.logTagPickerPeopleModeEntered(method: 'button');
   }
 
   late final TagsProvider tagsProvider = context.read<TagsProvider>();
@@ -72,9 +71,7 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
 
   Future<void> _toggle(TagDbModel tag) async {
     final isSelected = selectedTags.contains(tag.id);
-    final newTags = isSelected
-        ? ({...selectedTags}..remove(tag.id)).toList()
-        : ({...selectedTags, tag.id}).toList();
+    final newTags = isSelected ? ({...selectedTags}..remove(tag.id)).toList() : ({...selectedTags, tag.id}).toList();
 
     setState(() => selectedTags = newTags.toSet());
     final success = await widget.onUpdated(newTags);
@@ -128,9 +125,7 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
 
   Widget buildPage({required BuildContext context}) {
     final provider = Provider.of<TagsProvider>(context);
-    final tags =
-        (_peopleMode ? provider.peopleTags : provider.tags)?.items ??
-        <TagDbModel>[];
+    final tags = (_peopleMode ? provider.peopleTags : provider.tags)?.items ?? <TagDbModel>[];
 
     final filtered = _query.isEmpty
         ? tags
@@ -151,9 +146,7 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
           }();
 
     final allowCreate =
-        _query.isNotEmpty &&
-        (tags.isEmpty ||
-            !tags.any((t) => t.title.toLowerCase() == _query.toLowerCase()));
+        _query.isNotEmpty && (tags.isEmpty || !tags.any((t) => t.title.toLowerCase() == _query.toLowerCase()));
 
     return Column(
       mainAxisSize: .min,
@@ -166,9 +159,7 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
             onChanged: (text) => setState(() => _query = text),
             decoration: InputDecoration(
               isDense: true,
-              hintText: _peopleMode
-                  ? tr('input.people.hint')
-                  : tr('input.tag.hint'),
+              hintText: _peopleMode ? tr('input.people.hint') : tr('input.tag.hint'),
               hintStyle: TextStyle(
                 color: ColorScheme.of(context).onSurface.withValues(alpha: 0.4),
               ),
@@ -204,9 +195,7 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
                 children: [
                   Icon(_peopleMode ? SpIcons.people : SpIcons.tag, size: 24.0),
                   Text(
-                    _peopleMode
-                        ? tr("page.tags.people_empty_message")
-                        : tr("page.tags.empty_message"),
+                    _peopleMode ? tr("page.tags.people_empty_message") : tr("page.tags.empty_message"),
                     textAlign: TextAlign.center,
                     style: TextTheme.of(context).bodyMedium,
                   ),
@@ -249,8 +238,7 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text:
-                                  '${_peopleMode ? tr("page.new_person.title") : tr("page.new_tag.title")}: ',
+                              text: '${_peopleMode ? tr("page.new_person.title") : tr("page.new_tag.title")}: ',
                             ),
                             TextSpan(
                               text: _query,
@@ -271,8 +259,7 @@ class _SpFloatingTagPickerState extends State<SpFloatingTagPicker> {
                         motion: const DrawerMotion(),
                         children: [
                           SlidableAction(
-                            onPressed: (context) =>
-                                provider.deleteTag(context, tag),
+                            onPressed: (context) => provider.deleteTag(context, tag),
                             backgroundColor: ColorScheme.of(context).error,
                             foregroundColor: ColorScheme.of(context).onError,
                             icon: SpIcons.delete,
@@ -421,8 +408,7 @@ class _EditTagView extends StatelessWidget {
                     value,
                     categoryId: tag.categoryId,
                   );
-                  final unchanged =
-                      tag.title.toLowerCase() == value.trim().toLowerCase();
+                  final unchanged = tag.title.toLowerCase() == value.trim().toLowerCase();
                   if (exists && !unchanged) {
                     return tr("input.message.already_exist");
                   }

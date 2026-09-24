@@ -117,9 +117,7 @@ class _TemplatesTabState extends State<TemplatesTab> {
           : null,
       body: buildBody(context),
       floatingActionButtonLocation: SpFabLocation.endFloat(context),
-      floatingActionButton: params.viewingArchives || params.pickMode
-          ? null
-          : buildFAB(context),
+      floatingActionButton: params.viewingArchives || params.pickMode ? null : buildFAB(context),
     );
   }
 
@@ -150,8 +148,7 @@ class _TemplatesTabState extends State<TemplatesTab> {
   }
 
   Widget buildBody(BuildContext context) {
-    if (templates == null)
-      return const Center(child: CircularProgressIndicator.adaptive());
+    if (templates == null) return const Center(child: CircularProgressIndicator.adaptive());
     if (templates?.items.isEmpty == true) {
       return const _EmptyBody();
     }
@@ -177,8 +174,7 @@ class _TemplatesTabState extends State<TemplatesTab> {
         itemCount: templates!.items.length,
         padding: padding,
         buildDefaultDragHandles: true,
-        onReorderItem: (int oldIndex, int newIndex) =>
-            reorder(oldIndex, newIndex),
+        onReorderItem: (int oldIndex, int newIndex) => reorder(oldIndex, newIndex),
         proxyDecorator: (child, index, animation) {
           return Container(
             color: ColorScheme.of(context).readOnly.surface5,

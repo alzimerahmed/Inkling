@@ -20,8 +20,7 @@ class SpNestedNavigation extends StatefulWidget {
 }
 
 class SpNestedNavigationState extends State<SpNestedNavigation> {
-  final HeroController heroController =
-      MaterialApp.createMaterialHeroController();
+  final HeroController heroController = MaterialApp.createMaterialHeroController();
 
   @override
   void dispose() {

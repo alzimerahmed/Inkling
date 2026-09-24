@@ -302,8 +302,7 @@ class _FakeNextcloudService extends NextcloudCloudService {
   final bool signedIn;
 
   @override
-  NextcloudUserObject? get currentUser =>
-      signedIn ? _FakeNextcloudUser() : null;
+  NextcloudUserObject? get currentUser => signedIn ? _FakeNextcloudUser() : null;
 
   @override
   bool get isSignedIn => signedIn;
@@ -382,8 +381,7 @@ class _FakeCloudService implements BackupCloudService {
   Future<CloudStorageQuotaObject?> fetchStorageQuota() async => null;
 
   @override
-  Future<List<CloudFileObject>> listFilesInFolder(String folderName) async =>
-      [];
+  Future<List<CloudFileObject>> listFilesInFolder(String folderName) async => [];
 
   @override
   Future<Map<int, CloudFileObject>> fetchYearlyBackups() async => {};

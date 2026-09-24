@@ -50,16 +50,13 @@ class _$StoryContentDbModelCWProxyImpl implements _$StoryContentDbModelCWProxy {
   StoryContentDbModel title(String? title) => call(title: title);
 
   @override
-  StoryContentDbModel plainText(String? plainText) =>
-      call(plainText: plainText);
+  StoryContentDbModel plainText(String? plainText) => call(plainText: plainText);
 
   @override
-  StoryContentDbModel createdAt(DateTime createdAt) =>
-      call(createdAt: createdAt);
+  StoryContentDbModel createdAt(DateTime createdAt) => call(createdAt: createdAt);
 
   @override
-  StoryContentDbModel richPages(List<StoryPageDbModel>? richPages) =>
-      call(richPages: richPages);
+  StoryContentDbModel richPages(List<StoryPageDbModel>? richPages) => call(richPages: richPages);
 
   @override
   StoryContentDbModel pages(List<List<dynamic>>? pages) => call(pages: pages);
@@ -113,25 +110,21 @@ extension $StoryContentDbModelCopyWith on StoryContentDbModel {
   /// Returns a callable class used to build a new instance with modified fields.
   /// Example: `instanceOfStoryContentDbModel.copyWith(...)` or `instanceOfStoryContentDbModel.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$StoryContentDbModelCWProxy get copyWith =>
-      _$StoryContentDbModelCWProxyImpl(this);
+  _$StoryContentDbModelCWProxy get copyWith => _$StoryContentDbModelCWProxyImpl(this);
 }
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-StoryContentDbModel _$StoryContentDbModelFromJson(Map<String, dynamic> json) =>
-    StoryContentDbModel(
-      id: (json['id'] as num).toInt(),
-      title: json['title'] as String?,
-      plainText: json['plain_text'] as String?,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      richPages: _richPagesFromJson(json['rich_pages']),
-      pages: (json['pages'] as List<dynamic>?)
-          ?.map((e) => e as List<dynamic>)
-          .toList(),
-    );
+StoryContentDbModel _$StoryContentDbModelFromJson(Map<String, dynamic> json) => StoryContentDbModel(
+  id: (json['id'] as num).toInt(),
+  title: json['title'] as String?,
+  plainText: json['plain_text'] as String?,
+  createdAt: DateTime.parse(json['created_at'] as String),
+  richPages: _richPagesFromJson(json['rich_pages']),
+  pages: (json['pages'] as List<dynamic>?)?.map((e) => e as List<dynamic>).toList(),
+);
 
 Map<String, dynamic> _$StoryContentDbModelToJson(
   StoryContentDbModel instance,

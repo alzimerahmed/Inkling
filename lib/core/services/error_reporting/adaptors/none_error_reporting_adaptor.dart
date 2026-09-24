@@ -10,8 +10,7 @@ class NoneErrorReportingAdaptor extends BaseErrorReportingAdaptor {
   }) => Future.value();
 
   @override
-  Future<void> recordFlutterFatalError(FlutterErrorDetails details) =>
-      Future.value();
+  Future<void> recordFlutterFatalError(FlutterErrorDetails details) => Future.value();
 
   @override
   Future<void> log(String message) => Future.value();

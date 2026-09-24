@@ -48,11 +48,7 @@ class AppearanceViewModel extends ChangeNotifier with DisposeAwareMixin {
   final List<AppearanceSection> sections;
 
   Set<AppearancePreferenceKey> get resettableKeys {
-    return sections
-        .expand((section) => section.items)
-        .map((item) => item.resetKey)
-        .nonNulls
-        .toSet();
+    return sections.expand((section) => section.items).map((item) => item.resetKey).nonNulls.toSet();
   }
 
   void reset(BuildContext context) {
@@ -103,8 +99,7 @@ class AppearanceViewModel extends ChangeNotifier with DisposeAwareMixin {
             builder: _buildStoryTilePreferencesTile,
             resetKey: .storyTilePreferences,
           ),
-          if (kSupportQuickActions)
-            const AppearanceItem(builder: _buildQuickActionsTile),
+          if (kSupportQuickActions) const AppearanceItem(builder: _buildQuickActionsTile),
         ],
       ),
     ];
@@ -112,11 +107,9 @@ class AppearanceViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   static Widget _buildAppIconTile(BuildContext context) => const AppIconTile();
 
-  static Widget _buildStoryTilePreferencesTile(BuildContext context) =>
-      const StoryTilePreferencesTile(weekday: 6);
+  static Widget _buildStoryTilePreferencesTile(BuildContext context) => const StoryTilePreferencesTile(weekday: 6);
 
-  static Widget _buildQuickActionsTile(BuildContext context) =>
-      QuickActionsTile();
+  static Widget _buildQuickActionsTile(BuildContext context) => QuickActionsTile();
 
   static Widget _buildDayColorTile(BuildContext context) {
     return Consumer<InAppPurchaseProvider>(

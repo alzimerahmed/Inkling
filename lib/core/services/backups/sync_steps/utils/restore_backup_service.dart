@@ -42,9 +42,7 @@ class RestoreBackupService {
             returnDeleted: true,
           );
 
-          if (existingRecord != null &&
-              existingRecord.updatedAt != null &&
-              newRecord.updatedAt != null) {
+          if (existingRecord != null && existingRecord.updatedAt != null && newRecord.updatedAt != null) {
             bool backupHasNewerContent = existingRecord.updatedAt!.isBefore(
               newRecord.updatedAt!,
             );

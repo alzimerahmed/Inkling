@@ -168,9 +168,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
     final boundary = _pendingBoundaryMonth;
     if (boundary == null) return allUnpinnedStories;
 
-    return allUnpinnedStories
-        .where((story) => (story.year, story.month) != boundary)
-        .toList();
+    return allUnpinnedStories.where((story) => (story.year, story.month) != boundary).toList();
   }
 
   List<HomeItem> _buildItems(List<StoryDbModel> renderableStories) {
@@ -261,8 +259,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
     return result;
   }
 
-  List<int> get months =>
-      _monthsForYear.isNotEmpty ? _monthsForYear : [DateTime.now().month];
+  List<int> get months => _monthsForYear.isNotEmpty ? _monthsForYear : [DateTime.now().month];
 
   /// Re-derives [_monthsForYear] from the DB. Called unconditionally from
   /// [setStories] — cheap (no content decode), so simpler to always keep it
@@ -319,8 +316,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
               )
         : null;
 
-    if (generation != _loadGeneration)
-      return; // superseded while awaiting the above
+    if (generation != _loadGeneration) return; // superseded while awaiting the above
 
     // reset: true so this fetches offset 0 regardless of whatever [_stories]
     // still holds from before this reload (the old year/search-refresh data,
@@ -451,8 +447,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
       story: story,
     ).push(context);
 
-    if (editedStory is StoryDbModel &&
-        editedStory.updatedAt != story.updatedAt) {
+    if (editedStory is StoryDbModel && editedStory.updatedAt != story.updatedAt) {
       year = editedStory.year;
       await reload(debugSource: '$runtimeType#goToNewPage');
 
@@ -502,10 +497,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context
-            .read<DevicePreferencesProvider>()
-            .preferences
-            .assetCompression;
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
         final photo = await AppFilePickerService.pickImage(
           source: ImageSource.camera,
           compression: compression,
@@ -535,10 +527,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context
-            .read<DevicePreferencesProvider>()
-            .preferences
-            .assetCompression;
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
         final video = await AppFilePickerService.pickVideo(
           context: context,
           source: ImageSource.camera,
@@ -720,11 +709,8 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
         // setStories will automatically sort the stories by displayPathDate
         // Check existence before adding to prevent duplicates
         if (addedStory.pinned == true) {
-          final pinnedCollection =
-              pinnedStories ?? CollectionDbModel(items: []);
-          final isNew =
-              !pinnedCollection.exists(addedStory.id) &&
-              !(stories?.exists(addedStory.id) ?? false);
+          final pinnedCollection = pinnedStories ?? CollectionDbModel(items: []);
+          final isNew = !pinnedCollection.exists(addedStory.id) && !(stories?.exists(addedStory.id) ?? false);
           setStories(
             stories?.removeElement(addedStory),
             pinnedCollection.exists(addedStory.id)
@@ -734,9 +720,7 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
           if (isNew) unawaited(InAppReviewService.maybeRequest());
         } else {
           final storiesCollection = stories ?? CollectionDbModel(items: []);
-          final isNew =
-              !storiesCollection.exists(addedStory.id) &&
-              !(pinnedStories?.exists(addedStory.id) ?? false);
+          final isNew = !storiesCollection.exists(addedStory.id) && !(pinnedStories?.exists(addedStory.id) ?? false);
           setStories(
             storiesCollection.exists(addedStory.id)
                 ? storiesCollection.replaceElement(addedStory)

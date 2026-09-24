@@ -41,8 +41,7 @@ class DatabaseInitializer {
   // The 'tags' column was newly added to the asset table, so existing data may be missing tags.
   // This method runs exactly once to populate initial tag data for assets.
   static Future<void> computeStoryTagsForAsset() async {
-    bool initialComputed =
-        await ComputedInitialTagsForAssetsStorage().read() ?? false;
+    bool initialComputed = await ComputedInitialTagsForAssetsStorage().read() ?? false;
 
     if (initialComputed == false) {
       AppLogger.d(
@@ -55,9 +54,7 @@ class DatabaseInitializer {
       for (int i = 0; i < assets.length; i++) {
         var tags = await StoryDbModel.db.computeStoriesTagsForAsset(assets[i]);
         final isLastAsset = i == assets.length - 1;
-        await assets[i]
-            .copyWith(tags: tags.toList(), updatedAt: DateTime.now())
-            .save(runCallbacks: isLastAsset);
+        await assets[i].copyWith(tags: tags.toList(), updatedAt: DateTime.now()).save(runCallbacks: isLastAsset);
       }
 
       await ComputedInitialTagsForAssetsStorage().write(true);
@@ -69,12 +66,8 @@ class DatabaseInitializer {
     List<int>? assetIds,
   }) async {
     var assets = assetIds != null
-        ? await AssetDbModel.db
-              .where(filters: {'ids': assetIds})
-              .then((e) => e?.items ?? <AssetDbModel>[])
-        : await AssetDbModel.db
-              .where(filters: {'version': 1})
-              .then((e) => e?.items ?? <AssetDbModel>[]);
+        ? await AssetDbModel.db.where(filters: {'ids': assetIds}).then((e) => e?.items ?? <AssetDbModel>[])
+        : await AssetDbModel.db.where(filters: {'version': 1}).then((e) => e?.items ?? <AssetDbModel>[]);
 
     for (int i = 0; i < assets.length; i++) {
       AssetDbModel asset = assets[i];
@@ -126,8 +119,7 @@ class DatabaseInitializer {
             kSupportDirectory.path,
           ),
         );
-        if (!await destinationFile.parent.exists())
-          await destinationFile.create(recursive: true);
+        if (!await destinationFile.parent.exists()) await destinationFile.create(recursive: true);
         await destinationFile.writeAsBytes(
           await File(image.path).readAsBytes(),
         );

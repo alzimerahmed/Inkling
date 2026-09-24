@@ -11,12 +11,9 @@ class LocalAuthService {
   List<BiometricType>? enrolledBiometrics;
 
   bool? get canCheckBiometrics => _canCheckBiometrics;
-  bool get enrolledBothFingerprintAndFace =>
-      enrolledFingerprint && enrolledFace;
-  bool get enrolledFingerprint =>
-      enrolledBiometrics?.contains(BiometricType.fingerprint) == true;
-  bool get enrolledFace =>
-      enrolledBiometrics?.contains(BiometricType.face) == true;
+  bool get enrolledBothFingerprintAndFace => enrolledFingerprint && enrolledFace;
+  bool get enrolledFingerprint => enrolledBiometrics?.contains(BiometricType.fingerprint) == true;
+  bool get enrolledFace => enrolledBiometrics?.contains(BiometricType.face) == true;
   bool get enrolledOtherBiometrics => _canCheckBiometrics == true;
 
   Future<void> load() async {
@@ -29,8 +26,7 @@ class LocalAuthService {
 
     _isDeviceSupported = await auth.isDeviceSupported();
     _canCheckBiometrics = await auth.canCheckBiometrics;
-    if (_isDeviceSupported!)
-      enrolledBiometrics = await auth.getAvailableBiometrics();
+    if (_isDeviceSupported!) enrolledBiometrics = await auth.getAvailableBiometrics();
   }
 
   Future<bool> authenticate({
@@ -39,13 +35,11 @@ class LocalAuthService {
     if (Platform.isLinux) return false;
 
     await auth.stopAuthentication();
-    return auth
-        .authenticate(localizedReason: title, persistAcrossBackgrounding: true)
-        .catchError(
-          (e) {
-            debugPrint('$runtimeType#authenticate failed: ${e.toString()}');
-            return false;
-          },
-        );
+    return auth.authenticate(localizedReason: title, persistAcrossBackgrounding: true).catchError(
+      (e) {
+        debugPrint('$runtimeType#authenticate failed: ${e.toString()}');
+        return false;
+      },
+    );
   }
 }

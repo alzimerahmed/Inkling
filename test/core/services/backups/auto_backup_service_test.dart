@@ -63,9 +63,7 @@ void main() {
       );
 
       expect(deleted, 3);
-      final remaining =
-          tempDir.listSync().whereType<File>().map((f) => f.uri.pathSegments.last).toList()
-            ..sort();
+      final remaining = tempDir.listSync().whereType<File>().map((f) => f.uri.pathSegments.last).toList()..sort();
       expect(remaining, ['new2', 'new3']);
     });
 

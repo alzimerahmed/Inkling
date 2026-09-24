@@ -23,9 +23,7 @@ class UrlOpenerService {
 
     return launchUrl(
       uri,
-      mode: deeplinkOnly
-          ? launcher.LaunchMode.externalNonBrowserApplication
-          : launcher.LaunchMode.platformDefault,
+      mode: deeplinkOnly ? launcher.LaunchMode.externalNonBrowserApplication : launcher.LaunchMode.platformDefault,
     );
   }
 
@@ -74,11 +72,8 @@ class UrlOpenerService {
           return;
         }
 
-        Color toolbarColor =
-            Theme.of(context).appBarTheme.backgroundColor ?? Colors.white;
-        Color foregroundColor =
-            Theme.of(context).appBarTheme.foregroundColor ??
-            toolbarColor.darken(0.5);
+        Color toolbarColor = Theme.of(context).appBarTheme.backgroundColor ?? Colors.white;
+        Color foregroundColor = Theme.of(context).appBarTheme.foregroundColor ?? toolbarColor.darken(0.5);
 
         AnalyticsService.instance.logOpenLinkInCustomTab(
           url: url,
@@ -93,8 +88,7 @@ class UrlOpenerService {
           safariVCOptions: custom_tab.SafariViewControllerOptions(
             preferredBarTintColor: toolbarColor,
             preferredControlTintColor: foregroundColor,
-            dismissButtonStyle:
-                custom_tab.SafariViewControllerDismissButtonStyle.close,
+            dismissButtonStyle: custom_tab.SafariViewControllerDismissButtonStyle.close,
           ),
         );
       },

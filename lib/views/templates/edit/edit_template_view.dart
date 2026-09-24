@@ -52,8 +52,7 @@ class EditTemplateView extends StatelessWidget {
 
         return PopScope(
           canPop: false,
-          onPopInvokedWithResult: (didPop, result) =>
-              viewModel.onPopInvokedWithResult(didPop, result, context),
+          onPopInvokedWithResult: (didPop, result) => viewModel.onPopInvokedWithResult(didPop, result, context),
           child: SpStoryPreferenceTheme(
             preferences: viewModel.template.preferences,
             child: _EditTemplateContent(viewModel),

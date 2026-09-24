@@ -2,8 +2,7 @@ import 'dart:io' as io;
 
 import 'package:storypad/core/databases/models/asset_db_model.dart';
 import 'package:storypad/core/databases/models/collection_db_model.dart';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
-    as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
 import 'package:storypad/core/services/backups/sync_steps/backup_sync_messenger.dart';
 import 'package:storypad/core/services/backups/sync_steps/sync_step.dart';
 import 'package:storypad/core/services/backups/backup_cloud_service.dart';
@@ -27,8 +26,7 @@ enum BackfillOutcome {
 }
 
 class BackupImagesUploaderService {
-  BackupImagesUploaderService({required BackupSyncMessenger messenger})
-    : _messenger = messenger;
+  BackupImagesUploaderService({required BackupSyncMessenger messenger}) : _messenger = messenger;
 
   final BackupSyncMessenger _messenger;
 
@@ -192,8 +190,7 @@ class BackupImagesUploaderService {
   /// get less full between assets), so further backfill attempts stop —
   /// but assets that are already local need no new write, so they keep
   /// uploading normally regardless.
-  Future<({int uploadedCount, bool storageFull, int missingCount})>
-  _uploadAssetsForService(
+  Future<({int uploadedCount, bool storageFull, int missingCount})> _uploadAssetsForService(
     BackupCloudService cloudService,
     List<BackupCloudService> allServices,
   ) async {
@@ -374,8 +371,7 @@ class BackupImagesUploaderService {
       bytes = await RetryExecutor.execute(
         () => source.downloadFileBytes(fileId),
         policy: RetryPolicy.network,
-        operationName:
-            'backfill_asset_${asset.id}_from_${source.serviceType.id}',
+        operationName: 'backfill_asset_${asset.id}_from_${source.serviceType.id}',
       );
     } on exp.FileOperationException catch (e) {
       if (e.statusCode != 404) {
@@ -498,15 +494,10 @@ class BackupImagesUploaderService {
             .where(
               (e) =>
                   e.cloudDestinations[cloudService.serviceType.id] == null ||
-                  e.cloudDestinations[cloudService
-                          .serviceType
-                          .id]?[destinationKey] ==
-                      null,
+                  e.cloudDestinations[cloudService.serviceType.id]?[destinationKey] == null,
             )
             .where(
-              (e) =>
-                  e.localFile?.existsSync() == true ||
-                  findBackfillSource(e, allServices, cloudService) != null,
+              (e) => e.localFile?.existsSync() == true || findBackfillSource(e, allServices, cloudService) != null,
             )
             .toList() ??
         [];

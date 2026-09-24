@@ -84,8 +84,7 @@ void main() {
           cutoff + 999999,
         ]) {
           expect(
-            TagIdGeneratorService.isEmoji(id) ==
-                TagIdGeneratorService.isTime(id),
+            TagIdGeneratorService.isEmoji(id) == TagIdGeneratorService.isTime(id),
             isFalse,
           );
         }

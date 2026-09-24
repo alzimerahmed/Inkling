@@ -62,8 +62,7 @@ class _$PlaceDbModelCWProxyImpl implements _$PlaceDbModelCWProxy {
   PlaceDbModel country(String? country) => call(country: country);
 
   @override
-  PlaceDbModel isoCountryCode(String? isoCountryCode) =>
-      call(isoCountryCode: isoCountryCode);
+  PlaceDbModel isoCountryCode(String? isoCountryCode) => call(isoCountryCode: isoCountryCode);
 
   @override
   PlaceDbModel address(String? address) => call(address: address);
@@ -139,13 +138,12 @@ PlaceDbModel _$PlaceDbModelFromJson(Map<String, dynamic> json) => PlaceDbModel(
   address: json['address'] as String?,
 );
 
-Map<String, dynamic> _$PlaceDbModelToJson(PlaceDbModel instance) =>
-    <String, dynamic>{
-      'latitude': instance.latitude,
-      'longitude': instance.longitude,
-      'place_name': instance.placeName,
-      'locality': instance.locality,
-      'country': instance.country,
-      'address': instance.address,
-      'iso_country_code': instance.isoCountryCode,
-    };
+Map<String, dynamic> _$PlaceDbModelToJson(PlaceDbModel instance) => <String, dynamic>{
+  'latitude': instance.latitude,
+  'longitude': instance.longitude,
+  'place_name': instance.placeName,
+  'locality': instance.locality,
+  'country': instance.country,
+  'address': instance.address,
+  'iso_country_code': instance.isoCountryCode,
+};

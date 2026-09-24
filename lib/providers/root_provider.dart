@@ -7,18 +7,17 @@ import 'package:storypad/views/root/local_widgets/root_view_side_bar_info.dart';
 import 'package:storypad/core/constants/app_constants.dart';
 import 'package:storypad/core/services/app_quick_actions_service.dart';
 import 'package:storypad/core/services/notifications/local_notification_service.dart';
+import 'package:storypad/core/services/widgets/home_widget_service.dart';
 import 'package:storypad/widgets/base_view/base_route.dart';
 
-class RootProvider extends ChangeNotifier
-    with DisposeAwareMixin, DebounchedCallback {
+class RootProvider extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
   final String initialRoute = const HomeRoute().routeName;
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final ValueNotifier<String> selectedRootRouteNameNotifier = ValueNotifier(
     'home',
   );
-  final HeroController heroController =
-      MaterialApp.createMaterialHeroController();
+  final HeroController heroController = MaterialApp.createMaterialHeroController();
 
   final ValueNotifier<RootViewSideBarInfo> sideBarInfoNotifier = ValueNotifier(
     RootViewSideBarInfo(
@@ -28,8 +27,10 @@ class RootProvider extends ChangeNotifier
   );
 
   RootProvider() {
-    if (kSupportQuickActions)
-      AppQuickActionsService.instance.initialize(navigatorKey: navigatorKey);
+    if (kSupportQuickActions) AppQuickActionsService.instance.initialize(navigatorKey: navigatorKey);
+
+    // Android home-screen widget: deep-link quick capture + today snapshot.
+    HomeWidgetService.initialize(navigatorKey: navigatorKey);
 
     // Register the navigator key so reminder notification taps can navigate,
     // and (re)schedule reminders — see LocalNotificationService.init's doc
@@ -39,8 +40,7 @@ class RootProvider extends ChangeNotifier
 
   /// For any navigation from sidebar, use this RootProvider#navigate instead of push directly.
   void navigate(BaseRoute route) {
-    bool alreadySelected =
-        selectedRootRouteNameNotifier.value == route.routeName;
+    bool alreadySelected = selectedRootRouteNameNotifier.value == route.routeName;
 
     AnalyticsService.instance.logViewRoute(
       routeObject: route,

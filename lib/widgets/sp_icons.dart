@@ -4,85 +4,33 @@ import 'package:flutter_material_design_icons/flutter_material_design_icons.dart
 import 'package:storypad/core/constants/app_constants.dart';
 
 class SpIcons {
-  static const IconData alarm = kIsCupertino
-      ? CupertinoIcons.alarm
-      : Icons.alarm_outlined;
-  static const IconData newStory = kIsCupertino
-      ? CupertinoIcons.pencil_outline
-      : Icons.edit;
-  static const IconData edit = kIsCupertino
-      ? CupertinoIcons.square_pencil
-      : Icons.edit_outlined;
-  static const IconData question = kIsCupertino
-      ? CupertinoIcons.question
-      : Icons.question_mark_outlined;
-  static const IconData policy = kIsCupertino
-      ? CupertinoIcons.lock_shield
-      : Icons.policy_outlined;
-  static const IconData onboarding = kIsCupertino
-      ? CupertinoIcons.today
-      : Icons.waving_hand_outlined;
+  static const IconData alarm = kIsCupertino ? CupertinoIcons.alarm : Icons.alarm_outlined;
+  static const IconData newStory = kIsCupertino ? CupertinoIcons.pencil_outline : Icons.edit;
+  static const IconData edit = kIsCupertino ? CupertinoIcons.square_pencil : Icons.edit_outlined;
+  static const IconData question = kIsCupertino ? CupertinoIcons.question : Icons.question_mark_outlined;
+  static const IconData policy = kIsCupertino ? CupertinoIcons.lock_shield : Icons.policy_outlined;
+  static const IconData onboarding = kIsCupertino ? CupertinoIcons.today : Icons.waving_hand_outlined;
   static const IconData license = MdiIcons.license;
-  static const IconData code = kIsCupertino
-      ? CupertinoIcons.chevron_left_slash_chevron_right
-      : Icons.code;
-  static const IconData star = kIsCupertino
-      ? CupertinoIcons.star
-      : Icons.star_border;
-  static const IconData starFilled = kIsCupertino
-      ? CupertinoIcons.star_fill
-      : Icons.star;
-  static const IconData share = kIsCupertino
-      ? CupertinoIcons.share
-      : Icons.ios_share_outlined;
-  static const IconData search = kIsCupertino
-      ? CupertinoIcons.search
-      : Icons.search;
-  static const IconData setting = kIsCupertino
-      ? CupertinoIcons.settings
-      : Icons.settings_outlined;
-  static const IconData map = kIsCupertino
-      ? CupertinoIcons.map
-      : Icons.map_outlined;
-  static const IconData locationPin = kIsCupertino
-      ? CupertinoIcons.location_solid
-      : Icons.location_pin;
-  static const IconData myLocation = kIsCupertino
-      ? CupertinoIcons.location
-      : Icons.my_location_outlined;
-  static const IconData satellite = kIsCupertino
-      ? CupertinoIcons.map_fill
-      : Icons.satellite_alt_outlined;
-  static const IconData tag = kIsCupertino
-      ? CupertinoIcons.tag
-      : Icons.sell_outlined;
-  static const IconData person = kIsCupertino
-      ? CupertinoIcons.person
-      : Icons.person_outline;
-  static const IconData people = kIsCupertino
-      ? CupertinoIcons.person_2
-      : Icons.people_outline;
-  static const IconData alternateEmail = kIsCupertino
-      ? CupertinoIcons.at
-      : Icons.alternate_email;
-  static const IconData archive = kIsCupertino
-      ? CupertinoIcons.archivebox
-      : Icons.archive_outlined;
-  static const IconData theme = kIsCupertino
-      ? CupertinoIcons.paintbrush
-      : Icons.color_lens_outlined;
-  static const IconData lock = kIsCupertino
-      ? CupertinoIcons.lock
-      : Icons.lock_outline;
-  static const IconData photo = kIsCupertino
-      ? CupertinoIcons.photo
-      : Icons.photo_library_outlined;
-  static const IconData voice = kIsCupertino
-      ? CupertinoIcons.mic
-      : Icons.mic_none_sharp;
-  static const IconData cloudUpload = kIsCupertino
-      ? CupertinoIcons.cloud_upload
-      : Icons.backup_outlined;
+  static const IconData code = kIsCupertino ? CupertinoIcons.chevron_left_slash_chevron_right : Icons.code;
+  static const IconData star = kIsCupertino ? CupertinoIcons.star : Icons.star_border;
+  static const IconData starFilled = kIsCupertino ? CupertinoIcons.star_fill : Icons.star;
+  static const IconData share = kIsCupertino ? CupertinoIcons.share : Icons.ios_share_outlined;
+  static const IconData search = kIsCupertino ? CupertinoIcons.search : Icons.search;
+  static const IconData setting = kIsCupertino ? CupertinoIcons.settings : Icons.settings_outlined;
+  static const IconData map = kIsCupertino ? CupertinoIcons.map : Icons.map_outlined;
+  static const IconData locationPin = kIsCupertino ? CupertinoIcons.location_solid : Icons.location_pin;
+  static const IconData myLocation = kIsCupertino ? CupertinoIcons.location : Icons.my_location_outlined;
+  static const IconData satellite = kIsCupertino ? CupertinoIcons.map_fill : Icons.satellite_alt_outlined;
+  static const IconData tag = kIsCupertino ? CupertinoIcons.tag : Icons.sell_outlined;
+  static const IconData person = kIsCupertino ? CupertinoIcons.person : Icons.person_outline;
+  static const IconData people = kIsCupertino ? CupertinoIcons.person_2 : Icons.people_outline;
+  static const IconData alternateEmail = kIsCupertino ? CupertinoIcons.at : Icons.alternate_email;
+  static const IconData archive = kIsCupertino ? CupertinoIcons.archivebox : Icons.archive_outlined;
+  static const IconData theme = kIsCupertino ? CupertinoIcons.paintbrush : Icons.color_lens_outlined;
+  static const IconData lock = kIsCupertino ? CupertinoIcons.lock : Icons.lock_outline;
+  static const IconData photo = kIsCupertino ? CupertinoIcons.photo : Icons.photo_library_outlined;
+  static const IconData voice = kIsCupertino ? CupertinoIcons.mic : Icons.mic_none_sharp;
+  static const IconData cloudUpload = kIsCupertino ? CupertinoIcons.cloud_upload : Icons.backup_outlined;
   // ignore: deprecated_member_use, brand icon deprecated upstream by MDI (trademark), no replacement
   static const IconData googleDrive = MdiIcons.googleDrive;
   // Self-hosted, so a generic server icon rather than a Nextcloud brand mark.
@@ -95,282 +43,110 @@ class SpIcons {
       ? CupertinoIcons.antenna_radiowaves_left_right
       : MdiIcons.signalCellularOutline;
   static const IconData cloudOff = MdiIcons.cloudOff;
-  static const IconData pinSlash = kIsCupertino
-      ? CupertinoIcons.pin_slash
-      : MdiIcons.pinOff;
-  static const IconData pin = kIsCupertino
-      ? CupertinoIcons.pin_fill
-      : MdiIcons.pin;
-  static const IconData pinOutline = kIsCupertino
-      ? CupertinoIcons.pin
-      : MdiIcons.pinOutline;
-  static const IconData bookLock = kIsCupertino
-      ? CupertinoIcons.book
-      : MdiIcons.bookLockOutline;
-  static const IconData book = kIsCupertino
-      ? CupertinoIcons.book
-      : MdiIcons.bookOutline;
-  static const IconData tune = kIsCupertino
-      ? CupertinoIcons.slider_horizontal_3
-      : MdiIcons.tuneVariant;
-  static const IconData forum = kIsCupertino
-      ? CupertinoIcons.bubble_left_bubble_right
-      : Icons.forum_outlined;
-  static const IconData managingPage = kIsCupertino
-      ? CupertinoIcons.book
-      : MdiIcons.bookOpenOutline;
-  static const IconData managingPageOff = kIsCupertino
-      ? CupertinoIcons.book
-      : MdiIcons.bookOpenOutline;
-  static const IconData info = kIsCupertino
-      ? CupertinoIcons.info
-      : Icons.info_outline;
-  static const IconData moreVert = kIsCupertino
-      ? CupertinoIcons.ellipsis_vertical
-      : Icons.more_vert;
-  static const IconData moreHoriz = kIsCupertino
-      ? CupertinoIcons.ellipsis
-      : Icons.more_horiz;
-  static const IconData save = kIsCupertino
-      ? CupertinoIcons.floppy_disk
-      : Icons.save;
+  static const IconData pinSlash = kIsCupertino ? CupertinoIcons.pin_slash : MdiIcons.pinOff;
+  static const IconData pin = kIsCupertino ? CupertinoIcons.pin_fill : MdiIcons.pin;
+  static const IconData pinOutline = kIsCupertino ? CupertinoIcons.pin : MdiIcons.pinOutline;
+  static const IconData bookLock = kIsCupertino ? CupertinoIcons.book : MdiIcons.bookLockOutline;
+  static const IconData book = kIsCupertino ? CupertinoIcons.book : MdiIcons.bookOutline;
+  static const IconData tune = kIsCupertino ? CupertinoIcons.slider_horizontal_3 : MdiIcons.tuneVariant;
+  static const IconData forum = kIsCupertino ? CupertinoIcons.bubble_left_bubble_right : Icons.forum_outlined;
+  static const IconData managingPage = kIsCupertino ? CupertinoIcons.book : MdiIcons.bookOpenOutline;
+  static const IconData managingPageOff = kIsCupertino ? CupertinoIcons.book : MdiIcons.bookOpenOutline;
+  static const IconData info = kIsCupertino ? CupertinoIcons.info : Icons.info_outline;
+  static const IconData moreVert = kIsCupertino ? CupertinoIcons.ellipsis_vertical : Icons.more_vert;
+  static const IconData moreHoriz = kIsCupertino ? CupertinoIcons.ellipsis : Icons.more_horiz;
+  static const IconData save = kIsCupertino ? CupertinoIcons.floppy_disk : Icons.save;
   static const IconData addFeeling = Icons.add_reaction_sharp;
-  static const IconData favoriteFilled = kIsCupertino
-      ? CupertinoIcons.heart_fill
-      : Icons.favorite;
-  static const IconData favorite = kIsCupertino
-      ? CupertinoIcons.heart
-      : Icons.favorite_outline_outlined;
-  static const IconData bookmarkFilled = kIsCupertino
-      ? CupertinoIcons.bookmark_fill
-      : Icons.bookmark_rounded;
-  static const IconData bookmark = kIsCupertino
-      ? CupertinoIcons.bookmark
-      : Icons.bookmark_outline_rounded;
+  static const IconData favoriteFilled = kIsCupertino ? CupertinoIcons.heart_fill : Icons.favorite;
+  static const IconData favorite = kIsCupertino ? CupertinoIcons.heart : Icons.favorite_outline_outlined;
+  static const IconData bookmarkFilled = kIsCupertino ? CupertinoIcons.bookmark_fill : Icons.bookmark_rounded;
+  static const IconData bookmark = kIsCupertino ? CupertinoIcons.bookmark : Icons.bookmark_outline_rounded;
   static const IconData biometrics = Icons.face_unlock_outlined;
   static const IconData faceUnlock = Icons.face_unlock_outlined;
   static const IconData fingerprint = Icons.fingerprint_outlined;
-  static const IconData lockQuestion = kIsCupertino
-      ? CupertinoIcons.question_circle
-      : MdiIcons.lockQuestion;
-  static const IconData folderOpen = kIsCupertino
-      ? CupertinoIcons.folder_open
-      : Icons.folder_open;
-  static const IconData file = kIsCupertino
-      ? CupertinoIcons.doc
-      : Icons.insert_drive_file;
-  static const IconData profile = kIsCupertino
-      ? CupertinoIcons.person
-      : Icons.person;
-  static const IconData delete = kIsCupertino
-      ? CupertinoIcons.delete
-      : Icons.delete_outline;
-  static const IconData deleteForever = kIsCupertino
-      ? CupertinoIcons.bin_xmark
-      : Icons.delete_forever;
-  static const IconData swapHoriz = kIsCupertino
-      ? CupertinoIcons.arrow_right_arrow_left
-      : Icons.swap_horiz;
-  static const IconData putBack = kIsCupertino
-      ? CupertinoIcons.arrow_down_circle
-      : Icons.settings_backup_restore;
-  static const IconData import = kIsCupertino
-      ? CupertinoIcons.cloud_download
-      : Icons.restore_outlined;
-  static const IconData backspace = kIsCupertino
-      ? CupertinoIcons.delete_left
-      : Icons.backspace;
-  static const IconData clear = kIsCupertino
-      ? CupertinoIcons.clear
-      : Icons.clear;
-  static const IconData check = kIsCupertino
-      ? CupertinoIcons.check_mark
-      : Icons.done;
-  static const IconData compare = kIsCupertino
-      ? CupertinoIcons.doc_on_doc
-      : Icons.compare;
-  static const IconData draftEdit = kIsCupertino
-      ? CupertinoIcons.doc_on_doc
-      : Icons.edit_note;
-  static const IconData checkbox = kIsCupertino
-      ? CupertinoIcons.check_mark_circled
-      : Icons.check_box;
-  static const IconData checkboxBlank = kIsCupertino
-      ? CupertinoIcons.circle
-      : Icons.check_box_outline_blank;
-  static const IconData expandMore = kIsCupertino
-      ? CupertinoIcons.chevron_down
-      : Icons.expand_more_outlined;
-  static const IconData expandLess = kIsCupertino
-      ? CupertinoIcons.chevron_up
-      : Icons.expand_less_outlined;
-  static const IconData fullscreen = kIsCupertino
-      ? CupertinoIcons.fullscreen
-      : Icons.fullscreen_outlined;
-  static const IconData fullscreenExit = kIsCupertino
-      ? CupertinoIcons.fullscreen_exit
-      : Icons.fullscreen_exit_outlined;
-  static const IconData table = kIsCupertino
-      ? CupertinoIcons.doc_text_search
-      : MdiIcons.table;
-  static const IconData restore = kIsCupertino
-      ? CupertinoIcons.doc_checkmark
-      : MdiIcons.restore;
-  static const IconData checkCircle = kIsCupertino
-      ? CupertinoIcons.check_mark_circled
-      : Icons.check_circle_outline;
-  static const IconData errorCircle = kIsCupertino
-      ? CupertinoIcons.xmark
-      : Icons.error_outline_outlined;
-  static const IconData exploreBrowser = kIsCupertino
-      ? CupertinoIcons.globe
-      : Icons.travel_explore_outlined;
-  static const IconData darkMode = kIsCupertino
-      ? CupertinoIcons.moon
-      : Icons.dark_mode_outlined;
-  static const IconData lightMode = kIsCupertino
-      ? CupertinoIcons.sun_min
-      : Icons.light_mode_outlined;
-  static const IconData font = kIsCupertino
-      ? CupertinoIcons.textbox
-      : Icons.font_download_outlined;
-  static const IconData fontWeight = kIsCupertino
-      ? CupertinoIcons.bold
-      : Icons.format_bold_outlined;
-  static const IconData fontSize = kIsCupertino
-      ? CupertinoIcons.textformat_size
-      : Icons.format_size_outlined;
-  static const IconData warning = kIsCupertino
-      ? CupertinoIcons.exclamationmark
-      : Icons.error_outline;
-  static const IconData refresh = kIsCupertino
-      ? CupertinoIcons.refresh
-      : Icons.refresh;
-  static const IconData reorder = kIsCupertino
-      ? CupertinoIcons.arrow_up_arrow_down
-      : Icons.reorder;
-  static const IconData calendar = kIsCupertino
-      ? CupertinoIcons.calendar
-      : Icons.calendar_month;
-  static const IconData history = kIsCupertino
-      ? CupertinoIcons.time
-      : Icons.history_outlined;
-  static const IconData home = kIsCupertino
-      ? CupertinoIcons.home
-      : Icons.home_outlined;
-  static const IconData exportOffline = kIsCupertino
-      ? CupertinoIcons.arrow_down_doc
-      : Icons.download;
-  static const IconData importOffline = kIsCupertino
-      ? CupertinoIcons.arrow_up_doc
-      : Icons.folder_open;
-  static const IconData update = kIsCupertino
-      ? CupertinoIcons.arrow_down
-      : Icons.system_update;
-  static const IconData keyboardLeft = kIsCupertino
-      ? CupertinoIcons.left_chevron
-      : Icons.keyboard_arrow_left;
-  static const IconData keyboardRight = kIsCupertino
-      ? CupertinoIcons.right_chevron
-      : Icons.keyboard_arrow_right;
-  static const IconData keyboardUp = kIsCupertino
-      ? CupertinoIcons.chevron_up
-      : Icons.keyboard_arrow_up_outlined;
-  static const IconData keyboardDown = kIsCupertino
-      ? CupertinoIcons.chevron_down
-      : Icons.keyboard_arrow_down_outlined;
+  static const IconData lockQuestion = kIsCupertino ? CupertinoIcons.question_circle : MdiIcons.lockQuestion;
+  static const IconData folderOpen = kIsCupertino ? CupertinoIcons.folder_open : Icons.folder_open;
+  static const IconData file = kIsCupertino ? CupertinoIcons.doc : Icons.insert_drive_file;
+  static const IconData profile = kIsCupertino ? CupertinoIcons.person : Icons.person;
+  static const IconData delete = kIsCupertino ? CupertinoIcons.delete : Icons.delete_outline;
+  static const IconData deleteForever = kIsCupertino ? CupertinoIcons.bin_xmark : Icons.delete_forever;
+  static const IconData swapHoriz = kIsCupertino ? CupertinoIcons.arrow_right_arrow_left : Icons.swap_horiz;
+  static const IconData putBack = kIsCupertino ? CupertinoIcons.arrow_down_circle : Icons.settings_backup_restore;
+  static const IconData import = kIsCupertino ? CupertinoIcons.cloud_download : Icons.restore_outlined;
+  static const IconData backspace = kIsCupertino ? CupertinoIcons.delete_left : Icons.backspace;
+  static const IconData clear = kIsCupertino ? CupertinoIcons.clear : Icons.clear;
+  static const IconData check = kIsCupertino ? CupertinoIcons.check_mark : Icons.done;
+  static const IconData compare = kIsCupertino ? CupertinoIcons.doc_on_doc : Icons.compare;
+  static const IconData draftEdit = kIsCupertino ? CupertinoIcons.doc_on_doc : Icons.edit_note;
+  static const IconData checkbox = kIsCupertino ? CupertinoIcons.check_mark_circled : Icons.check_box;
+  static const IconData checkboxBlank = kIsCupertino ? CupertinoIcons.circle : Icons.check_box_outline_blank;
+  static const IconData expandMore = kIsCupertino ? CupertinoIcons.chevron_down : Icons.expand_more_outlined;
+  static const IconData expandLess = kIsCupertino ? CupertinoIcons.chevron_up : Icons.expand_less_outlined;
+  static const IconData fullscreen = kIsCupertino ? CupertinoIcons.fullscreen : Icons.fullscreen_outlined;
+  static const IconData fullscreenExit = kIsCupertino ? CupertinoIcons.fullscreen_exit : Icons.fullscreen_exit_outlined;
+  static const IconData table = kIsCupertino ? CupertinoIcons.doc_text_search : MdiIcons.table;
+  static const IconData restore = kIsCupertino ? CupertinoIcons.doc_checkmark : MdiIcons.restore;
+  static const IconData checkCircle = kIsCupertino ? CupertinoIcons.check_mark_circled : Icons.check_circle_outline;
+  static const IconData errorCircle = kIsCupertino ? CupertinoIcons.xmark : Icons.error_outline_outlined;
+  static const IconData exploreBrowser = kIsCupertino ? CupertinoIcons.globe : Icons.travel_explore_outlined;
+  static const IconData darkMode = kIsCupertino ? CupertinoIcons.moon : Icons.dark_mode_outlined;
+  static const IconData lightMode = kIsCupertino ? CupertinoIcons.sun_min : Icons.light_mode_outlined;
+  static const IconData font = kIsCupertino ? CupertinoIcons.textbox : Icons.font_download_outlined;
+  static const IconData fontWeight = kIsCupertino ? CupertinoIcons.bold : Icons.format_bold_outlined;
+  static const IconData fontSize = kIsCupertino ? CupertinoIcons.textformat_size : Icons.format_size_outlined;
+  static const IconData warning = kIsCupertino ? CupertinoIcons.exclamationmark : Icons.error_outline;
+  static const IconData refresh = kIsCupertino ? CupertinoIcons.refresh : Icons.refresh;
+  static const IconData reorder = kIsCupertino ? CupertinoIcons.arrow_up_arrow_down : Icons.reorder;
+  static const IconData calendar = kIsCupertino ? CupertinoIcons.calendar : Icons.calendar_month;
+  static const IconData history = kIsCupertino ? CupertinoIcons.time : Icons.history_outlined;
+  static const IconData home = kIsCupertino ? CupertinoIcons.home : Icons.home_outlined;
+  static const IconData exportOffline = kIsCupertino ? CupertinoIcons.arrow_down_doc : Icons.download;
+  static const IconData importOffline = kIsCupertino ? CupertinoIcons.arrow_up_doc : Icons.folder_open;
+  static const IconData update = kIsCupertino ? CupertinoIcons.arrow_down : Icons.system_update;
+  static const IconData keyboardLeft = kIsCupertino ? CupertinoIcons.left_chevron : Icons.keyboard_arrow_left;
+  static const IconData keyboardRight = kIsCupertino ? CupertinoIcons.right_chevron : Icons.keyboard_arrow_right;
+  static const IconData keyboardUp = kIsCupertino ? CupertinoIcons.chevron_up : Icons.keyboard_arrow_up_outlined;
+  static const IconData keyboardDown = kIsCupertino ? CupertinoIcons.chevron_down : Icons.keyboard_arrow_down_outlined;
   static const IconData dropDown = Icons.arrow_drop_down;
-  static const IconData globe = kIsCupertino
-      ? CupertinoIcons.globe
-      : Icons.language;
+  static const IconData globe = kIsCupertino ? CupertinoIcons.globe : Icons.language;
   static const IconData add = kIsCupertino ? CupertinoIcons.plus : Icons.add;
-  static const IconData remove = kIsCupertino
-      ? CupertinoIcons.minus
-      : Icons.remove;
-  static const IconData camera = kIsCupertino
-      ? CupertinoIcons.photo_camera
-      : Icons.photo_camera_outlined;
-  static const IconData videoCamera = kIsCupertino
-      ? CupertinoIcons.video_camera
-      : Icons.videocam_outlined;
-  static const IconData factCheck = kIsCupertino
-      ? CupertinoIcons.text_badge_checkmark
-      : Icons.fact_check_outlined;
+  static const IconData remove = kIsCupertino ? CupertinoIcons.minus : Icons.remove;
+  static const IconData camera = kIsCupertino ? CupertinoIcons.photo_camera : Icons.photo_camera_outlined;
+  static const IconData videoCamera = kIsCupertino ? CupertinoIcons.video_camera : Icons.videocam_outlined;
+  static const IconData factCheck = kIsCupertino ? CupertinoIcons.text_badge_checkmark : Icons.fact_check_outlined;
   static const IconData dragIndicator = Icons.drag_indicator;
   static const IconData imageNotSupported = kIsCupertino
       ? CupertinoIcons.flag_slash
       : Icons.image_not_supported_outlined;
-  static const IconData addPhoto = kIsCupertino
-      ? CupertinoIcons.add
-      : Icons.add_a_photo;
-  static const IconData hideSource = kIsCupertino
-      ? CupertinoIcons.circle
-      : Icons.hide_source;
-  static const IconData playCircle = kIsCupertino
-      ? CupertinoIcons.play_circle_fill
-      : Icons.play_circle;
-  static const IconData pauseCircle = kIsCupertino
-      ? CupertinoIcons.pause_circle_fill
-      : Icons.pause_circle;
+  static const IconData addPhoto = kIsCupertino ? CupertinoIcons.add : Icons.add_a_photo;
+  static const IconData hideSource = kIsCupertino ? CupertinoIcons.circle : Icons.hide_source;
+  static const IconData playCircle = kIsCupertino ? CupertinoIcons.play_circle_fill : Icons.play_circle;
+  static const IconData pauseCircle = kIsCupertino ? CupertinoIcons.pause_circle_fill : Icons.pause_circle;
   static const IconData replay5 = MdiIcons.rewind5;
   static const IconData forward5 = MdiIcons.fastForward5;
-  static const IconData volumeUp = kIsCupertino
-      ? CupertinoIcons.volume_up
-      : Icons.volume_up;
-  static const IconData volumeOff = kIsCupertino
-      ? CupertinoIcons.volume_mute
-      : Icons.volume_off;
-  static const IconData storage = kIsCupertino
-      ? CupertinoIcons.device_phone_portrait
-      : Icons.storage_outlined;
-  static const IconData musicNote = kIsCupertino
-      ? CupertinoIcons.music_note
-      : Icons.music_note_outlined;
+  static const IconData volumeUp = kIsCupertino ? CupertinoIcons.volume_up : Icons.volume_up;
+  static const IconData volumeOff = kIsCupertino ? CupertinoIcons.volume_mute : Icons.volume_off;
+  static const IconData storage = kIsCupertino ? CupertinoIcons.device_phone_portrait : Icons.storage_outlined;
+  static const IconData musicNote = kIsCupertino ? CupertinoIcons.music_note : Icons.music_note_outlined;
 
   // ignore: deprecated_member_use, deprecated upstream by MDI, no replacement
   static const IconData markdown = MdiIcons.languageMarkdown;
   static const IconData text = MdiIcons.text;
-  static const IconData fire = kIsCupertino
-      ? CupertinoIcons.flame
-      : Icons.local_fire_department_outlined;
+  static const IconData fire = kIsCupertino ? CupertinoIcons.flame : Icons.local_fire_department_outlined;
   static const IconData pdf = MdiIcons.filePdfBox;
-  static const IconData timer = kIsCupertino
-      ? CupertinoIcons.timer
-      : Icons.timer_outlined;
-  static const IconData lightBulb = kIsCupertino
-      ? CupertinoIcons.lightbulb
-      : Icons.lightbulb_outline;
-  static const IconData zoomInMap = kIsCupertino
-      ? CupertinoIcons.rectangle_expand_vertical
-      : Icons.zoom_in_map;
-  static const IconData zoomIn = kIsCupertino
-      ? CupertinoIcons.zoom_in
-      : Icons.zoom_in_outlined;
-  static const IconData zoomOut = kIsCupertino
-      ? CupertinoIcons.zoom_out
-      : Icons.zoom_out_outlined;
-  static const IconData addOns = kIsCupertino
-      ? CupertinoIcons.square_grid_2x2
-      : Icons.grid_view_rounded;
-  static const IconData verifiedFilled = !kIsCupertino
-      ? CupertinoIcons.checkmark_seal_fill
-      : Icons.verified;
-  static const IconData gift = kIsCupertino
-      ? CupertinoIcons.gift
-      : Icons.card_giftcard_outlined;
+  static const IconData timer = kIsCupertino ? CupertinoIcons.timer : Icons.timer_outlined;
+  static const IconData lightBulb = kIsCupertino ? CupertinoIcons.lightbulb : Icons.lightbulb_outline;
+  static const IconData zoomInMap = kIsCupertino ? CupertinoIcons.rectangle_expand_vertical : Icons.zoom_in_map;
+  static const IconData zoomIn = kIsCupertino ? CupertinoIcons.zoom_in : Icons.zoom_in_outlined;
+  static const IconData zoomOut = kIsCupertino ? CupertinoIcons.zoom_out : Icons.zoom_out_outlined;
+  static const IconData addOns = kIsCupertino ? CupertinoIcons.square_grid_2x2 : Icons.grid_view_rounded;
+  static const IconData verifiedFilled = !kIsCupertino ? CupertinoIcons.checkmark_seal_fill : Icons.verified;
+  static const IconData gift = kIsCupertino ? CupertinoIcons.gift : Icons.card_giftcard_outlined;
   static const IconData waterDrop = Icons.water_drop;
-  static const IconData download = kIsCupertino
-      ? CupertinoIcons.cloud_download
-      : Icons.download_outlined;
-  static const IconData sideBarLeft = kIsCupertino
-      ? CupertinoIcons.sidebar_left
-      : MdiIcons.dockLeft;
-  static const IconData starCircle = kIsCupertino
-      ? CupertinoIcons.star_circle
-      : MdiIcons.starCircleOutline;
-  static const IconData duplicate = kIsCupertino
-      ? CupertinoIcons.doc_on_doc
-      : Icons.copy_all_outlined;
+  static const IconData download = kIsCupertino ? CupertinoIcons.cloud_download : Icons.download_outlined;
+  static const IconData sideBarLeft = kIsCupertino ? CupertinoIcons.sidebar_left : MdiIcons.dockLeft;
+  static const IconData starCircle = kIsCupertino ? CupertinoIcons.star_circle : MdiIcons.starCircleOutline;
+  static const IconData duplicate = kIsCupertino ? CupertinoIcons.doc_on_doc : Icons.copy_all_outlined;
 
   static const IconData bug = MdiIcons.bug;
   static const IconData rocketLaunch = MdiIcons.rocketLaunchOutline;
@@ -378,13 +154,9 @@ class SpIcons {
   static const IconData deleteOutline = MdiIcons.deleteOutline;
   // Brand icons deprecated upstream by the Material Design Icons project for
   // trademark reasons; they still render and have no in-MDI replacement.
-  static const IconData reddit =
-      MdiIcons.reddit; // ignore: deprecated_member_use
-  static const IconData twitter =
-      MdiIcons.twitter; // ignore: deprecated_member_use
-  static const IconData github =
-      MdiIcons.github; // ignore: deprecated_member_use
+  static const IconData reddit = MdiIcons.reddit; // ignore: deprecated_member_use
+  static const IconData twitter = MdiIcons.twitter; // ignore: deprecated_member_use
+  static const IconData github = MdiIcons.github; // ignore: deprecated_member_use
   static const IconData apple = MdiIcons.apple; // ignore: deprecated_member_use
-  static const IconData googleMaps =
-      MdiIcons.googleMaps; // ignore: deprecated_member_use
+  static const IconData googleMaps = MdiIcons.googleMaps; // ignore: deprecated_member_use
 }

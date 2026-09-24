@@ -14,9 +14,7 @@ extension StringExtension on String {
       final u = units[i];
       if (u >= 0xD800 && u <= 0xDBFF) {
         // High surrogate — only keep it when followed by a valid low surrogate.
-        if (i + 1 < units.length &&
-            units[i + 1] >= 0xDC00 &&
-            units[i + 1] <= 0xDFFF) {
+        if (i + 1 < units.length && units[i + 1] >= 0xDC00 && units[i + 1] <= 0xDFFF) {
           result.add(u);
           result.add(units[i + 1]);
           i++;

@@ -57,10 +57,7 @@ class ExportStoriesToCsvService {
         story.validTags!.map((tagId) => tagNameGetter(tagId)),
       );
 
-      final validTagNames = tagNames
-          .whereType<String>()
-          .where((name) => name.isNotEmpty)
-          .toList();
+      final validTagNames = tagNames.whereType<String>().where((name) => name.isNotEmpty).toList();
       tagsCell = validTagNames.join('|');
     }
 

@@ -112,8 +112,7 @@ class EditStoryView extends StatelessWidget {
 
         return PopScope(
           canPop: false,
-          onPopInvokedWithResult: (didPop, result) =>
-              viewModel.onPopInvokedWithResult(didPop, result, context),
+          onPopInvokedWithResult: (didPop, result) => viewModel.onPopInvokedWithResult(didPop, result, context),
           child: SpKeyboardListener(
             onKeyEvent: (event) => viewModel.handleKeyEvent(event, context),
             child: SpStoryPreferenceTheme(

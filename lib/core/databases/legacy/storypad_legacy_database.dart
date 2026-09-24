@@ -72,8 +72,7 @@ class StorypadLegacyDatabase {
     List<Map<dynamic, dynamic>>? userInfoRows = await _database?.query(
       'user_info',
     );
-    if (storyRows == null || storyRows.isEmpty)
-      return (true, 'Database empty!');
+    if (storyRows == null || storyRows.isEmpty) return (true, 'Database empty!');
 
     try {
       List<StorypadLegacyStoryModel> storypadStories = storyRows.map((json) {
@@ -81,9 +80,7 @@ class StorypadLegacyDatabase {
           json,
         );
         if (story.paragraph != null) {
-          String? paragraph = story.paragraph != null
-              ? HtmlCharacterEntities.decode(story.paragraph!)
-              : null;
+          String? paragraph = story.paragraph != null ? HtmlCharacterEntities.decode(story.paragraph!) : null;
           return story.copyWith(
             paragraph: paragraph?.replaceAll(singleQuote, "'"),
           );

@@ -53,23 +53,19 @@ class _$GoogleUserObjectCWProxyImpl implements _$GoogleUserObjectCWProxy {
   GoogleUserObject email(String email) => call(email: email);
 
   @override
-  GoogleUserObject displayName(String? displayName) =>
-      call(displayName: displayName);
+  GoogleUserObject displayName(String? displayName) => call(displayName: displayName);
 
   @override
   GoogleUserObject photoUrl(String? photoUrl) => call(photoUrl: photoUrl);
 
   @override
-  GoogleUserObject accessToken(String? accessToken) =>
-      call(accessToken: accessToken);
+  GoogleUserObject accessToken(String? accessToken) => call(accessToken: accessToken);
 
   @override
-  GoogleUserObject refreshedAt(DateTime? refreshedAt) =>
-      call(refreshedAt: refreshedAt);
+  GoogleUserObject refreshedAt(DateTime? refreshedAt) => call(refreshedAt: refreshedAt);
 
   @override
-  GoogleUserObject autoBackupEnabled(bool? autoBackupEnabled) =>
-      call(autoBackupEnabled: autoBackupEnabled);
+  GoogleUserObject autoBackupEnabled(bool? autoBackupEnabled) => call(autoBackupEnabled: autoBackupEnabled);
 
   @override
   /// Creates a new instance with the provided field values.
@@ -132,26 +128,22 @@ extension $GoogleUserObjectCopyWith on GoogleUserObject {
 // JsonSerializableGenerator
 // **************************************************************************
 
-GoogleUserObject _$GoogleUserObjectFromJson(Map<String, dynamic> json) =>
-    GoogleUserObject(
-      id: json['id'] as String,
-      email: json['email'] as String,
-      displayName: json['display_name'] as String?,
-      photoUrl: json['photo_url'] as String?,
-      accessToken: json['access_token'] as String?,
-      refreshedAt: json['refreshed_at'] == null
-          ? null
-          : DateTime.parse(json['refreshed_at'] as String),
-      autoBackupEnabled: json['auto_backup_enabled'] as bool?,
-    );
+GoogleUserObject _$GoogleUserObjectFromJson(Map<String, dynamic> json) => GoogleUserObject(
+  id: json['id'] as String,
+  email: json['email'] as String,
+  displayName: json['display_name'] as String?,
+  photoUrl: json['photo_url'] as String?,
+  accessToken: json['access_token'] as String?,
+  refreshedAt: json['refreshed_at'] == null ? null : DateTime.parse(json['refreshed_at'] as String),
+  autoBackupEnabled: json['auto_backup_enabled'] as bool?,
+);
 
-Map<String, dynamic> _$GoogleUserObjectToJson(GoogleUserObject instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'email': instance.email,
-      'display_name': instance.displayName,
-      'photo_url': instance.photoUrl,
-      'access_token': instance.accessToken,
-      'refreshed_at': instance.refreshedAt?.toIso8601String(),
-      'auto_backup_enabled': instance.autoBackupEnabled,
-    };
+Map<String, dynamic> _$GoogleUserObjectToJson(GoogleUserObject instance) => <String, dynamic>{
+  'id': instance.id,
+  'email': instance.email,
+  'display_name': instance.displayName,
+  'photo_url': instance.photoUrl,
+  'access_token': instance.accessToken,
+  'refreshed_at': instance.refreshedAt?.toIso8601String(),
+  'auto_backup_enabled': instance.autoBackupEnabled,
+};

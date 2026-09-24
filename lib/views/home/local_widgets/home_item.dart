@@ -16,8 +16,7 @@ class _HomeValueKey extends GlobalKey {
   final Object value;
 
   @override
-  bool operator ==(Object other) =>
-      other is _HomeValueKey && other.value == value;
+  bool operator ==(Object other) => other is _HomeValueKey && other.value == value;
 
   @override
   int get hashCode => value.hashCode;
@@ -71,8 +70,7 @@ final class HomeMonthHeaderItem extends HomeItem {
   });
 
   @override
-  GlobalKey get key =>
-      _HomeValueKey(('header', pinned, story.year, story.month));
+  GlobalKey get key => _HomeValueKey(('header', pinned, story.year, story.month));
 
   @override
   int? get storyId => null;

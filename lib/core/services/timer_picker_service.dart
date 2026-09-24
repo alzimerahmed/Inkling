@@ -48,9 +48,7 @@ class TimePickerService {
                         }) {
                           return Container(
                             margin: EdgeInsets.only(
-                              right: selectedIndex == columnCount - 1
-                                  ? 0.0
-                                  : 8.0,
+                              right: selectedIndex == columnCount - 1 ? 0.0 : 8.0,
                             ),
                             decoration: BoxDecoration(
                               border: Border.all(
@@ -62,8 +60,7 @@ class TimePickerService {
                         },
                     initialTimerDuration: initialTimer,
                     mode: CupertinoTimerPickerMode.hm,
-                    onTimerDurationChanged: (duration) =>
-                        notifier.value = duration,
+                    onTimerDurationChanged: (duration) => notifier.value = duration,
                   ),
                 ),
                 FilledButton(
@@ -107,8 +104,7 @@ class TimePickerService {
                     CupertinoTimerPicker(
                       initialTimerDuration: initialTimer,
                       mode: CupertinoTimerPickerMode.hm,
-                      onTimerDurationChanged: (duration) =>
-                          notifier.value = duration,
+                      onTimerDurationChanged: (duration) => notifier.value = duration,
                     ),
                   ],
                 ),

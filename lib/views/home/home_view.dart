@@ -1,8 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:animations/animations.dart';
-import 'package:easy_localization/easy_localization.dart'
-    show tr, BuildContextEasyLocalizationExtension;
+import 'package:easy_localization/easy_localization.dart' show tr, BuildContextEasyLocalizationExtension;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:storypad/app_theme.dart';

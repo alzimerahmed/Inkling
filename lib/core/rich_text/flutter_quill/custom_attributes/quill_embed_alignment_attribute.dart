@@ -1,17 +1,12 @@
 part of '../quill_adapter.dart';
 
 class _EmbedAlignmentAttribute extends quill.Attribute<String?> {
-  const _EmbedAlignmentAttribute(String? value)
-    : super('custom-embed-alignment', quill.AttributeScope.embeds, value);
+  const _EmbedAlignmentAttribute(String? value) : super('custom-embed-alignment', quill.AttributeScope.embeds, value);
 
-  static _EmbedAlignmentAttribute get none =>
-      const _EmbedAlignmentAttribute(null);
-  static _EmbedAlignmentAttribute get left =>
-      const _EmbedAlignmentAttribute('left');
-  static _EmbedAlignmentAttribute get center =>
-      const _EmbedAlignmentAttribute('center');
-  static _EmbedAlignmentAttribute get right =>
-      const _EmbedAlignmentAttribute('right');
+  static _EmbedAlignmentAttribute get none => const _EmbedAlignmentAttribute(null);
+  static _EmbedAlignmentAttribute get left => const _EmbedAlignmentAttribute('left');
+  static _EmbedAlignmentAttribute get center => const _EmbedAlignmentAttribute('center');
+  static _EmbedAlignmentAttribute get right => const _EmbedAlignmentAttribute('right');
 
   bool hasApplied(quill.Embed node) {
     return node.style.attributes[key]?.value == value;

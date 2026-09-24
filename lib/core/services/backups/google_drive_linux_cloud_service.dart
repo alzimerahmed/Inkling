@@ -59,8 +59,7 @@ class GoogleDriveLinuxCloudService extends BackupCloudService {
   Future<CloudFileObject?> findFileById(String fileId) async => null;
 
   @override
-  Future<CloudFileObject?> findFileByIdIncludingTrashed(String fileId) async =>
-      null;
+  Future<CloudFileObject?> findFileByIdIncludingTrashed(String fileId) async => null;
 
   @override
   Future<CloudFileObject?> uploadFile(
@@ -80,6 +79,5 @@ class GoogleDriveLinuxCloudService extends BackupCloudService {
   Future<CloudStorageQuotaObject?> fetchStorageQuota() async => null;
 
   @override
-  Future<List<CloudFileObject>> listFilesInFolder(String folderName) async =>
-      [];
+  Future<List<CloudFileObject>> listFilesInFolder(String folderName) async => [];
 }

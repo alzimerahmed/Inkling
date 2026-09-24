@@ -31,8 +31,7 @@ abstract class _$GalleryTemplateCategoryObjectCWProxy {
 
 /// Callable proxy for `copyWith` functionality.
 /// Use as `instanceOfGalleryTemplateCategoryObject.copyWith(...)` or call `instanceOfGalleryTemplateCategoryObject.copyWith.fieldName(value)` for a single field.
-class _$GalleryTemplateCategoryObjectCWProxyImpl
-    implements _$GalleryTemplateCategoryObjectCWProxy {
+class _$GalleryTemplateCategoryObjectCWProxyImpl implements _$GalleryTemplateCategoryObjectCWProxy {
   const _$GalleryTemplateCategoryObjectCWProxyImpl(this._value);
 
   final GalleryTemplateCategoryObject _value;
@@ -41,8 +40,7 @@ class _$GalleryTemplateCategoryObjectCWProxyImpl
   GalleryTemplateCategoryObject name(String name) => call(name: name);
 
   @override
-  GalleryTemplateCategoryObject description(String description) =>
-      call(description: description);
+  GalleryTemplateCategoryObject description(String description) => call(description: description);
 
   @override
   GalleryTemplateCategoryObject templates(
@@ -67,8 +65,7 @@ class _$GalleryTemplateCategoryObjectCWProxyImpl
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      description:
-          description == const $CopyWithPlaceholder() || description == null
+      description: description == const $CopyWithPlaceholder() || description == null
           ? _value.description
           // ignore: cast_nullable_to_non_nullable
           : description as String,
@@ -80,13 +77,11 @@ class _$GalleryTemplateCategoryObjectCWProxyImpl
   }
 }
 
-extension $GalleryTemplateCategoryObjectCopyWith
-    on GalleryTemplateCategoryObject {
+extension $GalleryTemplateCategoryObjectCopyWith on GalleryTemplateCategoryObject {
   /// Returns a callable class used to build a new instance with modified fields.
   /// Example: `instanceOfGalleryTemplateCategoryObject.copyWith(...)` or `instanceOfGalleryTemplateCategoryObject.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$GalleryTemplateCategoryObjectCWProxy get copyWith =>
-      _$GalleryTemplateCategoryObjectCWProxyImpl(this);
+  _$GalleryTemplateCategoryObjectCWProxy get copyWith => _$GalleryTemplateCategoryObjectCWProxyImpl(this);
 }
 
 // **************************************************************************

@@ -17,8 +17,7 @@ class _HomeTimelineSideBar extends StatefulWidget {
 
 class _HomeTimelineSideBarState extends State<_HomeTimelineSideBar> {
   ValueNotifier<bool> showProBadgeNotifier = ValueNotifier<bool>(true);
-  late final DevicePreferencesProvider devicePreferencesProvider = context
-      .read<DevicePreferencesProvider>();
+  late final DevicePreferencesProvider devicePreferencesProvider = context.read<DevicePreferencesProvider>();
 
   @override
   void initState() {
@@ -58,9 +57,7 @@ class _HomeTimelineSideBarState extends State<_HomeTimelineSideBar> {
           homeViewModel: widget.viewModel,
           iapProvider: provider,
           showBadgeNotifer: showProBadgeNotifier,
-          enableRelaxSounds: context
-              .read<DevicePreferencesProvider>()
-              .enableRelaxSounds,
+          enableRelaxSounds: context.read<DevicePreferencesProvider>().enableRelaxSounds,
         );
 
         return Container(
@@ -81,9 +78,7 @@ class _HomeTimelineSideBarState extends State<_HomeTimelineSideBar> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             spacing: Platform.isMacOS ? 8.0 : 0.0,
-            children: items
-                .map((item) => _buildTimelineButton(context, item))
-                .toList(),
+            children: items.map((item) => _buildTimelineButton(context, item)).toList(),
           ),
         );
       },

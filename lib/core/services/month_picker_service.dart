@@ -32,8 +32,7 @@ class MonthPickerService {
     this.maximumDate,
   });
 
-  MonthPickerResult get initialMonth =>
-      MonthPickerResult(month: month, year: year);
+  MonthPickerResult get initialMonth => MonthPickerResult(month: month, year: year);
 
   Future<MonthPickerResult?> showPicker() async {
     if (kIsCupertino) {
@@ -70,9 +69,7 @@ class MonthPickerService {
                         }) {
                           return Container(
                             margin: EdgeInsets.only(
-                              right: selectedIndex == columnCount - 1
-                                  ? 0.0
-                                  : 8.0,
+                              right: selectedIndex == columnCount - 1 ? 0.0 : 8.0,
                             ),
                             decoration: BoxDecoration(
                               border: Border.all(

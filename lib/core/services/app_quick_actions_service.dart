@@ -32,8 +32,7 @@ import 'package:storypad/widgets/sp_app_lock_wrapper.dart';
 typedef AppQuickActionLaunchHandler = FutureOr<void> Function(String actionId);
 
 class AppQuickActionsService {
-  AppQuickActionsService({QuickActions quickActions = const QuickActions()})
-    : _quickActions = quickActions {
+  AppQuickActionsService({QuickActions quickActions = const QuickActions()}) : _quickActions = quickActions {
     if (supported) {
       _actionStream.stream.listen((actionId) async {
         _handleLaunch(actionId);
@@ -67,10 +66,8 @@ class AppQuickActionsService {
     _quickActions.initialize(_actionStream.add);
     _initCompleter.complete();
 
-    final homeQuickActions =
-        DevicePreferencesStorage.appInstance.preferences.homeQuickActions;
-    if (homeQuickActions == null || homeQuickActions.isEmpty)
-      await setActions([]);
+    final homeQuickActions = DevicePreferencesStorage.appInstance.preferences.homeQuickActions;
+    if (homeQuickActions == null || homeQuickActions.isEmpty) await setActions([]);
   }
 
   Future<void> setActions(List<AppQuickActionObject>? actions) async {
@@ -223,6 +220,19 @@ class AppQuickActionsService {
     await _reloadHomeIfStoryCreated(result);
   }
 
+  /// Entry point for the Android home-screen widget's quick-capture button
+  /// (Phase 3, gap #1): `inkling://widget?action=new_story`. Reuses the exact
+  /// new-story flow of home-screen quick actions.
+  Future<void> handleWidgetLaunch(Uri? uri) async {
+    if (uri?.host != 'widget') return;
+    if (uri?.queryParameters['action'] != 'new_story') return;
+
+    final context = await _waitForNavigatorContext();
+    if (context == null || !context.mounted) return;
+
+    await _openNewStory(context);
+  }
+
   Future<void> _takePhoto(BuildContext context) async {
     final homeContext = HomeView.homeContext;
     if (homeContext?.mounted == true) {
@@ -233,10 +243,7 @@ class AppQuickActionsService {
     await SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context
-            .read<DevicePreferencesProvider>()
-            .preferences
-            .assetCompression;
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
         final photo = await AppFilePickerService.pickImage(
           source: ImageSource.camera,
           compression: compression,
@@ -265,10 +272,7 @@ class AppQuickActionsService {
     await SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context
-            .read<DevicePreferencesProvider>()
-            .preferences
-            .assetCompression;
+        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
         final video = await AppFilePickerService.pickVideo(
           context: context,
           source: ImageSource.camera,

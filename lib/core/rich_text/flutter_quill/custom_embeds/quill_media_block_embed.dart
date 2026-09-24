@@ -50,8 +50,7 @@ class _QuillMediaRenderer extends StatelessWidget {
   final bool readOnly;
   final List<String> Function() fetchAllMedia;
 
-  static List<String> _parsePaths(String value) =>
-      value.split('|').where((s) => s.isNotEmpty).toList();
+  static List<String> _parsePaths(String value) => value.split('|').where((s) => s.isNotEmpty).toList();
 
   void remove() {
     if (readOnly) return;
@@ -71,9 +70,7 @@ class _QuillMediaRenderer extends StatelessWidget {
     }
 
     final op = node.toDelta().operations.first;
-    final attributes = op.attributes == null
-        ? null
-        : Map<String, dynamic>.from(op.attributes!);
+    final attributes = op.attributes == null ? null : Map<String, dynamic>.from(op.attributes!);
     final delta = QuillRichTextController._buildEmbedDelta(
       embedType: 'media',
       value: newPaths.join('|'),
@@ -207,9 +204,7 @@ class _QuillMediaRenderer extends StatelessWidget {
                 ),
                 child: SpAlbumGrid(
                   paths: paths,
-                  onTap: readOnly
-                      ? (index) => _viewMediaAt(context, paths, index)
-                      : null,
+                  onTap: readOnly ? (index) => _viewMediaAt(context, paths, index) : null,
                 ),
               ),
               if (!readOnly)
@@ -253,9 +248,7 @@ class _QuillMediaRenderer extends StatelessWidget {
       ),
       IconButton(
         icon: Icon(
-          _EmbedSizeAttribute.maxSize.hasApplied(node)
-              ? SpIcons.zoomOut
-              : SpIcons.zoomIn,
+          _EmbedSizeAttribute.maxSize.hasApplied(node) ? SpIcons.zoomOut : SpIcons.zoomIn,
         ),
         onPressed: () => _EmbedSizeAttribute.toggle(controller, node),
       ),
@@ -306,8 +299,7 @@ class _QuillMediaRenderer extends StatelessWidget {
             spacing: 0.0,
             runSpacing: 0.0,
             children: buttons.map((button) {
-              bool selected =
-                  button.onPressed != null && button.isSelected == true;
+              bool selected = button.onPressed != null && button.isSelected == true;
 
               return SizedBox(
                 width: itemSize,
@@ -318,9 +310,7 @@ class _QuillMediaRenderer extends StatelessWidget {
                     icon: button.icon,
                     color: button.color,
                     style: IconButton.styleFrom(
-                      side: selected
-                          ? BorderSide(color: Theme.of(context).dividerColor)
-                          : null,
+                      side: selected ? BorderSide(color: Theme.of(context).dividerColor) : null,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),

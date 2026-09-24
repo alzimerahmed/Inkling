@@ -8,33 +8,29 @@ import 'package:storypad/core/services/multi_audio_player_service.dart';
 import 'package:storypad/core/services/relax_sound_timer_service.dart';
 
 class RelaxSoundsProvider extends ChangeNotifier with DebounchedCallback {
-  Map<String, RelaxSoundObject> get relaxSounds =>
-      RelaxSoundObject.defaultSoundsList();
-  String get selectedSoundsLabel =>
-      selectedRelaxSounds.map((e) => e.label).join(", ");
+  Map<String, RelaxSoundObject> get relaxSounds => RelaxSoundObject.defaultSoundsList();
+  String get selectedSoundsLabel => selectedRelaxSounds.map((e) => e.label).join(", ");
   List<RelaxSoundObject> get selectedRelaxSounds {
     return audioPlayersService.audioUrlPaths.map((urlPath) {
       return relaxSounds[urlPath]!;
     }).toList();
   }
 
-  PlayerState? playerStateFor(String urlPath) =>
-      audioPlayersService.playingStates[urlPath];
-  late final MultiAudioPlayersService audioPlayersService =
-      MultiAudioPlayersService(
-        onStateChanged: (bool? playing) async {
-          if (playing != null) {
-            playing ? timerService.startIfNot() : timerService.pauseIfNot();
-            _playing = playing;
-          } else {
-            timerService.setStopIn(null);
-            timerService.pauseIfNot();
-          }
+  PlayerState? playerStateFor(String urlPath) => audioPlayersService.playingStates[urlPath];
+  late final MultiAudioPlayersService audioPlayersService = MultiAudioPlayersService(
+    onStateChanged: (bool? playing) async {
+      if (playing != null) {
+        playing ? timerService.startIfNot() : timerService.pauseIfNot();
+        _playing = playing;
+      } else {
+        timerService.setStopIn(null);
+        timerService.pauseIfNot();
+      }
 
-          refreshAppNotification();
-          notifyListeners();
-        },
-      );
+      refreshAppNotification();
+      notifyListeners();
+    },
+  );
 
   late final _notificationService = MultiAudioNotificationService(
     onPlayed: () async => audioPlayersService.playAll(),
@@ -57,14 +53,11 @@ class RelaxSoundsProvider extends ChangeNotifier with DebounchedCallback {
   bool? _canSaveMix;
   bool get canSaveMix => _canSaveMix ?? false;
 
-  bool isSoundSelected(RelaxSoundObject sound) =>
-      audioPlayersService.exist(sound.soundUrlPath);
+  bool isSoundSelected(RelaxSoundObject sound) => audioPlayersService.exist(sound.soundUrlPath);
   bool isDownloading(PlayerState? state) =>
-      state?.processingState == ProcessingState.loading ||
-      state?.processingState == ProcessingState.idle;
+      state?.processingState == ProcessingState.loading || state?.processingState == ProcessingState.idle;
 
-  double? getVolume(RelaxSoundObject sound) =>
-      audioPlayersService.getVolume(sound.soundUrlPath);
+  double? getVolume(RelaxSoundObject sound) => audioPlayersService.getVolume(sound.soundUrlPath);
   void setVolume(RelaxSoundObject sound, double volume) {
     audioPlayersService.setVolume(sound.soundUrlPath, volume);
     notifyListeners();
@@ -149,20 +142,16 @@ class RelaxSoundsProvider extends ChangeNotifier with DebounchedCallback {
   Future<RelaxSoundMixModel?> findExistingMix({
     required bool ignoreVolume,
   }) async {
-    final saved =
-        await RelaxSoundMixModel.db.where().then((e) => e?.items) ?? [];
+    final saved = await RelaxSoundMixModel.db.where().then((e) => e?.items) ?? [];
 
     final playing = selectedRelaxSounds
         .map(
-          (s) =>
-              "${s.soundUrlPath}:${ignoreVolume ? 1 : getVolume(relaxSounds[s.soundUrlPath]!)}",
+          (s) => "${s.soundUrlPath}:${ignoreVolume ? 1 : getVolume(relaxSounds[s.soundUrlPath]!)}",
         )
         .toSet();
 
     return saved.where((mix) {
-      final db = mix.sounds
-          .map((s) => "${s.soundUrlPath}:${ignoreVolume ? 1 : s.volume}")
-          .toSet();
+      final db = mix.sounds.map((s) => "${s.soundUrlPath}:${ignoreVolume ? 1 : s.volume}").toSet();
       return db.length == playing.length && db.containsAll(playing);
     }).firstOrNull;
   }

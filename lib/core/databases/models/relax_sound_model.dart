@@ -15,6 +15,5 @@ class RelaxSoundModel {
   });
 
   Map<String, dynamic> toJson() => _$RelaxSoundModelToJson(this);
-  factory RelaxSoundModel.fromJson(Map<String, dynamic> json) =>
-      _$RelaxSoundModelFromJson(json);
+  factory RelaxSoundModel.fromJson(Map<String, dynamic> json) => _$RelaxSoundModelFromJson(json);
 }

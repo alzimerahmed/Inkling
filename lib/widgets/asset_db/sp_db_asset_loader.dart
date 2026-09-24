@@ -1,8 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
-    as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
 import 'package:storypad/core/services/assets/backup_asset_downloader_service.dart';
 import 'package:storypad/core/services/assets/db_asset_loader_service.dart';
 import 'package:storypad/core/services/backups/backup_cloud_service.dart';
@@ -18,13 +17,11 @@ class SpDbAssetLoader extends StatefulWidget {
 
   final String relativePath;
   final List<BackupCloudService> signedInServices;
-  final Widget Function(BuildContext context, File? file, Object? error)
-  builder;
+  final Widget Function(BuildContext context, File? file, Object? error) builder;
 
   static Widget withUser({
     required String relativePath,
-    required Widget Function(BuildContext context, File? file, Object? error)
-    builder,
+    required Widget Function(BuildContext context, File? file, Object? error) builder,
   }) {
     return Consumer<BackupProvider>(
       builder: (context, backupProvider, child) {

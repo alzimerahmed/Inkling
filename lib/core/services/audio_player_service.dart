@@ -46,14 +46,10 @@ class AudioPlayerService {
       _setLoop ??= await _player.setLoopMode(LoopMode.one).then((e) => true);
 
       File? cachedFile = CloudStorageService.instance.getCachedFile(urlPath);
-      cachedFile ??= await CloudStorageService.instance
-          .downloadFile(urlPath)
-          .then((e) => e.file);
+      cachedFile ??= await CloudStorageService.instance.downloadFile(urlPath).then((e) => e.file);
 
       if (cachedFile != null && !_disposed) {
-        _setAudioSource ??= await _player
-            .setFilePath(cachedFile.path)
-            .then((value) => true);
+        _setAudioSource ??= await _player.setFilePath(cachedFile.path).then((value) => true);
         completer.complete(true);
         return true;
       } else {

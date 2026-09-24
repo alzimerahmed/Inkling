@@ -16,8 +16,7 @@ class DatePickerService {
 
   Future<DateTime?> show() async {
     DateTime? date;
-    final bool hasMousePointer =
-        RendererBinding.instance.mouseTracker.mouseIsConnected;
+    final bool hasMousePointer = RendererBinding.instance.mouseTracker.mouseIsConnected;
 
     if (kIsCupertino && !hasMousePointer) {
       date = await _showCupertinoDatePicker();

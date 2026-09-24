@@ -29,9 +29,7 @@ class AppLockProvider extends ChangeNotifier {
   }
 
   bool get hasAppLock =>
-      appLock.pin != null ||
-      (localAuth.canCheckBiometrics == true &&
-          appLock.enabledBiometric == true);
+      appLock.pin != null || (localAuth.canCheckBiometrics == true && appLock.enabledBiometric == true);
 
   final AppLockStorage storage = AppLockStorage();
 
@@ -56,20 +54,16 @@ class AppLockProvider extends ChangeNotifier {
       if (!hasAppLock) return true;
       if (appLock.pin != null) {
         return PinUnlockRoute.confirmation(
-              context: context,
-              title: PinUnlockTitle.enter_your_pin,
-              invalidPinTitle: PinUnlockTitle.incorrect_pin,
-              correctPin: appLock.pin!,
-              onConfirmWithBiometrics:
-                  appLock.enabledBiometric == true &&
-                      localAuth.canCheckBiometrics == true
-                  ? () => localAuth.authenticate(
-                      title: tr('dialog.unlock_to_open_the_app.title'),
-                    )
-                  : null,
-            )
-            .push(context, rootNavigator: true)
-            .then((confirmed) => confirmed == true);
+          context: context,
+          title: PinUnlockTitle.enter_your_pin,
+          invalidPinTitle: PinUnlockTitle.incorrect_pin,
+          correctPin: appLock.pin!,
+          onConfirmWithBiometrics: appLock.enabledBiometric == true && localAuth.canCheckBiometrics == true
+              ? () => localAuth.authenticate(
+                  title: tr('dialog.unlock_to_open_the_app.title'),
+                )
+              : null,
+        ).push(context, rootNavigator: true).then((confirmed) => confirmed == true);
       } else {
         return localAuth.authenticate(
           title: tr('dialog.unlock_to_open_the_app.title'),
@@ -87,15 +81,12 @@ class AppLockProvider extends ChangeNotifier {
   }
 
   Future<void> clearPIN(BuildContext context) async {
-    bool authenticated =
-        await PinUnlockRoute.confirmation(
-              context: context,
-              correctPin: appLock.pin!,
-              title: PinUnlockTitle.confirm_your_pin,
-              invalidPinTitle: PinUnlockTitle.incorrect_pin,
-            )
-            .push(context, rootNavigator: true)
-            .then((authenticated) => authenticated == true);
+    bool authenticated = await PinUnlockRoute.confirmation(
+      context: context,
+      correctPin: appLock.pin!,
+      title: PinUnlockTitle.confirm_your_pin,
+      invalidPinTitle: PinUnlockTitle.incorrect_pin,
+    ).push(context, rootNavigator: true).then((authenticated) => authenticated == true);
 
     if (context.mounted && authenticated) {
       AnalyticsService.instance.logClearPIN();

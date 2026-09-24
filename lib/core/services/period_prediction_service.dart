@@ -25,12 +25,7 @@ class PeriodPredictionService {
     List<DateTime> periodDates, {
     DateTime? now,
   }) {
-    final days =
-        periodDates
-            .map((d) => DateTime(d.year, d.month, d.day))
-            .toSet()
-            .toList()
-          ..sort();
+    final days = periodDates.map((d) => DateTime(d.year, d.month, d.day)).toSet().toList()..sort();
 
     // A day is a cycle start when the previous calendar day isn't also a
     // period day — this groups consecutive logged days (a single period,
@@ -89,9 +84,7 @@ class PeriodPredictionService {
     final collection = await EventDbModel.db.where(
       filters: {"event_type": "period"},
     );
-    final dates =
-        collection?.items.map((e) => e.date).whereType<DateTime>().toList() ??
-        [];
+    final dates = collection?.items.map((e) => e.date).whereType<DateTime>().toList() ?? [];
     return predictNextPeriodStart(dates, now: now);
   }
 }

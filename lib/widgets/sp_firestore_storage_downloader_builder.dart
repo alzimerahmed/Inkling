@@ -13,12 +13,10 @@ class SpFirestoreStorageDownloaderBuilder extends StatefulWidget {
   final Widget Function(BuildContext context, File? file, bool failed) builder;
 
   @override
-  State<SpFirestoreStorageDownloaderBuilder> createState() =>
-      _SpFirestoreStorageDownloaderBuilderState();
+  State<SpFirestoreStorageDownloaderBuilder> createState() => _SpFirestoreStorageDownloaderBuilderState();
 }
 
-class _SpFirestoreStorageDownloaderBuilderState
-    extends State<SpFirestoreStorageDownloaderBuilder> {
+class _SpFirestoreStorageDownloaderBuilderState extends State<SpFirestoreStorageDownloaderBuilder> {
   File? file;
   bool failed = false;
 
@@ -32,9 +30,7 @@ class _SpFirestoreStorageDownloaderBuilderState
 
   Future<void> downloadAndLoadFile() async {
     try {
-      file = await CloudStorageService.instance
-          .downloadFile(widget.filePath)
-          .then((e) => e.file);
+      file = await CloudStorageService.instance.downloadFile(widget.filePath).then((e) => e.file);
       if (mounted) setState(() {});
     } catch (e) {
       failed = true;

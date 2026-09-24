@@ -97,11 +97,10 @@ abstract class BaseRoute {
     required bool fullscreenDialog,
   }) {
     return CupertinoSheetRoute<T>(
-      scrollableBuilder: (context, controller) =>
-          SpCupertinoFullPageSheetConfigurations(
-            context: context,
-            child: buildPage(context),
-          ),
+      scrollableBuilder: (context, controller) => SpCupertinoFullPageSheetConfigurations(
+        context: context,
+        child: buildPage(context),
+      ),
     );
   }
 
@@ -112,8 +111,7 @@ abstract class BaseRoute {
     if (fullscreenDialog) {
       return PageRouteBuilder(
         fullscreenDialog: fullscreenDialog,
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            buildPage(context),
+        pageBuilder: (context, animation, secondaryAnimation) => buildPage(context),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SharedAxisTransition(
             animation: animation,

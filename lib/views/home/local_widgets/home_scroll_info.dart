@@ -53,15 +53,11 @@ class _HomeScrollInfo {
       double expandedHeight = appBar(context).getExpandedHeight();
       double scrollOffset = max(
         0.0,
-        scrollController.offset -
-            expandedHeight +
-            MediaQuery.of(context).padding.top,
+        scrollController.offset - expandedHeight + MediaQuery.of(context).padding.top,
       );
 
       final renderBox = context.findRenderObject() as RenderBox?;
-      double? itemPosition = renderBox
-          ?.localToGlobal(Offset(0.0, scrollOffset))
-          .dy;
+      double? itemPosition = renderBox?.localToGlobal(Offset(0.0, scrollOffset)).dy;
 
       if (itemPosition != null && itemPosition > scrollOffset + 48) {
         int monthIndex = months.indexWhere((e) => e == item.story.month);
@@ -196,9 +192,7 @@ class _HomeScrollInfo {
       bool isMovingForward = visibleIndices.every(
         (index) => targetIndex > index,
       );
-      int nearestIndex = isMovingForward
-          ? visibleIndices.last
-          : visibleIndices.first;
+      int nearestIndex = isMovingForward ? visibleIndices.last : visibleIndices.first;
 
       // Jump to nearest visible key (no animation) to trigger rendering of more items
       final nearestKey = keys[nearestIndex];

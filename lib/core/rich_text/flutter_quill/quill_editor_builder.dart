@@ -16,8 +16,7 @@ Widget buildQuillEditor({
   VoidCallback? onGoToEdit,
 }) {
   // Cast to QuillRichTextController to access underlying QuillController
-  final quillController =
-      (controller as QuillRichTextController).quillController;
+  final quillController = (controller as QuillRichTextController).quillController;
 
   return _QuillEditorWidget(
     bodyFocusNode: focusNode,
@@ -116,12 +115,11 @@ class _QuillEditorWidgetState extends State<_QuillEditorWidget> {
           ),
         ),
         keyboardAppearance: Theme.of(context).brightness,
-        contextMenuBuilder: (context, rawEditorState) =>
-            _QuillContextMenuHelper.get(
-              rawEditorState,
-              editable: !widget.readOnly,
-              onEdit: widget.onGoToEdit,
-            ),
+        contextMenuBuilder: (context, rawEditorState) => _QuillContextMenuHelper.get(
+          rawEditorState,
+          editable: !widget.readOnly,
+          onEdit: widget.onGoToEdit,
+        ),
         scrollBottomInset: MediaQuery.of(context).viewPadding.bottom,
         scrollable: true,
         expands: false,
@@ -133,28 +131,23 @@ class _QuillEditorWidgetState extends State<_QuillEditorWidget> {
           right: 12.0,
         ),
         autoFocus: false,
-        checkBoxReadOnly: widget.onChanged == null
-            ? true
-            : (widget.readOnly ? false : null),
+        checkBoxReadOnly: widget.onChanged == null ? true : (widget.readOnly ? false : null),
         enableScribble: !widget.readOnly,
         showCursor: !widget.readOnly,
         paintCursorAboveText: !widget.readOnly,
         placeholder: "...",
-        onLaunchUrl: (value) =>
-            UrlOpenerService.openForRichContent(context: context, url: value),
+        onLaunchUrl: (value) => UrlOpenerService.openForRichContent(context: context, url: value),
         embedBuilders: [
           _QuillMediaBlockEmbed(
             layoutType: widget.layoutType,
-            fetchAllMedia: () =>
-                StoryContentEmbedExtractor.media(widget.storyContent),
+            fetchAllMedia: () => StoryContentEmbedExtractor.media(widget.storyContent),
           ),
           // Legacy key, kept for backward compatibility -- stories saved
           // before the image->media rename still use `image` and must keep
           // rendering exactly as before. See _QuillMediaBlockEmbed's doc.
           _QuillMediaBlockEmbed(
             layoutType: widget.layoutType,
-            fetchAllMedia: () =>
-                StoryContentEmbedExtractor.media(widget.storyContent),
+            fetchAllMedia: () => StoryContentEmbedExtractor.media(widget.storyContent),
             embedKey: 'image',
           ),
           _QuillAudioBlockEmbed(),
@@ -164,12 +157,8 @@ class _QuillEditorWidgetState extends State<_QuillEditorWidget> {
 
         // ignore: experimental_member_use
         customLeadingBlockBuilder: (node, config) {
-          final attribute =
-              config.attrs[quill.Attribute.list.key] ??
-              config.attrs[quill.Attribute.codeBlock.key];
-          final isCheck =
-              attribute == quill.Attribute.checked ||
-              attribute == quill.Attribute.unchecked;
+          final attribute = config.attrs[quill.Attribute.list.key] ?? config.attrs[quill.Attribute.codeBlock.key];
+          final isCheck = attribute == quill.Attribute.checked || attribute == quill.Attribute.unchecked;
 
           if (isCheck) {
             return Container(
@@ -181,9 +170,7 @@ class _QuillEditorWidgetState extends State<_QuillEditorWidget> {
               transform: Matrix4.translationValues(-6.0, 0.0, 0.0),
               child: Checkbox.adaptive(
                 value: config.value,
-                onChanged: config.enabled == true
-                    ? (value) => config.onCheckboxTap.call(value == true)
-                    : null,
+                onChanged: config.enabled == true ? (value) => config.onCheckboxTap.call(value == true) : null,
               ),
             );
           }

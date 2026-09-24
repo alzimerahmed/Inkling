@@ -23,8 +23,7 @@ abstract class _$GalleryTemplatePageObjectCWProxy {
 
 /// Callable proxy for `copyWith` functionality.
 /// Use as `instanceOfGalleryTemplatePageObject.copyWith(...)` or call `instanceOfGalleryTemplatePageObject.copyWith.fieldName(value)` for a single field.
-class _$GalleryTemplatePageObjectCWProxyImpl
-    implements _$GalleryTemplatePageObjectCWProxy {
+class _$GalleryTemplatePageObjectCWProxyImpl implements _$GalleryTemplatePageObjectCWProxy {
   const _$GalleryTemplatePageObjectCWProxyImpl(this._value);
 
   final GalleryTemplatePageObject _value;
@@ -64,8 +63,7 @@ extension $GalleryTemplatePageObjectCopyWith on GalleryTemplatePageObject {
   /// Returns a callable class used to build a new instance with modified fields.
   /// Example: `instanceOfGalleryTemplatePageObject.copyWith(...)` or `instanceOfGalleryTemplatePageObject.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$GalleryTemplatePageObjectCWProxy get copyWith =>
-      _$GalleryTemplatePageObjectCWProxyImpl(this);
+  _$GalleryTemplatePageObjectCWProxy get copyWith => _$GalleryTemplatePageObjectCWProxyImpl(this);
 }
 
 // **************************************************************************

@@ -23,8 +23,7 @@ class StoryThemeButton extends StatelessWidget {
         onPressed: () async {
           var nextAction = await SpStoryThemeBottomSheet(
             preferences: viewModel.story!.preferences,
-            onThemeChanged: (preferences) =>
-                viewModel.changePreferences(preferences),
+            onThemeChanged: (preferences) => viewModel.changePreferences(preferences),
             storyViewModel: viewModel,
           ).show(context: context);
 

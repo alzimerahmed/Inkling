@@ -86,8 +86,7 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
 
   void _onSpeedPreferenceChanged() {
     if (!mounted) return;
-    if (_playbackSpeed == _preferencesProvider.preferences.videoPlaybackSpeed)
-      return;
+    if (_playbackSpeed == _preferencesProvider.preferences.videoPlaybackSpeed) return;
 
     _playbackSpeed = _preferencesProvider.preferences.videoPlaybackSpeed;
     controller?.setPlaybackSpeed(_playbackSpeed);
@@ -144,9 +143,7 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
   // hasClients guards the very first frame: PageController.page asserts if no
   // PageView is attached yet, and _createController can resolve that early.
   bool get _isCurrentPage {
-    final page = widget.controller.hasClients
-        ? widget.controller.page?.round()
-        : null;
+    final page = widget.controller.hasClients ? widget.controller.page?.round() : null;
     return (page ?? widget.controller.initialPage) == widget.index;
   }
 
@@ -266,9 +263,7 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
       // Only surface the failure when there's nothing on screen to keep: a
       // failed *re*-create (the EOS workaround) leaves the still-working
       // controller alone instead of tearing the video off the page.
-      if (mounted &&
-          controller == null &&
-          generation == _controllerGeneration) {
+      if (mounted && controller == null && generation == _controllerGeneration) {
         setState(() => _failed = true);
       }
       return;
@@ -372,8 +367,7 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
       await current.seekTo(target);
     } else if (_hasReachedEnd) {
       final file = _file;
-      if (file != null)
-        await _createController(file, autoplay: wasPlaying, seekTo: target);
+      if (file != null) await _createController(file, autoplay: wasPlaying, seekTo: target);
     } else {
       await current.seekTo(target);
       if (wasPlaying) await current.play();
@@ -403,8 +397,7 @@ class _VideoPageScaffoldState extends State<_VideoPageScaffold> {
     controller?.seekTo(position);
   }
 
-  Future<void> _handleSeekEnd(Duration position) =>
-      _seekAndMaybeResume(position);
+  Future<void> _handleSeekEnd(Duration position) => _seekAndMaybeResume(position);
 
   @override
   Widget build(BuildContext context) {
@@ -624,10 +617,8 @@ class _VideoControls extends StatelessWidget {
         max: durationMs > 0 ? durationMs : 1.0,
         activeColor: Colors.white,
         inactiveColor: Colors.white24,
-        onChanged: (newValue) =>
-            onSeekChanged(Duration(milliseconds: newValue.toInt())),
-        onChangeEnd: (newValue) =>
-            onSeekEnd(Duration(milliseconds: newValue.toInt())),
+        onChanged: (newValue) => onSeekChanged(Duration(milliseconds: newValue.toInt())),
+        onChangeEnd: (newValue) => onSeekEnd(Duration(milliseconds: newValue.toInt())),
       ),
     );
   }

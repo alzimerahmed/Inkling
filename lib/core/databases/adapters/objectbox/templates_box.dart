@@ -17,16 +17,13 @@ class TemplatesBox extends BaseBox<TemplateObjectBox, TemplateDbModel> {
   bool get isYearPartitioned => false;
 
   @override
-  QueryIntegerProperty<TemplateObjectBox> get idProperty =>
-      TemplateObjectBox_.id;
+  QueryIntegerProperty<TemplateObjectBox> get idProperty => TemplateObjectBox_.id;
 
   @override
-  QueryStringProperty<TemplateObjectBox> get lastSavedDeviceIdProperty =>
-      TemplateObjectBox_.lastSavedDeviceId;
+  QueryStringProperty<TemplateObjectBox> get lastSavedDeviceIdProperty => TemplateObjectBox_.lastSavedDeviceId;
 
   @override
-  QueryDateProperty<TemplateObjectBox> get permanentlyDeletedAtProperty =>
-      TemplateObjectBox_.permanentlyDeletedAt;
+  QueryDateProperty<TemplateObjectBox> get permanentlyDeletedAtProperty => TemplateObjectBox_.permanentlyDeletedAt;
 
   @override
   QueryBuilder<TemplateObjectBox> buildQuery({

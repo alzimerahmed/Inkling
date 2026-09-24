@@ -91,9 +91,7 @@ class _QuillAudioRendererState extends State<_QuillAudioRenderer> {
     if (_asset == null) return const SizedBox.shrink();
 
     return SpVoicePlayer.network(
-      initialDuration: _asset?.durationInMs != null
-          ? Duration(milliseconds: _asset!.durationInMs!)
-          : null,
+      initialDuration: _asset?.durationInMs != null ? Duration(milliseconds: _asset!.durationInMs!) : null,
       onDownloadRequested: _downloadAudio,
       onLongPress: () {
         SpAssetInfoSheet(

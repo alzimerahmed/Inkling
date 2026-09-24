@@ -20,9 +20,7 @@ class _SoundIconCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.0),
         color: selected ? ColorScheme.of(context).readOnly.surface2 : null,
         border: Border.all(
-          color: selected
-              ? ColorScheme.of(context).primary
-              : Theme.of(context).dividerColor,
+          color: selected ? ColorScheme.of(context).primary : Theme.of(context).dividerColor,
         ),
       ),
       child: SpFirestoreStorageDownloaderBuilder(
@@ -44,9 +42,7 @@ class _SoundIconCard extends StatelessWidget {
       semanticsLabel: relaxSound.label,
       height: 48,
       colorFilter: ColorFilter.mode(
-        selected
-            ? ColorScheme.of(context).primary
-            : ColorScheme.of(context).onSurface,
+        selected ? ColorScheme.of(context).primary : ColorScheme.of(context).onSurface,
         BlendMode.srcIn,
       ),
     );
@@ -62,9 +58,7 @@ class _SoundIconCard extends StatelessWidget {
             semanticsLabel: relaxSound.label,
             height: 48,
             colorFilter: ColorFilter.mode(
-              selected
-                  ? ColorScheme.of(context).primary
-                  : ColorScheme.of(context).onSurface,
+              selected ? ColorScheme.of(context).primary : ColorScheme.of(context).onSurface,
               BlendMode.srcIn,
             ),
           );

@@ -44,8 +44,7 @@ class DropboxUserObject extends CloudServiceUser {
   String get identifier => email;
 
   @override
-  String? get globalId =>
-      serviceType.hasGlobalUserId ? "${serviceType.id}_$id" : null;
+  String? get globalId => serviceType.hasGlobalUserId ? "${serviceType.id}_$id" : null;
 
   /// A short buffer before the real expiry so a request never races a
   /// just-expired token — mirrors the intent of [GoogleUserObject]'s
@@ -56,6 +55,5 @@ class DropboxUserObject extends CloudServiceUser {
   );
 
   Map<String, dynamic> toJson() => _$DropboxUserObjectToJson(this);
-  factory DropboxUserObject.fromJson(Map<String, dynamic> json) =>
-      _$DropboxUserObjectFromJson(json);
+  factory DropboxUserObject.fromJson(Map<String, dynamic> json) => _$DropboxUserObjectFromJson(json);
 }

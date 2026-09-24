@@ -29,18 +29,13 @@ class AppTheme extends StatelessWidget {
   builder;
 
   // default text direction
-  static bool ltr(BuildContext context) =>
-      Directionality.of(context) == TextDirection.ltr;
-  static bool rtl(BuildContext context) =>
-      Directionality.of(context) == TextDirection.rtl;
-  static bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
+  static bool ltr(BuildContext context) => Directionality.of(context) == TextDirection.ltr;
+  static bool rtl(BuildContext context) => Directionality.of(context) == TextDirection.rtl;
+  static bool isDarkMode(BuildContext context) => Theme.of(context).brightness == Brightness.dark;
 
   static bool isMonochrome(BuildContext context) =>
-      context.read<DevicePreferencesProvider>().preferences.colorSeed ==
-          Colors.black ||
-      context.read<DevicePreferencesProvider>().preferences.colorSeed ==
-          Colors.white;
+      context.read<DevicePreferencesProvider>().preferences.colorSeed == Colors.black ||
+      context.read<DevicePreferencesProvider>().preferences.colorSeed == Colors.white;
 
   static T? getDirectionValue<T extends Object>(
     BuildContext context,
@@ -58,10 +53,7 @@ class AppTheme extends StatelessWidget {
     BuildContext context,
     FontWeight defaultWeight,
   ) {
-    FontWeight preferredFontWeight = context
-        .read<DevicePreferencesProvider>()
-        .preferences
-        .fontWeight;
+    FontWeight preferredFontWeight = context.read<DevicePreferencesProvider>().preferences.fontWeight;
 
     final fontWeights = {
       0: FontWeight.w100,
@@ -75,8 +67,7 @@ class AppTheme extends StatelessWidget {
       8: FontWeight.w900,
     };
 
-    int indexOf(FontWeight weight) =>
-        fontWeights.entries.firstWhere((e) => e.value == weight).key;
+    int indexOf(FontWeight weight) => fontWeights.entries.firstWhere((e) => e.value == weight).key;
 
     final diff = indexOf(defaultWeight) - indexOf(FontWeight.w400);
     final newIndex = (indexOf(preferredFontWeight) + diff).clamp(0, 8);
@@ -108,16 +99,10 @@ class AppTheme extends StatelessWidget {
             return AnnotatedRegion<SystemUiOverlayStyle>(
               value: SystemUiOverlayStyle(
                 statusBarColor: Colors.transparent,
-                statusBarIconBrightness: isDarkMode
-                    ? Brightness.light
-                    : Brightness.dark,
-                statusBarBrightness: isDarkMode
-                    ? Brightness.dark
-                    : Brightness.light,
+                statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
+                statusBarBrightness: isDarkMode ? Brightness.dark : Brightness.light,
                 systemNavigationBarColor: Colors.transparent,
-                systemNavigationBarIconBrightness: isDarkMode
-                    ? Brightness.light
-                    : Brightness.dark,
+                systemNavigationBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
                 systemNavigationBarDividerColor: Colors.transparent,
                 systemNavigationBarContrastEnforced: false,
               ),
@@ -204,9 +189,7 @@ class AppTheme extends StatelessWidget {
         ),
       ),
       textTheme: GoogleFonts.getTextTheme(
-        GoogleFonts.asMap().keys.contains(fontFamily)
-            ? fontFamily
-            : kDefaultFontFamily,
+        GoogleFonts.asMap().keys.contains(fontFamily) ? fontFamily : kDefaultFontFamily,
         TextTheme(
           displayLarge: calculateTextStyle(
             baseTheme.textTheme.displayLarge!,
@@ -298,8 +281,7 @@ class AppTheme extends StatelessWidget {
   /// follow dart-define [kIsCupertino].
   static TargetPlatform getPlatformByDartDefine() {
     TargetPlatform platform = defaultTargetPlatform;
-    bool isCupertioByPlatform =
-        platform == TargetPlatform.macOS || platform == TargetPlatform.iOS;
+    bool isCupertioByPlatform = platform == TargetPlatform.macOS || platform == TargetPlatform.iOS;
     bool isMaterialByPlatform =
         platform == TargetPlatform.android ||
         platform == TargetPlatform.fuchsia ||
@@ -319,8 +301,7 @@ class AppTheme extends StatelessWidget {
 
   Widget buildColorScheme({
     required DevicePreferencesProvider provider,
-    required Widget Function(ColorScheme lightScheme, ColorScheme darkScheme)
-    builder,
+    required Widget Function(ColorScheme lightScheme, ColorScheme darkScheme) builder,
   }) {
     return DynamicColorBuilder(
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
@@ -335,23 +316,18 @@ class AppTheme extends StatelessWidget {
           darkScheme = darkDynamic;
         } else {
           bool monochrome =
-              provider.preferences.colorSeed == Colors.black ||
-              provider.preferences.colorSeed == Colors.white;
+              provider.preferences.colorSeed == Colors.black || provider.preferences.colorSeed == Colors.white;
 
           lightScheme = ColorScheme.fromSeed(
             seedColor: provider.preferences.colorSeed ?? kDefaultColorSeed,
             brightness: Brightness.light,
-            dynamicSchemeVariant: monochrome
-                ? DynamicSchemeVariant.monochrome
-                : DynamicSchemeVariant.tonalSpot,
+            dynamicSchemeVariant: monochrome ? DynamicSchemeVariant.monochrome : DynamicSchemeVariant.tonalSpot,
           );
 
           darkScheme = ColorScheme.fromSeed(
             seedColor: provider.preferences.colorSeed ?? kDefaultColorSeed,
             brightness: Brightness.dark,
-            dynamicSchemeVariant: monochrome
-                ? DynamicSchemeVariant.monochrome
-                : DynamicSchemeVariant.tonalSpot,
+            dynamicSchemeVariant: monochrome ? DynamicSchemeVariant.monochrome : DynamicSchemeVariant.tonalSpot,
           );
         }
 

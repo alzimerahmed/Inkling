@@ -74,9 +74,7 @@ class StoryPageObjectsMap {
 
       final richTextController = editorAdapter.createController(
         json: richPage.body ?? [],
-        selection:
-            initialPagesMap?[richPage.id]?.bodyController.selection ??
-            const TextSelection.collapsed(offset: 0),
+        selection: initialPagesMap?[richPage.id]?.bodyController.selection ?? const TextSelection.collapsed(offset: 0),
         readOnly: readOnly,
       );
 

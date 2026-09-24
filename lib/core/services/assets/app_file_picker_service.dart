@@ -41,14 +41,10 @@ class AppFilePickerService {
     required ImageSource source,
     required AssetCompressionOption compression,
   }) async {
-    final rootContext = context
-        .read<RootProvider>()
-        .navigatorKey
-        .currentContext;
+    final rootContext = context.read<RootProvider>().navigatorKey.currentContext;
     final video = await _imagePicker.pickVideo(source: source);
     if (video == null) return null;
-    if (rootContext == null || !rootContext.mounted)
-      return _compressAndRead(video, compression);
+    if (rootContext == null || !rootContext.mounted) return _compressAndRead(video, compression);
 
     final picked = await VideoCompressionRoute.run<PickedMediaObject>(
       rootContext,
@@ -79,10 +75,7 @@ class AppFilePickerService {
     required BuildContext context,
     required AssetCompressionOption compression,
   }) async {
-    final rootContext = context
-        .read<RootProvider>()
-        .navigatorKey
-        .currentContext;
+    final rootContext = context.read<RootProvider>().navigatorKey.currentContext;
     final files = await _imagePicker.pickMultipleMedia(
       imageQuality: compression.imagePickerQuality,
     );
@@ -90,8 +83,7 @@ class AppFilePickerService {
     // Skip the screen entirely for an all-images batch -- nothing to re-encode.
     final int videoCount = files.where(AssetFileTypeService.isVideo).length;
     if (videoCount == 0) return _readAll(files);
-    if (rootContext == null || !rootContext.mounted)
-      return _compressVideosAndRead(files, compression);
+    if (rootContext == null || !rootContext.mounted) return _compressVideosAndRead(files, compression);
 
     final picked = await VideoCompressionRoute.run<List<PickedMediaObject>>(
       rootContext,

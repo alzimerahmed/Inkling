@@ -37,12 +37,9 @@ class _ExportAssetsContent extends StatelessWidget {
         ),
       ),
       body: ListView(
-        padding:
-            MediaQuery.paddingOf(
-                  context,
-                )
-                .copyWith(top: 16.0, bottom: 16.0)
-                .add(const EdgeInsets.symmetric(horizontal: 16.0)),
+        padding: MediaQuery.paddingOf(
+          context,
+        ).copyWith(top: 16.0, bottom: 16.0).add(const EdgeInsets.symmetric(horizontal: 16.0)),
         children: [
           buildStatistics(context),
           const SizedBox(height: 12.0),

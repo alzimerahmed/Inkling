@@ -36,8 +36,7 @@ class SpFontSizeSheet extends BaseBottomSheet {
                 String? label = fontSize?.label;
 
                 if (isDefaultToSystem) {
-                  label ??=
-                      "${tr('general.system')} (${tr('general.default')})";
+                  label ??= "${tr('general.system')} (${tr('general.default')})";
                 } else {
                   label ??= tr('general.default');
                 }

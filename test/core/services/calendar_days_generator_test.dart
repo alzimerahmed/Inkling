@@ -20,12 +20,9 @@ void main() {
       const expectedTotalDays = 42;
       final firstDayWeekday = DateTime(2024, 2, 1).weekday;
       final expectedPreviousMonthDayCount =
-          (firstDayWeekday - firstDayOfWeek.value + DateTime.daysPerWeek) %
-          DateTime.daysPerWeek;
+          (firstDayWeekday - firstDayOfWeek.value + DateTime.daysPerWeek) % DateTime.daysPerWeek;
       final expectedNextMonthDayCount =
-          expectedTotalDays -
-          expectedCurrentMonthDayCount -
-          expectedPreviousMonthDayCount;
+          expectedTotalDays - expectedCurrentMonthDayCount - expectedPreviousMonthDayCount;
 
       final previousMonthDays = result.where((d) => d.month == 1).length;
       final currentMonthDays = result.where((d) => d.month == 2).length;
@@ -52,12 +49,9 @@ void main() {
       const expectedTotalDays = 42;
       final firstDayWeekday = DateTime(2024, 2, 1).weekday;
       final expectedPreviousMonthDayCount =
-          (firstDayWeekday - firstDayOfWeek.value + DateTime.daysPerWeek) %
-          DateTime.daysPerWeek;
+          (firstDayWeekday - firstDayOfWeek.value + DateTime.daysPerWeek) % DateTime.daysPerWeek;
       final expectedNextMonthDayCount =
-          expectedTotalDays -
-          expectedCurrentMonthDayCount -
-          expectedPreviousMonthDayCount;
+          expectedTotalDays - expectedCurrentMonthDayCount - expectedPreviousMonthDayCount;
 
       final previousMonthDays = result.where((d) => d.month == 1).length;
       final currentMonthDays = result.where((d) => d.month == 2).length;

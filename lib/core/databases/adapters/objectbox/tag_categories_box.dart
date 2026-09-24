@@ -7,8 +7,7 @@ import 'package:storypad/objectbox.g.dart';
 
 part './helpers/tag_categories_box_transformer.dart';
 
-class TagCategoriesBox
-    extends BaseBox<TagCategoryObjectBox, TagCategoryDbModel> {
+class TagCategoriesBox extends BaseBox<TagCategoryObjectBox, TagCategoryDbModel> {
   @override
   String get tableName => "tag_categories";
 
@@ -16,12 +15,10 @@ class TagCategoriesBox
   bool get isYearPartitioned => false;
 
   @override
-  QueryIntegerProperty<TagCategoryObjectBox> get idProperty =>
-      TagCategoryObjectBox_.id;
+  QueryIntegerProperty<TagCategoryObjectBox> get idProperty => TagCategoryObjectBox_.id;
 
   @override
-  QueryStringProperty<TagCategoryObjectBox> get lastSavedDeviceIdProperty =>
-      TagCategoryObjectBox_.lastSavedDeviceId;
+  QueryStringProperty<TagCategoryObjectBox> get lastSavedDeviceIdProperty => TagCategoryObjectBox_.lastSavedDeviceId;
 
   @override
   QueryDateProperty<TagCategoryObjectBox> get permanentlyDeletedAtProperty =>
@@ -40,10 +37,7 @@ class TagCategoriesBox
           .then((e) => e?.items ?? <TagDbModel>[]);
 
       final suggested = category.suggestTags();
-      final suggestedEmojiSet = suggested
-          .map((tag) => tag.emoji)
-          .whereType<String>()
-          .toSet();
+      final suggestedEmojiSet = suggested.map((tag) => tag.emoji).whereType<String>().toSet();
 
       final existingByEmoji = {
         for (final tag in existing)
@@ -81,8 +75,7 @@ class TagCategoriesBox
     }
 
     return {
-      for (var category in categories)
-        category: await getTagsForCategory(category),
+      for (var category in categories) category: await getTagsForCategory(category),
     };
   }
 
@@ -93,8 +86,7 @@ class TagCategoriesBox
   }) {
     int? order = filters?["order"];
 
-    Condition<TagCategoryObjectBox> conditions = TagCategoryObjectBox_.id
-        .notNull();
+    Condition<TagCategoryObjectBox> conditions = TagCategoryObjectBox_.id.notNull();
     if (!returnDeleted)
       conditions = conditions.and(
         TagCategoryObjectBox_.permanentlyDeletedAt.isNull(),

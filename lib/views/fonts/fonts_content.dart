@@ -57,8 +57,7 @@ class _FontsContent extends StatelessWidget {
   }
 
   Widget buildBody(BuildContext context) {
-    if (viewModel.fontGroups == null)
-      return const Center(child: CircularProgressIndicator.adaptive());
+    if (viewModel.fontGroups == null) return const Center(child: CircularProgressIndicator.adaptive());
     return Scrollbar(
       controller: PrimaryScrollController.maybeOf(context),
       thumbVisibility: true,
@@ -70,8 +69,7 @@ class _FontsContent extends StatelessWidget {
   Widget buildListView(BuildContext context) {
     final items = <(String label, String fontFamily)>[
       for (final fontGroup in viewModel.fontGroups!)
-        for (final fontFamily in fontGroup.fontFamilies)
-          (fontGroup.label, fontFamily),
+        for (final fontFamily in fontGroup.fontFamilies) (fontGroup.label, fontFamily),
     ];
 
     return ListView.builder(
@@ -86,8 +84,7 @@ class _FontsContent extends StatelessWidget {
 
         return Column(
           children: [
-            if (previousLabel != label)
-              buildGroupHeader(context, label, isFirst: index == 0),
+            if (previousLabel != label) buildGroupHeader(context, label, isFirst: index == 0),
             buildFontFamilyTile(context, fontFamily),
           ],
         );

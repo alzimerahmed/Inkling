@@ -28,8 +28,7 @@ class ShowStoryViewModel extends BaseStoryViewModel {
   }) async {
     story = initialStory ?? await StoryDbModel.db.find(params.id);
     story = await _migrateEmbedAssetsToRelativeFilePathIfExists(story);
-    if (story?.draftContent != null)
-      lastSavedAtNotifier.value = story?.updatedAt;
+    if (story?.draftContent != null) lastSavedAtNotifier.value = story?.updatedAt;
 
     StoryContentDbModel content = story!.generateDraftContent();
     bool alreadyHasPage = content.richPages?.isNotEmpty == true;
@@ -43,9 +42,7 @@ class ShowStoryViewModel extends BaseStoryViewModel {
     // Copy with richPages from pagesManager instead, since DB-loaded pages have null plainText.
     // plainText is needed when saving back to draft content for homepage display & search.
     draftContent = content.copyWith(
-      richPages: content.richPages
-          ?.map((e) => pagesManager.pagesMap[e.id]?.page ?? e)
-          .toList(),
+      richPages: content.richPages?.map((e) => pagesManager.pagesMap[e.id]?.page ?? e).toList(),
     );
 
     // Save if detect data is invalid mostly from previous version before 2.12.3 (plainText), 2.23.0 (count)
@@ -73,14 +70,9 @@ class ShowStoryViewModel extends BaseStoryViewModel {
     switch (story?.preferences.layoutType) {
       case PageLayoutType.grid:
       case PageLayoutType.list:
-        if (pagesManager.canReadScrollOffset)
-          initialPageScrollOffet = pagesManager.pageScrollController.offset;
+        if (pagesManager.canReadScrollOffset) initialPageScrollOffet = pagesManager.pageScrollController.offset;
 
-        for (
-          int index = 0;
-          index < (draftContent?.richPages?.length ?? 0);
-          index++
-        ) {
+        for (int index = 0; index < (draftContent?.richPages?.length ?? 0); index++) {
           int pageId = draftContent!.richPages![index].id;
           if (pagesManager.pagesMap[pageId]?.titleVisibleFraction == 1) {
             nearestPageIndex = index;
@@ -158,8 +150,7 @@ class ShowStoryViewModel extends BaseStoryViewModel {
   ) async {
     if (story == null) return null;
 
-    List<String>? assetPaths =
-        story.draftContent != null || story.latestContent != null
+    List<String>? assetPaths = story.draftContent != null || story.latestContent != null
         ? StoryContentEmbedExtractor.media(
             story.draftContent ?? story.latestContent,
           )

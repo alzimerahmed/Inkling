@@ -22,9 +22,7 @@ enum TimeFormatOption {
     TimeFormatOption? preference,
   ) {
     if (preference != null) return preference;
-    return MediaQuery.alwaysUse24HourFormatOf(context)
-        ? TimeFormatOption.h24
-        : TimeFormatOption.h12;
+    return MediaQuery.alwaysUse24HourFormatOf(context) ? TimeFormatOption.h24 : TimeFormatOption.h12;
   }
 
   String formatTime(DateTime date, Locale locale) {

@@ -27,9 +27,7 @@ class _RestoreAndRedeemTexts extends StatelessWidget {
               ("•", null),
               (
                 tr('button.redeem_code'),
-                () => context
-                    .read<InAppPurchaseProvider>()
-                    .presentCodeRedemptionSheet(context),
+                () => context.read<InAppPurchaseProvider>().presentCodeRedemptionSheet(context),
               ),
             ].map((link) {
               return SpTapEffect(

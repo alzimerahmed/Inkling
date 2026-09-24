@@ -41,8 +41,7 @@ class HomeQuickActionsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HomeQuickActionsViewModel>(
-      create: (context) =>
-          HomeQuickActionsViewModel(params: params, context: context),
+      create: (context) => HomeQuickActionsViewModel(params: params, context: context),
       builder: (context, child) {
         return _HomeQuickActionsContent(Provider.of(context));
       },

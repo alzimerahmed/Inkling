@@ -24,8 +24,7 @@ class SpCountdownTimer extends StatefulWidget {
 
 class _SpCountdownTimerState extends State<SpCountdownTimer> {
   Timer? timer;
-  bool get ended =>
-      widget.endAt != null ? DateTime.now().isAfter(widget.endAt!) : true;
+  bool get ended => widget.endAt != null ? DateTime.now().isAfter(widget.endAt!) : true;
 
   @override
   void initState() {
@@ -62,9 +61,7 @@ class _SpCountdownTimerState extends State<SpCountdownTimer> {
 
   @override
   Widget build(BuildContext context) {
-    final duration = widget.endAt != null
-        ? widget.endAt!.difference(DateTime.now())
-        : const Duration();
+    final duration = widget.endAt != null ? widget.endAt!.difference(DateTime.now()) : const Duration();
 
     return widget.builder(
       context,

@@ -7,6 +7,5 @@ import 'package:storypad/core/services/analytics/adaptors/base_analytics_user_pr
 class AnalyticsUserProperyService {
   AnalyticsUserProperyService._();
 
-  static BaseAnalyticsUserPropertyAdaptor get instance =>
-      kAnalyticsUserPropertyService;
+  static BaseAnalyticsUserPropertyAdaptor get instance => kAnalyticsUserPropertyService;
 }

@@ -76,8 +76,7 @@ class StoryDbModel extends BaseDbModel {
   final StoryPreferencesDbModel? preferencesOrNull;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
-  StoryPreferencesDbModel get preferences =>
-      preferencesOrNull ?? StoryPreferencesDbModel.create();
+  StoryPreferencesDbModel get preferences => preferencesOrNull ?? StoryPreferencesDbModel.create();
 
   @override
   final DateTime? permanentlyDeletedAt;
@@ -94,8 +93,7 @@ class StoryDbModel extends BaseDbModel {
 
   // tags are mistaken stores in DB in string.
   // we use integer here, buts its actuals value is still in <string>.
-  List<int>? get validTags =>
-      tags?.map((e) => int.tryParse(e)).whereType<int>().toList();
+  List<int>? get validTags => tags?.map((e) => int.tryParse(e)).whereType<int>().toList();
 
   StoryDbModel({
     this.version = 3,
@@ -132,8 +130,7 @@ class StoryDbModel extends BaseDbModel {
   bool get draftStory => draftContent != null;
 
   bool get hasLocation => place != null;
-  SpLatLng? get latLng =>
-      place != null ? SpLatLng(place!.latitude, place!.longitude) : null;
+  SpLatLng? get latLng => place != null ? SpLatLng(place!.latitude, place!.longitude) : null;
 
   Duration get dateDifferentCount => DateTime.now().difference(displayPathDate);
   bool get preferredShowDayCount => preferences.showDayCount ?? false;
@@ -148,8 +145,7 @@ class StoryDbModel extends BaseDbModel {
   bool get permanentlyDeleted => permanentlyDeletedAt != null;
 
   bool get editable => type == PathType.docs && !cloudViewing;
-  bool get putBackAble =>
-      (permanentlyDeleted || inBins || unarchivable) && !cloudViewing;
+  bool get putBackAble => (permanentlyDeleted || inBins || unarchivable) && !cloudViewing;
 
   bool get archivable => type == PathType.docs && !cloudViewing;
   bool get unarchivable => type == PathType.archives && !cloudViewing;
@@ -306,13 +302,10 @@ class StoryDbModel extends BaseDbModel {
     List<int> tags = initialTagIds ?? template?.tags ?? [];
 
     // for gallery template, must load draft content beforehand.
-    final templateContent =
-        galleryTemplate?.lazyDraftContent ?? template?.content;
+    final templateContent = galleryTemplate?.lazyDraftContent ?? template?.content;
 
     StoryPreferencesDbModel preferences =
-        template?.preferences ??
-        defaultStoryPreferences?.toStoryPreference() ??
-        StoryPreferencesDbModel.create();
+        template?.preferences ?? defaultStoryPreferences?.toStoryPreference() ?? StoryPreferencesDbModel.create();
     if (galleryTemplate != null)
       preferences = preferences.copyWith(
         layoutType: galleryTemplate.pageLayoutType,
@@ -338,9 +331,7 @@ class StoryDbModel extends BaseDbModel {
       draftContent: templateContent,
       updatedAt: now,
       createdAt: now,
-      tags: tags.isNotEmpty == true
-          ? tags.map((e) => e.toString()).toList()
-          : null,
+      tags: tags.isNotEmpty == true ? tags.map((e) => e.toString()).toList() : null,
       assets: [],
       galleryTemplateId: galleryTemplate?.id,
       templateId: template?.id,
@@ -375,8 +366,7 @@ class StoryDbModel extends BaseDbModel {
     return initialStory;
   }
 
-  factory StoryDbModel.fromJson(Map<String, dynamic> json) =>
-      _$StoryDbModelFromJson(json);
+  factory StoryDbModel.fromJson(Map<String, dynamic> json) => _$StoryDbModelFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$StoryDbModelToJson(this);

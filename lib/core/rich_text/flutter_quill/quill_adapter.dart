@@ -97,8 +97,7 @@ class QuillRichTextController extends RichTextController {
   quill.QuillController get quillController => _quillController;
 
   @override
-  RichTextDocument get document =>
-      QuillRichTextDocument(_quillController.document);
+  RichTextDocument get document => QuillRichTextDocument(_quillController.document);
 
   @override
   TextSelection get selection => _quillController.selection;
@@ -195,9 +194,7 @@ class QuillRichTextController extends RichTextController {
       for (final child in line.children) {
         if (child is quill.Embed && child.documentOffset == offset) {
           final op = child.toDelta().operations.first;
-          attributes = op.attributes == null
-              ? null
-              : Map<String, dynamic>.from(op.attributes!);
+          attributes = op.attributes == null ? null : Map<String, dynamic>.from(op.attributes!);
           break;
         }
       }
@@ -246,8 +243,7 @@ class QuillRichTextController extends RichTextController {
     return quill_delta.Delta.fromJson([
       {
         'insert': {embedType: value},
-        if (attributes != null && attributes.isNotEmpty)
-          'attributes': Map<String, dynamic>.from(attributes),
+        if (attributes != null && attributes.isNotEmpty) 'attributes': Map<String, dynamic>.from(attributes),
       },
     ]);
   }

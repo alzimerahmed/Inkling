@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:storypad/core/mixins/debounched_callback.dart';
 import 'package:storypad/core/services/backups/auto_backup_service.dart';
+import 'package:storypad/core/services/widgets/home_widget_service.dart';
 import 'package:storypad/providers/backup_provider.dart';
 import 'package:storypad/views/home/home_view.dart';
 
@@ -35,6 +36,9 @@ class RootViewModel extends ChangeNotifier with DebounchedCallback {
         // Scheduled local auto-backup (Phase 3): fire-and-forget; the service
         // gates itself on enabled + interval and swallows its own errors.
         AutoBackupService.maybeRun();
+
+        // Home-screen widget (Phase 3): refresh today's-entry snapshot.
+        HomeWidgetService.updateTodayEntry();
       }
     });
   }

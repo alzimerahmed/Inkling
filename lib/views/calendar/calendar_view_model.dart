@@ -19,9 +19,7 @@ class CalendarViewModel extends ChangeNotifier with DisposeAwareMixin {
     ));
 
     _setSegments();
-    selectedSegment =
-        params.initialSegment != null &&
-            _segments.contains(params.initialSegment)
+    selectedSegment = params.initialSegment != null && _segments.contains(params.initialSegment)
         ? params.initialSegment!
         : _segments.first;
   }

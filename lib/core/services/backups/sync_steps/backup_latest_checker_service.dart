@@ -1,6 +1,5 @@
 import 'dart:convert';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
-    as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
 import 'package:storypad/core/objects/backup_object.dart';
 import 'package:storypad/core/objects/cloud_file_object.dart';
 import 'package:storypad/core/services/backups/sync_steps/backup_sync_messenger.dart';
@@ -13,10 +12,8 @@ import 'package:storypad/core/storages/backup_import_history_storage.dart';
 
 class BackupLatestCheckerResponse {
   final bool hasError;
-  final Map<int, CloudFileObject>?
-  backupCloudFileByYear; // v3: map of year -> CloudFileObject
-  final Map<int, BackupObject>?
-  backupContentsByYear; // v3: map of year -> BackupObject
+  final Map<int, CloudFileObject>? backupCloudFileByYear; // v3: map of year -> CloudFileObject
+  final Map<int, BackupObject>? backupContentsByYear; // v3: map of year -> BackupObject
 
   Map<int, DateTime?>? get lastSyncedAtByYear {
     return backupCloudFileByYear?.map(
@@ -32,8 +29,7 @@ class BackupLatestCheckerResponse {
 }
 
 class BackupLatestCheckerService {
-  BackupLatestCheckerService({required BackupSyncMessenger messenger})
-    : _messenger = messenger;
+  BackupLatestCheckerService({required BackupSyncMessenger messenger}) : _messenger = messenger;
 
   final BackupSyncMessenger _messenger;
 
@@ -149,10 +145,8 @@ class BackupLatestCheckerService {
         'BackupLatestChecker: Year $year - Remote: $remoteTimestamp, Local: $localTimestamp',
       );
 
-      final importedHistoryDates = await importHistoryStorage
-          .getImportHistoryByYear(cloudService.serviceType, year);
-      if (localTimestamp == null ||
-          !importedHistoryDates.contains(remoteTimestamp)) {
+      final importedHistoryDates = await importHistoryStorage.getImportHistoryByYear(cloudService.serviceType, year);
+      if (localTimestamp == null || !importedHistoryDates.contains(remoteTimestamp)) {
         yearsToDownload[year] = remoteFile;
       }
     }

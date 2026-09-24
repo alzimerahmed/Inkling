@@ -17,13 +17,9 @@ part 'templates_content.dart';
 enum TemplatePickResultType { custom, gallery }
 
 class TemplatePickResult {
-  const TemplatePickResult.custom(this.customTemplate)
-    : galleryTemplate = null,
-      type = TemplatePickResultType.custom;
+  const TemplatePickResult.custom(this.customTemplate) : galleryTemplate = null, type = TemplatePickResultType.custom;
 
-  const TemplatePickResult.gallery(this.galleryTemplate)
-    : customTemplate = null,
-      type = TemplatePickResultType.gallery;
+  const TemplatePickResult.gallery(this.galleryTemplate) : customTemplate = null, type = TemplatePickResultType.gallery;
 
   final TemplatePickResultType type;
   final TemplateDbModel? customTemplate;

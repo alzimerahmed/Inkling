@@ -110,10 +110,9 @@ void main() {
       final Map<String, dynamic> fromFile = jsonDecode(jsonEncode(contents));
 
       // 3. Restore: decode tables back into models.
-      final Map<String, List<BaseDbModel>> decoded =
-          JsonTablesToModelService.decode(
-            fromFile['tables'] as Map<String, dynamic>,
-          );
+      final Map<String, List<BaseDbModel>> decoded = JsonTablesToModelService.decode(
+        fromFile['tables'] as Map<String, dynamic>,
+      );
       final StoryDbModel restored = decoded['stories']!.first as StoryDbModel;
 
       expect(restored.toJson(), story.toJson());

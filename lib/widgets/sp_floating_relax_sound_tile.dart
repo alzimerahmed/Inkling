@@ -35,9 +35,7 @@ class SpFloatingRelaxSoundsTile extends StatelessWidget {
     bool notPlaying =
         provider.audioPlayersService.playingStates.keys.isEmpty ||
         provider.audioPlayersService.playingStates.values.every(
-          (p) =>
-              p.processingState == ProcessingState.idle ||
-              p.processingState == ProcessingState.loading,
+          (p) => p.processingState == ProcessingState.idle || p.processingState == ProcessingState.loading,
         );
 
     if (notPlaying) return const SizedBox.shrink();
@@ -51,9 +49,7 @@ class SpFloatingRelaxSoundsTile extends StatelessWidget {
         backgroundColor: backgroundColor,
         provider: provider,
         child: buildContents(context, backgroundColor, provider),
-        onTap: fromHome
-            ? () => const RelaxSoundsRoute().push(context)
-            : () => showTimerPicker(provider, context),
+        onTap: fromHome ? () => const RelaxSoundsRoute().push(context) : () => showTimerPicker(provider, context),
       ),
     );
   }
@@ -143,9 +139,7 @@ class SpFloatingRelaxSoundsTile extends StatelessWidget {
     Color backgroundColor,
     RelaxSoundsProvider provider,
   ) {
-    Color foregroundColor = AppTheme.isDarkMode(context)
-        ? backgroundColor.darken(0.5)
-        : backgroundColor.lighten(0.8);
+    Color foregroundColor = AppTheme.isDarkMode(context) ? backgroundColor.darken(0.5) : backgroundColor.lighten(0.8);
 
     return Row(
       spacing: 4.0,
@@ -242,8 +236,7 @@ class SpFloatingRelaxSoundsTile extends StatelessWidget {
     BuildContext context,
   ) async {
     Duration initialStopTimer() {
-      if (provider.timerService.stopIn == null || provider.timerService.ended)
-        return const Duration(minutes: 30);
+      if (provider.timerService.stopIn == null || provider.timerService.ended) return const Duration(minutes: 30);
       return provider.timerService.stopIn!;
     }
 

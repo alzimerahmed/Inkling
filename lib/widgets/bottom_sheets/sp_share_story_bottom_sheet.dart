@@ -45,9 +45,7 @@ class SpShareStoryBottomSheet extends BaseBottomSheet {
         bottomPadding: bottomPadding,
       );
     } else {
-      double maxChildSize =
-          1 -
-          View.of(context).viewPadding.top / MediaQuery.of(context).size.height;
+      double maxChildSize = 1 - View.of(context).viewPadding.top / MediaQuery.of(context).size.height;
       return DraggableScrollableSheet(
         expand: false,
         maxChildSize: maxChildSize,
@@ -109,15 +107,8 @@ class _ShareStoryBottomSheetState extends State<_ShareStoryBottomSheet> {
     final assetIds = StoryExtractAssetsFromPagesService.call(
       widget.draftContent.richPages,
     );
-    final assets = assetIds.isNotEmpty
-        ? await AssetDbModel.db.where(filters: {'ids': assetIds.toList()})
-        : null;
-    files =
-        assets?.items
-            .where((a) => a.localFile != null)
-            .map((a) => XFile(a.localFilePath))
-            .toList() ??
-        [];
+    final assets = assetIds.isNotEmpty ? await AssetDbModel.db.where(filters: {'ids': assetIds.toList()}) : null;
+    files = assets?.items.where((a) => a.localFile != null).map((a) => XFile(a.localFilePath)).toList() ?? [];
     setState(() {});
   }
 
@@ -166,9 +157,7 @@ class _ShareStoryBottomSheetState extends State<_ShareStoryBottomSheet> {
       appBar: AppBar(
         toolbarHeight: CupertinoSheetRoute.hasParentSheet(context) ? 72 : null,
         centerTitle: true,
-        leading: CupertinoSheetRoute.hasParentSheet(context)
-            ? const SizedBox.shrink()
-            : null,
+        leading: CupertinoSheetRoute.hasParentSheet(context) ? const SizedBox.shrink() : null,
         automaticallyImplyLeading: false,
         actions: [
           if (CupertinoSheetRoute.hasParentSheet(context))
@@ -179,10 +168,7 @@ class _ShareStoryBottomSheetState extends State<_ShareStoryBottomSheet> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(
-          bottom:
-              MediaQuery.of(context).padding.bottom +
-              MediaQuery.of(context).viewInsets.bottom +
-              12,
+          bottom: MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom + 12,
           left: 16.0,
           right: 16.0,
         ),
@@ -337,9 +323,7 @@ class _ShareStoryBottomSheetState extends State<_ShareStoryBottomSheet> {
 
         // iPad requires sharePositionOrigin for proper share sheet positioning
         // Ensure passing correct button context to have proper positioning.
-        sharePositionOrigin: box != null
-            ? box.localToGlobal(Offset.zero) & box.size
-            : null,
+        sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
       ),
     );
   }

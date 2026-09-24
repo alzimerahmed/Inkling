@@ -70,10 +70,8 @@ class _Fakes {
 
   Future<void> saveAsset(AssetDbModel asset) async => savedAssets.add(asset);
 
-  String storagePathFor(AssetType type, int id, String ext) =>
-      type.getStoragePath(id: id, extension: ext);
-  String relativePathFor(AssetType type, int id, String ext) =>
-      type.getRelativeStoragePath(id: id, extension: ext);
+  String storagePathFor(AssetType type, int id, String ext) => type.getStoragePath(id: id, extension: ext);
+  String relativePathFor(AssetType type, int id, String ext) => type.getRelativeStoragePath(id: id, extension: ext);
 }
 
 Future<ImportMediaResult> _run(
@@ -411,8 +409,7 @@ void main() {
     // --- real file integration (optional) ---
 
     group('real .tar.gz file', () {
-      const realFilePath =
-          'examples/backups/StoryPad-iPhone-assets-2026-05-08T01:47:47.635256.tar.gz';
+      const realFilePath = 'examples/backups/StoryPad-iPhone-assets-2026-05-08T01:47:47.635256.tar.gz';
 
       test('parses real StoryPad export without throwing', () async {
         final file = File(realFilePath);

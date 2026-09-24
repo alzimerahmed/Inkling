@@ -85,8 +85,7 @@ void main() {
       () {
         store.onConnectionChecked({
           BackupServiceType.google_drive: BackupConnectionStatus.readyToSync,
-          BackupServiceType.nextcloud:
-              BackupConnectionStatus.needServicePermission,
+          BackupServiceType.nextcloud: BackupConnectionStatus.needServicePermission,
         });
 
         expect(
@@ -197,8 +196,7 @@ void main() {
 
     test('resetService clears everything known about that service', () {
       store.onConnectionChecked({
-        BackupServiceType.google_drive:
-            BackupConnectionStatus.needServicePermission,
+        BackupServiceType.google_drive: BackupConnectionStatus.needServicePermission,
       });
       store.onServiceSyncFinished(
         BackupServiceType.google_drive,

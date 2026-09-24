@@ -25,10 +25,8 @@ import 'package:storypad/core/types/time_format_option.dart';
 import 'package:storypad/providers/in_app_purchase_provider.dart';
 import 'package:storypad/widgets/maps/map_types.dart';
 
-class DevicePreferencesProvider extends ChangeNotifier
-    with WidgetsBindingObserver {
-  static DevicePreferencesStorage get storage =>
-      DevicePreferencesStorage.appInstance;
+class DevicePreferencesProvider extends ChangeNotifier with WidgetsBindingObserver {
+  static DevicePreferencesStorage get storage => DevicePreferencesStorage.appInstance;
 
   DevicePreferencesObject _preferences = storage.preferences;
   DevicePreferencesObject get preferences => _preferences;
@@ -36,13 +34,11 @@ class DevicePreferencesProvider extends ChangeNotifier
 
   bool get enableRelaxSounds => preferences.enableRelaxSounds ?? false;
   bool enablePeriodCalendar(BuildContext context) =>
-      preferences.enablePeriodCalendar ??
-      context.read<InAppPurchaseProvider>().periodCalendar;
+      preferences.enablePeriodCalendar ?? context.read<InAppPurchaseProvider>().periodCalendar;
 
   /// Effective time format — falls back to the device's 24-hour setting when
   /// the user hasn't customized [DevicePreferencesObject.timeFormat].
-  TimeFormatOption timeFormatOf(BuildContext context) =>
-      TimeFormatOption.resolve(context, preferences.timeFormat);
+  TimeFormatOption timeFormatOf(BuildContext context) => TimeFormatOption.resolve(context, preferences.timeFormat);
 
   final Map<String, List<void Function()>> _listeners = {};
 
@@ -51,8 +47,7 @@ class DevicePreferencesProvider extends ChangeNotifier
   // In such cases, we determine dark mode based directly on ThemeMode and platform brightness.
   bool isDarkModeBaseOnThemeMode(BuildContext context) {
     if (themeMode == ThemeMode.system) {
-      return View.maybeOf(context)?.platformDispatcher.platformBrightness ==
-          Brightness.dark;
+      return View.maybeOf(context)?.platformDispatcher.platformBrightness == Brightness.dark;
     } else {
       return themeMode == ThemeMode.dark;
     }
@@ -118,9 +113,7 @@ class DevicePreferencesProvider extends ChangeNotifier
 
   void setColorSeed(Color color) {
     _preferences = _preferences.copyWith(
-      colorSeedValue: _preferences.colorSeedValue == color.toARGB32()
-          ? null
-          : color.toARGB32(),
+      colorSeedValue: _preferences.colorSeedValue == color.toARGB32() ? null : color.toARGB32(),
     );
 
     storage.writeObject(_preferences);
@@ -383,16 +376,13 @@ class DevicePreferencesProvider extends ChangeNotifier
   }
 
   List<ReminderObject> get reminders => preferences.reminders ?? const [];
-  ReminderObject? reminderOfType(ReminderType type) =>
-      reminders.where((r) => r.type == type).firstOrNull;
+  ReminderObject? reminderOfType(ReminderType type) => reminders.where((r) => r.type == type).firstOrNull;
 
   ReminderObject? get dailyReminder => reminderOfType(ReminderType.daily);
-  ReminderObject? get onThisDayReminder =>
-      reminderOfType(ReminderType.onThisDay);
+  ReminderObject? get onThisDayReminder => reminderOfType(ReminderType.onThisDay);
   ReminderObject? get periodReminder => reminderOfType(ReminderType.period);
 
-  List<ReminderObject> get customReminders =>
-      reminders.where((r) => r.type == ReminderType.custom).toList();
+  List<ReminderObject> get customReminders => reminders.where((r) => r.type == ReminderType.custom).toList();
 
   /// Small, monotonically increasing id for a new custom reminder. Ids are kept
   /// small because Android notification ids are 32-bit and we derive them as
@@ -445,9 +435,7 @@ class DevicePreferencesProvider extends ChangeNotifier
   }
 
   Future<void> toggleReminder(int id, bool enabled) async {
-    final updated = reminders
-        .map((r) => r.id == id ? r.copyWith(enabled: enabled) : r)
-        .toList();
+    final updated = reminders.map((r) => r.id == id ? r.copyWith(enabled: enabled) : r).toList();
     await _writeReminders(updated);
   }
 
@@ -461,8 +449,7 @@ class DevicePreferencesProvider extends ChangeNotifier
 
   bool get isDarkMode {
     if (themeMode == ThemeMode.system) {
-      Brightness? brightness =
-          WidgetsBinding.instance.platformDispatcher.platformBrightness;
+      Brightness? brightness = WidgetsBinding.instance.platformDispatcher.platformBrightness;
       return brightness == Brightness.dark;
     } else {
       return themeMode == ThemeMode.dark;

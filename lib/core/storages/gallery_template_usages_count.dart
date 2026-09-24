@@ -4,6 +4,5 @@ import 'package:storypad/core/storages/storage_adapters/secure_storage_adaptor.d
 
 class GalleryTemplateUsagesCount extends MapStorage {
   @override
-  Future<BaseStorageAdapter<String>> get adapter async =>
-      SecureStorageAdaptor();
+  Future<BaseStorageAdapter<String>> get adapter async => SecureStorageAdaptor();
 }

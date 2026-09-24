@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:dio/dio.dart';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
-    as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
 import 'package:storypad/core/objects/cloud_file_object.dart';
 import 'package:storypad/core/objects/cloud_storage_quota_object.dart';
 import 'package:storypad/core/objects/nextcloud_user_object.dart';
@@ -29,8 +28,7 @@ class NextcloudCloudService extends BackupCloudService {
   /// The account's configured storage location, e.g. `Journals/MyDiary` —
   /// falls back to [NextcloudUserObject.defaultFolderName] for accounts
   /// connected before this was customizable (or that left it blank).
-  String get _rootFolder =>
-      _currentUser?.folderName ?? NextcloudUserObject.defaultFolderName;
+  String get _rootFolder => _currentUser?.folderName ?? NextcloudUserObject.defaultFolderName;
   String get _trashFolder => '$_rootFolder/.trash';
 
   /// Trims slashes, drops empty/`.`/`..` segments (defensive — this is the
@@ -170,14 +168,11 @@ class NextcloudCloudService extends BackupCloudService {
 
   String get _appRootPath => '/$_rootFolder';
 
-  String _folderPath(String? folderName) =>
-      folderName != null ? '$_appRootPath/$folderName' : _appRootPath;
+  String _folderPath(String? folderName) => folderName != null ? '$_appRootPath/$folderName' : _appRootPath;
 
   String _trashPathFor(String originalPath) {
     final relative = originalPath.startsWith(_appRootPath)
-        ? originalPath
-              .substring(_appRootPath.length)
-              .replaceFirst(RegExp(r'^/+'), '')
+        ? originalPath.substring(_appRootPath.length).replaceFirst(RegExp(r'^/+'), '')
         : originalPath.replaceFirst(RegExp(r'^/+'), '');
     return '/$_trashFolder/$relative';
   }
@@ -212,10 +207,7 @@ class NextcloudCloudService extends BackupCloudService {
           final existing = yearlyBackups[year];
           final existingTs = existing?.lastUpdatedAt;
           final newTs = cloudFile.lastUpdatedAt;
-          final isNewer =
-              existing == null ||
-              (newTs != null &&
-                  (existingTs == null || newTs.isAfter(existingTs)));
+          final isNewer = existing == null || (newTs != null && (existingTs == null || newTs.isAfter(existingTs)));
           if (isNewer) yearlyBackups[year] = cloudFile;
         }
 
@@ -362,9 +354,7 @@ class NextcloudCloudService extends BackupCloudService {
   }
 
   String _parentOf(String path) {
-    final trimmed = path.endsWith('/')
-        ? path.substring(0, path.length - 1)
-        : path;
+    final trimmed = path.endsWith('/') ? path.substring(0, path.length - 1) : path;
     final index = trimmed.lastIndexOf('/');
     return index <= 0 ? '/' : trimmed.substring(0, index);
   }

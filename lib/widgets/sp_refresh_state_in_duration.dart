@@ -13,8 +13,7 @@ class SpRefreshStateInDuration extends StatefulWidget {
   final Widget Function(BuildContext context) builder;
 
   @override
-  State<SpRefreshStateInDuration> createState() =>
-      _SpRefreshStateInDurationState();
+  State<SpRefreshStateInDuration> createState() => _SpRefreshStateInDurationState();
 }
 
 class _SpRefreshStateInDurationState extends State<SpRefreshStateInDuration> {

@@ -66,15 +66,12 @@ class BackupAssetDownloaderService {
     _downloadingByPath[localFilePath] = completer;
 
     _performDownload(
-          asset: asset,
-          signedInServices: signedInServices,
-          localFilePath: localFilePath,
-        )
-        .then(completer.complete)
-        .catchError((Object e) => completer.completeError(e))
-        .whenComplete(() {
-          _downloadingByPath.remove(localFilePath);
-        });
+      asset: asset,
+      signedInServices: signedInServices,
+      localFilePath: localFilePath,
+    ).then(completer.complete).catchError((Object e) => completer.completeError(e)).whenComplete(() {
+      _downloadingByPath.remove(localFilePath);
+    });
 
     return completer.future;
   }

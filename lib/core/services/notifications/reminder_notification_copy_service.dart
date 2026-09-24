@@ -48,8 +48,7 @@ class ReminderNotificationCopyService {
     String fallbackTitleKey,
     String fallbackBodyKey,
   ) async {
-    if (!await _useEnglishVariants())
-      return (tr(fallbackTitleKey), tr(fallbackBodyKey));
+    if (!await _useEnglishVariants()) return (tr(fallbackTitleKey), tr(fallbackBodyKey));
     return variants[Random().nextInt(variants.length)];
   }
 

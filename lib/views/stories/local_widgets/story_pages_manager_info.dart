@@ -22,8 +22,7 @@ class StoryPagesManagerInfo {
         () => currentPageIndexNotifier.value = pageController.page?.toInt(),
       );
       pageScrollController.addListener(() {
-        if (canReadScrollOffset)
-          pageScrollOffsetNotifier.value = pageScrollController.offset;
+        if (canReadScrollOffset) pageScrollOffsetNotifier.value = pageScrollController.offset;
       });
     });
   }
@@ -69,8 +68,7 @@ class StoryPagesManagerInfo {
         0,
         min(destination, pageScrollController.position.maxScrollExtent),
       );
-      int pageIndex =
-          draftContent()?.richPages?.indexWhere((e) => e.id == pageId) ?? -1;
+      int pageIndex = draftContent()?.richPages?.indexWhere((e) => e.id == pageId) ?? -1;
 
       if (pageIndex == 0) {
         await pageScrollController.animateTo(
@@ -92,8 +90,7 @@ class StoryPagesManagerInfo {
     if (!canReadScrollOffset) return null;
 
     double scrollOffset = max(0.0, pageScrollController.offset);
-    final renderBox =
-        pagesMap[pageId]?.key.currentContext?.findRenderObject() as RenderBox?;
+    final renderBox = pagesMap[pageId]?.key.currentContext?.findRenderObject() as RenderBox?;
     return renderBox?.localToGlobal(Offset(0.0, scrollOffset)).dy;
   }
 

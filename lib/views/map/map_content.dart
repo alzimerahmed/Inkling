@@ -66,8 +66,7 @@ class _MapContent extends StatelessWidget {
       );
     }
 
-    final double topPadding =
-        MediaQuery.of(context).padding.top + kToolbarHeight + 16.0;
+    final double topPadding = MediaQuery.of(context).padding.top + kToolbarHeight + 16.0;
 
     switch (viewModel.mapRenderer) {
       case SpMapRenderer.googleMap:
@@ -86,14 +85,13 @@ class _MapContent extends StatelessWidget {
           onViewportChanged: viewModel.handleViewportChanged,
           onMarkerTap: viewModel.onMarkerTap,
           onClusterTap: viewModel.onClusterTap,
-          markerIconBuilder: (context, marker, pixelRatio) =>
-              _MapStoryMarkerIconFactory.create(
-                context,
-                marker,
-                pixelRatio,
-                imageFile: viewModel.firstAssetFileForStory(marker.data),
-                color: viewModel.markerColorForStory(marker.data),
-              ),
+          markerIconBuilder: (context, marker, pixelRatio) => _MapStoryMarkerIconFactory.create(
+            context,
+            marker,
+            pixelRatio,
+            imageFile: viewModel.firstAssetFileForStory(marker.data),
+            color: viewModel.markerColorForStory(marker.data),
+          ),
         );
       case SpMapRenderer.flutterMap:
         return SpFlutterMap<MapStoryObject>(
@@ -153,8 +151,7 @@ class _FlutterMapStoryMarker extends StatelessWidget {
                         Image.file(
                           imageFile!,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const _FlutterMapStoryIconPlaceholder(),
+                          errorBuilder: (context, error, stackTrace) => const _FlutterMapStoryIconPlaceholder(),
                         ),
                         DecoratedBox(
                           decoration: BoxDecoration(
@@ -203,9 +200,7 @@ class _MapStoryMarkerIconFactory {
       cacheKey: marker.iconCacheKey ?? 'plc:${color.toARGB32()}',
       pixelRatio: pixelRatio,
       render: () async {
-        final ui.Image? image = imageFile == null
-            ? null
-            : await _loadImage(imageFile, pixelRatio);
+        final ui.Image? image = imageFile == null ? null : await _loadImage(imageFile, pixelRatio);
 
         try {
           final Uint8List rendered = await _drawMarker(

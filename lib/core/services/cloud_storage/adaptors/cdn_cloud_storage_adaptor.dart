@@ -8,8 +8,7 @@ class CdnCloudStorageAdaptor extends BaseCloudStorageAdaptor {
   final String baseUrl;
   final http.Client _httpClient;
 
-  CdnCloudStorageAdaptor({required this.baseUrl, http.Client? httpClient})
-    : _httpClient = httpClient ?? http.Client();
+  CdnCloudStorageAdaptor({required this.baseUrl, http.Client? httpClient}) : _httpClient = httpClient ?? http.Client();
 
   @override
   Future<Uint8List?> downloadBytes(String hashPath) async {

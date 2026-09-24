@@ -30,9 +30,7 @@ class PickedMediaObject {
   static Future<PickedMediaObject> read(XFile file) async {
     return PickedMediaObject(
       file: file,
-      size: AssetFileTypeService.isVideo(file)
-          ? await _readVideoSize(file)
-          : await _readImageSize(file),
+      size: AssetFileTypeService.isVideo(file) ? await _readVideoSize(file) : await _readImageSize(file),
     );
   }
 

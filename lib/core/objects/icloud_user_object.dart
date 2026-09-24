@@ -78,10 +78,8 @@ class ICloudUserObject extends CloudServiceUser {
   /// `hasGlobalUserId` for consistency with the other two, even though
   /// iCloud's is always `true`.
   @override
-  String? get globalId =>
-      serviceType.hasGlobalUserId ? "${serviceType.id}_$accountId" : null;
+  String? get globalId => serviceType.hasGlobalUserId ? "${serviceType.id}_$accountId" : null;
 
   Map<String, dynamic> toJson() => _$ICloudUserObjectToJson(this);
-  factory ICloudUserObject.fromJson(Map<String, dynamic> json) =>
-      _$ICloudUserObjectFromJson(json);
+  factory ICloudUserObject.fromJson(Map<String, dynamic> json) => _$ICloudUserObjectFromJson(json);
 }

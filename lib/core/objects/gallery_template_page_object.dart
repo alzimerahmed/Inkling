@@ -14,8 +14,7 @@ class GalleryTemplatePageObject {
     required this.content,
   });
 
-  factory GalleryTemplatePageObject.fromJson(Map<String, dynamic> json) =>
-      _$GalleryTemplatePageObjectFromJson(json);
+  factory GalleryTemplatePageObject.fromJson(Map<String, dynamic> json) => _$GalleryTemplatePageObjectFromJson(json);
 
   Map<String, dynamic> toJson() => _$GalleryTemplatePageObjectToJson(this);
 }

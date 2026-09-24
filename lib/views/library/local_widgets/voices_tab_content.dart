@@ -11,8 +11,7 @@ class _VoicesTabContent extends StatefulWidget {
   State<_VoicesTabContent> createState() => _VoicesTabContentState();
 }
 
-class _VoicesTabContentState extends State<_VoicesTabContent>
-    with AutomaticKeepAliveClientMixin {
+class _VoicesTabContentState extends State<_VoicesTabContent> with AutomaticKeepAliveClientMixin {
   Map<int, int> storiesCount = {};
   CollectionDbModel<AssetDbModel>? assets;
 
@@ -72,8 +71,7 @@ class _VoicesTabContentState extends State<_VoicesTabContent>
     BuildContext context,
     BackupProvider provider,
   ) {
-    if (assets == null)
-      return const Center(child: CircularProgressIndicator.adaptive());
+    if (assets == null) return const Center(child: CircularProgressIndicator.adaptive());
     if (assets?.items.isEmpty == true) return _EmptyBody(context: context);
 
     // Group assets by day
@@ -141,9 +139,7 @@ class _VoicesTabContentState extends State<_VoicesTabContent>
               leadingIconData: SpIcons.book,
               title: tr("button.view"),
               onPressed: () async {
-                var stories = await StoryDbModel.db
-                    .where(filters: {'asset': asset.id})
-                    .then((e) => e?.items);
+                var stories = await StoryDbModel.db.where(filters: {'asset': asset.id}).then((e) => e?.items);
 
                 if (!context.mounted) return;
                 if (stories?.length == 1) {
@@ -164,8 +160,7 @@ class _VoicesTabContentState extends State<_VoicesTabContent>
           SpPopMenuItem(
             leadingIconData: SpIcons.info,
             title: tr("button.info"),
-            onPressed: () =>
-                SpAssetInfoSheet(asset: asset).show(context: context),
+            onPressed: () => SpAssetInfoSheet(asset: asset).show(context: context),
           ),
           SpPopMenuItem(
             leadingIconData: SpIcons.share,
@@ -178,9 +173,7 @@ class _VoicesTabContentState extends State<_VoicesTabContent>
                 ShareParams(
                   title: basename(asset.localFile!.path),
                   files: [XFile(asset.localFile!.path)],
-                  sharePositionOrigin: box != null
-                      ? box.localToGlobal(Offset.zero) & box.size
-                      : null,
+                  sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
                 ),
               );
             },
@@ -188,9 +181,7 @@ class _VoicesTabContentState extends State<_VoicesTabContent>
         ];
       },
       builder: (callback) {
-        final timeFormat = context
-            .read<DevicePreferencesProvider>()
-            .timeFormatOf(context);
+        final timeFormat = context.read<DevicePreferencesProvider>().timeFormatOf(context);
         final createdTimeString = timeFormat.formatTime(
           asset.createdAt,
           context.locale,
@@ -248,8 +239,7 @@ class _VoicesTabContentState extends State<_VoicesTabContent>
           padding: const EdgeInsets.only(top: 12.0),
           child: SpScrollableChoiceChips<TagDbModel>(
             choices: tagsProvider.tags?.items ?? [],
-            storiesCount: (TagDbModel tag) =>
-                tag.id == selectedTagId ? assets?.items.length : null,
+            storiesCount: (TagDbModel tag) => tag.id == selectedTagId ? assets?.items.length : null,
             toLabel: (TagDbModel tag) => tag.title,
             selected: (TagDbModel tag) => selectedTagId == tag.id,
             onToggle: (TagDbModel tag) {
@@ -313,9 +303,7 @@ class _VoicesTabContentState extends State<_VoicesTabContent>
           : tr(
               "button.delete_from_args",
               namedArgs: {
-                'SP_SERVICES': reachableServices
-                    .map((e) => e.displayName)
-                    .join(', '),
+                'SP_SERVICES': reachableServices.map((e) => e.displayName).join(', '),
               },
             ),
       onPressed: () => _deleteAsset(context, asset, storyCount),

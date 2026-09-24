@@ -58,8 +58,7 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
   late SearchFilterObject exportFilter = initialExportFilter;
 
   bool get filtered =>
-      jsonEncode(exportFilter.toDatabaseFilter()) !=
-      jsonEncode(initialExportFilter.toDatabaseFilter());
+      jsonEncode(exportFilter.toDatabaseFilter()) != jsonEncode(initialExportFilter.toDatabaseFilter());
 
   void setExportFilter(SearchFilterObject result) {
     exportFilter = result;
@@ -218,10 +217,7 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
           }
         }
 
-        await buildEntries()
-            .transform(tarWriter)
-            .transform(gzip.encoder)
-            .pipe(tarFile.openWrite());
+        await buildEntries().transform(tarWriter).transform(gzip.encoder).pipe(tarFile.openWrite());
         return (tarFile, tempDir);
       },
     );
@@ -239,9 +235,7 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
       await SharePlus.instance.share(
         ShareParams(
           title: basename(tarFile.path),
-          sharePositionOrigin: box != null
-              ? box.localToGlobal(Offset.zero) & box.size
-              : null,
+          sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
           files: [XFile(tarFile.path)],
         ),
       );
@@ -264,8 +258,7 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
 
         if (!context.mounted || stories == null || stories.isEmpty) return null;
 
-        final String exportFileName =
-            "$kAppName-${kDeviceInfo.model}-text-${DateTime.now().toIso8601String()}.txt";
+        final String exportFileName = "$kAppName-${kDeviceInfo.model}-text-${DateTime.now().toIso8601String()}.txt";
         final textFile = File(
           "${SupportDirectoryPath.backups.directoryPath}/$exportFileName",
         );
@@ -294,9 +287,7 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
       await SharePlus.instance.share(
         ShareParams(
           title: basename(result.path),
-          sharePositionOrigin: box != null
-              ? box.localToGlobal(Offset.zero) & box.size
-              : null,
+          sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
           files: [XFile(result.path)],
         ),
       );
@@ -327,8 +318,7 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
 
         if (!context.mounted || stories == null || stories.isEmpty) return null;
 
-        final String exportFileName =
-            "$kAppName-${kDeviceInfo.model}-csv-${DateTime.now().toIso8601String()}.csv";
+        final String exportFileName = "$kAppName-${kDeviceInfo.model}-csv-${DateTime.now().toIso8601String()}.csv";
         final csvFile = File(
           "${SupportDirectoryPath.backups.directoryPath}/$exportFileName",
         );
@@ -357,9 +347,7 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
       await SharePlus.instance.share(
         ShareParams(
           title: basename(result.path),
-          sharePositionOrigin: box != null
-              ? box.localToGlobal(Offset.zero) & box.size
-              : null,
+          sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
           files: [XFile(result.path)],
         ),
       );
@@ -383,11 +371,9 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
     // session, so it can legitimately still be null here (e.g. fresh session, no
     // sync configured). It's only used as the backup's "created at" metadata, so
     // falling back to now() is safe — don't reintroduce a null-guard early return.
-    DateTime lastDbUpdatedAt =
-        context.read<BackupProvider>().lastDbUpdatedAt ?? DateTime.now();
+    DateTime lastDbUpdatedAt = context.read<BackupProvider>().lastDbUpdatedAt ?? DateTime.now();
 
-    final String exportFileName =
-        "$kAppName-${kDeviceInfo.model}-backup-${DateTime.now().toIso8601String()}.json";
+    final String exportFileName = "$kAppName-${kDeviceInfo.model}-backup-${DateTime.now().toIso8601String()}.json";
 
     final backup = await MessengerService.of(context).showLoading(
       debugSource: '$runtimeType#export',
@@ -420,9 +406,7 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
         await SharePlus.instance.share(
           ShareParams(
             title: basename(file.path),
-            sharePositionOrigin: box != null
-                ? box.localToGlobal(Offset.zero) & box.size
-                : null,
+            sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
             files: [
               XFile(file.path),
             ],

@@ -12,8 +12,7 @@ class _ExportSection extends StatefulWidget {
 }
 
 class _ExportSectionState extends State<_ExportSection> {
-  late AppExportOption selectedOption =
-      widget.viewModel.params.initialExportOption ?? .storyPadJson;
+  late AppExportOption selectedOption = widget.viewModel.params.initialExportOption ?? .storyPadJson;
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +99,7 @@ class _ExportSectionState extends State<_ExportSection> {
                   enabled: provider.isProUser,
                   secondary: Builder(
                     builder: (context) {
-                      if (provider.isProUser)
-                        return const Icon(SpIcons.markdown);
+                      if (provider.isProUser) return const Icon(SpIcons.markdown);
                       return const Stack(
                         clipBehavior: Clip.none,
                         children: [
@@ -135,25 +133,19 @@ class _ExportSectionState extends State<_ExportSection> {
           // ),
           Container(
             width: double.infinity,
-            margin:
-                MediaQuery.paddingOf(
-                      context,
-                    )
-                    .copyWith(top: 0.0, bottom: 0)
-                    .add(const EdgeInsets.symmetric(horizontal: 16.0)),
+            margin: MediaQuery.paddingOf(
+              context,
+            ).copyWith(top: 0.0, bottom: 0).add(const EdgeInsets.symmetric(horizontal: 16.0)),
             child: Builder(
               builder: (context) {
                 return FilledButton(
-                  onPressed:
-                      widget.viewModel.storyCount == null ||
-                          widget.viewModel.storyCount == 0
+                  onPressed: widget.viewModel.storyCount == null || widget.viewModel.storyCount == 0
                       ? null
                       : () => widget.viewModel.export(context, selectedOption),
                   child: Text(
                     [
                       tr('button.export'),
-                      if (selectedOption == AppExportOption.markdown)
-                        '(.tar.gz)',
+                      if (selectedOption == AppExportOption.markdown) '(.tar.gz)',
                     ].join(' '),
                   ),
                 );
@@ -163,12 +155,9 @@ class _ExportSectionState extends State<_ExportSection> {
           const Divider(height: 32.0),
           Container(
             width: double.infinity,
-            margin:
-                MediaQuery.paddingOf(
-                      context,
-                    )
-                    .copyWith(top: 0.0, bottom: 0)
-                    .add(const EdgeInsets.symmetric(horizontal: 16.0)),
+            margin: MediaQuery.paddingOf(
+              context,
+            ).copyWith(top: 0.0, bottom: 0).add(const EdgeInsets.symmetric(horizontal: 16.0)),
             child: TextButton.icon(
               icon: const Icon(SpIcons.photo),
               label: Text(tr('button.export_assets')),

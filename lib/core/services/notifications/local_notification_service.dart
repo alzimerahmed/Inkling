@@ -26,8 +26,7 @@ class LocalNotificationService {
   LocalNotificationService._();
   static final LocalNotificationService instance = LocalNotificationService._();
 
-  final FlutterLocalNotificationsPlugin _plugin =
-      FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _plugin = FlutterLocalNotificationsPlugin();
   GlobalKey<NavigatorState>? _navigatorKey;
   bool _initialized = false;
 
@@ -46,8 +45,7 @@ class LocalNotificationService {
   // call superseded before its turn comes up does no wasted native work.
   Future<void> _rescheduleQueue = Future<void>.value();
 
-  bool get supported =>
-      Platform.isAndroid || Platform.isIOS || Platform.isMacOS;
+  bool get supported => Platform.isAndroid || Platform.isIOS || Platform.isMacOS;
 
   /// Initializes the plugin, handles a cold-launch tap, and schedules the
   /// enabled reminders — a one-time, idempotent setup guarded by [_initialized].
@@ -143,18 +141,12 @@ class LocalNotificationService {
     if (!supported) return false;
 
     if (Platform.isAndroid) {
-      final android = _plugin
-          .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin
-          >();
+      final android = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
       return await android?.requestNotificationsPermission() ?? false;
     }
 
     if (Platform.isIOS) {
-      final ios = _plugin
-          .resolvePlatformSpecificImplementation<
-            IOSFlutterLocalNotificationsPlugin
-          >();
+      final ios = _plugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
       return await ios?.requestPermissions(
             alert: true,
             badge: true,
@@ -164,10 +156,7 @@ class LocalNotificationService {
     }
 
     if (Platform.isMacOS) {
-      final macOS = _plugin
-          .resolvePlatformSpecificImplementation<
-            MacOSFlutterLocalNotificationsPlugin
-          >();
+      final macOS = _plugin.resolvePlatformSpecificImplementation<MacOSFlutterLocalNotificationsPlugin>();
       return await macOS?.requestPermissions(
             alert: true,
             badge: true,
@@ -251,17 +240,14 @@ class LocalNotificationService {
         ),
         notificationDetails: details,
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-        matchDateTimeComponents: weekday == null
-            ? DateTimeComponents.time
-            : DateTimeComponents.dayOfWeekAndTime,
+        matchDateTimeComponents: weekday == null ? DateTimeComponents.time : DateTimeComponents.dayOfWeekAndTime,
         payload: payload,
       );
     }
   }
 
   Future<void> _schedulePeriod(ReminderObject reminder) async {
-    final predicted =
-        await PeriodPredictionService.loadPredictedNextPeriodStart();
+    final predicted = await PeriodPredictionService.loadPredictedNextPeriodStart();
     if (predicted == null) return;
 
     final daysAhead = reminder.daysAhead ?? 2;
@@ -336,8 +322,7 @@ class LocalNotificationService {
   /// Derived id for one-shot, date-specific notifications (on-this-day). Uses a
   /// much larger multiplier than [_notificationId] so the two id spaces never
   /// collide for realistic reminder ids.
-  int _dateNotificationId(int reminderId, DateTime date) =>
-      reminderId * 100000 + date.month * 100 + date.day;
+  int _dateNotificationId(int reminderId, DateTime date) => reminderId * 100000 + date.month * 100 + date.day;
 
   tz.TZDateTime _nextInstance({
     required int hour,
@@ -397,8 +382,7 @@ class LocalNotificationService {
 
     int? reminderId;
     try {
-      reminderId =
-          (jsonDecode(payload) as Map<String, dynamic>)['reminderId'] as int?;
+      reminderId = (jsonDecode(payload) as Map<String, dynamic>)['reminderId'] as int?;
     } catch (_) {
       return;
     }

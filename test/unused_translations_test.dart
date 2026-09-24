@@ -37,8 +37,7 @@ Future<void> _checkUnusedAndMissingKeys() async {
   final Map<String, dynamic> enJson = jsonDecode(enJsonContent);
 
   // Get all keys from en.json (excluding meta keys)
-  final List<String> allKeys =
-      enJson.keys.where((key) => !key.startsWith('_meta.')).toList()..sort();
+  final List<String> allKeys = enJson.keys.where((key) => !key.startsWith('_meta.')).toList()..sort();
 
   print('=== Total Translation Keys: ${allKeys.length} ===\n');
 
@@ -73,8 +72,7 @@ Future<void> _checkUnusedAndMissingKeys() async {
       }
     }
 
-    if (!dartContentStr.contains("'$keyToCheck'") &&
-        !dartContentStr.contains('"$keyToCheck"')) {
+    if (!dartContentStr.contains("'$keyToCheck'") && !dartContentStr.contains('"$keyToCheck"')) {
       unusedKeys.add(key);
     }
   }
@@ -122,10 +120,7 @@ Future<void> _checkUnusedAndMissingKeys() async {
     } else {
       // For regular keys and plural base keys used with plural() function,
       // check if the key exists OR if plural variants exist (key.one, key.other)
-      keyExists =
-          enJson.containsKey(key) ||
-          enJson.containsKey('$key.one') ||
-          enJson.containsKey('$key.other');
+      keyExists = enJson.containsKey(key) || enJson.containsKey('$key.one') || enJson.containsKey('$key.other');
     }
 
     if (!keyExists) {
@@ -171,8 +166,7 @@ Future<void> _checkLocalesMatchEnKeys() async {
           .listSync()
           .whereType<File>()
           .where(
-            (file) =>
-                file.path.endsWith('.json') && !file.path.endsWith('en.json'),
+            (file) => file.path.endsWith('.json') && !file.path.endsWith('en.json'),
           )
           .toList()
         ..sort((a, b) => a.path.compareTo(b.path));
@@ -217,8 +211,7 @@ Future<void> _checkLocalesMatchEnKeys() async {
   expect(
     mismatches,
     isEmpty,
-    reason:
-        'Found locale files with keys that do not match en.json:\n${mismatches.join('\n')}',
+    reason: 'Found locale files with keys that do not match en.json:\n${mismatches.join('\n')}',
   );
 }
 

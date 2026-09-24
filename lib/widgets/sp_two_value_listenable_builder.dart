@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-typedef SpTwoValueWidgetBuilder<T, P> =
-    Widget Function(BuildContext context, T value1, P value2, Widget? child);
+typedef SpTwoValueWidgetBuilder<T, P> = Widget Function(BuildContext context, T value1, P value2, Widget? child);
 
 class SpTwoValueListenableBuilder<T, P> extends StatefulWidget {
   const SpTwoValueListenableBuilder({
@@ -19,12 +18,10 @@ class SpTwoValueListenableBuilder<T, P> extends StatefulWidget {
   final Widget? child;
 
   @override
-  State<StatefulWidget> createState() =>
-      _SpTwoValueListenableBuilderState<T, P>();
+  State<StatefulWidget> createState() => _SpTwoValueListenableBuilderState<T, P>();
 }
 
-class _SpTwoValueListenableBuilderState<T, P>
-    extends State<SpTwoValueListenableBuilder<T, P>> {
+class _SpTwoValueListenableBuilderState<T, P> extends State<SpTwoValueListenableBuilder<T, P>> {
   late T value1;
   late P value2;
 

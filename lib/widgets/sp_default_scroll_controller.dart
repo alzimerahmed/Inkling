@@ -6,33 +6,25 @@ class SpDefaultScrollController extends StatefulWidget {
     required this.builder,
   });
 
-  final Widget Function(BuildContext context, ScrollController controller)
-  builder;
+  final Widget Function(BuildContext context, ScrollController controller) builder;
 
   @override
-  State<SpDefaultScrollController> createState() =>
-      _SpDefaultScrollControllerState();
+  State<SpDefaultScrollController> createState() => _SpDefaultScrollControllerState();
 
   static ScrollController? maybeOf(BuildContext context) {
-    return context
-        .findAncestorStateOfType<_SpDefaultScrollControllerState>()
-        ?.controller;
+    return context.findAncestorStateOfType<_SpDefaultScrollControllerState>()?.controller;
   }
 
   static ScrollController of(BuildContext context) {
-    return context
-        .findAncestorStateOfType<_SpDefaultScrollControllerState>()!
-        .controller;
+    return context.findAncestorStateOfType<_SpDefaultScrollControllerState>()!.controller;
   }
 
   static Widget listenToOffet({
-    required Widget Function(BuildContext context, double offset, Widget? child)
-    builder,
+    required Widget Function(BuildContext context, double offset, Widget? child) builder,
   }) {
     return Builder(
       builder: (context) {
-        final state = context
-            .findAncestorStateOfType<_SpDefaultScrollControllerState>();
+        final state = context.findAncestorStateOfType<_SpDefaultScrollControllerState>();
         return ValueListenableBuilder(
           valueListenable: state!.controllerOffetNotifier,
           builder: (context, offet, child) {

@@ -56,20 +56,16 @@ class _$RelaxSoundMixModelCWProxyImpl implements _$RelaxSoundMixModelCWProxy {
   RelaxSoundMixModel name(String name) => call(name: name);
 
   @override
-  RelaxSoundMixModel sounds(List<RelaxSoundModel> sounds) =>
-      call(sounds: sounds);
+  RelaxSoundMixModel sounds(List<RelaxSoundModel> sounds) => call(sounds: sounds);
 
   @override
-  RelaxSoundMixModel createdAt(DateTime createdAt) =>
-      call(createdAt: createdAt);
+  RelaxSoundMixModel createdAt(DateTime createdAt) => call(createdAt: createdAt);
 
   @override
-  RelaxSoundMixModel updatedAt(DateTime updatedAt) =>
-      call(updatedAt: updatedAt);
+  RelaxSoundMixModel updatedAt(DateTime updatedAt) => call(updatedAt: updatedAt);
 
   @override
-  RelaxSoundMixModel lastSavedDeviceId(String? lastSavedDeviceId) =>
-      call(lastSavedDeviceId: lastSavedDeviceId);
+  RelaxSoundMixModel lastSavedDeviceId(String? lastSavedDeviceId) => call(lastSavedDeviceId: lastSavedDeviceId);
 
   @override
   RelaxSoundMixModel permanentlyDeletedAt(DateTime? permanentlyDeletedAt) =>
@@ -137,29 +133,25 @@ extension $RelaxSoundMixModelCopyWith on RelaxSoundMixModel {
   /// Returns a callable class used to build a new instance with modified fields.
   /// Example: `instanceOfRelaxSoundMixModel.copyWith(...)` or `instanceOfRelaxSoundMixModel.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$RelaxSoundMixModelCWProxy get copyWith =>
-      _$RelaxSoundMixModelCWProxyImpl(this);
+  _$RelaxSoundMixModelCWProxy get copyWith => _$RelaxSoundMixModelCWProxyImpl(this);
 }
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-RelaxSoundMixModel _$RelaxSoundMixModelFromJson(Map<String, dynamic> json) =>
-    RelaxSoundMixModel(
-      id: (json['id'] as num).toInt(),
-      name: json['name'] as String,
-      sounds: (json['sounds'] as List<dynamic>)
-          .map((e) => RelaxSoundModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
-      lastSavedDeviceId: json['last_saved_device_id'] as String?,
-      permanentlyDeletedAt: json['permanently_deleted_at'] == null
-          ? null
-          : DateTime.parse(json['permanently_deleted_at'] as String),
-      index: (json['index'] as num?)?.toInt(),
-    );
+RelaxSoundMixModel _$RelaxSoundMixModelFromJson(Map<String, dynamic> json) => RelaxSoundMixModel(
+  id: (json['id'] as num).toInt(),
+  name: json['name'] as String,
+  sounds: (json['sounds'] as List<dynamic>).map((e) => RelaxSoundModel.fromJson(e as Map<String, dynamic>)).toList(),
+  createdAt: DateTime.parse(json['created_at'] as String),
+  updatedAt: DateTime.parse(json['updated_at'] as String),
+  lastSavedDeviceId: json['last_saved_device_id'] as String?,
+  permanentlyDeletedAt: json['permanently_deleted_at'] == null
+      ? null
+      : DateTime.parse(json['permanently_deleted_at'] as String),
+  index: (json['index'] as num?)?.toInt(),
+);
 
 Map<String, dynamic> _$RelaxSoundMixModelToJson(
   RelaxSoundMixModel instance,

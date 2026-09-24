@@ -7,8 +7,7 @@ import 'package:storypad/core/services/logger/app_logger.dart';
 import 'package:storypad/core/storages/backup_import_history_storage.dart';
 
 class BackupImporterService {
-  BackupImporterService({required BackupSyncMessenger messenger})
-    : _messenger = messenger;
+  BackupImporterService({required BackupSyncMessenger messenger}) : _messenger = messenger;
 
   final BackupSyncMessenger _messenger;
 

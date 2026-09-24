@@ -13,8 +13,7 @@ void main() {
   const secureStorageChannel = MethodChannel(
     'plugins.it_nomads.com/flutter_secure_storage',
   );
-  final messenger =
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+  final messenger = TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
 
   // In-memory stand-in for the keychain — ICloudUserStorage's key is the
   // class's runtimeType ("ICloudUserObject"), but the mock responds
@@ -170,14 +169,12 @@ void main() {
         await expectLater(
           service.signIn(),
           throwsA(isA<NetworkException>()),
-          reason:
-              'a changed local identity must not fall back to the old cached account',
+          reason: 'a changed local identity must not fall back to the old cached account',
         );
         expect(
           service.currentUser,
           isNull,
-          reason:
-              'must not keep exposing account A as signed in once the local identity no longer matches it',
+          reason: 'must not keep exposing account A as signed in once the local identity no longer matches it',
         );
       },
     );
@@ -214,8 +211,7 @@ void main() {
         expect(
           freshLaunch.currentUser,
           isNull,
-          reason:
-              'no recorded fingerprint to compare against means the match can\'t be confirmed',
+          reason: 'no recorded fingerprint to compare against means the match can\'t be confirmed',
         );
       },
     );
@@ -281,8 +277,7 @@ void main() {
         expect(
           service.currentUser?.autoBackupEnabled,
           isFalse,
-          reason:
-              'reconnecting the same account must not silently re-enable automatic backup',
+          reason: 'reconnecting the same account must not silently re-enable automatic backup',
         );
       },
     );
@@ -300,8 +295,7 @@ void main() {
       expect(
         service.currentUser?.autoBackupEnabled,
         isTrue,
-        reason:
-            'a genuinely different account must not inherit the old account\'s preference',
+        reason: 'a genuinely different account must not inherit the old account\'s preference',
       );
     });
 

@@ -144,8 +144,7 @@ class SpStoryTile extends StatelessWidget {
     );
 
     bool hasTitle = content?.title?.trim().isNotEmpty == true;
-    bool hasBody =
-        displayShortBody != null && displayShortBody.trim().isNotEmpty == true;
+    bool hasBody = displayShortBody != null && displayShortBody.trim().isNotEmpty == true;
     List<SpPopMenuItem> menus = buildPopUpMenus(context);
 
     return SpPopupMenuButton(
@@ -162,12 +161,10 @@ class SpStoryTile extends StatelessWidget {
             onLongPress = null;
           } else if (story.inArchives || story.inBins) {
             onTap = () => openPopUpMenu.call();
-            onLongPress = () =>
-                multiEditState.turnOnEditing(initialId: story.id);
+            onLongPress = () => multiEditState.turnOnEditing(initialId: story.id);
           } else {
             onTap = this.onTap;
-            onLongPress = () =>
-                multiEditState.turnOnEditing(initialId: story.id);
+            onLongPress = () => multiEditState.turnOnEditing(initialId: story.id);
           }
         } else {
           onTap = this.onTap;

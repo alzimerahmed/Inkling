@@ -14,9 +14,7 @@ import 'package:storypad/widgets/bottom_sheets/base_bottom_sheet.dart';
 
 abstract class BaseAnalyticsEventAdaptor {
   static BaseAnalyticsEventAdaptor create() {
-    return kFirebaseAvailable
-        ? FirebaseAnalyticsEventAdaptor()
-        : NoneAnalyticsEventAdaptor();
+    return kFirebaseAvailable ? FirebaseAnalyticsEventAdaptor() : NoneAnalyticsEventAdaptor();
   }
 
   // ---------------------------------------------------------------------------
@@ -83,14 +81,11 @@ abstract class BaseAnalyticsEventAdaptor {
 
   Future<void> logSyncBackup() => logEvent(sanitizeEventName('sync_backup'));
 
-  Future<void> logImportOfflineBackup() =>
-      logEvent(sanitizeEventName('import_offline_backup'));
+  Future<void> logImportOfflineBackup() => logEvent(sanitizeEventName('import_offline_backup'));
 
-  Future<void> logExportOfflineBackup() =>
-      logEvent(sanitizeEventName('export_offline_backup'));
+  Future<void> logExportOfflineBackup() => logEvent(sanitizeEventName('export_offline_backup'));
 
-  Future<void> logRequestGoogleDriveScope() =>
-      logEvent(sanitizeEventName('request_google_drive_scope'));
+  Future<void> logRequestGoogleDriveScope() => logEvent(sanitizeEventName('request_google_drive_scope'));
 
   Future<void> logSignOut() => logEvent(sanitizeEventName('sign_out'));
 
@@ -357,18 +352,14 @@ abstract class BaseAnalyticsEventAdaptor {
       sanitizeEventName('reorder_tags'),
       parameters: sanitizeParameters({
         'count': tags.items.length.toString(),
-        'category': tags.items.isEmpty
-            ? null
-            : tagCategoryLabel(tags.items.first),
+        'category': tags.items.isEmpty ? null : tagCategoryLabel(tags.items.first),
       }),
     );
   }
 
-  Future<void> logInsertNewPhoto() =>
-      logEvent(sanitizeEventName('insert_new_photo'));
+  Future<void> logInsertNewPhoto() => logEvent(sanitizeEventName('insert_new_photo'));
 
-  Future<void> logInsertNewVideo() =>
-      logEvent(sanitizeEventName('insert_new_video'));
+  Future<void> logInsertNewVideo() => logEvent(sanitizeEventName('insert_new_video'));
 
   Future<void> logTakePhoto() => logEvent(sanitizeEventName('take_photo'));
 
@@ -488,13 +479,8 @@ abstract class BaseAnalyticsEventAdaptor {
       'day': story.day.toString(),
       'pinned': ?story.pinned?.toString(),
       'gallery_template_id': ?story.galleryTemplateId,
-      'pages_count':
-          (story.draftContent?.id != null
-                  ? story.draftContent
-                  : story.latestContent)
-              ?.richPages
-              ?.length
-              .toString(),
+      'pages_count': (story.draftContent?.id != null ? story.draftContent : story.latestContent)?.richPages?.length
+          .toString(),
       'draft_saved': story.draftContent?.id != null ? 'true' : 'false',
       'preferred_show_day_count': story.preferences.showDayCount?.toString(),
       'tags_count': ?story.tags?.length.toString(),
@@ -505,15 +491,13 @@ abstract class BaseAnalyticsEventAdaptor {
   }
 
   // Categorical/numeric only — never the tag title (tag and person names are user PII).
-  Map<String, Object>? tagAnalyticParameters(TagDbModel tag) =>
-      sanitizeParameters({
-        'category': tagCategoryLabel(tag),
-        'has_emoji': (tag.emoji != null).toString(),
-      });
+  Map<String, Object>? tagAnalyticParameters(TagDbModel tag) => sanitizeParameters({
+    'category': tagCategoryLabel(tag),
+    'has_emoji': (tag.emoji != null).toString(),
+  });
 
   // 'emoji' (Feeling/Activity/Weather), 'people', or 'topic' (regular tags).
-  String tagCategoryLabel(TagDbModel tag) =>
-      tag.emoji != null ? 'emoji' : (tag.isPerson ? 'people' : 'topic');
+  String tagCategoryLabel(TagDbModel tag) => tag.emoji != null ? 'emoji' : (tag.isPerson ? 'people' : 'topic');
 
   /// Validates and returns [name]. Firebase event names must be 1–40 alphanumeric/underscore
   /// characters, start with a letter, and not use reserved prefixes.

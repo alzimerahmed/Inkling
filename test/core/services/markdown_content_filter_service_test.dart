@@ -408,8 +408,7 @@ void main() {
 > Quote
 ---
 1. Item''';
-        const expected =
-            'Title\nTask 1\nTask 2\nBold and italic\nLink\nQuote\nItem';
+        const expected = 'Title\nTask 1\nTask 2\nBold and italic\nLink\nQuote\nItem';
         expect(MarkdownContentFilterService.call(markdown), expected);
       });
 
@@ -421,8 +420,7 @@ void main() {
       });
 
       test('preserves actual content in complex scenario', () {
-        const markdown =
-            '## Story\n\n- [ ] Write **introduction**\n- Research [topic](url)\n\n> Get started!';
+        const markdown = '## Story\n\n- [ ] Write **introduction**\n- Research [topic](url)\n\n> Get started!';
         final filtered = MarkdownContentFilterService.call(markdown);
         expect(filtered, contains('Story'));
         expect(filtered, contains('Write introduction'));
@@ -446,10 +444,7 @@ void main() {
         // User writes a list with 3 items
         const withMarkdown = '- Item one\n- Item two\n- Item three';
         final filtered = MarkdownContentFilterService.call(withMarkdown);
-        final words = filtered
-            .split(RegExp(r'\s+'))
-            .where((w) => w.isNotEmpty)
-            .length;
+        final words = filtered.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).length;
         expect(words, 6); // "Item one Item two Item three" = 6 words
       });
     });
