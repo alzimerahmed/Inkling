@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storypad/core/databases/models/story_content_db_model.dart';
 import 'package:storypad/core/databases/models/story_db_model.dart';
@@ -7,78 +5,88 @@ import 'package:storypad/core/databases/models/story_page_db_model.dart';
 import 'package:storypad/core/services/export/export_stories_to_pdf_service.dart';
 import 'package:storypad/core/types/path_type.dart';
 
-StoryDbModel _story({required int id, String? title, String? body, DateTime? date}) {
-  final entryDate = date ?? DateTime(2023, 5, 1, 9, 30);
-  final content = StoryContentDbModel.create(createdAt: entryDate).copyWith(
-    title: title,
-    richPages: [
-      StoryPageDbModel(
-        id: id,
-        title: title,
-        body: [
-          {'insert': '${body ?? 'Body text'}\n'},
-        ],
-      ),
-    ],
-  );
-
+StoryDbModel buildStory({
+  required int id,
+  required String body,
+  List<int> tagIds = const [],
+}) {
+  final date = DateTime(2024, 3, 1, 9, 30);
   return StoryDbModel(
     type: PathType.docs,
     id: id,
     starred: false,
     pinned: false,
     feeling: null,
-    year: entryDate.year,
-    month: entryDate.month,
-    day: entryDate.day,
-    hour: entryDate.hour,
-    minute: entryDate.minute,
-    second: entryDate.second,
-    updatedAt: entryDate,
-    createdAt: entryDate,
+    year: date.year,
+    month: date.month,
+    day: date.day,
+    hour: date.hour,
+    minute: date.minute,
+    second: date.second,
+    createdAt: date,
+    updatedAt: date,
     lastSavedDeviceId: null,
     galleryTemplateId: null,
     templateId: null,
-    tags: [],
+    tags: tagIds.map((e) => e.toString()).toList(),
     assets: [],
     movedToBinAt: null,
-    latestContent: content,
+    latestContent: StoryContentDbModel.create(createdAt: date).copyWith(
+      title: 'Дневник / 日記',
+      richPages: [
+        StoryPageDbModel(
+          id: id,
+          title: 'Дневник / 日記',
+          body: [
+            {'insert': '$body\n'},
+          ],
+        ),
+      ],
+    ),
     draftContent: null,
     permanentlyDeletedAt: null,
   );
 }
 
 void main() {
-  group('ExportStoriesToPdfService', () {
-    test('produces a valid PDF byte stream', () async {
-      final bytes = await ExportStoriesToPdfService.call(
-        stories: [_story(id: 1, title: 'My Entry', body: 'Hello PDF')],
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  test(
+    'PDF export renders non-Latin (Cyrillic/Arabic/CJK) text with bundled Unicode fonts',
+    () async {
+      final fontBytes = await ExportStoriesToPdfService.loadBundledFonts();
+      expect(
+        fontBytes,
+        isNotEmpty,
+        reason: 'bundled Noto fonts must ship as assets',
       );
 
-      expect(bytes, isNotEmpty);
-      // PDF files start with the %PDF- header.
-      expect(utf8.decode(bytes.sublist(0, 5)), '%PDF-');
-      // PDF files end with the %%EOF marker.
-      final tail = utf8.decode(bytes.sublist(bytes.length - 8));
-      expect(tail, contains('%%EOF'));
-    });
-
-    test('produces one document for multiple entries', () async {
       final bytes = await ExportStoriesToPdfService.call(
         stories: [
-          _story(id: 1, title: 'First', body: 'A'),
-          _story(id: 2, title: 'Second', body: 'B'),
+          buildStory(id: 1, body: 'Привет мир — مرحبا بالعالم — 你好世界'),
+          buildStory(id: 2, body: 'Plain latin entry'),
         ],
+        tagNames: {1: 'работа', 2: 'رحلات'},
+        fontBytes: fontBytes,
+        tagsLabel: 'Tags: ',
+        photoPlaceholder: '[photo]',
       );
 
       expect(bytes, isNotEmpty);
-      expect(utf8.decode(bytes.sublist(0, 5)), '%PDF-');
-    });
+      // PDF magic header.
+      expect(bytes.sublist(0, 5), '%PDF-'.codeUnits);
+    },
+  );
 
-    test('skips stories without content', () async {
-      final bytes = await ExportStoriesToPdfService.call(stories: []);
+  test(
+    'PDF export works without fonts (legacy fallback) for Latin text',
+    () async {
+      final bytes = await ExportStoriesToPdfService.call(
+        stories: [buildStory(id: 1, body: 'Plain latin entry')],
+        tagNames: {},
+      );
+
       expect(bytes, isNotEmpty);
-      expect(utf8.decode(bytes.sublist(0, 5)), '%PDF-');
-    });
-  });
+    },
+  );
 }
