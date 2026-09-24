@@ -588,6 +588,10 @@
   "button.select_file": "Select File",
   "button.export_pdf": "Export PDF",
   "snack_bar.import_external_done": "Imported {} entries ({} photos imported, {} photos skipped).",
+  "import_external.warning_attachments_skipped": "រំលងឯកសារភ្ជាប់",
+  "snack_bar.import_parse_failed": "មិនអាចអានឯកសារបានទេ។ តើវាជាឯកសារនាំចេញត្រឹមត្រូវទេ?",
+  "export.pdf_tags": "ស្លាក: ",
+  "export.pdf_photo_placeholder": "[រូបភាព]",
   "search.preset.starred": "Starred",
   "search.preset.pinned": "Pinned",
   "search.preset.this_year": "This year"
