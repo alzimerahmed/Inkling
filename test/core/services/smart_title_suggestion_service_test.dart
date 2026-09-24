@@ -88,16 +88,14 @@ void main() {
 
     test('truncates long lines at a sentence boundary when reasonable', () {
       final result = SmartTitleSuggestionService.suggest(
-        bodyPlainText:
-            'We finally visited the old lighthouse. It was taller than remembered.',
+        bodyPlainText: 'We finally visited the old lighthouse. It was taller than remembered.',
       );
       expect(result, 'We finally visited the old lighthouse.');
     });
 
     test('truncates long lines at a word boundary with ellipsis otherwise', () {
       final result = SmartTitleSuggestionService.suggest(
-        bodyPlainText:
-            'A very long rambling opening line about nothing in particular at all really',
+        bodyPlainText: 'A very long rambling opening line about nothing in particular at all really',
         maxChars: 30,
       );
       expect(result, endsWith('…'));
@@ -107,8 +105,7 @@ void main() {
 
     test('never cuts mid-word even for a very long first word', () {
       final result = SmartTitleSuggestionService.suggest(
-        bodyPlainText:
-            'Supercalifragilisticexpialidociousandthensomemorelettershere',
+        bodyPlainText: 'Supercalifragilisticexpialidociousandthensomemorelettershere',
         maxChars: 20,
       );
       expect(result, isNotNull);

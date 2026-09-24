@@ -59,8 +59,7 @@ class SyncViewModel extends ChangeNotifier {
     final String username = usernameController.text.trim();
     final String passphrase = passphraseController.text;
 
-    if (serverUrl.isEmpty || username.isEmpty || passphrase.isEmpty)
-      return false;
+    if (serverUrl.isEmpty || username.isEmpty || passphrase.isEmpty) return false;
     if (!isServerUrlSecure(serverUrl)) return false;
     if (!isPassphraseAcceptable(passphrase)) return false;
 
@@ -156,9 +155,7 @@ class SyncViewModel extends ChangeNotifier {
         );
         lastSyncedAtIso = DateTime.now().toIso8601String();
         lastSyncedChanges = changes;
-        statusMessage = changes > 0
-            ? 'page.sync.synced_with_changes'
-            : 'page.sync.synced_up_to_date';
+        statusMessage = changes > 0 ? 'page.sync.synced_with_changes' : 'page.sync.synced_up_to_date';
       } finally {
         try {
           if (tempFile.existsSync()) tempFile.deleteSync();
@@ -175,17 +172,14 @@ class SyncViewModel extends ChangeNotifier {
   }
 
   /// Strips trailing slashes and surrounding whitespace from a server URL.
-  static String normalizeServerUrl(String raw) =>
-      raw.trim().replaceAll(RegExp(r'/+$'), '');
+  static String normalizeServerUrl(String raw) => raw.trim().replaceAll(RegExp(r'/+$'), '');
 
   /// Only https is accepted: WebDAV uses Basic auth, so plaintext HTTP would
   /// send the app password (and, more importantly, the encrypted journal is
   /// still metadata-leaking) in the clear.
   static bool isServerUrlSecure(String url) {
     final Uri? uri = Uri.tryParse(url);
-    return uri != null &&
-        (uri.scheme == 'https' ||
-            uri.scheme == 'http' && _isLocalLoopback(uri));
+    return uri != null && (uri.scheme == 'https' || uri.scheme == 'http' && _isLocalLoopback(uri));
   }
 
   static bool _isLocalLoopback(Uri uri) {
@@ -193,8 +187,7 @@ class SyncViewModel extends ChangeNotifier {
     return host == 'localhost' || host == '127.0.0.1' || host == '::1';
   }
 
-  static bool isPassphraseAcceptable(String passphrase) =>
-      passphrase.length >= 8;
+  static bool isPassphraseAcceptable(String passphrase) => passphrase.length >= 8;
 
   @override
   void dispose() {

@@ -22,8 +22,7 @@ class SmartTitleSuggestionService {
 
     final String title = _truncate(_capitalize(line), maxChars);
     if (title.length < _minChars) return null;
-    if (currentTitle != null &&
-        title.trim().toLowerCase() == currentTitle.trim().toLowerCase()) {
+    if (currentTitle != null && title.trim().toLowerCase() == currentTitle.trim().toLowerCase()) {
       return null;
     }
 

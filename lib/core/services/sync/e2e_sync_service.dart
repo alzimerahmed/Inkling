@@ -66,8 +66,7 @@ class E2eSyncService {
 
   Future<E2eSyncConfigObject?> readConfig() => _storage.readObject();
 
-  Future<void> writeConfig(E2eSyncConfigObject config) =>
-      _storage.writeObject(config);
+  Future<void> writeConfig(E2eSyncConfigObject config) => _storage.writeObject(config);
 
   DateTime? lastSyncedAt(E2eSyncConfigObject? config) => config?.lastSyncedAt;
 
@@ -82,8 +81,7 @@ class E2eSyncService {
     required String passphrase,
     E2eSyncConfigObject? config,
   }) async {
-    final E2eSyncConfigObject? effectiveConfig =
-        config ?? await _storage.readObject();
+    final E2eSyncConfigObject? effectiveConfig = config ?? await _storage.readObject();
     if (effectiveConfig == null || !effectiveConfig.enabled) {
       return E2eSyncResult(
         success: false,
@@ -121,11 +119,9 @@ class E2eSyncService {
       final CloudFileObject? uploaded = await _transport.uploadFile(
         defaultRemoteFileName,
         tempFile,
-        folderName:
-            effectiveConfig.folderName ?? E2eSyncConfigObject.defaultFolderName,
+        folderName: effectiveConfig.folderName ?? E2eSyncConfigObject.defaultFolderName,
       );
-      if (uploaded == null)
-        throw StateError('Upload failed: no file object returned');
+      if (uploaded == null) throw StateError('Upload failed: no file object returned');
 
       await _storage.writeObject(
         effectiveConfig.copyWith(
@@ -149,8 +145,7 @@ class E2eSyncService {
     required String passphrase,
     E2eSyncConfigObject? config,
   }) async {
-    final E2eSyncConfigObject? effectiveConfig =
-        config ?? await _storage.readObject();
+    final E2eSyncConfigObject? effectiveConfig = config ?? await _storage.readObject();
     if (effectiveConfig == null || !effectiveConfig.enabled) {
       throw StateError('E2E sync is not enabled');
     }
@@ -158,8 +153,7 @@ class E2eSyncService {
     final String remotePath =
         '${effectiveConfig.folderName ?? E2eSyncConfigObject.defaultFolderName}/$defaultRemoteFileName';
     final List<int>? encrypted = await _transport.downloadFileBytes(remotePath);
-    if (encrypted == null)
-      throw StateError('No remote sync payload found at $remotePath');
+    if (encrypted == null) throw StateError('No remote sync payload found at $remotePath');
 
     final Uint8List archiveBytes = await _encryption.decrypt(
       encrypted: encrypted,
@@ -194,8 +188,7 @@ class _DefaultTransport implements E2eSyncTransport {
   }
 
   @override
-  Future<List<int>?> downloadFileBytes(String fileId) =>
-      _nextcloud.downloadFileBytes(fileId);
+  Future<List<int>?> downloadFileBytes(String fileId) => _nextcloud.downloadFileBytes(fileId);
 
   @override
   Future<CloudFileObject?> uploadFile(

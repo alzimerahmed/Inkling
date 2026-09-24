@@ -51,14 +51,11 @@ class E2eSyncConfigObject {
       passphrase: passphrase ?? this.passphrase,
       folderName: folderName ?? this.folderName,
       enabled: enabled ?? this.enabled,
-      lastSyncedAtIso: clearLastSyncedAt
-          ? null
-          : (lastSyncedAtIso ?? this.lastSyncedAtIso),
+      lastSyncedAtIso: clearLastSyncedAt ? null : (lastSyncedAtIso ?? this.lastSyncedAtIso),
     );
   }
 
-  DateTime? get lastSyncedAt =>
-      lastSyncedAtIso == null ? null : DateTime.tryParse(lastSyncedAtIso!);
+  DateTime? get lastSyncedAt => lastSyncedAtIso == null ? null : DateTime.tryParse(lastSyncedAtIso!);
 
   factory E2eSyncConfigObject.fromJson(Map<String, dynamic> json) {
     return E2eSyncConfigObject(

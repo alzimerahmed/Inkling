@@ -23,9 +23,7 @@ class SmartTitleSuggestionTile extends StatelessWidget {
       title: Text(tr('page.settings.smart_title_suggestion.title')),
       subtitle: Text(tr('page.settings.smart_title_suggestion.subtitle')),
       value: enabled,
-      onChanged: (value) => context
-          .read<DevicePreferencesProvider>()
-          .setSmartTitleSuggestion(value),
+      onChanged: (value) => context.read<DevicePreferencesProvider>().setSmartTitleSuggestion(value),
     );
   }
 }

@@ -50,8 +50,7 @@ class FakeWebdavTransport implements E2eSyncTransport {
 /// Config storage backed by [MemoryStorageAdapter] instead of secure storage.
 class TestE2eSyncConfigStorage extends E2eSyncConfigStorage {
   @override
-  Future<BaseStorageAdapter<String>> get adapter async =>
-      MemoryStorageAdapter<String>();
+  Future<BaseStorageAdapter<String>> get adapter async => MemoryStorageAdapter<String>();
 }
 
 E2eSyncConfigObject testConfig({bool enabled = true}) => E2eSyncConfigObject(
@@ -111,8 +110,7 @@ void main() {
           expect(transport.uploadCount, 1);
 
           // The uploaded artifact must NOT be plaintext.
-          const String remotePath =
-              '/${E2eSyncConfigObject.defaultFolderName}/${E2eSyncService.defaultRemoteFileName}';
+          const String remotePath = '/${E2eSyncConfigObject.defaultFolderName}/${E2eSyncService.defaultRemoteFileName}';
           final List<int> uploaded = transport.files[remotePath]!;
           expect(uploaded, isNot(equals(originalArchive)));
           expect(
@@ -144,8 +142,7 @@ void main() {
         final io.Directory tempDir = await io.Directory.systemTemp.createTemp(
           'inkling_test',
         );
-        final io.File backupFile = io.File('${tempDir.path}/backup.json.gz')
-          ..writeAsBytesSync([1, 2, 3]);
+        final io.File backupFile = io.File('${tempDir.path}/backup.json.gz')..writeAsBytesSync([1, 2, 3]);
 
         try {
           final result = await service.syncNow(
@@ -173,8 +170,7 @@ void main() {
         final io.Directory tempDir = await io.Directory.systemTemp.createTemp(
           'inkling_test',
         );
-        final io.File backupFile = io.File('${tempDir.path}/backup.json.gz')
-          ..writeAsBytesSync([1, 2, 3]);
+        final io.File backupFile = io.File('${tempDir.path}/backup.json.gz')..writeAsBytesSync([1, 2, 3]);
 
         try {
           final result = await service.syncNow(
@@ -200,8 +196,7 @@ void main() {
       final io.Directory tempDir = await io.Directory.systemTemp.createTemp(
         'inkling_test',
       );
-      final io.File backupFile = io.File('${tempDir.path}/backup.json.gz')
-        ..writeAsBytesSync([1, 2, 3]);
+      final io.File backupFile = io.File('${tempDir.path}/backup.json.gz')..writeAsBytesSync([1, 2, 3]);
 
       try {
         final result = await service.syncNow(
@@ -227,14 +222,12 @@ void main() {
           plaintext: archive,
           passphrase: 'pw',
         );
-        transport
-                .files['/${E2eSyncConfigObject.defaultFolderName}/${E2eSyncService.defaultRemoteFileName}'] =
+        transport.files['/${E2eSyncConfigObject.defaultFolderName}/${E2eSyncService.defaultRemoteFileName}'] =
             encrypted;
 
         // Decrypt via the service's own path (restore itself needs a live DB,
         // so the DB merge is covered by integration tests).
-        const String remotePath =
-            '/${E2eSyncConfigObject.defaultFolderName}/${E2eSyncService.defaultRemoteFileName}';
+        const String remotePath = '/${E2eSyncConfigObject.defaultFolderName}/${E2eSyncService.defaultRemoteFileName}';
         final List<int>? downloaded = await transport.downloadFileBytes(
           remotePath,
         );

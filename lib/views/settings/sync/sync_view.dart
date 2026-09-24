@@ -76,9 +76,7 @@ class _SyncContent extends StatelessWidget {
                     )
                   : const Icon(Icons.sync_outlined),
               title: Text(tr("page.sync.sync_now")),
-              subtitle: viewModel.statusMessage == null
-                  ? null
-                  : Text(_statusText(viewModel)),
+              subtitle: viewModel.statusMessage == null ? null : Text(_statusText(viewModel)),
               onTap: viewModel.busy ? null : () => viewModel.syncNow(),
             ),
           ],
@@ -183,8 +181,7 @@ class _SyncServerSheetState extends State<_SyncServerSheet> {
                   value ?? '',
                 );
                 if (url.isEmpty) return tr("page.sync.error_missing_field");
-                if (!SyncViewModel.isServerUrlSecure(url))
-                  return tr("page.sync.error_https_required");
+                if (!SyncViewModel.isServerUrlSecure(url)) return tr("page.sync.error_https_required");
                 return null;
               },
             ),
@@ -192,9 +189,8 @@ class _SyncServerSheetState extends State<_SyncServerSheet> {
             TextFormField(
               controller: _username,
               decoration: InputDecoration(labelText: tr("page.sync.username")),
-              validator: (value) => (value == null || value.trim().isEmpty)
-                  ? tr("page.sync.error_missing_field")
-                  : null,
+              validator: (value) =>
+                  (value == null || value.trim().isEmpty) ? tr("page.sync.error_missing_field") : null,
             ),
             const SizedBox(height: 12),
             TextFormField(
@@ -213,10 +209,8 @@ class _SyncServerSheetState extends State<_SyncServerSheet> {
                 helperText: tr("page.sync.passphrase_hint"),
               ),
               validator: (value) {
-                if (value == null || value.isEmpty)
-                  return tr("page.sync.error_missing_field");
-                if (!SyncViewModel.isPassphraseAcceptable(value))
-                  return tr("page.sync.error_weak_passphrase");
+                if (value == null || value.isEmpty) return tr("page.sync.error_missing_field");
+                if (!SyncViewModel.isPassphraseAcceptable(value)) return tr("page.sync.error_weak_passphrase");
                 return null;
               },
             ),

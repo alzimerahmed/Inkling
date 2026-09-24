@@ -56,18 +56,15 @@ final bool kIAPEnabled =
 
 final bool kSupportCamera = Platform.isAndroid || Platform.isIOS;
 final bool kSupportQuickActions = Platform.isAndroid || Platform.isIOS;
-final bool kSupportVideoCompression =
-    Platform.isAndroid || Platform.isIOS || Platform.isMacOS;
+final bool kSupportVideoCompression = Platform.isAndroid || Platform.isIOS || Platform.isMacOS;
 
 /// Desktop targets (Gap #16 v1): the app runs as a first-class desktop app on
 /// macOS and Linux. Use this to gate mobile-only UX (e.g. quick actions,
 /// home-screen widget, camera) rather than sprinkling `Platform.isX` checks.
-final bool kSupportDesktop =
-    Platform.isMacOS || Platform.isLinux || Platform.isWindows;
+final bool kSupportDesktop = Platform.isMacOS || Platform.isLinux || Platform.isWindows;
 
 final bool kStoryPad = kPackageInfo.packageName == 'com.tc.writestory';
-final bool kCommunity =
-    kPackageInfo.packageName == 'com.tc.writestory.community';
+final bool kCommunity = kPackageInfo.packageName == 'com.tc.writestory.community';
 
 late final Directory kSupportDirectory;
 late final Directory kApplicationDirectory;
@@ -89,42 +86,36 @@ AppLogo? kAppLogo;
 /// `Firebase*` instance, since doing so throws `[core/no-app]` otherwise.
 bool kFirebaseAvailable = false;
 
-final BaseAnalyticsEventAdaptor kAnalyticsService =
-    BaseAnalyticsEventAdaptor.create();
-final BaseAnalyticsUserPropertyAdaptor kAnalyticsUserPropertyService =
-    BaseAnalyticsUserPropertyAdaptor.create();
-final BaseErrorReportingAdaptor kErrorReportingService =
-    BaseErrorReportingAdaptor.create();
-final BaseRemoteConfigAdaptor kRemoteConfigAdaptor =
-    BaseRemoteConfigAdaptor.create();
-final BaseCloudStorageAdaptor kCloudStorageService =
-    BaseCloudStorageAdaptor.create();
+final BaseAnalyticsEventAdaptor kAnalyticsService = BaseAnalyticsEventAdaptor.create();
+final BaseAnalyticsUserPropertyAdaptor kAnalyticsUserPropertyService = BaseAnalyticsUserPropertyAdaptor.create();
+final BaseErrorReportingAdaptor kErrorReportingService = BaseErrorReportingAdaptor.create();
+final BaseRemoteConfigAdaptor kRemoteConfigAdaptor = BaseRemoteConfigAdaptor.create();
+final BaseCloudStorageAdaptor kCloudStorageService = BaseCloudStorageAdaptor.create();
 
 /// Maps a stable material color name (persisted in preferences) to its swatch.
 /// Used to store user-picked day colors as readable strings (e.g. `red`, `deepPurple`)
 /// and to resolve them back into shades (700 for light, 300 for dark).
-const Map<String, MaterialColor> kMaterialColorsByName =
-    <String, MaterialColor>{
-      'red': Colors.red,
-      'pink': Colors.pink,
-      'purple': Colors.purple,
-      'deepPurple': Colors.deepPurple,
-      'indigo': Colors.indigo,
-      'blue': Colors.blue,
-      'lightBlue': Colors.lightBlue,
-      'cyan': Colors.cyan,
-      'teal': Colors.teal,
-      'green': Colors.green,
-      'lightGreen': Colors.lightGreen,
-      'lime': Colors.lime,
-      'yellow': Colors.yellow,
-      'amber': Colors.amber,
-      'orange': Colors.orange,
-      'deepOrange': Colors.deepOrange,
-      'brown': Colors.brown,
-      'grey': Colors.grey,
-      'blueGrey': Colors.blueGrey,
-    };
+const Map<String, MaterialColor> kMaterialColorsByName = <String, MaterialColor>{
+  'red': Colors.red,
+  'pink': Colors.pink,
+  'purple': Colors.purple,
+  'deepPurple': Colors.deepPurple,
+  'indigo': Colors.indigo,
+  'blue': Colors.blue,
+  'lightBlue': Colors.lightBlue,
+  'cyan': Colors.cyan,
+  'teal': Colors.teal,
+  'green': Colors.green,
+  'lightGreen': Colors.lightGreen,
+  'lime': Colors.lime,
+  'yellow': Colors.yellow,
+  'amber': Colors.amber,
+  'orange': Colors.orange,
+  'deepOrange': Colors.deepOrange,
+  'brown': Colors.brown,
+  'grey': Colors.grey,
+  'blueGrey': Colors.blueGrey,
+};
 
 /// Special day-color name representing the monochrome swatch: black in light mode,
 /// white in dark mode (matches the picker's black/white swatch and getForeground convention).

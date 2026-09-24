@@ -40,8 +40,7 @@ class E2eEncryptionService {
   static const int saltLengthBytes = 16;
   static const int nonceLengthBytes = 12;
   static const int tagLengthBytes = 16;
-  static final int headerLengthBytes =
-      magicBytes.length + saltLengthBytes + nonceLengthBytes;
+  static final int headerLengthBytes = magicBytes.length + saltLengthBytes + nonceLengthBytes;
 
   /// OWASP-recommended floor for PBKDF2-HMAC-SHA256 is 600k iterations for
   /// password storage; for a passphrase-derived *encryption* key used on
@@ -82,17 +81,11 @@ class E2eEncryptionService {
     List<int>? nonce,
   }) async {
     final Random secureRandom = Random.secure();
-    final List<int> usedSalt =
-        salt ??
-        List<int>.generate(saltLengthBytes, (_) => secureRandom.nextInt(256));
-    final List<int> usedNonce =
-        nonce ??
-        List<int>.generate(nonceLengthBytes, (_) => secureRandom.nextInt(256));
+    final List<int> usedSalt = salt ?? List<int>.generate(saltLengthBytes, (_) => secureRandom.nextInt(256));
+    final List<int> usedNonce = nonce ?? List<int>.generate(nonceLengthBytes, (_) => secureRandom.nextInt(256));
 
-    if (usedSalt.length != saltLengthBytes)
-      throw ArgumentError('salt must be $saltLengthBytes bytes');
-    if (usedNonce.length != nonceLengthBytes)
-      throw ArgumentError('nonce must be $nonceLengthBytes bytes');
+    if (usedSalt.length != saltLengthBytes) throw ArgumentError('salt must be $saltLengthBytes bytes');
+    if (usedNonce.length != nonceLengthBytes) throw ArgumentError('nonce must be $nonceLengthBytes bytes');
 
     final Uint8List key = await deriveKey(
       passphrase: passphrase,
@@ -126,8 +119,7 @@ class E2eEncryptionService {
       throw const FormatException('E2E payload too short');
     }
     for (int i = 0; i < magicBytes.length; i++) {
-      if (bytes[i] != magicBytes[i])
-        throw const FormatException('Not an Inkling E2E payload');
+      if (bytes[i] != magicBytes[i]) throw const FormatException('Not an Inkling E2E payload');
     }
 
     final List<int> salt = bytes.sublist(
