@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:storypad/app_theme.dart';
@@ -397,6 +398,9 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
     await _checkNewStoryResult(addedStory);
   }
 
+  /// Quick voice capture: records, then saves a standalone voice story
+  /// immediately — no editor round-trip. The snackbar offers Undo (moves the
+  /// story to bin); the story stays fully editable from its tile afterwards.
   Future<void> goToNewPageWithVoice(BuildContext context) async {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
@@ -409,13 +413,48 @@ class HomeViewModel extends ChangeNotifier with DisposeAwareMixin {
 
         if (asset == null) return;
 
-        final addedStory = await EditStoryRoute(
-          id: null,
-          initialYear: year,
-          initialAsset: asset,
-        ).push(HomeView.homeContext!);
+        final now = DateTime.now();
+        StoryDbModel story = StoryDbModel.fromDate(now);
 
-        await _checkNewStoryResult(addedStory);
+        final content = StoryContentDbModel(
+          id: now.millisecondsSinceEpoch,
+          title: tr("story.voice_note_title"),
+          plainText: null,
+          createdAt: now,
+          richPages: [
+            StoryPageDbModel(
+              id: now.millisecondsSinceEpoch + 1,
+              title: null,
+              body: [
+                {'insert': {'audio': asset.relativeLocalFilePath}},
+              ],
+              characterCount: null,
+              wordCount: null,
+            ),
+          ],
+        );
+
+        story = story.copyWith(latestContent: content, draftContent: null, assets: [asset.id]);
+        final savedStory = await StoryDbModel.db.set(story);
+
+        AnalyticsService.instance.logSaveVoiceNote();
+
+        if (savedStory == null) return;
+
+        await _checkNewStoryResult(savedStory);
+
+        if (HomeView.homeContext?.mounted != true) return;
+        MessengerService.of(HomeView.homeContext!).showSnackBar(
+          tr("snack_bar.voice_note_saved"),
+          action: (foreground) => SnackBarAction(
+            label: tr("button.undo"),
+            textColor: foreground,
+            onPressed: () async {
+              final binned = await savedStory.moveToBin();
+              if (binned != null) onAStoryReloaded(binned);
+            },
+          ),
+        );
       },
     );
   }

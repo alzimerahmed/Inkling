@@ -56,13 +56,27 @@ class DevicePreferencesObject {
   final bool? enableRelaxSounds;
   final bool? enablePeriodCalendar;
 
+  /// Opt-in smart title suggestion: when enabled, the editor offers a title
+  /// derived from the first body line via pure-Dart heuristics. Fully
+  /// on-device (no model, no network) — see ADR-012.
+  final bool? enableSmartTitleSuggestion;
+
+  /// Opt-in weather auto-attach: when enabled, new stories get the current
+  /// weather prepended as a text line (Day One-style). Opt-in because it
+  /// uses location + network; silently skipped when offline or when
+  /// location permission was never granted.
+  final bool? enableWeatherAutoAttach;
+
   /// Device-local reminder configurations. `null` means never configured.
   /// Reminders are intentionally not synced across devices (OS notifications
   /// are per-device).
   final List<ReminderObject>? reminders;
 
-  Color? get colorSeed => colorSeedValue != null ? Color(colorSeedValue!) : null;
-  FontWeight get fontWeight => fontWeightIndex != null ? FontWeight.values[fontWeightIndex!] : kDefaultFontWeight;
+  Color? get colorSeed =>
+      colorSeedValue != null ? Color(colorSeedValue!) : null;
+  FontWeight get fontWeight => fontWeightIndex != null
+      ? FontWeight.values[fontWeightIndex!]
+      : kDefaultFontWeight;
 
   bool get colorSeedCustomized => colorSeed != null;
 
@@ -72,6 +86,8 @@ class DevicePreferencesObject {
     this.fontWeightIndex,
     this.enableRelaxSounds,
     this.enablePeriodCalendar,
+    this.enableSmartTitleSuggestion,
+    this.enableWeatherAutoAttach,
     this.reminders,
     ThemeMode? themeMode,
     this.timeFormat,
@@ -92,13 +108,16 @@ class DevicePreferencesObject {
   }) : fontFamily = fontFamily ?? kDefaultFontFamily,
        themeMode = themeMode ?? ThemeMode.system,
        firstDayOfWeek = firstDayOfWeek ?? FirstDayOfWeekOption.defaultValue,
-       assetCompression = assetCompression ?? AssetCompressionOption.defaultValue,
+       assetCompression =
+           assetCompression ?? AssetCompressionOption.defaultValue,
        mediaSync = mediaSync ?? MediaSyncOption.defaultValue,
        voicePlaybackSpeed = voicePlaybackSpeed ?? 1.0,
        videoPlaybackSpeed = videoPlaybackSpeed ?? 1.0,
        videoMuted = videoMuted ?? false,
-       storyTilePreferences = storyTilePreferences ?? StoryTilePreferencesObject(),
-       defaultStoryPreferences = defaultStoryPreferences ?? DefaultStoryPreferencesObject(),
+       storyTilePreferences =
+           storyTilePreferences ?? StoryTilePreferencesObject(),
+       defaultStoryPreferences =
+           defaultStoryPreferences ?? DefaultStoryPreferencesObject(),
        mapStyle = mapStyle ?? SpMapStyle.streets;
 
   factory DevicePreferencesObject.initial() {
@@ -106,5 +125,6 @@ class DevicePreferencesObject {
   }
 
   Map<String, dynamic> toJson() => _$DevicePreferencesObjectToJson(this);
-  factory DevicePreferencesObject.fromJson(Map<String, dynamic> json) => _$DevicePreferencesObjectFromJson(json);
+  factory DevicePreferencesObject.fromJson(Map<String, dynamic> json) =>
+      _$DevicePreferencesObjectFromJson(json);
 }

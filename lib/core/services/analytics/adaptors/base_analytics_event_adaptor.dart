@@ -264,6 +264,8 @@ abstract class BaseAnalyticsEventAdaptor {
 
   Future<void> logRecordVideo() => logEvent(sanitizeEventName('record_video'));
 
+  Future<void> logSaveVoiceNote() => logEvent(sanitizeEventName('save_voice_note'));
+
   Future<void> logViewImages({required int imagesCount, int videosCount = 0}) {
     return logEvent(
       sanitizeEventName('view_images'),
