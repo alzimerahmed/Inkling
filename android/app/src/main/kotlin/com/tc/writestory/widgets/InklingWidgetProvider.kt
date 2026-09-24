@@ -8,7 +8,6 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.RemoteViews
 import com.tc.writestory.MainActivity
-import com.tc.writestory.R
 
 /**
  * Inkling home-screen widget (Phase 3, gap #1).
@@ -20,6 +19,11 @@ import com.tc.writestory.R
  *
  * Data comes from `HomeWidgetPreferences` SharedPreferences, written by the
  * home_widget plugin (HomeWidgetService#updateTodayEntry).
+ *
+ * Resource IDs are resolved by name via [Context.getPackageName] because the
+ * app has product flavors with different applicationIds (com.tc.writestory /
+ * com.tc.writestory.community), so a compile-time `R` import cannot work for
+ * both flavors from a shared source set.
  */
 class InklingWidgetProvider : AppWidgetProvider() {
 
@@ -33,23 +37,33 @@ class InklingWidgetProvider : AppWidgetProvider() {
         }
     }
 
+    private fun resId(context: Context, name: String, defType: String): Int =
+        context.resources.getIdentifier(name, defType, context.packageName)
+
+    private fun string(context: Context, name: String, vararg args: Any): String {
+        val id = resId(context, name, "string")
+        return if (id != 0) context.getString(id, *args) else ""
+    }
+
     private fun buildViews(context: Context): RemoteViews {
         val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
         val todayExists = prefs.getBoolean("today_exists", false)
         val todayTitle = prefs.getString("today_title", "") ?: ""
         val todayWordCount = prefs.getInt("today_word_count", 0)
 
-        val views = RemoteViews(context.packageName, R.layout.inkling_widget)
+        val views = RemoteViews(context.packageName, resId(context, "inkling_widget", "layout"))
+        val statusId = resId(context, "widget_today_status", "id")
+        val detailId = resId(context, "widget_today_detail", "id")
 
         if (todayExists) {
-            views.setTextViewText(R.id.widget_today_status, context.getString(R.string.widget_written_today))
+            views.setTextViewText(statusId, string(context, "widget_written_today"))
             views.setTextViewText(
-                R.id.widget_today_detail,
-                if (todayTitle.isNotEmpty()) todayTitle else context.getString(R.string.widget_words_suffix, todayWordCount),
+                detailId,
+                if (todayTitle.isNotEmpty()) todayTitle else string(context, "widget_words_suffix", todayWordCount),
             )
         } else {
-            views.setTextViewText(R.id.widget_today_status, context.getString(R.string.widget_no_entry_today))
-            views.setTextViewText(R.id.widget_today_detail, "")
+            views.setTextViewText(statusId, string(context, "widget_no_entry_today"))
+            views.setTextViewText(detailId, "")
         }
 
         // Whole-widget tap: open the app normally.
@@ -57,7 +71,7 @@ class InklingWidgetProvider : AppWidgetProvider() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
         views.setOnClickPendingIntent(
-            R.id.widget_root,
+            resId(context, "widget_root", "id"),
             PendingIntent.getActivity(
                 context,
                 0,
@@ -72,7 +86,7 @@ class InklingWidgetProvider : AppWidgetProvider() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
         views.setOnClickPendingIntent(
-            R.id.widget_quick_capture,
+            resId(context, "widget_quick_capture", "id"),
             PendingIntent.getActivity(
                 context,
                 1,
