@@ -21,7 +21,11 @@ class OnThisDayPredictionService {
     final start = DateTime(from.year, from.month, from.day);
     final matches = <DateTime>[];
 
-    for (int offset = 0; offset <= horizonDays && matches.length < maxResults; offset++) {
+    for (
+      int offset = 0;
+      offset <= horizonDays && matches.length < maxResults;
+      offset++
+    ) {
       final date = start.add(Duration(days: offset));
       if (hasMemoriesOn(date.month, date.day)) matches.add(date);
     }

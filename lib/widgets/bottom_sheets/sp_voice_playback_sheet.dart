@@ -66,7 +66,9 @@ class _VoicePlaybackContent extends StatelessWidget {
       child: SpVoicePlayer.network(
         autoplay: true,
         onDownloadRequested: () => _downloadAudio(context),
-        initialDuration: asset.durationInMs != null ? Duration(milliseconds: asset.durationInMs!) : null,
+        initialDuration: asset.durationInMs != null
+            ? Duration(milliseconds: asset.durationInMs!)
+            : null,
       ),
     );
   }

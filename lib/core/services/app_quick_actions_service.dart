@@ -32,7 +32,8 @@ import 'package:storypad/widgets/sp_app_lock_wrapper.dart';
 typedef AppQuickActionLaunchHandler = FutureOr<void> Function(String actionId);
 
 class AppQuickActionsService {
-  AppQuickActionsService({QuickActions quickActions = const QuickActions()}) : _quickActions = quickActions {
+  AppQuickActionsService({QuickActions quickActions = const QuickActions()})
+    : _quickActions = quickActions {
     if (supported) {
       _actionStream.stream.listen((actionId) async {
         _handleLaunch(actionId);
@@ -66,8 +67,10 @@ class AppQuickActionsService {
     _quickActions.initialize(_actionStream.add);
     _initCompleter.complete();
 
-    final homeQuickActions = DevicePreferencesStorage.appInstance.preferences.homeQuickActions;
-    if (homeQuickActions == null || homeQuickActions.isEmpty) await setActions([]);
+    final homeQuickActions =
+        DevicePreferencesStorage.appInstance.preferences.homeQuickActions;
+    if (homeQuickActions == null || homeQuickActions.isEmpty)
+      await setActions([]);
   }
 
   Future<void> setActions(List<AppQuickActionObject>? actions) async {
@@ -243,7 +246,10 @@ class AppQuickActionsService {
     await SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final compression = context
+            .read<DevicePreferencesProvider>()
+            .preferences
+            .assetCompression;
         final photo = await AppFilePickerService.pickImage(
           source: ImageSource.camera,
           compression: compression,
@@ -272,7 +278,10 @@ class AppQuickActionsService {
     await SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final compression = context
+            .read<DevicePreferencesProvider>()
+            .preferences
+            .assetCompression;
         final video = await AppFilePickerService.pickVideo(
           context: context,
           source: ImageSource.camera,

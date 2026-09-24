@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
 import 'package:storypad/core/databases/models/asset_db_model.dart';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
+    as exp;
 import 'package:storypad/core/services/analytics/analytics_service.dart';
 import 'package:storypad/core/services/internet_checker_service.dart';
 import 'package:storypad/core/services/messenger_service.dart';

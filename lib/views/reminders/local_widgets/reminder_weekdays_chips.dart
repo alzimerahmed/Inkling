@@ -57,7 +57,11 @@ class ReminderWeekdaysChips extends StatelessWidget {
   }
 
   List<int> _orderedWeekdays(BuildContext context) {
-    final firstDay = context.read<DevicePreferencesProvider>().preferences.firstDayOfWeek.value;
+    final firstDay = context
+        .read<DevicePreferencesProvider>()
+        .preferences
+        .firstDayOfWeek
+        .value;
     return List.generate(7, (i) => ((firstDay - 1 + i) % 7) + 1);
   }
 }

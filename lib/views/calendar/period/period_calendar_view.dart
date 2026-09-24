@@ -26,7 +26,8 @@ class PeriodCalendarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<PeriodCalendarViewModel>(
-      create: (context) => PeriodCalendarViewModel(params: this, context: context),
+      create: (context) =>
+          PeriodCalendarViewModel(params: this, context: context),
       builder: (context, child) {
         return _PeriodCalendarContent(Provider.of(context));
       },

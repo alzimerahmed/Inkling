@@ -31,7 +31,10 @@ class EditStoryViewModel extends BaseStoryViewModel {
     init(
       initialStory: params.story,
       initialPagesMap: params.pagesMap,
-      defaultStoryPreferences: context.read<DevicePreferencesProvider>().preferences.defaultStoryPreferences,
+      defaultStoryPreferences: context
+          .read<DevicePreferencesProvider>()
+          .preferences
+          .defaultStoryPreferences,
     ).then((_) => requestFocus());
   }
 
@@ -49,8 +52,11 @@ class EditStoryViewModel extends BaseStoryViewModel {
   }) async {
     story = this.initialStory = initialStory;
 
-    if (params.id != null) story = this.initialStory = initialStory ?? await StoryDbModel.db.find(params.id!);
-    if (story?.draftContent != null) lastSavedAtNotifier.value = story?.updatedAt;
+    if (params.id != null)
+      story = this.initialStory =
+          initialStory ?? await StoryDbModel.db.find(params.id!);
+    if (story?.draftContent != null)
+      lastSavedAtNotifier.value = story?.updatedAt;
 
     flowType = story == null ? EditingFlowType.create : EditingFlowType.update;
     story ??= StoryDbModel.fromDate(
@@ -77,13 +83,18 @@ class EditStoryViewModel extends BaseStoryViewModel {
     // Copy with richPages from pagesManager instead, since DB-loaded pages have null plainText.
     // plainText is needed when saving back to draft content for homepage display & search.
     draftContent = content.copyWith(
-      richPages: content.richPages?.map((e) => pagesManager.pagesMap[e.id]?.page ?? e).toList(),
+      richPages: content.richPages
+          ?.map((e) => pagesManager.pagesMap[e.id]?.page ?? e)
+          .toList(),
     );
 
     if (params.initialAsset?.relativeLocalFilePath != null) {
       final asset = params.initialAsset!;
-      final index = pagesManager.pagesMap.first.bodyController.selection.baseOffset;
-      final length = pagesManager.pagesMap.first.bodyController.selection.extentOffset - index;
+      final index =
+          pagesManager.pagesMap.first.bodyController.selection.baseOffset;
+      final length =
+          pagesManager.pagesMap.first.bodyController.selection.extentOffset -
+          index;
       final embedKey = asset.type == AssetType.audio ? 'audio' : 'media';
       pagesManager.pagesMap.first.bodyController.replaceText(
         index,
@@ -146,13 +157,16 @@ class EditStoryViewModel extends BaseStoryViewModel {
 
         // only focus when it is a selection (no tap)
         if (page != null &&
-            (page.titleController.selection.baseOffset != page.titleController.selection.extentOffset)) {
+            (page.titleController.selection.baseOffset !=
+                page.titleController.selection.extentOffset)) {
           page.titleFocusNode.requestFocus();
           requested = true;
         }
 
         // only focus when it is a selection (no tap)
-        if (page != null && (page.bodyController.selection.baseOffset != page.bodyController.selection.extentOffset)) {
+        if (page != null &&
+            (page.bodyController.selection.baseOffset !=
+                page.bodyController.selection.extentOffset)) {
           page.bodyFocusNode.requestFocus();
           requested = true;
         }
@@ -169,7 +183,8 @@ class EditStoryViewModel extends BaseStoryViewModel {
       }
 
       if (!requested) {
-        pagesManager.pagesMap[draftContent!.richPages!.first.id]?.bodyFocusNode.requestFocus();
+        pagesManager.pagesMap[draftContent!.richPages!.first.id]?.bodyFocusNode
+            .requestFocus();
         requested = true;
       }
     });
@@ -222,7 +237,8 @@ class EditStoryViewModel extends BaseStoryViewModel {
         if (userAction == OkCancelResult.ok) {
           await StoryDbModel.db.delete(story!.id, softDelete: false);
           story = null;
-          if (context.mounted && ModalRoute.of(context)?.isCurrent == true) return Navigator.of(context).pop(null);
+          if (context.mounted && ModalRoute.of(context)?.isCurrent == true)
+            return Navigator.of(context).pop(null);
         } else {
           return;
         }
@@ -235,7 +251,8 @@ class EditStoryViewModel extends BaseStoryViewModel {
         if (userAction == OkCancelResult.ok) {
           await StoryDbModel.db.set(initialStory!);
           story = initialStory;
-          if (context.mounted && ModalRoute.of(context)?.isCurrent == true) return Navigator.of(context).pop(null);
+          if (context.mounted && ModalRoute.of(context)?.isCurrent == true)
+            return Navigator.of(context).pop(null);
         }
       } else {
         if (context.mounted) Navigator.of(context).pop(null);

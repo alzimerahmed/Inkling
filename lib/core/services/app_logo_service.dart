@@ -27,7 +27,8 @@ class AppLogoService {
     try {
       await _channel.invokeMethod('AppLogoService.set', {
         if (Platform.isIOS) 'xcodeLogoName': logo.xcodeLogoName,
-        if (Platform.isAndroid) 'androidActivityAliasName': logo.androidActivityAliasName,
+        if (Platform.isAndroid)
+          'androidActivityAliasName': logo.androidActivityAliasName,
       });
 
       set = true;
@@ -55,7 +56,9 @@ class AppLogoService {
     try {
       await _channel.invokeMethod('AppLogoService.set', {
         if (Platform.isIOS) 'xcodeLogoName': null,
-        if (Platform.isAndroid) 'androidActivityAliasName': AppLogo.values.first.androidActivityAliasName,
+        if (Platform.isAndroid)
+          'androidActivityAliasName':
+              AppLogo.values.first.androidActivityAliasName,
       });
       cleared = true;
     } catch (e) {

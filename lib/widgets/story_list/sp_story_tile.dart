@@ -17,6 +17,7 @@ import 'package:storypad/widgets/bottom_sheets/sp_story_info_sheet.dart';
 import 'package:storypad/widgets/sp_icons.dart';
 import 'package:storypad/widgets/sp_album_grid.dart';
 import 'package:storypad/widgets/sp_animated_icon.dart';
+import 'package:storypad/widgets/sp_highlighted_text.dart';
 import 'package:storypad/widgets/sp_markdown_body.dart';
 import 'package:storypad/widgets/sp_media_tile.dart';
 import 'package:storypad/widgets/media_viewer/sp_media_viewer.dart';
@@ -44,6 +45,7 @@ class SpStoryTile extends StatelessWidget {
     required this.onTap,
     required this.listContext,
     this.viewOnly = false,
+    this.highlightQuery,
   });
 
   final StoryDbModel story;
@@ -51,6 +53,9 @@ class SpStoryTile extends StatelessWidget {
   final bool showMonogram;
   final bool viewOnly;
   final void Function()? onTap;
+
+  /// Search query for body match highlighting (null outside search results).
+  final String? highlightQuery;
 
   /// In some case, StoryTile is removed from screen, which make its context unusable.
   /// [listContext] is still mounted even after story is removed, allow us it to read HomeViewModel & do other thiings.
@@ -120,6 +125,14 @@ class SpStoryTile extends StatelessWidget {
           persisted: true,
         ).show(context: context),
       ),
+      SpPopMenuItem(
+        title: tr('button.export_pdf'),
+        leadingIconData: SpIcons.pdf,
+        onPressed: () => StoryTileActions(
+          story: story,
+          storyListReloaderContext: listContext,
+        ).exportPdf(context),
+      ),
     ];
   }
 
@@ -144,7 +157,8 @@ class SpStoryTile extends StatelessWidget {
     );
 
     bool hasTitle = content?.title?.trim().isNotEmpty == true;
-    bool hasBody = displayShortBody != null && displayShortBody.trim().isNotEmpty == true;
+    bool hasBody =
+        displayShortBody != null && displayShortBody.trim().isNotEmpty == true;
     List<SpPopMenuItem> menus = buildPopUpMenus(context);
 
     return SpPopupMenuButton(
@@ -161,10 +175,12 @@ class SpStoryTile extends StatelessWidget {
             onLongPress = null;
           } else if (story.inArchives || story.inBins) {
             onTap = () => openPopUpMenu.call();
-            onLongPress = () => multiEditState.turnOnEditing(initialId: story.id);
+            onLongPress = () =>
+                multiEditState.turnOnEditing(initialId: story.id);
           } else {
             onTap = this.onTap;
-            onLongPress = () => multiEditState.turnOnEditing(initialId: story.id);
+            onLongPress = () =>
+                multiEditState.turnOnEditing(initialId: story.id);
           }
         } else {
           onTap = this.onTap;
@@ -204,6 +220,7 @@ class SpStoryTile extends StatelessWidget {
                       hasBody: hasBody,
                       displayShortBody: displayShortBody,
                       preferences: preferences,
+                      highlightQuery: highlightQuery,
                     ),
                   ],
                 ),

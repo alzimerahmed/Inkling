@@ -131,7 +131,8 @@ class VideoCompressionService {
       // iOS that field is `track.totalSampleDataLength`, the video track alone, so
       // it under-reports and would make clips look more compact than they are.
       final sourceBitrate = originalSize * 8 / (durationMs / 1000);
-      final targetBitrate = _bitsPerPixelPerSecond * width * height * _assumedFrameRate;
+      final targetBitrate =
+          _bitsPerPixelPerSecond * width * height * _assumedFrameRate;
 
       return sourceBitrate <= targetBitrate * _worthCompressingRatio;
     } catch (e, s) {

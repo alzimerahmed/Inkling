@@ -40,7 +40,8 @@ class StorageManagementView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<StorageManagementViewModel>(
-      create: (context) => StorageManagementViewModel(params: params, context: context),
+      create: (context) =>
+          StorageManagementViewModel(params: params, context: context),
       builder: (context, child) {
         return _StorageManagementContent(Provider.of(context));
       },

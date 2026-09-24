@@ -163,7 +163,8 @@ class _PeriodCalendarContent extends StatelessWidget {
     bool scrollable = false,
   }) {
     final firstDayOfWeek = context.select(
-      (DevicePreferencesProvider provider) => provider.preferences.firstDayOfWeek,
+      (DevicePreferencesProvider provider) =>
+          provider.preferences.firstDayOfWeek,
     );
 
     Widget child = SpCalendar(
@@ -180,7 +181,9 @@ class _PeriodCalendarContent extends StatelessWidget {
           isLastMonthPeriodDate: viewModel.isLastMonthPeriodDate(date),
           isPeriodDate: viewModel.isPeriodDate(date),
           selected: viewModel.isDateSelected(date),
-          onTap: isDisplayMonth ? () => viewModel.toggleDate(context, date) : null,
+          onTap: isDisplayMonth
+              ? () => viewModel.toggleDate(context, date)
+              : null,
         );
       },
     );
@@ -197,7 +200,8 @@ class _PeriodCalendarContent extends StatelessWidget {
   static const double _reminderTileHeight = 72.0;
 
   Widget buildStoryList(BuildContext context) {
-    if (viewModel.selectedEventStories?.items == null || viewModel.selectedEventStories?.items.isEmpty == true) {
+    if (viewModel.selectedEventStories?.items == null ||
+        viewModel.selectedEventStories?.items.isEmpty == true) {
       return Padding(
         padding: const EdgeInsets.all(
           16.0,
@@ -213,8 +217,10 @@ class _PeriodCalendarContent extends StatelessWidget {
     return SpStoryList(
       paddingTop: _reminderTileHeight,
       stories: viewModel.selectedEventStories,
-      onChanged: (item) => viewModel.load(initialSelectedDate: viewModel.selectedEventDate),
-      onDeleted: () => viewModel.load(initialSelectedDate: viewModel.selectedEventDate),
+      onChanged: (item) =>
+          viewModel.load(initialSelectedDate: viewModel.selectedEventDate),
+      onDeleted: () =>
+          viewModel.load(initialSelectedDate: viewModel.selectedEventDate),
     );
   }
 }

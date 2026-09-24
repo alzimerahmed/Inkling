@@ -20,6 +20,7 @@ class SpStoryTileListItem extends StatelessWidget {
     this.listHasPinned = false,
     this.viewOnly = false,
     this.monthlyStats,
+    this.highlightQuery,
   });
 
   final int index;
@@ -31,16 +32,24 @@ class SpStoryTileListItem extends StatelessWidget {
   final bool viewOnly;
   final BuildContext listContext;
 
+  /// Search query for match highlighting in tile bodies (null elsewhere).
+  final String? highlightQuery;
+
   /// Per-month recap stats keyed by month. When null (e.g. the cross-year
   /// list), no recap tile is shown.
   final Map<int, MonthRecapStatsObject>? monthlyStats;
 
   @override
   Widget build(BuildContext context) {
-    StoryDbModel? previousStory = index - 1 >= 0 ? stories.items[index - 1] : null;
+    StoryDbModel? previousStory = index - 1 >= 0
+        ? stories.items[index - 1]
+        : null;
     StoryDbModel story = stories.items[index];
-    StoryDbModel? nextStory = index + 1 < stories.items.length ? stories.items[index + 1] : null;
-    bool showMonogram = previousStory == null || !previousStory.sameDayAs(story);
+    StoryDbModel? nextStory = index + 1 < stories.items.length
+        ? stories.items[index + 1]
+        : null;
+    bool showMonogram =
+        previousStory == null || !previousStory.sameDayAs(story);
 
     Widget timelineDivider;
 
@@ -61,7 +70,8 @@ class SpStoryTileListItem extends StatelessWidget {
       );
     }
 
-    if (previousStory?.month != story.month || previousStory?.year != story.year) {
+    if (previousStory?.month != story.month ||
+        previousStory?.year != story.year) {
       final MonthRecapStatsObject? monthStats = monthlyStats?[story.month];
 
       return Column(
@@ -134,6 +144,7 @@ class SpStoryTileListItem extends StatelessWidget {
           viewOnly: viewOnly,
           onTap: onTap,
           listContext: listContext,
+          highlightQuery: highlightQuery,
         );
       },
     );

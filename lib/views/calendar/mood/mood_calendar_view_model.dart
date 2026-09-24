@@ -15,7 +15,8 @@ import 'package:storypad/views/stories/edit/edit_story_view.dart';
 import 'package:storypad/widgets/calendar/sp_calendar.dart';
 import 'mood_calendar_view.dart';
 
-class MoodCalendarViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
+class MoodCalendarViewModel extends ChangeNotifier
+    with DisposeAwareMixin, DebounchedCallback {
   final MoodCalendarView params;
   late final TagsProvider tagsProvider;
 
@@ -26,14 +27,16 @@ class MoodCalendarViewModel extends ChangeNotifier with DisposeAwareMixin, Debou
     tagsProvider = context.read<TagsProvider>();
     oddFeelingVisibleIndexNotifier = ValueNotifier<int>(0);
     oddPeriodicTimer = Timer.periodic(const Duration(seconds: 3), (_) {
-      oddFeelingVisibleIndexNotifier.value = oddFeelingVisibleIndexNotifier.value + 1;
+      oddFeelingVisibleIndexNotifier.value =
+          oddFeelingVisibleIndexNotifier.value + 1;
     });
 
     evenFeelingVisibleIndexNotifier = ValueNotifier<int>(0);
     evenPeriodicTimer = Timer.periodic(const Duration(seconds: 3), (_) {
       Future.delayed(const Duration(seconds: 1)).then((_) {
         if (disposed) return;
-        evenFeelingVisibleIndexNotifier.value = evenFeelingVisibleIndexNotifier.value + 1;
+        evenFeelingVisibleIndexNotifier.value =
+            evenFeelingVisibleIndexNotifier.value + 1;
       });
     });
 
@@ -44,7 +47,8 @@ class MoodCalendarViewModel extends ChangeNotifier with DisposeAwareMixin, Debou
     );
 
     _tags = [...context.read<TagsProvider>().tags?.items ?? []];
-    if (_tags?.isNotEmpty == true) _tags?.insert(0, TagDbModel.fromIDTitle(0, tr('general.all')));
+    if (_tags?.isNotEmpty == true)
+      _tags?.insert(0, TagDbModel.fromIDTitle(0, tr('general.all')));
 
     currentFilterStoriesCount = StoryDbModel.db.getStoryCountBy(
       filters: searchFilter.toDatabaseFilter(),
@@ -92,7 +96,8 @@ class MoodCalendarViewModel extends ChangeNotifier with DisposeAwareMixin, Debou
 
   Map<int, List<String>> feelingsMapByDay = {};
 
-  bool tagSelected(TagDbModel tag) => (selectedTagId == tag.id) || (tag.id == 0 && selectedTagId == null);
+  bool tagSelected(TagDbModel tag) =>
+      (selectedTagId == tag.id) || (tag.id == 0 && selectedTagId == null);
   SearchFilterObject get searchFilter {
     return SearchFilterObject(
       years: {year},
@@ -145,7 +150,9 @@ class MoodCalendarViewModel extends ChangeNotifier with DisposeAwareMixin, Debou
     int? selectedDay,
     int? selectedTagId,
   ) async {
-    if (year != this.year || month != this.month || selectedTagId != this.selectedTagId) {
+    if (year != this.year ||
+        month != this.month ||
+        selectedTagId != this.selectedTagId) {
       feelingsMapByDay = StoryDbModel.db.getStoryFeelingByMonth(
         month: month,
         year: year,
@@ -154,7 +161,9 @@ class MoodCalendarViewModel extends ChangeNotifier with DisposeAwareMixin, Debou
       );
     }
 
-    this.selectedDay = year != this.year || month != this.month ? null : selectedDay;
+    this.selectedDay = year != this.year || month != this.month
+        ? null
+        : selectedDay;
     this.year = year;
     this.month = month;
     this.selectedTagId = selectedTagId;
@@ -173,7 +182,8 @@ class MoodCalendarViewModel extends ChangeNotifier with DisposeAwareMixin, Debou
   void onMonthChanged(int year, int month) {
     onChanged(year, month, selectedDay, selectedTagId);
 
-    if (params.monthYearNotifier.value.month != month || params.monthYearNotifier.value.year != year) {
+    if (params.monthYearNotifier.value.month != month ||
+        params.monthYearNotifier.value.year != year) {
       params.monthYearNotifier.value = (year: year, month: month);
     }
 

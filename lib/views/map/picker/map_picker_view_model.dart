@@ -47,9 +47,13 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
   bool _showCurrentLocation = false;
   bool get showCurrentLocation => _showCurrentLocation;
 
-  SpMapRenderer get mapRenderer => viewContext.read<DevicePreferencesProvider>().mapRenderer;
+  SpMapRenderer get mapRenderer =>
+      viewContext.read<DevicePreferencesProvider>().mapRenderer;
 
-  late SpMapStyle _mapStyle = viewContext.read<DevicePreferencesProvider>().preferences.mapStyle;
+  late SpMapStyle _mapStyle = viewContext
+      .read<DevicePreferencesProvider>()
+      .preferences
+      .mapStyle;
   SpMapStyle get mapStyle => _mapStyle;
 
   PlaceDbModel? _selectedPlace;
@@ -92,10 +96,14 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
 
     return selectedPlace.latitude != initialPlace.latitude ||
         selectedPlace.longitude != initialPlace.longitude ||
-        _normalizeText(selectedPlace.placeName) != _normalizeText(initialPlace.placeName) ||
-        _normalizeText(selectedPlace.locality) != _normalizeText(initialPlace.locality) ||
-        _normalizeText(selectedPlace.country) != _normalizeText(initialPlace.country) ||
-        _normalizeText(selectedPlace.address) != _normalizeText(initialPlace.address);
+        _normalizeText(selectedPlace.placeName) !=
+            _normalizeText(initialPlace.placeName) ||
+        _normalizeText(selectedPlace.locality) !=
+            _normalizeText(initialPlace.locality) ||
+        _normalizeText(selectedPlace.country) !=
+            _normalizeText(initialPlace.country) ||
+        _normalizeText(selectedPlace.address) !=
+            _normalizeText(initialPlace.address);
   }
 
   Future<void> resolveInitialCamera() async {
@@ -248,7 +256,8 @@ class MapPickerViewModel extends ChangeNotifier with DisposeAwareMixin {
     final String trimmed = query.trim();
 
     if (trimmed.isEmpty) return Future.value(const <PlaceDbModel>[]);
-    if (params.initialSelectedPlace == null) return Future.value(const <PlaceDbModel>[]);
+    if (params.initialSelectedPlace == null)
+      return Future.value(const <PlaceDbModel>[]);
 
     return SpGeocodingService.onlineInstance.searchPlaces(
       trimmed,

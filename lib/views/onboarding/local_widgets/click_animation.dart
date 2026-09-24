@@ -91,7 +91,8 @@ class _ClickAnimationState extends State<ClickAnimation> {
             return Container(
               width: 64,
               height: 64,
-              transform: Matrix4.identity()..spScale(lerpDouble(0.3, 1, animation.value)!),
+              transform: Matrix4.identity()
+                ..spScale(lerpDouble(0.3, 1, animation.value)!),
               transformAlignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
@@ -121,7 +122,8 @@ class _ClickAnimationState extends State<ClickAnimation> {
             return Container(
               width: 30,
               height: 30,
-              transform: Matrix4.identity()..spScale(lerpDouble(0.3, 1, animation.value)!),
+              transform: Matrix4.identity()
+                ..spScale(lerpDouble(0.3, 1, animation.value)!),
               transformAlignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,

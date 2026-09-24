@@ -36,17 +36,19 @@ class StoryShouldRevertChangeService {
     currentStoryJson.remove('draft_content');
     currentStoryJson.remove('latest_content');
 
-    initialStoryJson['content_to_compare'] = (initialStory.draftContent ?? initialStory.latestContent)?.toJson()
-      ?..remove('id')
-      ..remove('created_at')
-      ..remove('plain_text')
-      ..remove('metadata');
+    initialStoryJson['content_to_compare'] =
+        (initialStory.draftContent ?? initialStory.latestContent)?.toJson()
+          ?..remove('id')
+          ..remove('created_at')
+          ..remove('plain_text')
+          ..remove('metadata');
 
-    currentStoryJson['content_to_compare'] = (currentStory.draftContent ?? currentStory.latestContent)?.toJson()
-      ?..remove('id')
-      ..remove('created_at')
-      ..remove('plain_text')
-      ..remove('metadata');
+    currentStoryJson['content_to_compare'] =
+        (currentStory.draftContent ?? currentStory.latestContent)?.toJson()
+          ?..remove('id')
+          ..remove('created_at')
+          ..remove('plain_text')
+          ..remove('metadata');
 
     return jsonEncode(currentStoryJson) == jsonEncode(initialStoryJson);
   }

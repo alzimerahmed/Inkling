@@ -11,7 +11,8 @@ class _SearchContent extends StatelessWidget {
       builder: (context, state) {
         return PopScope(
           canPop: !state.editing,
-          onPopInvokedWithResult: (didPop, result) => viewModel.onPopInvokedWithResult(didPop, result, context),
+          onPopInvokedWithResult: (didPop, result) =>
+              viewModel.onPopInvokedWithResult(didPop, result, context),
           child: buildScaffold(context, state),
         );
       },
@@ -82,9 +83,25 @@ class _SearchContent extends StatelessWidget {
                         choices: visibleTags,
                         storiesCount: (TagDbModel tag) => tag.storiesCount,
                         toLabel: (TagDbModel tag) => tag.title,
-                        selected: (TagDbModel tag) => viewModel.tagSelected(tag),
-                        onToggle: (TagDbModel tag) => viewModel.toggleTag(tag, context),
+                        selected: (TagDbModel tag) =>
+                            viewModel.tagSelected(tag),
+                        onToggle: (TagDbModel tag) =>
+                            viewModel.toggleTag(tag, context),
                       ),
+                    ),
+                    const SizedBox(height: 12.0),
+                  ],
+                ),
+              )
+            : viewModel.hasQuery
+            ? PreferredSize(
+                preferredSize: const Size.fromHeight(34.0 + 12.0),
+                child: Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    SizedBox(
+                      width: .infinity,
+                      child: _buildPresetChips(context),
                     ),
                     const SizedBox(height: 12.0),
                   ],
@@ -98,9 +115,53 @@ class _SearchContent extends StatelessWidget {
   }
 
   Widget buildBody() {
-    if (viewModel.searchFilter == null) return const Center(child: CircularProgressIndicator.adaptive());
+    if (viewModel.searchFilter == null)
+      return const Center(child: CircularProgressIndicator.adaptive());
     return SpStoryList.withQuery(
       filter: viewModel.searchFilter,
+    );
+  }
+
+  /// One-tap filter presets shown while a query is active (Phase 4, gap #14).
+  Widget _buildPresetChips(BuildContext context) {
+    Widget presetChip({
+      required String label,
+      required bool selected,
+      required VoidCallback onTap,
+    }) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: FilterChip(
+          label: Text(label),
+          selected: selected,
+          onSelected: (_) => onTap(),
+          visualDensity: VisualDensity.compact,
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: Row(
+        children: [
+          presetChip(
+            label: tr('search.preset.starred'),
+            selected: viewModel.presetStarredActive,
+            onTap: viewModel.togglePresetStarred,
+          ),
+          presetChip(
+            label: tr('search.preset.pinned'),
+            selected: viewModel.presetPinnedActive,
+            onTap: viewModel.togglePresetPinned,
+          ),
+          presetChip(
+            label: tr('search.preset.this_year'),
+            selected: viewModel.presetThisYearActive,
+            onTap: viewModel.togglePresetThisYear,
+          ),
+        ],
+      ),
     );
   }
 

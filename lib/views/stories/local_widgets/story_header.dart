@@ -60,7 +60,8 @@ class StoryHeader extends StatelessWidget {
     required BuildContext context,
   }) {
     return StoryHeader(
-      currentPageIndexNotifier: viewModel.story?.preferences.layoutType == PageLayoutType.pages
+      currentPageIndexNotifier:
+          viewModel.story?.preferences.layoutType == PageLayoutType.pages
           ? viewModel.pagesManager.currentPageIndexNotifier
           : null,
       onSizeChange: (size) => viewModel.pagesManager.setHeaderHeight(
@@ -89,7 +90,8 @@ class StoryHeader extends StatelessWidget {
   }) {
     return StoryHeader(
       page: page,
-      currentPageIndexNotifier: viewModel.story?.preferences.layoutType == PageLayoutType.pages
+      currentPageIndexNotifier:
+          viewModel.story?.preferences.layoutType == PageLayoutType.pages
           ? viewModel.pagesManager.currentPageIndexNotifier
           : null,
       onSizeChange: (size) => viewModel.pagesManager.setHeaderHeight(
@@ -213,14 +215,19 @@ class _StoryHeaderDateSelector extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       alignment: .centerLeft,
       child: InkWell(
-        onTap: dateReadOnly || onChangeDate == null ? () => openCalendar(context) : () => changeDate(context),
+        onTap: dateReadOnly || onChangeDate == null
+            ? () => openCalendar(context)
+            : () => changeDate(context),
         borderRadius: BorderRadius.circular(4.0),
         child: Wrap(
           crossAxisAlignment: .center,
           children: [
             buildDay(context),
             const SizedBox(width: 4.0),
-            if (daySuffix != null) buildDaySuffixMonthYear(context, daySuffix) else buildMonthYear(context),
+            if (daySuffix != null)
+              buildDaySuffixMonthYear(context, daySuffix)
+            else
+              buildMonthYear(context),
             if (!dateReadOnly) ...[
               const SizedBox(width: 4.0),
               const Icon(SpIcons.dropDown),

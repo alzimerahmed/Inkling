@@ -44,7 +44,8 @@ class HomeWidgetService {
   }
 
   static bool uriIsQuickCapture({required Uri? initialUri}) =>
-      initialUri?.host == 'widget' && initialUri?.queryParameters['action'] == 'new_story';
+      initialUri?.host == 'widget' &&
+      initialUri?.queryParameters['action'] == 'new_story';
 
   /// Refreshes the widget's "today" snapshot. Called opportunistically on
   /// home navigation (see RootViewModel) — cheap query, no isolate needed.
@@ -63,8 +64,12 @@ class HomeWidgetService {
 
       final items = stories?.items ?? [];
       final bool exists = items.isNotEmpty;
-      final String title = exists ? (items.first.latestContent?.title ?? '').trim() : '';
-      final int wordCount = exists ? (items.first.latestContent?.wordCount ?? 0) : 0;
+      final String title = exists
+          ? (items.first.latestContent?.title ?? '').trim()
+          : '';
+      final int wordCount = exists
+          ? (items.first.latestContent?.wordCount ?? 0)
+          : 0;
 
       await HomeWidget.saveWidgetData<bool>('today_exists', exists);
       await HomeWidget.saveWidgetData<String>('today_title', title);

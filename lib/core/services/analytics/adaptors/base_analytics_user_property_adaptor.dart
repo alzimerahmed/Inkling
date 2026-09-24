@@ -11,7 +11,9 @@ import 'package:storypad/core/types/time_format_option.dart';
 
 abstract class BaseAnalyticsUserPropertyAdaptor {
   static BaseAnalyticsUserPropertyAdaptor create() {
-    return kFirebaseAvailable ? FirebaseAnalyticsUserPropertyAdaptor() : NoneAnalyticsUserPropertyAdaptor();
+    return kFirebaseAvailable
+        ? FirebaseAnalyticsUserPropertyAdaptor()
+        : NoneAnalyticsUserPropertyAdaptor();
   }
 
   // ---------------------------------------------------------------------------

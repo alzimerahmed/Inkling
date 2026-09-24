@@ -24,7 +24,8 @@ import 'package:storypad/views/throwback/throwback_view.dart';
 /// custom reminders).
 class ReminderNavigationService {
   ReminderNavigationService._();
-  static final ReminderNavigationService instance = ReminderNavigationService._();
+  static final ReminderNavigationService instance =
+      ReminderNavigationService._();
 
   /// Returns the notification title+body together — always as one pair, so a
   /// randomly-picked title never ends up mismatched with an unrelated body.
@@ -103,7 +104,9 @@ class ReminderNavigationService {
     BuildContext context,
   ) async {
     final hasPrefill =
-        reminder.templateId != null || reminder.galleryTemplateId != null || (reminder.tagIds?.isNotEmpty ?? false);
+        reminder.templateId != null ||
+        reminder.galleryTemplateId != null ||
+        (reminder.tagIds?.isNotEmpty ?? false);
 
     // No prefill configured -> just bring the app to the foreground on Home.
     if (!hasPrefill) {

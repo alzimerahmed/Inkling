@@ -88,7 +88,8 @@ class _GalleryTabState extends State<GalleryTab> {
           GalleryTemplateCategoryObject category = templates!.keys.elementAt(
             index,
           );
-          List<GalleryTemplateObject> templatesInCategory = templates!.values.elementAt(index);
+          List<GalleryTemplateObject> templatesInCategory = templates!.values
+              .elementAt(index);
 
           return SpFadeInFadeOutGradient(
             color: Theme.of(context).scaffoldBackgroundColor,
@@ -164,7 +165,8 @@ class _GalleryTabState extends State<GalleryTab> {
                     ),
                     child: _GalleryTemplateCard(
                       template: templatesInCategory[i],
-                      onTap: () => openTemplate(context, templatesInCategory[i]),
+                      onTap: () =>
+                          openTemplate(context, templatesInCategory[i]),
                     ),
                   ),
               ],

@@ -14,7 +14,8 @@ class BackupDatabasesToBackupObjectService {
     required DateTime lastUpdatedAt,
     SearchFilterObject? storyFilter,
     required bool hasCompression,
-    int? year, // Optional: filter records by createdAt.year for v3 yearly backups
+    int?
+    year, // Optional: filter records by createdAt.year for v3 yearly backups
   }) async {
     debugPrint(
       'BackupDatabasesToBackupObjectService#constructBackup year=$year hasCompression=$hasCompression',
@@ -60,7 +61,9 @@ class BackupDatabasesToBackupObjectService {
       if (isGlobalBucket && db.isYearPartitioned) continue;
       if (isYearlyBucket && !db.isYearPartitioned) continue;
 
-      Map<String, dynamic>? filters = isYearlyBucket ? {'created_year': year} : null;
+      Map<String, dynamic>? filters = isYearlyBucket
+          ? {'created_year': year}
+          : null;
 
       if (db.tableName == StoryDbModel.db.tableName && storyFilter != null) {
         filters ??= storyFilter.toDatabaseFilter();

@@ -22,7 +22,8 @@ class BackupTagsTableViewer extends StatelessWidget {
           leading: const Icon(SpIcons.tag),
           title: Text(tag.title),
           subtitle: Text(
-            DateFormatHelper.yMEd_jmNullable(tag.updatedAt, context.locale) ?? tr("general.na"),
+            DateFormatHelper.yMEd_jmNullable(tag.updatedAt, context.locale) ??
+                tr("general.na"),
           ),
         );
       },

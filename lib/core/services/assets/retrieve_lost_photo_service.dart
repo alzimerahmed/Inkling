@@ -24,7 +24,8 @@ class RetrieveLostPhotoService {
 
   static Future<void> _getLostData() async {
     try {
-      final LostDataResponse response = await AppFilePickerService.retrieveLostData();
+      final LostDataResponse response =
+          await AppFilePickerService.retrieveLostData();
       if (response.isEmpty) return;
 
       final List<XFile>? files = response.files;
@@ -34,8 +35,10 @@ class RetrieveLostPhotoService {
           // `AppFilePickerService`, so it has to compress by hand -- these are
           // raw recordings the picker never got to hand back. No context here
           // (and nobody watching), so no spinner: it just runs unattended.
-          final compression = DevicePreferencesStorage.appInstance.preferences.assetCompression;
-          final compressed = await VideoCompressionService.compress(file, compression) ?? file;
+          final compression =
+              DevicePreferencesStorage.appInstance.preferences.assetCompression;
+          final compressed =
+              await VideoCompressionService.compress(file, compression) ?? file;
           final picked = await PickedMediaObject.read(compressed);
           InsertFileToDbService.insertVideo(picked.file, size: picked.size);
         } else {

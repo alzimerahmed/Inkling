@@ -191,7 +191,8 @@ class SpAlbumGrid extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 '+$extraCount',
-                                style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white),
+                                style: Theme.of(context).textTheme.titleLarge
+                                    ?.copyWith(color: Colors.white),
                               ),
                             ),
                           )

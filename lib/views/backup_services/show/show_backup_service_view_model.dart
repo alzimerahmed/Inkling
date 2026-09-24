@@ -61,7 +61,9 @@ class ShowBackupServiceViewModel extends ChangeNotifier with DisposeAwareMixin {
           null,
           (prev, curr) => prev == null || curr.isAfter(prev) ? curr : prev,
         );
-    return latest != null ? DateFormatHelper.yMEd_jmNullable(latest, context.locale) ?? '...' : null;
+    return latest != null
+        ? DateFormatHelper.yMEd_jmNullable(latest, context.locale) ?? '...'
+        : null;
   }
 
   Future<void> load() async {
@@ -120,7 +122,11 @@ class ShowBackupServiceViewModel extends ChangeNotifier with DisposeAwareMixin {
     await MessengerService.of(context).showLoading(
       debugSource: '$runtimeType#deleteCloudFile',
       future: () async {
-        bool? success = await context.read<BackupProvider>().repository.getService(serviceType).deleteFile(file.id);
+        bool? success = await context
+            .read<BackupProvider>()
+            .repository
+            .getService(serviceType)
+            .deleteFile(file.id);
         if (success == true) yearlyBackups?.remove(file.year);
         notifyListeners();
       },

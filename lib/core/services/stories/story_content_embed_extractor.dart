@@ -35,17 +35,21 @@ class StoryContentEmbedExtractor {
   ///
   /// Use [photos]/[videos] when you mean one kind specifically (counts,
   /// labels, filters).
-  static List<String> media(StoryContentDbModel? content) => _extractEmbedSources(content, {'media', 'image'});
+  static List<String> media(StoryContentDbModel? content) =>
+      _extractEmbedSources(content, {'media', 'image'});
 
-  static List<String> audio(StoryContentDbModel? content) => _extractEmbedSources(content, {'audio'});
+  static List<String> audio(StoryContentDbModel? content) =>
+      _extractEmbedSources(content, {'audio'});
 
   /// Photos only — [media] minus anything stored under `videos/`.
-  static List<String> photos(StoryContentDbModel? content) =>
-      media(content).where((link) => AssetType.getTypeFromLink(link) != AssetType.video).toList();
+  static List<String> photos(StoryContentDbModel? content) => media(content)
+      .where((link) => AssetType.getTypeFromLink(link) != AssetType.video)
+      .toList();
 
   /// Videos only — the complement of [photos] within [media].
-  static List<String> videos(StoryContentDbModel? content) =>
-      media(content).where((link) => AssetType.getTypeFromLink(link) == AssetType.video).toList();
+  static List<String> videos(StoryContentDbModel? content) => media(content)
+      .where((link) => AssetType.getTypeFromLink(link) == AssetType.video)
+      .toList();
 
   static List<String> all(StoryContentDbModel? content) => [
     ...photos(content),

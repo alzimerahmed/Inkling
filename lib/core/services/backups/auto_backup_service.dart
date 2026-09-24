@@ -21,21 +21,28 @@ class AutoBackupService {
   static const List<int> intervalOptionsInHours = [6, 12, 24, 24 * 7];
   static const int defaultKeepCount = 5;
 
-  static final AutoBackupEnabledStorage _enabledStorage = AutoBackupEnabledStorage();
-  static final AutoBackupIntervalStorage _intervalStorage = AutoBackupIntervalStorage();
-  static final AutoBackupKeepCountStorage _keepCountStorage = AutoBackupKeepCountStorage();
-  static final AutoBackupLastRunStorage _lastRunStorage = AutoBackupLastRunStorage();
+  static final AutoBackupEnabledStorage _enabledStorage =
+      AutoBackupEnabledStorage();
+  static final AutoBackupIntervalStorage _intervalStorage =
+      AutoBackupIntervalStorage();
+  static final AutoBackupKeepCountStorage _keepCountStorage =
+      AutoBackupKeepCountStorage();
+  static final AutoBackupLastRunStorage _lastRunStorage =
+      AutoBackupLastRunStorage();
 
   /// True when a backup was taken this call.
   static Future<bool> maybeRun() async {
     final bool enabled = await _enabledStorage.read() ?? false;
     if (!enabled) return false;
 
-    final int intervalHours = await _intervalStorage.read() ?? intervalOptionsInHours.first;
+    final int intervalHours =
+        await _intervalStorage.read() ?? intervalOptionsInHours.first;
     final String? lastRunAt = await _lastRunStorage.read();
 
     final DateTime now = DateTime.now();
-    final DateTime? lastRun = lastRunAt == null ? null : DateTime.tryParse(lastRunAt)?.toLocal();
+    final DateTime? lastRun = lastRunAt == null
+        ? null
+        : DateTime.tryParse(lastRunAt)?.toLocal();
 
     if (!isDue(lastRun, now, intervalHours)) return false;
 
@@ -64,7 +71,8 @@ class AutoBackupService {
     final String encoded = jsonEncode(backup.toContents());
     final List<int> bytes = GzipService.compress(encoded);
 
-    final String fileName = 'auto-backup-${now.toIso8601String().replaceAll(':', '.')}.json.gz';
+    final String fileName =
+        'auto-backup-${now.toIso8601String().replaceAll(':', '.')}.json.gz';
     await File('${dir.path}/$fileName').writeAsBytes(bytes);
 
     await applyRetention(

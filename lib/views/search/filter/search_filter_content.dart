@@ -49,7 +49,8 @@ class _SearchFilterContent extends StatelessWidget {
       ),
     ];
 
-    if (children.isEmpty) return const Center(child: CircularProgressIndicator.adaptive());
+    if (children.isEmpty)
+      return const Center(child: CircularProgressIndicator.adaptive());
 
     return ListView(
       controller: PrimaryScrollController.maybeOf(context),

@@ -34,7 +34,9 @@ class _EnterSecurityQuestionContent extends StatelessWidget {
             builder: (context, value, child) {
               return OutlinedButton.icon(
                 label: Text(tr("button.clear")),
-                onPressed: value.text.isNotEmpty ? () => viewModel.controller.clear() : null,
+                onPressed: value.text.isNotEmpty
+                    ? () => viewModel.controller.clear()
+                    : null,
               );
             },
           ),

@@ -7,7 +7,8 @@ import 'package:storypad/core/services/avoid_dublicated_call_service.dart';
 // but this is acceptable since the data is only used for analytics.
 class GalleryTemplateUsageService {
   GalleryTemplateUsageService._();
-  static GalleryTemplateUsageService get instance => GalleryTemplateUsageService._();
+  static GalleryTemplateUsageService get instance =>
+      GalleryTemplateUsageService._();
 
   FirebaseFirestore get firestore => FirebaseFirestore.instance;
 
@@ -20,7 +21,11 @@ class GalleryTemplateUsageService {
 
     try {
       return await avoidDublicatedCallService.run(() async {
-        final docRef = firestore.collection('templates').doc(templateId).collection('devices').doc(kDeviceInfo.id);
+        final docRef = firestore
+            .collection('templates')
+            .doc(templateId)
+            .collection('devices')
+            .doc(kDeviceInfo.id);
 
         bool exist = await docRef.get().then((e) => e.exists);
         if (exist) {

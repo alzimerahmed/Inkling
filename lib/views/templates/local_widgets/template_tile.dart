@@ -31,7 +31,9 @@ class _TemplateTile extends StatelessWidget {
         ),
         onTap: onTap,
         title: Text(
-          hasName ? template.name!.trim() : (hasBody ? body! : tr('general.na')),
+          hasName
+              ? template.name!.trim()
+              : (hasBody ? body! : tr('general.na')),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),

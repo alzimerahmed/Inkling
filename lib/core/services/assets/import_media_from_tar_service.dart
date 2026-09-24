@@ -100,10 +100,12 @@ class ImportMediaFromTarService {
     required Stream<List<int>> tarGzStream,
     required Future<AssetDbModel?> Function(int id) findAsset,
     required bool Function(String path) fileExists,
-    required Future<void> Function(String path, Stream<List<int>> bytesStream) writeFile,
+    required Future<void> Function(String path, Stream<List<int>> bytesStream)
+    writeFile,
     required Future<void> Function(AssetDbModel asset) saveAsset,
     required String Function(AssetType type, int id, String ext) getStoragePath,
-    required String Function(AssetType type, int id, String ext) getRelativePath,
+    required String Function(AssetType type, int id, String ext)
+    getRelativePath,
   }) async {
     int imported = 0;
     int skipped = 0;
@@ -130,7 +132,8 @@ class ImportMediaFromTarService {
       // totals and null results remain ignored.
       if (result == ImportMediaEntryResult.skipped) {
         skipped++;
-      } else if (result == ImportMediaEntryResult.importedNew || result == ImportMediaEntryResult.importedRestored) {
+      } else if (result == ImportMediaEntryResult.importedNew ||
+          result == ImportMediaEntryResult.importedRestored) {
         imported++;
       }
     }
@@ -142,10 +145,12 @@ class ImportMediaFromTarService {
     required TarEntry entry,
     required Future<AssetDbModel?> Function(int id) findAsset,
     required bool Function(String path) fileExists,
-    required Future<void> Function(String path, Stream<List<int>> bytesStream) writeFile,
+    required Future<void> Function(String path, Stream<List<int>> bytesStream)
+    writeFile,
     required Future<void> Function(AssetDbModel asset) saveAsset,
     required String Function(AssetType type, int id, String ext) getStoragePath,
-    required String Function(AssetType type, int id, String ext) getRelativePath,
+    required String Function(AssetType type, int id, String ext)
+    getRelativePath,
   }) async {
     // Archive filenames use the millisecond timestamp stem as the asset ID.
     final entryName = entry.name;
@@ -164,7 +169,8 @@ class ImportMediaFromTarService {
 
     final existing = await findAsset(id);
     final assetType = _inferType(entryName, ext);
-    final storagePath = existing?.localFilePath ?? getStoragePath(assetType, id, ext);
+    final storagePath =
+        existing?.localFilePath ?? getStoragePath(assetType, id, ext);
 
     if (existing != null && fileExists(storagePath)) {
       return ImportMediaEntryResult.skipped;
@@ -198,7 +204,8 @@ class ImportMediaFromTarService {
   static AssetType _inferType(String entryName, String ext) {
     for (final type in AssetType.values) {
       // Trailing slash matters: a root-level `videos_2024.mp4` is not a `videos/` entry.
-      if (entryName.startsWith('${type.subDirectory.relativePath}/')) return type;
+      if (entryName.startsWith('${type.subDirectory.relativePath}/'))
+        return type;
     }
 
     if (_audioExtensions.contains(ext.toLowerCase())) return AssetType.audio;
@@ -209,7 +216,9 @@ class ImportMediaFromTarService {
   static DateTime? _createdAtFromId(int id) {
     final now = DateTime.now();
     final plausibleLowerBound = DateTime(2000).millisecondsSinceEpoch;
-    final plausibleUpperBound = now.add(const Duration(days: 365)).millisecondsSinceEpoch;
+    final plausibleUpperBound = now
+        .add(const Duration(days: 365))
+        .millisecondsSinceEpoch;
     if (id < plausibleLowerBound || id > plausibleUpperBound) return null;
 
     return DateTime.fromMillisecondsSinceEpoch(id);

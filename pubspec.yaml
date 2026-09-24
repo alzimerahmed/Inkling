@@ -93,6 +93,12 @@ dependencies:
   webdav_client: 1.2.2
   video_compressor_plus: 4.1.0
   home_widget: ^0.10.0
+  # Phase 4: PDF export (Apache-2.0, pure Dart — F-Droid compatible).
+  pdf: ^3.12.0
+  # Phase 4: Day One .zip export unpacking (Apache-2.0, pure Dart).
+  archive: 4.0.7
+  # Phase 4: Evernote ENEX parsing — self-contained regex-based parser (no xml
+  # package: webdav_client pins xml ^6 while pdf needs ^7, so avoid the conflict).
 
 dev_dependencies:
   build_runner: 2.15.1

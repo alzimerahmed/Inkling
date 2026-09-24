@@ -11,7 +11,8 @@ class _HomeFloatingButtons extends StatefulWidget {
   State<_HomeFloatingButtons> createState() => _HomeFloatingButtonsState();
 }
 
-class _HomeFloatingButtonsState extends State<_HomeFloatingButtons> with SingleTickerProviderStateMixin {
+class _HomeFloatingButtonsState extends State<_HomeFloatingButtons>
+    with SingleTickerProviderStateMixin {
   late final AnimationController animationController = AnimationController(
     vsync: this,
     duration: Durations.medium2,

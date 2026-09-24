@@ -86,7 +86,9 @@ class SpMediaViewer extends StatefulWidget {
     for (final path in images) {
       // Non-null only for relative asset paths (images/, audio/, videos/),
       // which are the ones backed by an AssetDbModel row.
-      final String? assetRelativePath = AssetType.getTypeFromLink(path) != null ? path : null;
+      final String? assetRelativePath = AssetType.getTypeFromLink(path) != null
+          ? path
+          : null;
 
       if (AssetType.getTypeFromLink(path) == AssetType.video) {
         items.add(
@@ -224,7 +226,8 @@ AppBar _buildAppBar(
     ),
     actions: [
       _ShareButton(tag: item.tag),
-      if (item.assetRelativePath != null) _InfoButton(assetRelativePath: item.assetRelativePath!),
+      if (item.assetRelativePath != null)
+        _InfoButton(assetRelativePath: item.assetRelativePath!),
       const CloseButton(color: _foregroundColor),
     ],
   );
@@ -308,7 +311,9 @@ class _ShareButton extends StatelessWidget {
               SharePlus.instance.share(
                 ShareParams(
                   files: [XFile(existFilePath)],
-                  sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+                  sharePositionOrigin: box != null
+                      ? box.localToGlobal(Offset.zero) & box.size
+                      : null,
                 ),
               );
             },

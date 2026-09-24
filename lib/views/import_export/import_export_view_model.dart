@@ -26,6 +26,7 @@ import 'package:storypad/core/services/messenger_service.dart';
 import 'package:storypad/providers/backup_provider.dart';
 import 'package:storypad/core/services/export/export_stories_to_csv_service.dart';
 import 'package:storypad/core/services/export/export_stories_to_markdown_service.dart';
+import 'package:storypad/core/services/export/export_stories_to_pdf_service.dart';
 import 'package:storypad/core/services/export/export_stories_to_text_service.dart';
 
 import 'import_export_view.dart';
@@ -58,7 +59,8 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
   late SearchFilterObject exportFilter = initialExportFilter;
 
   bool get filtered =>
-      jsonEncode(exportFilter.toDatabaseFilter()) != jsonEncode(initialExportFilter.toDatabaseFilter());
+      jsonEncode(exportFilter.toDatabaseFilter()) !=
+      jsonEncode(initialExportFilter.toDatabaseFilter());
 
   void setExportFilter(SearchFilterObject result) {
     exportFilter = result;
@@ -150,9 +152,73 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
         await exportMarkdown(context);
         break;
       case AppExportOption.pdf:
-        MessengerService.of(context).showSnackBar('PDF export coming soon!');
+        await exportPdf(context);
         break;
     }
+  }
+
+  Future<void> exportPdf(BuildContext context) async {
+    AnalyticsService.instance.logExportOfflineBackup();
+
+    File? result = await MessengerService.of(context).showLoading(
+      debugSource: '$runtimeType#exportPdf',
+      future: () async {
+        final stories = await StoryDbModel.db
+            .where(filters: filtered ? exportFilter.toDatabaseFilter() : null)
+            .then((context) => context?.items);
+
+        if (!context.mounted || stories == null || stories.isEmpty) return null;
+
+        final String exportFileName =
+            "$kAppName-${kDeviceInfo.model}-pdf-${DateTime.now().toIso8601String()}.pdf";
+        final pdfFile = File(
+          "${SupportDirectoryPath.backups.directoryPath}/$exportFileName",
+        );
+
+        // PDF generation is pure-Dart CPU work — run it off the main isolate.
+        final bytes = await Isolate.run(() async {
+          return await ExportStoriesToPdfService.call(
+            stories: stories,
+            tagNameGetter: (tagId) async {
+              final tag = await TagDbModel.db.find(tagId);
+              return tag?.title;
+            },
+          );
+        });
+
+        if (bytes.isEmpty) return null;
+        await pdfFile.create(recursive: true);
+        await pdfFile.writeAsBytes(bytes);
+        return pdfFile;
+      },
+    );
+
+    if (!context.mounted) return;
+    if (result == null) return;
+
+    // Share/save the PDF file
+    if (Platform.isIOS || Platform.isMacOS) {
+      RenderBox? box = context.findRenderObject() as RenderBox?;
+      await SharePlus.instance.share(
+        ShareParams(
+          title: basename(result.path),
+          sharePositionOrigin: box != null
+              ? box.localToGlobal(Offset.zero) & box.size
+              : null,
+          files: [XFile(result.path)],
+        ),
+      );
+    } else if (Platform.isAndroid) {
+      await FilePicker.saveFile(
+        fileName: basename(result.path),
+        type: FileType.custom,
+        allowedExtensions: ['pdf'],
+        bytes: await result.readAsBytes(),
+      );
+    }
+
+    // Cleanup
+    await result.delete();
   }
 
   Future<void> exportMarkdown(BuildContext context) async {
@@ -217,7 +283,10 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
           }
         }
 
-        await buildEntries().transform(tarWriter).transform(gzip.encoder).pipe(tarFile.openWrite());
+        await buildEntries()
+            .transform(tarWriter)
+            .transform(gzip.encoder)
+            .pipe(tarFile.openWrite());
         return (tarFile, tempDir);
       },
     );
@@ -235,7 +304,9 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
       await SharePlus.instance.share(
         ShareParams(
           title: basename(tarFile.path),
-          sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+          sharePositionOrigin: box != null
+              ? box.localToGlobal(Offset.zero) & box.size
+              : null,
           files: [XFile(tarFile.path)],
         ),
       );
@@ -258,7 +329,8 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
 
         if (!context.mounted || stories == null || stories.isEmpty) return null;
 
-        final String exportFileName = "$kAppName-${kDeviceInfo.model}-text-${DateTime.now().toIso8601String()}.txt";
+        final String exportFileName =
+            "$kAppName-${kDeviceInfo.model}-text-${DateTime.now().toIso8601String()}.txt";
         final textFile = File(
           "${SupportDirectoryPath.backups.directoryPath}/$exportFileName",
         );
@@ -287,7 +359,9 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
       await SharePlus.instance.share(
         ShareParams(
           title: basename(result.path),
-          sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+          sharePositionOrigin: box != null
+              ? box.localToGlobal(Offset.zero) & box.size
+              : null,
           files: [XFile(result.path)],
         ),
       );
@@ -318,7 +392,8 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
 
         if (!context.mounted || stories == null || stories.isEmpty) return null;
 
-        final String exportFileName = "$kAppName-${kDeviceInfo.model}-csv-${DateTime.now().toIso8601String()}.csv";
+        final String exportFileName =
+            "$kAppName-${kDeviceInfo.model}-csv-${DateTime.now().toIso8601String()}.csv";
         final csvFile = File(
           "${SupportDirectoryPath.backups.directoryPath}/$exportFileName",
         );
@@ -347,7 +422,9 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
       await SharePlus.instance.share(
         ShareParams(
           title: basename(result.path),
-          sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+          sharePositionOrigin: box != null
+              ? box.localToGlobal(Offset.zero) & box.size
+              : null,
           files: [XFile(result.path)],
         ),
       );
@@ -371,9 +448,11 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
     // session, so it can legitimately still be null here (e.g. fresh session, no
     // sync configured). It's only used as the backup's "created at" metadata, so
     // falling back to now() is safe — don't reintroduce a null-guard early return.
-    DateTime lastDbUpdatedAt = context.read<BackupProvider>().lastDbUpdatedAt ?? DateTime.now();
+    DateTime lastDbUpdatedAt =
+        context.read<BackupProvider>().lastDbUpdatedAt ?? DateTime.now();
 
-    final String exportFileName = "$kAppName-${kDeviceInfo.model}-backup-${DateTime.now().toIso8601String()}.json";
+    final String exportFileName =
+        "$kAppName-${kDeviceInfo.model}-backup-${DateTime.now().toIso8601String()}.json";
 
     final backup = await MessengerService.of(context).showLoading(
       debugSource: '$runtimeType#export',
@@ -406,7 +485,9 @@ class ImportExportViewModel extends ChangeNotifier with DisposeAwareMixin {
         await SharePlus.instance.share(
           ShareParams(
             title: basename(file.path),
-            sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+            sharePositionOrigin: box != null
+                ? box.localToGlobal(Offset.zero) & box.size
+                : null,
             files: [
               XFile(file.path),
             ],

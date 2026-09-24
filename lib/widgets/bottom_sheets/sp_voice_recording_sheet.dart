@@ -63,7 +63,8 @@ class SpVoiceRecordingSheet extends BaseBottomSheet {
       );
       final newFile = File(storagePath)..createSync(recursive: true);
       await newFile.writeAsBytes(File(result.filePath).readAsBytesSync());
-      if (File(result.filePath).existsSync()) File(result.filePath).deleteSync(recursive: true);
+      if (File(result.filePath).existsSync())
+        File(result.filePath).deleteSync(recursive: true);
 
       final savedAsset = await asset.save();
 
@@ -137,7 +138,8 @@ class _VoiceRecordingContentState extends State<_VoiceRecordingContent> {
         }
       }
     } catch (e) {
-      if (mounted) MessengerService.of(context).showSnackBar(e.toString(), success: false);
+      if (mounted)
+        MessengerService.of(context).showSnackBar(e.toString(), success: false);
     }
   }
 
@@ -152,7 +154,8 @@ class _VoiceRecordingContentState extends State<_VoiceRecordingContent> {
         });
       }
     } catch (e) {
-      if (mounted) MessengerService.of(context).showSnackBar(e.toString(), success: false);
+      if (mounted)
+        MessengerService.of(context).showSnackBar(e.toString(), success: false);
     }
   }
 
@@ -190,7 +193,9 @@ class _VoiceRecordingContentState extends State<_VoiceRecordingContent> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              hasRecording ? buildPlaybackUI(context) : buildRecordingUI(context),
+              hasRecording
+                  ? buildPlaybackUI(context)
+                  : buildRecordingUI(context),
             ],
           ),
         ),
@@ -285,12 +290,16 @@ class _VoiceRecordingContentState extends State<_VoiceRecordingContent> {
           Expanded(
             child: kIsCupertino
                 ? CupertinoButton.filled(
-                    onPressed: recordingResult != null ? () => Navigator.of(context).pop(recordingResult) : null,
+                    onPressed: recordingResult != null
+                        ? () => Navigator.of(context).pop(recordingResult)
+                        : null,
                     child: Text(tr('button.done')),
                   )
                 : FilledButton.icon(
                     icon: const Icon(SpIcons.save),
-                    onPressed: recordingResult != null ? () => Navigator.of(context).pop(recordingResult) : null,
+                    onPressed: recordingResult != null
+                        ? () => Navigator.of(context).pop(recordingResult)
+                        : null,
                     label: Text(tr('button.done')),
                   ),
           ),
@@ -308,7 +317,9 @@ class _VoiceRecordingContentState extends State<_VoiceRecordingContent> {
           width: 6,
           height: 6,
           decoration: BoxDecoration(
-            color: !recording ? Colors.transparent : Theme.of(context).colorScheme.error,
+            color: !recording
+                ? Colors.transparent
+                : Theme.of(context).colorScheme.error,
             shape: BoxShape.circle,
           ),
         ),

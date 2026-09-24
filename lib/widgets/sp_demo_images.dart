@@ -48,7 +48,8 @@ class SpDemoImages extends StatelessWidget {
     return widthOf(imageId);
   }
 
-  int get itemCount => demoImageUrls?.length ?? demoImageUrlPaths?.length ?? skeletonCount;
+  int get itemCount =>
+      demoImageUrls?.length ?? demoImageUrlPaths?.length ?? skeletonCount;
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +132,8 @@ class SpDemoImages extends StatelessWidget {
               width: itemWidth,
               height: height,
               fit: BoxFit.cover,
-              progressIndicatorBuilder: (context, url, progress) => buildLoading(context, itemWidth),
+              progressIndicatorBuilder: (context, url, progress) =>
+                  buildLoading(context, itemWidth),
             ),
           ),
         ),
@@ -162,7 +164,8 @@ class SpDemoImages extends StatelessWidget {
               width: width,
               height: height,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => buildLoading(context, width),
+              errorBuilder: (context, error, stackTrace) =>
+                  buildLoading(context, width),
             ),
           ),
         ),
@@ -176,14 +179,18 @@ class SpDemoImages extends StatelessWidget {
 
     final localFilePaths = await Future.wait(
       urlPaths.map(
-        (urlPath) => CloudStorageService.instance.downloadFile(urlPath).then((e) => e.file?.path),
+        (urlPath) => CloudStorageService.instance
+            .downloadFile(urlPath)
+            .then((e) => e.file?.path),
       ),
     ).then((paths) => paths.whereType<String>().toList());
 
     if (localFilePaths.isEmpty || !context.mounted) return;
 
     await SpMediaViewer.fromString(
-      initialIndex: demoImageUrlPaths?.length == localFilePaths.length ? initialIndex : 0,
+      initialIndex: demoImageUrlPaths?.length == localFilePaths.length
+          ? initialIndex
+          : 0,
       images: localFilePaths,
       context: context,
     ).show(context);

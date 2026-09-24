@@ -6,7 +6,8 @@ import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
 import 'package:storypad/objectbox.g.dart';
 import 'recently_deleted_records_view.dart';
 
-class RecentlyDeletedRecordsViewModel extends ChangeNotifier with DisposeAwareMixin {
+class RecentlyDeletedRecordsViewModel extends ChangeNotifier
+    with DisposeAwareMixin {
   final RecentlyDeletedRecordsRoute params;
 
   RecentlyDeletedRecordsViewModel({

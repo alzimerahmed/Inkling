@@ -8,7 +8,9 @@ class TagHeader extends StatelessWidget {
     return InkWell(
       onTap: () => context.read<RootProvider>().navigate(TagsRoute()),
       child: ValueListenableBuilder(
-        valueListenable: context.read<RootProvider>().selectedRootRouteNameNotifier,
+        valueListenable: context
+            .read<RootProvider>()
+            .selectedRootRouteNameNotifier,
         child: Row(
           mainAxisAlignment: .start,
           crossAxisAlignment: .center,

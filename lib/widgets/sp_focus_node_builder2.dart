@@ -13,7 +13,8 @@ class SpFocusNodeBuilder2 extends StatefulWidget {
   final Widget? child;
   final FocusNode focusNode1;
   final FocusNode focusNode2;
-  final void Function(bool node1Focused, bool node2Focused)? onFucusChangeAfterInitialized;
+  final void Function(bool node1Focused, bool node2Focused)?
+  onFucusChangeAfterInitialized;
   final Widget Function(
     BuildContext context,
     bool node1Focused,

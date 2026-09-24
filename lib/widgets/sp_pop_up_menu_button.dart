@@ -61,7 +61,8 @@ class _SpPopupMenuButtonState extends State<SpPopupMenuButton> {
   Size get screenSize => MediaQuery.of(context).size;
 
   RelativeRect? get relativeRect {
-    if (childPosition == null || childSize == null || overlayBox == null) return null;
+    if (childPosition == null || childSize == null || overlayBox == null)
+      return null;
     return RelativeRect.fromSize(
       Rect.fromCenter(
         center: childPosition!,
@@ -156,7 +157,9 @@ class _SpPopupMenuButtonState extends State<SpPopupMenuButton> {
             : null,
         title: Text(e.title, style: e.titleStyle),
         trailing: e.trailingIconData != null ? Icon(e.trailingIconData) : null,
-        subtitle: e.subtitle != null ? Text(e.subtitle!, style: e.subtitleStyle) : null,
+        subtitle: e.subtitle != null
+            ? Text(e.subtitle!, style: e.subtitleStyle)
+            : null,
       ),
     );
   }

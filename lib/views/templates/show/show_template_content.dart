@@ -6,7 +6,8 @@ class _ShowTemplateContent extends StatelessWidget {
   final ShowTemplateViewModel viewModel;
 
   List<StoryPageObject> constructPages() {
-    if (viewModel.pagesManager.pagesMap.keys.isEmpty) return <StoryPageObject>[];
+    if (viewModel.pagesManager.pagesMap.keys.isEmpty)
+      return <StoryPageObject>[];
     return List.generate(viewModel.draftContent?.richPages?.length ?? 0, (
       index,
     ) {
@@ -23,7 +24,9 @@ class _ShowTemplateContent extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         automaticallyImplyLeading: !CupertinoSheetRoute.hasParentSheet(context),
-        title: viewModel.template.name != null ? Text(viewModel.template.name!) : null,
+        title: viewModel.template.name != null
+            ? Text(viewModel.template.name!)
+            : null,
         actions: [
           if (!viewModel.template.archived)
             IconButton(

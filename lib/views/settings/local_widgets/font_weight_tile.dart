@@ -27,7 +27,8 @@ class FontWeightTile extends StatelessWidget {
         return FontWeightTile(
           weekday: weekday,
           currentFontWeight: provider.preferences.fontWeight,
-          onChanged: (FontWeight fontWeight) => provider.setFontWeight(fontWeight),
+          onChanged: (FontWeight fontWeight) =>
+              provider.setFontWeight(fontWeight),
           locked: !inAppPurchaseProvider.isProUser,
         );
       },

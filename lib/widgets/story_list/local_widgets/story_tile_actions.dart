@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:file_picker/file_picker.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:storypad/core/databases/models/story_db_model.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:storypad/core/services/export/export_stories_to_pdf_service.dart';
+import 'package:storypad/core/types/support_directory_path.dart';
 import 'package:storypad/views/home/home_view.dart';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:storypad/core/databases/models/story_preferences_db_model.dart';
@@ -43,7 +49,8 @@ class StoryTileActions {
 
         /// In all case, delete button only show inside [SpStoryListWithQuery],
         /// So after undo, we should reload the list.
-        if (storyListReloaderContext != null && storyListReloaderContext!.mounted) {
+        if (storyListReloaderContext != null &&
+            storyListReloaderContext!.mounted) {
           SpStoryListWithQuery.of(
             storyListReloaderContext!,
           )?.load(debugSource: '$runtimeType#undoHardDelete');
@@ -105,7 +112,8 @@ class StoryTileActions {
       );
 
       // sometime, it move to bin from archive page, so need to reload story list which in archives view as well.
-      if (storyListReloaderContext != null && storyListReloaderContext!.mounted) {
+      if (storyListReloaderContext != null &&
+          storyListReloaderContext!.mounted) {
         await SpStoryListWithQuery.of(
           storyListReloaderContext!,
         )?.load(debugSource: '$runtimeType#undoMoveToBin');
@@ -188,7 +196,8 @@ class StoryTileActions {
           story: updatedStory,
         );
 
-        if (storyListReloaderContext != null && storyListReloaderContext!.mounted) {
+        if (storyListReloaderContext != null &&
+            storyListReloaderContext!.mounted) {
           await SpStoryListWithQuery.of(
             storyListReloaderContext!,
           )?.load(debugSource: '$runtimeType#undoPutBack');
@@ -285,5 +294,49 @@ class StoryTileActions {
 
   Future<void> reloadHome(String debugSource) async {
     await HomeView.reload(debugSource: debugSource);
+  }
+
+  /// Per-entry PDF export (Phase 4): generates a single-entry PDF and hands
+  /// it to the share sheet (Android) or save dialog (desktop).
+  Future<void> exportPdf(BuildContext context) async {
+    final messenger = MessengerService.of(context);
+    final bytes = await messenger.showLoading(
+      debugSource: '$runtimeType#exportPdf',
+      future: () => ExportStoriesToPdfService.call(stories: [story]),
+    );
+
+    if (bytes == null || bytes.isEmpty) return;
+    if (!context.mounted) return;
+
+    final date = story.displayPathDate;
+    final fileName =
+        '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}-entry.pdf';
+    final file = File('${SupportDirectoryPath.tmp.directoryPath}/$fileName');
+    await file.create(recursive: true);
+    await file.writeAsBytes(bytes);
+
+    if (Platform.isAndroid) {
+      await FilePicker.saveFile(
+        fileName: fileName,
+        type: FileType.custom,
+        allowedExtensions: ['pdf'],
+        bytes: Uint8List.fromList(bytes),
+      );
+    } else {
+      RenderBox? box = context.mounted
+          ? context.findRenderObject() as RenderBox?
+          : null;
+      await SharePlus.instance.share(
+        ShareParams(
+          title: fileName,
+          sharePositionOrigin: box != null
+              ? box.localToGlobal(Offset.zero) & box.size
+              : null,
+          files: [XFile(file.path)],
+        ),
+      );
+    }
+
+    await file.delete();
   }
 }

@@ -142,7 +142,8 @@ class SpColorPickerState extends State<SpColorPicker> {
     });
 
     Future.delayed(const Duration(milliseconds: 100)).then((value) {
-      if (widget.currentColor != null && _colorNormal.contains(widget.currentColor)) {
+      if (widget.currentColor != null &&
+          _colorNormal.contains(widget.currentColor)) {
         setState(() {
           currentSelectedColor = widget.currentColor;
         });
@@ -180,7 +181,9 @@ class SpColorPickerState extends State<SpColorPicker> {
         ),
         secondChild: buildColorListWrapper(
           context: context,
-          height: _colorsMap!.length == 1 ? spOnPickingColorHeight - 32 - 12 : spOnPickingColorHeight,
+          height: _colorsMap!.length == 1
+              ? spOnPickingColorHeight - 32 - 12
+              : spOnPickingColorHeight,
           child: buildColorListing(context),
         ),
       ),
@@ -240,7 +243,8 @@ class SpColorPickerState extends State<SpColorPicker> {
     final double right = i != (childrenIndex.length) - 1 ? 8.0 : 0;
     final dynamic color;
     color = isColorChildPicking ? _colorNormal[index] : _colorsSwatch[index];
-    final bool isSelected = currentSelectedColor == color || currentSelectedColorsSwatch == color;
+    final bool isSelected =
+        currentSelectedColor == color || currentSelectedColorsSwatch == color;
 
     return SpColorItem(
       color: color,

@@ -75,7 +75,9 @@ class _RoundedPainter extends BoxPainter {
     final Paint paint;
 
     paint = decoration.borderSide.toPaint()..strokeCap = StrokeCap.round;
-    final Rect indicator = decoration._indicatorRectFor(rect, textDirection).deflate(decoration.borderSide.width / 2.0);
+    final Rect indicator = decoration
+        ._indicatorRectFor(rect, textDirection)
+        .deflate(decoration.borderSide.width / 2.0);
 
     canvas.drawLine(indicator.bottomLeft, indicator.bottomRight, paint);
   }

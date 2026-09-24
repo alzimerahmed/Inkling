@@ -124,7 +124,8 @@ class VideoCompressionRoute extends BaseRoute {
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return FadeTransition(opacity: animation, child: child);
       },
-      pageBuilder: (context, animation, secondaryAnimation) => buildPage(context),
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          buildPage(context),
     );
   }
 
@@ -144,7 +145,8 @@ class VideoCompressionView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<VideoCompressionViewModel>(
       create: (context) => VideoCompressionViewModel(params: params),
-      builder: (context, child) => _VideoCompressionContent(context.watch<VideoCompressionViewModel>()),
+      builder: (context, child) =>
+          _VideoCompressionContent(context.watch<VideoCompressionViewModel>()),
     );
   }
 }

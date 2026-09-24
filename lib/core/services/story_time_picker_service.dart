@@ -80,7 +80,8 @@ class StoryTimePickerService {
                         minutes: story.displayPathDate.minute,
                       ),
                       mode: CupertinoTimerPickerMode.hm,
-                      onTimerDurationChanged: (duration) => notifier.value = _durationToTimeOfDay(duration),
+                      onTimerDurationChanged: (duration) =>
+                          notifier.value = _durationToTimeOfDay(duration),
                     ),
                   ],
                 ),

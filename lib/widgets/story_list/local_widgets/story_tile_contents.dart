@@ -10,6 +10,7 @@ class _StoryTileContents extends StatelessWidget {
     required this.hasBody,
     required this.displayShortBody,
     required this.preferences,
+    this.highlightQuery,
   });
 
   final StoryDbModel story;
@@ -20,6 +21,9 @@ class _StoryTileContents extends StatelessWidget {
   final bool hasBody;
   final String? displayShortBody;
   final StoryTilePreferencesObject preferences;
+
+  /// Search query for body match highlighting (null outside search results).
+  final String? highlightQuery;
 
   void _viewAssetImageAt(
     BuildContext context,
@@ -37,7 +41,9 @@ class _StoryTileContents extends StatelessWidget {
   Widget build(BuildContext context) {
     // `media()` returns both photos and videos (they share one embed type by
     // design) -- rendering/tap-handling branches per path.
-    final assetPaths = content != null ? StoryContentEmbedExtractor.media(content) : null;
+    final assetPaths = content != null
+        ? StoryContentEmbedExtractor.media(content)
+        : null;
 
     final audioPaths = (story.draftContent ?? story.latestContent) != null
         ? StoryContentEmbedExtractor.audio(
@@ -53,7 +59,9 @@ class _StoryTileContents extends StatelessWidget {
             Consumer<DevicePreferencesProvider>(
               builder: (context, provider, child) {
                 return Text(
-                  provider.timeFormatOf(context).formatTime(story.displayPathDate, context.locale),
+                  provider
+                      .timeFormatOf(context)
+                      .formatTime(story.displayPathDate, context.locale),
                   style: TextTheme.of(context).labelMedium,
                 );
               },
@@ -83,7 +91,14 @@ class _StoryTileContents extends StatelessWidget {
                       const EdgeInsets.only(left: 24.0),
                       const EdgeInsets.only(right: 24.0),
                     ),
-              child: SpMarkdownBody(body: displayShortBody!),
+              child: highlightQuery != null
+                  ? SpHighlightedText(
+                      text: displayShortBody!,
+                      query: highlightQuery,
+                      maxLines: 6,
+                      style: TextTheme.of(context).bodyMedium,
+                    )
+                  : SpMarkdownBody(body: displayShortBody!),
             ),
           SpStoryLabels(
             story: story,
@@ -124,7 +139,10 @@ class _StoryTileContents extends StatelessWidget {
                   width: double.infinity,
                   child: SpAlbumGrid(
                     paths: assetPaths!,
-                    onTap: viewOnly ? null : (index) => _viewAssetImageAt(context, assetPaths, index),
+                    onTap: viewOnly
+                        ? null
+                        : (index) =>
+                              _viewAssetImageAt(context, assetPaths, index),
                   ),
                 ),
               )

@@ -23,5 +23,6 @@ class StoryPageBuilderAction {
   });
 
   bool canMoveUp(int pageIndex) => pageIndex > 0;
-  bool canMoveDown(int pageIndex, int pagesLength) => pageIndex < pagesLength - 1;
+  bool canMoveDown(int pageIndex, int pagesLength) =>
+      pageIndex < pagesLength - 1;
 }

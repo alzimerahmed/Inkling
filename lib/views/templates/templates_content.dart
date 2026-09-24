@@ -37,7 +37,9 @@ class _TemplatesContent extends StatelessWidget {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       title: Text(
-        viewModel.params.pickMode ? tr("button.choose_template") : tr("paywall_features.templates.title"),
+        viewModel.params.pickMode
+            ? tr("button.choose_template")
+            : tr("paywall_features.templates.title"),
       ),
       bottom: TabBar(
         onTap: (index) {
@@ -79,7 +81,9 @@ class _TemplatesContent extends StatelessWidget {
 
   Widget buildBody(BuildContext context) {
     return TabBarView(
-      physics: context.read<InAppPurchaseProvider>().isProUser ? null : const NeverScrollableScrollPhysics(),
+      physics: context.read<InAppPurchaseProvider>().isProUser
+          ? null
+          : const NeverScrollableScrollPhysics(),
       children: [
         TemplatesTab(params: viewModel.params),
         GalleryTab(params: viewModel.params),

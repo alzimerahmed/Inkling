@@ -87,14 +87,16 @@ class HomeQuickActionsViewModel extends ChangeNotifier with DisposeAwareMixin {
     ),
   ];
 
-  final GlobalKey<AnimatedListState> availableActionsListKey = GlobalKey<AnimatedListState>();
+  final GlobalKey<AnimatedListState> availableActionsListKey =
+      GlobalKey<AnimatedListState>();
 
   // Tracks the default items currently visible in the AnimatedList.
   final List<HomeQuickActionItem> availableItems = [];
   final Set<String> _activatingIds = <String>{};
   final Map<String, Timer> _syncTimers = <String, Timer>{};
 
-  Widget Function(HomeQuickActionItem, Animation<double>)? _availableTileBuilder;
+  Widget Function(HomeQuickActionItem, Animation<double>)?
+  _availableTileBuilder;
   void setAvailableTileBuilder(
     Widget Function(HomeQuickActionItem, Animation<double>) builder,
   ) {
@@ -103,7 +105,8 @@ class HomeQuickActionsViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   bool isActivating(String actionId) => _activatingIds.contains(actionId);
 
-  List<HomeQuickActionItem> get visibleEnabledActions => enabledActions ?? const [];
+  List<HomeQuickActionItem> get visibleEnabledActions =>
+      enabledActions ?? const [];
   bool get limitReached => enabledCount >= actionLimit;
   int get enabledCount => enabledActions?.length ?? 0;
   double get capacity => enabledCount / actionLimit;
@@ -128,7 +131,9 @@ class HomeQuickActionsViewModel extends ChangeNotifier with DisposeAwareMixin {
       final removed = availableItems.removeAt(idx);
       availableActionsListKey.currentState?.removeItem(
         idx,
-        (ctx, anim) => _availableTileBuilder?.call(removed, anim) ?? const SizedBox.shrink(),
+        (ctx, anim) =>
+            _availableTileBuilder?.call(removed, anim) ??
+            const SizedBox.shrink(),
       );
     }
     actions.add(action);
@@ -182,7 +187,9 @@ class HomeQuickActionsViewModel extends ChangeNotifier with DisposeAwareMixin {
     _activatingIds.remove(action.key);
 
     // Re-insert the item into availableItems at its original position.
-    final freshAvailable = defaultActions.where((a) => !isEnabled(a.key)).toList();
+    final freshAvailable = defaultActions
+        .where((a) => !isEnabled(a.key))
+        .toList();
 
     for (int i = 0; i < freshAvailable.length; i++) {
       if (!availableItems.any((a) => a.key == freshAvailable[i].key)) {
@@ -213,7 +220,8 @@ class HomeQuickActionsViewModel extends ChangeNotifier with DisposeAwareMixin {
     return objects
         .where((object) => object.key.isNotEmpty)
         .map(
-          (object) => HomeQuickActionItem(object: object, icon: _iconFor(object)),
+          (object) =>
+              HomeQuickActionItem(object: object, icon: _iconFor(object)),
         )
         .toList();
   }

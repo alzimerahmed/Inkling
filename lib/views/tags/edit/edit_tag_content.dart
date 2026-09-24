@@ -5,13 +5,16 @@ class _EditTagContent extends StatelessWidget {
 
   final EditTagViewModel viewModel;
 
-  bool get isPerson => viewModel.selectedCategoryId == TagCategoryDbModel.peopleId;
+  bool get isPerson =>
+      viewModel.selectedCategoryId == TagCategoryDbModel.peopleId;
 
   @override
   Widget build(BuildContext context) {
     return SpTextInputsPage(
       appBar: AppBar(
-        title: viewModel.tag != null ? Text(tr("page.edit_tag.title")) : Text(tr("page.new_tag.title")),
+        title: viewModel.tag != null
+            ? Text(tr("page.edit_tag.title"))
+            : Text(tr("page.new_tag.title")),
         actions: [
           if (viewModel.tag != null)
             IconButton(
@@ -39,14 +42,17 @@ class _EditTagContent extends StatelessWidget {
           initialText: viewModel.tag?.title,
           hintText: isPerson ? tr("input.people.hint") : tr("input.tag.hint"),
           validator: (value) {
-            if (value == null || value.trim().isEmpty == true) return tr("input.message.required");
+            if (value == null || value.trim().isEmpty == true)
+              return tr("input.message.required");
 
             final exists = context.read<TagsProvider>().isTagExist(
               value,
               categoryId: viewModel.selectedCategoryId,
             );
             // Allow keeping the same title when editing an existing tag.
-            final unchanged = viewModel.tag?.title.toLowerCase() == value.trim().toLowerCase();
+            final unchanged =
+                viewModel.tag?.title.toLowerCase() ==
+                value.trim().toLowerCase();
             if (exists && !unchanged) return tr("input.message.already_exist");
 
             return null;
@@ -70,7 +76,8 @@ class _EditTagContent extends StatelessWidget {
           ChoiceChip(
             label: Text(tr("general.tag_category.people_title")),
             selected: isPerson,
-            onSelected: (_) => viewModel.setCategory(TagCategoryDbModel.peopleId),
+            onSelected: (_) =>
+                viewModel.setCategory(TagCategoryDbModel.peopleId),
           ),
         ],
       ),

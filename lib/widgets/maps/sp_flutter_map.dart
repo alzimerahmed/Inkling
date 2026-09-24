@@ -12,8 +12,10 @@ import 'package:storypad/core/objects/sp_latlng_bounds.dart';
 import 'package:storypad/widgets/maps/map_types.dart';
 import 'package:storypad/widgets/maps/sp_map_controller.dart';
 
-typedef SpFlutterMapMarkerBuilder<T> = Widget Function(BuildContext context, SpMapMarker<T> marker);
-typedef SpFlutterMapClusterMarkerBuilder<T> = Widget Function(BuildContext context, List<SpMapMarker<T>> markers);
+typedef SpFlutterMapMarkerBuilder<T> =
+    Widget Function(BuildContext context, SpMapMarker<T> marker);
+typedef SpFlutterMapClusterMarkerBuilder<T> =
+    Widget Function(BuildContext context, List<SpMapMarker<T>> markers);
 
 class SpFlutterMap<T> extends StatefulWidget {
   const SpFlutterMap({
@@ -51,7 +53,8 @@ class SpFlutterMap<T> extends StatefulWidget {
   State<SpFlutterMap<T>> createState() => _SpFlutterMapState<T>();
 }
 
-class _SpFlutterMapState<T> extends State<SpFlutterMap<T>> with DebounchedCallback {
+class _SpFlutterMapState<T> extends State<SpFlutterMap<T>>
+    with DebounchedCallback {
   static const double _clusterRadiusPx = 72.0;
   static const double _tileSize = 256.0;
   static const double _minZoom = 3.0;
@@ -126,7 +129,8 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>> with DebounchedCallba
             _currentRotation = camera.rotation;
           }
 
-          final bool shouldRebuildClusters = (previousZoom - _currentZoom).abs() > 0.0001;
+          final bool shouldRebuildClusters =
+              (previousZoom - _currentZoom).abs() > 0.0001;
           if (shouldRebuildClusters && mounted) setState(() {});
 
           if (!mounted) return;
@@ -141,7 +145,8 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>> with DebounchedCallba
               () {
                 if (!mounted) return;
                 _isGesturing = false;
-                final latlong.LatLng center = _flutterMapController.camera.center;
+                final latlong.LatLng center =
+                    _flutterMapController.camera.center;
                 widget.onCameraIdle?.call(
                   SpLatLng(center.latitude, center.longitude),
                 );
@@ -205,7 +210,8 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>> with DebounchedCallba
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
       }
-      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
         return;
       }
 
@@ -265,7 +271,8 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>> with DebounchedCallba
         rotate: true,
         child: GestureDetector(
           onTap: () {
-            final ValueChanged<List<SpMapMarker<T>>>? onClusterTap = widget.onClusterTap;
+            final ValueChanged<List<SpMapMarker<T>>>? onClusterTap =
+                widget.onClusterTap;
             if (onClusterTap != null) {
               onClusterTap(cluster.markers);
               return;
@@ -273,7 +280,9 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>> with DebounchedCallba
 
             if (!_isFiniteLatLng(cluster.position)) return;
 
-            final double nextZoom = (_safeZoom(_currentZoom) + 2.0).clamp(_minZoom, _maxZoom).toDouble();
+            final double nextZoom = (_safeZoom(_currentZoom) + 2.0)
+                .clamp(_minZoom, _maxZoom)
+                .toDouble();
             _flutterMapController.moveAndRotate(
               cluster.position,
               nextZoom,
@@ -292,7 +301,9 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>> with DebounchedCallba
       point: _toLatLng(marker.point),
       width: marker.size.width,
       height: marker.size.height,
-      alignment: widget.markerBuilder != null ? Alignment.center : const Alignment(0.0, -0.6),
+      alignment: widget.markerBuilder != null
+          ? Alignment.center
+          : const Alignment(0.0, -0.6),
       rotate: true,
       child: GestureDetector(
         onTap: () => widget.onMarkerTap?.call(marker),
@@ -316,7 +327,9 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>> with DebounchedCallba
           ),
         )
         .toList();
-    final List<SpMapMarker<T>> clusterableMarkers = widget.markers.where((marker) => marker.clusterable).toList();
+    final List<SpMapMarker<T>> clusterableMarkers = widget.markers
+        .where((marker) => marker.clusterable)
+        .toList();
 
     final double zoom = _safeZoom(_currentZoom);
     if (zoom >= 18.0) {
@@ -346,7 +359,8 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>> with DebounchedCallba
             return a.projected.y.compareTo(b.projected.y);
           });
 
-    final List<_ClusterAccumulator<T>> accumulators = <_ClusterAccumulator<T>>[];
+    final List<_ClusterAccumulator<T>> accumulators =
+        <_ClusterAccumulator<T>>[];
     for (final _MapClusterPoint<T> point in points) {
       _ClusterAccumulator<T>? best;
       double bestDistanceSquared = _clusterRadiusPx * _clusterRadiusPx;
@@ -418,7 +432,9 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>> with DebounchedCallba
     final latlong.LatLng center = _flutterMapController.camera.center;
     if (!_isFiniteLatLng(center)) return;
 
-    final double nextZoom = (_safeZoom(_currentZoom) + delta).clamp(_minZoom, _maxZoom).toDouble();
+    final double nextZoom = (_safeZoom(_currentZoom) + delta)
+        .clamp(_minZoom, _maxZoom)
+        .toDouble();
     _flutterMapController.moveAndRotate(
       center,
       nextZoom,
@@ -477,7 +493,10 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>> with DebounchedCallba
     final double sinLatitude = math.sin(latitudeRadians).clamp(-0.9999, 0.9999);
     final double worldSize = _tileSize * math.pow(2.0, safeZoom);
     final double x = (latLng.longitude + 180.0) / 360.0 * worldSize;
-    final double y = (0.5 - math.log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * math.pi)) * worldSize;
+    final double y =
+        (0.5 -
+            math.log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * math.pi)) *
+        worldSize;
     return _ScreenPoint(x, y);
   }
 
@@ -487,7 +506,8 @@ class _SpFlutterMapState<T> extends State<SpFlutterMap<T>> with DebounchedCallba
     final double longitude = point.x / worldSize * 360.0 - 180.0;
     final double n = math.pi - 2.0 * math.pi * point.y / worldSize;
     final double latitude = math.atan(_sinh(n)) * 180.0 / math.pi;
-    return _safeLatLng(latitude, longitude) ?? _toLatLng(widget.initialCamera.target);
+    return _safeLatLng(latitude, longitude) ??
+        _toLatLng(widget.initialCamera.target);
   }
 
   double _sinh(double value) {
@@ -674,7 +694,8 @@ class _PinPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_PinPainter old) => old.color != color || old.tipOffset != tipOffset;
+  bool shouldRepaint(_PinPainter old) =>
+      old.color != color || old.tipOffset != tipOffset;
 }
 
 class _FlutterMapCurrentLocationMarker extends StatelessWidget {

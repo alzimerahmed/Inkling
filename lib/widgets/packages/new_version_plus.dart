@@ -131,7 +131,8 @@ class NewVersionPlus {
 
   /// This function attempts to clean local version strings so they match the MAJOR.MINOR.PATCH
   /// versioning pattern, so they can be properly compared with the store version.
-  String _getCleanVersion(String version) => RegExp(r'\d+\.\d+(\.\d+)?').stringMatch(version) ?? '0.0.0';
+  String _getCleanVersion(String version) =>
+      RegExp(r'\d+\.\d+(\.\d+)?').stringMatch(version) ?? '0.0.0';
   //RegExp(r'\d+\.\d+(\.[a-z]+)?(\.([^"]|\\")*)?').stringMatch(version) ?? '0.0.0';
 
   /// iOS info is fetched by using the iTunes lookup API, which returns a
@@ -219,7 +220,9 @@ class NewVersionPlus {
       appStoreLink: uri.toString(),
       releaseNotes: androidHtmlReleaseNotes
           ? _parseUnicodeToString(releaseNotes)
-          : releaseNotes?.replaceAll(expRemoveSc, '').replaceAll(expRemoveQuote, '"'),
+          : releaseNotes
+                ?.replaceAll(expRemoveSc, '')
+                .replaceAll(expRemoveQuote, '"'),
     );
   }
 
@@ -238,7 +241,8 @@ class NewVersionPlus {
       var matches = re.allMatches(release);
       var codePoints = <int>[];
       for (var match in matches) {
-        var codePoint = match.namedGroup('asciiValue') ?? match.namedGroup('codePoint');
+        var codePoint =
+            match.namedGroup('asciiValue') ?? match.namedGroup('codePoint');
         if (codePoint != null) {
           codePoints.add(int.parse(codePoint, radix: 16));
         } else {

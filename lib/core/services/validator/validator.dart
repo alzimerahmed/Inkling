@@ -119,7 +119,10 @@ bool isEmail(String str) {
 /// 'require_protocol': false, 'allow_underscores': false }`.
 bool isURL(String? input, [Map<String, Object>? options]) {
   var str = input;
-  if (str == null || str.isEmpty || str.length > 2083 || str.indexOf('mailto:') == 0) {
+  if (str == null ||
+      str.isEmpty ||
+      str.length > 2083 ||
+      str.indexOf('mailto:') == 0) {
     return false;
   }
 
@@ -194,12 +197,16 @@ bool isURL(String? input, [Map<String, Object>? options]) {
   if (split.isNotEmpty) {
     final portStr = split.join(':');
     final port = int.tryParse(portStr, radix: 10);
-    if (!RegExp(r'^[0-9]+$').hasMatch(portStr) || port == null || port <= 0 || port > 65535) {
+    if (!RegExp(r'^[0-9]+$').hasMatch(portStr) ||
+        port == null ||
+        port <= 0 ||
+        port > 65535) {
       return false;
     }
   }
 
-  if (host == null || !isIP(host) && !isFQDN(host, options) && host != 'localhost') {
+  if (host == null ||
+      !isIP(host) && !isFQDN(host, options) && host != 'localhost') {
     return false;
   }
 
@@ -249,7 +256,9 @@ bool isFQDN(String str, [Map<String, Object>? options]) {
     if (!RegExp(r'^[a-z\\u00a1-\\uffff0-9-]+$').hasMatch(part)) {
       return false;
     }
-    if (part[0] == '-' || part[part.length - 1] == '-' || part.contains('---')) {
+    if (part[0] == '-' ||
+        part[part.length - 1] == '-' ||
+        part.contains('---')) {
       return false;
     }
   }

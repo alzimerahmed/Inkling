@@ -40,7 +40,8 @@ class ImportMediaEntry {
   }
 }
 
-class ImportMediaOverviewViewModel extends ChangeNotifier with DisposeAwareMixin {
+class ImportMediaOverviewViewModel extends ChangeNotifier
+    with DisposeAwareMixin {
   final ImportMediaOverviewRoute params;
 
   ImportMediaOverviewViewModel({
@@ -55,7 +56,8 @@ class ImportMediaOverviewViewModel extends ChangeNotifier with DisposeAwareMixin
   int get toImportCount => entries?.where((e) => !e.isSkipped).length ?? 0;
 
   Future<void> _load() async {
-    final tmpPath = '${SupportDirectoryPath.tmp.directoryPath}/import_preview_${DateTime.now().millisecondsSinceEpoch}';
+    final tmpPath =
+        '${SupportDirectoryPath.tmp.directoryPath}/import_preview_${DateTime.now().millisecondsSinceEpoch}';
     _tempDir = Directory(tmpPath);
 
     try {
@@ -75,7 +77,8 @@ class ImportMediaOverviewViewModel extends ChangeNotifier with DisposeAwareMixin
       for (var i = 0; i < scanEntries.length; i++) {
         final scan = scanEntries[i];
         final existing = assets[i];
-        final targetFileExists = existing != null && File(existing.localFilePath).existsSync();
+        final targetFileExists =
+            existing != null && File(existing.localFilePath).existsSync();
         resolved.add(
           ImportMediaEntry(
             scanEntry: scan,
@@ -116,8 +119,10 @@ class ImportMediaOverviewViewModel extends ChangeNotifier with DisposeAwareMixin
           }
         },
         saveAsset: (asset) async => asset.save(runCallbacks: false),
-        getStoragePath: (type, id, ext) => type.getStoragePath(id: id, extension: ext),
-        getRelativePath: (type, id, ext) => type.getRelativeStoragePath(id: id, extension: ext),
+        getStoragePath: (type, id, ext) =>
+            type.getStoragePath(id: id, extension: ext),
+        getRelativePath: (type, id, ext) =>
+            type.getRelativeStoragePath(id: id, extension: ext),
       ),
     );
 

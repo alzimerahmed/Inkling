@@ -8,7 +8,9 @@ class _Preview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = ColorScheme.of(context);
-    final menuColor = kIsCupertino ? colorScheme.surface.withValues(alpha: 0.92) : colorScheme.surface;
+    final menuColor = kIsCupertino
+        ? colorScheme.surface.withValues(alpha: 0.92)
+        : colorScheme.surface;
     const pointerHeight = 12.0;
     const pointerHalfWidth = 14.0;
     const pointerCornerRadius = 5.0;
@@ -68,7 +70,11 @@ class _Preview extends StatelessWidget {
                             physics: const NeverScrollableScrollPhysics(),
                             onReorderItem: viewModel.reorderActions,
                             children: [
-                              for (int i = 0; i < viewModel.visibleEnabledActions.length; i++)
+                              for (
+                                int i = 0;
+                                i < viewModel.visibleEnabledActions.length;
+                                i++
+                              )
                                 ReorderableDelayedDragStartListener(
                                   key: ValueKey(
                                     viewModel.visibleEnabledActions[i].key,
@@ -78,15 +84,23 @@ class _Preview extends StatelessWidget {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       _PreviewRow(
-                                        action: viewModel.visibleEnabledActions[i],
+                                        action:
+                                            viewModel.visibleEnabledActions[i],
                                         activating: viewModel.isActivating(
-                                          viewModel.visibleEnabledActions[i].key,
+                                          viewModel
+                                              .visibleEnabledActions[i]
+                                              .key,
                                         ),
                                         onRemove: () => viewModel.removeAction(
                                           viewModel.visibleEnabledActions[i],
                                         ),
                                       ),
-                                      if (i < viewModel.visibleEnabledActions.length - 1) const Divider(height: 1),
+                                      if (i <
+                                          viewModel
+                                                  .visibleEnabledActions
+                                                  .length -
+                                              1)
+                                        const Divider(height: 1),
                                     ],
                                   ),
                                 ),
@@ -132,7 +146,9 @@ class _PreviewRow extends StatelessWidget {
     return AnimatedContainer(
       duration: Durations.medium2,
       curve: Curves.ease,
-      color: activating ? ColorScheme.of(context).primaryContainer.withValues(alpha: 0.35) : Colors.transparent,
+      color: activating
+          ? ColorScheme.of(context).primaryContainer.withValues(alpha: 0.35)
+          : Colors.transparent,
       child: ListTile(
         contentPadding: const EdgeInsets.only(left: 16.0, right: 8.0),
         leading: Icon(action.icon, size: 20),

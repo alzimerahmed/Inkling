@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:http/http.dart' as http;
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
+    as exp;
 import 'package:storypad/core/objects/cloud_file_object.dart';
 import 'package:storypad/core/objects/cloud_storage_quota_object.dart';
 import 'package:storypad/core/objects/dropbox_user_object.dart';
@@ -158,7 +159,8 @@ class DropboxCloudService extends BackupCloudService {
   @override
   Future<bool> requestScope() async => isSignedIn;
 
-  ({String id, String email, String? displayName, String? photoUrl}) _parseAccount(Map<String, dynamic> body) {
+  ({String id, String email, String? displayName, String? photoUrl})
+  _parseAccount(Map<String, dynamic> body) {
     final name = body['name'] as Map<String, dynamic>?;
     return (
       id: body['account_id'] as String,
@@ -168,7 +170,8 @@ class DropboxCloudService extends BackupCloudService {
     );
   }
 
-  Future<({String id, String email, String? displayName, String? photoUrl})> _fetchAccount({
+  Future<({String id, String email, String? displayName, String? photoUrl})>
+  _fetchAccount({
     required String accessToken,
   }) async {
     final response = await http.post(
@@ -188,8 +191,10 @@ class DropboxCloudService extends BackupCloudService {
     return _parseAccount(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
-  Uri _apiUri(String endpoint) => Uri.parse('https://api.dropboxapi.com/2/$endpoint');
-  Uri _contentUri(String endpoint) => Uri.parse('https://content.dropboxapi.com/2/$endpoint');
+  Uri _apiUri(String endpoint) =>
+      Uri.parse('https://api.dropboxapi.com/2/$endpoint');
+  Uri _contentUri(String endpoint) =>
+      Uri.parse('https://content.dropboxapi.com/2/$endpoint');
 
   Map<String, String> get _authHeader {
     final user = _currentUser;
@@ -230,7 +235,8 @@ class DropboxCloudService extends BackupCloudService {
 
   String? _errorSummary(String body) {
     try {
-      return (jsonDecode(body) as Map<String, dynamic>)['error_summary'] as String?;
+      return (jsonDecode(body) as Map<String, dynamic>)['error_summary']
+          as String?;
     } catch (_) {
       return null;
     }
@@ -260,7 +266,10 @@ class DropboxCloudService extends BackupCloudService {
           final existing = yearlyBackups[year];
           final existingTs = existing?.lastUpdatedAt;
           final newTs = cloudFile.lastUpdatedAt;
-          final isNewer = existing == null || (newTs != null && (existingTs == null || newTs.isAfter(existingTs)));
+          final isNewer =
+              existing == null ||
+              (newTs != null &&
+                  (existingTs == null || newTs.isAfter(existingTs)));
           if (isNewer) yearlyBackups[year] = cloudFile;
         }
 
@@ -388,7 +397,8 @@ class DropboxCloudService extends BackupCloudService {
           },
         );
         _throwIfError(metadataResponse);
-        final metadata = jsonDecode(metadataResponse.body) as Map<String, dynamic>;
+        final metadata =
+            jsonDecode(metadataResponse.body) as Map<String, dynamic>;
         final path = metadata['path_lower'] as String;
 
         // Deleted-file metadata carries no `rev` (only live FileMetadata
@@ -404,8 +414,10 @@ class DropboxCloudService extends BackupCloudService {
           },
         );
         _throwIfError(revisionsResponse);
-        final revisions = jsonDecode(revisionsResponse.body) as Map<String, dynamic>;
-        final entries = (revisions['entries'] as List).cast<Map<String, dynamic>>();
+        final revisions =
+            jsonDecode(revisionsResponse.body) as Map<String, dynamic>;
+        final entries = (revisions['entries'] as List)
+            .cast<Map<String, dynamic>>();
         if (entries.isEmpty) {
           throw exp.FileOperationException(
             'No revisions found to restore',
@@ -496,7 +508,10 @@ class DropboxCloudService extends BackupCloudService {
           {'path': fileId},
         );
         _throwIfError(oldMetadataResponse);
-        final oldPath = (jsonDecode(oldMetadataResponse.body) as Map<String, dynamic>)['path_lower'] as String;
+        final oldPath =
+            (jsonDecode(oldMetadataResponse.body)
+                    as Map<String, dynamic>)['path_lower']
+                as String;
         final folder = _parentPath(oldPath);
         final newPath = folder.isEmpty ? '/$fileName' : '$folder/$fileName';
 
@@ -515,7 +530,8 @@ class DropboxCloudService extends BackupCloudService {
           body: bytes,
         );
         _throwIfError(uploadResponse);
-        final uploaded = jsonDecode(uploadResponse.body) as Map<String, dynamic>;
+        final uploaded =
+            jsonDecode(uploadResponse.body) as Map<String, dynamic>;
 
         if (newPath.toLowerCase() != oldPath) {
           try {

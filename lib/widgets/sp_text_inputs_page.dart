@@ -105,7 +105,8 @@ class _SpTextInputsPageState extends State<SpTextInputsPage> {
           widget.header!,
           const SizedBox(height: 16.0),
         ],
-        for (int index = 0; index < controllers.length; index++) buildTextField(index, context),
+        for (int index = 0; index < controllers.length; index++)
+          buildTextField(index, context),
         const SizedBox(height: 16.0),
         buildSaveButton(context),
       ],
@@ -143,7 +144,9 @@ class _SpTextInputsPageState extends State<SpTextInputsPage> {
               CupertinoTextField(
                 autofocus: index == 0,
                 maxLines: widget.fields[index].maxLines,
-                textInputAction: lastIndex ? TextInputAction.done : TextInputAction.next,
+                textInputAction: lastIndex
+                    ? TextInputAction.done
+                    : TextInputAction.next,
                 controller: controllers[index],
                 keyboardType: widget.fields[index].keyboardType,
                 placeholder: widget.fields[index].hintText,
@@ -167,7 +170,9 @@ class _SpTextInputsPageState extends State<SpTextInputsPage> {
     } else {
       textField = TextFormField(
         autofocus: index == 0,
-        textInputAction: lastIndex ? TextInputAction.done : TextInputAction.next,
+        textInputAction: lastIndex
+            ? TextInputAction.done
+            : TextInputAction.next,
         controller: controllers[index],
         keyboardType: widget.fields[index].keyboardType,
         decoration: InputDecoration(

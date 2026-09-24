@@ -161,7 +161,8 @@ class SpAndroidRedemptionSheet extends BaseBottomSheet {
               height: imageHeight,
               fit: BoxFit.cover,
               cacheWidth: imageWidth != double.infinity
-                  ? (imageWidth * MediaQuery.of(context).devicePixelRatio).round()
+                  ? (imageWidth * MediaQuery.of(context).devicePixelRatio)
+                        .round()
                   : null,
             );
           },

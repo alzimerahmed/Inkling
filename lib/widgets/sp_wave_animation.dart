@@ -25,7 +25,8 @@ class SpWaveAnimation extends StatefulWidget {
   State<SpWaveAnimation> createState() => _SpWaveAnimationState();
 }
 
-class _SpWaveAnimationState extends State<SpWaveAnimation> with SingleTickerProviderStateMixin {
+class _SpWaveAnimationState extends State<SpWaveAnimation>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
   late List<double> _waveOffsets;
@@ -94,19 +95,24 @@ class _SpWaveAnimationState extends State<SpWaveAnimation> with SingleTickerProv
     // Secondary wave with different frequency for organic feel
     final secondaryWave =
         sin(
-          wavePosition * 0.7 + position * _waveLength * 2.0 + _waveOffsets[index],
+          wavePosition * 0.7 +
+              position * _waveLength * 2.0 +
+              _waveOffsets[index],
         ) *
         0.3;
 
     // Tertiary wave for subtle variation
     final tertiaryWave =
         cos(
-          wavePosition * 0.3 + position * _waveLength * 0.5 - _waveOffsets[index],
+          wavePosition * 0.3 +
+              position * _waveLength * 0.5 -
+              _waveOffsets[index],
         ) *
         0.2;
 
     // Combine waves with different weights for natural movement
-    final waveValue = (wave * 0.7 + secondaryWave * 0.2 + tertiaryWave * 0.1) * 0.8;
+    final waveValue =
+        (wave * 0.7 + secondaryWave * 0.2 + tertiaryWave * 0.1) * 0.8;
 
     // Normalize to 0.1-0.9 range and apply wave height
     return 0.1 + ((waveValue + 1) / 2) * widget.waveHeight * 0.8;

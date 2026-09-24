@@ -12,8 +12,12 @@ class _ImportMediaOverviewContent extends StatelessWidget {
     // Photos and videos share one tab, same as everywhere else media is
     // browsed (Library, the image picker's "types" filter) — see
     // docs/app/features/media.md ("Video is merged into the images tab").
-    final imageEntries = entries?.where((e) => e.scanEntry.type != AssetType.audio).toList() ?? const [];
-    final audioEntries = entries?.where((e) => e.scanEntry.type == AssetType.audio).toList() ?? const [];
+    final imageEntries =
+        entries?.where((e) => e.scanEntry.type != AssetType.audio).toList() ??
+        const [];
+    final audioEntries =
+        entries?.where((e) => e.scanEntry.type == AssetType.audio).toList() ??
+        const [];
     final hasImages = imageEntries.isNotEmpty;
     final hasAudio = audioEntries.isNotEmpty;
 
@@ -52,7 +56,9 @@ class _ImportMediaOverviewContent extends StatelessWidget {
               : null,
         ),
         body: buildBody(entries, tabs, tabViews),
-        bottomNavigationBar: entries == null ? null : buildBottomBar(context, entries),
+        bottomNavigationBar: entries == null
+            ? null
+            : buildBottomBar(context, entries),
       ),
     );
   }
@@ -98,7 +104,9 @@ class _ImportMediaOverviewContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             FilledButton(
-              onPressed: toImport == 0 ? null : () => viewModel.performImport(context),
+              onPressed: toImport == 0
+                  ? null
+                  : () => viewModel.performImport(context),
               child: Text(
                 "${tr('button.import')} (${plural('plural.row', toImport)})",
               ),
@@ -156,9 +164,10 @@ class _ImagesImportTab extends StatelessWidget {
                     mainAxisSpacing: 8.0,
                     crossAxisSpacing: 8.0,
                     padding: EdgeInsets.zero,
-                    gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: max(1, constraints.maxWidth ~/ 120),
-                    ),
+                    gridDelegate:
+                        SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: max(1, constraints.maxWidth ~/ 120),
+                        ),
                     itemBuilder: (context, index) {
                       return _ImageImportTile(entry: dayAssets[index]);
                     },
@@ -449,7 +458,8 @@ class _AudioImportTile extends StatelessWidget {
 }
 
 List<Map<String, dynamic>> _groupEntriesByDay(List<ImportMediaEntry> source) {
-  final sorted = [...source]..sort((a, b) => _entryDate(b).compareTo(_entryDate(a)));
+  final sorted = [...source]
+    ..sort((a, b) => _entryDate(b).compareTo(_entryDate(a)));
   final groupedMap = <String, List<ImportMediaEntry>>{};
 
   for (final entry in sorted) {
@@ -464,11 +474,14 @@ List<Map<String, dynamic>> _groupEntriesByDay(List<ImportMediaEntry> source) {
       return dateB.compareTo(dateA);
     });
 
-  return sortedKeys.map((key) => {'label': key, 'entries': groupedMap[key]!}).toList();
+  return sortedKeys
+      .map((key) => {'label': key, 'entries': groupedMap[key]!})
+      .toList();
 }
 
 DateTime _entryDate(ImportMediaEntry entry) {
-  return entry.existingAsset?.createdAt ?? DateTime.fromMillisecondsSinceEpoch(entry.scanEntry.id);
+  return entry.existingAsset?.createdAt ??
+      DateTime.fromMillisecondsSinceEpoch(entry.scanEntry.id);
 }
 
 String _dayKey(DateTime dateTime) {

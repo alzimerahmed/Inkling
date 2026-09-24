@@ -105,22 +105,26 @@ class _CloudOptimizeContent extends StatelessWidget {
                 ? tr(
                     'page.cloud_optimize.step.cleanup.active_with_count',
                     namedArgs: {
-                      'CURRENT_COUNT': '${viewModel.deletedCount + viewModel.failedCount}',
+                      'CURRENT_COUNT':
+                          '${viewModel.deletedCount + viewModel.failedCount}',
                       'TOTAL_COUNT': '${viewModel.totalToClean}',
                     },
                   )
                 : tr('page.cloud_optimize.step.cleanup.active'),
             doneColor: isAllDone ? green : null,
           ),
-          if (viewModel.currentStep == OptimizeStep.awaitingConfirmation) _buildConfirmation(context, viewModel),
-          if (viewModel.currentStep == OptimizeStep.error) _buildError(context, viewModel),
+          if (viewModel.currentStep == OptimizeStep.awaitingConfirmation)
+            _buildConfirmation(context, viewModel),
+          if (viewModel.currentStep == OptimizeStep.error)
+            _buildError(context, viewModel),
         ],
       ),
     );
   }
 
   String _analysisSummary(CloudOptimizeViewModel vm) {
-    if (!vm.hasFindings) return tr('page.cloud_optimize.step.analyze.nothing_to_clean');
+    if (!vm.hasFindings)
+      return tr('page.cloud_optimize.step.analyze.nothing_to_clean');
     final parts = <String>[];
     if (vm.detachedCandidates.isNotEmpty) {
       parts.add(
@@ -156,7 +160,8 @@ class _CloudOptimizeContent extends StatelessWidget {
   }
 
   String _cleanupSummary(CloudOptimizeViewModel vm) {
-    if (vm.deletedCount == 0 && vm.failedCount == 0) return tr('page.cloud_optimize.step.cleanup.no_files');
+    if (vm.deletedCount == 0 && vm.failedCount == 0)
+      return tr('page.cloud_optimize.step.cleanup.no_files');
     final parts = <String>[];
 
     if (vm.deletedCount > 0) {
@@ -266,9 +271,13 @@ class _CloudOptimizeContent extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: FilledButton(
-              onPressed: viewModel.hasFilesToClean ? () => viewModel.startCleanup() : () => Navigator.of(context).pop(),
+              onPressed: viewModel.hasFilesToClean
+                  ? () => viewModel.startCleanup()
+                  : () => Navigator.of(context).pop(),
               child: Text(
-                viewModel.hasFilesToClean ? tr('button.move_to_trash') : tr('button.done'),
+                viewModel.hasFilesToClean
+                    ? tr('button.move_to_trash')
+                    : tr('button.done'),
               ),
             ),
           ),
@@ -350,7 +359,9 @@ class _StepCard extends StatelessWidget {
         ? colorScheme.primary
         : colorScheme.outlineVariant;
 
-    final badgeTextColor = _isDone || _isActive ? colorScheme.onPrimary : colorScheme.outline;
+    final badgeTextColor = _isDone || _isActive
+        ? colorScheme.onPrimary
+        : colorScheme.outline;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -379,7 +390,9 @@ class _StepCard extends StatelessWidget {
                   Text(activeSubtitle, style: textTheme.bodySmall),
                 ] else if (_isDone) ...[
                   Text(
-                    skipped ? tr('page.cloud_optimize.step.skipped') : doneSubtitle,
+                    skipped
+                        ? tr('page.cloud_optimize.step.skipped')
+                        : doneSubtitle,
                     style: textTheme.bodySmall?.copyWith(
                       color: doneColor?.withValues(alpha: 0.85),
                     ),
@@ -413,7 +426,9 @@ class _StepCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: _isPending ? Colors.transparent : badgeColor,
         shape: BoxShape.circle,
-        border: _isPending ? Border.all(color: colorScheme.outlineVariant) : null,
+        border: _isPending
+            ? Border.all(color: colorScheme.outlineVariant)
+            : null,
       ),
       alignment: Alignment.center,
       child: Text(

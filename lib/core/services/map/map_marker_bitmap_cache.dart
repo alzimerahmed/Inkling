@@ -103,7 +103,10 @@ class MapMarkerBitmapCache {
     _pruneScheduled = true;
 
     try {
-      final List<File> files = SupportDirectoryPath.map_markers.directory.listSync().whereType<File>().toList();
+      final List<File> files = SupportDirectoryPath.map_markers.directory
+          .listSync()
+          .whereType<File>()
+          .toList();
       if (files.length <= _maxEntries) return;
 
       files.sort(

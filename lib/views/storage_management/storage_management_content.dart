@@ -137,7 +137,8 @@ class _StorageManagementContent extends StatelessWidget {
         SpSectionTitle(
           title: tr('page.storage_management.section.cloud_storage'),
         ),
-        for (final entry in viewModel.cloudQuotas.entries) ?_buildCloudTile(context, entry.key, entry.value),
+        for (final entry in viewModel.cloudQuotas.entries)
+          ?_buildCloudTile(context, entry.key, entry.value),
       ],
     );
   }
@@ -159,15 +160,26 @@ class _StorageManagementContent extends StatelessWidget {
     final limitBytes = quota.limitInBytes;
 
     final appUsedLabel = _formatBytes(appUsageBytes);
-    final accountUsedLabel = accountUsageBytes != null ? _formatBytes(accountUsageBytes) : 'N/A';
+    final accountUsedLabel = accountUsageBytes != null
+        ? _formatBytes(accountUsageBytes)
+        : 'N/A';
     final limitLabel = limitBytes != null ? _formatBytes(limitBytes) : 'N/A';
 
-    final hasFullQuotaData = accountUsageBytes != null && limitBytes != null && limitBytes > 0;
-    final otherUsageBytes = hasFullQuotaData ? (accountUsageBytes - appUsageBytes).clamp(0, accountUsageBytes) : 0;
-    final freeBytes = hasFullQuotaData ? (limitBytes - accountUsageBytes).clamp(0, limitBytes) : 0;
+    final hasFullQuotaData =
+        accountUsageBytes != null && limitBytes != null && limitBytes > 0;
+    final otherUsageBytes = hasFullQuotaData
+        ? (accountUsageBytes - appUsageBytes).clamp(0, accountUsageBytes)
+        : 0;
+    final freeBytes = hasFullQuotaData
+        ? (limitBytes - accountUsageBytes).clamp(0, limitBytes)
+        : 0;
 
-    final appFraction = hasFullQuotaData ? (appUsageBytes / limitBytes).clamp(0.0, 1.0) : 0.0;
-    final otherFraction = hasFullQuotaData ? (otherUsageBytes / limitBytes).clamp(0.0, 1.0) : 0.0;
+    final appFraction = hasFullQuotaData
+        ? (appUsageBytes / limitBytes).clamp(0.0, 1.0)
+        : 0.0;
+    final otherFraction = hasFullQuotaData
+        ? (otherUsageBytes / limitBytes).clamp(0.0, 1.0)
+        : 0.0;
     final usedFraction = (appFraction + otherFraction).clamp(0.0, 1.0);
 
     final appColor = ColorFromDayService(context: context).get(2)!;
@@ -186,7 +198,8 @@ class _StorageManagementContent extends StatelessWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (email != null) Text(email, style: TextTheme.of(context).bodySmall),
+          if (email != null)
+            Text(email, style: TextTheme.of(context).bodySmall),
           const SizedBox(height: 8),
           Row(
             children: [
@@ -256,9 +269,15 @@ class _StorageManagementContent extends StatelessWidget {
                     // constraints.maxWidth can be negative or non-finite in squeezed/overflowing
                     // layouts, which would make the clamps below throw ArgumentError.
                     final rawBarWidth = constraints.maxWidth;
-                    final barWidth = rawBarWidth.isFinite ? math.max(rawBarWidth, 0.0) : 0.0;
-                    final rawUsedWidth = (barWidth * usedFraction).clamp(0.0, barWidth).toDouble();
-                    final rawAppWidth = (barWidth * appFraction).clamp(0.0, barWidth).toDouble();
+                    final barWidth = rawBarWidth.isFinite
+                        ? math.max(rawBarWidth, 0.0)
+                        : 0.0;
+                    final rawUsedWidth = (barWidth * usedFraction)
+                        .clamp(0.0, barWidth)
+                        .toDouble();
+                    final rawAppWidth = (barWidth * appFraction)
+                        .clamp(0.0, barWidth)
+                        .toDouble();
 
                     // Tiny app usage may be sub-pixel; keep it visible while preserving total used width.
                     final appWidthUpperBound = math.max(
@@ -266,9 +285,13 @@ class _StorageManagementContent extends StatelessWidget {
                       minVisibleAppWidth,
                     );
                     final appWidth = appFraction > 0
-                        ? rawAppWidth.clamp(minVisibleAppWidth, appWidthUpperBound).toDouble()
+                        ? rawAppWidth
+                              .clamp(minVisibleAppWidth, appWidthUpperBound)
+                              .toDouble()
                         : 0.0;
-                    final otherWidth = (rawUsedWidth - appWidth).clamp(0.0, barWidth).toDouble();
+                    final otherWidth = (rawUsedWidth - appWidth)
+                        .clamp(0.0, barWidth)
+                        .toDouble();
 
                     return Stack(
                       children: [

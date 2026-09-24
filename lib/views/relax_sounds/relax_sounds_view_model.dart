@@ -12,7 +12,8 @@ import 'package:storypad/providers/relax_sounds_provider.dart';
 import 'package:storypad/views/relax_sounds/edit_mix/edit_mix_view.dart';
 import 'relax_sounds_view.dart';
 
-class RelaxSoundsViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
+class RelaxSoundsViewModel extends ChangeNotifier
+    with DisposeAwareMixin, DebounchedCallback {
   final RelaxSoundsRoute params;
   final RelaxSoundsProvider provider;
 
@@ -42,10 +43,12 @@ class RelaxSoundsViewModel extends ChangeNotifier with DisposeAwareMixin, Deboun
   List<RelaxSoundMixModel>? get mixes => _mixes;
 
   final Set<String> _downloadedSoundUrlPaths = {};
-  bool downloaded(RelaxSoundObject relaxSound) => _downloadedSoundUrlPaths.contains(relaxSound.soundUrlPath);
+  bool downloaded(RelaxSoundObject relaxSound) =>
+      _downloadedSoundUrlPaths.contains(relaxSound.soundUrlPath);
 
   Future<void> load() async {
-    _mixes = await RelaxSoundMixModel.db.where().then((value) => value?.items) ?? [];
+    _mixes =
+        await RelaxSoundMixModel.db.where().then((value) => value?.items) ?? [];
     loadDownloadSounds();
     notifyListeners();
   }
@@ -71,7 +74,8 @@ class RelaxSoundsViewModel extends ChangeNotifier with DisposeAwareMixin, Deboun
       sounds.add(
         RelaxSoundModel(
           soundUrlPath: soundUrlPath,
-          volume: provider.getVolume(provider.relaxSounds[soundUrlPath]!) ?? 0.5,
+          volume:
+              provider.getVolume(provider.relaxSounds[soundUrlPath]!) ?? 0.5,
         ),
       );
     }
@@ -99,7 +103,8 @@ class RelaxSoundsViewModel extends ChangeNotifier with DisposeAwareMixin, Deboun
     await RelaxSoundMixModel.db.delete(mix.id);
     await load();
 
-    if (context.mounted) context.read<RelaxSoundsProvider>().refreshCanSaveMix();
+    if (context.mounted)
+      context.read<RelaxSoundsProvider>().refreshCanSaveMix();
   }
 
   // [newIndex] already accounts for the removed item (ReorderableListView's `onReorderItem`).
@@ -136,7 +141,10 @@ class RelaxSoundsViewModel extends ChangeNotifier with DisposeAwareMixin, Deboun
     await context.read<RelaxSoundsProvider>().playAll(
       soundWithInitialVolume: {
         for (var sound in sounds)
-          sound: mix.sounds.where((saved) => saved.soundUrlPath == sound.soundUrlPath).firstOrNull?.volume,
+          sound: mix.sounds
+              .where((saved) => saved.soundUrlPath == sound.soundUrlPath)
+              .firstOrNull
+              ?.volume,
       },
     );
   }

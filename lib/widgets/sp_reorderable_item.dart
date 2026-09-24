@@ -51,7 +51,9 @@ class _SpReorderableItemState extends State<SpReorderableItem> {
           ),
           child: SpMeasureSize(
             onChange: (size) => sizeNotifier.value = size,
-            child: candidateItems.isNotEmpty ? Opacity(opacity: 0.5, child: widget.child) : widget.child,
+            child: candidateItems.isNotEmpty
+                ? Opacity(opacity: 0.5, child: widget.child)
+                : widget.child,
           ),
         );
       },

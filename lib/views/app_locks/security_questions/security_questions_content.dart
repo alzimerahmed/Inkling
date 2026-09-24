@@ -29,7 +29,9 @@ class _SecurityQuestionsContent extends StatelessWidget {
           final answer = viewModel.securityAnswers[question];
           return ListTile(
             title: Text(question.translatedQuestion),
-            subtitle: answer != null ? Text(List.generate(answer.length, (e) => "*").join("")) : null,
+            subtitle: answer != null
+                ? Text(List.generate(answer.length, (e) => "*").join(""))
+                : null,
             trailing: answer != null
                 ? Icon(
                     SpIcons.checkCircle,

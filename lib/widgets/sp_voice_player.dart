@@ -116,7 +116,8 @@ class SpVoicePlayer extends StatefulWidget {
   State<SpVoicePlayer> createState() => _SpVoicePlayerState();
 }
 
-class _SpVoicePlayerState extends State<SpVoicePlayer> with WidgetsBindingObserver {
+class _SpVoicePlayerState extends State<SpVoicePlayer>
+    with WidgetsBindingObserver {
   /// AudioPlayer instance managed by this widget.
   /// Handles actual playback using the just_audio package.
   final AudioPlayer player = AudioPlayer();
@@ -199,7 +200,8 @@ class _SpVoicePlayerState extends State<SpVoicePlayer> with WidgetsBindingObserv
 
   void _onPreferencesChanged() async {
     if (!mounted) return;
-    if (_playbackSpeed == _preferencesProvider.preferences.voicePlaybackSpeed) return;
+    if (_playbackSpeed == _preferencesProvider.preferences.voicePlaybackSpeed)
+      return;
 
     AppLogger.debug(
       '$runtimeType#_onPreferencesChanged setting _playbackSpeed',
@@ -237,7 +239,8 @@ class _SpVoicePlayerState extends State<SpVoicePlayer> with WidgetsBindingObserv
       // player is still `idle` (no audio source set), which would otherwise
       // show a "playing" UI with no audible sound.
       setState(
-        () => playing = state.playing && state.processingState != ProcessingState.idle,
+        () => playing =
+            state.playing && state.processingState != ProcessingState.idle,
       );
 
       // When audio reaches the end, pause and reset to beginning
@@ -431,8 +434,13 @@ class _SpVoicePlayerState extends State<SpVoicePlayer> with WidgetsBindingObserv
                   widget.onLongPress!();
                 }
               : null,
-          onHorizontalDragUpdate: downloading ? null : (details) => handleHorizontalDrag(details, constraints.maxWidth),
-          onHorizontalDragEnd: downloading ? null : (_) => handleHorizontalDragEnd(),
+          onHorizontalDragUpdate: downloading
+              ? null
+              : (details) =>
+                    handleHorizontalDrag(details, constraints.maxWidth),
+          onHorizontalDragEnd: downloading
+              ? null
+              : (_) => handleHorizontalDragEnd(),
           child: Material(
             color: Colors.transparent,
             clipBehavior: Clip.hardEdge,
@@ -545,7 +553,10 @@ class _SpVoicePlayerState extends State<SpVoicePlayer> with WidgetsBindingObserv
       child: Container(
         width:
             (_duration.inMilliseconds > 0
-                ? (_isDragging ? _draggedPosition.inMilliseconds : _position.inMilliseconds) / _duration.inMilliseconds
+                ? (_isDragging
+                          ? _draggedPosition.inMilliseconds
+                          : _position.inMilliseconds) /
+                      _duration.inMilliseconds
                 : 0) *
             constraints.maxWidth,
         color: Theme.of(context).colorScheme.readOnly.surface5,

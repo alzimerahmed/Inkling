@@ -49,7 +49,8 @@ class SpBackgroundPicker extends StatefulWidget {
   State<SpBackgroundPicker> createState() => _SpBackgroundPickerState();
 }
 
-class _SpBackgroundPickerState extends State<SpBackgroundPicker> with DebounchedCallback {
+class _SpBackgroundPickerState extends State<SpBackgroundPicker>
+    with DebounchedCallback {
   int? get colorSeedValue => widget.colorSeedValue;
   int? get colorTone => widget.colorTone;
   String? get backgroundImagePath => widget.backgroundImagePath;
@@ -81,14 +82,16 @@ class _SpBackgroundPickerState extends State<SpBackgroundPicker> with Debounched
           .where((group) => StoryBackgrounds.all.containsKey(group))
           .firstOrNull;
 
-      this.selectedGroup = selectedGroup != null && allGroups.containsKey(selectedGroup)
+      this.selectedGroup =
+          selectedGroup != null && allGroups.containsKey(selectedGroup)
           ? selectedGroup
           : allGroups.keys.elementAt(1); // default to cute
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final key = groupLabelKeys[selectedGroup];
-      if (selectedGroup != allGroups.keys.first && key?.currentContext != null) {
+      if (selectedGroup != allGroups.keys.first &&
+          key?.currentContext != null) {
         Scrollable.ensureVisible(
           key!.currentContext!,
           curve: Curves.ease,
@@ -194,7 +197,8 @@ class _SpBackgroundPickerState extends State<SpBackgroundPicker> with Debounched
           content: Container(
             padding: const EdgeInsets.only(top: 8.0),
             child: MarkdownBody(
-              listItemCrossAxisAlignment: MarkdownListItemCrossAxisAlignment.start,
+              listItemCrossAxisAlignment:
+                  MarkdownListItemCrossAxisAlignment.start,
               styleSheet: MarkdownStyleSheet(
                 p: TextTheme.of(context).bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
@@ -215,12 +219,13 @@ class _SpBackgroundPickerState extends State<SpBackgroundPicker> with Debounched
                   'APP_NAME': kAppName,
                 },
               ),
-              onTapLink: (text, href, title) => UrlOpenerService.openForMarkdown(
-                context: context,
-                text: text,
-                href: href,
-                title: title,
-              ),
+              onTapLink: (text, href, title) =>
+                  UrlOpenerService.openForMarkdown(
+                    context: context,
+                    text: text,
+                    href: href,
+                    title: title,
+                  ),
             ),
           ),
         );
@@ -248,7 +253,8 @@ class _ImageBackgroundCarousel extends StatefulWidget {
   final OnBackgroundThemeChanged onThemeChanged;
 
   @override
-  State<_ImageBackgroundCarousel> createState() => _ImageBackgroundCarouselState();
+  State<_ImageBackgroundCarousel> createState() =>
+      _ImageBackgroundCarouselState();
 }
 
 class _ImageBackgroundCarouselState extends State<_ImageBackgroundCarousel> {
@@ -273,7 +279,9 @@ class _ImageBackgroundCarouselState extends State<_ImageBackgroundCarousel> {
         controller.jumpTo(
           min(
             controller.position.maxScrollExtent,
-            _backgroundCardHeight * _backgroundCardAspectRatio * lastSelectedIndex,
+            _backgroundCardHeight *
+                _backgroundCardAspectRatio *
+                lastSelectedIndex,
           ),
         );
       }
@@ -322,7 +330,8 @@ class _ImageBackgroundCarouselState extends State<_ImageBackgroundCarousel> {
           }
 
           final background = widget.backgrounds[index];
-          bool selected = widget.backgroundImagePath == basename(background.path);
+          bool selected =
+              widget.backgroundImagePath == basename(background.path);
 
           widget.onThemeChanged(
             colorTone: null,
@@ -399,7 +408,9 @@ class _ImageItem extends StatelessWidget {
               // Each background card is ~86.4px wide (or itemWidth), but BoxFit.cover crops the image based on alignment (left/center/right),
               // so only a portion of the original image is visible. We multiply by 3 to ensure the displayed area is rendered sharply.
               // Using cacheWidth improves performance by decoding only the necessary resolution.
-              cacheWidth: (itemWidth * 3 * MediaQuery.of(context).devicePixelRatio).round(),
+              cacheWidth:
+                  (itemWidth * 3 * MediaQuery.of(context).devicePixelRatio)
+                      .round(),
             );
           },
         ),
@@ -441,7 +452,8 @@ class _ColorBackgroundsCarousel extends StatefulWidget {
   final OnBackgroundThemeChanged onThemeChanged;
 
   @override
-  State<_ColorBackgroundsCarousel> createState() => _ColorBackgroundsCarouselState();
+  State<_ColorBackgroundsCarousel> createState() =>
+      _ColorBackgroundsCarouselState();
 }
 
 class _ColorBackgroundsCarouselState extends State<_ColorBackgroundsCarousel> {
@@ -472,7 +484,9 @@ class _ColorBackgroundsCarouselState extends State<_ColorBackgroundsCarousel> {
         controller.jumpTo(
           min(
             controller.position.maxScrollExtent,
-            _backgroundCardHeight * _backgroundCardAspectRatio * lastSelectedIndex,
+            _backgroundCardHeight *
+                _backgroundCardAspectRatio *
+                lastSelectedIndex,
           ),
         );
       }
@@ -555,14 +569,15 @@ class _ColorBackgroundsCarouselState extends State<_ColorBackgroundsCarousel> {
             DynamicSchemeVariant.tonalSpot,
           );
 
-    Color? scaffoldBackgroundColor = SpStoryPreferenceThemeConstructor.getScaffoldBackgroundColor(
-      colorScheme: colorScheme,
-      preferences: StoryPreferencesDbModel.create().copyWith(
-        backgroundImagePath: null,
-        colorSeedValue: backgroundColor.toARGB32(),
-        colorTone: selected ? widget.colorTone : 0,
-      ),
-    );
+    Color? scaffoldBackgroundColor =
+        SpStoryPreferenceThemeConstructor.getScaffoldBackgroundColor(
+          colorScheme: colorScheme,
+          preferences: StoryPreferencesDbModel.create().copyWith(
+            backgroundImagePath: null,
+            colorSeedValue: backgroundColor.toARGB32(),
+            colorTone: selected ? widget.colorTone : 0,
+          ),
+        );
 
     return Column(
       children: [

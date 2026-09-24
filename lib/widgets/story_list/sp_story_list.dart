@@ -19,6 +19,10 @@ class SpStoryList extends StatelessWidget {
   final double? paddingTop;
   final Future<void> Function()? onRefresh;
 
+  /// When non-null (search results), story tile bodies are rendered as plain
+  /// text with query matches highlighted instead of markdown.
+  final String? highlightQuery;
+
   bool get hasThrowback => throwbackDates?.isNotEmpty == true;
 
   const SpStoryList({
@@ -30,6 +34,7 @@ class SpStoryList extends StatelessWidget {
     this.onRefresh,
     this.viewOnly = false,
     this.paddingTop,
+    this.highlightQuery,
   });
 
   static SpStoryListWithQuery withQuery({
@@ -55,7 +60,8 @@ class SpStoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (stories?.items == null) return const Center(child: CircularProgressIndicator.adaptive());
+    if (stories?.items == null)
+      return const Center(child: CircularProgressIndicator.adaptive());
 
     if (onRefresh != null) {
       return RefreshIndicator.adaptive(
@@ -107,6 +113,7 @@ class SpStoryList extends StatelessWidget {
               viewOnly: viewOnly,
               listContext: listContext,
               listHasThrowback: hasThrowback,
+              highlightQuery: highlightQuery,
               onTap: () {
                 if (viewOnly) {
                   ShowChangeRoute(

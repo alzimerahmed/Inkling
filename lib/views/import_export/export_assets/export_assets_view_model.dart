@@ -5,7 +5,8 @@ import 'package:share_plus/share_plus.dart';
 import 'package:storypad/core/constants/app_constants.dart';
 import 'package:storypad/core/databases/models/asset_db_model.dart';
 import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
+    as exp;
 import 'package:storypad/core/services/assets/backup_asset_downloader_service.dart';
 import 'package:storypad/core/services/backups/backup_cloud_service.dart';
 import 'package:storypad/core/services/messenger_service.dart';
@@ -111,7 +112,8 @@ class ExportAssetsViewModel extends ChangeNotifier with DisposeAwareMixin {
           // Auth errors affect every remaining download from that service —
           // surface and abort rather than skip-and-continue.
           if (e is exp.AuthException) {
-            if (context.mounted) MessengerService.of(context).showError(e.userFriendlyMessage);
+            if (context.mounted)
+              MessengerService.of(context).showError(e.userFriendlyMessage);
             return false;
           }
 
@@ -182,7 +184,10 @@ class ExportAssetsViewModel extends ChangeNotifier with DisposeAwareMixin {
           }
         }
 
-        await buildEntries().transform(tarWriter).transform(gzip.encoder).pipe(tarFile.openWrite());
+        await buildEntries()
+            .transform(tarWriter)
+            .transform(gzip.encoder)
+            .pipe(tarFile.openWrite());
 
         return tarFile;
       },
@@ -198,7 +203,9 @@ class ExportAssetsViewModel extends ChangeNotifier with DisposeAwareMixin {
       await SharePlus.instance.share(
         ShareParams(
           title: basename(tarFile.path),
-          sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+          sharePositionOrigin: box != null
+              ? box.localToGlobal(Offset.zero) & box.size
+              : null,
           files: [XFile(tarFile.path)],
         ),
       );

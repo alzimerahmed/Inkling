@@ -36,7 +36,8 @@ class _PaywallHeader extends StatelessWidget {
                   height: 56,
                   child: Image.file(
                     file,
-                    cacheWidth: (56 * MediaQuery.of(context).devicePixelRatio).round(),
+                    cacheWidth: (56 * MediaQuery.of(context).devicePixelRatio)
+                        .round(),
                   ),
                 );
               },

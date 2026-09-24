@@ -19,7 +19,8 @@ import 'package:storypad/widgets/bottom_sheets/sp_template_info_sheet.dart';
 
 import 'show_template_view.dart';
 
-class ShowTemplateViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
+class ShowTemplateViewModel extends ChangeNotifier
+    with DisposeAwareMixin, DebounchedCallback {
   final ShowTemplateRoute params;
   final PageController pageController = PageController();
 
@@ -96,7 +97,8 @@ class ShowTemplateViewModel extends ChangeNotifier with DisposeAwareMixin, Debou
 
   void _setTemplate(TemplateDbModel template) {
     this.template = template;
-    draftContent = template.content ?? StoryContentDbModel.create(createdAt: openedOn);
+    draftContent =
+        template.content ?? StoryContentDbModel.create(createdAt: openedOn);
 
     bool alreadyHasPage = draftContent?.richPages?.isNotEmpty == true;
     if (!alreadyHasPage) draftContent = draftContent?.addRichPage();

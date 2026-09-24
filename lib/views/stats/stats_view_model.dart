@@ -7,7 +7,8 @@ import 'package:storypad/core/mixins/dispose_aware_mixin.dart';
 import 'package:storypad/core/objects/search_filter_object.dart';
 import 'package:storypad/core/objects/sp_latlng.dart';
 import 'package:storypad/core/objects/stats/stats_range.dart';
-import 'package:storypad/core/objects/stats/story_stats_object.dart' show LabelStatItem, StoryStatsObject;
+import 'package:storypad/core/objects/stats/story_stats_object.dart'
+    show LabelStatItem, StoryStatsObject;
 import 'package:storypad/core/services/stories/story_stats_service.dart';
 import 'package:storypad/core/services/stories/writing_goal_service.dart';
 import 'package:storypad/core/types/path_type.dart';
@@ -69,11 +70,13 @@ class StatsViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   /// Returns cached stats for [tabIndex] in the current year, or null while it is
   /// still loading (or not yet requested).
-  StoryStatsObject? statsFor(int tabIndex) => _statsCache[_key(_selectedYear, tabIndex)];
+  StoryStatsObject? statsFor(int tabIndex) =>
+      _statsCache[_key(_selectedYear, tabIndex)];
 
   /// Derives the date range for a tab: 0 = full year, 1–12 = that month.
-  StatsRange rangeForTab(int tabIndex) =>
-      tabIndex == 0 ? StatsRange.year(DateTime(_selectedYear)) : StatsRange.month(DateTime(_selectedYear, tabIndex));
+  StatsRange rangeForTab(int tabIndex) => tabIndex == 0
+      ? StatsRange.year(DateTime(_selectedYear))
+      : StatsRange.month(DateTime(_selectedYear, tabIndex));
 
   // Sections the user has hidden (e.g. to declutter a screenshot). Global across
   // tabs/years and in-memory only — resets when the screen is closed. Countries
@@ -94,7 +97,8 @@ class StatsViewModel extends ChangeNotifier with DisposeAwareMixin {
     return stored.map((name) => byName[name]).whereType<StatsSection>().toSet();
   }
 
-  bool isSectionVisible(StatsSection section) => !_hiddenSections.contains(section);
+  bool isSectionVisible(StatsSection section) =>
+      !_hiddenSections.contains(section);
 
   void toggleSection(StatsSection section) {
     if (!_hiddenSections.remove(section)) _hiddenSections.add(section);
@@ -117,7 +121,8 @@ class StatsViewModel extends ChangeNotifier with DisposeAwareMixin {
   }
 
   /// Sections of the visible tab, listed in the section filter sheet.
-  List<StatsSection> sectionsForCurrentTab() => sectionsForTab(_tabController.index);
+  List<StatsSection> sectionsForCurrentTab() =>
+      sectionsForTab(_tabController.index);
 
   void _onTabChanged() {
     if (_tabController.indexIsChanging) return; // wait until the tab settles
@@ -205,7 +210,9 @@ class StatsViewModel extends ChangeNotifier with DisposeAwareMixin {
     if (place.storyIds == null || place.storyIds!.isEmpty) return;
     final range = rangeForTab(tabIndex);
 
-    SpLatLng? storyLocation = await StoryDbModel.db.find(place.storyIds!.first).then((story) => story?.place?.latLng);
+    SpLatLng? storyLocation = await StoryDbModel.db
+        .find(place.storyIds!.first)
+        .then((story) => story?.place?.latLng);
     if (!context.mounted) return;
 
     SpStoriesBottomSheet(

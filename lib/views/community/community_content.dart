@@ -22,7 +22,9 @@ class _CommunityContent extends StatelessWidget {
           ListTile(
             leading: Icon(
               SpIcons.favoriteFilled,
-              color: AppTheme.isDarkMode(context) ? Colors.red[300] : Colors.red[700],
+              color: AppTheme.isDarkMode(context)
+                  ? Colors.red[300]
+                  : Colors.red[700],
             ),
             title: Text(tr('page.support_us.title')),
             trailing: const Icon(SpIcons.keyboardRight),
@@ -35,7 +37,8 @@ class _CommunityContent extends StatelessWidget {
               }
             },
           ),
-          if (RemoteConfigService.policyPrivacyUrl.get().trim().isNotEmpty == true)
+          if (RemoteConfigService.policyPrivacyUrl.get().trim().isNotEmpty ==
+              true)
             ListTile(
               leading: const Icon(SpIcons.policy),
               title: Text(tr("general.privacy_policy")),
@@ -79,7 +82,8 @@ class _CommunityContent extends StatelessWidget {
                 context: context,
                 applicationName: kPackageInfo.appName,
                 applicationLegalese: '©${DateTime.now().year}',
-                applicationVersion: "${kPackageInfo.version}+${kPackageInfo.buildNumber}",
+                applicationVersion:
+                    "${kPackageInfo.version}+${kPackageInfo.buildNumber}",
               );
             },
           ),

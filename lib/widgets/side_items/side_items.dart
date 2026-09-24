@@ -82,7 +82,8 @@ class SideItems {
           title: tr('general.sounds'),
           iconData: SpIcons.musicNote,
           selectedIconData: SpIcons.musicNote,
-          onTap: (context, route) => context.read<RootProvider>().navigate(route),
+          onTap: (context, route) =>
+              context.read<RootProvider>().navigate(route),
         ),
     ];
   }
@@ -91,14 +92,16 @@ class SideItems {
     BuildContext context,
     HomeViewModel homeViewModel,
   ) {
-    bool showProBanner = kIAPEnabled && !context.read<InAppPurchaseProvider>().isProUser;
+    bool showProBanner =
+        kIAPEnabled && !context.read<InAppPurchaseProvider>().isProUser;
 
     return [
       CustomSideItem.custom(
         builder: (context) => SurveyBanner(homeViewModel: homeViewModel),
       ),
       CustomSideItem.custom(
-        builder: (context) => HomeYearSwitcherHeader(homeViewModel: homeViewModel),
+        builder: (context) =>
+            HomeYearSwitcherHeader(homeViewModel: homeViewModel),
       ),
       if (showProBanner) ...[
         CustomSideItem.custom(

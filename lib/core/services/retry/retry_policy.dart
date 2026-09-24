@@ -1,5 +1,6 @@
 import 'dart:math';
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
+    as exp;
 
 /// Configuration for retry behavior
 class RetryPolicy {
@@ -57,7 +58,8 @@ class RetryPolicy {
     if (currentAttempt >= maxAttempts) return false;
 
     if (exception is exp.BackupException) {
-      return exception.isRetryable && retryableExceptions.contains(exception.runtimeType);
+      return exception.isRetryable &&
+          retryableExceptions.contains(exception.runtimeType);
     }
 
     return false;

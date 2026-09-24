@@ -20,7 +20,9 @@ class _HomeScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: viewModel.scrollInfo.appBar(context).getScaffoldBackgroundColor(context),
+      backgroundColor: viewModel.scrollInfo
+          .appBar(context)
+          .getScaffoldBackgroundColor(context),
       resizeToAvoidBottomInset: false,
       drawerEnableOpenDragGesture: false,
       endDrawerEnableOpenDragGesture: false,
@@ -47,7 +49,9 @@ class _HomeScaffold extends StatelessWidget {
       body: Stack(
         children: [
           RefreshIndicator.adaptive(
-            edgeOffset: viewModel.scrollInfo.appBar(context).getExpandedHeight() + MediaQuery.of(context).padding.top,
+            edgeOffset:
+                viewModel.scrollInfo.appBar(context).getExpandedHeight() +
+                MediaQuery.of(context).padding.top,
             onRefresh: () => viewModel.refresh(context),
             child: SpScrollConfiguration(
               child: CustomScrollView(
@@ -89,7 +93,9 @@ class _HomeScaffold extends StatelessWidget {
               screenPadding: MediaQuery.of(context).padding.bottom == 0
                   ? MediaQuery.of(viewContext).padding
                   : MediaQuery.of(context).padding,
-              backgroundColor: viewModel.scrollInfo.appBar(context).getScaffoldBackgroundColor(context),
+              backgroundColor: viewModel.scrollInfo
+                  .appBar(context)
+                  .getScaffoldBackgroundColor(context),
             ),
           );
         },

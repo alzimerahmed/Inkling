@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SpSliverStickyDivider extends SliverPersistentHeaderDelegate {
-  static Widget sliver() => SliverPersistentHeader(delegate: SpSliverStickyDivider._(), pinned: true);
+  static Widget sliver() =>
+      SliverPersistentHeader(delegate: SpSliverStickyDivider._(), pinned: true);
 
   SpSliverStickyDivider._();
 
@@ -19,5 +20,6 @@ class SpSliverStickyDivider extends SliverPersistentHeaderDelegate {
   double get minExtent => 1;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      false;
 }

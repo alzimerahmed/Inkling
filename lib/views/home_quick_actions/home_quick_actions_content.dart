@@ -42,7 +42,8 @@ class _HomeQuickActionsContent extends StatelessWidget {
     if (viewModel.limitReached) return;
 
     final result = await const SpTemplatesPickerSheet().show(context: context);
-    if (result != null && result is TemplatePickResult) viewModel.addTemplate(result);
+    if (result != null && result is TemplatePickResult)
+      viewModel.addTemplate(result);
   }
 
   Future<void> _chooseTag(

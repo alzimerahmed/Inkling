@@ -28,7 +28,9 @@ class SpStoriesBottomSheet extends BaseBottomSheet {
     return SizedBox(
       height: MediaQuery.sizeOf(context).height * 0.5,
       child: Scaffold(
-        floatingActionButton: storyLocation != null ? _MapAppOpenerButton(storyLocation: storyLocation!) : null,
+        floatingActionButton: storyLocation != null
+            ? _MapAppOpenerButton(storyLocation: storyLocation!)
+            : null,
         body: SpStoryList.withQuery(
           filter: filter,
           disableMultiEdit: true,
@@ -110,7 +112,8 @@ class _MapAppOpenerButton extends StatelessWidget {
           url = "https://maps.apple.com/?ll=$latitude,$longitude";
         } else if (result == "google") {
           prefersDeepLink = Platform.isAndroid;
-          url = "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude";
+          url =
+              "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude";
         }
 
         if (url != null) {

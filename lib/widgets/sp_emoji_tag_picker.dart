@@ -31,7 +31,8 @@ class SpEmojiTagPicker extends StatefulWidget {
   State<SpEmojiTagPicker> createState() => _SpEmojiTagPicker();
 }
 
-class _SpEmojiTagPicker extends State<SpEmojiTagPicker> with DebounchedCallback {
+class _SpEmojiTagPicker extends State<SpEmojiTagPicker>
+    with DebounchedCallback {
   late Set<int> selectedTags = widget.initialTags.toSet();
   Map<TagCategoryDbModel, List<TagDbModel>>? emojisByCategory;
 
@@ -64,7 +65,12 @@ class _SpEmojiTagPicker extends State<SpEmojiTagPicker> with DebounchedCallback 
       if (selectedTags.contains(tag.id)) {
         newTags = ({...selectedTags}..remove(tag.id)).toList();
       } else {
-        final others = emojisByCategory?[category]?.map((e) => e.id).where((id) => id != tag.id).toSet() ?? {};
+        final others =
+            emojisByCategory?[category]
+                ?.map((e) => e.id)
+                .where((id) => id != tag.id)
+                .toSet() ??
+            {};
         newTags =
             ({...selectedTags}
                   ..removeAll(others)
@@ -97,7 +103,12 @@ class _SpEmojiTagPicker extends State<SpEmojiTagPicker> with DebounchedCallback 
     } else if (category.multiSelect) {
       newTags = ({...selectedTags, tag.id}).toList();
     } else {
-      final others = emojisByCategory?[category]?.map((e) => e.id).where((id) => id != tag.id).toSet() ?? {};
+      final others =
+          emojisByCategory?[category]
+              ?.map((e) => e.id)
+              .where((id) => id != tag.id)
+              .toSet() ??
+          {};
       newTags =
           ({...selectedTags}
                 ..removeAll(others)
@@ -174,7 +185,8 @@ class _SpEmojiTagPicker extends State<SpEmojiTagPicker> with DebounchedCallback 
               tags: entry.value,
               selectedTags: selectedTags,
               onToggle: _onToggle,
-              onPickCustomEmoji: (emoji) => _onPickCustomEmoji(emoji, entry.key),
+              onPickCustomEmoji: (emoji) =>
+                  _onPickCustomEmoji(emoji, entry.key),
             );
           }).toList(),
         ),
@@ -211,7 +223,9 @@ class _EmojiPicker extends StatelessWidget {
             builder: (context, constraints) {
               const gap = 6.0;
               final itemCount = constraints.maxWidth ~/ 40;
-              final itemWidth = constraints.maxWidth / itemCount - gap * (itemCount - 1) / itemCount;
+              final itemWidth =
+                  constraints.maxWidth / itemCount -
+                  gap * (itemCount - 1) / itemCount;
 
               return Wrap(
                 spacing: gap,
@@ -257,7 +271,8 @@ class _EmojiPicker extends StatelessWidget {
                     scaleActive: 1.3,
                     effects: [.scaleDown],
                     onTap: () async {
-                      final preferredCategory = await PreferredEmojiTabStorage().getCategoryFor(category.id);
+                      final preferredCategory = await PreferredEmojiTabStorage()
+                          .getCategoryFor(category.id);
                       final picker = _CustomEmojiPicker(
                         category: category,
                         initialCategory: preferredCategory,
@@ -267,7 +282,8 @@ class _EmojiPicker extends StatelessWidget {
                       final emoji = await Navigator.of(
                         context,
                       ).push(MaterialPageRoute(builder: (_) => picker));
-                      if (emoji != null && emoji is String) await onPickCustomEmoji(emoji);
+                      if (emoji != null && emoji is String)
+                        await onPickCustomEmoji(emoji);
                     },
                     child: Container(
                       width: itemWidth,
@@ -337,8 +353,10 @@ class _CustomEmojiPicker extends StatelessWidget {
         ),
         Expanded(
           child: EmojiPicker(
-            onEmojiSelected: (_, emoji) => Navigator.of(context).pop(emoji.emoji),
-            onCategoryChanged: (category) => PreferredEmojiTabStorage().setCategoryFor(this.category.id, category),
+            onEmojiSelected: (_, emoji) =>
+                Navigator.of(context).pop(emoji.emoji),
+            onCategoryChanged: (category) => PreferredEmojiTabStorage()
+                .setCategoryFor(this.category.id, category),
             config: Config(
               locale: context.locale,
               emojiViewConfig: EmojiViewConfig(

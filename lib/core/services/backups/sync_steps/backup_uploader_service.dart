@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io' as io;
-import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart' as exp;
+import 'package:storypad/core/objects/backup_exceptions/backup_exception.dart'
+    as exp;
 import 'package:storypad/core/objects/backup_object.dart';
 import 'package:storypad/core/objects/cloud_file_object.dart';
 import 'package:storypad/core/repositories/backup_repository.dart';
@@ -27,7 +28,8 @@ class BackupUploaderResponse {
 }
 
 class BackupUploaderService {
-  BackupUploaderService({required BackupSyncMessenger messenger}) : _messenger = messenger;
+  BackupUploaderService({required BackupSyncMessenger messenger})
+    : _messenger = messenger;
 
   final BackupSyncMessenger _messenger;
 
@@ -185,7 +187,8 @@ class BackupUploaderService {
               file: file,
             ),
             policy: RetryPolicy.network,
-            operationName: 'update_backup_year_${year}_${cloudService.serviceType.id}',
+            operationName:
+                'update_backup_year_${year}_${cloudService.serviceType.id}',
           );
         } else {
           uploadedFile = await RetryExecutor.execute(
@@ -194,7 +197,8 @@ class BackupUploaderService {
               file: file,
             ),
             policy: RetryPolicy.network,
-            operationName: 'upload_backup_year_${year}_${cloudService.serviceType.id}',
+            operationName:
+                'upload_backup_year_${year}_${cloudService.serviceType.id}',
           );
         }
 

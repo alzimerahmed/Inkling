@@ -577,5 +577,18 @@
   "sounds.thunder": "गड़गड़ाहट",
   "sounds.ticking_clock": "टिक-टिक करती घड़ी",
   "sounds.typing": "टाइपिंग",
-  "sounds.wind_chime": "पवन झंकार"
+  "sounds.wind_chime": "पवन झंकार",
+  "list_tile.import_day_one.title": "Import Day One (.json/.zip)",
+  "list_tile.import_daylio.title": "Import Daylio (.csv)",
+  "list_tile.import_keep.title": "Import Google Keep (.json)",
+  "list_tile.import_evernote.title": "Import Evernote (.enex)",
+  "import_external.pick_file_hint": "Pick your export file to see a preview before anything is imported.",
+  "import_external.skipped": "{} skipped",
+  "import_external.photos": "{} photos",
+  "button.select_file": "Select File",
+  "button.export_pdf": "Export PDF",
+  "snack_bar.import_external_done": "Imported {} entries ({} photos imported, {} photos skipped).",
+  "search.preset.starred": "Starred",
+  "search.preset.pinned": "Pinned",
+  "search.preset.this_year": "This year"
 }

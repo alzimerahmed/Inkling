@@ -37,7 +37,10 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final compression = context
+            .read<DevicePreferencesProvider>()
+            .preferences
+            .assetCompression;
         final photo = await AppFilePickerService.pickImage(
           source: source,
           compression: compression,
@@ -72,7 +75,10 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final compression = context
+            .read<DevicePreferencesProvider>()
+            .preferences
+            .assetCompression;
         final video = await AppFilePickerService.pickVideo(
           context: context,
           source: source,
@@ -109,7 +115,10 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final compression = context
+            .read<DevicePreferencesProvider>()
+            .preferences
+            .assetCompression;
         final files = await AppFilePickerService.pickMultipleMedia(
           context: context,
           compression: compression,
@@ -123,7 +132,9 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
         }
         if (savedAssets.isEmpty) return;
 
-        final mediaPath = savedAssets.map((a) => a.relativeLocalFilePath).join('|');
+        final mediaPath = savedAssets
+            .map((a) => a.relativeLocalFilePath)
+            .join('|');
         editorAdapter.insertMedia(
           controller: controller,
           mediaPath: mediaPath,
@@ -143,7 +154,10 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
     return SpAppLockWrapper.disableAppLockIfHas(
       context,
       callback: () async {
-        final compression = context.read<DevicePreferencesProvider>().preferences.assetCompression;
+        final compression = context
+            .read<DevicePreferencesProvider>()
+            .preferences
+            .assetCompression;
         final files = await AppFilePickerService.pickMultipleMedia(
           context: context,
           compression: compression,
@@ -185,7 +199,9 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
     if (pickAssets is List<AssetDbModel> && pickAssets.isNotEmpty) {
       // Media embed supports multiple items by joining paths with '|', and parsing them in the embed builder.
       // See docs/features/album-embed.md for details.
-      final mediaPath = pickAssets.map((a) => a.relativeLocalFilePath).join('|');
+      final mediaPath = pickAssets
+          .map((a) => a.relativeLocalFilePath)
+          .join('|');
 
       editorAdapter.insertMedia(
         controller: controller,
@@ -235,7 +251,9 @@ class SpImagePickerBottomSheet extends BaseBottomSheet {
     if (kIsCupertino) {
       return _Content(params: this);
     } else {
-      double maxChildSize = 1 - View.of(context).viewPadding.top / MediaQuery.of(context).size.height;
+      double maxChildSize =
+          1 -
+          View.of(context).viewPadding.top / MediaQuery.of(context).size.height;
       return DraggableScrollableSheet(
         expand: false,
         maxChildSize: maxChildSize,

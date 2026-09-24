@@ -75,7 +75,8 @@ class MapPickerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<MapPickerViewModel>(
-      create: (context) => MapPickerViewModel(params: params, viewContext: context),
+      create: (context) =>
+          MapPickerViewModel(params: params, viewContext: context),
       builder: (context, child) {
         final viewModel = Provider.of<MapPickerViewModel>(context);
 

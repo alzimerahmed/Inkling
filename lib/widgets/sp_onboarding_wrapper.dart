@@ -27,14 +27,16 @@ class SpOnboardingWrapper extends StatefulWidget {
   State<SpOnboardingWrapper> createState() => _SpOnboardingWrapperState();
 }
 
-class _SpOnboardingWrapperState extends State<SpOnboardingWrapper> with TickerProviderStateMixin {
+class _SpOnboardingWrapperState extends State<SpOnboardingWrapper>
+    with TickerProviderStateMixin {
   AnimationController? onboardingAnimationController;
   AnimationController? homeAnimationController;
 
   final transitionDuration = const Duration(milliseconds: 750);
 
   bool onboarding = false;
-  bool onboarded = OnboardingInitializer.onboarded ?? !OnboardingInitializer.isNewUser;
+  bool onboarded =
+      OnboardingInitializer.onboarded ?? !OnboardingInitializer.isNewUser;
   GlobalKey<NavigatorState>? onboardingKey;
 
   @override
@@ -107,7 +109,9 @@ class _SpOnboardingWrapperState extends State<SpOnboardingWrapper> with TickerPr
 
   @override
   Widget build(BuildContext context) {
-    if (onboarded || onboardingAnimationController == null || homeAnimationController == null) {
+    if (onboarded ||
+        onboardingAnimationController == null ||
+        homeAnimationController == null) {
       return widget.child;
     }
 
@@ -143,7 +147,8 @@ class _SpOnboardingWrapperState extends State<SpOnboardingWrapper> with TickerPr
         ),
         builder: (context, child) {
           return Container(
-            transform: Matrix4.identity()..spTranslate(0.0, lerpDouble(56.0, 0.0, homeAnimation.value)!),
+            transform: Matrix4.identity()
+              ..spTranslate(0.0, lerpDouble(56.0, 0.0, homeAnimation.value)!),
             child: child,
           );
         },
@@ -167,7 +172,8 @@ class _SpOnboardingWrapperState extends State<SpOnboardingWrapper> with TickerPr
         ),
         builder: (context, child) {
           return Container(
-            transform: Matrix4.identity()..spTranslate(0.0, lerpDouble(-56.0, 0.0, animation.value)!),
+            transform: Matrix4.identity()
+              ..spTranslate(0.0, lerpDouble(-56.0, 0.0, animation.value)!),
             child: child,
           );
         },

@@ -47,7 +47,9 @@ class CloudOptimizeView extends StatelessWidget {
 
           final backupProvider = context.read<BackupProvider>();
           return backupProvider.recheckAndSync(
-            services: backupProvider.services.where((service) => service.isSignedIn).toList(),
+            services: backupProvider.services
+                .where((service) => service.isSignedIn)
+                .toList(),
             context: context,
           );
         },

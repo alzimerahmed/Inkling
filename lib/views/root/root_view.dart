@@ -19,7 +19,8 @@ class RootView extends StatelessWidget {
   });
 
   static BuildContext? _rootContext;
-  static BuildContext? get rootContext => _rootContext?.mounted ?? false ? _rootContext : null;
+  static BuildContext? get rootContext =>
+      _rootContext?.mounted ?? false ? _rootContext : null;
 
   @override
   Widget build(BuildContext context) {

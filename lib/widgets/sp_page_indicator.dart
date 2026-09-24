@@ -88,7 +88,9 @@ class _SpPageIndicatorState extends State<SpPageIndicator> {
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeOutCubic,
                 // Center the current dot and move others accordingly
-                left: (centerIndex + offsetFromCenter) * (widget.dotSize + widget.spacing),
+                left:
+                    (centerIndex + offsetFromCenter) *
+                    (widget.dotSize + widget.spacing),
                 top: (widget.dotSize - (widget.dotSize * scale)) / 2,
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),

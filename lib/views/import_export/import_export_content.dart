@@ -7,8 +7,12 @@ class _ImportExportContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final onlyExport = viewModel.params.showExport == true && viewModel.params.showImport != true;
-    final onlyImport = viewModel.params.showImport == true && viewModel.params.showExport != true;
+    final onlyExport =
+        viewModel.params.showExport == true &&
+        viewModel.params.showImport != true;
+    final onlyImport =
+        viewModel.params.showImport == true &&
+        viewModel.params.showExport != true;
 
     return Scaffold(
       appBar: AppBar(
@@ -35,22 +39,34 @@ class _ImportExportContent extends StatelessWidget {
               title: Text(tr('list_tile.import_media.title')),
               onTap: () => viewModel.importMedia(context),
             ),
-            // TODO: more import options with files support + export by date & export in PDF
-            // ListTile(
-            //   leading: const Icon(SpIcons.importOffline),
-            //   title: const Text("Import StoryPad JSON (.zip)"),
-            //   onTap: () => viewModel.import(context),
-            // ),
-            // ListTile(
-            //   leading: const Icon(SpIcons.importOffline),
-            //   title: const Text("Import DayOne JSON (.zip)"),
-            //   onTap: () {},
-            // ),
-            // ListTile(
-            //   leading: const Icon(SpIcons.importOffline),
-            //   title: const Text("Import Journey JSON (.zip)"),
-            //   onTap: () {},
-            // ),
+            ListTile(
+              leading: const Icon(SpIcons.importOffline),
+              title: Text(tr('list_tile.import_day_one.title')),
+              onTap: () => const ImportExternalRoute(
+                source: ExternalImportSource.dayOne,
+              ).push(context),
+            ),
+            ListTile(
+              leading: const Icon(SpIcons.importOffline),
+              title: Text(tr('list_tile.import_daylio.title')),
+              onTap: () => const ImportExternalRoute(
+                source: ExternalImportSource.daylio,
+              ).push(context),
+            ),
+            ListTile(
+              leading: const Icon(SpIcons.importOffline),
+              title: Text(tr('list_tile.import_keep.title')),
+              onTap: () => const ImportExternalRoute(
+                source: ExternalImportSource.keep,
+              ).push(context),
+            ),
+            ListTile(
+              leading: const Icon(SpIcons.importOffline),
+              title: Text(tr('list_tile.import_evernote.title')),
+              onTap: () => const ImportExternalRoute(
+                source: ExternalImportSource.evernote,
+              ).push(context),
+            ),
           ],
           if (!onlyExport && !onlyImport) const Divider(),
           if (!onlyImport) _ExportSection(viewModel: viewModel),

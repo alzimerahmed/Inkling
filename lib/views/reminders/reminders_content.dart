@@ -41,7 +41,8 @@ class _RemindersContent extends StatelessWidget {
           const SizedBox(height: 8.0),
           const Divider(height: 1),
           const SizedBox(height: 4.0),
-          for (final reminder in provider.customReminders) _buildCustomTile(context, reminder),
+          for (final reminder in provider.customReminders)
+            _buildCustomTile(context, reminder),
           ListTile(
             leading: const Icon(SpIcons.add),
             title: Text(tr('page.reminders.add_reminder')),
@@ -72,7 +73,9 @@ class _RemindersContent extends StatelessWidget {
       leading: Icon(icon),
       title: Text(type.title),
       subtitle: Text(
-        enabled && reminder != null ? _builtinEnabledSummary(context, type, reminder) : type.description,
+        enabled && reminder != null
+            ? _builtinEnabledSummary(context, type, reminder)
+            : type.description,
       ),
       // The switch reflects the true enabled state but doesn't toggle directly —
       // tapping it (like tapping the tile) opens the sheet, where the real

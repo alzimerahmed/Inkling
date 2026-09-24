@@ -6,7 +6,8 @@ class _ShowStoryContent extends StatelessWidget {
   final ShowStoryViewModel viewModel;
 
   List<StoryPageObject> constructPages() {
-    if (viewModel.pagesManager.pagesMap.keys.isEmpty) return <StoryPageObject>[];
+    if (viewModel.pagesManager.pagesMap.keys.isEmpty)
+      return <StoryPageObject>[];
     return List.generate(viewModel.draftContent?.richPages?.length ?? 0, (
       index,
     ) {
@@ -57,8 +58,10 @@ class _ShowStoryContent extends StatelessWidget {
       pages: pages,
       preferences: viewModel.story?.preferences,
       storyContent: viewModel.draftContent!,
-      onTitleVisibilityChanged: (pageIndex, page, info) =>
-          viewModel.pagesManager.pagesMap.setTitleVisibleFraction(page.id, info.visibleFraction),
+      onTitleVisibilityChanged: (pageIndex, page, info) => viewModel
+          .pagesManager
+          .pagesMap
+          .setTitleVisibleFraction(page.id, info.visibleFraction),
       pageController: viewModel.pagesManager.pageController,
       onPageChanged: (newRichPage) => viewModel.onPageChanged(newRichPage),
       onGoToEdit: () => viewModel.goToEditPage(context),
@@ -78,7 +81,8 @@ class _ShowStoryContent extends StatelessWidget {
           : PreferredSize(
               preferredSize: const Size.fromHeight(1),
               child: ValueListenableBuilder(
-                valueListenable: viewModel.pagesManager.pageScrollOffsetNotifier,
+                valueListenable:
+                    viewModel.pagesManager.pageScrollOffsetNotifier,
                 builder: (BuildContext context, double offset, Widget? child) {
                   return Opacity(
                     opacity: offset.clamp(0.0, 8.0) / 8.0,

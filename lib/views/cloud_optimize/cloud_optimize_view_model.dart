@@ -74,9 +74,11 @@ class CloudOptimizeViewModel extends ChangeNotifier with DisposeAwareMixin {
 
   BackupServiceType get serviceType => service.serviceType;
 
-  bool get hasFindings => detachedCandidates.isNotEmpty || staleDuplicates.isNotEmpty;
+  bool get hasFindings =>
+      detachedCandidates.isNotEmpty || staleDuplicates.isNotEmpty;
 
-  bool get hasFilesToClean => staleDuplicates.isNotEmpty || detachedCandidates.isNotEmpty;
+  bool get hasFilesToClean =>
+      staleDuplicates.isNotEmpty || detachedCandidates.isNotEmpty;
 
   int get totalToClean => staleDuplicates.length + detachedCandidates.length;
 
@@ -256,7 +258,9 @@ class CloudOptimizeViewModel extends ChangeNotifier with DisposeAwareMixin {
     // Detached cleanup is only safe after sync preflight has succeeded.
     detachedCandidates = syncSucceeded
         ? detachedFiles.where((r) {
-            final assetId = r.file.fileName != null ? int.tryParse(r.file.fileName!.split('.').first) : null;
+            final assetId = r.file.fileName != null
+                ? int.tryParse(r.file.fileName!.split('.').first)
+                : null;
             final tombstone = assetId != null ? tombstoneById[assetId] : null;
             return CloudAssetAnalyzer.isDetachedEligibleForCleanup(
               r.file,
@@ -328,7 +332,9 @@ class CloudOptimizeViewModel extends ChangeNotifier with DisposeAwareMixin {
       if (disposed) break;
 
       final file = result.file;
-      final assetId = file.fileName != null ? int.tryParse(file.fileName!.split('.').first) : null;
+      final assetId = file.fileName != null
+          ? int.tryParse(file.fileName!.split('.').first)
+          : null;
       final tombstone = assetId != null ? freshTombstones[assetId] : null;
 
       if (!CloudAssetAnalyzer.isDetachedEligibleForCleanup(

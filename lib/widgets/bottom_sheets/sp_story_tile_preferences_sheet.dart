@@ -83,24 +83,35 @@ class _StoryTilePreferencesSheetContent extends StatefulWidget {
   final void Function(StoryTilePreferencesObject? preferences)? onChanged;
 
   @override
-  State<_StoryTilePreferencesSheetContent> createState() => _StoryTilePreferencesSheetContentState();
+  State<_StoryTilePreferencesSheetContent> createState() =>
+      _StoryTilePreferencesSheetContentState();
 }
 
-class _StoryTilePreferencesSheetContentState extends State<_StoryTilePreferencesSheetContent> {
-  late var storyTilePreferences = context.read<DevicePreferencesProvider>().preferences.storyTilePreferences;
+class _StoryTilePreferencesSheetContentState
+    extends State<_StoryTilePreferencesSheetContent> {
+  late var storyTilePreferences = context
+      .read<DevicePreferencesProvider>()
+      .preferences
+      .storyTilePreferences;
   late var defaultStoryTilePreferences = StoryTilePreferencesObject();
   late var initialStoryTilePreferences = storyTilePreferences;
 
   // Ensure a demo feeling emoji tag exists. ID is deterministic so we can use it
   // immediately without waiting for the DB write.
-  static TagDbModel get _demoFeeling1Tag => TagCategoryDbModel.feeling().suggestTags()[8];
-  static TagDbModel get _demoFeeling2Tag => TagCategoryDbModel.feeling().suggestTags()[7];
-  static TagDbModel get _demoActivityTag => TagCategoryDbModel.activity().suggestTags()[1];
+  static TagDbModel get _demoFeeling1Tag =>
+      TagCategoryDbModel.feeling().suggestTags()[8];
+  static TagDbModel get _demoFeeling2Tag =>
+      TagCategoryDbModel.feeling().suggestTags()[7];
+  static TagDbModel get _demoActivityTag =>
+      TagCategoryDbModel.activity().suggestTags()[1];
 
   static Future<void> _ensureDemoFeelingTag() async {
-    if (!TagDbModel.db.exist(_demoFeeling1Tag.id)) await TagDbModel.db.set(_demoFeeling1Tag);
-    if (!TagDbModel.db.exist(_demoFeeling2Tag.id)) await TagDbModel.db.set(_demoFeeling2Tag);
-    if (!TagDbModel.db.exist(_demoActivityTag.id)) await TagDbModel.db.set(_demoActivityTag);
+    if (!TagDbModel.db.exist(_demoFeeling1Tag.id))
+      await TagDbModel.db.set(_demoFeeling1Tag);
+    if (!TagDbModel.db.exist(_demoFeeling2Tag.id))
+      await TagDbModel.db.set(_demoFeeling2Tag);
+    if (!TagDbModel.db.exist(_demoActivityTag.id))
+      await TagDbModel.db.set(_demoActivityTag);
   }
 
   late StoryDbModel story = _buildMockStory();
@@ -112,8 +123,12 @@ class _StoryTilePreferencesSheetContentState extends State<_StoryTilePreferences
   // photo collage. Empty when the user has no images yet.
   List<String> _previewImagePaths = [];
 
-  bool get changed => jsonEncode(storyTilePreferences.toJson()) != jsonEncode(initialStoryTilePreferences.toJson());
-  bool get resettable => jsonEncode(storyTilePreferences.toJson()) != jsonEncode(defaultStoryTilePreferences.toJson());
+  bool get changed =>
+      jsonEncode(storyTilePreferences.toJson()) !=
+      jsonEncode(initialStoryTilePreferences.toJson());
+  bool get resettable =>
+      jsonEncode(storyTilePreferences.toJson()) !=
+      jsonEncode(defaultStoryTilePreferences.toJson());
 
   void _apply(StoryTilePreferencesObject next) {
     setState(() => storyTilePreferences = next);
@@ -141,7 +156,9 @@ class _StoryTilePreferencesSheetContentState extends State<_StoryTilePreferences
       },
     );
 
-    final images = collection?.items.map((e) => e.relativeLocalFilePath).toList();
+    final images = collection?.items
+        .map((e) => e.relativeLocalFilePath)
+        .toList();
     if (images == null || images.isEmpty || !mounted) return;
 
     setState(() {
@@ -177,7 +194,13 @@ class _StoryTilePreferencesSheetContentState extends State<_StoryTilePreferences
     return story.copyWith(
       tags: [
         ?context.read<TagsProvider>().tags?.items.firstOrNull?.id.toString(),
-        ?context.read<TagsProvider>().peopleTags?.items.firstOrNull?.id.toString(),
+        ?context
+            .read<TagsProvider>()
+            .peopleTags
+            ?.items
+            .firstOrNull
+            ?.id
+            .toString(),
         _demoFeeling2Tag.id.toString(),
       ],
       feeling: null,
@@ -273,7 +296,9 @@ class _StoryTilePreferencesSheetContentState extends State<_StoryTilePreferences
             ),
           IconButton(
             icon: const Icon(SpIcons.refresh),
-            onPressed: resettable ? () => _apply(defaultStoryTilePreferences) : null,
+            onPressed: resettable
+                ? () => _apply(defaultStoryTilePreferences)
+                : null,
           ),
           if (CupertinoSheetRoute.hasParentSheet(context))
             CloseButton(onPressed: () => CupertinoSheetRoute.popSheet(context)),
@@ -487,7 +512,8 @@ class _CharacterCountSliderState extends State<_CharacterCountSlider> {
   @override
   void didUpdateWidget(_CharacterCountSlider oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.preferences.displayCharacterCount != widget.preferences.displayCharacterCount) {
+    if (oldWidget.preferences.displayCharacterCount !=
+        widget.preferences.displayCharacterCount) {
       _localValue = widget.preferences.displayCharacterCount;
     }
   }

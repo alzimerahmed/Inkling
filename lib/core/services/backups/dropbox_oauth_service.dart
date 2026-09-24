@@ -65,7 +65,8 @@ class DropboxOAuthService {
   }
 
   String get _redirectUri {
-    if (!kIsWeb && io.Platform.isLinux) return 'http://localhost:$_linuxLoopbackPort/callback';
+    if (!kIsWeb && io.Platform.isLinux)
+      return 'http://localhost:$_linuxLoopbackPort/callback';
     return '$_callbackUrlScheme://oauth/dropbox';
   }
 
@@ -116,7 +117,9 @@ class DropboxOAuthService {
       // full URI and requires the complete `http://localhost:{port}` string
       // to bind the right port — passing just "http" throws before the
       // browser even opens. See flutter_web_auth_2's FlutterWebAuth2ServerPlugin.
-      callbackUrlScheme: useWebview ? Uri.parse(redirectUri).scheme : redirectUri,
+      callbackUrlScheme: useWebview
+          ? Uri.parse(redirectUri).scheme
+          : redirectUri,
       options: FlutterWebAuth2Options(useWebview: useWebview),
     );
 

@@ -12,13 +12,15 @@ class _ShowTagContent extends StatelessWidget {
     return DefaultTabController(
       length: years?.length ?? 1,
       child: SpStoryListMultiEditWrapper.withListener(
-        builder: (BuildContext context, SpStoryListMultiEditWrapperState state) {
-          return PopScope(
-            canPop: !state.editing,
-            onPopInvokedWithResult: (didPop, result) => viewModel.onPopInvokedWithResult(didPop, result, context),
-            child: buildScaffold(context, state, years),
-          );
-        },
+        builder:
+            (BuildContext context, SpStoryListMultiEditWrapperState state) {
+              return PopScope(
+                canPop: !state.editing,
+                onPopInvokedWithResult: (didPop, result) =>
+                    viewModel.onPopInvokedWithResult(didPop, result, context),
+                child: buildScaffold(context, state, years),
+              );
+            },
       ),
     );
   }

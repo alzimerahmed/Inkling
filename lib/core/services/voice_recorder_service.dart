@@ -64,7 +64,9 @@ class VoiceRecorderService {
     if (!_isRecording) return null;
 
     try {
-      final duration = _recordingStartTime != null ? DateTime.now().difference(_recordingStartTime!).inMilliseconds : 0;
+      final duration = _recordingStartTime != null
+          ? DateTime.now().difference(_recordingStartTime!).inMilliseconds
+          : 0;
 
       await _recorder.stop();
       _isRecording = false;
@@ -130,5 +132,6 @@ class VoiceRecordingResult {
   }
 
   @override
-  String toString() => 'VoiceRecordingResult(path: $filePath, duration: $formattedDuration, recordedAt: $recordedAt)';
+  String toString() =>
+      'VoiceRecordingResult(path: $filePath, duration: $formattedDuration, recordedAt: $recordedAt)';
 }

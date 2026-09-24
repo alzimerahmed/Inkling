@@ -22,7 +22,8 @@ class SpLocationFetchResult {
   final SpLocationFetchStatus status;
   final PlaceDbModel? place;
 
-  bool get isSuccess => status == SpLocationFetchStatus.success && place != null;
+  bool get isSuccess =>
+      status == SpLocationFetchStatus.success && place != null;
 }
 
 /// Core location service (no app UI concerns).
@@ -122,7 +123,9 @@ class SpLocationService {
         // only, and the label can be filled later from the map editor.
         if (place == null) {
           try {
-            place = await SpGeocodingService.systemInstance.reverseGeocode(latLng).timeout(geocodeTimeout);
+            place = await SpGeocodingService.systemInstance
+                .reverseGeocode(latLng)
+                .timeout(geocodeTimeout);
           } catch (_) {
             place = null;
           }
@@ -149,7 +152,8 @@ class SpLocationService {
   static Future<SpLatLng?> fetchLastKnownLocation() async {
     try {
       final LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
         return null;
       }
 

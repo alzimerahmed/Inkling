@@ -147,7 +147,9 @@ class SpStoryLabels extends StatelessWidget {
           builder: (context, provider, child) {
             return buildPin(
               context: context,
-              title: provider.timeFormatOf(context).formatTime(story.displayPathDate, context.locale),
+              title: provider
+                  .timeFormatOf(context)
+                  .formatTime(story.displayPathDate, context.locale),
               onTap: () => showTimePicker(context),
             );
           },
@@ -167,7 +169,10 @@ class SpStoryLabels extends StatelessWidget {
       );
     }
 
-    int pageCount = currentPagesCount ?? (story.draftContent ?? story.latestContent)?.richPages?.length ?? 0;
+    int pageCount =
+        currentPagesCount ??
+        (story.draftContent ?? story.latestContent)?.richPages?.length ??
+        0;
     bool showPageCount = preferences.showPageCount || !fromStoryTile;
     if (pageCount > 1 && showPageCount) {
       children.add(
@@ -186,7 +191,8 @@ class SpStoryLabels extends StatelessWidget {
       children.add(
         buildPin(
           context: context,
-          title: "📌 ${plural("plural.day_ago", story.dateDifferentCount.inDays)}",
+          title:
+              "📌 ${plural("plural.day_ago", story.dateDifferentCount.inDays)}",
           onTap: () => SpDaysCountBottomSheet(
             story: story,
             onToggleShowDayCount: onToggleShowDayCount,
@@ -196,14 +202,17 @@ class SpStoryLabels extends StatelessWidget {
     }
 
     bool showDraft = false;
-    if (story.draftContent != null) showDraft = fromStoryTile || draftActions != null;
+    if (story.draftContent != null)
+      showDraft = fromStoryTile || draftActions != null;
     if (showDraft) {
       children.add(
         buildPin(
           leadingIconData: SpIcons.draftEdit,
           context: context,
           title: tr("general.draft"),
-          onTap: draftActions != null ? () => showDraftActionSheet(context) : null,
+          onTap: draftActions != null
+              ? () => showDraftActionSheet(context)
+              : null,
         ),
       );
     }
@@ -307,7 +316,9 @@ class SpStoryLabels extends StatelessWidget {
     }
 
     // Emoji labels including its add button
-    final emojis = (story.validTags?.map((tag) => tagProvider.getEmojiTag(tag)) ?? []).whereType<String>();
+    final emojis =
+        (story.validTags?.map((tag) => tagProvider.getEmojiTag(tag)) ?? [])
+            .whereType<String>();
     final emojiRow = Row(
       mainAxisSize: .min,
       children: emojis.map((emoji) {
@@ -453,7 +464,9 @@ class SpStoryLabels extends StatelessWidget {
 
     if (newTime != null) {
       await onChangeDate?.call(
-        story.copyWith(hour: newTime.hour, minute: newTime.minute).displayPathDate,
+        story
+            .copyWith(hour: newTime.hour, minute: newTime.minute)
+            .displayPathDate,
       );
     }
   }
@@ -465,16 +478,23 @@ class SpStoryLabels extends StatelessWidget {
   }) {
     if (people) {
       final peopleTags =
-          tagProvider.peopleTags?.items.where((e) => story.validTags?.contains(e.id) == true).toList() ?? [];
+          tagProvider.peopleTags?.items
+              .where((e) => story.validTags?.contains(e.id) == true)
+              .toList() ??
+          [];
       return [
-        for (final person in peopleTags) buildTag(context, tagProvider, person, prefix: "@"),
+        for (final person in peopleTags)
+          buildTag(context, tagProvider, person, prefix: "@"),
       ];
     }
 
     final tags =
         tagProvider.tags?.items
             .where(
-              (e) => e.categoryId == null && e.emoji == null && story.validTags?.contains(e.id) == true,
+              (e) =>
+                  e.categoryId == null &&
+                  e.emoji == null &&
+                  story.validTags?.contains(e.id) == true,
             )
             .toList() ??
         [];
@@ -514,7 +534,8 @@ class SpStoryLabels extends StatelessWidget {
     return buildPin(
       context: context,
       title: title,
-      onTap: () => provider.viewTag(context: context, tag: tag, storyViewOnly: false),
+      onTap: () =>
+          provider.viewTag(context: context, tag: tag, storyViewOnly: false),
     );
   }
 
@@ -533,7 +554,8 @@ class SpStoryLabels extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4.0),
             ),
-            color: (AppTheme.isDarkMode(context) ? Colors.white : Colors.black).withValues(alpha: 0.06),
+            color: (AppTheme.isDarkMode(context) ? Colors.white : Colors.black)
+                .withValues(alpha: 0.06),
             child: InkWell(
               borderRadius: BorderRadius.circular(4.0),
               onTap: onTap is Future<void> Function()
@@ -608,7 +630,8 @@ class SpStoryLabels extends StatelessWidget {
 
     final child = Material(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-      color: (AppTheme.isDarkMode(context) ? Colors.white : Colors.black).withValues(alpha: 0.06),
+      color: (AppTheme.isDarkMode(context) ? Colors.white : Colors.black)
+          .withValues(alpha: 0.06),
       child: InkWell(
         borderRadius: BorderRadius.circular(4.0),
         onTap: onTap,

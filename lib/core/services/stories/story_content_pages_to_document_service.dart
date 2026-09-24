@@ -33,6 +33,8 @@ class StoryContentPagesToDocumentService {
   }
 
   static RichTextDocument _buildDocument(StoryPageDbModel page) {
-    return page.body != null ? editorAdapter.createDocument(json: page.body!) : editorAdapter.createEmptyDocument();
+    return page.body != null
+        ? editorAdapter.createDocument(json: page.body!)
+        : editorAdapter.createEmptyDocument();
   }
 }

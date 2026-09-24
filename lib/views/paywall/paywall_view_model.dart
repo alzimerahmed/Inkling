@@ -21,7 +21,8 @@ class PaywallViewModel extends ChangeNotifier with DisposeAwareMixin {
     (_) => GlobalKey(),
   );
 
-  late final ValueNotifier<PaywallFeature?> focusingFeatureNotifer = ValueNotifier(params.initialFocus);
+  late final ValueNotifier<PaywallFeature?> focusingFeatureNotifer =
+      ValueNotifier(params.initialFocus);
   List<PaywallFeatureObject>? features;
 
   PaywallViewModel({

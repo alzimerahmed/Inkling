@@ -1,6 +1,8 @@
-import 'package:easy_localization/easy_localization.dart' show BuildContextEasyLocalizationExtension, tr;
+import 'package:easy_localization/easy_localization.dart'
+    show BuildContextEasyLocalizationExtension, tr;
 import 'package:flutter/material.dart';
-import 'package:storypad/core/helpers/date_format_helper.dart' show DateFormatHelper;
+import 'package:storypad/core/helpers/date_format_helper.dart'
+    show DateFormatHelper;
 import 'package:storypad/core/services/color_from_day_service.dart';
 import 'package:storypad/views/throwback/throwback_view.dart';
 import 'package:storypad/widgets/sp_icons.dart';
@@ -19,7 +21,8 @@ class SpThrowbackTile extends StatelessWidget {
   // If not, we will not display divider line after throwback tile.
   final bool listHasStories;
 
-  DateTime get throwbackRepresentDate => throwbackDates?.firstOrNull ?? DateTime.now();
+  DateTime get throwbackRepresentDate =>
+      throwbackDates?.firstOrNull ?? DateTime.now();
 
   Future<void> view(BuildContext context) {
     return ThrowbackRoute(
@@ -30,7 +33,8 @@ class SpThrowbackTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool hasLastYearThrowback = throwbackDates?.any((e) => e.year == DateTime.now().year - 1) == true;
+    bool hasLastYearThrowback =
+        throwbackDates?.any((e) => e.year == DateTime.now().year - 1) == true;
 
     String title;
     String subtitle = DateFormatHelper.yMEd(

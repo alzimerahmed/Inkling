@@ -37,14 +37,16 @@ class ColorFromDayService {
   bool get _isDarkMode => Theme.of(context).brightness == Brightness.dark;
 
   // User customizations from the in-memory preferences (no extra cache needed).
-  Map<int, String>? get _names => context.read<DevicePreferencesProvider>().preferences.colorByDay;
+  Map<int, String>? get _names =>
+      context.read<DevicePreferencesProvider>().preferences.colorByDay;
 
   String? _colorNameFor(int weekday) {
     return _names?[weekday] ?? kDefaultColorNamesByDay[weekday];
   }
 
   Color _resolve(String name, bool darkMode) {
-    if (name == kBlackWhiteColorName) return darkMode ? Colors.white : Colors.black;
+    if (name == kBlackWhiteColorName)
+      return darkMode ? Colors.white : Colors.black;
 
     final MaterialColor swatch = kMaterialColorsByName[name] ?? Colors.grey;
     return (darkMode ? swatch[300] : swatch[700])!;

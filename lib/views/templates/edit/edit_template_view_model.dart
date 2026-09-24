@@ -17,16 +17,21 @@ import 'package:storypad/views/stories/local_widgets/base_story_view_model.dart'
 
 import 'edit_template_view.dart';
 
-class EditTemplateViewModel extends ChangeNotifier with DisposeAwareMixin, DebounchedCallback {
+class EditTemplateViewModel extends ChangeNotifier
+    with DisposeAwareMixin, DebounchedCallback {
   final EditTemplateRoute params;
   final PageController pageController = PageController();
 
   EditTemplateViewModel({
     required this.params,
   }) {
-    template = params.initialTemplate ?? TemplateDbModel.newTemplate(createdAt: openedOn);
-    latestContent = template.content ?? StoryContentDbModel.create(createdAt: openedOn);
-    draftContent = template.content ?? StoryContentDbModel.create(createdAt: openedOn);
+    template =
+        params.initialTemplate ??
+        TemplateDbModel.newTemplate(createdAt: openedOn);
+    latestContent =
+        template.content ?? StoryContentDbModel.create(createdAt: openedOn);
+    draftContent =
+        template.content ?? StoryContentDbModel.create(createdAt: openedOn);
 
     bool alreadyHasPage = draftContent!.richPages?.isNotEmpty == true;
     if (!alreadyHasPage) draftContent = draftContent!.addRichPage();
@@ -199,8 +204,10 @@ class EditTemplateViewModel extends ChangeNotifier with DisposeAwareMixin, Debou
     if (preferences.layoutType != template.preferences.layoutType) {
       pagesManager.currentPageIndexNotifier.value = null;
 
-      if (pagesManager.pageController.hasClients) pagesManager.pageController.jumpToPage(0);
-      if (pagesManager.pageScrollController.hasClients) pagesManager.pageScrollController.jumpTo(0);
+      if (pagesManager.pageController.hasClients)
+        pagesManager.pageController.jumpToPage(0);
+      if (pagesManager.pageScrollController.hasClients)
+        pagesManager.pageScrollController.jumpTo(0);
     }
 
     template = template.copyWith(
@@ -225,14 +232,17 @@ class EditTemplateViewModel extends ChangeNotifier with DisposeAwareMixin, Debou
   }
 
   bool get hasDataWritten =>
-      flowType == EditingFlowType.update || StoryHasDataWrittenService.callByContent(draftContent!);
+      flowType == EditingFlowType.update ||
+      StoryHasDataWrittenService.callByContent(draftContent!);
 
   bool get hasChange {
     if (draftContent == null) return false;
     if (latestContent == null) return false;
 
     // when not ignore empty & no data written, consider not changed.
-    if (flowType == EditingFlowType.create && !StoryHasDataWrittenService.callByContent(draftContent!)) return false;
+    if (flowType == EditingFlowType.create &&
+        !StoryHasDataWrittenService.callByContent(draftContent!))
+      return false;
     return draftContent!.hasChanges(latestContent!);
   }
 
@@ -265,7 +275,8 @@ class EditTemplateViewModel extends ChangeNotifier with DisposeAwareMixin, Debou
         OkCancelResult userAction = await showDiscardConfirmation(context);
         if (userAction == OkCancelResult.ok) {
           await TemplateDbModel.db.delete(template.id, softDelete: false);
-          if (context.mounted && ModalRoute.of(context)?.isCurrent == true) return Navigator.of(context).pop(null);
+          if (context.mounted && ModalRoute.of(context)?.isCurrent == true)
+            return Navigator.of(context).pop(null);
         } else {
           return;
         }
@@ -278,7 +289,8 @@ class EditTemplateViewModel extends ChangeNotifier with DisposeAwareMixin, Debou
         if (userAction == OkCancelResult.ok) {
           await TemplateDbModel.db.set(params.initialTemplate!);
           template = params.initialTemplate!;
-          if (context.mounted && ModalRoute.of(context)?.isCurrent == true) return Navigator.of(context).pop(null);
+          if (context.mounted && ModalRoute.of(context)?.isCurrent == true)
+            return Navigator.of(context).pop(null);
         }
       } else {
         if (context.mounted) Navigator.of(context).pop(null);

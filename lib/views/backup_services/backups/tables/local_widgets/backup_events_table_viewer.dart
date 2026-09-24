@@ -42,7 +42,8 @@ class BackupEventsTableViewer extends StatelessWidget {
             ),
           ),
           subtitle: Text(
-            DateFormatHelper.yMEd_jmNullable(event.date, context.locale) ?? tr("general.na"),
+            DateFormatHelper.yMEd_jmNullable(event.date, context.locale) ??
+                tr("general.na"),
           ),
         );
       },

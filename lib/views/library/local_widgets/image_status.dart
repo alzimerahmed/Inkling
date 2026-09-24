@@ -37,7 +37,8 @@ class _ImageStatus extends StatelessWidget {
       backgroundColor: ColorScheme.of(context).bootstrap.success.color,
       foregroundColor: ColorScheme.of(context).bootstrap.success.onColor,
       icon: SpIcons.cloudDone,
-      tooltipMessage: '${destination.serviceType.displayName}: ${destination.identifier}',
+      tooltipMessage:
+          '${destination.serviceType.displayName}: ${destination.identifier}',
     );
   }
 }

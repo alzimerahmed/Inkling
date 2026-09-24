@@ -95,7 +95,8 @@ class _SoundsTab extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         buildSoundCardContents(provider, relaxSound, selected, context),
-        if (selected && provider.getVolume(relaxSound) != null) _VolumeSlider(relaxSound: relaxSound),
+        if (selected && provider.getVolume(relaxSound) != null)
+          _VolumeSlider(relaxSound: relaxSound),
       ],
     );
   }

@@ -66,7 +66,8 @@ class StoryStatsService {
 
       final content = story.latestContent ?? story.draftContent;
       wordCount += content?.wordCount ?? 0;
-      dailyWordCounts[day] = (dailyWordCounts[day] ?? 0) + (content?.wordCount ?? 0);
+      dailyWordCounts[day] =
+          (dailyWordCounts[day] ?? 0) + (content?.wordCount ?? 0);
 
       final int storyPhotoCount = StoryContentEmbedExtractor.photos(
         content,
@@ -180,7 +181,8 @@ class StoryStatsService {
     Map<int, int> counts,
     Map<int, TagDbModel> tagById,
   ) {
-    final entries = counts.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final entries = counts.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
     return entries
         .map(
           (e) => EmojiStatItem(
@@ -197,7 +199,8 @@ class StoryStatsService {
     Map<int, int> counts,
     Map<int, TagDbModel> tagById,
   ) {
-    final entries = counts.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final entries = counts.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
     return entries
         .map(
           (e) => LabelStatItem(
@@ -213,7 +216,8 @@ class StoryStatsService {
   static List<LabelStatItem> _topPlaceLabels(
     Map<String, Set<int>> placeStoryIds,
   ) {
-    final entries = placeStoryIds.entries.toList()..sort((a, b) => b.value.length.compareTo(a.value.length));
+    final entries = placeStoryIds.entries.toList()
+      ..sort((a, b) => b.value.length.compareTo(a.value.length));
     return entries
         .map(
           (e) => LabelStatItem(
@@ -226,7 +230,10 @@ class StoryStatsService {
   }
 
   static List<LabelStatItem> _topCountryLabels(Map<String, int> counts) {
-    final entries = counts.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
-    return entries.map((e) => LabelStatItem(label: e.key, count: e.value)).toList();
+    final entries = counts.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    return entries
+        .map((e) => LabelStatItem(label: e.key, count: e.value))
+        .toList();
   }
 }

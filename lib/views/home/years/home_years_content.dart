@@ -23,7 +23,8 @@ class _HomeYearsContent extends StatelessWidget {
   }
 
   Widget buildBody() {
-    if (viewModel.years == null) return const Center(child: CircularProgressIndicator.adaptive());
+    if (viewModel.years == null)
+      return const Center(child: CircularProgressIndicator.adaptive());
 
     return ListView(
       children: buildYearsTiles(),

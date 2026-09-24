@@ -11,7 +11,8 @@ class _PurchaseSyncAvatarButton extends StatelessWidget {
     final services = backupProvider.services;
     final selectedService = services
         .where(
-          (s) => s.serviceType == iapProvider.selectedSyncProvider && s.isSignedIn,
+          (s) =>
+              s.serviceType == iapProvider.selectedSyncProvider && s.isSignedIn,
         )
         .firstOrNull;
     final photoUrl = selectedService?.currentUser?.photoUrl;
@@ -22,9 +23,13 @@ class _PurchaseSyncAvatarButton extends StatelessWidget {
         onTap: () => const SpPurchaseSyncProviderSheet().show(context: context),
         child: CircleAvatar(
           radius: 16,
-          backgroundImage: photoUrl != null ? CachedNetworkImageProvider(photoUrl) : null,
+          backgroundImage: photoUrl != null
+              ? CachedNetworkImageProvider(photoUrl)
+              : null,
           onBackgroundImageError: photoUrl != null ? (_, _) {} : null,
-          child: photoUrl == null ? const Icon(SpIcons.cloudOff, size: 20) : null,
+          child: photoUrl == null
+              ? const Icon(SpIcons.cloudOff, size: 20)
+              : null,
         ),
       ),
     );

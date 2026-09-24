@@ -27,7 +27,8 @@ class _PaywallContent extends StatelessWidget {
                 mainAxisSize: .min,
                 children: [
                   if (!iapProvider.isProUser &&
-                      (activeDeal.badgeLabel != null || activeDeal.displayComparePrice != null)) ...[
+                      (activeDeal.badgeLabel != null ||
+                          activeDeal.displayComparePrice != null)) ...[
                     if (activeDeal.badgeLabel != null) ...[
                       Text(
                         activeDeal.badgeLabel!,
