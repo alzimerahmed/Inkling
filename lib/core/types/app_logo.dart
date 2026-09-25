@@ -5,25 +5,31 @@
 import 'package:storypad/gen/assets.gen.dart';
 
 enum AppLogo {
+  inkling(logoName: 'inkling'),
   storypad_1_0(logoName: 'storypad_logo_1_0'),
   storypad_2_0(logoName: 'storypad_logo_2_0'),
   storypad_3_0(logoName: 'storypad_logo_3_0'),
   storypad_4_0(logoName: 'storypad_logo_4_0'),
   storypad_5_0(logoName: 'storypad_logo_5_0'),
   storypad_6_0(logoName: 'storypad_logo_6_0'),
-  storypad_6_1(logoName: 'storypad_logo_6_1');
+  storypad_6_1(logoName: 'storypad_logo_6_1')
+  ;
 
   final String logoName;
 
   String get xcodeLogoName => logoName;
   String get androidActivityAliasName => 'com.tc.writestory.$logoName';
 
-  bool get free => this == AppLogo.storypad_1_0 || this == AppLogo.storypad_2_0;
+  bool get free => this == AppLogo.storypad_1_0;
 
-  const AppLogo({required this.logoName});
+  const AppLogo({
+    required this.logoName,
+  });
 
   AssetGenImage get asset {
     switch (this) {
+      case .inkling:
+        return Assets.logos.inkling.assets.inkling;
       case .storypad_1_0:
         return Assets.logos.storypadLogo10.assets.storypadLogo10;
       case .storypad_2_0:

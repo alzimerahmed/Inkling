@@ -462,6 +462,9 @@ class $AssetsImagesGen {
 class $AssetsLogosGen {
   const $AssetsLogosGen();
 
+  /// Directory path: assets/logos/inkling.icon
+  $AssetsLogosInklingIconGen get inkling => const $AssetsLogosInklingIconGen();
+
   /// Directory path: assets/logos/storypad_logo_1_0.icon
   $AssetsLogosStorypadLogo10IconGen get storypadLogo10 =>
       const $AssetsLogosStorypadLogo10IconGen();
@@ -579,6 +582,14 @@ class $AssetsImagesOnboardingGen {
   ];
 }
 
+class $AssetsLogosInklingIconGen {
+  const $AssetsLogosInklingIconGen();
+
+  /// Directory path: assets/logos/inkling.icon/Assets
+  $AssetsLogosInklingIconAssetsGen get assets =>
+      const $AssetsLogosInklingIconAssetsGen();
+}
+
 class $AssetsLogosStorypadLogo10IconGen {
   const $AssetsLogosStorypadLogo10IconGen();
 
@@ -633,6 +644,17 @@ class $AssetsLogosStorypadLogo61IconGen {
   /// Directory path: assets/logos/storypad_logo_6_1.icon/Assets
   $AssetsLogosStorypadLogo61IconAssetsGen get assets =>
       const $AssetsLogosStorypadLogo61IconAssetsGen();
+}
+
+class $AssetsLogosInklingIconAssetsGen {
+  const $AssetsLogosInklingIconAssetsGen();
+
+  /// File path: assets/logos/inkling.icon/Assets/inkling.png
+  AssetGenImage get inkling =>
+      const AssetGenImage('assets/logos/inkling.icon/Assets/inkling.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [inkling];
 }
 
 class $AssetsLogosStorypadLogo10IconAssetsGen {

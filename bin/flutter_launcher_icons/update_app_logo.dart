@@ -10,7 +10,7 @@ void main() {
   final logoNames = <String>[];
   for (final entity in logosDir.listSync()) {
     if (entity is Directory && entity.path.endsWith('.icon')) {
-      final logoName = entity.path.split('/').last.replaceAll('.icon', '');
+      final logoName = entity.path.split(RegExp(r'[/\\]')).last.replaceAll('.icon', '');
       logoNames.add(logoName);
     }
   }

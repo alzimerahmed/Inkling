@@ -1,5 +1,5 @@
 name: storypad
-version: 2.33.1+821
+version: 1.0.0+1
 publish_to: none
 environment:
   sdk: ^3.11.0
@@ -124,6 +124,7 @@ flutter:
     - assets/images/onboarding/
     - assets/emoji-64/
     - assets/fonts/
+    - assets/logos/inkling.icon/Assets/inkling.png
     - assets/logos/storypad_logo_1_0.icon/Assets/storypad_logo_1_0.png
     - assets/logos/storypad_logo_2_0.icon/Assets/storypad_logo_2_0.png
     - assets/logos/storypad_logo_3_0.icon/Assets/storypad_logo_3_0.png
