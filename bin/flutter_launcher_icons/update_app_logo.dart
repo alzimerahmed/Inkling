@@ -52,8 +52,7 @@ void main() {
 import 'package:storypad/gen/assets.gen.dart';
 
 enum AppLogo {
-${enumEntries.join(',\n')}
-  ;
+${enumEntries.join(',\n')};
 
   final String logoName;
 
